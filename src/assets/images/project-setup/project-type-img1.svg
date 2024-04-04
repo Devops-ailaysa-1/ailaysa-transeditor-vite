@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="52" viewBox="0 0 40 52">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.311" y1="1" x2="0.311" y2="0.013" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0078d4"/>
+      <stop offset="1" stop-color="#00b1ff"/>
+    </linearGradient>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_1319" data-name="Rectangle 1319" width="40" height="52" transform="translate(0.135 -0.112)" fill="url(#linear-gradient)"/>
+    </clipPath>
+    <linearGradient id="linear-gradient-3" x1="0.177" y1="-0.304" x2="0.966" y2="0.905" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0076bf"/>
+      <stop offset="1" stop-color="#0076bf" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="clip-path-2">
+      <path id="Path_2530" data-name="Path 2530" d="M18,0V11.506a2.876,2.876,0,0,0,2.876,2.876H32.382Z" transform="translate(-18)" fill="#a1dffc"/>
+    </clipPath>
+  </defs>
+  <g id="Group_750" data-name="Group 750" transform="translate(-475 -306)">
+    <g id="Group_746" data-name="Group 746" transform="translate(474.865 306.111)">
+      <g id="Group_745" data-name="Group 745" transform="translate(0 0)" clip-path="url(#clip-path)">
+        <path id="Path_2529" data-name="Path 2529" d="M40.27,14.382V48.9a2.876,2.876,0,0,1-2.876,2.876H2.876A2.876,2.876,0,0,1,0,48.9V2.876A2.876,2.876,0,0,1,2.876,0H25.888Z" transform="translate(0.001 0.001)" fill="url(#linear-gradient)"/>
+      </g>
+    </g>
+    <rect id="Rectangle_1321" data-name="Rectangle 1321" width="22" height="2" transform="translate(484 331)" fill="#fff" opacity="0.7"/>
+    <rect id="Rectangle_1322" data-name="Rectangle 1322" width="22" height="2" transform="translate(484 336)" fill="#fff" opacity="0.7"/>
+    <rect id="Rectangle_1323" data-name="Rectangle 1323" width="22" height="2" transform="translate(484 341)" fill="#fff" opacity="0.7"/>
+    <rect id="Rectangle_1324" data-name="Rectangle 1324" width="13" height="2" transform="translate(484 346)" fill="#fff" opacity="0.7"/>
+    <path id="Path_2531" data-name="Path 2531" d="M-21175.605,19970.02l7.475,6.508,6.008,6.008-.016-11.74Z" transform="translate(21677.123 -19650.404)" fill="url(#linear-gradient-3)"/>
+    <g id="Group_748" data-name="Group 748" transform="translate(500.617 306)">
+      <g id="Group_747" data-name="Group 747" clip-path="url(#clip-path-2)">
+        <rect id="Rectangle_1320" data-name="Rectangle 1320" width="20.339" height="20.339" transform="translate(-7.191 7.191) rotate(-45)" fill="#a1dffc"/>
+      </g>
+    </g>
+  </g>
+</svg>

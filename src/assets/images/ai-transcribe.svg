@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 43.16 36.54">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-3);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="0" y1="4.59" x2="52.34" y2="4.59" gradientTransform="translate(16.99 26.16) rotate(-90)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0673f7"/>
+      <stop offset=".22" stop-color="#056ff1"/>
+      <stop offset=".5" stop-color="#0465e0"/>
+      <stop offset=".82" stop-color="#0154c5"/>
+      <stop offset="1" stop-color="#004ab3"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="8.49" y1="18.27" x2="43.33" y2="18.27" gradientTransform="translate(3.31 39.85) rotate(-90)" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="11.41" y1="31.95" x2="32.41" y2="31.95" gradientTransform="translate(-10.38 53.53) rotate(-90)" xlink:href="#linear-gradient"/>
+  </defs>
+  <rect class="cls-1" x="16.99" y="-16.99" width="9.17" height="43.16" rx="4.59" ry="4.59" transform="translate(26.16 -16.99) rotate(90)"/>
+  <rect class="cls-2" x="16.99" y="5.18" width="9.17" height="26.18" rx="4.59" ry="4.59" transform="translate(39.85 -3.31) rotate(90)"/>
+  <rect class="cls-3" x="16.99" y="24.84" width="9.17" height="14.22" rx="4.59" ry="4.59" transform="translate(53.53 10.38) rotate(90)"/>
+</svg>

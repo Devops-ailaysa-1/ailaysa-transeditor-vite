@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <g id="stacked_bar_chart_black_24dp" transform="translate(-0.366 -0.366)">
+    <g id="Group_713" data-name="Group 713">
+      <rect id="Rectangle_1124" data-name="Rectangle 1124" width="20" height="20" transform="translate(0.366 0.366)" fill="none"/>
+    </g>
+    <g id="Group_714" data-name="Group 714" transform="translate(5.183 4.319)">
+      <path id="Path_2489" data-name="Path 2489" d="M6,9.319H8.592v8.639H6ZM6,5H8.592V8.455H6Zm8.639,9.5H17.23v3.455H14.639Zm0-2.592H17.23v1.728H14.639Zm-4.319,0h2.592v6.047H10.319Zm0-3.455h2.592v2.592H10.319Z" transform="translate(-6 -5)" fill="#474848"/>
+    </g>
+  </g>
+</svg>

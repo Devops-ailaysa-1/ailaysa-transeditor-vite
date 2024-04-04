@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.732" height="43.771" viewBox="0 0 48.732 43.771">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3268" data-name="Rectangle 3268" width="48.732" height="43.77" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect id="Rectangle_3267" data-name="Rectangle 3267" width="48.732" height="43.771" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-3">
+      <rect id="Rectangle_3261" data-name="Rectangle 3261" width="22.122" height="21.776" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Group_1945" data-name="Group 1945" transform="translate(0 0)">
+    <g id="Group_1944" data-name="Group 1944" transform="translate(0 0)" clip-path="url(#clip-path)">
+      <g id="Group_1943" data-name="Group 1943" transform="translate(0 0)">
+        <g id="Group_1942" data-name="Group 1942" clip-path="url(#clip-path-2)">
+          <path id="Path_4114" data-name="Path 4114" d="M39.442,11.676A20.351,20.351,0,0,0,2.628,29.036a1.344,1.344,0,0,1-.06.136L.131,36.633a1.564,1.564,0,0,0,2.142,2.02L9.535,37.18a20.367,20.367,0,0,0,29.908-25.5" transform="translate(0 0)" fill="#fdb129"/>
+          <g id="Group_1941" data-name="Group 1941" transform="translate(26.61 21.995)" style="mix-blend-mode: multiply;isolation: isolate">
+            <g id="Group_1940" data-name="Group 1940">
+              <g id="Group_1939" data-name="Group 1939" clip-path="url(#clip-path-3)">
+                <path id="Path_4115" data-name="Path 4115" d="M43.61,46.939a10.88,10.88,0,0,0,17.026,8.98l3.881.788a.836.836,0,0,0,1.145-1.081l-1.3-3.987a.788.788,0,0,1-.032-.073A10.879,10.879,0,1,0,43.61,46.939" transform="translate(-43.61 -36.046)" fill="#ffde58"/>
+              </g>
+            </g>
+          </g>
+          <rect id="Rectangle_3262" data-name="Rectangle 3262" width="2.437" height="5.143" transform="translate(9.265 17.99)" fill="#fff"/>
+          <rect id="Rectangle_3263" data-name="Rectangle 3263" width="2.437" height="5.143" transform="translate(29.698 16.885)" fill="#fff"/>
+          <rect id="Rectangle_3264" data-name="Rectangle 3264" width="2.437" height="12.926" transform="translate(14.359 14.165)" fill="#fff"/>
+          <rect id="Rectangle_3265" data-name="Rectangle 3265" width="2.437" height="12.926" transform="translate(24.604 13.059)" fill="#fff"/>
+          <rect id="Rectangle_3266" data-name="Rectangle 3266" width="2.437" height="22.493" transform="translate(19.453 7.92)" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

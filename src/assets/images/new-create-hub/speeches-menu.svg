@@ -1,0 +1,25 @@
+<svg id="Speeches-menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20.604" height="18.506" viewBox="0 0 20.604 18.506">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3268" data-name="Rectangle 3268" width="20.604" height="18.506" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-3">
+      <rect id="Rectangle_3261" data-name="Rectangle 3261" width="9.353" height="9.207" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Group_1944" data-name="Group 1944" transform="translate(0 0)" clip-path="url(#clip-path)">
+    <g id="Group_1943" data-name="Group 1943" transform="translate(0 0)">
+      <g id="Group_1942" data-name="Group 1942" clip-path="url(#clip-path)">
+        <path id="Path_4114" data-name="Path 4114" d="M16.676,4.936a8.6,8.6,0,0,0-15.565,7.34.568.568,0,0,1-.026.058L.056,15.488a.661.661,0,0,0,.906.854l3.07-.623A8.611,8.611,0,0,0,16.676,4.936" transform="translate(0 0)" fill="#fdb129"/>
+        <g id="Group_1941" data-name="Group 1941" transform="translate(11.25 9.299)" style="mix-blend-mode: multiply;isolation: isolate">
+          <g id="Group_1940" data-name="Group 1940">
+            <g id="Group_1939" data-name="Group 1939" clip-path="url(#clip-path-3)">
+              <path id="Path_4115" data-name="Path 4115" d="M43.61,40.652a4.6,4.6,0,0,0,7.2,3.8l1.641.333a.353.353,0,0,0,.484-.457l-.551-1.686a.334.334,0,0,1-.013-.031,4.6,4.6,0,1,0-8.759-1.957" transform="translate(-43.61 -36.046)" fill="#ffde58"/>
+            </g>
+          </g>
+        </g>
+        <path id="Union_1" data-name="Union 1" d="M-6356.523-18586.729v-10.029h1.218v10.029Zm-2.24-1.457v-5.828h1.223v5.828Zm4.5-.484v-5.83h1.218v5.83Zm-6.74-1.256v-2.408h1.218v2.408Zm8.975-.484v-2.408h1.223v2.408Z" transform="translate(6364.652 18599.844)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

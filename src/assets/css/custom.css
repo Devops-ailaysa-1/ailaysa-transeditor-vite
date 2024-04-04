@@ -1,0 +1,41 @@
+.nav-assign-manage-link {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3 all ease;
+    text-decoration: none;
+}
+
+.nav-assign-manage-link:hover{
+    text-decoration: none;
+}
+
+/* .nav-transeditor-wrapper .selected .nav-assign-manage-link:hover span,
+.nav-transeditor-wrapper .selected .nav-assign-manage-link span{
+    color: #ffffff;
+    font-weight: 500;
+    transition: 0.3a all ease;
+} */
+
+.nav-assign-manage-link span {
+    color: #ffffff;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: 0.3 all ease;
+}
+/* 
+.nav-assign-manage-link:hover span{
+    color: #ffffff;
+    font-weight: 500;
+    transition: 0.3 all ease;
+    text-decoration: none;
+} */
+
+/*  */
+.error-bottom {
+    left: 20px;
+    bottom: -18px;
+}

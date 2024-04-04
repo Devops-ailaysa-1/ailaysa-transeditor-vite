@@ -1,0 +1,35 @@
+<svg id="AI_writing" data-name="AI writing" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="33.401" height="25" viewBox="0 0 33.401 25">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3426" data-name="Rectangle 3426" width="33.401" height="25" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-3">
+      <rect id="Rectangle_3423" data-name="Rectangle 3423" width="18.79" height="18.79" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-4">
+      <rect id="Rectangle_3424" data-name="Rectangle 3424" width="9.884" height="14.473" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Group_2187" data-name="Group 2187" clip-path="url(#clip-path)">
+    <g id="Group_2186" data-name="Group 2186" transform="translate(0 0)">
+      <g id="Group_2185" data-name="Group 2185" clip-path="url(#clip-path)">
+        <path id="Path_4404" data-name="Path 4404" d="M21.748,25h-19A2.749,2.749,0,0,1,0,22.251V2.749A2.749,2.749,0,0,1,2.749,0h19A2.749,2.749,0,0,1,24.5,2.749v19.5A2.749,2.749,0,0,1,21.748,25" transform="translate(0 0)" fill="#24ccfc"/>
+        <g id="Group_2181" data-name="Group 2181" transform="translate(14.611 0.025)" style="mix-blend-mode: multiply;isolation: isolate">
+          <g id="Group_2180" data-name="Group 2180">
+            <g id="Group_2179" data-name="Group 2179" clip-path="url(#clip-path-3)">
+              <path id="Path_4405" data-name="Path 4405" d="M36.132,18.844l-4.574-.034-.01-4.551L45.277.529a1.621,1.621,0,0,1,2.293,0l2.293,2.293a1.62,1.62,0,0,1,0,2.292Z" transform="translate(-31.547 -0.054)" fill="#2079f3"/>
+            </g>
+          </g>
+        </g>
+        <g id="Group_2184" data-name="Group 2184" transform="translate(14.612 4.343)" opacity="0.5" style="mix-blend-mode: multiply;isolation: isolate">
+          <g id="Group_2183" data-name="Group 2183">
+            <g id="Group_2182" data-name="Group 2182" clip-path="url(#clip-path-4)">
+              <path id="Path_4406" data-name="Path 4406" d="M41.434,9.377v9.175l-5.3,5.3-4.576-.037-.009-4.548Z" transform="translate(-31.55 -9.377)" fill="#2079f3"/>
+            </g>
+          </g>
+        </g>
+        <path id="Path_4407" data-name="Path 4407" d="M16.557,17.588l-3.828,1.74-1.74,3.828-1.74-3.828-3.828-1.74,3.828-1.74,1.74-3.828,1.74,3.828Zm2.879-6.6-1.923.861-.861,1.923-.88-1.923-1.9-.861,1.9-.879.88-1.9.861,1.9Z" transform="translate(-2.91 -4.406)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

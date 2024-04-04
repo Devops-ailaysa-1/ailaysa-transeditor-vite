@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="72" height="81" viewBox="0 0 72 81">
+    <defs>
+        <style>
+            .a{fill:rgba(81,180,255,0.23);}
+            .b{mix-blend-mode:darken;isolation:isolate;}
+            .c{fill:#9ad3ff;}.d{fill:url(#a);}
+            .e{fill:#fff;}
+        </style>
+        <linearGradient id="a" x1="0.766" y1="1" x2="0.766" y2="0.007" gradientUnits="objectBoundingBox">
+            <stop offset="0" stop-color="#0078d4"/><stop offset="1" stop-color="#00b1ff"/>
+        </linearGradient>
+    </defs>
+    <g transform="translate(-1027 -289)">
+        <rect class="a" width="34" height="34" rx="4" transform="translate(1027 311)"/>
+        <rect class="a" width="20" height="20" rx="3" transform="translate(1079 350)"/>
+        <rect class="a" width="20" height="20" rx="3" transform="translate(1079 289)"/>
+        <g class="b" transform="translate(1036 320)">
+            <path class="c" d="M3,35.612a3,3,0,0,1-3-3V7.192A7.152,7.152,0,0,1,7.111,0h3.651A17.613,17.613,0,0,1,19.3,2.21L23.61,4.6H45a3,3,0,0,1,3,3V32.612a3,3,0,0,1-3,3Z" transform="translate(3 1)"/>
+            <rect class="d" width="54" height="34.5" rx="4" transform="translate(0 9.612)"/>
+        </g>
+        <g transform="translate(-1202.79 498.701)">
+            <rect class="e" width="4" height="11" transform="translate(2263.79 -155.701)"/>
+            <path class="e" d="M7,0l7,6H0Z" transform="translate(2258.79 -160.701)"/>
+        </g>
+    </g>
+</svg>

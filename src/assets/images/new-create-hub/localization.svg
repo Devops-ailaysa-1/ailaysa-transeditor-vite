@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="51.235" height="47.846" viewBox="0 0 51.235 47.846">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3317" data-name="Rectangle 3317" width="51.236" height="47.846" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-3">
+      <rect id="Rectangle_3314" data-name="Rectangle 3314" width="21.465" height="24.581" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Group_2058" data-name="Group 2058" transform="translate(0)">
+    <g id="Group_2057" data-name="Group 2057" transform="translate(0)" clip-path="url(#clip-path)">
+      <g id="Group_2056" data-name="Group 2056" transform="translate(0 0)">
+        <g id="Group_2055" data-name="Group 2055" clip-path="url(#clip-path)">
+          <path id="Path_4190" data-name="Path 4190" d="M40.709,34.747v-22.7a.7.7,0,0,0-.347-.6L20.7.093a.7.7,0,0,0-.694,0L.347,11.444a.7.7,0,0,0-.347.6v22.7a.7.7,0,0,0,.347.6L20.008,46.7a.691.691,0,0,0,.694,0l19.66-11.35a.7.7,0,0,0,.347-.6" transform="translate(0 0)" fill="#ff5556"/>
+          <g id="Group_2054" data-name="Group 2054" transform="translate(29.771 23.265)" style="mix-blend-mode: multiply;isolation: isolate">
+            <g id="Group_2053" data-name="Group 2053">
+              <g id="Group_2052" data-name="Group 2052" clip-path="url(#clip-path-3)">
+                <path id="Path_4191" data-name="Path 4191" d="M62.537,50.2V38.573A.662.662,0,0,0,62.206,38l-10.07-5.814a.665.665,0,0,0-.663,0L41.4,38a.662.662,0,0,0-.331.574V50.2a.662.662,0,0,0,.331.574l10.07,5.814a.665.665,0,0,0,.663,0l10.07-5.814a.662.662,0,0,0,.331-.574" transform="translate(-41.072 -32.097)" fill="#ffa91b"/>
+              </g>
+            </g>
+          </g>
+          <path id="Path_4192" data-name="Path 4192" d="M34.028,25l4.383,4.624-4.383,4.624,1.4,1.324,5.635-5.948-5.635-5.948Z" transform="translate(-9.363 -6.514)" fill="#fff"/>
+          <path id="Path_4193" data-name="Path 4193" d="M19.465,34.245l-4.383-4.624L19.465,25l-1.4-1.324-5.635,5.948,5.635,5.948Z" transform="translate(-3.421 -6.514)" fill="#fff"/>
+          <rect id="Rectangle_3315" data-name="Rectangle 3315" width="18.037" height="1.926" transform="translate(17.29 31.621) rotate(-76.299)" fill="#fff"/>
+          <path id="Path_4194" data-name="Path 4194" d="M52.011,32.133V43.578a.691.691,0,0,1-.348.6L41.08,50.29a.353.353,0,0,1-.007-.087V38.577a.666.666,0,0,1,.333-.58l10.068-5.813a.664.664,0,0,1,.536-.051" transform="translate(-11.301 -8.832)" fill="#ee012f"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

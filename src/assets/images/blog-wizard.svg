@@ -1,0 +1,16 @@
+<svg id="Group_2244" data-name="Group 2244" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="17.807" viewBox="0 0 18 17.807">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.378" y1="0.633" x2="1.103" y2="-0.105" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0673f7"/>
+      <stop offset="1" stop-color="#004ab3"/>
+    </linearGradient>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3558" data-name="Rectangle 3558" width="18" height="17.807" stroke="rgba(0,0,0,0)" stroke-width="1" fill="url(#linear-gradient)"/>
+    </clipPath>
+  </defs>
+  <g id="Group_2243" data-name="Group 2243" clip-path="url(#clip-path)">
+    <path id="Path_4451" data-name="Path 4451" d="M10.2,147.116a5.1,5.1,0,0,1-10.2,0V137.4H3.4v9.72a1.7,1.7,0,1,0,1.7-1.7H4.532v-3.4H5.1a5.1,5.1,0,0,1,5.1,5.1" transform="translate(0 -134.316)" stroke="rgba(0,0,0,0)" stroke-width="1" fill="url(#linear-gradient)"/>
+    <path id="Path_4452" data-name="Path 4452" d="M329.5,10.839h-1.779a9.352,9.352,0,0,0-9.079-9.075V0A11.111,11.111,0,0,1,329.5,10.839" transform="translate(-311.497)" stroke="rgba(0,0,0,0)" stroke-width="1" fill="url(#linear-gradient)"/>
+    <path id="Path_4453" data-name="Path 4453" d="M326.306,159.259h-1.784a5.936,5.936,0,0,0-5.663-5.665V151.82a7.691,7.691,0,0,1,7.447,7.439" transform="translate(-311.711 -148.417)" stroke="rgba(0,0,0,0)" stroke-width="1" fill="url(#linear-gradient)"/>
+  </g>
+</svg>

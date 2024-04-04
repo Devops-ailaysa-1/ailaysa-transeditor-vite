@@ -1,0 +1,27 @@
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="136.856" height="112.57" viewBox="0 0 136.856 112.57">
+  <defs>
+    <linearGradient id="linear-gradient" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0.01" stop-color="#e1dfdd"/>
+      <stop offset="1" stop-color="#ceccca"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-0.423" y1="0.5" x2="1.08" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#85e9ff"/>
+      <stop offset="1" stop-color="#12b4fd"/>
+    </linearGradient>
+  </defs>
+  <g id="Business_Abstract_3" data-name="Business Abstract 3">
+    <path id="Path_2561" data-name="Path 2561" d="M83.852,0h60.489a5.672,5.672,0,0,1,5.672,5.672v37.8a5.672,5.672,0,0,1-5.672,5.672H132.989V62.377L118.434,49.145H83.852a5.672,5.672,0,0,1-5.672-5.672V5.672A5.672,5.672,0,0,1,83.852,0Z" transform="translate(-13.158)" fill="url(#linear-gradient)"/>
+    <circle id="Ellipse_249" data-name="Ellipse 249" cx="3.784" cy="3.784" r="3.784" transform="translate(98.307 21.291)" fill="#f3f2f2"/>
+    <circle id="Ellipse_250" data-name="Ellipse 250" cx="3.784" cy="3.784" r="3.784" transform="translate(113.427 21.291)" fill="#f3f2f2"/>
+    <circle id="Ellipse_251" data-name="Ellipse 251" cx="3.784" cy="3.784" r="3.784" transform="translate(83.186 21.291)" fill="#f3f2f2"/>
+    <path id="Path_2562" data-name="Path 2562" d="M82.513,41.78H7.069A7.078,7.078,0,0,0,0,48.849V96.023A7.078,7.078,0,0,0,7.069,103.1H21.208v16.5l18.156-16.5H82.513a7.078,7.078,0,0,0,7.069-7.078V48.849a7.078,7.078,0,0,0-7.069-7.069Z" transform="translate(0 -7.032)" fill="url(#linear-gradient-2)"/>
+    <g id="Group_807" data-name="Group 807" transform="translate(17.258 52.156)" opacity="0.58">
+      <rect id="Rectangle_1314" data-name="Rectangle 1314" width="18.863" height="4.716" rx="2.358" transform="translate(33.002)" fill="#fff"/>
+      <rect id="Rectangle_1315" data-name="Rectangle 1315" width="18.863" height="4.716" rx="2.358" transform="translate(9.423)" fill="#fff"/>
+      <rect id="Rectangle_1316" data-name="Rectangle 1316" width="14.147" height="4.716" rx="2.358" transform="translate(37.717 11.785)" fill="#fff"/>
+      <rect id="Rectangle_1317" data-name="Rectangle 1317" width="33.002" height="4.716" rx="2.358" transform="translate(0 11.785)" fill="#fff"/>
+      <rect id="Rectangle_1318" data-name="Rectangle 1318" width="23.57" height="4.716" rx="2.358" transform="translate(18.855 23.57)" fill="#fff"/>
+      <rect id="Rectangle_1319" data-name="Rectangle 1319" width="14.147" height="4.716" rx="2.358" transform="translate(0 23.57)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

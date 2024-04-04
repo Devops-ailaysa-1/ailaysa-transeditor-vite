@@ -1,0 +1,37 @@
+<svg id="Group_1345" data-name="Group 1345" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28.068" height="37.064" viewBox="0 0 28.068 37.064">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.311" y1="1" x2="0.311" y2="0.013" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffa412"/>
+      <stop offset="1" stop-color="#ffd61c"/>
+    </linearGradient>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_1319" data-name="Rectangle 1319" width="27.84" height="36.919" transform="translate(0)" fill="url(#linear-gradient)"/>
+    </clipPath>
+    <linearGradient id="linear-gradient-3" x1="0.177" y1="-0.304" x2="0.966" y2="0.905" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffa612"/>
+      <stop offset="1" stop-color="#ffa613" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="clip-path-2">
+      <path id="Path_2530" data-name="Path 2530" d="M18,0V8.145a2.036,2.036,0,0,0,2.036,2.036H28.18Z" transform="translate(-18)" fill="#ffeb91"/>
+    </clipPath>
+  </defs>
+  <g id="Group_746" data-name="Group 746" transform="translate(0 0.145)">
+    <g id="Group_745" data-name="Group 745" transform="translate(0 0)" clip-path="url(#clip-path)">
+      <path id="Path_2529" data-name="Path 2529" d="M28.505,10.181V34.614a2.036,2.036,0,0,1-2.036,2.036H2.036A2.036,2.036,0,0,1,0,34.614V2.036A2.036,2.036,0,0,1,2.036,0H18.325Z" transform="translate(-0.341 -0.065)" fill="url(#linear-gradient)"/>
+    </g>
+  </g>
+  <path id="Path_2531" data-name="Path 2531" d="M-21175.605,19970.016l5.291,4.609,4.254,4.25-.01-8.309Z" transform="translate(21194.129 -19960.379)" fill="url(#linear-gradient-3)"/>
+  <g id="Group_748" data-name="Group 748" transform="translate(17.887 0)">
+    <g id="Group_747" data-name="Group 747" clip-path="url(#clip-path-2)">
+      <rect id="Rectangle_1320" data-name="Rectangle 1320" width="14.397" height="14.397" transform="translate(-5.09 5.09) rotate(-45)" fill="#ffeb91"/>
+    </g>
+  </g>
+  <g id="Group_1346" data-name="Group 1346" transform="translate(4.864 14.381)">
+    <rect id="Rectangle_2015" data-name="Rectangle 2015" width="1.582" height="3.338" transform="translate(0 6.537)" fill="#fff"/>
+    <rect id="Rectangle_2016" data-name="Rectangle 2016" width="1.582" height="3.338" transform="translate(16.531 6.537)" fill="#fff"/>
+    <rect id="Rectangle_2017" data-name="Rectangle 2017" width="1.582" height="8.39" transform="translate(3.306 4.054)" fill="#fff"/>
+    <rect id="Rectangle_2018" data-name="Rectangle 2018" width="1.582" height="8.39" transform="translate(13.225 4.054)" fill="#fff"/>
+    <rect id="Rectangle_2019" data-name="Rectangle 2019" width="1.582" height="14.6" transform="translate(6.613 0)" fill="#fff"/>
+    <rect id="Rectangle_2020" data-name="Rectangle 2020" width="1.582" height="14.734" transform="translate(9.919 1.582)" fill="#fff"/>
+  </g>
+</svg>

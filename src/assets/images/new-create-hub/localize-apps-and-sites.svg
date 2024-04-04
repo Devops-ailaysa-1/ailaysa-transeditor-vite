@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="33.953" height="31.707" viewBox="0 0 33.953 31.707">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3314" data-name="Rectangle 3314" width="14.225" height="16.289" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Localize_apps_and_sites" data-name="Localize apps and sites" transform="translate(-365.765 -650.015)">
+    <path id="Path_4190" data-name="Path 4190" d="M26.978,23.026V7.982a.461.461,0,0,0-.23-.4L13.719.061a.46.46,0,0,0-.46,0L.23,7.584a.461.461,0,0,0-.23.4V23.026a.461.461,0,0,0,.23.4l13.029,7.522a.458.458,0,0,0,.46,0l13.029-7.522a.461.461,0,0,0,.23-.4" transform="translate(365.765 650.016)" fill="#9658ff"/>
+    <g id="Group_2054" data-name="Group 2054" transform="translate(385.493 665.433)" style="mix-blend-mode: multiply;isolation: isolate">
+      <g id="Group_2053" data-name="Group 2053">
+        <g id="Group_2052" data-name="Group 2052" clip-path="url(#clip-path)">
+          <path id="Path_4191" data-name="Path 4191" d="M55.3,44.094V36.389a.439.439,0,0,0-.22-.38L48.4,32.155a.441.441,0,0,0-.44,0l-6.673,3.853a.439.439,0,0,0-.22.38v7.705a.439.439,0,0,0,.22.38l6.673,3.853a.441.441,0,0,0,.44,0l6.673-3.853a.439.439,0,0,0,.22-.38" transform="translate(-41.072 -32.097)" fill="#e781f7"/>
+        </g>
+      </g>
+    </g>
+    <path id="Union_2" data-name="Union 2" d="M-6755.28-18385.133l3.2-13.146,2.055.5-3.2,13.145Zm5.19-3.016,3.117-3.293-3.117-3.287,1.533-1.459,4.493,4.746-4.493,4.748Zm-11.146-3.293,4.5-4.742,1.533,1.455-3.121,3.287,3.121,3.293-1.533,1.455Z" transform="translate(7131.907 19056.77)" fill="#fff"/>
+    <path id="Path_4194" data-name="Path 4194" d="M48.321,32.121v7.585a.458.458,0,0,1-.231.4l-7.013,4.049a.234.234,0,0,1,0-.058v-7.7a.442.442,0,0,1,.221-.384l6.672-3.852a.44.44,0,0,1,.355-.034" transform="translate(344.421 633.336)" fill="#6d00e0"/>
+  </g>
+</svg>

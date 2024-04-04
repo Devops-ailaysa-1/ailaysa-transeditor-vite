@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30.189" height="29.69" viewBox="0 0 30.189 29.69">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3419" data-name="Rectangle 3419" width="30.189" height="29.69" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="tool_kit" data-name="tool kit" transform="translate(0 0.001)">
+    <g id="Group_2176" data-name="Group 2176" transform="translate(0 -0.001)" clip-path="url(#clip-path)">
+      <path id="Path_4402" data-name="Path 4402" d="M30.189,13.295V33.052a2.218,2.218,0,0,1-2.216,2.216H2.216A2.218,2.218,0,0,1,0,33.052V13.295a2.213,2.213,0,0,1,2.216-2.211H27.973a2.213,2.213,0,0,1,2.216,2.211" transform="translate(0 -5.577)" fill="#fb7c3e"/>
+      <path id="Path_4403" data-name="Path 4403" d="M30.26,8.717H27.031V3.229H14.462V8.645h-3.23V1.615A1.615,1.615,0,0,1,12.847,0h15.8A1.614,1.614,0,0,1,30.26,1.615Z" transform="translate(-5.652 0)" fill="#ffc746"/>
+      <rect id="Rectangle_3415" data-name="Rectangle 3415" width="3.229" height="3.14" transform="translate(5.579 5.506)" fill="#fb7c3e"/>
+      <rect id="Rectangle_3416" data-name="Rectangle 3416" width="3.229" height="3.209" transform="translate(21.381 5.506)" fill="#fb7c3e"/>
+      <rect id="Rectangle_3417" data-name="Rectangle 3417" width="3.229" height="3.14" transform="translate(5.579 5.506)" fill="#f04c01"/>
+      <rect id="Rectangle_3418" data-name="Rectangle 3418" width="3.229" height="3.209" transform="translate(21.381 5.506)" fill="#f04c01"/>
+      <path id="cached_FILL0_wght700_GRAD200_opsz40" d="M10.535,20.1A6.887,6.887,0,0,1,5.559,18.06a6.538,6.538,0,0,1-2.1-4.841v-.689L2.169,13.8,1.042,12.656,4.568,9.13l3.526,3.526L6.946,13.8,5.674,12.51v.647A4.6,4.6,0,0,0,7.114,16.5a4.7,4.7,0,0,0,3.422,1.4,5.2,5.2,0,0,0,1.241-.146,4.212,4.212,0,0,0,1.075-.418l1.586,1.565a6.572,6.572,0,0,1-1.868.918A7.02,7.02,0,0,1,10.535,20.1Zm6.009-3.276-3.526-3.505,1.148-1.168,1.293,1.273v-.584a4.594,4.594,0,0,0-1.481-3.3,4.719,4.719,0,0,0-3.4-1.4,5.664,5.664,0,0,0-1.262.136A5.134,5.134,0,0,0,8.24,8.65L6.7,7.085A6.393,6.393,0,0,1,8.532,6.2a7.234,7.234,0,0,1,2.045-.281,6.861,6.861,0,0,1,4.955,2.045A6.608,6.608,0,0,1,17.65,12.8v.668L18.9,12.176l1.169,1.147Z" transform="translate(4.537 4.756)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

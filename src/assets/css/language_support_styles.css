@@ -1,0 +1,82 @@
+/* Tamil */
+
+body.__tam__ .steps-select__placeholder,
+body.__tam__ .job-select__placeholder,
+body.__tam__ .project-select__placeholder,
+body.__tam__ .assignmanage-team-header-col button,
+body.__tam__ .project-type-list__placeholder,
+body.__tam__ .project-type-list__single-value,
+body.__tam__ .fileopen-new-btn,
+body.__tam__ {
+    font-family: "Noto Sans Tamil", sans-serif !important;
+}
+
+body.__tam__ .project-input-wrap .project-box,
+body.__tam__ .term-edit-form-control input[type="text"].gl-worksp-input,
+body.__tam__ .glossaries-list-wrapper .header-align.glossary-header .header-project-setup-align-wrap .section-header,
+body.__tam__ .file-edit-proj-status-txt.glossary-status,
+body.__tam__ .proj-file-type span,
+body.__tam__ .file-edit-heading-table-cell span,
+body.__tam__ .breadcrumbs-wrapper span.glossary-font-change,
+body.__tam__ .ai-subtask-collapse-wrap ul.ai-subtask-link-list li a.glossary-font-inner span,
+body.__tam__ .ai-subtask-collapse-wrap ul.ai-subtask-link-list li a.glossary-font-change,
+body.__tam__ .ai-subtask-collapse-wrap .header span.title.glossary-font-change,
+body.__tam__ .avatar-initial,
+body.__tam__ .assignmanage-team-cell-content .member-email, 
+body.__tam__ .assignmanage-cell-doc-content .team-name,
+body.__tam__ .assignmanage-cell-src-tar span,
+body.__tam__ .assignmanage-team-cell-content .name, 
+body.__tam__ .assignmanage-cell-doc-content .file span.file-word-count, 
+body.__tam__ .assignmanage-cell-doc-content .file,
+body.__tam__ .label-txt-new a,
+body.__tam__ .project-setup-pagination ul li,
+body.__tam__ .project-list-search-box input,
+body.__tam__ .file-progress-txt,
+body.__tam__ .file-edit-proj-txt-file-name,
+body.__tam__ .file-edit-proj-txt-file-extension,
+body.__tam__ .setting-file-edit-translation-txt span, 
+body.__tam__ .file-edit-translation-txt span,
+body.__tam__ .proj-list-info .proj-file-type .glossary-text-name,
+body.__tam__ .file-edit-proj-txt-word-count,
+body.__tam__ .file-edit-proj-txt-tmx {
+    font-family: 'Roboto', sans-serif !important;
+}
+
+body.__tam__ .side-bar-tab-glb-wrapper{
+    width: 105px;
+}
+
+body.__tam__ .side-bar-tab-glb-wrapper .side-bar-tab-box a.nav-link p{
+    font-size: 11px;
+}
+
+body.__tam__ .job-select__control,
+body.__tam__ .project-select__control{
+    width: 300px;
+}
+
+body.__tam__ .team-switch-btn{
+    font-size: 13px;
+}
+
+body.__tam__ .assignmanage-header-col .title{
+    font-size: 12px;
+}
+
+body.__tam__ .find-edit-text{
+    font-size: 10px;
+}
+
+body.__tam__ .file-edit-proj-status-txt{
+    font-size: 12px;
+}
+
+body.__tam__ .settings-heading-title{
+    font-size: 15px;
+}
+
+body.__tam__ .nav-transeditor-wrapper a:first-child .nav-assign-manage-link{
+    width: 140px !important;
+}
+
+/* Tamil */

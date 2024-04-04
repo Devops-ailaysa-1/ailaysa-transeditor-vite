@@ -1,0 +1,16 @@
+import React from "react";
+
+function SplitRightIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="48"
+      height="48"
+      viewBox="0 96 960 960"
+    >
+      <path d="M570 936q-24 0-42-18t-18-42V276q0-24 18-42t42-18h210q24 0 42 18t18 42v600q0 24-18 42t-42 18H570zm-390 0q-24 0-42-18t-18-42V276q0-24 18-42t42-18h210q24 0 42 18t18 42v600q0 24-18 42t-42 18H180zm0-660v600h210V276H180zm210 600H180h210z"></path>
+    </svg>
+  );
+}
+
+export default SplitRightIcon;
