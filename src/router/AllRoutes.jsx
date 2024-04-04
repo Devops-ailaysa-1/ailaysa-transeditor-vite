@@ -47,6 +47,7 @@ const Chat = lazy(() => lazyRetry(() => import('../vendor/chat/Chat')))
 const GlossaryWorkspace = lazy(() => lazyRetry(() => import('../vendor/project-type-selection/glossary-workspace/GlossaryWorkspace')))
 const Invitation = lazy(() => lazyRetry(() => import('../vendor/Invitation')))
 const ProjectSetup = lazy(() => lazyRetry(() => import('../project-setup-components/ProjectSetup')))
+const WordchoiceWorkspace = lazy(() => lazyRetry(() => import('../vendor/project-type-selection/wordchoice-workspace/WordchoiceWorkspace')))
 // const ProjectManagement = lazy(() => lazyRetry(() => import('../project-setup-components/ProjectManagement')))
 
 const Writter = lazy(() => lazyRetry(() => import('../ailaysa-writer/Writter')))
@@ -95,6 +96,9 @@ const AllRoutes = (props) => {
                 
                 <Route exact path="/default-glossary-workspace" element={<Suspense fallback={<MainAILoader />}><DefaultGlossaryWorkspace /></Suspense>} />
                 
+                <Route exact path="/wordchoice-workspace/:projectId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
+                <Route exact path="/wordchoice-workspace/:projectId/:taskId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
+
                 <Route exact path="/accept/:uid/:token" element={<Invitation />} />
                 <Route exact path="/confirm/:uid/:token" element={<Invitation />} />
 

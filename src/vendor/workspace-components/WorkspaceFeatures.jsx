@@ -122,7 +122,7 @@ const WorkspaceFeatures = (props) => {
                                             ref={commentsTabButton}
                                             onClick={(e) => {
                                                 e.isTrusted && handleToggleVisibility(true)
-                                                showSegmentComments(e, true)
+                                                showSegmentComments(null, true)
                                             }}
                                             className="nav-link"
                                             id="pills-comments-tab"

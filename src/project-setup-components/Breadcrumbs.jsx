@@ -97,15 +97,15 @@ const Breadcrumbs = () => {
                         fontWeight: 700,
                     }}
                 />
-                <span className={params?.menu === "glossaries" ? "glossary-font-change" : "category-sub-text"}>
+                {/* <span className={params?.menu === "glossaries" ? "glossary-font-change" : "category-sub-text"}>
                     {   
                         params?.menu === "glossaries" ? t("glossaries") 
                         : 
                         ""
                     }
-                </span>
+                </span> */}
                 {
-                    (!params?.action === "instant-text" || !params?.category === "transcribe" || !params?.category === "voice" || !params?.menu === "text" || params?.category === "assets") &&
+                    (!params?.action === "instant-text" || !params?.category === "transcribe" || !params?.category === "voice" || !params?.menu === "text" || !params?.category === "assets") &&
                     <KeyboardArrowRightIcon
                         style={{
                             fontSize: "20px",
@@ -128,13 +128,14 @@ const Breadcrumbs = () => {
                         : 
                         params?.action === "translate-files" ? `${t("translate_files")}` 
                         : 
-                        params?.action === "create" ? `${t("create")}` 
+                        params?.menu === "glossaries" ? `${t("glossaries")}`
                         : 
                         params?.action === "convert-pdf" ? `${t("convert_pdf")}` 
                         :
                         params?.action === "my-list" ? `${t("my_list")}` 
                         : 
-                        ""
+                        params?.menu === "wordchoice" ? `${t("wordchoice")}`
+                        : ""
                     }
                 </span>
             </div>
