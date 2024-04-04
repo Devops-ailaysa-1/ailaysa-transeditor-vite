@@ -1008,20 +1008,22 @@ const WordchoiceWorkspace = (props) => {
                             {(showTermsLoading && termsList?.length === 0) ? (
                                 Array(10).fill(null).map((index) => {
                                     return(
-                                        <div key={index} className={`choicelist-list-item `}>
-                                            <div className="choice-list-source-term-wrap">
-                                                <p className="choicelist-item-text">
-                                                    {/* <span className="text-icon" style={{background: 'none'}}> <Skeleton animation="wave" variant="circular" width={19} height={19} /></span> */}
-                                                    <Skeleton animation="wave" variant="text" width={120} />
-                                                </p>
+                                        <>
+                                            <div key={index} className={`choicelist-list-item `}>
+                                                <div className="choice-list-source-term-wrap">
+                                                    <p className="choicelist-item-text">
+                                                        {/* <span className="text-icon" style={{background: 'none'}}> <Skeleton animation="wave" variant="circular" width={19} height={19} /></span> */}
+                                                        <Skeleton animation="wave" variant="text" width={120} />
+                                                    </p>
+                                                </div>
+                                                <div className="choice-list-replace-term-wrap">
+                                                    <p className="choicelist-item-text"><Skeleton animation="wave" variant="text" width={120} /></p>
+                                                </div>
+                                                <div className="choice-list-replace-term-wrap">
+                                                    <p className="choicelist-item-text pos"><Skeleton animation="wave" variant="text" width={120} /></p>
+                                                </div>
                                             </div>
-                                            <div className="choice-list-replace-term-wrap">
-                                                <p className="choicelist-item-text"><Skeleton animation="wave" variant="text" width={120} /></p>
-                                            </div>
-                                            <div className="choice-list-replace-term-wrap">
-                                                <p className="choicelist-item-text pos"><Skeleton animation="wave" variant="text" width={120} /></p>
-                                            </div>
-                                        </div>
+                                        </>
                                     )
                                 })
                             ) : 
