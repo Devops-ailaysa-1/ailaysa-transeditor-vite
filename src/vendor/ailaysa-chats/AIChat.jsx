@@ -401,8 +401,17 @@ const AIChat = () => {
         }
     }
 
-    const [pageNumber, setPageNumber] = useState(1);
+    const scroll = (element) => {
+        document.querySelector(`.page-${element}`)?.scrollIntoView({ behavior: "smooth",block: 'nearest',
+        inline: 'center' });
+      }
 
+    const [pageNumber, setPageNumber] = useState(1);
+    const handleReference = (page) => {
+        setPageNumber(page)
+        scroll(page)
+      
+    }
  
     return (
         <>
@@ -790,7 +799,7 @@ const AIChat = () => {
                                                                 <span className="reference-label">Reference:</span>
                                                                 {chat?.pdf_chat_page_ref?.map((each) => {
                                                                     return(
-                                                                        <span onClick={() => setPageNumber(each.page_no)} className="page-no" key={each?.page_no}>{each?.page_no},</span>
+                                                                        <span onClick={() => handleReference(each.page_no)} className="page-no" key={each?.page_no}>{each?.page_no},</span>
                                                                     )
                                                                 })}
                                                             </div>
