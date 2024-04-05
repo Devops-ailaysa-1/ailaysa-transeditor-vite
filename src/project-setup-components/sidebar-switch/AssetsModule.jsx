@@ -17,6 +17,7 @@ import "rodal/lib/rodal.css";
 // import Select, { components } from "react-select";
 // import AddIcon from '@mui/icons-material/Add';
 import SearchTerms from "../assets-component/glossaries/SearchTerms";
+import CreateWordchoice from "../assets-component/wordchoice/CreateWordchoice";
 
 const AssetsModule = (props) => {
     const {
@@ -25,6 +26,7 @@ const AssetsModule = (props) => {
     }=props
 
     const params = useParams();
+    console.log(params)
 
     if (!params?.menu && !params?.action) {
         <Navigate to="assets/glossaries/create" />;
@@ -34,14 +36,16 @@ const AssetsModule = (props) => {
         switch (params?.action) {
             case "create":
                 return <CreateGlossaries 
-                sidebarActiveTab={sidebarActiveTab}
-                setSidebarActiveTab={setSidebarActiveTab}
+                    sidebarActiveTab={sidebarActiveTab}
+                    setSidebarActiveTab={setSidebarActiveTab}
                 />;
             case "my-glossaries":
                 return <ViewGlossariesList/>;
             case "search-terms":
                 return <SearchTerms />;
         }
+    } else if (params?.menu === "wordchoice") {
+        return <CreateWordchoice />
     }
 };
 

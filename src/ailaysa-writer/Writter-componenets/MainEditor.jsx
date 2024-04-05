@@ -1944,7 +1944,6 @@ const MainEditor = (props) => {
             })
 
             var text = noteEditingArea?.innerHTML?.trim()
-            // text = removeTagsWithClass(text, 'mark', 'choicelist-option-highlight')
             var wordsToHighlight = words_list; // Array of words to highlight
             // console.log(wordsToHighlight)
             // console.log(text)

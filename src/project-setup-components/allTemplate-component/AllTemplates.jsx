@@ -40,25 +40,11 @@ const AllTemplate = (props) => {
     const [activeTab, setActiveTab] = useState(null);
     const [categoryListItem, setCategoryListItem] = useState(null);
     const [projectSearchTerm, setProjectSearchTerm] = useState("");
-    const [choiceListProjectName, setChoiceListProjectName] = useState("");
-    const [choiceListLanguage, setChoiceListLanguage] = useState(null);
-    const [showChoiceListCreateModal, setShowChoiceListCreateModal] = useState(false);
-    const [showSrcLangModal, setshowSrcLangModal] = useState(false);
-    const [isChoiceListModalEdit, setIsChoiceListModalEdit] = useState(false)
-    const [isCreating, setIsCreating] = useState(false);
-    const [isUpdating, setIsUpdating] = useState(false);
-    const [filteredResults, setFilteredResults] = useState([]);
-    const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
     const dispatch = useDispatch()
-    const showGlobalTransition = useSelector((state) => state.globalTransition.value)
     
     const searchTermRef = useRef(null)
-    const searchTermCloseOutside = useRef();
     const DataItem = useRef(null)
     const DataFilterItem = useRef(null)
-    const dontDisplayId = useRef([22, 23, 28])
-    const searchAreaRef = useRef(null);
 
     useEffect(() =>{
         if(projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete){
@@ -103,24 +89,6 @@ const AllTemplate = (props) => {
         }
     }, [location?.state, DataFilterItem.current])
 
-    // reset the choicelist states when choicelist modal is closed
-    useEffect(() => {
-        if(!showChoiceListCreateModal){
-            resetChoicelistCreationModal()
-        }
-    }, [showChoiceListCreateModal])
-    
-    // useEffect(() => {
-    //   if(allTemplateList?.res !== undefined && individualTemplateList?.res !== undefined){
-    //     // console.log(allTemplateList)
-    //     // console.log(individualTemplateList)
-    //     setDataItem(allTemplateList.res)
-    //     DataItem.current = allTemplateList.res
-    //     setDataFilterItem(individualTemplateList.res)
-    //     DataFilterItem.current = individualTemplateList.res
-    //   }
-    // }, [allTemplateList, individualTemplateList])
-    
 
     const getCardContent = async() => {
         setCardLoaders(true)
@@ -213,12 +181,6 @@ const AllTemplate = (props) => {
         }
     }, [params?.menu, DataFilterItem.current])
 
-    /* Handling source language selection */
-    const handleSourceLangClick = (value, name, e) => {
-        setChoiceListLanguage({ name, value })
-        setshowSrcLangModal(false);
-    };
-
     const filterItem = (curcat) => {
         setFileListSearchEnlarge(false)
         setProjectSearchTerm('')
@@ -238,60 +200,15 @@ const AllTemplate = (props) => {
     };
 
     const handleCardClick = (item) => {
-        if(item.attributes?.url !== 'open-choicelist-modal'){
-            dispatch(setShowGlobalTransition(false))
-            setTimeout(() => {
-                if(item.attributes?.url.includes("https")){
-                    window.open(item.attributes?.url, "_blank")
-                }else{
-                    history(item.attributes?.url, {state: {aiWritingCateg: item.attributes?.backend_id, prevPath: location.pathname}})
-                }
-            }, 250);
-        }else{
-            setShowChoiceListCreateModal(true)
-        }
-    }
-
-    const createChoiceList = () => {
-
-        if (choiceListProjectName?.trim() === '' || choiceListLanguage?.value === undefined) {
-            Config.toast(t("please_complete_form"), 'warning')
-            return;
-        }
-
-        let formData = new FormData();
-        formData.append('name', choiceListProjectName?.trim());
-        formData.append('language', choiceListLanguage?.value);
-        setIsCreating(true)
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelist/`,
-            method: "POST",
-            data: formData,
-            auth: true,
-            success: (response) => {
-                // console.log(response.data)
-                setShowChoiceListCreateModal(false)
-                setIsCreating(false)
-                setIsCreating(false)
-                history(`/choicelist-workspace/${response.data.id}`)
-                // resetChoicelistCreationModal()
-                // getChoiceLists()
-            },
-            error: (err) => {
-                setIsCreating(false)
+        dispatch(setShowGlobalTransition(false))
+        setTimeout(() => {
+            if(item.attributes?.url.includes("https")){
+                window.open(item.attributes?.url, "_blank")
+            }else{
+                history(item.attributes?.url, {state: {aiWritingCateg: item.attributes?.backend_id, prevPath: location.pathname}})
             }
-        });
+        }, 250);
     }
-
-    const resetChoicelistCreationModal = () => {
-        setChoiceListLanguage(null)
-        setChoiceListProjectName("")
-    }
-
-    // useEffect(() => {
-    //     console.log(activeTab)
-    // }, [])
-    
 
     return (
         <React.Fragment>
@@ -543,104 +460,6 @@ const AllTemplate = (props) => {
                     </div>
                 </div>
             </section>
-            {/* New choicelist creation modal */}
-            {
-                showChoiceListCreateModal && (
-                    <Rodal
-                        visible={showChoiceListCreateModal}
-                        showCloseButton={false}
-                        onClose={() => {console.log()}}
-                        className={"edit-instant-project-box " + ((showSrcLangModal) ? "z-index-reduce" : "z-index-increase")}
-                    >
-                        <div className="header-wrapper">
-                            <div className="header-text">
-                                {!isChoiceListModalEdit ? (
-                                    <h1>{t("create_choicelist")}</h1>
-                                ) : (
-                                    <h1>{t("edit_choicelist")}</h1>
-                                )}
-                            </div>
-                            <span className="modal-close-btn" onClick={() => { setShowChoiceListCreateModal(false); setIsChoiceListModalEdit(false) }}>
-                                <img src={CloseBlack} alt="close_black" />
-                            </span>
-                        </div>
-                        <div className="body-wrapper">
-                            <div className="language-details mb-3">
-                                <h2>{t("choicelist_name")}</h2>
-                                <input
-                                    type='text'
-                                    value={choiceListProjectName}
-                                    placeholder={t("choicelist_name")}
-                                    className="ai-sl-tl-btn input"
-                                    onChange={(e) => setChoiceListProjectName(e.target.value)}
-                                />
-                            </div>
-                            <div className="language-details mb-3">
-                                <h2>{t("select_language")}</h2>
-                                <ButtonBase
-                                    style={isChoiceListModalEdit ? { pointerEvents: 'none', opacity: 0.7 } : {}}
-                                    onClick={() => setshowSrcLangModal(true)}
-                                >
-                                    <div className="ai-sl-tl-btn">
-                                        <span className="text" style={choiceListLanguage?.value !== undefined ? {color: '#343a40'} : { color: '#ababab' }}>
-                                            {choiceListLanguage?.value !== undefined ? `${choiceListLanguage?.name}` : t("select_language")}
-                                        </span>
-                                    </div>
-                                </ButtonBase>
-                            </div>
-                            <div className="edit-proj-button-row">
-                                <ButtonBase className="instant-edit-delete-btn" onClick={() => { setShowChoiceListCreateModal(false); setIsChoiceListModalEdit(false) }}>
-                                    {t("discard")}
-                                </ButtonBase>
-                                {!isChoiceListModalEdit ? (
-                                    <ButtonBase className="instant-edit-update-btn" onClick={() => { !isCreating && createChoiceList() }}>
-                                        {isCreating && <ButtonLoader />}
-                                        {isCreating ? t("creating") : t("create")}
-                                    </ButtonBase>
-                                ) : (
-                                    <ButtonBase className="instant-edit-update-btn" onClick={() => { !isUpdating && console.log() }}>
-                                        {isUpdating && <ButtonLoader />}
-                                        {isUpdating ? t("updating") : t("update")}
-                                    </ButtonBase>
-                                )}
-                            </div>
-                        </div>
-                    </Rodal>
-                )
-            }
-            {
-                showSrcLangModal && (
-                    <Rodal
-                        className="ai-tar-lang-select-modal"
-                        visible={showSrcLangModal}
-                        width={784}
-                        height='auto'
-                        onClose={() => {console.log()}}
-                        showCloseButton={false}
-                    >
-                        <div className="lang-modal-wrapper">
-                            {/* <h1>{t("select_target_language-2")}</h1> */}
-                            <span className="modal-close-btn lang-close" onClick={(e) => setshowSrcLangModal(false)}>
-                                <img src={CloseBlack} alt="close_black" />
-                            </span>
-                            <SourceLanguage
-                                sourceLanguage={choiceListLanguage?.value}
-                                showSrcLangModal={showSrcLangModal}
-                                setshowSrcLangModal={setshowSrcLangModal}
-                                sourceLanguageOptions={languageOptionsList}
-                                handleSourceLangClick={handleSourceLangClick}
-                                filteredResults={filteredResults}
-                                setFilteredResults={setFilteredResults}
-                                searchInput={searchInput}
-                                setSearchInput={setSearchInput}
-                                onFocusWrap={onFocusWrap}
-                                setOnFocusWrap={setOnFocusWrap}
-                                searchAreaRef={searchAreaRef}
-                            />
-                        </div>
-                    </Rodal>
-                )
-            }
         </React.Fragment>
     )
 };

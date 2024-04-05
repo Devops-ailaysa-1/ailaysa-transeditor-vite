@@ -3,7 +3,7 @@ import React, { useState, useEffect, createRef, useRef } from "react";
 import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from "reactstrap";
 import classnames from "classnames";
 import { useNavigate } from "react-router-dom";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Config from "./Config";
 // import Navbar from "./Navbar";
 import Rodal from "rodal";
@@ -49,6 +49,7 @@ import DownloadIcon from "../assets/images/new-ui-icons/file_download14x14.svg"
 import DeleteBinIcon from "../assets/images/new-ui-icons/assets-delete-icon.svg"
 import ConfirmIcon from "../assets/images/new-ui-icons/confirm-icon.svg"
 import PlusIcon from "../assets/images/new-ui-icons/plus-new.svg"
+import WordchoiceIcon from "../assets/images/choicelist.svg"
 
 
 const IOSSwitch = styled((props) => (
@@ -103,7 +104,10 @@ const IOSSwitch = styled((props) => (
     },
 }));
 
-function Settings(props) {
+const Settings = (props) => {
+
+    let {isNewsProject} = props
+
     const history = useNavigate();
     const { t } = useTranslation();
     const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
@@ -154,26 +158,21 @@ function Settings(props) {
     const [tmxFilesFromAPI, setTmxFilesFromAPI] = useState(null)
     const [isQAFileDeleted, setIsQAFileDeleted] = useState(false)
     const [tmxTempFiles, setTmxTempFiles] = useState([])
-    const [choiceList, setChoiceList] = useState([])
-    const [checkedChoiceList, setCheckedChoiceList] = useState([])
-    const [selectedChoiceList, setSelectedChoiceList] = useState([])
-    const [isChoiceListChanged, setIsChoiceListChanged] = useState(false)
-
-    const [selectedChoiceListId, setSelectedChoiceListId] = useState(null)
-    const [isChoiceListAddedToProject, setIsChoiceListAddedToProject] = useState(false)
-
-    const previouslySelectedChoiceListRef = useRef(null)
-    const isChoiceListAddedToProjectRef = useRef(null)
     const [isLoadingButton, setIsLoadingButton] = useState(false)
     const [isConvertingButton, setIsConvertingButton] = useState(false)
+    const [isGlossaryListLoading, setisGlossaryListLoading] = useState(false)
+    const [isWordchoiceListLoading, setIsWordchoiceListLoading] = useState(false)
 
     const downloadref = useRef(null)
     const downloadedFileName = useRef(null)
     const glossaryToRemove = useRef(null)
-    const choicelistToRemove = useRef(null)
-    const choicelistToAdd = useRef([])
     const jobsOptionsRef = useRef([])
-    const checkedChoiceListRef = useRef([])
+    
+    const glossaryListRef = useRef([])
+    const wordChoiceListRef = useRef([])
+    const glossarySelectedListRef = useRef([])
+    const wordChoiceSelectedListRef = useRef([])
+    const activeTabRef = useRef(1)
 
     const modaloption = {
         closeMaskOnClick: false
@@ -208,51 +207,115 @@ function Settings(props) {
         }
     }, [projectId])
 
+
     useEffect(() => {
-        if (tmxFiles.length !== 0 && props.tmxFiles !== tmxFiles) {
-            // this.setState({ ...this.state, tmxFiles: this.props.tmxFiles });
-            // tmxFileUpload(props.tmxFiles);
+        if(isNewsProject){
+            setActiveTab("3")
+            activeTabRef.current = "3"
         }
-    }, [tmxFiles])
+    }, [isNewsProject])
+    
+    useEffect(() => {
+        if(activeTab === "3"){
+            glossaryToRemove.current = null
+            setGlossaryList(glossaryListRef.current)
+            console.log(glossarySelectedListRef.current)
+            setGlossarySelectedList(glossarySelectedListRef.current)
+            setCheckedGlossary(prevState => [])
+            setIsGlossaryChanged(false)
+        }else if(activeTab === "6"){
+            glossaryToRemove.current = null
+            setGlossaryList(wordChoiceListRef.current)
+            setGlossarySelectedList(wordChoiceSelectedListRef.current)
+            setIsGlossaryChanged(false)
+            setCheckedGlossary(prevState => [])
+        }
+    }, [activeTab])
+
+    
+    // store the glossary which are removed
+    useEffect(() => {
+        let list = glossarySelectedList?.filter(o1 => !checkedGlossary.some(o2 => o1.glossary == o2))
+        console.log(list)
+        glossaryToRemove.current = list
+        if (glossaryToRemove.current?.length !== 0 || checkedGlossary?.filter(item => !glossarySelectedList?.some(each => each.glossary == item))?.length !== 0) {
+            setIsGlossaryChanged(true)
+        } else {
+            setIsGlossaryChanged(false)
+        }
+    }, [checkedGlossary]);
+
+
+    // check the already added glossaries
+    useEffect(() => {
+        // console.log("checked list changed")
+        if (glossaryList?.length !== 0 && glossarySelectedList?.length !== 0) {
+            let a = glossaryList.filter(item => glossarySelectedList.some(each => item.glossary_id == each.glossary))
+            let list = []
+            a?.map(each => {
+                list.push(each.glossary_id)
+            })
+            console.log(list)
+            setCheckedGlossary(list)
+        }
+    }, [glossarySelectedList, glossaryList])
+
+    
+    const handleGlossaryCheckbox = (e, glossaryId) => {
+        console.log(checkedGlossary)
+        if(checkedGlossary?.includes(glossaryId)){
+            let newCheckedTerms = checkedGlossary?.filter(id => id !== glossaryId)
+            glossaryToRemove.current = glossaryId
+            setCheckedGlossary(newCheckedTerms)
+        }else{
+            setCheckedGlossary(oldArray => [...oldArray, glossaryId]);
+        }
+    }
+
 
 
     /* Get all the store previous values and load*/
     const loadAllValues = () => {
-        setChecked(false)
-        setShowTmSection(true)
-        setShowToolbarSection(true)
-        setMatchThreshold(85)
-        setStepValue(5)
-        setReferenceFiles([])
-        setTmxFiles([])
-        setTbxFiles([])
-        setGlossaryList([])
-        setGlossarySelectedList([])
-        setSelectedChoiceList([])
-        // setJobsOptions([])
-        setJobsOnlyOptions([])
-        setUploadedTbxFile(null)
-        setSelectedTbxJob("")
-        setSelectedTbxConvertJob("")
-        setUploadedTbxConvertFile(null)
-        setUploadedTbxConvertFileName("")
-        getJobsByProjectId();
-        getTmxFiles();
-        getGlossaryList();
-        getSelectedGlossaries();
-        getTbxFiles();
-        getThresholdValues();
-        getReferenceFiles();
-        getUntranslatableFiles()
-        getForbiddenFiles()
-        // getChoiceList()
-        // getSelectedChoicelist()
+        if(!isNewsProject){
+            setChecked(false)
+            setShowTmSection(true)
+            setShowToolbarSection(true)
+            setMatchThreshold(85)
+            setStepValue(5)
+            setReferenceFiles([])
+            setTmxFiles([])
+            setTbxFiles([])
+            setGlossaryList([])
+            setGlossarySelectedList([])
+            // setJobsOptions([])
+            setJobsOnlyOptions([])
+            setUploadedTbxFile(null)
+            setSelectedTbxJob("")
+            setSelectedTbxConvertJob("")
+            setUploadedTbxConvertFile(null)
+            setUploadedTbxConvertFileName("")
+            getJobsByProjectId();
+            getTmxFiles();
+            getGlossaryList();
+            getWordchoiceList();
+            getTbxFiles();
+            getThresholdValues();
+            getReferenceFiles();
+            getUntranslatableFiles()
+            getForbiddenFiles()
+        }else{
+            setGlossaryList([])
+            setGlossarySelectedList([])
+            getGlossaryList();
+            // getSelectedGlossaries();
+        }
     };
 
     /* Switch the active tab */
     const toggle = (tab) => {
         if (activeTab !== tab) {
             setActiveTab(tab)
+            activeTabRef.current = tab
         }
     };
 
@@ -575,26 +638,75 @@ function Settings(props) {
     };
 
     const getGlossaryList = () => {
+
+        setisGlossaryListLoading(true)
         Config.axios({
-            url: `${Config.BASE_URL}/glex/glossaries/${projectId}`,
+            url: `${Config.BASE_URL}/glex/glossaries/${projectId}/?option=glossary`,
             auth: true,
             success: (response) => {
-                // console.log(response)
-                setGlossaryList(response.data)
+                if(activeTabRef.current === "3"){
+                    setGlossaryList(response.data)
+                }
+                glossaryListRef.current = response.data
+                setisGlossaryListLoading(false)
+                getSelectedGlossaries()
             },
+            error: (err) => {
+                setisGlossaryListLoading(false)
+            }
+        });
+        getFilteredGlossaryList();
+    };
+
+    const getWordchoiceList = () => {
+        setIsWordchoiceListLoading(true)
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/glossaries/${projectId}/?option=word_choices`,
+            auth: true,
+            success: (response) => {
+                if(activeTabRef.current === "6"){
+                    console.log('inside wc')
+                    setGlossaryList(response.data)
+                }
+                wordChoiceListRef.current = response.data
+                setIsWordchoiceListLoading(false)
+                getSelectedWordChoice()
+            },
+            error: (err) => {
+                setIsWordchoiceListLoading(false)
+            }
         });
         getFilteredGlossaryList();
     };
 
     const getSelectedGlossaries = () => {
         Config.axios({
-            url: `${Config.BASE_URL}/glex/glossary_selected/?project=${projectId}`,
+            url: `${Config.BASE_URL}/glex/glossary_selected/?project=${projectId}&option=glossary`,
             auth: true,
             success: (response) => {
-                setGlossarySelectedList(response.data)
+                glossarySelectedListRef.current = response.data
+                if(activeTabRef.current === "3"){
+                    setGlossarySelectedList(response.data)
+                }
+                setIsLoadingButton(false)
             },
         });
     };
+
+    const getSelectedWordChoice = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/glossary_selected/?project=${projectId}&option=word_choices`,
+            auth: true,
+            success: (response) => {
+                wordChoiceSelectedListRef.current = response.data
+                if(activeTabRef.current === "6"){
+                    setGlossarySelectedList(response.data)
+                }
+                setIsLoadingButton(false)
+            },
+        });
+    };
+
 
     // add glossary
     const addGlossaryToProject = () => {
@@ -617,11 +729,15 @@ function Settings(props) {
             method: "POST",
             data: formData,
             success: (response) => {
-                response?.status === 201 && getSelectedGlossaries();
+                if(response?.status === 201) {
+                    if(activeTab === "3") getSelectedGlossaries()
+                    else if(activeTab === "6") getSelectedWordChoice()
+                }
                 Config.toast(t("added_success"))
-                setIsLoadingButton(false)
-
             },
+            error: (err) => {
+                setIsLoadingButton(false)
+            }
         });
     };
 
@@ -637,15 +753,21 @@ function Settings(props) {
             auth: true,
             method: "DELETE",
             success: (response) => {
-                response?.status === 204 && getSelectedGlossaries();
                 Config.toast(t("removed_success"))
                 glossaryToRemove.current = null
                 setIsGlossaryChanged(false)
                 setIsLoadingButton(false)
-
+                if(response?.status === 204) {
+                    if(activeTab === "3") getSelectedGlossaries()
+                    else if(activeTab === "6") getSelectedWordChoice()
+                }
             },
+            error: (err) => {
+                setIsLoadingButton(false)
+            }
         });
     };
+    
 
     /* Upload new TMX files */
     // const tmxFileUpload = (fileInput, e) => {
@@ -1227,13 +1349,6 @@ function Settings(props) {
         if (checkedGlossary?.filter(item => !glossarySelectedList?.some(each => each.glossary == item))?.length !== 0) {
             addGlossaryToProject()
         }
-        if (choicelistToAdd.current?.length !== 0 && choicelistToRemove.current?.length === 0 && activeTab == 4) {
-            addChoiceListToProject()
-        } else if (choicelistToAdd.current?.length === 0 && choicelistToRemove.current?.length !== 0 && activeTab == 4) {
-            removeChoiceListFromProject()
-        } else if (activeTab == 4) {
-            removeChoiceListFromProject('remove-and-add')
-        }
 
         if (activeTab == 5 && subQatab == 1) {
             if (isQaChanged) {
@@ -1404,39 +1519,6 @@ function Settings(props) {
         })
     }
 
-    const handleGlossaryCheckbox = (e, glossaryId) => {
-        if (e.target.checked) {
-            setCheckedGlossary([...checkedGlossary, glossaryId])
-        } else if (e.target.checked === false) {
-            let newCheckedTerms = checkedGlossary?.filter(id => id !== glossaryId)
-            glossaryToRemove.current = glossaryId
-            setCheckedGlossary(newCheckedTerms)
-        }
-    }
-
-    // store the glossary which are removed
-    useEffect(() => {
-        let list = glossarySelectedList?.filter(o1 => !checkedGlossary.some(o2 => o1.glossary == o2))
-        glossaryToRemove.current = list
-        if (glossaryToRemove.current?.length !== 0 || checkedGlossary?.filter(item => !glossarySelectedList?.some(each => each.glossary == item))?.length !== 0) {
-            setIsGlossaryChanged(true)
-        } else {
-            setIsGlossaryChanged(false)
-        }
-    }, [checkedGlossary]);
-
-
-    // check the already added glossaries
-    useEffect(() => {
-        if (glossaryList?.length !== 0 && glossarySelectedList?.length !== 0) {
-            let a = glossaryList.filter(item => glossarySelectedList.some(each => item.glossary_id == each.glossary))
-            let list = []
-            a?.map(each => {
-                list.push(each.glossary_id)
-            })
-            setCheckedGlossary(list)
-        }
-    }, [glossarySelectedList, glossaryList])
 
     const updateJobForQAFile = (job_id, objId, target) => {
         let formData = new FormData();
@@ -1484,201 +1566,6 @@ function Settings(props) {
         }, {});
     }
 
-    const getChoiceList = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelist/?project=${projectId}`,
-            auth: true,
-            success: (response) => {
-                let grouped_res = groupByKey(response.data, "language")
-                setChoiceList(grouped_res)
-            },
-        });
-    }
-
-    const getSelectedChoicelist = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelistselected/?project=${projectId}`,
-            auth: true,
-            success: (response) => {
-                setSelectedChoiceList(response.data)
-                let newArr = response.data?.map(each => {
-                    return {
-                        choicelist_id: each.choice_list,
-                        lang_id: each.language
-                    }
-                })
-                checkedChoiceListRef.current = newArr
-                setCheckedChoiceList(newArr)
-            },
-        });
-    };
-
-    function findChangedObjects(array1, array2) {
-
-        const changedObjects = [];
-        const objMap = new Map(array2.map((obj) => [obj.lang_id, obj]));
-
-        for (const obj1 of array1) {
-            const obj2 = objMap.get(obj1.lang_id);
-
-            if (obj2 && obj1.choicelist_id !== obj2.choicelist_id) {
-                changedObjects.push({ lang_id: obj1.lang_id, choicelist_id: obj2.choicelist_id });
-            }
-        }
-
-        // Include objects from array1 with new: true
-        for (const obj1 of array2) {
-            if (obj1.new) {
-                changedObjects.push({ lang_id: obj1.lang_id, choicelist_id: obj1.choicelist_id });
-            }
-        }
-
-        return changedObjects;
-    }
-
-    // store the choicelist which are removed
-    useEffect(() => {
-        let choice_to_add = findChangedObjects(checkedChoiceListRef.current, checkedChoiceList)
-        choicelistToAdd.current = choice_to_add?.map(each => each.choicelist_id)
-        // console.log(choicelistToAdd.current)
-
-        let choice_to_remove = selectedChoiceList?.filter(o1 => !checkedChoiceList.some(o2 => o1.choice_list == o2.choicelist_id))
-        choicelistToRemove.current = choice_to_remove?.map(each => each.id)
-        // console.log(choicelistToRemove.current)
-
-        if (choicelistToAdd.current?.length !== 0 || choicelistToRemove.current?.length !== 0) {
-            setIsChoiceListChanged(true)
-        } else {
-            setIsChoiceListChanged(false)
-        }
-    }, [checkedChoiceList]);
-
-
-    // handle choicelist change
-    const handleChoicelistCheckbox = (event, choicelist_id, lang_id) => {
-        // this is for updating the existing choicelist
-        if (checkedChoiceList?.find(each => each.lang_id == lang_id)) {
-            let newArr = checkedChoiceList?.map(obj => {
-                if (obj.lang_id == lang_id) {
-                    return {
-                        ...obj,
-                        choicelist_id
-                    }
-                }
-                return obj
-            })
-            setCheckedChoiceList(newArr)
-        } else {  // if doesn't have add new
-            setCheckedChoiceList([...checkedChoiceList, { choicelist_id, lang_id }])
-        }
-
-    }
-
-    const handleChoiceListLangSwitch = (e, lang_id, first_choicelist) => {
-        if (!e.target.checked) {
-            setCheckedChoiceList(checkedChoiceList?.filter(each => each.lang_id != lang_id))
-        } else {
-            let previous_choice = checkedChoiceListRef.current?.find(each => each.lang_id == lang_id)
-            // already have previous choice
-            if (previous_choice) {
-                setCheckedChoiceList([...checkedChoiceList, previous_choice])
-            } else {  // adding new choice
-                setCheckedChoiceList([...checkedChoiceList, { choicelist_id: first_choicelist?.id, lang_id, new: true }])
-            }
-        }
-    }
-    // check the already added glossaries
-    // useEffect(() => {
-    //     if (choiceList?.length !== 0 && selectedChoiceList?.length !== 0) {
-    //         let a = choiceList?.filter(item => selectedChoiceList.some(each => item.id == each.choice_list))
-    //         let list = []
-    //         a?.map(each => {
-    //             list.push(each.id)
-    //         })
-    //         setCheckedChoiceList(list)
-    //     }
-    // }, [selectedChoiceList, choiceList])
-
-    // checks whether the choicelist is changed or not
-    // useEffect(() => {
-    //     if (isChoiceListAddedToProjectRef.current === isChoiceListAddedToProject) {
-    //         setIsChoiceListChanged(false)
-    //     } else if (isChoiceListAddedToProjectRef.current !== isChoiceListAddedToProject) {
-    //         if (previouslySelectedChoiceListRef.current !== null) setIsChoiceListChanged(true)
-    //     }
-    //     if (selectedChoiceListId !== null) {
-    //         if (previouslySelectedChoiceListRef.current?.choice_list === selectedChoiceListId) {
-    //             setIsChoiceListChanged(false)
-    //         } else {
-    //             setIsChoiceListChanged(true)
-    //         }
-    //     }
-    // }, [previouslySelectedChoiceListRef.current, selectedChoiceListId, isChoiceListAddedToProject])
-
-    const addChoiceListToProject = () => {
-        let formData = new FormData();
-        formData.append("project", projectId);
-
-        console.log(choicelistToAdd.current)
-        choicelistToAdd.current?.forEach(each => {
-            formData.append("choice_list", each);
-        });
-
-        // // this code is for sending multiple choicelist ids to api
-        // if (selectedChoiceList?.length == 0) {
-        //     checkedChoiceList?.map(each => {
-        //         formData.append("choice_list", each);
-        //     })
-        // } else {
-        //     let listToUpdate = checkedChoiceList?.filter(item => !selectedChoiceList?.some(each => each.choice_list == item))
-        //     // console.log(listToUpdate);
-        //     listToUpdate?.map(each => {
-        //         formData.append("choice_list", each);
-        //     })
-        // }
-
-
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelistselected/`,
-            method: "POST",
-            auth: true,
-            data: formData,
-            success: (response) => {
-                // console.log(response.data);
-                getSelectedChoicelist()
-                Config.toast(t("added_success"))
-                setIsLoadingButton(false)
-
-            },
-        });
-    }
-
-    const removeChoiceListFromProject = (action) => {
-        let list = "";
-        console.log(choicelistToRemove.current)
-        choicelistToRemove.current?.map((each, index) => {
-            list += `${each}${index !== choicelistToRemove.current?.length - 1 ? "," : ""}`;
-        });
-        // console.log(list);
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelistselected/O/?remove_ids=${list}`,
-            auth: true,
-            method: "DELETE",
-            success: (response) => {
-                if (action === 'remove-and-add') {
-                    addChoiceListToProject()
-                } else {
-                    response?.status === 204 && getSelectedChoicelist();
-                    Config.toast(t("removed_success"))
-                    choicelistToRemove.current = null
-                    setIsChoiceListChanged(false)
-                    setIsLoadingButton(false)
-
-                }
-
-            },
-        });
-    }
 
     return (
         <React.Fragment>
@@ -1689,56 +1576,70 @@ function Settings(props) {
                         <img src={UploadFileNewGrey} alt="upload_file_new_grey" />
                         <span>{t("assets")}</span>
                     </div>
-                    <Nav tabs className="settings-nav-container">
-                        <NavItem
-                            className={"setup-button-modal-btn " + classnames({ active: activeTab === "1" })}
-                            onClick={() => {
-                                toggle("1");
-                                setQaSubdomain(false);
-                                setSubQatab()
-                            }}
-                        >
-                            <NavLink className="settings-setup-btn">{t("translation_memories")} (TMX)</NavLink>
-                        </NavItem>
-                        <NavItem
-                            className={"setup-button-modal-btn " + classnames({ active: activeTab === "2" })}
-                            onClick={() => {
-                                toggle("2");
-                                setQaSubdomain(false)
-                                setSubQatab()
-                            }}
-                        >
-                            <NavLink className="settings-setup-btn">{t("termbases")} (TBX)</NavLink>
-                        </NavItem>
-                        {/* This is for the next version release */}
-                        <NavItem
-                            className={"setup-button-modal-btn " + classnames({ active: activeTab === "3" })}
-                            onClick={() => {
-                                toggle("3");
-                                setQaSubdomain(false)
-                                setSubQatab()
-                            }}
-                        >
-                            <NavLink className="settings-setup-btn">{t("ailaysa_glossaries")}</NavLink>
-                        </NavItem>
+                    {!isNewsProject ? (
+                        <Nav tabs className="settings-nav-container">
+                            <NavItem
+                                className={"setup-button-modal-btn " + classnames({ active: activeTab === "1" })}
+                                onClick={() => {
+                                    toggle("1");
+                                    setQaSubdomain(false);
+                                    setSubQatab()
+                                }}
+                            >
+                                <NavLink className="settings-setup-btn">{t("translation_memories")} (TMX)</NavLink>
+                            </NavItem>
+                            <NavItem
+                                className={"setup-button-modal-btn " + classnames({ active: activeTab === "2" })}
+                                onClick={() => {
+                                    toggle("2");
+                                    setQaSubdomain(false)
+                                    setSubQatab()
+                                }}
+                            >
+                                <NavLink className="settings-setup-btn">{t("termbases")} (TBX)</NavLink>
+                            </NavItem>
+                            {/* This is for the next version release */}
+                            <NavItem
+                                className={"setup-button-modal-btn " + classnames({ active: activeTab === "3" })}
+                                onClick={() => {
+                                    toggle("3");
+                                    setQaSubdomain(false)
+                                    setSubQatab()
+                                }}
+                            >
+                                <NavLink className="settings-setup-btn">{t("ailaysa_glossaries")}</NavLink>
+                            </NavItem>
+                            <NavItem
+                                className={"setup-button-modal-btn " + classnames({ active: activeTab === "6" })}
+                                onClick={() => {
+                                    toggle("6");
+                                    setQaSubdomain(false)
+                                    setSubQatab()
+                                }}
+                            >
+                                <NavLink className="settings-setup-btn">{t("wordchoice")}</NavLink>
+                            </NavItem>
 
-                        {/* <NavItem
-                            className={"setup-button-modal-btn " + classnames({ active: activeTab === "4" })}
-                            onClick={() => {
-                                toggle("4");
-                                setQaSubdomain(false)
-                                setSubQatab()
-                            }}
-                        >
-                            <NavLink className="settings-setup-btn">{t("choicelist")}</NavLink>
-                        </NavItem> */}
-
-                        <NavItem className={"setup-button-modal-btn " + classnames({ active: (activeTab === "5" && (subQatab === 1 || subQatab === 2)) })} onClick={() => { toggle("5"); toggleInner(1); setQaSubdomain(true); }}>
-                            <NavLink className="settings-setup-btn">
-                                {t("quality_analysis")}
-                            </NavLink>
-                        </NavItem>
-                    </Nav>
+                            <NavItem className={"setup-button-modal-btn " + classnames({ active: (activeTab === "5" && (subQatab === 1 || subQatab === 2)) })} onClick={() => { toggle("5"); toggleInner(1); setQaSubdomain(true); }}>
+                                <NavLink className="settings-setup-btn">
+                                    {t("quality_analysis")}
+                                </NavLink>
+                            </NavItem>
+                        </Nav>
+                    ) : (
+                        <Nav tabs className="settings-nav-container">
+                            <NavItem
+                                className={"setup-button-modal-btn " + classnames({ active: activeTab === "3" })}
+                                onClick={() => {
+                                    toggle("3");
+                                    setQaSubdomain(false)
+                                    setSubQatab()
+                                }}
+                            >
+                                <NavLink className="settings-setup-btn">{t("ailaysa_glossaries")}</NavLink>
+                            </NavItem>
+                        </Nav>
+                    )}
                 </div>
                 <div className="settings-mega-container">
                     {
@@ -1778,13 +1679,13 @@ function Settings(props) {
                                                 activeTab === "3" ?
                                                     t("ailaysa_glossaries")
                                                     :
-                                                    activeTab === "4" ?
-                                                        t("choicelist")
-                                                        :
-                                                        activeTab === "5" ?
-                                                            t("quality_analysis")
-                                                            :
-                                                            ""
+                                                    activeTab === "5" ?
+                                                        t("quality_analysis")
+                                                        : 
+                                                        activeTab === "6" ?
+                                                            t("wordchoice")
+                                                                :
+                                                                ""
                                     }
                                 </h1>
                                 <span className="settings-close-btn" onClick={() => props?.hideSettingsModal()}>
@@ -2403,106 +2304,132 @@ function Settings(props) {
                                     <div className="asset-glossary-title-wrap">
                                         <h2 className="asset-gl-head">{t("glossary_list")}</h2>
                                         <div className="create-tbx-btn-align">
-                                            <button className="settings-CreateTBXLink" onClick={() => { history('/create/assets/glossaries/create') }} target="_blank" rel="noopener noreferrer">
-                                                {/* <img src={PlusIcon} />{" "} */}
-                                                <span className="create-tbx-btn">{t("create_a_new_glossary")}</span>
-                                            </button>
+                                            <Link to="/create/assets/glossaries/create" className="settings-CreateTBXLink"><span className="create-tbx-btn">{t("create_a_new_glossary")}</span></Link>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="asset-glossary-list-wrapper">
                                     <ul className="asset-glossary-projects-wrap-list">
-                                        {glossaryList?.length !== 0 ?
-                                            glossaryList?.map((value) => {
-                                                return (
-                                                    <li key={value.glossary_id}>
-                                                        <div className="asset-project-select-checkbox">
-                                                            <Checkbox
-                                                                checked={checkedGlossary?.find(each => each == value?.glossary_id) ? true : false}
-                                                                onChange={(e) => handleGlossaryCheckbox(e, value.glossary_id)}
-                                                                size="small"
-                                                            />
-                                                        </div>
-                                                        <div className="asset-project-info-wrap">
-                                                            <span className="assets-icon">
-                                                                <DescriptionOutlinedIcon className="gloss-types" />
-                                                            </span>
-                                                            <div className="asset-project-info">
-                                                                <span className="title">{value.glossary_name}</span>
-                                                                <div className="lang-pair">
-                                                                    <span>{value?.source_lang}</span>
-                                                                    <img src={ArrowRightGrey} />
-                                                                    <span>{value?.target_lang?.join(', ')}</span>
+                                        {(isGlossaryListLoading && glossaryList?.length === 0) ? (
+                                            Array(8).fill(null).map((index) => {
+                                                return(
+                                                    <>
+                                                        <li key={index} style={(!isGlossaryListLoading && glossaryList?.length !== 0) ? {display: 'none'} : {}}>
+                                                            <Skeleton animation="wave" variant="rectangular" height={15} width={15} />
+                                                            <div className="asset-project-info-wrap">
+                                                                <Skeleton animation="wave" variant="rectangular" width={26} height={26} />
+                                                                <div className="asset-project-info">
+                                                                    <span className="title"><Skeleton animation="wave" variant="text" width={150} /></span>
+                                                                    <div className="lang-pair">
+                                                                        <Skeleton animation="wave" variant="text" width={50} />
+                                                                        <img src={ArrowRightGrey} />
+                                                                        <Skeleton animation="wave" variant="text" width={50} />
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </li>
+                                                        </li>
+                                                    </>
                                                 )
                                             })
+                                        ) : (
+                                            glossaryList?.length !== 0 ?
+                                                glossaryList?.map((value) => {
+                                                    return (
+                                                        <li key={value.glossary_id}>
+                                                            <div className="asset-project-select-checkbox">
+                                                                <Checkbox
+                                                                    checked={checkedGlossary?.find(each => each == value?.glossary_id) ? true : false}
+                                                                    onChange={(e) => handleGlossaryCheckbox(e, value.glossary_id)}
+                                                                    size="small"
+                                                                />
+                                                            </div>
+                                                            <div className="asset-project-info-wrap">
+                                                                <span className="assets-icon">
+                                                                    <DescriptionOutlinedIcon className="gloss-types" />
+                                                                </span>
+                                                                <div className="asset-project-info">
+                                                                    <span className="title">{value.glossary_name}</span>
+                                                                    <div className="lang-pair">
+                                                                        <span>{value?.source_lang}</span>
+                                                                        <img src={ArrowRightGrey} />
+                                                                        <span>{value?.target_lang?.join(', ')}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    )
+                                                })
                                             :
-                                            <span>{t("no_glossaries_to_ass")}</span>
-                                        }
+                                                <span>{t("no_glossaries_to_ass")}</span>
+                                        )}
                                     </ul>
                                 </div>
                             </TabPane>
-                            {/* <TabPane tabId="4">
+
+                            <TabPane tabId="6">
                                 <div className="asset-glossary-wrapper">
                                     <div className="asset-glossary-title-wrap">
-                                        <h2 className="asset-gl-head">{t("choicelist")}</h2>
+                                        <h2 className="asset-gl-head">{t("wordchoice_list")}</h2>
                                         <div className="create-tbx-btn-align">
-                                            <button className="settings-CreateTBXLink" onClick={() => props.setShowChoiceListCreateModal(true)} >
-                                                <span className="create-tbx-btn">Create a new choicelist</span>
-                                            </button>
+                                            <Link to="/create/assets/wordchoice" className="settings-CreateTBXLink"><span className="create-tbx-btn">{t("create_a_new_wordchoice")}</span></Link>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="asset-glossary-list-wrapper">
-                                    {Object.keys(choiceList)?.length !== 0 ?
-                                        Object.entries(choiceList)?.map(([key, values]) => {
-                                            return (
-                                                <div key={key}>
-                                                    <div className="choicelist-lang-wrapper">
-                                                        <div className="choicelist-lang-tag">{languageOptionsList?.find(lang => lang.id == key)?.language}</div>
-                                                        <FormGroup>
-                                                            <FormControlLabel
-                                                                checked={checkedChoiceList?.find(each => each.lang_id == key) ? true : false}
-                                                                onChange={(e) => handleChoiceListLangSwitch(e, key, values[0])}
-                                                                control={<IOSSwitch sx={{ m: 1 }} />}
-                                                                label={t("remove_choicelist_frm_this_lang")}
-                                                                className="select-individual-choicelist"
-                                                            />
-                                                        </FormGroup>
-                                                    </div>
-                                                    <ul className="asset-glossary-projects-wrap-list" style={checkedChoiceList?.find(each => each.lang_id == key) ? {} : { opacity: 0.6, pointerEvents: 'none' }}>
-                                                        {values?.map(value => {
-                                                            return (
-                                                                <li key={value.id} onClick={(e) => handleChoicelistCheckbox(e, value.id, value.language)}>
-                                                                    <div className="asset-project-select-checkbox">
-                                                                        <Radio
-                                                                            id={`choicelist-${value.id}`}
-                                                                            checked={checkedChoiceList?.find(each => each.choicelist_id === value.id) ? true : false}
-                                                                            onChange={(e) => handleChoicelistCheckbox(e, value.id, value.language)}
-                                                                            size="small"
-                                                                        />
+                                    <ul className="asset-glossary-projects-wrap-list">
+                                        {(isWordchoiceListLoading && glossaryList?.length === 0) ? (
+                                            Array(8).fill(null).map((index) => {
+                                                return(
+                                                    <>
+                                                        <li key={index} style={(!isGlossaryListLoading && glossaryList?.length !== 0) ? {display: 'none'} : {}}>
+                                                            <Skeleton animation="wave" variant="rectangular" height={15} width={15} />
+                                                            <div className="asset-project-info-wrap">
+                                                                <Skeleton animation="wave" variant="rectangular" width={26} height={26} />
+                                                                <div className="asset-project-info">
+                                                                    <span className="title"><Skeleton animation="wave" variant="text" width={150} /></span>
+                                                                    <div className="lang-pair">
+                                                                        <Skeleton animation="wave" variant="text" width={50} />
+                                                                        <img src={ArrowRightGrey} />
+                                                                        <Skeleton animation="wave" variant="text" width={50} />
                                                                     </div>
-                                                                    <div className="asset-project-info-wrap">
-                                                                        <img src={Config.HOST_URL + "assets/images/choicelist.svg"} alt="choicelist-icon" />
-                                                                        <div className="asset-project-info">
-                                                                            <span className="title">{value.name}</span>
-                                                                        </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </>
+                                                )
+                                            })
+                                        ) : (
+                                            glossaryList?.length !== 0 ?
+                                                glossaryList?.map((value) => {
+                                                    return (
+                                                        <li key={value.glossary_id}>
+                                                            <div className="asset-project-select-checkbox">
+                                                                <Checkbox
+                                                                    checked={checkedGlossary?.find(each => each == value?.glossary_id) ? true : false}
+                                                                    onChange={(e) => handleGlossaryCheckbox(e, value.glossary_id)}
+                                                                    size="small"
+                                                                />
+                                                            </div>
+                                                            <div className="asset-project-info-wrap">
+                                                                <img src={WordchoiceIcon} alt="Wordchoice-icon" />
+                                                                <div className="asset-project-info">
+                                                                    <span className="title">{value.glossary_name}</span>
+                                                                    <div className="lang-pair">
+                                                                        <span>{value?.source_lang}</span>
+                                                                        <img src={ArrowRightGrey} />
+                                                                        <span>{value?.target_lang?.join(', ')}</span>
                                                                     </div>
-                                                                </li>
-                                                            )
-                                                        })}
-                                                    </ul>
-                                                </div>
-                                            )
-                                        })
-                                        :
-                                        <span>{t("no_choicelist_add")}</span>
-                                    }
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    )
+                                                })
+                                            :
+                                                <span>{t("no_glossaries_to_ass")}</span>
+                                        )}
+                                    </ul>
                                 </div>
-                            </TabPane> */}
+                            </TabPane>
 
                             <TabPane tabId="5">
                                 <TabContent activeTab={subQatab}>
@@ -2836,12 +2763,6 @@ function Settings(props) {
                                 </TabContent>
                             </TabPane>
                             {
-                                // (
-                                //     (activeTab == 1 && isTMXSettingsChnaged) || 
-                                //     (activeTab == 3 && isGlossaryChanged) ||
-                                //     ((activeTab == 5 && subQatab == 1) && untranslatableFiles?.filter(each => each?.id === undefined)?.length !== 0) || 
-                                //     ((activeTab == 5 && subQatab == 2) && forbiddenWordsFiles?.filter(each => each?.id === undefined)?.length !== 0)
-                                // ) && 
                                 <div className="settings-update-btn">
 
                                     <button onClick={() => props?.hideSettingsModal()} className="setting-close-btn">{t("close")}</button>
@@ -2852,7 +2773,7 @@ function Settings(props) {
                                                     (activeTab == 1 && !isTMXSettingsChnaged && tmxTempFiles?.filter(each => each?.id === undefined)?.length === 0 && !isTMXFilesChanged) ||
                                                     (activeTab == 2) ||
                                                     (activeTab == 3 && !isGlossaryChanged) ||
-                                                    (activeTab == 4 && !isChoiceListChanged) ||
+                                                    (activeTab == 6 && !isGlossaryChanged) ||
                                                     ((activeTab == 5 && subQatab == 1) && untranslatableFiles?.filter(each => each?.id === undefined)?.length === 0 && !isQaChanged) ||
                                                     ((activeTab == 5 && subQatab == 2) && forbiddenWordsFiles?.filter(each => each?.id === undefined)?.length === 0 && !isQaChanged)
                                                 ) ? { opacity: 0.5 } : {}
@@ -2861,12 +2782,12 @@ function Settings(props) {
                                                 (activeTab == 1 && !isTMXSettingsChnaged && tmxTempFiles?.filter(each => each?.id === undefined)?.length === 0 && !isTMXFilesChanged) ||
                                                 (activeTab == 2) ||
                                                 (activeTab == 3 && !isGlossaryChanged) ||
-                                                (activeTab == 4 && !isChoiceListChanged) ||
+                                                (activeTab == 6 && !isGlossaryChanged) ||
                                                 ((activeTab == 5 && subQatab == 1) && untranslatableFiles?.filter(each => each?.id === undefined)?.length === 0 && !isQaChanged) ||
                                                 ((activeTab == 5 && subQatab == 2) && forbiddenWordsFiles?.filter(each => each?.id === undefined)?.length === 0 && !isQaChanged)
                                             }
                                         >
-                                       {isLoadingButton &&  <SaveButtonLoader />}
+                                        {isLoadingButton &&  <SaveButtonLoader />}
                                         {isLoadingButton ? t("saving") :t("save")}
                                    </button>
                                     </form>

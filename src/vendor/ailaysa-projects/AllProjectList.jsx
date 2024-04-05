@@ -117,6 +117,7 @@ import NoEditorsFound2 from "../../assets/images/no-editors-found-2.svg"
 import EmptyProjectsFolder from "../../assets/images/empty-projects-folder.svg"
 import HowToRegister from "../../assets/images/new-ui-icons/how_to_register.svg"
 import ReactRouterPrompt from 'react-router-prompt'
+import ChoicelistIcon from "../../assets/images/choicelist.svg"
 
 function AllProjectList(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -132,13 +133,10 @@ function AllProjectList(props) {
     const history = useNavigate();
     const dispatch = useDispatch()
     const userDetails = useSelector((state) => state.userDetails.value)
-    const showGlobalTransition = useSelector((state) => state.globalTransition.value)
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
 
     let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
-    // const handleOpenAllTemplates = () => {
-    //     dispatch(setShowGlobalTransition(true))
-    // }
-
+    
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const [didMount, setDidMount] = useState(false);
@@ -503,7 +501,7 @@ function AllProjectList(props) {
             setIsMobileWidth(false)
         }
     }, [window.innerWidth])
-    
+
 
     const open = Boolean(anchorEl); //Assigned task open
 
@@ -737,9 +735,6 @@ function AllProjectList(props) {
         setAssignStep(stepId)
         setShowIndividualAssignManage(true)
         setAssignedTaskId(task.id);
-        // props.history(`/collaborate?project=${projectId}&task=${taskId}&job=${jobId}&_edit=${true}&_step=${stepId}`);
-        // setAnchorEl(null);
-        // activeToggle(3);
     };
 
     const handleSortClick = (e) => {
@@ -1330,9 +1325,10 @@ function AllProjectList(props) {
     useEffect(() => {
         if (projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
             projectSearchFunctionality('clear-search')
-            setIsSearchTermDelete(false)
+        }else if(projectSearchTerm == "" && searchTermRef.current !== "" && searchTermRef.current !== null){
+            projectSearchFunctionality('clear-search')
         }
-    }, [projectSearchTerm, isSearchTermDelete])
+    }, [projectSearchTerm])
 
     /* Throw errors when there's no target language selected */
     useEffect(() => {
@@ -1377,6 +1373,8 @@ function AllProjectList(props) {
         }
         if (param !== 'clear-search') {
             if (projectSearchTerm != null) url += `&search=${projectSearchTerm}`;
+        }else if(param === 'clear-search'){
+            setIsSearchTermDelete(true)
         }
         history(url);
     }
@@ -1444,7 +1442,7 @@ function AllProjectList(props) {
         return () => {
             controller.abort()
         }
-    }, [URL_SEARCH_PARAMS.get("search"), activeProjTab]);
+    }, [URL_SEARCH_PARAMS.get("search"), activeProjTab, isSearchTermDelete]);
 
     useEffect(() => {
         let proceedAssignParam = URL_SEARCH_PARAMS.get("proceed-assgin")
@@ -2084,6 +2082,16 @@ function AllProjectList(props) {
                     }});
                 });
             }
+            // if url is null means its non transeditor/translation project [wordchoice porject type = 10]
+            if (projectType === 10) {
+                setTimeout(() => {
+                    // window.location.href = 'workspace/' + response.data.document_id
+                    history(`/wordchoice-workspace/${selectedProjectId}/${id}/`, {state: {
+                        prevPageInfo: prevPageInfo,
+                        prevPath: location.pathname + location.search
+                    }});
+                });
+            }
         }
     };
 
@@ -2341,6 +2349,8 @@ function AllProjectList(props) {
             // deisgner project edit code here'
             handleRetriveDesignProject(e,project)
             // console.log('designer project edit')
+        } else if (projectType === 10) {
+            history(`/create/assets/wordchoice?project=${projectId}`, { prevPageInfo });
         }
     };
 
@@ -2928,7 +2938,7 @@ function AllProjectList(props) {
                                     <div className="assigned-status-details">
                                         <div className={
                                             eachRole?.task_assign_detail?.client_response?.toLowerCase() == "approved" ?
-                                                "status-indicator-completed"
+                                                "status-indicator-approved"
                                                 : eachRole?.task_assign_detail?.client_response.toLowerCase() == "rejected"
                                                     ? "status-indicator-in-progress-color"
                                                     : "status-indicator-created"
@@ -3395,30 +3405,30 @@ function AllProjectList(props) {
     }
 
 
-    // download convert docx file 
-    const downloadConvertDocxFile = async (targetValue, data) => {
-        try{
-            dispatch(addDownloadingFiles({ id: data.id, file_name: targetValue === 'task' ? data.filename?.split('.')[0] : data.docx_file_name?.split('.')[0] , ext: '.docx', status: 1 }))
-            setMoreEl(false)
+   // download convert docx file 
+   const downloadConvertDocxFile = async (targetValue, data) => {
+    try{
+        dispatch(addDownloadingFiles({ id: data.id, file_name: targetValue === 'task' ? data.filename?.split('.')[0] : data.docx_file_name?.split('.')[0] , ext: '.docx', status: 1 }))
+        setMoreEl(false)
 
-            let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?${targetValue === 'task' ? 'task_id' : 'id'}=${data.id}`
-            const response = await Config.downloadFileFromApi(url);
-            
-            // update the list once download completed
-            dispatch(updateDownloadingFile({ id:data.id, status: 2 }))
+        let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?${targetValue === 'task' ? 'task_id' : 'id'}=${data.id}`
+        const response = await Config.downloadFileFromApi(url);
+        
+        // update the list once download completed
+        dispatch(updateDownloadingFile({ id:data.id, status: 2 }))
 
-            Config.downloadFileInBrowser(response)
-            
+        Config.downloadFileInBrowser(response)
+        
 
-            setTimeout(() => {
-                // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: data.id }))
-            }, 8000);
-            
-        }catch(e) {
-            console.log(e)
-        }
+        setTimeout(() => {
+            // remove the downloaded file from list
+            dispatch(deleteDownloadingFile({ id: data.id }))
+        }, 8000);
+        
+    }catch(e) {
+        console.log(e)
     }
+}
 
 
     const convertPdfToDocxFromTask = (taskId, projectId) => {
@@ -3769,6 +3779,7 @@ function AllProjectList(props) {
     /* Download different type of output files */
     const downloadDifferentFile = async (type, documentId, e, key = null, id = null, url = "", isFirstOpen, openIn, projectName, project_id, projectType, taskFileName) => {
         setMoreEl(false)
+        setSubDownloadOption(false)
         // if task is not opened (document id - null)
         if (documentId == null) {
             openFile(
@@ -4210,7 +4221,7 @@ function AllProjectList(props) {
             </div>
         )
     }
-
+    
     const MoreOptionsIconMobile = (props) => {
         return (
             <div className="more-options-wrap">
@@ -4275,7 +4286,6 @@ function AllProjectList(props) {
 
     const MoreOptionsIconDesigner = (props) => {
         let { project, removeDelete, removeEdit, selectedProjectFile, deleteOnly, assigned } = props
-        // console.log(assigned)
 
         return (
             <div className="more-options-wrap">
@@ -4287,7 +4297,7 @@ function AllProjectList(props) {
                         <div className="menu-wrapper" ref={moreOptionOutside}>
                             <ul>
                                 {
-                                    moreOptionsForDesigner?.filter(each => project?.get_project_type === 7 ? each.id !== 1 : (removeEdit ?  (assigned ? each.id !== 1 : (each.id !== 1 && each.id !== 4)) : (removeDelete ? each.id === 3 : (assigned ? each.id !== 1 : (each.id !== 1 && each.id !== 4)))))?.map((item) => {
+                                    moreOptionsForDesigner?.filter(each => project?.get_project_type === 7 ? (each.id !== 1 && each?.id !== 4) : (removeEdit ?  (assigned ? each.id !== 1 : (each.id !== 1 && each.id !== 4)) : (removeDelete ? each.id === 3 : (assigned ? each.id !== 1 : (each.id !== 1 && each.id !== 4)))))?.map((item) => {
                                         return (
                                             <li
                                                 key={item.id}
@@ -4557,7 +4567,7 @@ function AllProjectList(props) {
             success: (response) => {
                 let { data } = response;
                 // console.log(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.project_name)
-                setExpressProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.project_name )
+                setExpressProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name )
                 // setHasTeam(data.team)
                 let editTargetLanguages = [];
                 let tar = [];
@@ -4764,8 +4774,8 @@ function AllProjectList(props) {
 
 
     const handleDeleteDesignWholeProject = (proj,url) => {
-        setIsTaskDeleting(true)
         setIsExpressProjectDeleting(true)
+        setIsTaskDeleting(true)
         Config.axios({
             url: url,
             method: 'DELETE',
@@ -4791,6 +4801,7 @@ function AllProjectList(props) {
                 setIsTaskDeleting(false)
                 setIsDesignDeleting(false)
                 setIsExpressProjectDeleting(false)
+
              }
         });
     }
@@ -4893,7 +4904,7 @@ function AllProjectList(props) {
                     if (obj.id === proj?.id) {
                         return {
                             ...obj,
-                            project_name: response.data.project_name,
+                            project_name: response.data.file_name,
                         };
                     }
                     return obj;
@@ -4909,8 +4920,6 @@ function AllProjectList(props) {
 
     const downloadTaskTargetFile = async(task_data) => {
         let {id, filename} = task_data
-
-        console.log(task_data)
         let {name, extension} = Config.getNameAndExtension(filename)
         
         // add in download list
@@ -5074,7 +5083,7 @@ function AllProjectList(props) {
     }
 
     const handleBookOpen = (book_id) => {
-        history(`/book-writing?book=${book_id}`)
+        history(`/book-writing?book=${book_id}`, {state: {from: 'list'}})
     }
 
     const handleBookDownload = (bookId) => {
@@ -5207,7 +5216,7 @@ function AllProjectList(props) {
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        console.log("asda s");
+        // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
         
         // console.log(allDownloadedFilesArrRef.current)
@@ -5225,7 +5234,7 @@ function AllProjectList(props) {
             headers: { Authorization: `Bearer ${token}` },
         }).then(function (response) {
             //handle success
-            console.log(response.data)
+            // console.log(response.data)
             const filename = response.headers['content-disposition']?.split('filename*=')[1];
             let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''))
             const url = URL.createObjectURL(new Blob([response.data]));
@@ -5252,6 +5261,7 @@ function AllProjectList(props) {
             dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
         })
     } 
+
 
     return (
         <React.Fragment>
@@ -5539,16 +5549,16 @@ function AllProjectList(props) {
                                                                                     <span className="arrow-icon">
                                                                                         {
                                                                                             openedProjectId == project.id ?
-                                                                                            <KeyboardArrowUpIcon className="proj-list-arrow-up" />
-                                                                                            :
-                                                                                            <KeyboardArrowDownIcon className="proj-list-arrow-down" />
+                                                                                                <KeyboardArrowUpIcon className="proj-list-arrow-up" />
+                                                                                                :
+                                                                                                <KeyboardArrowDownIcon className="proj-list-arrow-down" />
                                                                                         }
                                                                                     </span>
                                                                                     
                                                                                     {/* {project?.get_project_type === 6 && <span class="empty-box-icon"></span>} */}
                                                                                     <div className="proj-title-list-container">
                                                                                         <div className="proj-type-icon-wrap">
-                                                                                            <span className={"proj-type-icon " + (project?.get_project_type == 6 ? "designer-bg" : (project?.get_project_type === 1 || project?.get_project_type === 2) ? "translate-bg" : project?.get_project_type === 3 ? "assets-bg" : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 2) ? "voice-bg" : "")}>
+                                                                                            <span className={"proj-type-icon " + (project?.get_project_type == 6 ? "designer-bg" : (project?.get_project_type === 1 || project?.get_project_type === 2) ? "translate-bg" : (project?.get_project_type === 3 || project?.get_project_type === 10) ? "assets-bg" : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 2) ? "voice-bg" : "")}>
                                                                                                 {
                                                                                                     (project?.get_project_type === 1 || project?.get_project_type === 2) ?
                                                                                                         <TranslateIcon className="proj-types" />
@@ -5562,6 +5572,8 @@ function AllProjectList(props) {
                                                                                                                         <img src={InstantTranslateIcon} alt="instant-project-icon" />
                                                                                                                         : project?.get_project_type === 6 ?
                                                                                                                         <img src={DesignerIcon} alt="designer-project-icon" /> 
+                                                                                                                        : project?.get_project_type === 10 ?
+                                                                                                                            <img src={ChoicelistIcon} alt="choicelist-icon" />
                                                                                                                         : ""
                                                                                                 }
     
@@ -5667,7 +5679,7 @@ function AllProjectList(props) {
                                                                                             </>
                                                                                         )}
                                                                                     <div className="project-edit-tools dont-open-list">
-                                                                                        {((!Config.userState?.is_internal_member && project?.get_project_type !== 3 && project?.assign_enable)) &&  // add this to enable project-download for agency => || userDetails?.agency
+                                                                                        {((!Config.userState?.is_internal_member && project?.get_project_type !== 3 && project?.get_project_type !== 10 && project?.assign_enable)) &&  // add this to enable project-download for agency => || userDetails?.agency
                                                                                             <Tooltip className="dont-open-list" title={t("download")} placement="top">
                                                                                                 <span onClick={(e) => handleBulkDownload(e, project)}>
                                                                                                     <img
@@ -5679,7 +5691,7 @@ function AllProjectList(props) {
                                                                                             </Tooltip>
                                                                                         }
                                                                                         {/* Don't show project analysis option for glossary, express, and voice project without translation task. */}
-                                                                                        {(!project?.file_translate && project.get_project_type !== 3 && project.get_project_type !== 5 && project.get_project_type !== 6 && project?.show_analysis) && 
+                                                                                        {(!project?.file_translate && project.get_project_type !== 3 && project?.get_project_type !== 10 && project.get_project_type !== 5 && project.get_project_type !== 6 && project?.show_analysis) && 
                                                                                             <Tooltip title={t("project_analysis")} placement="top">
                                                                                                 <span onClick={(e) => { handleShowAnalysisModal(e, project?.id); setShowProjectAnalysis(true) }}>
                                                                                                     <img
@@ -5746,9 +5758,9 @@ function AllProjectList(props) {
                                                                                                 ></div>
                                                                                                 {project.progress?.toLowerCase() == "completed" ? t("completed") : project.progress?.toLowerCase() == "in progress" ? t("in_progress") : project.progress?.toLowerCase() == "yet to start" ? t("yet_to_start") : ""}
                                                                                             </span>
-                                                                                            { !isMobileWidth ? 
+                                                                                            {!isMobileWidth ? 
                                                                                                 <span className="more-icon-empty"></span>
-                                                                                                :
+                                                                                            :
                                                                                                 ""
                                                                                             }
                                                                                         </div>
@@ -5805,9 +5817,33 @@ function AllProjectList(props) {
                                                                                                         ? selectedProjectFile?.task_assign_info[1]?.assigned_by_details
                                                                                                         : selectedProjectFile?.task_assign_info[1]?.assign_to_details;
                                                                                             }
-    
+                                                                                            
+                                                                                            let taskAssignStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.task_status
+                                                                                            let taskClientStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.client_response
+
                                                                                             selectedFilesData = (
-                                                                                                <div className="file-edit-inner-table" key={selectedProjectFile.id}>
+                                                                                                <div 
+                                                                                                    className={
+                                                                                                        "file-edit-inner-table " + ( 
+                                                                                                            isDinamalar ? (
+                                                                                                                selectedProjectFile?.task_assign_info === null ? (
+                                                                                                                    (selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? "task-completed-bg" : 
+                                                                                                                    selectedProjectFile?.progress?.total_segments !== 0 ? "task-in-progress-bg" : 
+                                                                                                                    selectedProjectFile?.progress?.total_segments === 0 ? "" : ""
+                                                                                                                ) : (
+                                                                                                                    taskClientStatus === "Approved" ? "task-approved-bg" :
+                                                                                                                    taskClientStatus === "Rework" ? "task-rework-bg" :
+                                                                                                                    taskAssignStatus === "Yet to start" ? "" :
+                                                                                                                    taskAssignStatus === "In Progress" ? "task-in-progress-bg" :
+                                                                                                                    taskAssignStatus === "Completed" ? "task-completed-bg" :
+                                                                                                                    taskAssignStatus === "Return Request" ? "task-declined-bg" : ""
+
+                                                                                                                )
+                                                                                                            ) : ""
+                                                                                                        ) 
+                                                                                                    } 
+                                                                                                    key={selectedProjectFile.id}
+                                                                                                >
                                                                                                     <div className="file-edit-list-inner-table-row">
                                                                                                         <div className="file-edit-list-inner-table-cell">
                                                                                                             <div className="file-edit-translation-txt">
@@ -7819,7 +7855,7 @@ function AllProjectList(props) {
                                                                                                                                                             <ul>
                                                                                                                                                                 {
                                                                                                                                                                     moreOptions?.filter(item => (
-                                                                                                                                                                        (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
+                                                                                                                                                                        (project?.get_project_type !== 5 && project?.get_project_type !== 3 && project?.get_project_type !== 10) ?
                                                                                                                                                                             (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
                                                                                                                                                                             : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
                                                                                                                                                                     ))?.map((item) => {
@@ -8032,7 +8068,7 @@ function AllProjectList(props) {
                                                                                                                                                             <ul>
                                                                                                                                                                 {
                                                                                                                                                                     moreOptions?.filter(item => (
-                                                                                                                                                                        (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
+                                                                                                                                                                        (project?.get_project_type !== 5 && project?.get_project_type !== 3 && project?.get_project_type !== 10) ?
                                                                                                                                                                             (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
                                                                                                                                                                             : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
                                                                                                                                                                     ))?.map((item) => {
@@ -8423,7 +8459,7 @@ function AllProjectList(props) {
                                                                                                                                                             {
                                                                                                                                                                 moreOptions?.filter(item => (
                                                                                                                                                                     project?.file_translate ? item?.id === 2 :
-                                                                                                                                                                    (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
+                                                                                                                                                                    (project?.get_project_type !== 5 && project?.get_project_type !== 3 && project?.get_project_type !== 10) ?
                                                                                                                                                                         (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
                                                                                                                                                                         : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
                                                                                                                                                                 ))?.map((item) => {
@@ -8895,7 +8931,7 @@ function AllProjectList(props) {
                                                                                     }}
                                                                                 >
                                                                                     <span className="add-new-project-btn">
-                                                                                        <img src={PlusIcon} alt="plus" />
+                                                                                    <img src={PlusIcon} alt="plus" />
                                                                                         {t("create_new_project")}
                                                                                     </span>
                                                                                 </button>
@@ -8993,7 +9029,7 @@ function AllProjectList(props) {
                                                                                     }}
                                                                                 >
                                                                                     <span className="add-new-project-btn">
-                                                                                        <img src={PlusIcon} alt="plus" />
+                                                                                    <img src={PlusIcon} alt="plus" />
                                                                                         {t("create_new_project")}
                                                                                     </span>
                                                                                 </button>
@@ -9912,7 +9948,7 @@ function AllProjectList(props) {
                     </div>
                 </div>
             </Rodal>)}
-
+            
             {/* Modal to selecting the project to update the file */}
             {projectUpdateModal && (<Rodal visible={projectUpdateModal} height="min-content" showCloseButton={false} className="add-edit-new-term-modal-wrapper glossary-list-modal">
                 <div className="header-area-wrapper">

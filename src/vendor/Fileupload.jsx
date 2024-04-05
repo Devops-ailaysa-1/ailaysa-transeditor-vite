@@ -104,7 +104,6 @@ import PlusIcon from "../assets/images/new-ui-icons/plus.svg"
 import TranscriptionIcon from "../assets/images/new-project-setup/transcription.svg"
 import SpeechWhiteIcon from "../assets/images/new-project-setup/speech-icon-white.svg"
 import InstantTranslateIcon from "../assets/images/instant-translate-icon.svg"
-import ChoiceListIcon from "../assets/images/choicelist.svg"
 import DesignerIcon from "../assets/images/new-ui-icons/designer-icon.svg"
 import UnopenedProjSymbol from "../assets/images/new-unopened-proj-symbol.svg"
 import BlogArticleIcon from "../assets/images/blog-article.svg"
@@ -125,8 +124,10 @@ import UploadFile from "../assets/images/new-ui-icons/upload_file.svg"
 import TranslationPair from "../assets/images/new-ui-icons/translation-pair-L.svg"
 import NoEditorsFound2 from "../assets/images/no-editors-found-2.svg"
 import EmptyProjectsFolder from "../assets/images/empty-projects-folder.svg"
+import WordchoiceIcon from "../assets/images/choicelist.svg"
 import HowToRegister from "../assets/images/new-ui-icons/how_to_register.svg"
 import ReactRouterPrompt from 'react-router-prompt'
+
 
 function Fileupload(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -143,6 +144,7 @@ function Fileupload(props) {
     const dispatch = useDispatch()
     const userDetails = useSelector((state) => state.userDetails.value)
     const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
 
     let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
 
@@ -376,19 +378,10 @@ function Fileupload(props) {
     const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false)
     const [isApproving, setIsApproving] = useState(false)
 
-    const [choiceListLanguage, setChoiceListLanguage] = useState(null);
-    const [choiceListProjectName, setChoiceListProjectName] = useState("");
-    const [isChoiceListModalEdit, setIsChoiceListModalEdit] = useState(false)
-    const [showChoiceListCreateModal, setShowChoiceListCreateModal] = useState(false);
-    const [showChoiceListDeleteModal, setShowChoiceListDeleteModal] = useState(false)
-    const [choiceList, setChoiceList] = useState([])
-    const [isCreating, setIsCreating] = useState(false);
-    const [isUpdating, setIsUpdating] = useState(false);
-    const [assetsSelectedTypeFilter, setAssetsSelectedTypeFilter] = useState("all");
+    const [assetsSelectedTypeFilter, setAssetsSelectedTypeFilter] = useState("glossary");
 
     const [isTaskDeleting, setIsTaskDeleting] = useState(false)
     const [isExpressProjectDeleting, setIsExpressProjectDeleting] = useState(false)
-    const [isChoiceListDeleting, setIsChoiceListDeleting] = useState(false)
     
     const [isDesignDeleting, setIsDesignDeleting] = useState(false);
     const [axiosVendorDashboardAbortController, setAxiosVendorDashboardAbortController] = useState(null);
@@ -400,6 +393,7 @@ function Fileupload(props) {
     const projectTypeForPOModal = useRef(null)
 
     const clientResponseDataRef = useRef(null)
+    const projectListAbortControllerRef = useRef(null)
 
     /* State constants - end */
 
@@ -479,7 +473,6 @@ function Fileupload(props) {
     const isTaskReassigned = useRef(false)
 
     const taskDetailsForDeadlineCrossedTask = useRef(null)
-    const selectedChoiceListDataRef = useRef(null);
     const fileTranslatingTaskListRef = useRef([])
 
     let paginationTimeOut = null
@@ -610,13 +603,6 @@ function Fileupload(props) {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     });
-
-    // reset the choicelist states when choicelist modal is closed
-    useEffect(() => {
-        if (!showChoiceListCreateModal) {
-            resetChoicelistCreationModal()
-        }
-    }, [showChoiceListCreateModal])
 
     const handleIndividualTaskAssignManage = (e, selectedStep, task, project) => {
         e.stopPropagation();
@@ -1184,7 +1170,6 @@ function Fileupload(props) {
 
     /* Handling source language selection */
     const handleSourceLangClick = (value, name, e) => {
-        setChoiceListLanguage({ name, value })
         setshowSrcLangModal(false);
         setSearchInput('')
     };
@@ -1256,9 +1241,10 @@ function Fileupload(props) {
     useEffect(() => {
         if (projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
             projectSearchFunctionality('clear-search')
-            setIsSearchTermDelete(false)
+        }else if(projectSearchTerm == "" && searchTermRef.current !== "" && searchTermRef.current !== null){
+            projectSearchFunctionality('clear-search')
         }
-    }, [projectSearchTerm, isSearchTermDelete])
+    }, [projectSearchTerm])
 
     /* Throw errors when there's no target language selected */
     useEffect(() => {
@@ -1308,7 +1294,7 @@ function Fileupload(props) {
             url = `/assets?page=1`;
         } else if (activeProjTab === 9) {
             url = `/designs?page=1`;
-        }
+        } 
 
         if (orderby != null) url += `&order_by=${orderby}`;
         if (filter != null) url += `&filter=${filter}`;
@@ -1316,6 +1302,8 @@ function Fileupload(props) {
         if (typeParam != null) url += `&type=${typeParam}`;
         if (param !== 'clear-search') {
             if (projectSearchTerm != null) url += `&search=${projectSearchTerm}`;
+        }else if(param === 'clear-search'){
+            setIsSearchTermDelete(true)
         }
         history(url);
     }
@@ -1397,7 +1385,6 @@ function Fileupload(props) {
             //     listAssetsProject(controller)
             // }
         } else if (isSearchTermDelete) {
-            // console.log('from search');
             listProjects(controller);
             // if (activeProjTab !== 6) {
             // } else {
@@ -1408,7 +1395,7 @@ function Fileupload(props) {
         return () => {
             controller.abort()
         }
-    }, [URL_SEARCH_PARAMS.get("search")]);
+    }, [URL_SEARCH_PARAMS.get("search"), isSearchTermDelete]);
 
     useEffect(() => {
         let proceedAssignParam = URL_SEARCH_PARAMS.get("proceed-assgin")
@@ -1442,21 +1429,13 @@ function Fileupload(props) {
         let typeParam = URL_SEARCH_PARAMS.get("type")
         if (typeParam !== null && typeParam !== undefined) {
             setAssetsSelectedTypeFilter(typeParam)
-            listAssetsProject(controller)
+            listProjects(controller)
         }
 
         return () => {
             controller.abort()
         }
     }, [URL_SEARCH_PARAMS.get("type")]);
-
-
-    // useEffect(() => {
-    //   if(URL_SEARCH_PARAMS.get("pre-trans")){
-    //     getPreTranslateTaskStatus(URL_SEARCH_PARAMS.get("open-project"))
-    //   }
-    // }, [URL_SEARCH_PARAMS.get("pre-trans")])
-
 
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
@@ -1473,7 +1452,7 @@ function Fileupload(props) {
             url = `/assets?page=${page}`;
         } else if (activeProjTab === 9) {
             url = `/designs?page=${page}`;
-        }
+        } 
 
         let queryParam = new URLSearchParams(window.location.search)
         let orderParam = queryParam.get("order_by");
@@ -1504,7 +1483,7 @@ function Fileupload(props) {
             url = `/assets?page=${page}`;
         } else if (activeProjTab === 9) {
             url = `/designs?page=${page}`;
-        }
+        } 
         if (orderFieldTemp != null) url += `&order_by=${orderFieldTemp}`;
 
         let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
@@ -1541,7 +1520,7 @@ function Fileupload(props) {
 
 
     /* Lsiting already created projects */
-    const listProjects = (controller) => {
+    const listProjects = () => {
         setFileListSearchEnlarge(false);
         setShowListingLoader(true);
         setCreatedProjects([])
@@ -1563,6 +1542,7 @@ function Fileupload(props) {
         // orderParam;
         let filterParam = URL_SEARCH_PARAMS.get("filter");
         let searchParam = URL_SEARCH_PARAMS.get("search");
+        let typeParam = URL_SEARCH_PARAMS.get("type") ? URL_SEARCH_PARAMS.get("type") : 'glossary'
 
         /* ordering param set/get - end */
         // console.log(projectFilterType)
@@ -1572,8 +1552,17 @@ function Fileupload(props) {
         if (activeProjTab === 3) url += `&filter=translation`
         if (activeProjTab === 4) url += `&filter=transcription`
         if (activeProjTab === 5) url += `&filter=ai_voice`
-        if (activeProjTab === 6) url += `&filter=assets`
+        if (activeProjTab === 6 && typeParam === 'glossary') url += `&filter=glossary`
+        if (activeProjTab === 6 && typeParam === 'wordchoices') url += `&filter=word_choices`
         if (activeProjTab === 9) url += `&filter=designer`
+        // if (activeProjTab === 8) url += `&filter=word_choices`
+
+        if (projectListAbortControllerRef.current) {
+            projectListAbortControllerRef.current.abort()
+        }
+    
+        const controller = new AbortController();
+        projectListAbortControllerRef.current = controller
 
         let params = {
             url: url,
@@ -1601,66 +1590,6 @@ function Fileupload(props) {
         };
         Config.axios(params);
     };
-
-    const listAssetsProject = (controller) => {
-        setFileListSearchEnlarge(false);
-        setShowListingLoader(true);
-        setCreatedProjects([])
-        // setprojectFilterType(null)
-        /* Page param set/get - start */
-        let page = 1;
-        let pageParam = URL_SEARCH_PARAMS.get("page");
-        if (pageParam != null) {
-            setCurrentPage(pageParam);
-            page = pageParam;
-        } else setCurrentPage(pageParam);
-
-        /* Page param set/get - start */
-        /* ordering param set/get - start */
-        // let orderFieldTemp = "";
-        let orderParam = URL_SEARCH_PARAMS.get("order_by");
-        // if (orderParam != null)  
-        // orderParam;
-        let typeParam = URL_SEARCH_PARAMS.get("type");
-        let searchParam = URL_SEARCH_PARAMS.get("search");
-
-        /* ordering param set/get - end */
-        // console.log(projectFilterType)
-        let url = `${Config.BASE_URL}/workspace/assert_lists/?page=${page}${orderParam != null ? `&ordering=${orderParam}` : ''}`;
-        if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
-        if (typeParam !== null && typeParam !== undefined && typeParam !== 'all') url += `&type=${typeParam}`
-
-        // if (activeProjTab === 3) url += `&filter=translation`
-        // if (activeProjTab === 4) url += `&filter=transcription`
-        // if (activeProjTab === 5) url += `&filter=ai_voice`
-        // if (activeProjTab === 6) url += `&filter=assets`
-
-        let params = {
-            url: url,
-            auth: true,
-            ...(controller !== undefined && {signal: controller.signal}),
-            timeout: 1000 * 15, // Wait for 15 seconds
-            success: (response) => {
-                // setOrderField(orderFieldTemp);
-                setCreatedProjects(response.data.results);
-                setCreatedProjectsList(response.data.results)
-                createdProjectsRef.current = response.data.results
-                setShowListingLoader(false);
-                if (response.data.results.length === 0) setEmptyProjects(true);
-                else setEmptyProjects(false);
-                setCurrentPage(page);
-                setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
-                if (response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))?.length !== 0) {
-                    setAnalysisRunningProjectList(response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id')))
-                    analysisRunningProjectListRef.current = response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))
-                }
-            },
-            error: (error) => {
-                Config.log(error);
-            },
-        };
-        Config.axios(params);
-    }
 
     // need to put in useeffect instead of a function because new need to clear the timeout when the component is unmounted (so, we clear the settimout in return of useeffect)
     // otherwise if written as function the settimout will be called in every component until the page is reloaded
@@ -2011,7 +1940,7 @@ function Fileupload(props) {
     }, [preTranslateAllTask])
 
 
-    const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as,selectedProjectFile,project) => {
+    const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as,selectedProjectFile, project) => {
         let prevPageInfo = {
             pageNo: URL_SEARCH_PARAMS.get("page"),
             orderBy: URL_SEARCH_PARAMS.get("order_by"),
@@ -2142,7 +2071,7 @@ function Fileupload(props) {
                     },
                 });
             }
-            // if url is null means its glossary project [glossary porject type = 3]
+            // if url is null means its non transeditor/translation project [glossary porject type = 3]
             if (projectType === 3) {
                 setTimeout(() => {
                     // window.location.href = 'workspace/' + response.data.document_id
@@ -2152,23 +2081,17 @@ function Fileupload(props) {
                     }});
                 });
             }
+            // if url is null means its non transeditor/translation project [wordchoice porject type = 10]
+            if (projectType === 10) {
+                setTimeout(() => {
+                    // window.location.href = 'workspace/' + response.data.document_id
+                    history(`/wordchoice-workspace/${selectedProjectId}/${id}/`, {state: {
+                        prevPageInfo: prevPageInfo,
+                        prevPath: location.pathname + location.search
+                    }});
+                });
+            }
         }
-
-        /* From version 3.0 */
-        // if (projectType === 1 || projectType === 2) {
-        //     Config.axios({
-        //         url: Config.BASE_URL + url,
-        //         auth: true,
-        //         success: (response) => {
-        //             setClickedOpenButton(null);
-        //             setTimeout(() => {
-        //                 // window.location.href = 'workspace/' + response.data.document_id
-        //                 props.history("workspace/" + response.data.document_id);
-        //             });
-        //         },
-        //     });
-        // } 
-
     };
 
     const ValueContainer = ({ children, ...props }) => {
@@ -2297,7 +2220,7 @@ function Fileupload(props) {
             if (page > 1)
                 content.push(
                     <li key={"prevButton"} onClick={(e) => pageSelect(page - 1)}>
-                        <img src={ PaginationLeft} />
+                        <img src={PaginationLeft} />
                     </li>
                 );
             content.push(
@@ -2341,49 +2264,6 @@ function Fileupload(props) {
         }, 100);
     };
 
-    const editSelectedChoiceList = (item) => {
-        selectedChoiceListDataRef.current = item
-        setChoiceListLanguage({
-            name: languageOptionsList?.find(each => each.id === item?.language)?.language,
-            value: languageOptionsList?.find(each => each.id === item?.language)?.id
-        })
-        setChoiceListProjectName(item?.name)
-
-        setIsChoiceListModalEdit(true)
-        setShowChoiceListCreateModal(true)
-        setMoreEl(false)
-    }
-
-    const deleteSelectedChoiceList = (item) => {
-        selectedChoiceListDataRef.current = item
-        if (!showChoiceListDeleteModal) {
-            setShowChoiceListDeleteModal(true)
-            setMoreEl(false)
-            return
-        }
-        setIsChoiceListDeleting(true)
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelist/${selectedChoiceListDataRef.current?.id}/`,
-            method: "DELETE",
-            auth: true,
-            success: (response) => {
-                let newArr = createdProjects?.filter(each => each.id !== selectedChoiceListDataRef.current?.id)
-                Config.toast(t("choicelist_delete_success_toast"))
-                setShowChoiceListDeleteModal(false)
-                setIsChoiceListDeleting(false)
-                setShowListingLoader(false);
-                if (newArr?.length === 0) setEmptyProjects(true);
-                setCreatedProjects(newArr)
-            },
-            error: (err) => {
-                Config.toast(t("deletion_failed"), 'error')
-                setIsCreating(false)
-                setShowChoiceListDeleteModal(false)
-                setIsChoiceListDeleting(false)
-            }
-        });
-    }
-
     const editProject = (e = null, projectId, projectType, project) => {
         e.stopPropagation()
         // page information for redirecting to same page after updation is done.
@@ -2418,6 +2298,8 @@ function Fileupload(props) {
             // deisgner project edit code here'
             handleRetriveDesignProject(e,project)
             console.log('designer project edit')
+        } else if (projectType === 10) {
+            history(`/create/assets/wordchoice?project=${projectId}`, { state: prevPageInfo });
         }
     };
 
@@ -2998,7 +2880,7 @@ function Fileupload(props) {
                                     <div className="assigned-status-details">
                                         <div className={
                                             eachRole?.task_assign_detail?.client_response?.toLowerCase() == "approved" ?
-                                                "status-indicator-completed"
+                                                "status-indicator-approved"
                                                 : eachRole?.task_assign_detail?.client_response.toLowerCase() == "rejected"
                                                     ? "status-indicator-in-progress-color"
                                                     : "status-indicator-created"
@@ -3031,8 +2913,8 @@ function Fileupload(props) {
         )
     }
 
-    // download source audo file 
-    const downloadSourceAudioFile = async (taskData) => {
+     // download source audo file 
+     const downloadSourceAudioFile = async (taskData) => {
         let {id, filename} = taskData
         try{
             // add in download list
@@ -3467,8 +3349,8 @@ function Fileupload(props) {
     }
 
 
-    // download convert docx file 
-    const downloadConvertDocxFile = async (taskData) => {
+   // download convert docx file 
+   const downloadConvertDocxFile = async (taskData) => {
         let {id, filename} = taskData
         try{
             // add in download list
@@ -3493,12 +3375,7 @@ function Fileupload(props) {
         }
     }
 
-    const handleOpenButton = (id) => {
-        history(`/choicelist-workspace/${id}`, {state: {
-            prevPath: location.pathname + location.search
-        }})
-    }
-
+   
     const convertPdfToDocxFromTask = (taskId, projectId) => {
         setClickedOpenButton(taskId)
         Config.axios({
@@ -3780,7 +3657,7 @@ function Fileupload(props) {
     const mtRawCeleryCheck = async (celeryId, documentId, task_id, uniqueKey) => {
         // setAnimateDownloding('MTRAW')
         let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
+            typeof Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) : null
         );
         let token = userCacheData != null ? userCacheData?.token : "";
         try {
@@ -3848,6 +3725,7 @@ function Fileupload(props) {
     /* Download different type of output files */
     const downloadDifferentFile = async (type, documentId, e, key = null, id = null, url = "", isFirstOpen, openIn, projectName, project_id, projectType, taskFileName) => {
         setMoreEl(false)
+        setSubDownloadOption(false)
         // if task is not opened (document id - null)
         if (documentId == null) {
             openFile(
@@ -3894,7 +3772,7 @@ function Fileupload(props) {
                 id: uniqueKey,
                 file_name: taskFileName,
                 ext: (type === 'ORIGINAL' || type === 'MTRAW' || type === 'SOURCE') ? `.${taskFileName?.split('.')[1]}` :
-                    type === 'BILINGUAL' ? '.xlxs' : type === 'TMX' ? '.tmx' : type === 'XLIFF' ? '.xliff' : '',
+                    type === 'BILINGUAL' ? '.xlsx' : type === 'TMX' ? '.tmx' : type === 'XLIFF' ? '.xliff' : '',
                 status: type !== 'MTRAW' ? 1 : 3    // 1 for downloading and 3 for processing
             }
         ))
@@ -4203,68 +4081,7 @@ function Fileupload(props) {
         });
     }
 
-    const createChoiceList = () => {
-
-        if (choiceListProjectName?.trim() === '' || choiceListLanguage?.value === undefined) {
-            Config.toast(t("please_complete_form"), 'warning')
-            return;
-        }
-
-        let formData = new FormData();
-        formData.append('name', choiceListProjectName?.trim());
-        formData.append('language', choiceListLanguage?.value);
-        setIsCreating(true)
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelist/`,
-            method: "POST",
-            data: formData,
-            auth: true,
-            success: (response) => {
-                console.log(response.data)
-                setShowChoiceListCreateModal(false)
-                setIsCreating(false)
-                setIsCreating(false)
-                listAssetsProject()
-            },
-            error: (err) => {
-                setIsCreating(false)
-            }
-        });
-    }
-
-    const updateChoiceList = () => {
-        let formData = new FormData();
-        if (selectedChoiceListDataRef.current.name === choiceListProjectName?.trim()) {
-            Config.toast(t("no_change_to_update"), 'warning')
-            return
-        }
-
-        formData.append('name', choiceListProjectName?.trim());
-        setIsUpdating(true)
-
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelist/${selectedChoiceListDataRef.current.id}/`,
-            method: "PUT",
-            data: formData,
-            auth: true,
-            success: (response) => {
-                console.log(response.data)
-                setShowChoiceListCreateModal(false)
-                setIsUpdating(false)
-                listAssetsProject()
-                setIsChoiceListModalEdit(false)
-            },
-            error: (err) => {
-                setIsUpdating(false)
-            }
-        });
-    }
-
-    const resetChoicelistCreationModal = () => {
-        setChoiceListLanguage(null)
-        setChoiceListProjectName("")
-    }
-
+ 
     const MoreOptionsIcon = (props) => {
         let { selectedProjectFile, project, key, onlyDelete, disabled } = props
         return (
@@ -4391,45 +4208,7 @@ function Fileupload(props) {
             </div>
         )
     }
-
-    const MoreOptionsIconChoiceList = (props) => {
-        let { choiceListItem, deleteOnly } = props
-        return (
-            <div className="more-options-wrap">
-                <ButtonBase onMouseUp={(e) => handleMoreVertOption(e, choiceListItem.id)} className="sorting-icon">
-                    <MoreVertIcon className="more-icon" />
-                </ButtonBase>
-                {(moreEl && (openedMoreOption === choiceListItem.id)) &&
-                    <>
-                        <div className="menu-wrapper" ref={moreOptionOutside}>
-                            <ul>
-                                {
-                                    moreOptionsForDoc?.filter(each => deleteOnly ? each.id === 2 : each.id)?.map((item) => {
-                                        return (
-                                            <li
-                                                key={item.id}
-                                                className="list-item"
-                                                onClick={(e) => {
-                                                    item?.label === 'Edit' ? editSelectedChoiceList(choiceListItem) :
-                                                        item?.label === 'Delete' && deleteSelectedChoiceList(choiceListItem)
-                                                }}
-                                            >
-                                                <div className="item-wrap">
-                                                    <span className="icon">{item.icon}</span>
-                                                    <span className="text">{item.label}</span>
-                                                </div>
-                                            </li>
-                                        )
-                                    })
-                                }
-                            </ul>
-                        </div>
-                    </>
-                }
-            </div>
-        )
-    }
-
+   
     const MoreOptionsIconDesigner = (props) => {
         let { project, removeDelete, removeEdit, selectedProjectFile, deleteOnly, assigned } = props
         console.log(assigned)
@@ -4488,22 +4267,15 @@ function Fileupload(props) {
 
     const handleCreateNewProjectBtnClick = () => {
         const search_param = new URLSearchParams(window.location.search);
-        let typeParam = search_param.get("type")
-        if (typeParam === 'assert') {
-            setShowChoiceListCreateModal(true)
-        } else {
-            console.log(Config.DESIGNER_HOST)
-            if(activeProjTab === 9){    // redirect to designer
-                window.open(Config.DESIGNER_HOST)
-            }else{
-                history(
-                    activeProjTab === 3 ? "/create/translate/files/translate-files" :
-                        activeProjTab === 4 ? "/create/speech/speech-to-text" :
-                            activeProjTab === 5 ? "/create/speech/text-to-speech" :
-                                activeProjTab === 6 && "/create/assets/glossaries/create"
-                                
-                );
-            }
+        if(activeProjTab === 9){    // redirect to designer
+            window.open(Config.DESIGNER_HOST)
+        }else{
+            history(
+                activeProjTab === 3 ? "/create/translate/files/translate-files" :
+                    activeProjTab === 4 ? "/create/speech/speech-to-text" :
+                        activeProjTab === 5 ? "/create/speech/text-to-speech" :
+                            activeProjTab === 6 && "/create/assets/glossaries/create" 
+            );
         }
     }
 
@@ -4523,8 +4295,8 @@ function Fileupload(props) {
             auth: true,
             success: (response) => {
                 let { data } = response;
-                console.log(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.project_name)
-                setExpressProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.project_name )
+                console.log(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name)
+                setExpressProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name )
                 // setHasTeam(data.team)
                 let editTargetLanguages = [];
                 let tar = [];
@@ -4848,7 +4620,7 @@ function Fileupload(props) {
                     if (obj.id === proj?.id) {
                         return {
                             ...obj,
-                            project_name: response.data.project_name,
+                            project_name: response.data.file_name,
                         };
                     }
                     return obj;
@@ -5083,42 +4855,13 @@ function Fileupload(props) {
                             components={{ DropdownIndicator, IndicatorSeparator: () => null }}
                             onChange={handleSelectedOrderItem}
                         />
-                        {/* <ButtonBase onClick={handleSortClick} className="sorting-icon">
-                            <SortByAlphaIcon className="sort-icon" />
-                        </ButtonBase>
-                        <Menu
-                            anchorEl={sortEl}
-                            open={sortOpen}
-                            onClose={handleDrpDownClose}
-                            getContentAnchorEl={null}
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "right",
-                            }}
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "right",
-                            }}
-                            className="menu-list-wrapper"
-                        >
-                            {orderByOptions.map((option, index) => (
-                                <MenuItem
-                                    className="menu-list-item"
-                                    key={index}
-                                    selected={option?.value === selectedValue}
-                                    onClick={(e) => handleSelectedMenuItem(e, option.value)}
-                                >
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </Menu> */}
-                        {/* {activeProjTab === 6 && (
+                        
+                        {activeProjTab === 6 && (
                             <div className="assets-type-filter-wrapper">
-                                <button className={"assets-type-filter-item " + (assetsSelectedTypeFilter === "all" ? "active" : "")} onClick={() => handleAssetsTypeFilterClick('all')}>All</button>
                                 <button className={"assets-type-filter-item " + (assetsSelectedTypeFilter === 'glossary' ? "active" : "")} onClick={() => handleAssetsTypeFilterClick('glossary')}>Glossary</button>
-                                <button className={"assets-type-filter-item " + (assetsSelectedTypeFilter === 'assert' ? "active" : "")} onClick={() => handleAssetsTypeFilterClick('assert')}>Choicelist</button>
+                                <button className={"assets-type-filter-item " + (assetsSelectedTypeFilter === 'wordchoices' ? "active" : "")} onClick={() => handleAssetsTypeFilterClick('wordchoices')}>{t("wordchoice")}</button>
                             </div>
-                        )} */}
+                        )}
                     </div>
                 </div>
                 <div className="upload-files-section">
@@ -5225,7 +4968,8 @@ function Fileupload(props) {
                                                 (createdProjects.length !== 0) ?
                                                     <React.Fragment>
                                                         {createdProjects.map((project, key) => {
-                                                            if (activeProjTab !== 6 ? true : (activeProjTab === 6 && project?.get_project_type === 3)) {
+                                                            // activeProjTab === 6 && project?.get_project_type === 3
+                                                            if (activeProjTab !== 6 ? true : (project?.get_project_type === 10 || project?.get_project_type === 3)) {
                                                                 // this is for designer project list - without tasks 
                                                                 if(project?.get_project_type == 6 && project?.tasks_count == 0){
                                                                     return(
@@ -5305,20 +5049,22 @@ function Fileupload(props) {
                                                                                     </span>
                                                                                     <div className={"proj-title-list-container " + (project?.get_project_type === 4 ? "speech-proj" : "")}>
                                                                                         <div className="proj-type-icon-wrap">
-                                                                                            <span className={"proj-type-icon " + (project?.get_project_type == 6 ? "designer-bg" : (project?.get_project_type === 1 || project?.get_project_type === 2) ? "translate-bg" : project?.get_project_type === 3 ? "assets-bg" : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 2) ? "voice-bg" : "")}>
+                                                                                            <span className={"proj-type-icon " + (project?.get_project_type == 6 ? "designer-bg" : (project?.get_project_type === 1 || project?.get_project_type === 2) ? "translate-bg" : (project?.get_project_type === 3 || project?.get_project_type === 10) ? "assets-bg" : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 2) ? "voice-bg" : "")}>
                                                                                                 {
                                                                                                     (project?.get_project_type === 1 || project?.get_project_type === 2) ?
                                                                                                         <TranslateIcon className="proj-types" />
-                                                                                                        : project?.get_project_type === 3 ?
+                                                                                                        : (project?.get_project_type === 3) ?
                                                                                                             <DescriptionOutlinedIcon className="gloss-types" />
                                                                                                             : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 1) ?
                                                                                                                 <img src={TranscriptionIcon} alt="transcription" />
                                                                                                                 : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 2) ?
                                                                                                                     <img src={SpeechWhiteIcon} alt="sidebar-speech" />
-                                                                                                                    : project?.get_project_type === 5 ?
-                                                                                                                        <img src={ InstantTranslateIcon} alt="instant-project-icon" />
-                                                                                                                        : project?.get_project_type === 6 ?
+                                                                                                                : project?.get_project_type === 5 ?
+                                                                                                                    <img src={ InstantTranslateIcon} alt="instant-project-icon" />
+                                                                                                                : project?.get_project_type === 6 ?
                                                                                                                         <img src={DesignerIcon} alt="designer-project-icon" /> 
+                                                                                                                        : project?.get_project_type === 10 ?
+                                                                                                                        <img src={WordchoiceIcon} alt="Wordchoice-icon" />
                                                                                                                         : ""
                                                                                                 }
     
@@ -5421,7 +5167,7 @@ function Fileupload(props) {
                                                                                             </>
                                                                                         )}
                                                                                     <div className="project-edit-tools dont-open-list">
-                                                                                        {((!Config.userState?.is_internal_member && project?.get_project_type !== 3 && project?.assign_enable)) &&  // add this to enable project-download for agency => || userDetails?.agency
+                                                                                        {((!Config.userState?.is_internal_member && project?.get_project_type !== 3 && project?.get_project_type !== 10 && project?.assign_enable)) &&  // add this to enable project-download for agency => || userDetails?.agency
                                                                                             <Tooltip className="dont-open-list" title={t("download")} placement="top">
                                                                                                 <span onClick={(e) => handleBulkDownload(e, project)}>
                                                                                                     <img
@@ -5433,7 +5179,7 @@ function Fileupload(props) {
                                                                                             </Tooltip>
                                                                                         }
                                                                                         {/* Don't show project analysis option for glossary, express, and voice project without translation task. */}
-                                                                                        {(!project?.file_translate && project.get_project_type !== 3 && project.get_project_type !== 5 && project.get_project_type !== 6 && project?.show_analysis) && <Tooltip title={t("project_analysis")} placement="top">
+                                                                                        {(!project?.file_translate && project.get_project_type !== 3 && project?.get_project_type !== 10 && project.get_project_type !== 5 && project.get_project_type !== 6 && project?.show_analysis) && <Tooltip title={t("project_analysis")} placement="top">
                                                                                             <span onClick={(e) => { handleShowAnalysisModal(e, project?.id); setShowProjectAnalysis(true) }}>
                                                                                                 <img
                                                                                                     src={StackedBarChart}
@@ -5551,8 +5297,32 @@ function Fileupload(props) {
                                                                                                         : selectedProjectFile?.task_assign_info[1]?.assign_to_details;
                                                                                             }
     
+                                                                                            let taskAssignStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.task_status
+                                                                                            let taskClientStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.client_response
+
                                                                                             selectedFilesData = (
-                                                                                                <div className="file-edit-inner-table" key={selectedProjectFile?.id}>
+                                                                                                <div 
+                                                                                                    className={
+                                                                                                        "file-edit-inner-table " + ( 
+                                                                                                            isDinamalar ? (
+                                                                                                                selectedProjectFile?.task_assign_info === null ? (
+                                                                                                                    (selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? "task-completed-bg" : 
+                                                                                                                    selectedProjectFile?.progress?.total_segments !== 0 ? "task-in-progress-bg" : 
+                                                                                                                    selectedProjectFile?.progress?.total_segments === 0 ? "" : ""
+                                                                                                                ) : (
+                                                                                                                    taskClientStatus === "Approved" ? "task-approved-bg" :
+                                                                                                                    taskClientStatus === "Rework" ? "task-rework-bg" :
+                                                                                                                    taskAssignStatus === "Yet to start" ? "" :
+                                                                                                                    taskAssignStatus === "In Progress" ? "task-in-progress-bg" :
+                                                                                                                    taskAssignStatus === "Completed" ? "task-completed-bg" :
+                                                                                                                    taskAssignStatus === "Return Request" ? "task-declined-bg" : ""
+
+                                                                                                                )
+                                                                                                            ) : ""
+                                                                                                        ) 
+                                                                                                    } 
+                                                                                                    key={selectedProjectFile?.id}
+                                                                                                >
                                                                                                     <div className="file-edit-list-inner-table-row">
                                                                                                         <div className="file-edit-list-inner-table-cell">
                                                                                                             <div className="file-edit-translation-txt">
@@ -7574,7 +7344,7 @@ function Fileupload(props) {
                                                                                                                                                             <ul>
                                                                                                                                                                 {
                                                                                                                                                                     moreOptions?.filter(item => (
-                                                                                                                                                                        (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
+                                                                                                                                                                        (project?.get_project_type !== 5 && project?.get_project_type !== 3 && project?.get_project_type !== 10) ?
                                                                                                                                                                             (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
                                                                                                                                                                             : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
                                                                                                                                                                     ))?.map((item) => {
@@ -7811,7 +7581,7 @@ function Fileupload(props) {
                                                                                                                                                             <ul>
                                                                                                                                                                 {
                                                                                                                                                                     moreOptions?.filter(item => (
-                                                                                                                                                                        (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
+                                                                                                                                                                        (project?.get_project_type !== 5 && project?.get_project_type !== 3 && project?.get_project_type !== 10) ?
                                                                                                                                                                             (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
                                                                                                                                                                             : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
                                                                                                                                                                     ))?.map((item) => {
@@ -8202,7 +7972,7 @@ function Fileupload(props) {
                                                                                                                                                         {
                                                                                                                                                             moreOptions?.filter(item => (
                                                                                                                                                                 project?.file_translate ? item?.id === 2 :
-                                                                                                                                                                (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
+                                                                                                                                                                (project?.get_project_type !== 5 && project?.get_project_type !== 3 && project?.get_project_type !== 10) ?
                                                                                                                                                                     (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
                                                                                                                                                                     : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
                                                                                                                                                             ))?.map((item) => {
@@ -8400,83 +8170,6 @@ function Fileupload(props) {
                                                                         </div>
                                                                     );
                                                                 }
-                                                            }
-                                                            // for displaying choicelist 
-                                                            else if (activeProjTab === 6) {
-                                                                return (
-                                                                    <div
-                                                                        className="file-edit-list-table-row"
-                                                                        key={project.id}
-                                                                    >
-                                                                        <div className="file-edit-list-table-cell-wrap">
-                                                                            <div className="file-edit-list-table-cell">
-                                                                                <div className="proj-title-list-container">
-                                                                                    <div className="blog-category-icon">
-                                                                                        {/* {
-                                                                                            item?.document_type__type === 'Blog' ? (
-                                                                                                <Tooltip title="Blog article" TransitionComponent={Zoom} placement="top" arrow>
-                                                                                                    <img src={Config.HOST_URL + "assets/images/blog-article.svg"} alt="blog article icon" />
-                                                                                                </Tooltip>
-                                                                                            ) : item?.open_as == 'BlogWizard' ? (
-                                                                                                <Tooltip title="Blog wizard" TransitionComponent={Zoom} placement="top" arrow>
-                                                                                                    <img src={Config.HOST_URL + "assets/images/blog-wizard.svg"} alt="blog article icon" />
-                                                                                                </Tooltip>
-                                                                                            ) : (
-                                                                                                <img src={Config.BASE_URL +"/app/extension-image/docx"} alt="document" />
-                                                                                                )
-                                                                                            } */}
-                                                                                        <img src={ChoiceListIcon} alt="choicelist-icon" />
-                                                                                    </div>
-                                                                                    <div className="proj-list-info">
-                                                                                        <div className="proj-information">
-                                                                                            {/* <Tooltip TransitionComponent={Zoom} title={item.doc_name} placement="top" arrow>
-                                                                                        </Tooltip> */}
-                                                                                            <span className="file-edit-proj-txt-tmx">
-                                                                                                {project.name}
-                                                                                            </span>
-                                                                                        </div>
-                                                                                        <div className="proj-file-type">
-                                                                                            <span className="glossary-text-name">
-                                                                                                {languageOptionsList?.find(each => each.id === project?.language)?.language}
-                                                                                            </span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="file-edit-list-table-cell">
-                                                                                <div className="file-edit-translation-txt word-count">
-
-                                                                                    <span className="file-edit-proj-txt-tmx" >
-                                                                                        {
-                                                                                            Config.getProjectCreatedDate(project?.created_at)
-                                                                                        }
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="file-edit-list-table-cell">
-                                                                                <div className="status-conditions-part dont-open-list">
-                                                                                    {/* <Tooltip title={item?.open_as == 'BlogWizard' ? "Open in Blog" : "Open in Writter"} TransitionComponent={Zoom} placement="top">
-                                                                                        <button 
-                                                                                        style={{
-                                                                                            paddingLeft: "30px",
-                                                                                            paddingRight: "30px"
-                                                                                        }}
-                                                                                        className="workspace-files-OpenProjectButton" type="button" onMouseUp={() =>  item?.open_as == 'BlogWizard' ? history(`/writer-blog/?blog=${item?.id}`, {prevPath: window.location.pathname + window.location.search}) : openWriter(item?.id, item?.doc_name)}>
-                                                                                            <span className="fileopen-new-btn">Open</span>
-                                                                                        </button>
-                                                                                    </Tooltip> */}
-                                                                                    <button
-                                                                                        className="workspace-files-OpenProjectButton"
-                                                                                        onClick={() => handleOpenButton(project.id)}
-                                                                                    >
-                                                                                        <span className="fileopen-new-btn">{t("open")}</span>
-                                                                                    </button>
-                                                                                    <MoreOptionsIconChoiceList choiceListItem={project} />
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                )
                                                             }
                                                         })}
                                                     </React.Fragment>
@@ -8758,7 +8451,6 @@ function Fileupload(props) {
                         hideSettingsModal={hideSettingsModal}
                         showSettings={showSettings}
                         setshowSettings={setshowSettings}
-                        setShowChoiceListCreateModal={setShowChoiceListCreateModal}
                     />
                 }
             </Rodal>)}
@@ -8874,28 +8566,6 @@ function Fileupload(props) {
                         />}
                 </div>
             </Rodal>)}
-
-            {/* {showSrcLangModal && (<Rodal visible={showSrcLangModal} {...modaloption} showCloseButton={false} className="ai-lang-select-modal">
-                <div className="lang-modal-header">
-                    <h1>{t("select_source_language")}</h1>
-                    <span className="modal-close-btn" onClick={() => setshowSrcLangModal(false)}>
-                        <img src={CloseBlack} alt="close_black" />
-                    </span>
-                </div>
-                <Sourcelanguage
-                    sourceLanguage={sourceLanguage}
-                    setshowSrcLangModal={setshowSrcLangModal}
-                    sourceLanguageOptions={targetLanguageOptionsRef.current}
-                    handleSourceLangClick={handleSourceLangClick}
-                    filteredResults={filteredResults}
-                    setFilteredResults={setFilteredResults}
-                    searchInput={searchInput}
-                    setSearchInput={setSearchInput}
-                    onFocusWrap={onFocusWrap}
-                    setOnFocusWrap={setOnFocusWrap}
-                    searchAreaRef={searchAreaRef}
-                />
-            </Rodal>)} */}
 
             {showDurationAlertModal && (<Rodal visible={showDurationAlertModal} {...modaloption} showCloseButton={false} className="ai-large-file-alert-modal">
                 <span className="prompt-close-btn" onClick={() => setShowDurationAlertModal(false)}>
@@ -9619,111 +9289,6 @@ function Fileupload(props) {
                     </div>
                 </Rodal>
             )}
-            {/* New choicelist creation modal */}
-            {showChoiceListCreateModal && (
-                <Rodal
-                    visible={showChoiceListCreateModal}
-                    showCloseButton={false}
-                    onClose={() => { console.log() }}
-                    className={"edit-instant-project-box " + ((showSrcLangModal) ? "z-index-reduce" : "z-index-increase")}
-                >
-                    <div className="header-wrapper">
-                        <div className="header-text">
-                            {!isChoiceListModalEdit ? (
-                                <h1>{t("create_choicelist")}</h1>
-                            ) : (
-                                <h1>{t("edit_choicelist")}</h1>
-                            )}
-                        </div>
-                        <span className="modal-close-btn" onClick={() => { setShowChoiceListCreateModal(false); setIsChoiceListModalEdit(false) }}>
-                            <img src={CloseBlack} alt="close_black" />
-                        </span>
-                    </div>
-                    <div className="body-wrapper">
-                        <div className="language-details mb-3">
-                            <h2>{t("choicelist_name")}</h2>
-                            <input
-                                type='text'
-                                value={choiceListProjectName}
-                                placeholder={t("choicelist_name")}
-                                className="ai-sl-tl-btn input"
-                                onChange={(e) => setChoiceListProjectName(e.target.value)}
-                            />
-                        </div>
-                        <div className="language-details mb-3">
-                            <h2>{t("select_language")}</h2>
-                            <ButtonBase
-                                style={isChoiceListModalEdit ? { pointerEvents: 'none', opacity: 0.7 } : {}}
-                                onClick={() => setshowSrcLangModal(true)}
-                            >
-                                <div className="ai-sl-tl-btn">
-                                    <span className="text" style={choiceListLanguage?.value !== undefined ? { color: '#343a40' } : { color: '#ababab' }}>
-                                        {choiceListLanguage?.value !== undefined ? `${choiceListLanguage?.name}` : t("select_language")}
-                                    </span>
-                                </div>
-                            </ButtonBase>
-                            {isChoiceListModalEdit && (
-                                <div className="choicelist-edit-note">
-                                    <span className="note-content">
-                                        <ErrorOutlineOutlinedIcon className="imp-icon" />
-                                        {t("choicelist_lang_edit_restricted")}
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-                        <div className="edit-proj-button-row">
-                            <ButtonBase className="instant-edit-delete-btn" onClick={() => { setShowChoiceListCreateModal(false); setIsChoiceListModalEdit(false) }}>
-                                {t("discard")}
-                            </ButtonBase>
-                            {!isChoiceListModalEdit ? (
-                                <ButtonBase className="instant-edit-update-btn" onClick={() => { !isCreating && createChoiceList() }}>
-                                    {isCreating && <ButtonLoader />}
-                                    {isCreating ? t("creating") : t("create")}
-                                </ButtonBase>
-                            ) : (
-                                <ButtonBase className="instant-edit-update-btn" onClick={() => { !isUpdating && updateChoiceList() }}>
-                                    {isUpdating && <ButtonLoader />}
-                                    {isUpdating ? t("updating") : t("update")}
-                                </ButtonBase>
-                            )}
-                        </div>
-                    </div>
-                </Rodal>
-            )}
-
-            {showChoiceListDeleteModal && (<Rodal
-                visible={showChoiceListDeleteModal}
-                {...modaloptions}
-                showCloseButton={false}
-                className="ai-mark-confirm-box"
-            >
-                <div className="confirmation-warning-wrapper" style={isChoiceListDeleting ? { pointerEvents: 'none' } : {}}>
-                    <div className="confirm-top">
-                        <div><span onClick={() => { setShowChoiceListDeleteModal(false) }}><CloseIcon /></span></div>
-                        <div>{t("are_you_sure")}</div>
-                        <div>{t("choicelist_delete_note")}</div>
-                    </div>
-                    <div className="confirm-bottom">
-                        <div>
-                            <Button onClick={() => { setShowChoiceListDeleteModal(false) }}>{t("discard")}</Button>
-                            <Button
-                                style={isChoiceListDeleting ? { display: 'flex', alignItems: 'baseline' } : {}}
-                                onClick={() => !isChoiceListDeleting && deleteSelectedChoiceList(selectedChoiceListDataRef.current)}
-                                variant="contained"
-                            >
-                                {isChoiceListDeleting ? (
-                                    <>
-                                        <ButtonLoader />
-                                        {t("deleting")}
-                                    </>
-                                ) : (
-                                    t("delete")
-                                )}
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </Rodal>)}
             
             {showFileErrorModal && (
                 <Rodal 

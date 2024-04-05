@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
 import "bootstrap";
 
 import parse from "html-react-parser";
@@ -30,7 +28,7 @@ import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import ReactSelect, {components} from 'react-select';
+import ReactSelect, { components } from 'react-select';
 import Checkbox from '@mui/material/Checkbox';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 // import DOMPurify from "isomorphic-dompurify";
@@ -82,7 +80,9 @@ import NewMagnifier from "../assets/images/new-ui-icons/new-magnifier.svg"
 import NorCopyContent from "../assets/images/new-ui-icons/nor-copy-content.svg"
 import autosizeInput from 'autosize-input'
 import WorkspaceFeatures from "./workspace-components/WorkspaceFeatures";
+import {ClickAwayListener} from '@mui/base/ClickAwayListener';
 import AddGlossaryTermModal from "./model-select/AddGlossaryTermModal";
+// import { getTransliterateSuggestions } from "react-transliterate";
 
 // const useStyles = makeStyles((theme) => ({
 //     selectBox: {
@@ -277,11 +277,6 @@ function Workspace(props) {
     const [wholeWordMatch, setWholeWordMatch] = useState(false);
     const [pushPinActive, setPushPinActive] = useState(false);
     const [segmentStatusName, setSegmentStatusName] = useState([]);
-
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const handleCloseMenu = () => setIsMenuOpen(false)
-    const handleOpenMenu = () => setIsMenuOpen(true)
 
     /*Find and replace - end*/
     const [segmentStatuses, setSegmentStatuses] = useState({
@@ -485,13 +480,25 @@ function Workspace(props) {
     const [sourceSelectionText, setSourceSelectionText] = useState("")
     const [targetSelectionText, setTargetSelectionText] = useState("")
     
-    const [glossarylist, setGlossarylist] = useState([])
-    const [selectedGlossaryItem, setSelectedGlossaryItem] = useState(null)
+    const [wordChoicelist, setWordChoicelist] = useState([])
+    const [selectedWordChoiceItem, setSelectedWordChoiceItem] = useState(null)
+    const [selectedWordChoicePOS, setSelectedWordChoicePOS] = useState(null)
+
     const [isTermAdding, setIsTermAdding] = useState(false)
     const [showTaskAssignActionBtn, setShowTaskAssignActionBtn] = useState(false)
+    
     const [commentsLoader, setCommentsLoader] = useState(false)
     const [segmentHistoryLoader, setSegmentHistoryLoader] = useState(false)
-    
+    const [isSegmentDataLoading, setIsSegmentDataLoading] = useState(false)
+    const forcedLoaderRef = useRef(false)
+
+    const glossarySrcFieldRef = useRef(null)
+    const glossaryTarFieldRef = useRef(null)
+
+    const axiosTransliterationAbortControllerRef = useRef(null)
+    const axiosCommentListAbortControllerRef = useRef(null)
+    const axiosSegmentHistoryAbortControllerRef = useRef(null)
+    const axiosMTRawTMAbortControllerRef = useRef(null)
     const choiceListPopoverTargetRef = useRef(null)
     const isDocumentOpenerVendorRef = useRef(false)
     const documentProgressRef = useRef(null)
@@ -651,18 +658,16 @@ function Workspace(props) {
     const pageSizeRef = useRef(null)
     const clientResponseDataRef = useRef(null)
     const previousSegmentIdRef = useRef(null)
-    const glossarySrcFieldRef = useRef(null)
-    const glossaryTarFieldRef = useRef(null)
-
-    const axiosTransliterationAbortControllerRef = useRef(null)
-    const axiosCommentListAbortControllerRef = useRef(null)
-    const axiosSegmentHistoryAbortControllerRef = useRef(null)
+    
+    const documentDetailsRef = useRef(null)
+    const termAddModalPositionRef = useRef({ x: '-50%', y: '-60%' })
+    const wordChoiceListRef = useRef([])
 
     const transphraseId = transphrasePopoverOpen ? "simple-popover" : undefined;
     let userSelectionCallTimer = null;
 
     const [allowedMinFontSize, allowedMaxFontSize] = [12, 18];
-    // filterMenuProps.PaperProps.className = classes.selectOptions;
+    // filterMenuPaperclassName = classes.selectOptions;
 
     const customPageSelectStyles = {
         placeholder: (provided, state) => ({
@@ -733,63 +738,62 @@ function Workspace(props) {
         }
     }, [location.state])
 
+
     useEffect(() => {
-        // console.log(params)
+        if(userDetails !== null) {
+            queryParamExistUrl();
+            getSteps();
+            setDidMount(true); // Component is mount (App loaded)
+            didMountRef.current = true;
+            if (location?.state?.sourceLanguage != null) {
+                setSourceLanguage(location.state.sourceLanguage);
+                setTargetLanguage(location.state.targetLanguage);
+                setSourceLanguageId(location.state.sourceLanguageId);
+                setTargetLanguageId(location.state.targetLanguageId);
+                setFileName(location.state.fileName);
+                setDocumentId(params.documentId);
+            } else if (params?.documentId != null) {
+                // Check documentId is exist in the url
+                setDocumentId(params.documentId);
+                getDocumentDetailsById(params.documentId);
+            } // If laguage data or document id is not present, redirect to file-upload page
+            else history("/file-upload");
 
-        queryParamExistUrl();
-        getSteps();
-        setDidMount(true); // Component is mount (App loaded)
-        didMountRef.current = true;
-        console.log(params.documentId)
+            makeSegmentStatusOptions();
+            getSavedPageSize();
+            // history.listen((location, action) => {
+            //     removeIMESuggestion();
+            //     /* if (enableIME) {
+            //         targetContentEditable.current[focusedDivIdRef.current].current.blur()
+            //         setTimeout(() => {
+            //             window.location.reload()
+            //         }, 100)
+            //     } */
+            // });
 
-        if (location?.state?.sourceLanguage != null) {
-            setSourceLanguage(location.state.sourceLanguage);
-            setTargetLanguage(location.state.targetLanguage);
-            setSourceLanguageId(location.state.sourceLanguageId);
-            setTargetLanguageId(location.state.targetLanguageId);
-            setFileName(location.state.fileName);
-            setDocumentId(params.documentId);
-        } else if (params?.documentId != null) {
-            // Check documentId is exist in the url
-            setDocumentId(params.documentId);
-            getDocumentDetailsById(params.documentId);
-        } // If laguage data or document id is not present, redirect to file-upload page
-        else history("/file-upload");
+            let element = workspaceFeaturRef.current; // Footer toolbar
+            makeResizable(element, 10, 10);
 
-        makeSegmentStatusOptions();
-        getSavedPageSize();
-        // history.listen((location, action) => {
-        //     removeIMESuggestion();
-        //     /* if (enableIME) {
-        //         targetContentEditable.current[focusedDivIdRef.current].current.blur()
-        //         setTimeout(() => {
-        //             window.location.reload()
-        //         }, 100)
-        //     } */
-        // });
+            /* How to tour will be shown for the first time - start */
+            if (typeof Cookies.get("isProductTourSeen") == "undefined")
+                // Check for the product tour is not seen yet
+                setIsProductTourSeen(false); // Product tour is not yet seen
+            /* How to tour will be shown for the first time - end */
 
-        let element = workspaceFeaturRef.current; // Footer toolbar
-        makeResizable(element, 10, 10);
-
-        /* How to tour will be shown for the first time - start */
-        if (typeof Cookies.get("isProductTourSeen") == "undefined")
-            // Check for the product tour is not seen yet
-            setIsProductTourSeen(false); // Product tour is not yet seen
-        /* How to tour will be shown for the first time - end */
-
-        /* To unselect the spellcheck by default - start (ID1)*/
-        const waitForSpellCheckButton = setInterval(() => {
-            // Wait for the spellcheck icon is to be rendered
-            let spellcheckButton = toggleSpellCheckBtn.current;
-            if (spellcheckButton) {
-                spellcheckButton?.click(); // Manually clicking the spellcheck icon because it has been enabled by default
-                clearInterval(waitForSpellCheckButton);
-            }
-        }, 0);
-        /* To unselect the spellcheck by default - end */
-        // set browser tab title as "Transeditor"
-        document.title = 'Ailaysa | Transeditor';
-    }, []);
+            /* To unselect the spellcheck by default - start (ID1)*/
+            const waitForSpellCheckButton = setInterval(() => {
+                // Wait for the spellcheck icon is to be rendered
+                let spellcheckButton = toggleSpellCheckBtn.current;
+                if (spellcheckButton) {
+                    spellcheckButton?.click(); // Manually clicking the spellcheck icon because it has been enabled by default
+                    clearInterval(waitForSpellCheckButton);
+                }
+            }, 0);
+            /* To unselect the spellcheck by default - end */
+            // set browser tab title as "Transeditor"
+            document.title = 'Ailaysa | Transeditor';
+        }
+    }, [userDetails]);
 
     /*Keep the focus of the target segment contenteditable when clicking the toolbars- start*/
     useEffect(() => {
@@ -1030,8 +1034,15 @@ function Workspace(props) {
         if (isDocumentOpenerVendorRef.current) {
             if (isWorkspaceEditable) {
                 let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
+                // console.log(isUserIsReviwer)
+                // console.log(documentProgressRef.current)
                 if (!isUserIsReviwer ? (segments_confirmed_count === total_segment_count) : isEditorSubmittedDocument.current) {
-                    setShowDocumentSubmitButton(true)
+                    console.log("editor submnit: "+isEditorSubmittedDocument.current)
+                    if(isEditorSubmittedDocument.current){
+                        setShowDocumentSubmitButton(false)
+                    }else{
+                        setShowDocumentSubmitButton(true)
+                    }
                 } else {
                     setShowDocumentSubmitButton(false)
                 }
@@ -1258,6 +1269,7 @@ function Workspace(props) {
             }catch(e) {
                 console.log(e)
             }
+            setIsSegmentDataLoading(true)
         }
     }, [focusedDivId]);
 
@@ -1349,30 +1361,30 @@ function Workspace(props) {
 
 
     // close the popover and remove the mark tag when clicked outside of the popover
-    useEffect(() => {
-        // console.log('sarvesh')
-        if (grammarCheckPopoverTarget !== "") {
-            document.addEventListener('click', (e) => {
-                // console.log(e.target)
-                let popoverDiv = document.getElementsByClassName('popover')[0]
-                // console.log(popoverDiv)
-                if (!e.target.classList.contains('popover') && popoverDiv) {
-                    // setParaphraseText("")
-                    setGrammarPopoverOpen(false);
-                    setgrammarCheckPopoverTarget("");
-                    setGrammarCheckResponse([]);
-                    // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
-                    //     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
-                    //     "mark"
-                    // );
-                    // updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", targetContentEditable.current[focusedDivIdRef.current].current.innerHTML);
-                    // updateSegmentStatus(focusedDivIdRef.current, 103);
-                    // changeEditedStatus(focusedDivIdRef.current, "unsaved");
-                }
-            })
+    // useEffect(() => {
+    //     // console.log('sarvesh')
+    //     if (grammarCheckPopoverTarget !== "") {
+    //         document.addEventListener('click', (e) => {
+    //             // console.log(e.target)
+    //             let popoverDiv = document.getElementsByClassName('popover')[0]
+    //             // console.log(popoverDiv)
+    //             if (!e.target.classList.contains('popover') && popoverDiv) {
+    //                 // setParaphraseText("")
+    //                 setGrammarPopoverOpen(false);
+    //                 setgrammarCheckPopoverTarget("");
+    //                 setGrammarCheckResponse([]);
+    //                 // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
+    //                 //     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
+    //                 //     "mark"
+    //                 // );
+    //                 // updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", targetContentEditable.current[focusedDivIdRef.current].current.innerHTML);
+    //                 // updateSegmentStatus(focusedDivIdRef.current, 103);
+    //                 // changeEditedStatus(focusedDivIdRef.current, "unsaved");
+    //             }
+    //         })
 
-        }
-    }, [grammarCheckPopoverTarget])
+    //     }
+    // }, [grammarCheckPopoverTarget])
 
 
     useEffect(() => {
@@ -1602,7 +1614,7 @@ function Workspace(props) {
     useEffect(() => {
         const errorHandler = (message, source, lineno, colno, error) => {
           // You can log the error or perform any other action here.
-        //   console.error(error);
+          console.error(error);
           return true; // Return true to prevent the default browser error handling
         };
     
@@ -1613,6 +1625,8 @@ function Workspace(props) {
         };
     }, []);
  
+
+
     useEffect(() => {
         // Create a state specifically for Parawise segmentation
         let tempParagraphSegmentsList = [];
@@ -1932,7 +1946,27 @@ function Workspace(props) {
         return () => {
             document.removeEventListener("click", handleClick);
         };
-    });
+    }, []);
+
+    // function to calculate the scroll y position of the scrolling editor, 
+    // used to place the modal at the specified position
+    useEffect(() => {
+        const workspaceEditor = document.querySelector('.workspace-editor');
+        const handleScroll = () => {
+            if (workspaceEditor) {
+                const { scrollTop, scrollHeight, clientHeight } = workspaceEditor;
+                termAddModalPositionRef.current = {
+                    ...termAddModalPositionRef.current,
+                    y: (scrollTop - 268)
+                }
+            }
+        }
+    
+        workspaceEditor?.addEventListener('scroll', handleScroll);
+        return () => {
+            workspaceEditor?.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     useEffect(() => {
         if (mergeSelectedSegmentIds?.length !== 0) {
@@ -1969,6 +2003,13 @@ function Workspace(props) {
         }
     }, [document.querySelector('#page-num')])
 
+    // get the list of glossaries based on the task_id
+    useEffect(() => {
+        if(documentTaskIdRef.current !== null){
+            getWordChoiceListForDocument()
+        }
+    }, [documentTaskIdRef.current])
+    
     // reset the target if source text is selected
     useEffect(() => {
         if(sourceSelectionText !== "" && !showGlossaryAddition){
@@ -1981,7 +2022,7 @@ function Workspace(props) {
         if(targetSelectionText !== "" && !showGlossaryAddition){
             setSourceSelectionText("")
         }
-    }, [targetSelectionText])
+    }, [targetSelectionText])    
 
     // Handle footer pin
     const handlePushPinActive = (show = false) => {
@@ -2000,7 +2041,7 @@ function Workspace(props) {
 
     // Handle paste on target segment - only plain text is accepted
     const handlePasteOnWorkArea = (e) => {
-        console.log(e.target)   
+        // console.log(e.target)   
         e.preventDefault();
         var text = "";
         if (e.clipboardData && e.clipboardData.getData) {
@@ -2032,7 +2073,9 @@ function Workspace(props) {
 
     // Handle keyboard key press on target segment
     const handleKeyDown = (e) => {
-       
+        
+        if(imeOn) handeIMEKeyDownDiv(e)
+
         if (ctrlAClicked.current) {
             // To detect empty for status if the user removes the content with CTRL + A
             if (String.fromCharCode(e.keyCode).match(/(\w|\s)/g))
@@ -2044,6 +2087,9 @@ function Workspace(props) {
         }
 
         ctrlAClicked.current = false;
+        if(e.key === "Enter"){
+            e.preventDefault()
+        }
         if (e.ctrlKey) {
             if (e.key === "a") ctrlAClicked.current = true; // To Change status if user selects CTRL+A and type
             else if (e.altKey) {
@@ -2274,6 +2320,7 @@ function Workspace(props) {
             auth: true,
             success: (docResponse) => {
                 let responseTemp = docResponse.data;
+                documentDetailsRef.current = docResponse.data
                 // console.log(responseTemp)
                 if (responseTemp.doc_credit_check_open_alert) {
                     setShowCreditAlert(true);
@@ -2350,7 +2397,6 @@ function Workspace(props) {
                     }
                 }
 
-
                 Config.axios({
                     url: `${Config.BASE_URL}/workspace/vendor/dashboard/${responseTemp.project}/`,
                     auth: true,
@@ -2369,14 +2415,14 @@ function Workspace(props) {
                                 let assign_by_data = assign_info?.assigned_by_details
                                 let assign_to_data = assign_info?.assign_to_details
                                 
-                                console.log("Assign info")
-                                console.log(assign_info)
+                                // console.log("Assign info")
+                                // console.log(assign_info)
                                 // console.log("Assign by");
                                 // console.log(assign_by_data);
                                 // console.log("Assign to");
                                 // console.log(assign_to_data);
                                 
-                                console.log(assign_info?.task_assign_detail?.client_response)
+                                // console.log(assign_info?.task_assign_detail?.client_response)
                                 if(assign_info?.task_assign_detail?.client_response === "Approved"){
                                     setIsWorkspaceEditable(responseTemp.edit_allowed)
                                     isWorkspaceEditableRef.current = responseTemp.edit_allowed
@@ -2419,10 +2465,10 @@ function Workspace(props) {
                             let assign_to_data = task_data?.task_reassign_info?.find(each => ((each?.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))))
                             let assign_by_data = task_data?.task_reassign_info?.find(each => ((each?.assigned_by_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))))
 
-                            console.log("Assign by");
-                            console.log(assign_by_data);
-                            console.log("Assign to");
-                            console.log(assign_to_data);
+                            // console.log("Assign by");
+                            // console.log(assign_by_data);
+                            // console.log("Assign to");
+                            // console.log(assign_to_data);
 
                             // task is assigned by me (view -> when task owner/admin sees)
                             if (assign_by_data?.assigned_by_details?.id === userDetails.pk) {
@@ -2440,7 +2486,7 @@ function Workspace(props) {
                             if (assign_to_data?.assign_to_details?.id === userDetails.pk) {
                                 // console.log('vendor view');
                                 if (assign_to_data?.task_assign_detail.task_status !== "Return Request" && assign_to_data?.task_assign_detail.task_status !== "Completed") {
-                                    console.log('return 2')
+                                    // console.log('return 2')
                                     setShowReturnRequestBtn(true)
                                 }
                                 else setShowReturnRequestBtn(false)
@@ -2626,60 +2672,12 @@ function Workspace(props) {
             },
             error: (err) => {
                 if (err.response?.data?.detail) {
-                    props.history.push("/file-upload");
+                    history("/file-upload");
                 }
             }
         });
     };
-
-    // useEffect(() => {
-    //   console.log('is_editable: ' + isWorkspaceEditable);
-    // }, [isWorkspaceEditable])
-    // useEffect(() => {
-    //   console.log('is_reviewer: ' + isUserIsReviwer);
-    // }, [isUserIsReviwer])
-    // useEffect(() => {
-    //   console.log('is_doc_opener_vendor: ' + isDocumentOpenerVendorRef.current);
-    // }, [isDocumentOpenerVendorRef.current])
-    // useEffect(() => {
-    //     console.log('show doc submit: ' + showDocumentSubmitButton);
-    // }, [showDocumentSubmitButton])
-    // useEffect(() => {
-    //   console.log('task is reassigned: ' + isTaskReassignedRef.current);
-    // }, [isTaskReassignedRef.current])
-    // useEffect(() => {
-    //   console.log('show return_request: ' + showReturnRequestBtn);
-    // }, [showReturnRequestBtn])
-    // useEffect(() => {
-    //   console.log('is_editing_completed: ' + isEditorSubmittedDocument.current);
-    // }, [isEditorSubmittedDocument.current])
-
-    // un-comment the return request button if the return request button only be visibile when that particular editor have workspace access
-    // otherwise the all time the return request button will be visible even that editor doesn't the access
-
-
-    // watches the document progress and decide whether to show document submit button or not
-    // shows the document submit button if doc opener is assigned vendor
-    // useEffect(() => {
-    //     if(documentProgressRef.current !== null && isDocumentOpenerVendorRef.current){
-    //         let {segments_confirmed_count, total_segment_count} = documentProgressRef.current
-
-    //         // show submit button when all segments are confirmed or the vendor is reviewer 
-    //         if(!isUserIsReviwer ? (segments_confirmed_count === total_segment_count) : isEditorSubmittedDocument.current){
-    //             console.log("isDocumentSubbmited: " +isDocumentSubmittedRef.current);
-    //             // also check whether the document is submitted or not
-    //             if(!isDocumentSubmittedRef.current){
-    //                 setShowDocumentSubmitButton(true)
-    //             }else{
-    //                 setShowDocumentSubmitButton(false)
-    //             }
-    //         }else{
-    //             setShowDocumentSubmitButton(false)
-    //         }
-    //     }
-    // }, [documentProgressRef.current, isEditorSubmittedDocument.current, isUserIsReviwer, isDocumentOpenerVendorRef.current, isDocumentSubmittedRef.current])
-
-
+    
     const handleDocumentSubmitBtn = (status) => {
         setVendorReturnRequestReasonText('')
         if (status === 4 && vendorReturnRequestReasonText?.trim() === '') {
@@ -2710,7 +2708,9 @@ function Workspace(props) {
             data: formData,
             auth: true,
             success: (response) => {
-                setIsWorkspaceEditable(false)
+                if(!isDinamalar){
+                    setIsWorkspaceEditable(false)
+                }
                 setShowDocumentSubmitButton(false)
                 setShowReturnRequestBtn(false)
                 setShowVendorComplaintReasonModal(false)
@@ -3098,6 +3098,7 @@ function Workspace(props) {
 
 
 
+
     const getSelectedText = (e) => {
 
       
@@ -3126,6 +3127,9 @@ function Workspace(props) {
         updateSegmentStatus(focusedDivIdRef.current, 103);
         changeEditedStatus(focusedDivIdRef.current, "unsaved");
         handleTransphrasePopoverClose()
+        setTimeout(() => {
+            updateTranslationById(null, focusedDivIdRef.current, true, { forceUpdate: true });
+        }, 200);
     }
 
     const repalceWithNewSynonym = (e, value) => {
@@ -3248,6 +3252,8 @@ function Workspace(props) {
                 // normal paraphrasing
                 formdata.append("sentence", text.trim());
                 formdata.append("doc_id", documentId);
+
+                formdata.append("seg_id", focusedDivId ? focusedDivId : focusedDivIdRef.current);
             } else if (sourceLanguageId == 17) {
                 // transphrasing
                 formdata.append("source_sent", text?.trim());
@@ -3574,7 +3580,7 @@ function Workspace(props) {
         // // Call the highlight choicelist
         if (e.target.innerText !== ""){
             debounceApiCall(() => {
-                console.log('debounce')
+                // console.log('debounce')
                 symSpellCheck(id)
                 // highlightChoiceListOptions(id)
             })
@@ -3752,7 +3758,6 @@ function Workspace(props) {
                         // console.log(targetContentEditable?.current[id]?.current)
                         if (targetContentEditable?.current[id]?.current != null)
                             targetContentEditable.current[id].current.setAttribute("data-translated-text", response.data.target == '' ? "" : response.data.target);
-
                         updateTranslatedResponseSegment(id, "temp_target", response.data.temp_target == null ? "" : response.data.temp_target);
                         updateTranslatedResponseSegment(id, "target", response.data.target);
                         updateTranslatedResponseSegment(id, "status", changeStatusTo);
@@ -3874,7 +3879,7 @@ function Workspace(props) {
                     showAllSegmentsConfirmedToastRef.current = true
                     confirmedSegmentListFromConfirmAll.current?.map(each => {
                         if (targetContentEditable?.current[each]?.current != null){
-                            console.log(response.data.results?.find(seg => seg?.segment_id == each)?.target)
+                            // console.log(response.data.results?.find(seg => seg?.segment_id == each)?.target)
                             targetContentEditable.current[each].current.setAttribute("data-translated-text", (response.data.results?.find(seg => seg?.segment_id == each)?.target == '' || response.data.results?.find(seg => seg?.segment_id == each)?.target == null) ? "" : response.data.results?.find(seg => seg?.segment_id == each)?.target);
                         }
                     })
@@ -3913,10 +3918,13 @@ function Workspace(props) {
             return;
         }
         // formdata.append("status", isUserIsReviwer ? 110 : 104);
-
+        
+        // console.log(translatedResponseRef.current)
         let list = []
+        let confirmedStatusList = [102, 104, 106, 110]
         translatedResponseRef.current?.map(each => {
-            if (each?.status !== undefined) {
+            // console.log(confirmedStatusList?.includes(each?.status))
+            if (each?.status !== undefined && !confirmedStatusList?.includes(each?.status)) {
                 list.push({
                     pk: each.segment_id,
                     status: each.status == 101 ? "102" : each.status == 103 ? "104" : each.status == 105 ? "106" : (each.status == 109 && !isUserIsReviwer) ? "104" :
@@ -3930,6 +3938,7 @@ function Workspace(props) {
             Config.toast(t("no_segments_confirm"), 'warning')
             return;
         }
+
         setShowAiLoader(true)
 
         formdata.append("confirm_list", JSON.stringify(list));
@@ -4019,7 +4028,7 @@ function Workspace(props) {
         }
         history(url);
     }
-    
+
     // Store last visited project page number in local storage
     const storeLastVisitedPageNumber = (path) => {
         localStorage.setItem(documentId, path)
@@ -4113,7 +4122,7 @@ function Workspace(props) {
 
 
     /* Whenever select a target contenteditable */
-    const contentEditableFocus = (e) => {
+    const contentEditableFocus = (e, segment_status) => {
         let id = e.target.getAttribute("data-id");
         // console.log(e.target);
         // console.log();
@@ -4156,7 +4165,6 @@ function Workspace(props) {
         focusedDivIdRef.current = id;
         // spellCheck(e);
         symSpellCheck(id)
-
         if(isDinamalar){
             getNerTerms(id)
         }
@@ -4164,6 +4172,7 @@ function Workspace(props) {
         getSegmentDiff()
 
         changeEditedStatus(id);
+
         let advanceToolbarOpenedForTm = false;
         if (targetContentEditable?.current[id]?.current != null) {
             if (findTerm === "") {
@@ -4182,6 +4191,9 @@ function Workspace(props) {
         let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
         let thisSegmentTag = segmentData?.target_tags;
         let textTag = "" + thisSegmentTag
+
+        if(segment_status) return
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace_okapi/mt_raw_and_tm/${id}?mt_uc=false`,
             auth: true,
@@ -4243,8 +4255,10 @@ function Workspace(props) {
                 if(mtTmResponse?.options){
                     setChoicelistOptions(mtTmResponse?.options)
                 }
+                setIsSegmentDataLoading(false)
             },
             error: (error) => {
+                setIsSegmentDataLoading(false)
                 if (error.response?.data?.mt_alert) {
                     if (showCreditAlert) {
                         if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
@@ -4360,7 +4374,11 @@ function Workspace(props) {
         if (tagName) {
             tagName = tagName.map((val, key) => {
                 thisTag = val.replace(/[<>]|[</>]/g, "");
+                // console.log(thisTag)
                 bgColor = bgColors[thisTag] != undefined ? bgColors[thisTag] : "#0074D3";
+                // console.log(thisTag)
+                let digitPattern = /^[0-9]+$/;
+                let isDigit = digitPattern?.test(thisTag);
                 if (exculudeTags.indexOf(thisTag) == -1) {
                     if (/<([0-9]+) *[^/]*?>/gi.test(val)) {
                         // Open tag
@@ -4369,7 +4387,7 @@ function Workspace(props) {
                             key +
                             '" id="open-tag-' +
                             key +
-                            '" class="tag tag-open draggable" contenteditable="false" suppressContentEditableWarning="true" style="--tag-color: ' +
+                            `" class="tag tag-open draggable ${isDigit ? '' : 'd-none'}" contenteditable="false" suppressContentEditableWarning="true" style="--tag-color: ` +
                             bgColor +
                             ';">' +
                             thisTag +
@@ -4383,7 +4401,7 @@ function Workspace(props) {
                             key +
                             '" id="close-tag-' +
                             key +
-                            '" class="tag tag-close draggable" contenteditable="false" suppressContentEditableWarning="true" style="--tag-color: ' +
+                            `" class="tag tag-close ${isDigit ? '' : 'd-none'}  draggable" contenteditable="false" suppressContentEditableWarning="true" style="--tag-color: ` +
                             bgColor +
                             ';">' +
                             thisTag +
@@ -4514,10 +4532,21 @@ function Workspace(props) {
         let segmentId = e.target.getAttribute("data-id");
         let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
         let thisSegmentTags = segmentData.target_tags;
-        Config.axios({
 
+        if (axiosMTRawTMAbortControllerRef.current) {
+            axiosMTRawTMAbortControllerRef.current.abort()
+        }
+
+        const controller = new AbortController();
+        axiosMTRawTMAbortControllerRef.current = controller 
+
+        forcedLoaderRef.current = true
+        setIsSegmentDataLoading(true)
+        
+        Config.axios({
             url: `${Config.BASE_URL}/workspace_okapi/mt_raw_and_tm/${segmentId}?mt_uc=true`,
             auth: true,
+            ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
                 // console.log("workgin and cmg", response);
                 lastCalledArgs.current.functionName = "getMachineTranslation";
@@ -4555,6 +4584,8 @@ function Workspace(props) {
                     // console.log(replaceFromRegExp);
                     replacedText = replacedText.replace(replaceFromRegExp, (match) => '<mark contentEditable="false">' + match + "</mark>");
                 }
+                forcedLoaderRef.current = false
+                setIsSegmentDataLoading(false)
                 // console.log(replacedText);
                 /*if (targetContentEditable?.current[segmentId]?.current != null)
                     targetContentEditable.current[segmentId].current.innerHTML = replaceTextWithTags(translatedText)*/
@@ -4584,6 +4615,9 @@ function Workspace(props) {
             },
             error: (error) => {
                 if (error.response?.data?.mt_alert) {
+                    forcedLoaderRef.current = false
+                    setIsSegmentDataLoading(false)
+
                     setShowCreditAlert(true);
                     if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
                     else setCreditAlertTxt(error.response?.data?.alert_msg);
@@ -4740,6 +4774,11 @@ function Workspace(props) {
         setEnableSpellCheck(false)
         resetSynonymStates()
         toggleSpellCheckBtn.current?.classList?.remove("toolbar-list-icons-active");
+        console.log(focusedDivIdRef.current)
+
+        if(!focusedDivIdRef.current){
+            targetContentEditable.current[translatedResponse[0]?.segment_id].current.focus();
+        } 
         if (grammarPopoverOpen) {
             setGrammarPopoverOpen(false)
             setgrammarCheckPopoverTarget("")
@@ -5009,7 +5048,7 @@ function Workspace(props) {
                 data: data,
                 success: (response) => {
                     if (response.data?.page_id != null)
-                        history("/workspace/" + documentId + "?page=" + response.data.page_id, {state: { findHighlightSegment: nextPageSegmentIdMax }});
+                    history("/workspace/" + documentId + "?page=" + response.data.page_id, {state: { findHighlightSegment: nextPageSegmentIdMax }});
                 },
                 error: (error) => { },
             });
@@ -5068,7 +5107,7 @@ function Workspace(props) {
                 data: data,
                 success: (response) => {
                     if (response.data?.page_id != null)
-                        history("/workspace/" + documentId + "?page=" + response.data.page_id, {state: { highlightFirstFindTerm: true }});
+                    history("/workspace/" + documentId + "?page=" + response.data.page_id, {state: { highlightFirstFindTerm: true }});
                 },
                 error: (error) => { },
             });
@@ -5166,11 +5205,14 @@ function Workspace(props) {
     /* Update the segment status in the front-end itself  */
     const updateSegmentStatus = (segmentId = null, status = null) => {
         if (segmentId != null) {
+            // console.log(segmentId)
+            // console.log(status)
             allSegmentStatuses.current[segmentId] = status;
             setAllSegmentStatusState((prevState) => ({
                 ...prevState,
                 [segmentId]: status,
             }));
+            translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, status: status } : el))
         } else if (segmentId == null && status == null) {
             translatedResponse.map((value) => {
                 allSegmentStatuses.current[value.segment_id] = value?.status;
@@ -5190,7 +5232,7 @@ function Workspace(props) {
         }
         // let selectedText = window.getSelection().anchorNode.data.substring( window.getSelection().anchorOffset,window.getSelection().extentOffset)
         let selectedText = window.getSelection().toString();
-        console.log(selectedText)
+        // console.log(selectedText)
         if (selectedText != "") {
             setDictionaryTerm(selectedText);
             showDictionaryRef.current.classList.add("toolbar-list-icons-active");
@@ -5590,14 +5632,14 @@ function Workspace(props) {
             setCommentsData([])
             setCommentsLoader(true)
         }
-
+        
         if (axiosCommentListAbortControllerRef.current) {
             axiosCommentListAbortControllerRef.current.abort()
         }
-
+    
         const controller = new AbortController();
         axiosCommentListAbortControllerRef.current = controller
-
+        
         let url = Config.BASE_URL + "/workspace_okapi/comment/?by=segment&id=" + segmentId;
         Config.axios({
             url: url,
@@ -5846,10 +5888,13 @@ function Workspace(props) {
             if (targetContentEditable.current[focusedDivIdRef.current]?.current != null) {
                 // targetContentEditable.current[focusedDivId].current.innerHTML = sourceTextDiv?.current[focusedDivId]?.current?.innerHTML
                 setTimeout(() => {
+
+                    var srcText = removeTagsWithClass(sourceTextDiv?.current[focusedDivIdRef.current]?.current?.innerHTML, 'mark', 'ner-highlight');
+
                     updateTranslatedResponseSegment(
                         focusedDivIdRef.current,
                         "temp_target",
-                        replaceTagsWithText(sourceTextDiv?.current[focusedDivIdRef.current]?.current?.innerHTML)
+                        replaceTagsWithText(srcText)
                     );
                     updateSegmentStatus(focusedDivIdRef.current, 105);
                 }, 150);
@@ -5943,10 +5988,11 @@ function Workspace(props) {
 
     const getSegmentDiff = () => {
         if (focusedDivId != '') {
+
             if (axiosSegmentHistoryAbortControllerRef.current) {
                 axiosSegmentHistoryAbortControllerRef.current.abort()
             }
-
+        
             const controller = new AbortController();
             axiosSegmentHistoryAbortControllerRef.current = controller
 
@@ -6153,20 +6199,18 @@ function Workspace(props) {
     const handleJoyrideCallback = (data) => {
         let { action, index, status, type } = data;
         let navDropDown = document.getElementById("download-dropdown-wrapper");
+        
         if ([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(type)) {
             let secondSegmentId = translatedResponse[1]?.segment_id;
             if (secondSegmentId && isWorkspaceEditable) {
-                if (index === 1 && focusedDivIdRef.current !== secondSegmentId) targetContentEditable.current[secondSegmentId].current?.focus();
+                if (index === 1 && focusedDivIdRef.current !== secondSegmentId) targetContentEditable.current[secondSegmentId].current.focus();
             } else {
                 if ([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(type)) {
                     // Update state to advance the tour
-                    /* if (index === 5 && action === ACTIONS.PREV) {
-                        setTourStepIndex(index - 4)
-                        return
-                    } else */ if (index === 5 && action === ACTIONS.NEXT) {
+                    if (index === 5 && action === ACTIONS.NEXT) {
                         setTourStepIndex(index + 4);
                         if (typeof Cookies.get("isProductTourSeen") == "undefined")
-                            Cookies.set("isProductTourSeen", true, { domain: import.meta.env.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
+                        Cookies.set("isProductTourSeen", true, { domain: import.meta.env.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
                         return;
                     }
                 }
@@ -6182,7 +6226,7 @@ function Workspace(props) {
             }
             setTourStepIndex(index + (action === ACTIONS.PREV ? -1 : 1));
             if (typeof Cookies.get("isProductTourSeen") == "undefined")
-                Cookies.set("isProductTourSeen", true, { domain: import.meta.env.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
+            Cookies.set("isProductTourSeen", true, { domain: import.meta.env.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
         } else if ([STATUS.FINISHED, STATUS.SKIPPED, STATUS.IDLE].includes(status) || action === ACTIONS.CLOSE) {
             // Need to set our running state to false, so we can restart if we click start again.
             if (navDropDown) navDropDown.classList.remove("tour-hover");
@@ -6587,10 +6631,13 @@ function Workspace(props) {
     /* Show how to use tags tour */
     const showTagsTour = () => {
         let firstTag = document.querySelector(".workspace-row span.tag");
+        let digitPattern = /^[0-9]+$/;
+        let isDigitTag = digitPattern?.test(firstTag?.innerText);
+
         let firstTagSegmentIdTemp = firstTag?.parentElement?.getAttribute("data-id");
         setFirstTagSegmentId(firstTagSegmentIdTemp);
         let firstTagSegment = targetContentEditable?.current[firstTagSegmentIdTemp]?.current;
-        if (firstTagSegment) {
+        if (firstTagSegment && isDigitTag) {
             setTagTourStepIndex(0);
             setIsTagTourSeen(false);
             firstTagSegment.focus();
@@ -6820,8 +6867,6 @@ function Workspace(props) {
                 console.log(e)
             }
             restoreCursorPositionWithinContenteditable(content_editable_div);
-            
-
         }
     }
 
@@ -6844,7 +6889,7 @@ function Workspace(props) {
     // Function to check if the mouse pointer is within the bounding box of the <mark> element
     function isMouseOverMark(event, ele) {
         if(ele === undefined || ele?.length === 0) return
-        
+
         for (const markElement of ele) {
             const boundingBox = markElement.getBoundingClientRect();
             const mouseX = event.clientX;
@@ -6872,6 +6917,7 @@ function Workspace(props) {
             // console.log(targetContentEditable.current[focusedDivIdRef.current].current)
             const markTags = targetContentEditable.current[focusedDivIdRef.current].current?.querySelectorAll('.spellcheck-highlight');
             let isSpellCheckPopOpen = document.querySelector('#pop').style.visibility === 'visible' ? true : false
+    
             const touchedMark = isMouseOverMark(e, markTags);
             if (isMouseOverMark(e, markTags) && !isSpellCheckPopOpen) {
                 // Mouse pointer is touching the bounding box of a <mark> element
@@ -6955,7 +7001,7 @@ function Workspace(props) {
 
     const handleWrongWordClick = (e) => {
         let clickedOverPop = e.target.closest('#pop') ? true : false
-        let segment_id = e.target.parentNode?.getAttribute('data-id')
+        let segment_id = e.target?.parentNode?.getAttribute('data-id')
         
         choiceListPopoverTargetRef.current = e.target.id
 
@@ -7042,16 +7088,390 @@ function Workspace(props) {
     }
 
     const checkTargetTextSelection = () => {
-        let selTxt = window.getSelection()?.toString()
+        // let selTxt = window.getSelection()?.toString()
+        let selection = window.getSelection();
+        if(selection?.toString()?.trim()?.length === 0) return 
+        let range = selection.getRangeAt(0);
+        let clonedSelection = range.cloneContents();
+        let div = document.createElement('div');
+        div.appendChild(clonedSelection);
+        let selectedHTML = div.innerHTML;
+        let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
+
         setTargetSelectionText(selTxt)
         if(window.getSelection().toString()?.trim() === '' || dictionaryTerm !== selTxt){
             showDictionaryRef.current?.classList.remove("toolbar-list-icons-active")
         }
     }
 
+
     const checkSourceTextSelection = () => {
-        let selTxt = window.getSelection()?.toString()
+        // let selTxt = window.getSelection()?.toString()
+        // console.log(window.getSelection())
+        // console.log(selTxt)
+        let selection = window.getSelection();
+        if(selection?.toString()?.trim()?.length === 0) return
+        let range = selection.getRangeAt(0);
+        let clonedSelection = range.cloneContents();
+        let div = document.createElement('div');
+        div.appendChild(clonedSelection);
+        let selectedHTML = div.innerHTML;
+        let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
+
         setSourceSelectionText(selTxt)
+    }
+
+    // ================================================================================================================
+
+     // Transliteration
+
+     const supportedImeLanguage = [
+        "am", "ar", "bn", "be", "bg", "yue-hant",
+        "zh", "zh-hant", "fr", "de", "el", "gu", "he",
+        "hi", "it", "ja", "kn", "ml", "mr", "ne", "or",
+        "fa", "pt", "pa", "ru", "sa", "sr", "si", "es",
+        "ta", "te", "ti", "uk", "ur", "vi"
+      ];
+    const [imeOn, setImeOn] = useState(false)
+    const [options, setOptions] = useState([])
+    const [activeResult, setActiveResult] = useState(0)
+    const [top, setTop] = useState(0)
+    const [left, setLeft] = useState(0)
+    const [showImeSuggesstion, setShowImeSugessiton] = useState(false)
+    const transliterateCompRef = useRef()
+    const inputTransliterate = useRef(null)
+
+    const imeRef = useRef(false)
+    let shouldRenderSuggestions = true
+    let showCurrentWordAsLastSuggestion = true
+    let maxOptions = 5
+    let lang = targetLanguageCode
+
+    const handleIme = () => {
+        setImeOn(!imeOn)
+    }
+
+    const renderSuggestions = async (lastWord) => {
+        if (!shouldRenderSuggestions) return;
+        
+        
+
+        // fetch suggestion from api
+        const numOptions = showCurrentWordAsLastSuggestion ? maxOptions - 1 : maxOptions;
+        const data = await transliteration(lastWord, {
+
+            numOptions: numOptions,
+            showCurrentWordAsLastSuggestion: showCurrentWordAsLastSuggestion,
+            lang: lang
+        });
+        console.log(data)
+        setOptions(data);
+    };
+
+    const transliteration = async (word, config) => {
+        const { numOptions: numOptions, showCurrentWordAsLastSuggestion: showCurrentWordAsLastSuggestion, lang: lang } = config || {
+            numOptions: 5,
+            showCurrentWordAsLastSuggestion: true,
+            lang: targetLanguageCode
+        };
+
+        if (axiosTransliterationAbortControllerRef.current) {
+            axiosTransliterationAbortControllerRef.current.abort()
+        }
+
+        const controller = new AbortController();
+        axiosTransliterationAbortControllerRef.current = controller 
+
+        // fetch suggestion from api
+        // const url = `https://www.google.com/inputtools/request?ime=transliteration_en_${lang}&num=5&cp=0&cs=0&ie=utf-8&oe=utf-8&app=jsapi&text=${word}`;
+        const url = `https://inputtools.google.com/request?text=${word}&itc=${lang}-t-i0-und&num=${numOptions}&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage`;
+        try {
+            const res = await fetch(url, {
+                signal: controller.signal
+            });
+            const data = await res.json();
+            if (data && data[0] === "SUCCESS") {
+                const found = showCurrentWordAsLastSuggestion ? [
+                    ...data[1][0][1],
+                    word
+                ] : data[1][0][1];
+                return found;
+            } else {
+                if (showCurrentWordAsLastSuggestion) return [
+                    word
+                ];
+                return [];
+            }
+        } catch (e) {
+            // catch error
+            console.error("There was an error with transliteration", e);
+            return [];
+        }
+    };
+
+
+    function getCaretPositions() {
+        var x = 0;
+        var y = 0;
+        var sel = window.getSelection();
+        if (sel.rangeCount) {
+            var range = sel.getRangeAt(0).cloneRange();
+            if (range.getClientRects()) {
+                range.collapse(true);
+                var rect = range.getClientRects()[0];
+                if (rect) {
+                    y = rect.top;
+                    x = rect.left;
+                }
+            }
+        }
+        return {
+            x: x,
+            y: y
+        };
+    }
+
+
+
+    function insertTextAtCaret(text, expression, space = true) {
+        if (isPrecedingCharacterSpace()) {
+            if(expression == null){
+                document.execCommand("insertText", false, text + (space ? " " : ""))
+            }else{
+                document.execCommand("insertText", false, text + expression + (space ? " " : ""))
+            }
+           
+
+        } else {
+            if(expression == null){
+                document.execCommand("insertText", false, text + (space ? " " : ""))
+            }else{
+                document.execCommand("insertText", false, text + expression + (space ? " " : ""))
+
+            }
+        }
+
+        document.querySelector('.input-box-transliterate').innerHTML = ''
+        setActiveResult(0)
+        setOptions([])
+        setShowImeSugessiton(false)
+        // sel.removeAllRanges();
+
+    }
+
+
+    function isPrecedingCharacterSpace() {
+        var sel = window.getSelection();
+
+        if (sel.rangeCount > 0) {
+            var range = sel.getRangeAt(0);
+
+            // Ensure that there is content before the caret
+            if (range.startOffset > 0) {
+                var precedingText = range.startContainer.textContent.substring(0, range.startOffset);
+                return /\s$/.test(precedingText);
+            } else if (range.startContainer.previousSibling && range.startContainer.previousSibling.nodeType === Node.TEXT_NODE) {
+                // Check the last character of the previous text node if it exists
+                var precedingText = range.startContainer.previousSibling.textContent;
+                return /\s$/.test(precedingText);
+            }
+        }
+
+        return false; // Return false if no space or no selection
+    }
+
+
+   let textRef = useRef('')
+    const handeIMEKeyDownDiv = (e) => {
+
+        var charCode = e.keyCode;
+        // console.log(e.target.getBoundingClientRect())
+      
+        if (e.ctrlKey) {
+            if (charCode == 39) {
+                if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                    e.preventDefault()
+                } 
+            } else if (charCode == 37) {
+                if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                    e.preventDefault()
+                }
+            }else if(charCode == 40 || charCode == 38 ){
+                if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                    e.preventDefault()
+                }
+            }else{
+                if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                    e.preventDefault()
+                }
+            }
+        } else {
+            if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8) {
+                if(charCode >= 112 && charCode <= 123) {
+
+                    if(charCode == 113 || charCode == 115 || charCode == 119 || charCode == 120){
+                        if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                        return
+                        }
+                    }else{
+                        if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                       handleDissapear()
+                       return
+                        }
+                    }
+                }
+                
+                if (getCaretPositions()?.x == 0 && getCaretPositions()?.y == 0) {
+                    let rect = e.target.getBoundingClientRect()
+                    setLeft(rect.left + window.pageXOffset + 10)
+                    setTop(rect.top + window.pageYOffset)
+                    if (window.innerHeight - (rect.top + window.pageYOffset) > (transliterateCompRef.current?.clientHeight + 50)) {
+
+                    } else {
+                        document.querySelector('.workspace-editor-add-top').scrollBy({
+                            top: transliterateCompRef.current?.clientHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                } else {
+                    setLeft(window.innerWidth - getCaretPositions()?.x > (transliterateCompRef.current?.clientWidth + 50) ? getCaretPositions()?.x : (getCaretPositions()?.x - transliterateCompRef.current?.clientWidth))
+                    setTop(getCaretPositions()?.y)
+                }
+
+
+                // console.log(window.innerHeight - getCaretPositions()?.y > (transliterateCompRef.current?.clientHeight + 50) ? getCaretPositions()?.y : (getCaretPositions()?.x - 5))
+                if (window.innerHeight - getCaretPositions()?.y > (transliterateCompRef.current?.clientHeight + 50)) {
+
+                } else {
+                    // document.querySelector('.workspace-editor-add-top').scrollIntoView({
+                    //     // top: transliterateCompRef.current?.clientHeight,
+                    //     behavior: 'smooth'
+                    // });
+                    document.querySelector(".focused-row")?.scrollIntoView({ behavior: "smooth",block: 'nearest',
+                    inline: 'center' });
+                }
+
+               
+                let text = ''
+                if (charCode == 8) {
+                    if (inputTransliterate.current.innerText.length > 0) {
+                        text = inputTransliterate.current.innerText.slice(0, -1);
+                        textRef.current = inputTransliterate.current.innerText.slice(0, -1)
+                        inputTransliterate.current.innerText = inputTransliterate.current.innerText.slice(0, -1); // 
+                    
+                        e.preventDefault()
+                        renderSuggestions(textRef.current)
+                        if(document.querySelector('.input-box-transliterate').innerText.length == 0){
+                            handleDissapear()
+                        }
+                    } else {
+
+                    }
+                } else if(charCode >= 65 && charCode <= 90) {
+                    setShowImeSugessiton(true)
+                    text = inputTransliterate.current.innerText + e.key
+                    textRef.current = inputTransliterate.current.innerText + e.key
+                    inputTransliterate.current.innerText = inputTransliterate.current.innerText + e.key
+
+                    e.preventDefault()
+                    renderSuggestions(textRef.current)
+                }else if(charCode >= 106 && charCode <= 111) {
+                    if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,e.key)
+                        e.preventDefault()
+                       
+                    }
+                }else{
+                    if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                    e.preventDefault()
+                    }
+                }
+              
+
+
+            }
+            else {
+                console.log(e)
+                if(document.querySelector('.active-transliterate-result') === null) return
+                
+                if (charCode == 40) {
+                    if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
+                        setActiveResult(activeResult == 4 ? 0 : activeResult + 1)
+                        e.preventDefault()
+                    } else {
+                    }
+
+
+                }else if(charCode >= 48 && charCode <= 57){
+                    if (e.shiftKey && document.querySelector('.input-box-transliterate').innerText.length != 0) {
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,e.key)
+                        e.preventDefault()
+                    }else{
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,null)
+                        e.preventDefault()
+                    }
+                }else if(charCode == 18){
+                    if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
+                        e.preventDefault()
+                    }
+                } else if (charCode == 46) {
+                    // console.log('clicked')
+                    if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
+                        e.preventDefault()
+                    }
+                } else if (charCode == 38) {
+                    if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
+                        setActiveResult(activeResult == 0 ? 4 : activeResult - 1)
+                        e.preventDefault()
+                    } else {
+
+                    }
+
+
+                }else if((charCode >= 186 && charCode <= 222)){
+                    if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,e.key)
+                        e.preventDefault()
+                    }
+                } else if (charCode == 32) {
+                    if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,null)
+                        e.preventDefault()
+                    } else {
+
+                    }
+                }else if (charCode == 13){
+                    if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText, null, false)
+                        e.preventDefault()
+                    }
+                } else if (charCode == 39) {
+                    if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                        e.preventDefault()
+                    } 
+                } else if (charCode == 37) {
+                    if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                        e.preventDefault()
+                    }
+                } else if (charCode == 16) {
+                    if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                        e.preventDefault()
+                    }
+                }else {
+                    if(document.querySelector('.input-box-transliterate').innerText.length != 0){
+                    setShowImeSugessiton(false)
+                    e.preventDefault()
+                    }
+
+                }
+                return false;
+            }
+        }
+
+
+
+        // inputTransliterate.current.innerText = inputTransliterate.current.innerText + e.key 
+
     }
 
     const handlePasteSelection = (e) => {
@@ -7070,9 +7490,9 @@ function Workspace(props) {
         setShowImeSugessiton(false)
     }
 
-    const getGlossaryListForDocument = () =>{
+    const getWordChoiceListForDocument = () =>{
         Config.axios({
-            url: `${Config.BASE_URL}/glex/glossaries_list?task_id=${documentTaskIdRef.current}`,
+            url: `${Config.BASE_URL}/glex/word_choices_list/?task_id=${documentTaskIdRef.current}`,
             auth: true,
             success: (response) => {
                 let list = response.data?.map(each => {
@@ -7081,14 +7501,17 @@ function Workspace(props) {
                         value: each?.glossary_id
                     }
                 })
-                setGlossarylist(list)
-                if(list?.length !== 0) setSelectedGlossaryItem(list[0])
+                wordChoiceListRef.current = list
+                setWordChoicelist(list)
+                
+                // get the selected wordchoice list for the project
+                getSelectedWordChoice()
             },
             error: (error) => {},
         });
     } 
 
-    const addTermToGlossary = () => {
+    const addTermToGlossary = (glossary_id) => {
         let formData = new FormData();
 
         let srcInputEle = glossarySrcFieldRef.current
@@ -7103,21 +7526,35 @@ function Workspace(props) {
             return
         }
 
-
-        formData.append("sl_term", srcInputEle?.value);
-        formData.append("tl_term", tarInputEle?.value);
+        if(isDinamalar){
+            formData.append("sl_term", srcInputEle?.value);
+            formData.append("tl_term", tarInputEle?.value);
+        }else{
+            formData.append("source", srcInputEle?.value);
+            formData.append("target", tarInputEle?.value);
+            formData.append("pos", selectedWordChoicePOS?.label ? selectedWordChoicePOS?.label : "");
+            if(glossary_id){
+                if(glossary_id) formData.append("glossary", glossary_id);
+            }else{
+                if(selectedWordChoiceItem?.value) formData.append("glossary", selectedWordChoiceItem?.value);
+            }
+        }
         formData.append("doc_id", documentId);
 
-        if(selectedGlossaryItem?.value !== undefined) formData.append("glossary", selectedGlossaryItem?.value);
+        let url = ''
+        if(isDinamalar) url = `${Config.BASE_URL}/glex/default_glossary/`
+        else url = `${Config.BASE_URL}/glex/term_save/`
+
         setIsTermAdding(true)
 
+
         Config.axios({
-            url: `${Config.BASE_URL}/glex/default_glossary/`,
+            url: url,
             method: "POST",
             auth: true,
             data: formData,
             success: (response) => {
-                // getGlossaryListForDocument()
+                getWordChoiceListForDocument()
                 setIsTermAdding(false)
                 Config.toast(t("term_added_success"))
                 showHideToolbarElement("showGlossaryAddition")
@@ -7126,7 +7563,6 @@ function Workspace(props) {
                 console.log(error)
                 if(error?.response?.status == 400){
                     Config.toast(t("term_already_exist"),'warning');
-
                 }else{
                     Config.toast("Failed to add term!", "error")
 
@@ -7150,14 +7586,14 @@ function Workspace(props) {
 
     const getNerTerms = (id) => {
         
-        console.log("isDinamalar: "+isDinamalar)
-        console.log("targetLanguage: "+sourceLanguage)
+        // console.log("isDinamalar: "+isDinamalar)
+        // console.log("targetLanguage: "+sourceLanguage)
         if(!isDinamalar && sourceLanguage !== "English") return
 
         if(previousSegmentIdRef.current !== null && previousSegmentIdRef.current !== ""){
             console.log(previousSegmentIdRef.current)
             let content_editable_div = sourceTextDiv.current[previousSegmentIdRef.current].current
-            console.log(content_editable_div)
+            // console.log(content_editable_div)
             if(content_editable_div === null) return 
             var text = removeTagsWithClass(content_editable_div.innerHTML, 'mark', 'ner-highlight');
             content_editable_div.innerHTML = removeSpecificTag(text, 'font');
@@ -7214,6 +7650,27 @@ function Workspace(props) {
         }
     }
 
+    // get the selected wordchoice list for the project and set the first selected wordchoice by default
+    const getSelectedWordChoice = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/glossary_selected/?project=${documentDetailsRef.current?.project}&option=word_choices`,
+            auth: true,
+            success: (response) => {
+                let list = response.data
+                if(list?.length === 0) {
+                    // if there is no selected wordchoice for the project by default select the first wordchoice project
+                    setSelectedWordChoiceItem(wordChoiceListRef.current[0])
+                    return
+                }
+                // set the first selected wordchoice by default
+                setSelectedWordChoiceItem(wordChoiceListRef.current?.find(each => each?.value === list[0]?.glossary) )
+            },
+        });
+    };
+
+
+    // ================================================================================================================
+
     let id,
         segmentNo,
         hasComment,
@@ -7234,8 +7691,7 @@ function Workspace(props) {
         targetFindTermTemp,
         textUnit;
     let bgColor = "#0074D3";
-
-
+    
 
     return (
         <React.Fragment>
@@ -7337,8 +7793,9 @@ function Workspace(props) {
                                             </div>
                                         </Tooltip>
                                     </li>
-                                    {isDinamalar && <li onClick={(e) => handleAddGlossaryTermBtn()}>
-                                        <Tooltip title={t("add_glossary")} placement="bottom" arrow>
+                                    {/* isDinamalar && */}
+                                    {<li onClick={(e) => handleAddGlossaryTermBtn()}>
+                                        <Tooltip title={isDinamalar ? t("add_glossary") : t("add_wordchoice")} placement="bottom" arrow>
                                             <div ref={showGlossaryRef} className="toolbar-list-icons-align">
                                                 <div className="toolbar-list-icon-bg glossary"></div>
                                             </div>
@@ -7472,7 +7929,15 @@ function Workspace(props) {
                                         </li>
                                     </Tooltip>
                                 </ul>
-
+                                {supportedImeLanguage?.includes(targetLanguageCode) &&  <ul className="last-row-tools-1" onClick={handleIme}>
+                                    <li>
+                                        <Tooltip title="Transliteration typing" placement="bottom" arrow>
+                                            <div ref={imeRef} className={"toolbar-list-icons-align toolbar-list-icons-disable" + (imeOn ? " toolbar-list-icons-active" : "")} style={{ border: 'none'}}>
+                                                <div className={"toolbar-list-icon-bg ime-editor "}></div>
+                                            </div>
+                                        </Tooltip>
+                                    </li>
+                                </ul>}
                                 {/* {webSpeechLang?.find(each => each.name?.toLowerCase() === targetLanguage?.toLowerCase()) && (
                                     <ul>
                                         <Tooltip title={isListening ? t("listening") : t("voice_typing")} placement="bottom" arrow>
@@ -7510,16 +7975,6 @@ function Workspace(props) {
                                         onChange={(selectedOption) => setSelectedPageSize(selectedOption)}
                                         components={{ DropdownIndicator, IndicatorSeparator: () => null }}
                                     />
-                                    {/* <Select
-                                       value={selectedPageSize}
-                                       onChange={(selectedOption) => setSelectedPageSize(selectedOption)}
-                                    >
-                                        {pageSizeOption?.map((pageOptions) => (
-                                            <MenuItem className="workspaceMenuItem" key={pageOptions.value} value={pageOptions}>
-                                                <p className="filter-text">{pageOptions.label}</p>
-                                            </MenuItem>
-                                        ))}
-                                    </Select> */}
                                     <span>{t("segments/page")}</span>
                                 </div>
                                 {/* <div className="confirm-all-btn">
@@ -7886,8 +8341,10 @@ function Workspace(props) {
                                                 translation = translatedResponse[key].temp_target ? translatedResponse[key].temp_target : "";
                                                 savedTranslation = translatedResponse[key].target ? translatedResponse[key].target : "";
                                                 machineTranslatedText = translation;
-                                                // console.log(isShowTags.current);
+                                                
+                                                // console.log("===================temp-target===============");
                                                 // console.log(translation);
+                                         
                                                 if (isShowTags.current) {
                                                     translation = replaceTextWithTags(translation, "mark"); //Hide for not to show tags
                                                     savedTranslation = replaceTextWithTags(savedTranslation); //Hide for not to show tags
@@ -7959,7 +8416,6 @@ function Workspace(props) {
 
                                                 if (document.querySelectorAll('.tag-close')) {
                                                     let closeTag = document.querySelectorAll('.tag-close')
-                                                    // console.log(closeTag);
                                                     closeTag?.forEach(each => {
                                                         each.contentEditable = 'false'
                                                     })
@@ -8003,7 +8459,7 @@ function Workspace(props) {
                                                                         id={"source-text-div-" + id}
                                                                         data-id={id}
                                                                         style={sourceLanguageFontSize != null ? { fontSize: sourceLanguageFontSize } : {}}
-                                                                        onFocus={(e) => contentEditableFocus(e)}
+                                                                        onFocus={(e) => contentEditableFocus(e, translatedResponse[key].status)}
                                                                         onClick={(e) => isWorkspaceEditable && handleSourceSegmentClick(e)}
                                                                         onBlur={(e) => isWorkspaceEditable && handleSourceSegmentBlur(e)}
                                                                         onKeyDown={(e) => e.preventDefault()}
@@ -8011,6 +8467,7 @@ function Workspace(props) {
                                                                         onPaste={(e) => e.preventDefault()}
                                                                         onDrop={(e) => e.preventDefault()}
                                                                         onCut={(e) => e.preventDefault()}
+                                                                        onCopy={(e) => isDinamalar && e.preventDefault()}
                                                                         onSelect={() => debounceApiCall(checkSourceTextSelection)}
                                                                         source-data-text-unit={textUnit}
                                                                         suppressContentEditableWarning={true}
@@ -8079,18 +8536,30 @@ function Workspace(props) {
                                                                 <div className="workspace-align trigger-focus" data-id={id}>
                                                                     {/* {console.log("testing 2")} */}
                                                                     <div className="form-group new-form-group trigger-focus" data-id={id}>
+                                                                        
+                                                                        <div style={{display: ((isSegmentDataLoading && focusedDivId == id) && (!translatedResponse[key].status || forcedLoaderRef.current)) ? 'block' : 'none'}}>
+                                                                            <Skeleton animation="wave" height={15} style={{ marginBottom: 6 }} />
+                                                                            <Skeleton animation="wave" height={15} width="80%" />
+                                                                        </div>
+
                                                                         <div
+                                                                            style={targetLanguageFontSize != null ? { fontSize: targetLanguageFontSize, opacity: (isSegmentDataLoading && focusedDivId == id && (!translatedResponse[key].status || forcedLoaderRef.current)) ? 0 : 1 } : {opacity: isSegmentDataLoading ? 0 : 1}}
                                                                             data-placeholder={(segmentNo == 1 && !isUserIsReviwer) ? "Click here to translate..." : (segmentNo == 1 && isUserIsReviwer) ? "Click here to review" : (isConfirmBtnClicked && segmentNo == 2) ? "Click here to continue" : ''}
                                                                             contentEditable={isWorkspaceEditable ? (translatedResponseDisableEditRef.current?.find(each => each.segment_id == id)?.disableEdit ? false : true) : false}
                                                                             ref={targetContentEditable.current[id]}
-                                                                            onFocus={(e) => isWorkspaceEditable && contentEditableFocus(e)}
+                                                                            onFocus={(e) => isWorkspaceEditable && contentEditableFocus(e, translatedResponse[key].status)}
                                                                             // onClick={(e) => !isWorkspaceEditable && highlightFocusedSegment(translatedResponse[key].segment_id)}
                                                                             onInput={(e) => isWorkspaceEditable &&  (!translatedResponse[key].disableEdit && translatedTextChange(e))}
-                                                                            onBlur={(e) => handleTargetSegmentBlur(e, null, true, {}, translatedResponse[key].temp_target, translatedResponse[key].target)}
+                                                                            // onBlur={(e) => handleTargetSegmentBlur(e, null, true, {}, translatedResponse[key].temp_target, translatedResponse[key].target)}
+                                                                            onBlur={(e) => document.querySelector('.input-box-transliterate').innerText.length == 0 && handleTargetSegmentBlur(e, null, true, {}, translatedResponse[key].temp_target, translatedResponse[key].target)}
                                                                             onSelect={(e) => isWorkspaceEditable && ((enableSynonym || enableIME) ? getSelectedText() : debounceApiCall(checkTargetTextSelection))}
                                                                             onMouseUp={(e) => isWorkspaceEditable && (enableIME && removeSelectedText(e))}
                                                                             onPaste={handlePasteOnWorkArea}
-                                                                            onKeyUp={(e) => handleKeyDown(e)}
+                                                                            // onCopy={(e) => isDinamalar && e.preventDefault()}
+                                                                            onKeyDown={(e) => handleKeyDown(e)}
+                                                                            // onKeyUp={(e) => handleKeyDown(e)}
+                                                                            onClick={(e) => imeOn && handleDissapear()}
+                                                                            onScroll={(e) => imeOn && handleDissapear()}
                                                                             onDrop={(e) => e.preventDefault()}  // this line prevent from dropping anything inside the target segment
                                                                             // onClick={(e) => recreateNode(targetContentEditable.current[focusedDivIdRef.current].current) }
                                                                             data-id={id}
@@ -8101,7 +8570,6 @@ function Workspace(props) {
                                                                             }
                                                                             id={"workspace-textarea-" + id}
                                                                             className={rightAlignLangs.current.indexOf(targetLanguage) != -1 ? "workspace-textarea align-right" : "workspace-textarea"}
-                                                                            style={targetLanguageFontSize != null ? { fontSize: targetLanguageFontSize } : {}}
                                                                             spellCheck="false"
                                                                             suppressContentEditableWarning={true}
                                                                             dangerouslySetInnerHTML={{ __html: sanitizeHtml(translation) }}
@@ -8142,9 +8610,9 @@ function Workspace(props) {
                                                                             {(isWorkspaceEditable && (sourceLanguageId == 17 || targetLanguageId == 17)) ? (
                                                                                 targetContentEditable.current[id]?.current !== null && targetContentEditable.current[id]?.current?.innerText != "" ? (
                                                                                     <>
-                                                                                        <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Rewrite' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Rewrite')}><span>Rewrite</span></span>
-                                                                                        <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Simplify' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Simplify')}><span>Simplify</span></span>
-                                                                                        <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Shorten' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Shorten')}><span>Shorten</span></span>
+                                                                                        <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Rewrite' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Rewrite')}><span>{t("rewrite")}</span></span>
+                                                                                        <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Simplify' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Simplify')}><span>{t("simplified")}</span></span>
+                                                                                        {/* <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Shorten' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Shorten')}><span>{t("shortened")}</span></span> */}
                                                                                     </>
                                                                                 ) : null
                                                                             ) : null}
@@ -8293,7 +8761,7 @@ function Workspace(props) {
                                                                         </div>
                                                                         {hasComment && (
                                                                             <Tooltip title={t("add_view_comments")} placement="top" arrow>
-                                                                                <div className="untarget-lang-row-align" style={{ cursor: 'pointer' }} data-id={id} onClick={(e) => {contentEditableFocus(e); showCommentSection(e)}}>
+                                                                                <div className="untarget-lang-row-align" style={{ cursor: 'pointer' }} data-id={id} onClick={(e) => {contentEditableFocus(e, translatedResponse[key].status); showCommentSection(e)}}>
                                                                                     <div className="comment-msg-info-part" data-id={id}>
                                                                                         <div className="comment-not-action" data-id={id}></div>
                                                                                     </div>
@@ -8370,18 +8838,25 @@ function Workspace(props) {
                     </Draggable>
                 )}
                 {showGlossaryAddition && (
-                    <AddGlossaryTermModal
+                    <AddGlossaryTermModal 
+                        wordChoicelist={wordChoicelist}
                         addGlossarySectionRef={addGlossarySectionRef}
                         showHideToolbarElement={showHideToolbarElement}
                         sourceSelectionText={sourceSelectionText}
                         targetSelectionText={targetSelectionText}
-                        // setSelectedGlossaryItem={setSelectedGlossaryItem}
+                        selectedWordChoiceItem={selectedWordChoiceItem}
+                        setSelectedWordChoiceItem={setSelectedWordChoiceItem}
                         addTermToGlossary={addTermToGlossary}
                         srcInputRef={glossarySrcFieldRef}
                         tarInputRef={glossaryTarFieldRef}
+                        selectedWordChoicePOS={selectedWordChoicePOS}
+                        setSelectedWordChoicePOS={setSelectedWordChoicePOS}
                         isTermAdding={isTermAdding}
                         documentTaskIdRef={documentTaskIdRef}
                         setShowCreditAlert={setShowCreditAlert}
+                        documentDetailsRef={documentDetailsRef}
+                        termAddModalPositionRef={termAddModalPositionRef}
+                        setIsTermAdding={setIsTermAdding}
                     />
                 )}
                 {showFormatSize && (
@@ -8456,9 +8931,8 @@ function Workspace(props) {
                                             onClick={(e) => {
                                                 e.isTrusted && handleToggleVisibility(true)
                                                 getSegmentDiff()
-
                                             }}
-                                            className="nav-link active"
+                                            className="nav-link"
                                             id="pills-segmentDiff-tab"
                                             data-toggle="pill"
                                             href="#pills-segmentDiff"
@@ -8469,27 +8943,13 @@ function Workspace(props) {
                                             {t("history")}
                                         </a>
                                     </li>
-                                    {/* <li className="nav-item" role="presentation">
-                                        <a
-                                            ref={choiceListTabButton}
-                                            onClick={(e) => {
-                                                e.isTrusted && handleToggleVisibility(true)
-                                            }}
-                                            className="nav-link"
-                                            id="pills-choicelist-tab"
-                                            data-toggle="pill"
-                                            href="#pills-choicelist"
-                                            role="tab"
-                                            aria-controls="pills-choicelist"
-                                            aria-selected="false"
-                                        >
-                                            {t("Choicelist")}
-                                        </a>
-                                    </li> 
                                     <li className="nav-item" role="presentation">
                                         <a
                                             ref={commentsTabButton}
-                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
+                                            onClick={(e) => {
+                                                e.isTrusted && handleToggleVisibility(true)
+                                                showSegmentComments(e, true)
+                                            }}
                                             className="nav-link"
                                             id="pills-comments-tab"
                                             data-toggle="pill"
@@ -8584,21 +9044,17 @@ function Workspace(props) {
                                     (<span>{segmentStatusPercentage}</span>%)
                                 </div>
                             </div>
-                            {/* <div className="workspace-page-per-num">
-                                    <span className="page-per-num border-right-add-new">{"Page " + currentPage + "/" + Math.ceil(totalPages)}</span>
-                                </div> 
                             {
                                 advancedOptionVisibility &&
                                 <div className="workspace-page-pinned">
                                     <span onClick={() => handlePushPinActive(!pushPinActive)} className={"workspace-pin " + (pushPinActive ? "active" : "")}>
-                                        <img src={PushPin} alt="push_pin" />
+                                        <img src={Config.HOST_URL + "assets/images/new-project-setup/push_pin.svg"} alt="push_pin" />
                                     </span>
                                 </div>
                             }
                             <div className="workspace-page-minimize">
                                 <span className="tool-tm-section-minimize" onClick={(e) => handleToggleVisibility(pushPinActive ? advancedOptionVisibility : !advancedOptionVisibility)}>
                                     {advancedOptionVisibility ? (
-                                        // <img src={Config.HOST_URL + "assets/images/new-ui-icons/maximize.svg"} />
                                         <ExpandMoreIcon />
                                     ) : (
                                         <ExpandLessIcon />
@@ -8642,7 +9098,7 @@ function Workspace(props) {
                                                                                     <div className="translation-list-value-src">
                                                                                         <div className="text-left d-flex align-items-start justify-content-between">
                                                                                             <p className="tb-file-src-txt">{value.source}</p>
-                                                                                            <img className="tmx-arrow-icon" src={ArrowRightAltColor} />
+                                                                                            <img className="tmx-arrow-icon" src={Config.HOST_URL + "assets/images/new-ui-icons/arrow_right_alt_color.svg"} />
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="translation-list-value-tar">
@@ -8670,7 +9126,7 @@ function Workspace(props) {
                                                                                         >
                                                                                             <img
                                                                                                 data-key={key}
-                                                                                                src={NorCopyContent}
+                                                                                                src={Config.HOST_URL + "assets/images/new-ui-icons/nor-copy-content.svg"}
                                                                                                 className="content-copy"
                                                                                                 alt="copy text"
                                                                                             />
@@ -8727,7 +9183,7 @@ function Workspace(props) {
                                                                                                             <p className="settings-file-names-new">{value.source}</p>
                                                                                                         </div>
                                                                                                         <div className="translation-list-src-part">
-                                                                                                            <img src={ArrowRightAltColor} />
+                                                                                                            <img src={Config.HOST_URL + "assets/images/new-ui-icons/arrow_right_alt_color.svg"} />
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -8742,7 +9198,7 @@ function Workspace(props) {
                                                                                                             onClick={(e) => copyText(value.target)}
                                                                                                         >
                                                                                                             <img
-                                                                                                                src={NorCopyContent}
+                                                                                                                src={Config.HOST_URL + "assets/images/new-ui-icons/nor-copy-content.svg"}
                                                                                                                 className="content-copy"
                                                                                                                 alt="copy text"
                                                                                                             />
@@ -8769,7 +9225,7 @@ function Workspace(props) {
                                                                                         <p className="settings-file-names-new">{value.source}</p>
                                                                                     </div>
                                                                                     <div className="translation-list-src-part">
-                                                                                        <img src={ArrowRightAltColor} />
+                                                                                        <img src={Config.HOST_URL + "assets/images/new-ui-icons/arrow_right_alt_color.svg"} />
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -8784,7 +9240,7 @@ function Workspace(props) {
                                                                                         onClick={(e) => copyText(value.target)}
                                                                                     >
                                                                                         <img
-                                                                                            src={NorCopyContent}
+                                                                                            src={Config.HOST_URL + "assets/images/new-ui-icons/nor-copy-content.svg"}
                                                                                             className="content-copy"
                                                                                             alt="copy text"
                                                                                         />
@@ -8833,7 +9289,7 @@ function Workspace(props) {
                                                                                                     <p className="settings-file-names-new">{value.source}</p>
                                                                                                 </div>
                                                                                                 <div className="translation-list-src-part">
-                                                                                                    <img src={ArrowRightAltColor} />
+                                                                                                    <img src={Config.HOST_URL + "assets/images/new-ui-icons/arrow_right_alt_color.svg"} />
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -8850,7 +9306,7 @@ function Workspace(props) {
                                                                                                         onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 500)}
                                                                                                     >
                                                                                                         <img
-                                                                                                            src={NorCopyContent}
+                                                                                                            src={Config.HOST_URL + "assets/images/new-ui-icons/nor-copy-content.svg"}
                                                                                                             className="content-copy"
                                                                                                             alt="copy text"
                                                                                                         />
@@ -8899,7 +9355,7 @@ function Workspace(props) {
                                                                                     onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 500)}
                                                                                 >
                                                                                     <img
-                                                                                        src={NorCopyContent}
+                                                                                        src={Config.HOST_URL + "assets/images/new-ui-icons/nor-copy-content.svg"}
                                                                                         className="content-copy" alt="copy text"
                                                                                     />
                                                                                 </button>
@@ -8923,60 +9379,88 @@ function Workspace(props) {
                             <section className="comments-part">
                                 <div className="comments-container">
                                     <div className="add-comments-section">
-                                        {/* <div className="add-comments-title-bar">
-                                                <p className="comments-title">Personal Note</p>
-                                            </div> 
                                         <div className="text-comments-area" ref={commentScrollingDivRef}>
                                             <ul>
-                                                {commentsData?.map((value) => {
-                                                    return (
-                                                        <li key={value.id}>
-                                                            <div className="comment-area-box">
-                                                                <div className="profile-row">
-                                                                    <span className="no-avatar-icon">{value?.commented_by_user?.charAt(0).toUpperCase()}</span>
-                                                                    <span className="text">{value?.commented_by_user}</span>
+                                                {(commentsLoader && commentsData?.length === 0) ? (
+                                                    Array(2).fill(null).map((value, key) => (
+                                                        <>
+                                                            <li key={key}>
+                                                                <div className="comment-area-box">
+                                                                    <div className="profile-row">
+                                                                        <Skeleton animation="wave" variant="circular" width={30} height={30} />
+                                                                        <span className="text">
+                                                                            <Skeleton animation="wave" variant="text" width={100} />
+                                                                        </span>
+                                                                    </div>
+                                                                    <p className="comment-text"><Skeleton animation="wave" variant="text" width={200} /></p>
                                                                 </div>
+                                                                <span className="time">
+                                                                    <Skeleton animation="wave" variant="text" width={50} />
+                                                                </span>
+                                                                <div className="action-wrapper">
+                                                                    <span className="comment-close-btn">
+                                                                        <Skeleton animation="wave" variant="circular" width={20} height={20} />
+                                                                    </span>
+                                                                    <span className="comment-edit-btn">
+                                                                        <Skeleton animation="wave" variant="circular" width={20} height={20} />
+                                                                    </span>
+                                                                </div>
+                                                            </li>
+                                                        </>
+                                                    ))
+                                                ) : commentsData?.length !== 0 ? (
+                                                    commentsData?.map((value) => {
+                                                        return (
+                                                            <li key={value.id}>
+                                                                <div className="comment-area-box">
+                                                                    <div className="profile-row">
+                                                                        <span className="no-avatar-icon">{value?.commented_by_user?.charAt(0).toUpperCase()}</span>
+                                                                        <span className="text">{value?.commented_by_user}</span>
+                                                                    </div>
+                                                                    {value.isEdit ? (
+                                                                        <TextareaAutosize
+                                                                            className="comment-text-area"
+                                                                            value={commentsDataCopy?.find(each => each.id === value.id)?.comment}
+                                                                            onChange={(e) => handleCommentChange(e, value.id)}
+                                                                        />
+                                                                    ) : (
+                                                                        <p className="comment-text">{value.comment}</p>
+                                                                    )}
+                                                                </div>
+                                                                <span className="time">{Config.getProjectCreatedDate(value.created_at)}</span>
                                                                 {value.isEdit ? (
-                                                                    <TextareaAutosize
-                                                                        className="comment-text-area"
-                                                                        value={commentsDataCopy?.find(each => each.id === value.id)?.comment}
-                                                                        onChange={(e) => handleCommentChange(e, value.id)}
-                                                                    />
+                                                                    <div className="action-wrapper">
+                                                                        <span
+                                                                            className="comment-close-btn"
+                                                                            data-comment-id={value.id}
+                                                                            onClick={() => commentEdit(value.id)}
+                                                                        >
+                                                                            <CheckOutlinedIcon className="edit-icon" />
+                                                                        </span>
+                                                                        <span
+                                                                            className="comment-edit-btn"
+                                                                            data-comment-id={value.id}
+                                                                            onClick={() => closeCommentsEdit(value.id)}
+                                                                        >
+                                                                            <CloseIcon className="edit-icon" />
+                                                                        </span>
+                                                                    </div>
                                                                 ) : (
-                                                                    <p className="comment-text">{value.comment}</p>
+                                                                    <div className="action-wrapper">
+                                                                        <span className="comment-close-btn" data-comment-id={value.id} onClick={(e) => deleteComment(e)}>
+                                                                            <DeleteIcon />
+                                                                        </span>
+                                                                        <span className="comment-edit-btn" data-comment-id={value.id} onClick={() => openCommentsEdit(value.id)}>
+                                                                            <EditOutlinedIcon className="edit-icon" />
+                                                                        </span>
+                                                                    </div>
                                                                 )}
-                                                            </div>
-                                                            <span className="time">{Config.getProjectCreatedDate(value.created_at)}</span>
-                                                            {value.isEdit ? (
-                                                                <div className="action-wrapper">
-                                                                    <span
-                                                                        className="comment-close-btn"
-                                                                        data-comment-id={value.id}
-                                                                        onClick={() => commentEdit(value.id)}
-                                                                    >
-                                                                        <CheckOutlinedIcon className="edit-icon" />
-                                                                    </span>
-                                                                    <span
-                                                                        className="comment-edit-btn"
-                                                                        data-comment-id={value.id}
-                                                                        onClick={() => closeCommentsEdit(value.id)}
-                                                                    >
-                                                                        <CloseIcon className="edit-icon" />
-                                                                    </span>
-                                                                </div>
-                                                            ) : (
-                                                                <div className="action-wrapper">
-                                                                    <span className="comment-close-btn" data-comment-id={value.id} onClick={(e) => deleteComment(e)}>
-                                                                        <DeleteIcon />
-                                                                    </span>
-                                                                    <span className="comment-edit-btn" data-comment-id={value.id} onClick={() => openCommentsEdit(value.id)}>
-                                                                        <EditOutlinedIcon className="edit-icon" />
-                                                                    </span>
-                                                                </div>
-                                                            )}
-                                                        </li>
-                                                    );
-                                                })}
+                                                            </li>
+                                                        );
+                                                    })
+                                                ) : (
+                                                    <small className="disable ml-4">{t("no_comments_yet")}</small>
+                                                )}
                                             </ul>
                                         </div>
                                         <div className="comments-input-part">
@@ -8985,7 +9469,7 @@ function Workspace(props) {
                                                     <TextareaAutosize ref={commentTextArea} name="comments" id="comments" placeholder={`${t("add_comment")}....`} onKeyDown={(e) => handleCommentEnter(e)} />
                                                 </div>
                                                 <button type="submit" onClick={(e) => commentSubmit(e)}>
-                                                    <img src={SendIcon} />
+                                                    <img src={Config.HOST_URL + "assets/images/new-ui-icons/send.svg"} />
                                                 </button>
                                             </div>
                                         </div>
@@ -8993,7 +9477,6 @@ function Workspace(props) {
                                             <b>Shift + Enter</b>&nbsp;{t("multiline_text_box_help_text")}
                                         </span>
                                     </div>
-                                    {/* <div className="gap-section"></div> 
                                 </div>
                             </section>
                         }
@@ -9015,7 +9498,7 @@ function Workspace(props) {
                                 <div className="dictionary-wikipedia dictionary-border-right">
                                     <p className="dictionary-wikipedia-title">
                                         <span>
-                                            <img src={WikipediaIcon} />
+                                            <img src={Config.HOST_URL + "assets/images/new-ui-icons/wiki-new-img.svg"} />
                                         </span>
                                         {t("from_wikipedia")}
                                     </p>
@@ -9029,21 +9512,21 @@ function Workspace(props) {
                                                         <a href={wikipediaData.sourceUrl} target="_blank">
                                                             {wikipediaData.source}
                                                             <span>
-                                                                <img src={OpenInNew} />
+                                                                <img src={Config.HOST_URL + "assets/images/new-ui-icons/open_in_new.svg"} />
                                                             </span>
                                                         </a>
                                                     )}
                                                 </li>
                                                 {
                                                     (wikipediaData.source != "" && wikipediaData.target != "") &&
-                                                    <li><img src={ArrowRightAltColor} /></li>
+                                                    <li><img src={Config.HOST_URL + "assets/images/new-ui-icons/arrow_right_alt_color.svg"} /></li>
                                                 }
                                                 <li>
                                                     {wikipediaData.target != "" && (
                                                         <a href={wikipediaData.targetUrl} target="_blank">
                                                             {wikipediaData.target}
                                                             <span>
-                                                                <img src={OpenInNew} />
+                                                                <img src={Config.HOST_URL + "assets/images/new-ui-icons/open_in_new.svg"} />
                                                             </span>
                                                         </a>
                                                     )}
@@ -9055,7 +9538,7 @@ function Workspace(props) {
                                 <div className="dictionary-wikitionary">
                                     <p className="dictionary-wikitionary-title">
                                         <span>
-                                            <img src={WikitionaryIcon} />
+                                            <img src={Config.HOST_URL + "assets/images/new-ui-icons/wikitionary-new-img.png"} />
                                         </span>
                                         {t("from_wiktionary")}
                                     </p>
@@ -9069,7 +9552,7 @@ function Workspace(props) {
                                                         <a href={wiktionaryData.sourceUrl} target="_blank">
                                                             {wiktionaryData.source}
                                                             <span>
-                                                                <img src={OpenInNew} />
+                                                                <img src={Config.HOST_URL + "assets/images/new-ui-icons/open_in_new.svg"} />
                                                             </span>
                                                         </a>
                                                     ) : (
@@ -9078,7 +9561,7 @@ function Workspace(props) {
                                                 </li>
                                                 {
                                                     (wiktionaryData.source != "" && wiktionaryData.targets.length !== 0) &&
-                                                    <li><img src={ArrowRightAltColor} /></li>
+                                                    <li><img src={Config.HOST_URL + "assets/images/new-ui-icons/arrow_right_alt_color.svg"} /></li>
                                                 }
                                                 {wiktionaryData.targets.map((value, key) => (
                                                     <React.Fragment key={value}>
@@ -9086,7 +9569,7 @@ function Workspace(props) {
                                                             <a href={wiktionaryData.targetUrls[key]} target="_blank">
                                                                 {value}
                                                                 <span>
-                                                                    <img src={OpenInNew} />
+                                                                    <img src={Config.HOST_URL + "assets/images/new-ui-icons/open_in_new.svg"} />
                                                                 </span>
                                                             </a>
                                                         </li>
@@ -9126,19 +9609,43 @@ function Workspace(props) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {segmentDifference?.map((list, index) => {
-                                            return (
-                                                <tr key={index}>
-                                                    <td><div className="segment-list" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.sentense_diff_result }}></div></td>
-                                                    <td><div className="segment-avatar-list"><span dangerouslySetInnerHTML={{ __html: list?.user_name?.slice(0, 1)?.toUpperCase() }}></span><p className="name" dangerouslySetInnerHTML={{ __html: list?.user_name }}></p></div></td>
-                                                    <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.save_type }}></div></td>
-                                                    <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.step_name }}></div></td>
-                                                    <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.status_id == 104 ? t('machine_translation') : list?.status_id == 103 ? t('machine_translation') : list?.status_id == 105 ? t("manual") : list?.status_id == 106 ? t("manual") : list?.status_id == 101 ? t("translation_mem") : t("translation_mem") }}></div></td>
-                                                    <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: Config.getProjectCreatedDate(list?.created_at) }}></div></td>
-                                                </tr>
-                                            )
-
-                                        })}
+                                        {(segmentHistoryLoader && segmentDifference?.length === 0) ? (
+                                            Array(2).fill(null).map((value, key) => (
+                                                <>
+                                                    <tr key={key}>
+                                                        <td>
+                                                            <div className="segment-list">
+                                                                <Skeleton animation="wave" variant="text" width="100%" />
+                                                                <Skeleton animation="wave" variant="text" width="85%" />
+                                                            </div>
+                                                        </td>
+                                                        <td><div className="segment-avatar-lists d-flex"><Skeleton animation="wave" variant="circular" width={28} height={28} /><p className="name ml-2"><Skeleton animation="wave" variant="text" width={80} /></p></div></td>
+                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
+                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
+                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
+                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
+                                                    </tr>
+                                                </>
+                                            ))
+                                        ) : segmentDifference?.length !== 0 ? (
+                                            segmentDifference?.map((list, index) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td><div className="segment-list" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.sentense_diff_result }}></div></td>
+                                                        <td><div className="segment-avatar-list"><span dangerouslySetInnerHTML={{ __html: list?.user_name?.slice(0, 1)?.toUpperCase() }}></span><p className="name" dangerouslySetInnerHTML={{ __html: list?.user_name }}></p></div></td>
+                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.save_type }}></div></td>
+                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.step_name }}></div></td>
+                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.status_id == 104 ? t('machine_translation') : list?.status_id == 103 ? t('machine_translation') : list?.status_id == 105 ? t("manual") : list?.status_id == 106 ? t("manual") : list?.status_id == 101 ? t("translation_mem") : t("translation_mem") }}></div></td>
+                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: Config.getProjectCreatedDate(list?.created_at) }}></div></td>
+                                                    </tr>
+                                                )
+    
+                                            })
+                                        ) : (
+                                            <tr style={{display: 'block'}}>
+                                                <td colspan="6"><div className="segment-list">{t("no_records_yet")}</div></td>
+                                            </tr>
+                                        )}
                                     </tbody>
                                 </table>
                             </section>
@@ -9151,12 +9658,10 @@ function Workspace(props) {
                                     <>
                                         <div className="paraphrase-header-wrap">
                                             <p></p>
-                                            {/* <TrendingFlatIcon className="arrow-icon" /> 
                                             <p>{selectedParaphrase}</p>
                                         </div>
                                         <div className="paraphrase-div">
                                             <div className="paraphrase-source-div">
-                                                {/* {paraphraseText} 
                                             </div>
                                             <div className="paraphrase-result-div">
                                                 <ul className="list-unstyled">
@@ -9172,12 +9677,6 @@ function Workspace(props) {
                                                             </Tooltip>
                                                         </div>
                                                     </li>
-                                                    {/* {
-                                                    paraPhraseResList?.map(each => {
-                                                        return (
-                                                        )
-                                                    })
-                                                }     *
                                                 </ul>
                                             </div>
                                         </div>
@@ -9401,8 +9900,7 @@ function Workspace(props) {
                             </span>
 
                         </div>
-                        {
-                        (paraphraseTrigger && paraPhraseResList?.length !== 0) ? (
+                        {(paraphraseTrigger && paraPhraseResList?.length !== 0) ? (
                             <div className="paraphrase-result-div">
                                 <ul className="list-unstyled">
                                     <li onClick={(e) => replaceWithNewPara(e, paraPhraseResList)}>
@@ -9527,7 +10025,7 @@ function Workspace(props) {
                     { target: ".target-lang-part", title: t("joyride_note_1"), disableBeacon: true },
                     { target: ".workspace-feature-btn", title: t("joyride_note_2") },
                     { target: "ul#workspace li:nth-child(2) div.target-lang-part", title: t("joyride_note_3") },
-                    { target: "ul#workspace li:nth-child(2) .workspace-feature-btn", title: t("joyride_note_4") },
+                    { target: "ul#workspace li:nth-child(2) .segment-save-btn", title: t("joyride_note_4") },
                     { target: "ul#workspace li:nth-child(2) div.target-lang-part", title: t("joyride_note_5") },
                     { target: "#download-dropdown", title: t("joyride_note_6") },
                 ]}
@@ -9601,6 +10099,23 @@ function Workspace(props) {
                 documentRestrictionReasonRef={documentRestrictionReasonRef}
                 isDocumentSubmitting={isDocumentSubmitting}
             />
+            <ClickAwayListener onClickAway={handleDissapear}>
+                <div onClick={(e) => e.stopPropagation()} ref={transliterateCompRef} className="iframe-component-transliterate" height={250} width={250} style={{ top:top+23 , left:left, zIndex: 500, visibility:showImeSuggesstion? 'visible' : 'hidden',zIndex:showImeSuggesstion? '5' : '-1'  }}>
+                    <div  className="transliterate-body"   >
+                        <div className="input-box-transliterate" ref={inputTransliterate}></div>
+                        <div className="sugessions">
+                            <span>
+                            {options.map((each,index) => (
+                                <div className="each-suggesstions">
+                                    <span className="suggesstion-numbering"><span>{index + 1}</span> <span>.</span> </span>
+                                    <button onClick={(e) => { handlePasteSelection(e)}} className={activeResult == index ?   `active-transliterate-result results-options-button` : 'results-options-button'} key={each}>{each}</button>
+                                    </div>
+                            ))}
+                            </span>                            
+                        </div>
+                    </div>
+                </div >
+            </ClickAwayListener>
         </React.Fragment>
     );
 }
