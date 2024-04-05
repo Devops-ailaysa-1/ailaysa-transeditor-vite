@@ -1035,7 +1035,7 @@ function Navbar(props) {
                         </Link>
                         <div
                             // onClick={()=> {(props.prevPageInfo?.fromProjectList) ? history(`/file-upload?page=${props.prevPageInfo?.pageNo}&order_by=${props.prevPageInfo?.orderBy}${(props.prevPageInfo?.projectTypeFilter !== 'all' && props.prevPageInfo?.projectTypeFilter != null) ? `&filter=${props.prevPageInfo?.projectTypeFilter}` : ""}${props.prevPageInfo?.search != null ? `&search=${props.prevPageInfo?.search}` : ""}&open-project=${props.prevPageInfo?.projectId}`) : history.goBack()}}
-                            onClick={() => props.prevPathRef.current ? history(props.prevPathRef.current) : props.isChoiceList ? history('/assets?page=1') : history('/file-upload?page=1')}
+                            onClick={() => props.prevPathRef.current ? history(props.prevPathRef.current) : history('/file-upload?page=1')}
                             className={props.isWhite ? "navbar-display-show" : "navbar-display-hide"}
                         >
                             <div className="nav-projects-link ">
@@ -1192,7 +1192,7 @@ function Navbar(props) {
                                             <span>{targetLanguageScript}</span>
                                         </span>
                                     )}
-                                    {(props.isWhite && !isWorkspaceEditable && !props.isGlossary && !props.isChoiceList) && (
+                                    {(props.isWhite && !isWorkspaceEditable && !props.isGlossary) && (
                                         <span className="view-only-tag">
                                             <RemoveRedEyeOutlinedIcon className="eye-icon" />
                                             {t("view_only")}

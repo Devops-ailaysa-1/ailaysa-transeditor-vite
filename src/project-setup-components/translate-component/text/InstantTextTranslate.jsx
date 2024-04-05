@@ -4295,7 +4295,6 @@ const InstantTextTranslate = (props) => {
             })
 
             var text = translateResultText
-            // text = removeTagsWithClass(text, 'mark', 'choicelist-option-highlight')
             var wordsToHighlight = words_list; // Array of words to highlight
             // console.log(wordsToHighlight)
             // console.log(text)
@@ -4985,86 +4984,6 @@ const InstantTextTranslate = (props) => {
                                 </div>
                             </div>
                         </div>
-
-                        {/* <div id="pop" className="choicelist-popover-box spellcheck-popover-box">
-                            <div className="popup" >
-                                <div className="ai-writter-popover-modal">
-                                    <strong>
-                                        <div className="pop-header-bar ai-writter-popover-modal-header">
-                                            <span>{selectedCustomization}</span>
-
-                                            <button className="result-icon-single-item-popup close-pop-writter-drag-icon" onClick={() => {
-                                                document.querySelector('#pop').style.visibility = 'hidden';
-                                                document.querySelector('#pop').style.opacity = '0';
-                                            }}>
-                                                <img className="icons" src={Config.HOST_URL + "assets/images/new-ui-icons/discard-popup.svg"} alt="file_upload" />
-                                            </button>
-
-                                        </div>
-                                    </strong>
-                                    <div className="ai-writter-popover-modal-content" >
-                                        <div
-                                            className="ai-writter-popover-modal-content-leaf"
-                                        >hello how are you </div>
-
-                                    </div>
-                                    <div className="popup-footer">
-                                        <div className="d-flex gap-5" >
-                                            <div className="btn-form-group">
-                                                <Radio
-                                                    // checked={newline}
-                                                    className="cell-box-radio"
-                                                    size="small"
-                                                    id="new_line"
-                                                    // onChange={(e) => setNewline(current => true)}
-                                                />
-                                                <label className="customization-line-option-label" htmlFor="new_line">{t("new_line")}</label>
-                                            </div>
-                                            <div className="btn-form-group">
-                                                <Radio
-                                                    // checked={!newline}
-                                                    className="cell-box-radio"
-                                                    size="small"
-                                                    id="same_line"
-                                                    // onChange={(e) => setNewline(current => false)}
-                                                />
-                                                <label className="customization-line-option-label" htmlFor="same_line">{t("same_line")}</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="writer-customize-set-as-default">
-                                        <div>
-                                            <Checkbox
-                                                id="set-default"
-                                                className="cell-box"
-                                                size="small"
-                                                // checked={setAsDefault}
-                                                // onChange={() => setSetAsDefault(!setAsDefault)}
-                                            // disabled={!isSourceTextChanged}
-                                            /> <label className="customization-save-defaul-label" htmlFor="set-default">{t("set_as_default")}</label>
-                                        </div>
-                                        <div className="d-flex">
-                                            <Tooltip title={t("accept")}>
-                                                <button className="result-icon-single-item-popup" data-id="Accept" name="Accept" >
-                                                    <img className="icons" name="Accept" src={Config.HOST_URL + "assets/images/new-ui-icons/done-popup.svg"} alt="file_upload" />
-                                                </button>
-                                            </Tooltip>
-                                            <Tooltip title={t("replace")}>
-                                                <button className="result-icon-single-item-popup" data-id="Replace" name="Replace" >
-                                                    <img className="icons" name="Replace" src={Config.HOST_URL + "assets/images/new-ui-icons/replace-popup.svg"} alt="file_upload" />
-                                                </button>
-                                            </Tooltip>
-                                            <Tooltip title={t("copy")}>
-                                                <button className="result-icon-single-item-popup" >
-                                                    <img className="icons" src={Config.HOST_URL + "assets/images/new-ui-icons/copy-popup.svg"} alt="file_upload" />
-                                                </button>
-                                            </Tooltip>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
-
                     </div>
                     <ul className="share-row-list-outer" style={!isCustomizationProcessing && (!isSrcTextEmpty && !isTarTextEmpty) && ((createdProject && enableassignrow.current) || isOpenFromList.current) ? { opacity: 1 } : { opacity: 0.5, pointerEvents: 'none' }}>
                         <Tooltip title={t("copy")} placement="right">

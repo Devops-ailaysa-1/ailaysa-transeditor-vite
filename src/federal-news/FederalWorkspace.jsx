@@ -424,11 +424,6 @@ const FederalWorkspace = (props) => {
     const [selfLearnWordsList, setSelfLearnWordsList] = useState([]);
     const [isDocumentSubmitting, setIsDocumentSubmitting] = useState(false);
 
-    const [choicelistOptions, setChoicelistOptions] = useState({});
-    const [choiceListPopoverTarget, setChoiceListPopoverTarget] = useState("");
-    const [choiceListPopoverOpen, setChoiceListPopoverOpen] = useState(false);
-    const [choicelistOptionsList, setChoicelistOptionsList] = useState([]);
-
     const [isAssignEnable, setIsAssignEnable] = useState(true)
 
     const [transphrasePopoverOpen, setTransphrasePopoverOpen] = useState(false);
@@ -445,7 +440,6 @@ const FederalWorkspace = (props) => {
 
     const axiosTransliterationAbortControllerRef = useRef(null)
 
-    const choiceListPopoverTargetRef = useRef(null)
 
     const isDocumentOpenerVendorRef = useRef(false)
     const documentProgressRef = useRef(null)
@@ -586,8 +580,7 @@ const FederalWorkspace = (props) => {
 
     const taskDataRef = useRef(null)
     const recognition = useRef(null)
-    const choiceListTabButton = useRef(null)
-    const choicelistPopoverTimeoutRef = useRef(null)
+
     
     const savedCursorPositionRef = useRef(null)
     const commentScrollingDivRef = useRef(null)
@@ -860,9 +853,6 @@ const FederalWorkspace = (props) => {
             
             if (e.target.classList.contains("spellcheck-highlight")) {
                 
-            }
-            if (e.target.classList.contains("choicelist-option-highlight")) {
-                handleChoiceListWordMouseEnter(e)
             }
         };
         document.addEventListener("mouseover", handleMouseover, false);
@@ -1519,11 +1509,8 @@ const FederalWorkspace = (props) => {
 
     useEffect(() => {
         if (didMount && translationMatches?.length !== 0) {
-            // console.log(choiceListTabButton.current.classList.contains('active'))
-            if (!choiceListTabButton.current?.classList?.contains('active')) {
-                tmTabButton.current?.click();
-                showTmSectionFunction();
-            }
+            tmTabButton.current?.click();
+            showTmSectionFunction();
         }
     }, [translationMatches]);
 
@@ -1797,19 +1784,6 @@ const FederalWorkspace = (props) => {
                 targetContentEditable.current[translatedResponse[0]?.segment_id].current.focus();
         }
     }, [isProductTourSeen]);
-
-
-    useEffect(() => {
-        if (Object.keys(choicelistOptions)?.length !== 0) {
-            // highlightChoiceListOptions(focusedDivId)
-        }
-    }, [choicelistOptions])
-
-    useEffect(() => {
-        if (choicelistOptionsList?.length !== 0) {
-            setChoiceListPopoverOpen(true)
-        }
-    }, [choicelistOptionsList])
     
     useEffect(() => {
         if(spellCheckResponseRef.current?.length !== 0){
@@ -1903,11 +1877,7 @@ const FederalWorkspace = (props) => {
                     }
                 }
             }
-            if (choiceListPopoverOpen) {
-                setChoiceListPopoverOpen(false)
-                setChoiceListPopoverTarget("")
-                setChoicelistOptionsList([])
-            }
+            
             if(popoverOpen){
                 setPopoverOpen(false)
                 setPopoverTarget(null);
@@ -3366,9 +3336,6 @@ const FederalWorkspace = (props) => {
     const updateTranslationById = (e = null, id = null, isTemp = false, extraArgs = {}, temp_target, target, isTyping = false) => {
         
         resetSynonymStates();
-        setChoiceListPopoverOpen(false)
-        setChoiceListPopoverTarget("")
-        setChoicelistOptionsList([])
 
         let userTrigger = false;
         let alreadyTranslatedText = null;
@@ -3559,7 +3526,6 @@ const FederalWorkspace = (props) => {
                         if(isTyping) {
                             restoreCursorPositionWithinContenteditable()
                             symSpellCheck(id)
-                            // highlightChoiceListOptions(id)
                         } 
                     }
                     istargetSegmentOnBlurTriggeredRef.current = false
@@ -3853,8 +3819,6 @@ const FederalWorkspace = (props) => {
 
 
     const toggleSynonym = () => {
-        setChoiceListPopoverOpen(false)
-        setChoiceListPopoverTarget("")
         setEnableSpellCheck(false)
         resetSynonymStates()
         toggleSpellCheckBtn.current?.classList?.remove("toolbar-list-icons-active");
@@ -4850,49 +4814,6 @@ const FederalWorkspace = (props) => {
     };
 
 
-    const handleChoiceListWordMouseEnter = (e) => {
-        const word = e.target.getAttribute('data-word');
-        let segment_id = e.target.parentNode.getAttribute('data-id')
-        setChoiceListPopoverOpen(false)
-        setChoiceListPopoverTarget("")
-        setChoicelistOptionsList([])
-
-        try{
-            let options_list = choicelistOptions[word]?.map((value, ind) => {
-                return (
-                    <p
-                        key={value}
-                        className={"corrected-word " + (ind === 0 ? "d-flex" : "")}
-                        onClick={(event) => repalceWithSelectedChoiceListOption(value, segment_id)}
-                    >
-                        {value}
-                        {ind === 0 && (
-                            <span className="choicelist-mt-tag">Original MT</span>
-                        )}
-                    </p>
-                )
-            })
-            if(segment_id === focusedDivId){
-                setChoicelistOptionsList(options_list)
-                setChoiceListPopoverTarget(e.target.id)
-                choiceListPopoverTargetRef.current = e.target.id    
-            }
-        }catch(e){
-            console.log(e)
-        }
-    };
-
-    const repalceWithSelectedChoiceListOption = (value, segment_id) => {
-        let childMark = document.getElementById(choiceListPopoverTargetRef.current)
-        // console.log(childMark)
-        childMark.innerHTML = value + " "
-
-        // highlightChoiceListOptions(segment_id)
-        setChoiceListPopoverOpen(false)
-        setChoiceListPopoverTarget("")
-        setChoicelistOptionsList([])
-    }
-
     const symSpellCheck = (segmentId) => {
         if(enableSpellCheck){
             let sentence_without_tags = removeSpecificTagWithContent(targetContentEditable.current[segmentId]?.current?.innerHTML, 'span')
@@ -4930,7 +4851,6 @@ const FederalWorkspace = (props) => {
             })
 
             var text = removeTagsWithClass(content_editable_div.innerHTML, 'mark', 'spellcheck-highlight');
-            // text = removeTagsWithClass(text, 'mark', 'choicelist-option-highlight')
             var wordsToHighlight = words_list; // Array of words to highlight
             // console.log(wordsToHighlight)
             // console.log(text)
@@ -5100,8 +5020,6 @@ const FederalWorkspace = (props) => {
         let clickedOverPop = e.target.closest('#pop') ? true : false
         let segment_id = e.target?.parentNode?.getAttribute('data-id')
         
-        choiceListPopoverTargetRef.current = e.target.id
-
         if(clickedWrongWordRef.current !== null && !clickedOverPop){
             let {element} = clickedWrongWordRef.current
 
@@ -5139,38 +5057,6 @@ const FederalWorkspace = (props) => {
     }
 
     
-    // const handleSpellCheckWordMouseEnter = (e) => {
-    //     const word = e.target.getAttribute('data-word');
-    //     let segment_id = e.target.parentNode.getAttribute('data-id')
-    //     setChoiceListPopoverOpen(false)
-    //     setChoiceListPopoverTarget("")
-    //     setChoicelistOptionsList([])
-
-    //     let errorWordSuggestions = spellCheckWordsOptions?.find(each => each.word === word)?.suggestion
-
-    //     try{
-    //         let options_list = errorWordSuggestions?.map((value, ind) => {
-    //             return (
-    //                 <p
-    //                     key={ind}
-    //                     className="corrected-word"
-    //                     onClick={(event) => repalceWithSelectedSpellCheckSuggestedWord(value, segment_id)}
-    //                 >
-    //                     {value}
-    //                 </p>
-    //             )
-    //         })
-    //         if(segment_id === focusedDivId){
-    //             setChoicelistOptionsList(options_list)
-    //             setChoiceListPopoverTarget(e.target.id)
-    //             choiceListPopoverTargetRef.current = e.target.id    
-    //         }
-    //     }catch(e){
-    //         console.log(e)
-    //     }
-    // };
-
-    
     const repalceWithSelectedSpellCheckSuggestedWord = (value, segment_id, element) => {
         let childMark = element
         childMark.innerHTML = value + " "
@@ -5179,9 +5065,6 @@ const FederalWorkspace = (props) => {
         document.querySelector('#pop').style.opacity = '0';
         highlightSpellCheckWords(segment_id)
         // symSpellCheck(segment_id)
-        setChoiceListPopoverOpen(false)
-        setChoiceListPopoverTarget("")
-        setChoicelistOptionsList([])
     }
 
     const checkTextSelection = () => {
@@ -5650,12 +5533,6 @@ const FederalWorkspace = (props) => {
         let id = e.target.getAttribute("data-id");
         // console.log(e.target);
         // console.log();
-
-        setChoiceListPopoverOpen(false)
-        setChoiceListPopoverTarget("")
-        setChoicelistOptionsList([])
-
-       
 
         if (e.target.className?.includes('source')) {
             if (sourceTextDiv.current[id].current !== null) {

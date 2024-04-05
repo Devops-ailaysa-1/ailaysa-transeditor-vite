@@ -49,7 +49,7 @@ import DownloadIcon from "../assets/images/new-ui-icons/file_download14x14.svg"
 import DeleteBinIcon from "../assets/images/new-ui-icons/assets-delete-icon.svg"
 import ConfirmIcon from "../assets/images/new-ui-icons/confirm-icon.svg"
 import PlusIcon from "../assets/images/new-ui-icons/plus-new.svg"
-import ChoicelistIcon from "../assets/images/choicelist.svg"
+import WordchoiceIcon from "../assets/images/choicelist.svg"
 
 
 const IOSSwitch = styled((props) => (
@@ -158,14 +158,6 @@ const Settings = (props) => {
     const [tmxFilesFromAPI, setTmxFilesFromAPI] = useState(null)
     const [isQAFileDeleted, setIsQAFileDeleted] = useState(false)
     const [tmxTempFiles, setTmxTempFiles] = useState([])
-    const [choiceList, setChoiceList] = useState([])
-    const [checkedChoiceList, setCheckedChoiceList] = useState([])
-    const [selectedChoiceList, setSelectedChoiceList] = useState([])
-    const [isChoiceListChanged, setIsChoiceListChanged] = useState(false)
-    const [selectedChoiceListId, setSelectedChoiceListId] = useState(null)
-    const [isChoiceListAddedToProject, setIsChoiceListAddedToProject] = useState(false)
-    
-
     const [isLoadingButton, setIsLoadingButton] = useState(false)
     const [isConvertingButton, setIsConvertingButton] = useState(false)
     const [isGlossaryListLoading, setisGlossaryListLoading] = useState(false)
@@ -174,10 +166,7 @@ const Settings = (props) => {
     const downloadref = useRef(null)
     const downloadedFileName = useRef(null)
     const glossaryToRemove = useRef(null)
-    const choicelistToRemove = useRef(null)
-    const choicelistToAdd = useRef([])
     const jobsOptionsRef = useRef([])
-    const checkedChoiceListRef = useRef([])
     
     const glossaryListRef = useRef([])
     const wordChoiceListRef = useRef([])
@@ -298,7 +287,6 @@ const Settings = (props) => {
             setTbxFiles([])
             setGlossaryList([])
             setGlossarySelectedList([])
-            setSelectedChoiceList([])
             // setJobsOptions([])
             setJobsOnlyOptions([])
             setUploadedTbxFile(null)
@@ -309,16 +297,12 @@ const Settings = (props) => {
             getJobsByProjectId();
             getTmxFiles();
             getGlossaryList();
-            // getSelectedGlossaries();
             getWordchoiceList();
-            // getSelectedWordChoice()
             getTbxFiles();
             getThresholdValues();
             getReferenceFiles();
             getUntranslatableFiles()
             getForbiddenFiles()
-            // getChoiceList()
-            // getSelectedChoicelist()
         }else{
             setGlossaryList([])
             setGlossarySelectedList([])
@@ -1365,13 +1349,6 @@ const Settings = (props) => {
         if (checkedGlossary?.filter(item => !glossarySelectedList?.some(each => each.glossary == item))?.length !== 0) {
             addGlossaryToProject()
         }
-        if (choicelistToAdd.current?.length !== 0 && choicelistToRemove.current?.length === 0 && activeTab == 4) {
-            addChoiceListToProject()
-        } else if (choicelistToAdd.current?.length === 0 && choicelistToRemove.current?.length !== 0 && activeTab == 4) {
-            removeChoiceListFromProject()
-        } else if (activeTab == 4) {
-            removeChoiceListFromProject('remove-and-add')
-        }
 
         if (activeTab == 5 && subQatab == 1) {
             if (isQaChanged) {
@@ -1589,200 +1566,6 @@ const Settings = (props) => {
         }, {});
     }
 
-    const getChoiceList = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelist/?project=${projectId}`,
-            auth: true,
-            success: (response) => {
-                let grouped_res = groupByKey(response.data, "language")
-                setChoiceList(grouped_res)
-            },
-        });
-    }
-
-    const getSelectedChoicelist = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelistselected/?project=${projectId}`,
-            auth: true,
-            success: (response) => {
-                setSelectedChoiceList(response.data)
-                let newArr = response.data?.map(each => {
-                    return {
-                        choicelist_id: each.choice_list,
-                        lang_id: each.language
-                    }
-                })
-                checkedChoiceListRef.current = newArr
-                setCheckedChoiceList(newArr)
-            },
-        });
-    };
-
-    function findChangedObjects(array1, array2) {
-
-        const changedObjects = [];
-        const objMap = new Map(array2.map((obj) => [obj.lang_id, obj]));
-
-        for (const obj1 of array1) {
-            const obj2 = objMap.get(obj1.lang_id);
-
-            if (obj2 && obj1.choicelist_id !== obj2.choicelist_id) {
-                changedObjects.push({ lang_id: obj1.lang_id, choicelist_id: obj2.choicelist_id });
-            }
-        }
-
-        // Include objects from array1 with new: true
-        for (const obj1 of array2) {
-            if (obj1.new) {
-                changedObjects.push({ lang_id: obj1.lang_id, choicelist_id: obj1.choicelist_id });
-            }
-        }
-
-        return changedObjects;
-    }
-
-    // store the choicelist which are removed
-    useEffect(() => {
-        let choice_to_add = findChangedObjects(checkedChoiceListRef.current, checkedChoiceList)
-        choicelistToAdd.current = choice_to_add?.map(each => each.choicelist_id)
-        // console.log(choicelistToAdd.current)
-
-        let choice_to_remove = selectedChoiceList?.filter(o1 => !checkedChoiceList.some(o2 => o1.choice_list == o2.choicelist_id))
-        choicelistToRemove.current = choice_to_remove?.map(each => each.id)
-        // console.log(choicelistToRemove.current)
-
-        if (choicelistToAdd.current?.length !== 0 || choicelistToRemove.current?.length !== 0) {
-            setIsChoiceListChanged(true)
-        } else {
-            setIsChoiceListChanged(false)
-        }
-    }, [checkedChoiceList]);
-
-
-    // handle choicelist change
-    const handleChoicelistCheckbox = (event, choicelist_id, lang_id) => {
-        // this is for updating the existing choicelist
-        if (checkedChoiceList?.find(each => each.lang_id == lang_id)) {
-            let newArr = checkedChoiceList?.map(obj => {
-                if (obj.lang_id == lang_id) {
-                    return {
-                        ...obj,
-                        choicelist_id
-                    }
-                }
-                return obj
-            })
-            setCheckedChoiceList(newArr)
-        } else {  // if doesn't have add new
-            setCheckedChoiceList([...checkedChoiceList, { choicelist_id, lang_id }])
-        }
-
-    }
-
-    const handleChoiceListLangSwitch = (e, lang_id, first_choicelist) => {
-        if (!e.target.checked) {
-            setCheckedChoiceList(checkedChoiceList?.filter(each => each.lang_id != lang_id))
-        } else {
-            let previous_choice = checkedChoiceListRef.current?.find(each => each.lang_id == lang_id)
-            // already have previous choice
-            if (previous_choice) {
-                setCheckedChoiceList([...checkedChoiceList, previous_choice])
-            } else {  // adding new choice
-                setCheckedChoiceList([...checkedChoiceList, { choicelist_id: first_choicelist?.id, lang_id, new: true }])
-            }
-        }
-    }
-    // check the already added glossaries
-    // useEffect(() => {
-    //     if (choiceList?.length !== 0 && selectedChoiceList?.length !== 0) {
-    //         let a = choiceList?.filter(item => selectedChoiceList.some(each => item.id == each.choice_list))
-    //         let list = []
-    //         a?.map(each => {
-    //             list.push(each.id)
-    //         })
-    //         setCheckedChoiceList(list)
-    //     }
-    // }, [selectedChoiceList, choiceList])
-
-    // checks whether the choicelist is changed or not
-    // useEffect(() => {
-    //     if (isChoiceListAddedToProjectRef.current === isChoiceListAddedToProject) {
-    //         setIsChoiceListChanged(false)
-    //     } else if (isChoiceListAddedToProjectRef.current !== isChoiceListAddedToProject) {
-    //         if (previouslySelectedChoiceListRef.current !== null) setIsChoiceListChanged(true)
-    //     }
-    //     if (selectedChoiceListId !== null) {
-    //         if (previouslySelectedChoiceListRef.current?.choice_list === selectedChoiceListId) {
-    //             setIsChoiceListChanged(false)
-    //         } else {
-    //             setIsChoiceListChanged(true)
-    //         }
-    //     }
-    // }, [previouslySelectedChoiceListRef.current, selectedChoiceListId, isChoiceListAddedToProject])
-
-    const addChoiceListToProject = () => {
-        let formData = new FormData();
-        formData.append("project", projectId);
-
-        console.log(choicelistToAdd.current)
-        choicelistToAdd.current?.forEach(each => {
-            formData.append("choice_list", each);
-        });
-
-        // // this code is for sending multiple choicelist ids to api
-        // if (selectedChoiceList?.length == 0) {
-        //     checkedChoiceList?.map(each => {
-        //         formData.append("choice_list", each);
-        //     })
-        // } else {
-        //     let listToUpdate = checkedChoiceList?.filter(item => !selectedChoiceList?.some(each => each.choice_list == item))
-        //     // console.log(listToUpdate);
-        //     listToUpdate?.map(each => {
-        //         formData.append("choice_list", each);
-        //     })
-        // }
-
-
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelistselected/`,
-            method: "POST",
-            auth: true,
-            data: formData,
-            success: (response) => {
-                // console.log(response.data);
-                getSelectedChoicelist()
-                Config.toast(t("added_success"))
-                setIsLoadingButton(false)
-
-            },
-        });
-    }
-
-    const removeChoiceListFromProject = (action) => {
-        let list = "";
-        console.log(choicelistToRemove.current)
-        choicelistToRemove.current?.map((each, index) => {
-            list += `${each}${index !== choicelistToRemove.current?.length - 1 ? "," : ""}`;
-        });
-        // console.log(list);
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelistselected/O/?remove_ids=${list}`,
-            auth: true,
-            method: "DELETE",
-            success: (response) => {
-                if (action === 'remove-and-add') {
-                    addChoiceListToProject()
-                } else {
-                    response?.status === 204 && getSelectedChoicelist();
-                    Config.toast(t("removed_success"))
-                    choicelistToRemove.current = null
-                    setIsChoiceListChanged(false)
-                    setIsLoadingButton(false)
-                }
-
-            },
-        });
-    }
 
     return (
         <React.Fragment>
@@ -1826,18 +1609,6 @@ const Settings = (props) => {
                             >
                                 <NavLink className="settings-setup-btn">{t("ailaysa_glossaries")}</NavLink>
                             </NavItem>
-
-                            {/* <NavItem
-                                className={"setup-button-modal-btn " + classnames({ active: activeTab === "4" })}
-                                onClick={() => {
-                                    toggle("4");
-                                    setQaSubdomain(false)
-                                    setSubQatab()
-                                }}
-                            >
-                                <NavLink className="settings-setup-btn">{t("choicelist")}</NavLink>
-                            </NavItem> */}
-                           
                             <NavItem
                                 className={"setup-button-modal-btn " + classnames({ active: activeTab === "6" })}
                                 onClick={() => {
@@ -1908,16 +1679,13 @@ const Settings = (props) => {
                                                 activeTab === "3" ?
                                                     t("ailaysa_glossaries")
                                                     :
-                                                    activeTab === "4" ?
-                                                        t("choicelist")
-                                                        :
-                                                        activeTab === "5" ?
-                                                            t("quality_analysis")
-                                                            : 
-                                                            activeTab === "6" ?
-                                                                t("wordchoice")
-                                                                    :
-                                                                    ""
+                                                    activeTab === "5" ?
+                                                        t("quality_analysis")
+                                                        : 
+                                                        activeTab === "6" ?
+                                                            t("wordchoice")
+                                                                :
+                                                                ""
                                     }
                                 </h1>
                                 <span className="settings-close-btn" onClick={() => props?.hideSettingsModal()}>
@@ -2643,7 +2411,7 @@ const Settings = (props) => {
                                                                 />
                                                             </div>
                                                             <div className="asset-project-info-wrap">
-                                                                <img src={ChoicelistIcon} alt="choicelist-icon" />
+                                                                <img src={WordchoiceIcon} alt="Wordchoice-icon" />
                                                                 <div className="asset-project-info">
                                                                     <span className="title">{value.glossary_name}</span>
                                                                     <div className="lang-pair">
@@ -2662,64 +2430,6 @@ const Settings = (props) => {
                                     </ul>
                                 </div>
                             </TabPane>
-                            {/* <TabPane tabId="4">
-                                <div className="asset-glossary-wrapper">
-                                    <div className="asset-glossary-title-wrap">
-                                        <h2 className="asset-gl-head">{t("choicelist")}</h2>
-                                        <div className="create-tbx-btn-align">
-                                            <button className="settings-CreateTBXLink" onClick={() => props.setShowChoiceListCreateModal(true)} >
-                                                <span className="create-tbx-btn">Create a new choicelist</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="asset-glossary-list-wrapper">
-                                    {Object.keys(choiceList)?.length !== 0 ?
-                                        Object.entries(choiceList)?.map(([key, values]) => {
-                                            return (
-                                                <div key={key}>
-                                                    <div className="choicelist-lang-wrapper">
-                                                        <div className="choicelist-lang-tag">{languageOptionsList?.find(lang => lang.id == key)?.language}</div>
-                                                        <FormGroup>
-                                                            <FormControlLabel
-                                                                checked={checkedChoiceList?.find(each => each.lang_id == key) ? true : false}
-                                                                onChange={(e) => handleChoiceListLangSwitch(e, key, values[0])}
-                                                                control={<IOSSwitch sx={{ m: 1 }} />}
-                                                                label={t("remove_choicelist_frm_this_lang")}
-                                                                className="select-individual-choicelist"
-                                                            />
-                                                        </FormGroup>
-                                                    </div>
-                                                    <ul className="asset-glossary-projects-wrap-list" style={checkedChoiceList?.find(each => each.lang_id == key) ? {} : { opacity: 0.6, pointerEvents: 'none' }}>
-                                                        {values?.map(value => {
-                                                            return (
-                                                                <li key={value.id} onClick={(e) => handleChoicelistCheckbox(e, value.id, value.language)}>
-                                                                    <div className="asset-project-select-checkbox">
-                                                                        <Radio
-                                                                            id={`choicelist-${value.id}`}
-                                                                            checked={checkedChoiceList?.find(each => each.choicelist_id === value.id) ? true : false}
-                                                                            onChange={(e) => handleChoicelistCheckbox(e, value.id, value.language)}
-                                                                            size="small"
-                                                                        />
-                                                                    </div>
-                                                                    <div className="asset-project-info-wrap">
-                                                                        <img src={ChoicelistIcon} alt="choicelist-icon" />
-                                                                        <div className="asset-project-info">
-                                                                            <span className="title">{value.name}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            )
-                                                        })}
-                                                    </ul>
-                                                </div>
-                                            )
-                                        })
-                                        :
-                                        <span>{t("no_choicelist_add")}</span>
-                                    }
-                                </div>
-                            </TabPane> */}
 
                             <TabPane tabId="5">
                                 <TabContent activeTab={subQatab}>

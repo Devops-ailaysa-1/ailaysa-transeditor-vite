@@ -368,19 +368,8 @@ function MyStories(props) {
     const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false)
     const [isApproving, setIsApproving] = useState(false)
 
-    const [choiceListLanguage, setChoiceListLanguage] = useState(null);
-    const [choiceListProjectName, setChoiceListProjectName] = useState("");
-    const [isChoiceListModalEdit, setIsChoiceListModalEdit] = useState(false)
-    const [showChoiceListCreateModal, setShowChoiceListCreateModal] = useState(false);
-    const [showChoiceListDeleteModal, setShowChoiceListDeleteModal] = useState(false)
-    const [choiceList, setChoiceList] = useState([])
-    const [isCreating, setIsCreating] = useState(false);
-    const [isUpdating, setIsUpdating] = useState(false);
-    const [assetsSelectedTypeFilter, setAssetsSelectedTypeFilter] = useState("all");
-
     const [isTaskDeleting, setIsTaskDeleting] = useState(false)
     const [isStoryProjectDeleting, setIsStoryProjectDeleting] = useState(false)
-    const [isChoiceListDeleting, setIsChoiceListDeleting] = useState(false)
     
     const [isDesignDeleting, setIsDesignDeleting] = useState(false);
     const [axiosVendorDashboardAbortController, setAxiosVendorDashboardAbortController] = useState(null);
@@ -485,7 +474,6 @@ function MyStories(props) {
     const isTaskReassigned = useRef(false)
 
     const taskDetailsForDeadlineCrossedTask = useRef(null)
-    const selectedChoiceListDataRef = useRef(null);
     const fileTranslatingTaskListRef = useRef([])
     const axiosListProjectControllerRef = useRef(null)
     const isProjectListEmptyRef = useRef(false)
@@ -635,12 +623,6 @@ function MyStories(props) {
         };
     }, []);
 
-    // reset the choicelist states when choicelist modal is closed
-    useEffect(() => {
-        if (!showChoiceListCreateModal) {
-            resetChoicelistCreationModal()
-        }
-    }, [showChoiceListCreateModal])
 
     const handleIndividualTaskAssignManage = (e, selectedStep, task, project) => {
         e.stopPropagation();
@@ -1208,7 +1190,6 @@ function MyStories(props) {
 
     /* Handling source language selection */
     const handleSourceLangClick = (value, name, e) => {
-        setChoiceListLanguage({ name, value })
         setshowSrcLangModal(false);
         setSearchInput('')
     };
@@ -2431,49 +2412,7 @@ function MyStories(props) {
         }, 100);
     };
 
-    const editSelectedChoiceList = (item) => {
-        selectedChoiceListDataRef.current = item
-        setChoiceListLanguage({
-            name: languageOptionsList?.find(each => each.id === item?.language)?.language,
-            value: languageOptionsList?.find(each => each.id === item?.language)?.id
-        })
-        setChoiceListProjectName(item?.name)
-
-        setIsChoiceListModalEdit(true)
-        setShowChoiceListCreateModal(true)
-        setMoreEl(false)
-    }
-
-    const deleteSelectedChoiceList = (item) => {
-        selectedChoiceListDataRef.current = item
-        if (!showChoiceListDeleteModal) {
-            setShowChoiceListDeleteModal(true)
-            setMoreEl(false)
-            return
-        }
-        setIsChoiceListDeleting(true)
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelist/${selectedChoiceListDataRef.current?.id}/`,
-            method: "DELETE",
-            auth: true,
-            success: (response) => {
-                let newArr = createdProjects?.filter(each => each.id !== selectedChoiceListDataRef.current?.id)
-                Config.toast(t("choicelist_delete_success_toast"))
-                setShowChoiceListDeleteModal(false)
-                setIsChoiceListDeleting(false)
-                setShowListingLoader(false);
-                if (newArr?.length === 0) setEmptyProjects(true);
-                setCreatedProjects(newArr)
-            },
-            error: (err) => {
-                Config.toast(t("deletion_failed"), 'error')
-                setIsCreating(false)
-                setShowChoiceListDeleteModal(false)
-                setIsChoiceListDeleting(false)
-            }
-        });
-    }
-
+   
     const editProject = (e = null, projectId, projectType, project) => {
         e.stopPropagation()
         // page information for redirecting to same page after updation is done.
@@ -3495,11 +3434,6 @@ function MyStories(props) {
         Config.downloadFileInBrowser(response)
     }
 
-    const handleOpenButton = (id) => {
-        history(`/choicelist-workspace/${id}`, {
-            prevPath: location.pathname + location.search
-        })
-    }
 
     const convertPdfToDocxFromTask = (taskId, projectId) => {
         setClickedOpenButton(taskId)
@@ -4212,66 +4146,6 @@ function MyStories(props) {
         });
     }
 
-    const createChoiceList = () => {
-
-        if (choiceListProjectName?.trim() === '' || choiceListLanguage?.value === undefined) {
-            Config.toast(t("please_complete_form"), 'warning')
-            return;
-        }
-
-        let formData = new FormData();
-        formData.append('name', choiceListProjectName?.trim());
-        formData.append('language', choiceListLanguage?.value);
-        setIsCreating(true)
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelist/`,
-            method: "POST",
-            data: formData,
-            auth: true,
-            success: (response) => {
-                // console.log(response.data)
-                setShowChoiceListCreateModal(false)
-                setIsCreating(false)
-                setIsCreating(false)
-            },
-            error: (err) => {
-                setIsCreating(false)
-            }
-        });
-    }
-
-    const updateChoiceList = () => {
-        let formData = new FormData();
-        if (selectedChoiceListDataRef.current.name === choiceListProjectName?.trim()) {
-            Config.toast(t("no_change_to_update"), 'warning')
-            return
-        }
-
-        formData.append('name', choiceListProjectName?.trim());
-        setIsUpdating(true)
-
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/choicelist/${selectedChoiceListDataRef.current.id}/`,
-            method: "PUT",
-            data: formData,
-            auth: true,
-            success: (response) => {
-                // console.log(response.data)
-                setShowChoiceListCreateModal(false)
-                setIsUpdating(false)
-                setIsChoiceListModalEdit(false)
-            },
-            error: (err) => {
-                setIsUpdating(false)
-            }
-        });
-    }
-
-    const resetChoicelistCreationModal = () => {
-        setChoiceListLanguage(null)
-        setChoiceListProjectName("")
-    }
-
     const MoreOptionsIcon = (props) => {
         let { selectedProjectFile, project, key, onlyDelete, disabled } = props
         return (
@@ -4400,44 +4274,6 @@ function MyStories(props) {
         )
     }
 
-    const MoreOptionsIconChoiceList = (props) => {
-        let { choiceListItem, deleteOnly } = props
-        return (
-            <div className="more-options-wrap">
-                <ButtonBase onMouseUp={(e) => handleMoreVertOption(e, choiceListItem.id)} className="sorting-icon">
-                    <MoreVertIcon className="more-icon" />
-                </ButtonBase>
-                {(moreEl && (openedMoreOption === choiceListItem.id)) &&
-                    <>
-                        <div className="menu-wrapper" ref={moreOptionOutside}>
-                            <ul>
-                                {
-                                    moreOptionsForDoc?.filter(each => deleteOnly ? each.id === 2 : each.id)?.map((item) => {
-                                        return (
-                                            <li
-                                                key={item.id}
-                                                className="list-item"
-                                                onClick={(e) => {
-                                                    item?.label === 'Edit' ? editSelectedChoiceList(choiceListItem) :
-                                                        item?.label === 'Delete' && deleteSelectedChoiceList(choiceListItem)
-                                                }}
-                                            >
-                                                <div className="item-wrap">
-                                                    <span className="icon">{item.icon}</span>
-                                                    <span className="text">{item.label}</span>
-                                                </div>
-                                            </li>
-                                        )
-                                    })
-                                }
-                            </ul>
-                        </div>
-                    </>
-                }
-            </div>
-        )
-    }
-
     const MoreOptionsIconDesigner = (props) => {
         let { project, removeDelete, removeEdit, selectedProjectFile, deleteOnly, assigned } = props
         // console.log(assigned)
@@ -4479,42 +4315,9 @@ function MyStories(props) {
         )
     }
 
-    const handleAssetsTypeFilterClick = (type) => {
-        let url = `/assets?page=1`;
-        let queryParam = new URLSearchParams(window.location.search)
-        setAssetsSelectedTypeFilter(type)
-        let orderParam = queryParam.get("order_by");
-        if (orderParam != null) url += `&order_by=${orderParam}`;
-        let projectIdParam = queryParam.get("open-project");
-        if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
-        let searchParam = queryParam.get("search");
-        if (searchParam != null) url += `&search=${searchParam}`;
-        if (type !== undefined) url += `&type=${type}`
-        history(url);
-    }
 
 
-    const handleCreateNewProjectBtnClick = () => {
-        const search_param = new URLSearchParams(window.location.search);
-        let typeParam = search_param.get("type")
-        if (typeParam === 'assert') {
-            setShowChoiceListCreateModal(true)
-        } else {
-            history("/all-stories?page=1")
-            if(activeProjTab === 9){    // redirect to designer
-                window.open(Config.DESIGNER_HOST)
-            }else{
-                history(
-                    activeProjTab === 3 ? "/create/translate/files/translate-files" :
-                        activeProjTab === 4 ? "/create/speech/speech-to-text" :
-                            activeProjTab === 5 ? "/create/speech/text-to-speech" :
-                                activeProjTab === 6 && "/create/assets/glossaries/create"
-                                
-                );
-            }
-        }
-    }
-
+    
 
     const handleRetriveDesignProject = (e,proj) => {
         e.stopPropagation()
@@ -5372,501 +5175,524 @@ function MyStories(props) {
                                                     <React.Fragment>
                                                         {createdProjects.map((project, key) => 
                                                             {
-                                                                        return (
-                                                                            <div
-                                                                                className={
-                                                                                    openedProjectId == project.id
-                                                                                        ? "file-edit-list-table-row focused-proj-row federal-news my-stories"
-                                                                                        : project.progress?.toLowerCase() == "yet to start" ? "file-edit-list-table-row unopened-focus-proj-row" : "file-edit-list-table-row"
-                                                                                }
-                                                                                key={project.id}
-                                                                                style={project?.analyzingWordCount ? { pointerEvents: 'none', opacity: '0.7' } : {}}
-                                                                                data-key={project.id}
-                                                                                onClick={(e) => selectProject(e, project?.id, project)}
-                                                                            >
-                                                                                <div className="file-edit-list-table-cell-wrap">
-                                                                                    <div className="file-edit-list-table-cell" data-key={project.id}>
-                                                                                        <span className="arrow-icon">
-                                                                                            {
-                                                                                                openedProjectId == project.id ?
-                                                                                                    <KeyboardArrowUpIcon className="proj-list-arrow-up" />
-                                                                                                    :
-                                                                                                    <KeyboardArrowDownIcon className="proj-list-arrow-down" />
-                                                                                            }
-                                                                                        </span>
-                                                                                        <div className={"proj-title-list-container " + (project?.get_project_type === 4 ? "speech-proj" : "")}>
-                                                                                            <div className="proj-type-icon-wrap">
-                                                                                            </div>
-                                                                                            <div className="proj-list-info">
-                                                                                                <div className="proj-information">
-                                                                                                    <Tooltip TransitionComponent={Zoom} title={project.project_name} placement="top" arrow>
-                                                                                                        <span className="file-edit-proj-txt-tmx">
-                                                                                                            {project.project_name}
+                                                                return (
+                                                                    <div
+                                                                        className={
+                                                                            openedProjectId == project.id
+                                                                                ? "file-edit-list-table-row focused-proj-row federal-news my-stories"
+                                                                                : project.progress?.toLowerCase() == "yet to start" ? "file-edit-list-table-row unopened-focus-proj-row" : "file-edit-list-table-row"
+                                                                        }
+                                                                        key={project.id}
+                                                                        style={project?.analyzingWordCount ? { pointerEvents: 'none', opacity: '0.7' } : {}}
+                                                                        data-key={project.id}
+                                                                        onClick={(e) => selectProject(e, project?.id, project)}
+                                                                    >
+                                                                        <div className="file-edit-list-table-cell-wrap">
+                                                                            <div className="file-edit-list-table-cell" data-key={project.id}>
+                                                                                <span className="arrow-icon">
+                                                                                    {
+                                                                                        openedProjectId == project.id ?
+                                                                                            <KeyboardArrowUpIcon className="proj-list-arrow-up" />
+                                                                                            :
+                                                                                            <KeyboardArrowDownIcon className="proj-list-arrow-down" />
+                                                                                    }
+                                                                                </span>
+                                                                                <div className={"proj-title-list-container " + (project?.get_project_type === 4 ? "speech-proj" : "")}>
+                                                                                    <div className="proj-type-icon-wrap">
+                                                                                    </div>
+                                                                                    <div className="proj-list-info">
+                                                                                        <div className="proj-information">
+                                                                                            <Tooltip TransitionComponent={Zoom} title={project.project_name} placement="top" arrow>
+                                                                                                <span className="file-edit-proj-txt-tmx">
+                                                                                                    {project.project_name}
 
+                                                                                                </span>
+                                                                                            </Tooltip>
+
+                                                                                            {/* project.is_proj_analysed is removed from the below condition */}
+                                                                                            {/* {project?.project_analysis?.proj_word_count != null && project?.project_analysis.proj_word_count != 0 ? (
+                                                                                                <div className="position-relative">
+                                                                                                    <span className="file-edit-proj-txt-word-count word-count-capsule">
+                                                                                                        <span >{project.project_analysis.proj_word_count} W</span>
+                                                                                                    </span>
+                                                                                                    {showElement &&
+                                                                                                        <span className={project.progress?.toLowerCase() == "yet to start" ? "unopend-icon" : "d-none"}>
+                                                                                                            <img src={Config.HOST_URL + "assets/images/new-unopened-proj-symbol.svg"} alt="unopened-proj" />
                                                                                                         </span>
-                                                                                                    </Tooltip>
-        
-                                                                                                    {/* project.is_proj_analysed is removed from the below condition */}
-                                                                                                    {/* {project?.project_analysis?.proj_word_count != null && project?.project_analysis.proj_word_count != 0 ? (
-                                                                                                        <div className="position-relative">
-                                                                                                            <span className="file-edit-proj-txt-word-count word-count-capsule">
-                                                                                                                <span >{project.project_analysis.proj_word_count} W</span>
-                                                                                                            </span>
-                                                                                                            {showElement &&
-                                                                                                                <span className={project.progress?.toLowerCase() == "yet to start" ? "unopend-icon" : "d-none"}>
-                                                                                                                    <img src={Config.HOST_URL + "assets/images/new-unopened-proj-symbol.svg"} alt="unopened-proj" />
-                                                                                                                </span>
-                                                                                                            }
-                                                                                                        </div>
-                                                                                                    ) : project?.analyzingWordCount && (
-                                                                                                        <div className="position-relative">
-                                                                                                            <span className="file-edit-proj-txt-word-count word-count-capsule">
-                                                                                                                <span>
-                                                                                                                    <div className="loading">
-                                                                                                                        <span className="loading__dot"></span>
-                                                                                                                        <span className="loading__dot"></span>
-                                                                                                                        <span className="loading__dot"></span>
-                                                                                                                    </div>
-                                                                                                                </span>
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                    )} */}
-        
-                                                                                                    {/* {project.assigned && (
-                                                                                                        <span className="pl-2 pr-2">
-                                                                                                            <img
-                                                                                                                src={Config.HOST_URL + "assets/images/new-ui-icons/how_to_register.svg"}
-                                                                                                                alt="project assigned"
-                                                                                                                should-open-files="dont-open"
-                                                                                                            />
-                                                                                                        </span>
-                                                                                                    )} */}
+                                                                                                    }
                                                                                                 </div>
-                                                                                                {/* <div className="proj-file-type">
-                                                                                                    <span className={project?.get_project_type === 3 ? "glossary-text-name" : ''}>{project?.get_project_type === 3 ? t("glossary") :
-                                                                                                        project?.file_create_type == "From insta text" ? t("text") :
-                                                                                                        (project?.get_project_type === 1 || project?.get_project_type === 2) ? t("files") : 
-                                                                                                        (project?.get_project_type === 5) ? t("instant") : (project?.get_project_type === 6) && t("proj_list_cate_design")}
-                                                                                                    </span>
-                                                                                                </div> */}
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div className="file-edit-list-table-cell">
-                                                                                        <div className="file-edit-translation-txt word-count">
-                                                                                            <span>{Config.getProjectCreatedDate(project.created_at)}</span>
-                                                                                        </div>
-																						{(!project?.file_translate && Config.userState?.internal_member_team_detail?.role !== "Editor" && project?.assign_enable) && (
-																							<div className="project-edit-tools" onClick={(e) => editProject(e, project.id, project?.get_project_type, project)}>
-																								{isFederal && (
-                                                                                                    <Tooltip title={t("edit")} placement="top">
+                                                                                            ) : project?.analyzingWordCount && (
+                                                                                                <div className="position-relative">
+                                                                                                    <span className="file-edit-proj-txt-word-count word-count-capsule">
                                                                                                         <span>
-                                                                                                            <img
-                                                                                                                src={EditIcon}
-                                                                                                                alt="pencil-edit-new"
-                                                                                                                should-open-files="dont-open"
-                                                                                                            />
+                                                                                                            <div className="loading">
+                                                                                                                <span className="loading__dot"></span>
+                                                                                                                <span className="loading__dot"></span>
+                                                                                                                <span className="loading__dot"></span>
+                                                                                                            </div>
                                                                                                         </span>
-                                                                                                    </Tooltip>
-                                                                                                )}
-                                                                                                {!isDinamalar && (
-                                                                                                    <Tooltip TransitionComponent={Zoom} title={t("assets")} placement="top">
-                                                                                                        <span onClick={(e) => showSettingsModal(e, project?.id)} >
-                                                                                                            <img
-                                                                                                                src={FileUploadIcon}
-                                                                                                                alt="upload_file"
-                                                                                                                should-open-files="dont-open"
-                                                                                                            />
-                                                                                                        </span>
-                                                                                                    </Tooltip>
-                                                                                                )}
-																							</div>
-																						)}
-                                                                                    </div>
-                                                                                    {/* <div className="file-edit-list-table-cell">
-                                                                                <div className="file-edit-translation-txt word-count">
-                                                                                    <span>{project?.get_project_type === 3 ? "Glossary" : project?.get_project_type === 4 ? "Voice" : 
-                                                                                        (project?.get_project_type === 1 || project?.get_project_type === 2) && "Files"}</span>
-                                                                                </div>
-                                                                            </div> */}
-                                                                                    {/* <div className="file-edit-list-table-cell" data-key={project.id}> */}
-                                                                                        {/* <div className="file-edit-translation-txt word-count">
-                                                                                    <span>{Config.getProjectCreatedDate(project.created_at)}</span>
-                                                                                </div> */}
-                                                                                        {/* (selectedProjectFile?.task_assign_info?.find(each => (userDetails.pk === each?.assign_to_details.id && each.task_assign_detail.step === 2)) && eachRole?.task_ven_status === 'task_accepted') */}
-                                                                                        {/* {((!project?.file_translate ) && (
-                                                                                            (project?.get_assignable_tasks_exists && project?.assign_enable) ||
-                                                                                            (userDetails?.agency && selectedProjectFiles?.find(task => task?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details?.managers?.find(user => user === userDetails.pk)) && each?.task_ven_status === 'task_accepted'))))
-                                                                                        )) && (
-                                                                                                <>
-                                                                                                    <div className="user-project-icon">
-                                                                                                        <Tooltip className="dont-open-list" title={t("assign")} placement="top">
-                                                                                                            <span
-                                                                                                                id={`project-assigni-icon-${project?.id}`}
-                                                                                                                onClick={(e) => handleShowLSPAssignManage(e, project)}>
-                                                                                                                <PersonAddAltOutlinedIcon className="member-add-icon" />
-                                                                                                            </span>
-                                                                                                        </Tooltip>
-                                                                                                    </div>
-                                                                                                    <div className="icons-separator"></div>
-                                                                                                </>
-                                                                                            )} */}
-                                                                                        {/* <div className="project-edit-tools dont-open-list">
-                                                                                            {((!Config.userState?.is_internal_member && project?.get_project_type !== 3 && project?.assign_enable)) &&  // add this to enable project-download for agency => || userDetails?.agency
-                                                                                                <Tooltip className="dont-open-list" title={t("download")} placement="top">
-                                                                                                    <span onClick={(e) => handleBulkDownload(e, project)}>
-                                                                                                        <img
-                                                                                                            src={Config.HOST_URL + "assets/images/new-ui-icons/file_download.svg"}
-                                                                                                            alt="bulk download"
-                                                                                                            should-open-files="dont-open"
-                                                                                                        />
                                                                                                     </span>
-                                                                                                </Tooltip>
-                                                                                            }
-                                                                                            // Don't show project analysis option for glossary, express, and voice project without translation task.
-                                                                                            {(!project?.file_translate && project.get_project_type !== 3 && project.get_project_type !== 5 && project.get_project_type !== 6 && project?.show_analysis) && <Tooltip title={t("project_analysis")} placement="top">
-                                                                                                <span onClick={(e) => { handleShowAnalysisModal(e, project?.id); setShowProjectAnalysis(true) }}>
+                                                                                                </div>
+                                                                                            )} */}
+
+                                                                                            {/* {project.assigned && (
+                                                                                                <span className="pl-2 pr-2">
                                                                                                     <img
-                                                                                                        src={Config.HOST_URL + "assets/images/new-ui-icons/stacked_bar_chart.svg"}
-                                                                                                        alt="stacked_bar_chart"
+                                                                                                        src={Config.HOST_URL + "assets/images/new-ui-icons/how_to_register.svg"}
+                                                                                                        alt="project assigned"
                                                                                                         should-open-files="dont-open"
                                                                                                     />
                                                                                                 </span>
-                                                                                            </Tooltip>}
-                                                                                            {
-                                                                                                (Config.userState?.internal_member_team_detail?.role !== "Editor" && project?.assign_enable && project.get_project_type === 3
-                                                                                                    && project?.tasks_count > 1 && project?.clone_available && openedProjectId == project.id) &&
-                                                                                                <Tooltip title={t("clone")} placement="top">
-                                                                                                    <span onClick={(e) => { e.stopPropagation(); setShowCloneModal(true) }}>
+                                                                                            )} */}
+                                                                                        </div>
+                                                                                        {/* <div className="proj-file-type">
+                                                                                            <span className={project?.get_project_type === 3 ? "glossary-text-name" : ''}>{project?.get_project_type === 3 ? t("glossary") :
+                                                                                                project?.file_create_type == "From insta text" ? t("text") :
+                                                                                                (project?.get_project_type === 1 || project?.get_project_type === 2) ? t("files") : 
+                                                                                                (project?.get_project_type === 5) ? t("instant") : (project?.get_project_type === 6) && t("proj_list_cate_design")}
+                                                                                            </span>
+                                                                                        </div> */}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="file-edit-list-table-cell">
+                                                                                <div className="file-edit-translation-txt word-count">
+                                                                                    <span>{Config.getProjectCreatedDate(project.created_at)}</span>
+                                                                                </div>
+                                                                                {(!project?.file_translate && Config.userState?.internal_member_team_detail?.role !== "Editor" && project?.assign_enable) && (
+                                                                                    <div className="project-edit-tools" onClick={(e) => editProject(e, project.id, project?.get_project_type, project)}>
+                                                                                        {isFederal && (
+                                                                                            <Tooltip title={t("edit")} placement="top">
+                                                                                                <span>
+                                                                                                    <img
+                                                                                                        src={EditIcon}
+                                                                                                        alt="pencil-edit-new"
+                                                                                                        should-open-files="dont-open"
+                                                                                                    />
+                                                                                                </span>
+                                                                                            </Tooltip>
+                                                                                        )}
+                                                                                        {!isDinamalar && (
+                                                                                            <Tooltip TransitionComponent={Zoom} title={t("assets")} placement="top">
+                                                                                                <span onClick={(e) => showSettingsModal(e, project?.id)} >
+                                                                                                    <img
+                                                                                                        src={FileUploadIcon}
+                                                                                                        alt="upload_file"
+                                                                                                        should-open-files="dont-open"
+                                                                                                    />
+                                                                                                </span>
+                                                                                            </Tooltip>
+                                                                                        )}
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                            {/* <div className="file-edit-list-table-cell">
+                                                                        <div className="file-edit-translation-txt word-count">
+                                                                            <span>{project?.get_project_type === 3 ? "Glossary" : project?.get_project_type === 4 ? "Voice" : 
+                                                                                (project?.get_project_type === 1 || project?.get_project_type === 2) && "Files"}</span>
+                                                                        </div>
+                                                                    </div> */}
+                                                                            {/* <div className="file-edit-list-table-cell" data-key={project.id}> */}
+                                                                                {/* <div className="file-edit-translation-txt word-count">
+                                                                            <span>{Config.getProjectCreatedDate(project.created_at)}</span>
+                                                                        </div> */}
+                                                                                {/* (selectedProjectFile?.task_assign_info?.find(each => (userDetails.pk === each?.assign_to_details.id && each.task_assign_detail.step === 2)) && eachRole?.task_ven_status === 'task_accepted') */}
+                                                                                {/* {((!project?.file_translate ) && (
+                                                                                    (project?.get_assignable_tasks_exists && project?.assign_enable) ||
+                                                                                    (userDetails?.agency && selectedProjectFiles?.find(task => task?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details?.managers?.find(user => user === userDetails.pk)) && each?.task_ven_status === 'task_accepted'))))
+                                                                                )) && (
+                                                                                        <>
+                                                                                            <div className="user-project-icon">
+                                                                                                <Tooltip className="dont-open-list" title={t("assign")} placement="top">
+                                                                                                    <span
+                                                                                                        id={`project-assigni-icon-${project?.id}`}
+                                                                                                        onClick={(e) => handleShowLSPAssignManage(e, project)}>
+                                                                                                        <PersonAddAltOutlinedIcon className="member-add-icon" />
+                                                                                                    </span>
+                                                                                                </Tooltip>
+                                                                                            </div>
+                                                                                            <div className="icons-separator"></div>
+                                                                                        </>
+                                                                                    )} */}
+                                                                                {/* <div className="project-edit-tools dont-open-list">
+                                                                                    {((!Config.userState?.is_internal_member && project?.get_project_type !== 3 && project?.assign_enable)) &&  // add this to enable project-download for agency => || userDetails?.agency
+                                                                                        <Tooltip className="dont-open-list" title={t("download")} placement="top">
+                                                                                            <span onClick={(e) => handleBulkDownload(e, project)}>
+                                                                                                <img
+                                                                                                    src={Config.HOST_URL + "assets/images/new-ui-icons/file_download.svg"}
+                                                                                                    alt="bulk download"
+                                                                                                    should-open-files="dont-open"
+                                                                                                />
+                                                                                            </span>
+                                                                                        </Tooltip>
+                                                                                    }
+                                                                                    // Don't show project analysis option for glossary, express, and voice project without translation task.
+                                                                                    {(!project?.file_translate && project.get_project_type !== 3 && project.get_project_type !== 5 && project.get_project_type !== 6 && project?.show_analysis) && <Tooltip title={t("project_analysis")} placement="top">
+                                                                                        <span onClick={(e) => { handleShowAnalysisModal(e, project?.id); setShowProjectAnalysis(true) }}>
+                                                                                            <img
+                                                                                                src={Config.HOST_URL + "assets/images/new-ui-icons/stacked_bar_chart.svg"}
+                                                                                                alt="stacked_bar_chart"
+                                                                                                should-open-files="dont-open"
+                                                                                            />
+                                                                                        </span>
+                                                                                    </Tooltip>}
+                                                                                    {
+                                                                                        (Config.userState?.internal_member_team_detail?.role !== "Editor" && project?.assign_enable && project.get_project_type === 3
+                                                                                            && project?.tasks_count > 1 && project?.clone_available && openedProjectId == project.id) &&
+                                                                                        <Tooltip title={t("clone")} placement="top">
+                                                                                            <span onClick={(e) => { e.stopPropagation(); setShowCloneModal(true) }}>
+                                                                                                <img
+                                                                                                    src={Config.HOST_URL + "assets/images/clone-icon.svg"}
+                                                                                                    alt="clone"
+                                                                                                    should-open-files="dont-open"
+                                                                                                />
+                                                                                            </span>
+                                                                                        </Tooltip>
+                                                                                    }
+                                                                                    {(!project?.file_translate && Config.userState?.internal_member_team_detail?.role !== "Editor" && project?.assign_enable) && (
+                                                                                        <>
+                                                                                            <Tooltip dont-open-list="yes" title={t("edit")} placement="top">
+                                                                                                <span onClick={(e) => editProject(e, project.id, project?.get_project_type, project)}>
+                                                                                                    <img
+                                                                                                        src={Config.HOST_URL + "assets/images/new-ui-icons/pencil-edit-new.svg"}
+                                                                                                        alt="pencil-edit-new"
+                                                                                                        should-open-files="dont-open"
+                                                                                                    />
+                                                                                                </span>
+                                                                                            </Tooltip>
+                                                                                            {(project.get_project_type == 1 || project.get_project_type == 2) &&
+                                                                                                <Tooltip TransitionComponent={Zoom} title={t("assets")} placement="top">
+                                                                                                    <span onClick={(e) => showSettingsModal(e, project?.id)} >
                                                                                                         <img
-                                                                                                            src={Config.HOST_URL + "assets/images/clone-icon.svg"}
-                                                                                                            alt="clone"
+                                                                                                            src={Config.HOST_URL + "assets/images/new-ui-icons/upload_file.svg"}
+                                                                                                            alt="upload_file"
                                                                                                             should-open-files="dont-open"
                                                                                                         />
                                                                                                     </span>
                                                                                                 </Tooltip>
                                                                                             }
-                                                                                            {(!project?.file_translate && Config.userState?.internal_member_team_detail?.role !== "Editor" && project?.assign_enable) && (
-                                                                                                <>
-                                                                                                    <Tooltip dont-open-list="yes" title={t("edit")} placement="top">
-                                                                                                        <span onClick={(e) => editProject(e, project.id, project?.get_project_type, project)}>
+                                                                                        </>
+                                                                                    )}
+                                                                                </div> */}
+                                                                                {/* {(!project?.file_translate && project?.get_project_type !== 6) && (
+                                                                                    <div className="status-conditions-part dont-open-list">
+                                                                                        <span className="file-edit-proj-status-txt">
+                                                                                            <div
+                                                                                                className={
+                                                                                                    project.progress?.toLowerCase() == "completed"
+                                                                                                        ? "status-indicator-completed"
+                                                                                                        : project.progress?.toLowerCase() == "in progress"
+                                                                                                            ? "status-indicator-in-progress-color"
+                                                                                                            : "status-indicator-created"
+                                                                                                }
+                                                                                                should-open-files="dont-open"
+                                                                                            ></div>
+                                                                                            {project.progress?.toLowerCase() == "completed" ? t("completed") : project.progress?.toLowerCase() == "in progress" ? t("in_progress") : project.progress?.toLowerCase() == "yet to start" ? t("yet_to_start") : ""}
+                                                                                        </span>
+                                                                                        <span className="more-icon-empty"></span>
+                                                                                    </div>
+                                                                                )}
+                                                                            </div> */}
+                                                                        </div>
+                                                                        <Collapse isOpen={openedProjectId == project.id} className="selected-file-row">
+                                                                            {
+                                                                                openedProjectId == project.id &&
+                                                                                ((selectedProjectFiles?.length > 0) ? (
+                                                                                    selectedProjectFiles.map((selectedProjectFile, key) => {
+                                                                                        // console.log(selectedProjectFile)
+                                                                                        isAssignedProject = createdProjects.find(
+                                                                                            (element) => element.id === openedProjectId
+                                                                                        )?.assign_enable;
+                                                                                        let segmentPercentage = 0;
+                                                                                        if (selectedProjectFile?.progress != null) {
+                                                                                            if (selectedProjectFile?.progress?.total_segments == 0)
+                                                                                                segmentPercentage = 0;
+                                                                                            else
+                                                                                                segmentPercentage = Math.floor(
+                                                                                                    (selectedProjectFile?.progress?.confirmed_segments /
+                                                                                                        selectedProjectFile?.progress?.total_segments) *
+                                                                                                    100
+                                                                                                );
+                                                                                        }
+                                                                                        // Need to destructure this following conditional code and set everything optimised properly
+                                                                                        if (selectedProjectFile?.task_assign_info?.length === 1) {
+                                                                                            editorAssignmentDetails =
+                                                                                                selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
+                                                                                                    Config.userState?.id
+                                                                                                    ? selectedProjectFile?.task_assign_info[0]?.assigned_by_details
+                                                                                                    : selectedProjectFile?.task_assign_info[0]?.assign_to_details;
+                                                                                            role = selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
+                                                                                                Config.userState?.id
+                                                                                                ? "Assigner" : "Editor"
+                                                                                        }
+
+                                                                                        // New logic
+                                                                                        if (selectedProjectFile?.task_assign_info?.length === 2) {
+
+                                                                                        }
+
+                                                                                        if (selectedProjectFile?.task_assign_info?.length === 2) {
+                                                                                            editorAssignmentDetails =
+                                                                                                selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
+                                                                                                    Config.userState?.id
+                                                                                                    ? selectedProjectFile?.task_assign_info[0]?.assigned_by_details
+                                                                                                    : selectedProjectFile?.task_assign_info[0]?.assign_to_details;
+
+                                                                                            reviewerAssignDetails =
+                                                                                                selectedProjectFile?.task_assign_info[1]?.assign_to_details?.id ===
+                                                                                                    Config.userState?.id
+                                                                                                    ? selectedProjectFile?.task_assign_info[1]?.assigned_by_details
+                                                                                                    : selectedProjectFile?.task_assign_info[1]?.assign_to_details;
+                                                                                        }
+
+                                                                                        let taskAssignStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.task_status
+                                                                                        let taskClientStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.client_response
+
+                                                                                        selectedFilesData = (
+                                                                                            <div 
+                                                                                                className={
+                                                                                                    "file-edit-inner-table " + ( 
+                                                                                                        isDinamalar ? (
+                                                                                                            selectedProjectFile?.task_assign_info === null ? (
+                                                                                                                (selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? "task-completed-bg" : 
+                                                                                                                selectedProjectFile?.progress?.total_segments !== 0 ? "task-in-progress-bg" : 
+                                                                                                                selectedProjectFile?.progress?.total_segments === 0 ? "" : ""
+                                                                                                            ) : (
+                                                                                                                taskClientStatus === "Approved" ? "task-approved-bg" :
+                                                                                                                taskClientStatus === "Rework" ? "task-rework-bg" :
+                                                                                                                taskAssignStatus === "Yet to start" ? "" :
+                                                                                                                taskAssignStatus === "In Progress" ? "task-in-progress-bg" :
+                                                                                                                taskAssignStatus === "Completed" ? "task-completed-bg" :
+                                                                                                                taskAssignStatus === "Return Request" ? "task-declined-bg" : ""
+
+                                                                                                            )
+                                                                                                        ) : ""
+                                                                                                    ) 
+                                                                                                } 
+                                                                                                key={selectedProjectFile?.id}
+                                                                                            >
+                                                                                                <div className="file-edit-list-inner-table-row">
+                                                                                                    {/* <div className="file-edit-list-inner-table-cell">
+                                                                                                        <div className="file-edit-translation-txt">
                                                                                                             <img
-                                                                                                                src={Config.HOST_URL + "assets/images/new-ui-icons/pencil-edit-new.svg"}
-                                                                                                                alt="pencil-edit-new"
-                                                                                                                should-open-files="dont-open"
+                                                                                                                className="translation-pair-L"
+                                                                                                                src={
+                                                                                                                    Config.HOST_URL +
+                                                                                                                    "assets/images/new-ui-icons/translation-pair-L.svg"
+                                                                                                                }
                                                                                                             />
-                                                                                                        </span>
-                                                                                                    </Tooltip>
-                                                                                                    {(project.get_project_type == 1 || project.get_project_type == 2) &&
-                                                                                                        <Tooltip TransitionComponent={Zoom} title={t("assets")} placement="top">
-                                                                                                            <span onClick={(e) => showSettingsModal(e, project?.id)} >
-                                                                                                                <img
-                                                                                                                    src={Config.HOST_URL + "assets/images/new-ui-icons/upload_file.svg"}
-                                                                                                                    alt="upload_file"
-                                                                                                                    should-open-files="dont-open"
-                                                                                                                />
+                                                                                                            <span>{targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}</span>
+                                                                                                            <img
+                                                                                                                src={
+                                                                                                                    Config.HOST_URL +
+                                                                                                                    "assets/images/new-ui-icons/arrow_right_alt_color.svg"
+                                                                                                                }
+                                                                                                            />
+                                                                                                            <span>
+                                                                                                                {
+                                                                                                                    (targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) !== undefined &&
+                                                                                                                        targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) != null) ?
+                                                                                                                        targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language :
+                                                                                                                        targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language
+                                                                                                                }
                                                                                                             </span>
-                                                                                                        </Tooltip>
-                                                                                                    }
-                                                                                                </>
-                                                                                            )}
-                                                                                        </div> */}
-                                                                                        {/* {(!project?.file_translate && project?.get_project_type !== 6) && (
-                                                                                            <div className="status-conditions-part dont-open-list">
-                                                                                                <span className="file-edit-proj-status-txt">
-                                                                                                    <div
-                                                                                                        className={
-                                                                                                            project.progress?.toLowerCase() == "completed"
-                                                                                                                ? "status-indicator-completed"
-                                                                                                                : project.progress?.toLowerCase() == "in progress"
-                                                                                                                    ? "status-indicator-in-progress-color"
-                                                                                                                    : "status-indicator-created"
-                                                                                                        }
-                                                                                                        should-open-files="dont-open"
-                                                                                                    ></div>
-                                                                                                    {project.progress?.toLowerCase() == "completed" ? t("completed") : project.progress?.toLowerCase() == "in progress" ? t("in_progress") : project.progress?.toLowerCase() == "yet to start" ? t("yet_to_start") : ""}
-                                                                                                </span>
-                                                                                                <span className="more-icon-empty"></span>
-                                                                                            </div>
-                                                                                        )}
-                                                                                    </div> */}
-                                                                                </div>
-                                                                                <Collapse isOpen={openedProjectId == project.id} className="selected-file-row">
-                                                                                    {
-                                                                                        openedProjectId == project.id &&
-                                                                                        ((selectedProjectFiles?.length > 0) ? (
-                                                                                            selectedProjectFiles.map((selectedProjectFile, key) => {
-                                                                                                // console.log(selectedProjectFile)
-                                                                                                isAssignedProject = createdProjects.find(
-                                                                                                    (element) => element.id === openedProjectId
-                                                                                                )?.assign_enable;
-                                                                                                let segmentPercentage = 0;
-                                                                                                if (selectedProjectFile?.progress != null) {
-                                                                                                    if (selectedProjectFile?.progress?.total_segments == 0)
-                                                                                                        segmentPercentage = 0;
-                                                                                                    else
-                                                                                                        segmentPercentage = Math.floor(
-                                                                                                            (selectedProjectFile?.progress?.confirmed_segments /
-                                                                                                                selectedProjectFile?.progress?.total_segments) *
-                                                                                                            100
-                                                                                                        );
-                                                                                                }
-                                                                                                // Need to destructure this following conditional code and set everything optimised properly
-                                                                                                if (selectedProjectFile?.task_assign_info?.length === 1) {
-                                                                                                    editorAssignmentDetails =
-                                                                                                        selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
-                                                                                                            Config.userState?.id
-                                                                                                            ? selectedProjectFile?.task_assign_info[0]?.assigned_by_details
-                                                                                                            : selectedProjectFile?.task_assign_info[0]?.assign_to_details;
-                                                                                                    role = selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
-                                                                                                        Config.userState?.id
-                                                                                                        ? "Assigner" : "Editor"
-                                                                                                }
-        
-                                                                                                // New logic
-                                                                                                if (selectedProjectFile?.task_assign_info?.length === 2) {
-        
-                                                                                                }
-        
-                                                                                                if (selectedProjectFile?.task_assign_info?.length === 2) {
-                                                                                                    editorAssignmentDetails =
-                                                                                                        selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
-                                                                                                            Config.userState?.id
-                                                                                                            ? selectedProjectFile?.task_assign_info[0]?.assigned_by_details
-                                                                                                            : selectedProjectFile?.task_assign_info[0]?.assign_to_details;
-        
-                                                                                                    reviewerAssignDetails =
-                                                                                                        selectedProjectFile?.task_assign_info[1]?.assign_to_details?.id ===
-                                                                                                            Config.userState?.id
-                                                                                                            ? selectedProjectFile?.task_assign_info[1]?.assigned_by_details
-                                                                                                            : selectedProjectFile?.task_assign_info[1]?.assign_to_details;
-                                                                                                }
-
-                                                                                                let taskAssignStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.task_status
-                                                                                                let taskClientStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.client_response
-
-                                                                                                selectedFilesData = (
-                                                                                                    <div 
-                                                                                                        className={
-                                                                                                            "file-edit-inner-table " + ( 
-                                                                                                                isDinamalar ? (
-                                                                                                                    selectedProjectFile?.task_assign_info === null ? (
-                                                                                                                        (selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? "task-completed-bg" : 
-                                                                                                                        selectedProjectFile?.progress?.total_segments !== 0 ? "task-in-progress-bg" : 
-                                                                                                                        selectedProjectFile?.progress?.total_segments === 0 ? "" : ""
-                                                                                                                    ) : (
-                                                                                                                        taskClientStatus === "Approved" ? "task-approved-bg" :
-                                                                                                                        taskClientStatus === "Rework" ? "task-rework-bg" :
-                                                                                                                        taskAssignStatus === "Yet to start" ? "" :
-                                                                                                                        taskAssignStatus === "In Progress" ? "task-in-progress-bg" :
-                                                                                                                        taskAssignStatus === "Completed" ? "task-completed-bg" :
-                                                                                                                        taskAssignStatus === "Return Request" ? "task-declined-bg" : ""
-
-                                                                                                                    )
-                                                                                                                ) : ""
-                                                                                                            ) 
-                                                                                                        } 
-                                                                                                        key={selectedProjectFile?.id}
-                                                                                                    >
-                                                                                                        <div className="file-edit-list-inner-table-row">
-                                                                                                            {/* <div className="file-edit-list-inner-table-cell">
-                                                                                                                <div className="file-edit-translation-txt">
-                                                                                                                    <img
-                                                                                                                        className="translation-pair-L"
-                                                                                                                        src={
-                                                                                                                            Config.HOST_URL +
-                                                                                                                            "assets/images/new-ui-icons/translation-pair-L.svg"
-                                                                                                                        }
-                                                                                                                    />
-                                                                                                                    <span>{targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}</span>
+                                                                                                        </div>
+                                                                                                    </div> */}
+                                                                                                    <div className="file-edit-list-inner-table-cell">
+                                                                                                        {/* <div className='check-box-wrap'>
+                                                                                                            <Checkbox 
+                                                                                                                size="small"
+                                                                                                                // checked={newsId.includes(each.newsId) ? true : false} 
+                                                                                                                // onClick={() => handleSelectedcard(each.newsId)}
+                                                                                                            />
+                                                                                                        </div> */}
+                                                                                                        <div className="my-stories-doc-info-wrapper dinamalar-info-wrap">
+                                                                                                            <div className="doc-icon-wrapper">
+                                                                                                                <span className="doc-icon">
                                                                                                                     <img
                                                                                                                         src={
-                                                                                                                            Config.HOST_URL +
-                                                                                                                            "assets/images/new-ui-icons/arrow_right_alt_color.svg"
+                                                                                                                            selectedProjectFile?.news_detail?.thumbUrl ?
+                                                                                                                            selectedProjectFile?.news_detail?.thumbUrl :
+                                                                                                                            isFederal ? FederalImgPlaceholder :
+                                                                                                                            isDinamalar ? DinamalarImgPlaceholder :
+                                                                                                                            NoImgPlaceholder
+                                                                                                                            
                                                                                                                         }
+                                                                                                                        onError={({ currentTarget }) => { 
+                                                                                                                            currentTarget.onerror = null; // prevents looping
+                                                                                                                            currentTarget.src = isFederal ?
+                                                                                                                            FederalImgPlaceholder :
+                                                                                                                            isDinamalar ? DinamalarImgPlaceholder :
+                                                                                                                            NoImgPlaceholder;
+                                                                                                                        }}
+                                                                                                                        alt="new-img"
                                                                                                                     />
-                                                                                                                    <span>
-                                                                                                                        {
-                                                                                                                            (targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) !== undefined &&
-                                                                                                                                targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) != null) ?
-                                                                                                                                targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language :
-                                                                                                                                targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language
-                                                                                                                        }
-                                                                                                                    </span>
-                                                                                                                </div>
-                                                                                                            </div> */}
-                                                                                                            <div className="file-edit-list-inner-table-cell">
-                                                                                                                {/* <div className='check-box-wrap'>
-                                                                                                                    <Checkbox 
-                                                                                                                        size="small"
-                                                                                                                        // checked={newsId.includes(each.newsId) ? true : false} 
-                                                                                                                        // onClick={() => handleSelectedcard(each.newsId)}
-                                                                                                                    />
-                                                                                                                </div> */}
-                                                                                                                <div className="my-stories-doc-info-wrapper dinamalar-info-wrap">
-                                                                                                                    <div className="doc-icon-wrapper">
-                                                                                                                        <span className="doc-icon">
-                                                                                                                            <img
-                                                                                                                                src={
-                                                                                                                                    selectedProjectFile?.news_detail?.thumbUrl ?
-                                                                                                                                    selectedProjectFile?.news_detail?.thumbUrl :
-                                                                                                                                    isFederal ? FederalImgPlaceholder :
-                                                                                                                                    isDinamalar ? DinamalarImgPlaceholder :
-                                                                                                                                    NoImgPlaceholder
-                                                                                                                                    
-                                                                                                                                }
-                                                                                                                                onError={({ currentTarget }) => { 
-                                                                                                                                    currentTarget.onerror = null; // prevents looping
-                                                                                                                                    currentTarget.src = isFederal ?
-                                                                                                                                    FederalImgPlaceholder :
-                                                                                                                                    isDinamalar ? DinamalarImgPlaceholder :
-                                                                                                                                    NoImgPlaceholder;
-                                                                                                                                }}
-                                                                                                                                alt="new-img"
-                                                                                                                            />
-                                                                                                                        </span>
-                                                                                                                    </div>
-                                                                                                                    <div className="story-info-wrap">
-                                                                                                                        {selectedProjectFile?.news_detail?.maincat_name && (
-                                                                                                                            <span className="category-wrap">{selectedProjectFile?.news_detail?.maincat_name}</span>
-                                                                                                                        )}
-                                                                                                                        <Tooltip TransitionComponent={Zoom} title={selectedProjectFile?.news_detail?.heading} placement="top">
-                                                                                                                            <span className="file-edit-proj-txt-file-name" onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "src")}>
-                                                                                                                                {selectedProjectFile?.news_detail?.heading}
-                                                                                                                            </span>
-                                                                                                                        </Tooltip>
-                                                                                                                    </div>
-                                                                                                                    {/* {projectType === 1 || projectType === 2 ? ( */}
-                                                                                                                    {/* {selectedProjectFile?.filename !== undefined &&
-                                                                                                                        <>
-                                                                                                                            <span className="doc-icon">
-                                                                                                                                <img
-                                                                                                                                    src={
-                                                                                                                                        `${Config.BASE_URL}/app/extension-image/` +
-                                                                                                                                        selectedProjectFile?.filename?.split(".")?.pop()
-                                                                                                                                    }
-                                                                                                                                    alt="doc-icon"
-                                                                                                                                />
-                                                                                                                            </span>
-                                                                                                                            <Tooltip TransitionComponent={Zoom} title={selectedProjectFile?.filename} placement="top">
-                                                                                                                                <span className="file-edit-proj-txt-file-name">
-                                                                                                                                    {selectedProjectFile?.filename
-                                                                                                                                        ?.split(".")
-                                                                                                                                        ?.slice(0, -1)
-                                                                                                                                        ?.join(".")}
-                                                                                                                                </span>
-                                                                                                                            </Tooltip>
-                                                                                                                            <Tooltip TransitionComponent={Zoom} title={selectedProjectFile?.filename} placement="top">
-                                                                                                                                <span className="file-edit-proj-txt-file-extension">
-                                                                                                                                    {"." + selectedProjectFile?.filename?.split(".")?.pop()}
-                                                                                                                                </span>
-                                                                                                                            </Tooltip>
-                                                                                                                        </>
-                                                                                                                    }
-                                                                                                                    {(selectedProjectFile?.filename !== undefined) && (selectedProjectAnalysis?.task_words?.find(
-                                                                                                                        (element) => element[selectedProjectFile?.id]
-                                                                                                                    )?.[selectedProjectFile?.id] || selectedProjectFile?.task_word_count != null) && (
-                                                                                                                            <span className="file-edit-proj-txt-file-extension word-count-capsule">
-                                                                                                                                {selectedProjectFile?.task_word_count && <span>
-                                                                                                                                    {
-                                                                                                                                        selectedProjectAnalysis?.task_words?.find(
-                                                                                                                                            (element) => element[selectedProjectFile?.id]
-                                                                                                                                        )?.[selectedProjectFile?.id] || selectedProjectFile?.task_word_count
-                                                                                                                                    } W
-                                                                                                                                </span>}
-                                                                                                                            </span>
-                                                                                                                        )} */}
-                                                                                                                    
-                                                                                                                </div>
-                                                                                                                <div className="file-edit-translation-txt">
-                                                                                                                    <span onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "src")}>
-                                                                                                                        {targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}
-                                                                                                                    </span>
-                                                                                                                    <img
-                                                                                                                        src={BlueRightArrow}
-                                                                                                                    />
-                                                                                                                    <span onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "tar")}>
-                                                                                                                        {targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}
-                                                                                                                    </span>
-                                                                                                                </div>
+                                                                                                                </span>
                                                                                                             </div>
-                                                                                                            <div className="file-edit-list-inner-table-cell">
-                                                                                                                {isFederal ? (  // task status without calculating segment progress
-                                                                                                                    <div className="status-conditions-part dont-open-list">
-                                                                                                                        <span className="file-edit-proj-status-txt">
-                                                                                                                            <div
-                                                                                                                                className={
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.push_detail && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed" && userDetails?.pk !== each?.assign_to_details?.id)) ? "status-indicator-approved" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? "status-indicator-completed" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? "status-indicator-created" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "In Progress")) ? "status-indicator-in-progress-color" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Return Request")) ? "status-indicator-created" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info == null && selectedProjectFile?.push_detail) ? "status-indicator-approved" :
-                                                                                                                                    (selectedProjectFile?.news_detail?.tar_json_exists) ? "status-indicator-in-progress-color" : "status-indicator-created"
-                                                                                                                                    // (selectedProjectFile?.progress?.total_segments === 0) ?  : ""
-                                                                                                                                }
-                                                                                                                                should-open-files="dont-open"
-                                                                                                                            ></div>
-                                                                                                                            {
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.push_detail && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed" && userDetails?.pk !== each?.assign_to_details?.id)) ? t("pushed") :
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? t("submitted") :
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? t("yet_to_start") :
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "In Progress")) ? t("in_progress") :
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Return Request")) ? t("declined") :
-                                                                                                                                (selectedProjectFile?.task_assign_info == null && selectedProjectFile?.push_detail) ? t("pushed") :
-                                                                                                                                (selectedProjectFile?.news_detail?.tar_json_exists) ? t("in_progress") : t("yet_to_start")
-                                                                                                                                // (selectedProjectFile?.progress?.total_segments === 0) ? t("yet_to_start") : ""
-                                                                                                                            }
-                                                                                                                        </span>
-                                                                                                                        <span className="more-icon-empty"></span>
-                                                                                                                    </div>
-                                                                                                                ) : (
-                                                                                                                    <div className="status-conditions-part dont-open-list">
-                                                                                                                        <span className="file-edit-proj-status-txt">
-                                                                                                                            <div
-                                                                                                                                className={
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.client_response?.toLowerCase() == "approved")) ? "status-indicator-approved" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? "status-indicator-completed" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? "status-indicator-created" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "In Progress")) ? "status-indicator-in-progress-color" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Return Request")) ? "status-indicator-created" :
-                                                                                                                                    (selectedProjectFile?.task_assign_info == null && selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? "status-indicator-completed" :
-                                                                                                                                    (selectedProjectFile?.progress?.total_segments !== 0) ? "status-indicator-in-progress-color" :
-                                                                                                                                    (selectedProjectFile?.progress?.total_segments === 0) ? "status-indicator-created" : ""
-                                                                                                                                }
-                                                                                                                                should-open-files="dont-open"
-                                                                                                                            ></div>
-                                                                                                                            {
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.client_response?.toLowerCase() == "approved")) ? t("approved") :
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? t("completed_&_submit") :
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? t("yet_to_start") :
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "In Progress")) ? t("in_progress") :
-                                                                                                                                (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Return Request")) ? t("declined") :
-                                                                                                                                (selectedProjectFile?.task_assign_info == null && selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? t("completed") :
-                                                                                                                                (selectedProjectFile?.progress?.total_segments !== 0) ? t("in_progress") : 
-                                                                                                                                (selectedProjectFile?.progress?.total_segments === 0) ? t("yet_to_start") : ""
-                                                                                                                            }
-                                                                                                                        </span>
-                                                                                                                        <span className="more-icon-empty"></span>
-                                                                                                                    </div>
+                                                                                                            <div className="story-info-wrap">
+                                                                                                                {selectedProjectFile?.news_detail?.maincat_name && (
+                                                                                                                    <span className="category-wrap">{selectedProjectFile?.news_detail?.maincat_name}</span>
                                                                                                                 )}
+                                                                                                                <Tooltip TransitionComponent={Zoom} title={selectedProjectFile?.news_detail?.heading} placement="top">
+                                                                                                                    <span className="file-edit-proj-txt-file-name" onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "src")}>
+                                                                                                                        {selectedProjectFile?.news_detail?.heading}
+                                                                                                                    </span>
+                                                                                                                </Tooltip>
                                                                                                             </div>
-        
-                                                                                                            <div className="file-edit-list-inner-table-cell">
-                                                                                                                {/*  Need to destructure this following conditional code and set everything optimised properly */}
-                                                                                                                <div className="file-assigned-member-lists">
-                                                                                                                    {(userDetails.agency ? (selectedProjectFile?.task_assign_info != null && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.task_assign_info != null)) ?
-                                                                                                                        (
-                                                                                                                            <>
-                                                                                                                                {selectedProjectFile?.task_assign_info?.sort((a, b) => a.task_assign_detail.step - b.task_assign_detail.step)?.map(each => console.log())}
-                                                                                                                                {
-                                                                                                                                    (selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each?.assign_to_details?.managers?.find(user => user === userDetails.pk))) !== undefined ||
-                                                                                                                                        selectedProjectFile?.task_assign_info?.find(each => Config.userState?.id === each.assigned_by_details.id) !== undefined) ? (
-                                                                                                                                        selectedProjectFile?.task_assign_info?.map((eachRole) => {
-                                                                                                                                            if (Config.userState?.id === eachRole?.assign_to_details.id || eachRole?.assign_to_details?.managers?.find(user => user === userDetails.pk)) {    // task is assigned to me
-                                                                                                                                                if (eachRole.task_assign_detail.step === 1 || eachRole.task_assign_detail.step === 2) {
-                                                                                                                                                    return (
-                                                                                                                                                        <div className="assigned-details-wrapper">
+                                                                                                            {/* {projectType === 1 || projectType === 2 ? ( */}
+                                                                                                            {/* {selectedProjectFile?.filename !== undefined &&
+                                                                                                                <>
+                                                                                                                    <span className="doc-icon">
+                                                                                                                        <img
+                                                                                                                            src={
+                                                                                                                                `${Config.BASE_URL}/app/extension-image/` +
+                                                                                                                                selectedProjectFile?.filename?.split(".")?.pop()
+                                                                                                                            }
+                                                                                                                            alt="doc-icon"
+                                                                                                                        />
+                                                                                                                    </span>
+                                                                                                                    <Tooltip TransitionComponent={Zoom} title={selectedProjectFile?.filename} placement="top">
+                                                                                                                        <span className="file-edit-proj-txt-file-name">
+                                                                                                                            {selectedProjectFile?.filename
+                                                                                                                                ?.split(".")
+                                                                                                                                ?.slice(0, -1)
+                                                                                                                                ?.join(".")}
+                                                                                                                        </span>
+                                                                                                                    </Tooltip>
+                                                                                                                    <Tooltip TransitionComponent={Zoom} title={selectedProjectFile?.filename} placement="top">
+                                                                                                                        <span className="file-edit-proj-txt-file-extension">
+                                                                                                                            {"." + selectedProjectFile?.filename?.split(".")?.pop()}
+                                                                                                                        </span>
+                                                                                                                    </Tooltip>
+                                                                                                                </>
+                                                                                                            }
+                                                                                                            {(selectedProjectFile?.filename !== undefined) && (selectedProjectAnalysis?.task_words?.find(
+                                                                                                                (element) => element[selectedProjectFile?.id]
+                                                                                                            )?.[selectedProjectFile?.id] || selectedProjectFile?.task_word_count != null) && (
+                                                                                                                    <span className="file-edit-proj-txt-file-extension word-count-capsule">
+                                                                                                                        {selectedProjectFile?.task_word_count && <span>
+                                                                                                                            {
+                                                                                                                                selectedProjectAnalysis?.task_words?.find(
+                                                                                                                                    (element) => element[selectedProjectFile?.id]
+                                                                                                                                )?.[selectedProjectFile?.id] || selectedProjectFile?.task_word_count
+                                                                                                                            } W
+                                                                                                                        </span>}
+                                                                                                                    </span>
+                                                                                                                )} */}
+                                                                                                            
+                                                                                                        </div>
+                                                                                                        <div className="file-edit-translation-txt">
+                                                                                                            <span onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "src")}>
+                                                                                                                {targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}
+                                                                                                            </span>
+                                                                                                            <img
+                                                                                                                src={BlueRightArrow}
+                                                                                                            />
+                                                                                                            <span onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "tar")}>
+                                                                                                                {targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}
+                                                                                                            </span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div className="file-edit-list-inner-table-cell">
+                                                                                                        {isFederal ? (  // task status without calculating segment progress
+                                                                                                            <div className="status-conditions-part dont-open-list">
+                                                                                                                <span className="file-edit-proj-status-txt">
+                                                                                                                    <div
+                                                                                                                        className={
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.push_detail && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed" && userDetails?.pk !== each?.assign_to_details?.id)) ? "status-indicator-approved" :
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? "status-indicator-completed" :
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? "status-indicator-created" :
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "In Progress")) ? "status-indicator-in-progress-color" :
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Return Request")) ? "status-indicator-created" :
+                                                                                                                            (selectedProjectFile?.task_assign_info == null && selectedProjectFile?.push_detail) ? "status-indicator-approved" :
+                                                                                                                            (selectedProjectFile?.news_detail?.tar_json_exists) ? "status-indicator-in-progress-color" : "status-indicator-created"
+                                                                                                                            // (selectedProjectFile?.progress?.total_segments === 0) ?  : ""
+                                                                                                                        }
+                                                                                                                        should-open-files="dont-open"
+                                                                                                                    ></div>
+                                                                                                                    {
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.push_detail && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed" && userDetails?.pk !== each?.assign_to_details?.id)) ? t("pushed") :
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? t("submitted") :
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? t("yet_to_start") :
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "In Progress")) ? t("in_progress") :
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Return Request")) ? t("declined") :
+                                                                                                                        (selectedProjectFile?.task_assign_info == null && selectedProjectFile?.push_detail) ? t("pushed") :
+                                                                                                                        (selectedProjectFile?.news_detail?.tar_json_exists) ? t("in_progress") : t("yet_to_start")
+                                                                                                                        // (selectedProjectFile?.progress?.total_segments === 0) ? t("yet_to_start") : ""
+                                                                                                                    }
+                                                                                                                </span>
+                                                                                                                <span className="more-icon-empty"></span>
+                                                                                                            </div>
+                                                                                                        ) : (
+                                                                                                            <div className="status-conditions-part dont-open-list">
+                                                                                                                <span className="file-edit-proj-status-txt">
+                                                                                                                    <div
+                                                                                                                        className={
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.client_response?.toLowerCase() == "approved")) ? "status-indicator-approved" :
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? "status-indicator-completed" :
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? "status-indicator-created" :
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "In Progress")) ? "status-indicator-in-progress-color" :
+                                                                                                                            (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Return Request")) ? "status-indicator-created" :
+                                                                                                                            (selectedProjectFile?.task_assign_info == null && selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? "status-indicator-completed" :
+                                                                                                                            (selectedProjectFile?.progress?.total_segments !== 0) ? "status-indicator-in-progress-color" :
+                                                                                                                            (selectedProjectFile?.progress?.total_segments === 0) ? "status-indicator-created" : ""
+                                                                                                                        }
+                                                                                                                        should-open-files="dont-open"
+                                                                                                                    ></div>
+                                                                                                                    {
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.client_response?.toLowerCase() == "approved")) ? t("approved") :
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? t("completed_&_submit") :
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? t("yet_to_start") :
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "In Progress")) ? t("in_progress") :
+                                                                                                                        (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Return Request")) ? t("declined") :
+                                                                                                                        (selectedProjectFile?.task_assign_info == null && selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? t("completed") :
+                                                                                                                        (selectedProjectFile?.progress?.total_segments !== 0) ? t("in_progress") : 
+                                                                                                                        (selectedProjectFile?.progress?.total_segments === 0) ? t("yet_to_start") : ""
+                                                                                                                    }
+                                                                                                                </span>
+                                                                                                                <span className="more-icon-empty"></span>
+                                                                                                            </div>
+                                                                                                        )}
+                                                                                                    </div>
+
+                                                                                                    <div className="file-edit-list-inner-table-cell">
+                                                                                                        {/*  Need to destructure this following conditional code and set everything optimised properly */}
+                                                                                                        <div className="file-assigned-member-lists">
+                                                                                                            {(userDetails.agency ? (selectedProjectFile?.task_assign_info != null && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.task_assign_info != null)) ?
+                                                                                                                (
+                                                                                                                    <>
+                                                                                                                        {selectedProjectFile?.task_assign_info?.sort((a, b) => a.task_assign_detail.step - b.task_assign_detail.step)?.map(each => console.log())}
+                                                                                                                        {
+                                                                                                                            (selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each?.assign_to_details?.managers?.find(user => user === userDetails.pk))) !== undefined ||
+                                                                                                                                selectedProjectFile?.task_assign_info?.find(each => Config.userState?.id === each.assigned_by_details.id) !== undefined) ? (
+                                                                                                                                selectedProjectFile?.task_assign_info?.map((eachRole) => {
+                                                                                                                                    if (Config.userState?.id === eachRole?.assign_to_details.id || eachRole?.assign_to_details?.managers?.find(user => user === userDetails.pk)) {    // task is assigned to me
+                                                                                                                                        if (eachRole.task_assign_detail.step === 1 || eachRole.task_assign_detail.step === 2) {
+                                                                                                                                            return (
+                                                                                                                                                <div className="assigned-details-wrapper">
+                                                                                                                                                    <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
+                                                                                                                                                        <span className="selected-project-assigned-member">
+                                                                                                                                                            {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                    ?.charAt(0)?.toUpperCase()
+                                                                                                                                                            }
+                                                                                                                                                        </span>
+
+                                                                                                                                                        <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                            <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                    } else if (Config.userState?.id === eachRole?.assigned_by_details.id) {    // // task is assigned by me to someone
+                                                                                                                                        if (eachRole.task_assign_detail.step === 1) {
+                                                                                                                                            return (
+                                                                                                                                                <>
+                                                                                                                                                    <div className="assigned-details-wrapper">
+                                                                                                                                                        {selectedProjectFile?.editorUnassigning ? (
+                                                                                                                                                            <CircularLoader size={30} />
+                                                                                                                                                        ) : (
                                                                                                                                                             <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
                                                                                                                                                                 <span className="selected-project-assigned-member">
                                                                                                                                                                     {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
@@ -5874,208 +5700,115 @@ function MyStories(props) {
                                                                                                                                                                             ?.charAt(0)?.toUpperCase()
                                                                                                                                                                     }
                                                                                                                                                                 </span>
-        
                                                                                                                                                                 <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                                 </div>
                                                                                                                                                             </div>
-                                                                                                                                                        </div>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                            } else if (Config.userState?.id === eachRole?.assigned_by_details.id) {    // // task is assigned by me to someone
-                                                                                                                                                if (eachRole.task_assign_detail.step === 1) {
-                                                                                                                                                    return (
-                                                                                                                                                        <>
-                                                                                                                                                            <div className="assigned-details-wrapper">
-                                                                                                                                                                {selectedProjectFile?.editorUnassigning ? (
-                                                                                                                                                                    <CircularLoader size={30} />
-                                                                                                                                                                ) : (
-                                                                                                                                                                    <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
-                                                                                                                                                                        <span className="selected-project-assigned-member">
-                                                                                                                                                                            {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                                (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                                    ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                            }
-                                                                                                                                                                        </span>
-                                                                                                                                                                        <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                            <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
-                                                                                                                                                                        </div>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )}
+                                                                                                                                                        )}
+                                                                                                                                                    </div>
+                                                                                                                                                    {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
+                                                                                                                                                    {
+                                                                                                                                                        (selectedProjectFile?.task_assign_info?.length === 1 && (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && !is_internal_meber_editor) && (
+                                                                                                                                                            <div className="unassigned-members-wrapper">
+                                                                                                                                                                <Tooltip title={t("assign_reviewer")} placement="top" arrow>
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                </Tooltip>
                                                                                                                                                             </div>
-                                                                                                                                                            {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
-                                                                                                                                                            {
-                                                                                                                                                                (selectedProjectFile?.task_assign_info?.length === 1 && (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && !is_internal_meber_editor) && (
-                                                                                                                                                                    <div className="unassigned-members-wrapper">
-                                                                                                                                                                        <Tooltip title={t("assign_reviewer")} placement="top" arrow>
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </Tooltip>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )
-                                                                                                                                                            }
-                                                                                                                                                        </>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                                if (eachRole.task_assign_detail.step === 2) {
-                                                                                                                                                    return (
-                                                                                                                                                        <>
-                                                                                                                                                            {
-                                                                                                                                                                (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
-                                                                                                                                                                    <div className="unassigned-members-wrapper">
-                                                                                                                                                                        <Tooltip title={t("assign_editor")} placement="top" arrow>
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </Tooltip>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )
-                                                                                                                                                            }
-                                                                                                                                                            <div className="assigned-details-wrapper">
-                                                                                                                                                                {selectedProjectFile?.editorUnassigning ? (
-                                                                                                                                                                    <CircularLoader size={30} />
-                                                                                                                                                                ) : (
-                                                                                                                                                                    <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
-                                                                                                                                                                        <span className="selected-project-assigned-member">
-                                                                                                                                                                            {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                                (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                                    ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                            }
-                                                                                                                                                                        </span>
-                                                                                                                                                                        <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                            <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
-                                                                                                                                                                        </div>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )}
+                                                                                                                                                        )
+                                                                                                                                                    }
+                                                                                                                                                </>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                        if (eachRole.task_assign_detail.step === 2) {
+                                                                                                                                            return (
+                                                                                                                                                <>
+                                                                                                                                                    {
+                                                                                                                                                        (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
+                                                                                                                                                            <div className="unassigned-members-wrapper">
+                                                                                                                                                                <Tooltip title={t("assign_editor")} placement="top" arrow>
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                </Tooltip>
                                                                                                                                                             </div>
-                                                                                                                                                        </>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                            } else {
-                                                                                                                                                if (eachRole.task_assign_detail.step === 1) {
-                                                                                                                                                    return (
-                                                                                                                                                        <>
-                                                                                                                                                            <div className="assigned-details-wrapper">
-                                                                                                                                                                {selectedProjectFile?.editorUnassigning ? (
-                                                                                                                                                                    <CircularLoader size={30} />
-                                                                                                                                                                ) : (
-                                                                                                                                                                    <div className="selected-proj-assigned-member-wrapper">
-                                                                                                                                                                        <span className="selected-project-assigned-member">
-                                                                                                                                                                            {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                                (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                                    ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                            }
-                                                                                                                                                                        </span>
-                                                                                                                                                                        <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                            <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
-                                                                                                                                                                        </div>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )}
-                                                                                                                                                            </div>
-                                                                                                                                                            {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
-                                                                                                                                                            {
-                                                                                                                                                                (selectedProjectFile?.task_assign_info?.length === 1 && (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && !is_internal_meber_editor) && (
-                                                                                                                                                                    <div className="unassigned-members-wrapper">
-                                                                                                                                                                        <Tooltip title={t("assign_reviewer")} placement="top" arrow>
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </Tooltip>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )
-                                                                                                                                                            }
-                                                                                                                                                        </>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                                if (eachRole.task_assign_detail.step === 2) {
-                                                                                                                                                    return (
-                                                                                                                                                        <>
-                                                                                                                                                            {
-                                                                                                                                                                (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
-                                                                                                                                                                    <div className="unassigned-members-wrapper">
-                                                                                                                                                                        <Tooltip title={t("assign_editor")} placement="top" arrow>
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </Tooltip>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )
-                                                                                                                                                            }
-                                                                                                                                                            <div className="assigned-details-wrapper">
-                                                                                                                                                                {selectedProjectFile?.editorUnassigning ? (
-                                                                                                                                                                    <CircularLoader size={30} />
-                                                                                                                                                                ) : (
-                                                                                                                                                                    <div className="selected-proj-assigned-member-wrapper">
-                                                                                                                                                                        <span className="selected-project-assigned-member">
-                                                                                                                                                                            {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                                (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                                    ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                            }
-                                                                                                                                                                        </span>
-                                                                                                                                                                        <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                            <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
-                                                                                                                                                                        </div>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )}
-                                                                                                                                                            </div>
-                                                                                                                                                        </>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        })
-                                                                                                                                    ) : (
-                                                                                                                                        selectedProjectFile?.task_assign_info?.map((eachRole) => {
-                                                                                                                                            if (eachRole.task_assign_detail.step === 1) {
-                                                                                                                                                return (
-                                                                                                                                                    <>
-                                                                                                                                                        <div className="assigned-details-wrapper">
-                                                                                                                                                            {selectedProjectFile?.editorUnassigning ? (
-                                                                                                                                                                <CircularLoader size={30} />   
-                                                                                                                                                            ) : (
-                                                                                                                                                                <div className="selected-proj-assigned-member-wrapper">
-                                                                                                                                                                    <span className="selected-project-assigned-member">
-                                                                                                                                                                        {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                            (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                                ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                        }
-                                                                                                                                                                    </span>
-                                                                                                                                                                    <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                        <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
-                                                                                                                                                                    </div>
+                                                                                                                                                        )
+                                                                                                                                                    }
+                                                                                                                                                    <div className="assigned-details-wrapper">
+                                                                                                                                                        {selectedProjectFile?.editorUnassigning ? (
+                                                                                                                                                            <CircularLoader size={30} />
+                                                                                                                                                        ) : (
+                                                                                                                                                            <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
+                                                                                                                                                                <span className="selected-project-assigned-member">
+                                                                                                                                                                    {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                        (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                            ?.charAt(0)?.toUpperCase()
+                                                                                                                                                                    }
+                                                                                                                                                                </span>
+                                                                                                                                                                <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                                    <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                                 </div>
-                                                                                                                                                            )}
                                                                                                                                                             </div>
-                                                                                                                                                        {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
-                                                                                                                                                        {
-                                                                                                                                                            (selectedProjectFile?.task_assign_info?.length === 1 && (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && !is_internal_meber_editor) && (
-                                                                                                                                                                <div className="unassigned-members-wrapper">
-                                                                                                                                                                    <Tooltip title={t("assign_reviewer")} placement="top" arrow>
-                                                                                                                                                                        <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
-                                                                                                                                                                            <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                        </button>
-                                                                                                                                                                    </Tooltip>
+                                                                                                                                                        )}
+                                                                                                                                                    </div>
+                                                                                                                                                </>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                    } else {
+                                                                                                                                        if (eachRole.task_assign_detail.step === 1) {
+                                                                                                                                            return (
+                                                                                                                                                <>
+                                                                                                                                                    <div className="assigned-details-wrapper">
+                                                                                                                                                        {selectedProjectFile?.editorUnassigning ? (
+                                                                                                                                                            <CircularLoader size={30} />
+                                                                                                                                                        ) : (
+                                                                                                                                                            <div className="selected-proj-assigned-member-wrapper">
+                                                                                                                                                                <span className="selected-project-assigned-member">
+                                                                                                                                                                    {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                        (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                            ?.charAt(0)?.toUpperCase()
+                                                                                                                                                                    }
+                                                                                                                                                                </span>
+                                                                                                                                                                <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                                    <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                                 </div>
-                                                                                                                                                            )
-                                                                                                                                                        }
-                                                                                                                                                    </>
-                                                                                                                                                )
-                                                                                                                                            }
-                                                                                                                                            if (eachRole.task_assign_detail.step === 2) {
-                                                                                                                                                return (
-                                                                                                                                                    <>
-                                                                                                                                                        {
-                                                                                                                                                            (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
-                                                                                                                                                                <div className="unassigned-members-wrapper">
-                                                                                                                                                                    <Tooltip title={t("assign_editor")} placement="top" arrow>
-                                                                                                                                                                        <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
-                                                                                                                                                                            <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                        </button>
-                                                                                                                                                                    </Tooltip>
-                                                                                                                                                                </div>
-                                                                                                                                                            )
-                                                                                                                                                        }
-                                                                                                                                                        <div className="assigned-details-wrapper">
+                                                                                                                                                            </div>
+                                                                                                                                                        )}
+                                                                                                                                                    </div>
+                                                                                                                                                    {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
+                                                                                                                                                    {
+                                                                                                                                                        (selectedProjectFile?.task_assign_info?.length === 1 && (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && !is_internal_meber_editor) && (
+                                                                                                                                                            <div className="unassigned-members-wrapper">
+                                                                                                                                                                <Tooltip title={t("assign_reviewer")} placement="top" arrow>
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                </Tooltip>
+                                                                                                                                                            </div>
+                                                                                                                                                        )
+                                                                                                                                                    }
+                                                                                                                                                </>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                        if (eachRole.task_assign_detail.step === 2) {
+                                                                                                                                            return (
+                                                                                                                                                <>
+                                                                                                                                                    {
+                                                                                                                                                        (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
+                                                                                                                                                            <div className="unassigned-members-wrapper">
+                                                                                                                                                                <Tooltip title={t("assign_editor")} placement="top" arrow>
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                </Tooltip>
+                                                                                                                                                            </div>
+                                                                                                                                                        )
+                                                                                                                                                    }
+                                                                                                                                                    <div className="assigned-details-wrapper">
+                                                                                                                                                        {selectedProjectFile?.editorUnassigning ? (
+                                                                                                                                                            <CircularLoader size={30} />
+                                                                                                                                                        ) : (
                                                                                                                                                             <div className="selected-proj-assigned-member-wrapper">
                                                                                                                                                                 <span className="selected-project-assigned-member">
                                                                                                                                                                     {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
@@ -6087,633 +5820,407 @@ function MyStories(props) {
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                                 </div>
                                                                                                                                                             </div>
+                                                                                                                                                        )}
+                                                                                                                                                    </div>
+                                                                                                                                                </>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                })
+                                                                                                                            ) : (
+                                                                                                                                selectedProjectFile?.task_assign_info?.map((eachRole) => {
+                                                                                                                                    if (eachRole.task_assign_detail.step === 1) {
+                                                                                                                                        return (
+                                                                                                                                            <>
+                                                                                                                                                <div className="assigned-details-wrapper">
+                                                                                                                                                    {selectedProjectFile?.editorUnassigning ? (
+                                                                                                                                                        <CircularLoader size={30} />   
+                                                                                                                                                    ) : (
+                                                                                                                                                        <div className="selected-proj-assigned-member-wrapper">
+                                                                                                                                                            <span className="selected-project-assigned-member">
+                                                                                                                                                                {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                    (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                        ?.charAt(0)?.toUpperCase()
+                                                                                                                                                                }
+                                                                                                                                                            </span>
+                                                                                                                                                            <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                                <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
+                                                                                                                                                            </div>
                                                                                                                                                         </div>
-                                                                                                                                                    </>
-                                                                                                                                                )
-                                                                                                                                            }
-                                                                                                                                        })
-                                                                                                                                    )
-                                                                                                                                }
-                                                                                                                            </>
-                                                                                                                        )
-                                                                                                                        : ((!project?.file_translate ) && ((userDetails.agency ? (selectedProjectFile?.assignable && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.assignable)) && !is_internal_meber_editor)) && (
-                                                                                                                            <>
-                                                                                                                                <div className="unassigned-members-wrapper">
+                                                                                                                                                    )}
+                                                                                                                                                    </div>
+                                                                                                                                                {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
+                                                                                                                                                {
+                                                                                                                                                    (selectedProjectFile?.task_assign_info?.length === 1 && (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && !is_internal_meber_editor) && (
+                                                                                                                                                        <div className="unassigned-members-wrapper">
+                                                                                                                                                            <Tooltip title={t("assign_reviewer")} placement="top" arrow>
+                                                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
+                                                                                                                                                                    <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                </button>
+                                                                                                                                                            </Tooltip>
+                                                                                                                                                        </div>
+                                                                                                                                                    )
+                                                                                                                                                }
+                                                                                                                                            </>
+                                                                                                                                        )
+                                                                                                                                    }
+                                                                                                                                    if (eachRole.task_assign_detail.step === 2) {
+                                                                                                                                        return (
+                                                                                                                                            <>
+                                                                                                                                                {
+                                                                                                                                                    (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
+                                                                                                                                                        <div className="unassigned-members-wrapper">
+                                                                                                                                                            <Tooltip title={t("assign_editor")} placement="top" arrow>
+                                                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
+                                                                                                                                                                    <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                </button>
+                                                                                                                                                            </Tooltip>
+                                                                                                                                                        </div>
+                                                                                                                                                    )
+                                                                                                                                                }
+                                                                                                                                                <div className="assigned-details-wrapper">
+                                                                                                                                                    <div className="selected-proj-assigned-member-wrapper">
+                                                                                                                                                        <span className="selected-project-assigned-member">
+                                                                                                                                                            {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                    ?.charAt(0)?.toUpperCase()
+                                                                                                                                                            }
+                                                                                                                                                        </span>
+                                                                                                                                                        <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                            <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </>
+                                                                                                                                        )
+                                                                                                                                    }
+                                                                                                                                })
+                                                                                                                            )
+                                                                                                                        }
+                                                                                                                    </>
+                                                                                                                )
+                                                                                                                : ((!project?.file_translate ) && ((userDetails.agency ? (selectedProjectFile?.assignable && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.assignable)) && !is_internal_meber_editor)) && (
+                                                                                                                    <>
+                                                                                                                        <div className="unassigned-members-wrapper">
+                                                                                                                            <Tooltip title={t("assign_editor")} placement="top" arrow>
+                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
+                                                                                                                                    <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                </button>
+                                                                                                                            </Tooltip>
+                                                                                                                            {   // show assign reviewer button only if project has reviewer step
+                                                                                                                                (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && (
+                                                                                                                                    <Tooltip title={t("assign_reviewer")} placement="top" arrow>
+                                                                                                                                        <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
+                                                                                                                                            <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                        </button>
+                                                                                                                                    </Tooltip>
+                                                                                                                                )
+                                                                                                                            }
+                                                                                                                        </div>
+                                                                                                                    </>
+                                                                                                                )
+                                                                                                            }
+
+                                                                                                            {/* Re-assign task info for agency/LSP it will show the assigned info card - shows for LSP only */}
+                                                                                                            {(typeof selectedProjectFile?.task_reassign_info !== 'boolean' && selectedProjectFile?.task_reassign_info?.length) ?
+                                                                                                                (
+                                                                                                                    <>
+                                                                                                                        {selectedProjectFile?.task_reassign_info?.sort((a, b) => a.task_assign_detail.step - b.task_assign_detail.step)?.map(each => console.log())}
+                                                                                                                        {
+                                                                                                                            (selectedProjectFile?.task_reassign_info?.find(each => (Config.userState?.id === each?.assign_to_details?.id)) !== undefined ||
+                                                                                                                                selectedProjectFile?.task_reassign_info?.find(each => Config.userState?.id === each.assigned_by_details.id) !== undefined) ? (
+                                                                                                                                selectedProjectFile?.task_reassign_info?.map((eachRole) => {
+                                                                                                                                    if (Config.userState?.id === eachRole?.assign_to_details.id || eachRole?.assign_to_details?.managers?.find(user => user === userDetails.pk)) {    // task is assigned to me
+                                                                                                                                        if (eachRole.task_assign_detail.step === 1 || eachRole.task_assign_detail.step === 2) {
+                                                                                                                                            return (
+                                                                                                                                                <div className="assigned-details-wrapper">
+                                                                                                                                                    <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
+                                                                                                                                                        <span className="selected-project-assigned-member">
+                                                                                                                                                            {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                    ?.charAt(0)?.toUpperCase()
+                                                                                                                                                            }
+                                                                                                                                                        </span>
+                                                                                                                                                        <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                            <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                    } else if (Config.userState?.id === eachRole?.assigned_by_details.id) {    // // task is assigned by me to someone
+                                                                                                                                        if (eachRole.task_assign_detail.step === 1) {
+                                                                                                                                            return (
+                                                                                                                                                <>
+                                                                                                                                                    <div className="assigned-details-wrapper">
+                                                                                                                                                        <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
+                                                                                                                                                            <span className="selected-project-assigned-member">
+                                                                                                                                                                {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                    (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                        ?.charAt(0)?.toUpperCase()
+                                                                                                                                                                }
+                                                                                                                                                            </span>
+                                                                                                                                                            <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                                <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
+                                                                                                                                                            </div>
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                    {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
+                                                                                                                                                    {
+                                                                                                                                                        (selectedProjectFile?.task_assign_info?.find(each => (userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each?.task_ven_status === 'task_accepted' && !is_internal_meber_editor) &&
+                                                                                                                                                            selectedProjectFile?.task_reassign_info?.length === 1) && (
+                                                                                                                                                            <div className="unassigned-members-wrapper">
+                                                                                                                                                                <Tooltip title={t("assign_reviewer")} placement="top" arrow>
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                </Tooltip>
+                                                                                                                                                            </div>
+                                                                                                                                                        )
+                                                                                                                                                    }
+                                                                                                                                                </>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                        if (eachRole.task_assign_detail.step === 2) {
+                                                                                                                                            return (
+                                                                                                                                                <>
+                                                                                                                                                    {
+                                                                                                                                                        (selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each?.task_ven_status === 'task_accepted') && !is_internal_meber_editor) &&
+                                                                                                                                                            selectedProjectFile?.task_reassign_info?.length === 1) && (
+                                                                                                                                                            <div className="unassigned-members-wrapper">
+                                                                                                                                                                <Tooltip title={t("assign_editor")} placement="top" arrow>
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                </Tooltip>
+                                                                                                                                                            </div>
+                                                                                                                                                        )
+                                                                                                                                                    }
+                                                                                                                                                    <div className="assigned-details-wrapper">
+                                                                                                                                                        <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
+                                                                                                                                                            <span className="selected-project-assigned-member">
+                                                                                                                                                                {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                    (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                        ?.charAt(0)?.toUpperCase()
+                                                                                                                                                                }
+                                                                                                                                                            </span>
+                                                                                                                                                            <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                                <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
+                                                                                                                                                            </div>
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                </>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                    } else {
+                                                                                                                                        if (eachRole.task_assign_detail.step === 1) {
+                                                                                                                                            return (
+                                                                                                                                                <>
+                                                                                                                                                    <div className="assigned-details-wrapper">
+                                                                                                                                                        <div className="selected-proj-assigned-member-wrapper">
+                                                                                                                                                            <span className="selected-project-assigned-member">
+                                                                                                                                                                {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                    (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                        ?.charAt(0)?.toUpperCase()
+                                                                                                                                                                }
+                                                                                                                                                            </span>
+                                                                                                                                                            <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                                <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
+                                                                                                                                                            </div>
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                    {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
+                                                                                                                                                    {
+                                                                                                                                                        (selectedProjectFile?.task_assign_info?.length === 1 && (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && !is_internal_meber_editor) && (
+                                                                                                                                                            <div className="unassigned-members-wrapper">
+                                                                                                                                                                <Tooltip title={t("assign_reviewer")} placement="top" arrow>
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                </Tooltip>
+                                                                                                                                                            </div>
+                                                                                                                                                        )
+                                                                                                                                                    }
+                                                                                                                                                </>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                        if (eachRole.task_assign_detail.step === 2) {
+                                                                                                                                            return (
+                                                                                                                                                <>
+                                                                                                                                                    {
+                                                                                                                                                        (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
+                                                                                                                                                            <div className="unassigned-members-wrapper">
+                                                                                                                                                                <Tooltip title={t("assign_editor")} placement="top" arrow>
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                </Tooltip>
+                                                                                                                                                            </div>
+                                                                                                                                                        )
+                                                                                                                                                    }
+                                                                                                                                                    <div className="assigned-details-wrapper">
+                                                                                                                                                        <div className="selected-proj-assigned-member-wrapper">
+                                                                                                                                                            <span className="selected-project-assigned-member">
+                                                                                                                                                                {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                    (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                        ?.charAt(0)?.toUpperCase()
+                                                                                                                                                                }
+                                                                                                                                                            </span>
+
+                                                                                                                                                            <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                                <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
+                                                                                                                                                            </div>
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                </>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                })
+                                                                                                                            ) : (
+                                                                                                                                selectedProjectFile?.task_reassign_info?.map((eachRole) => {
+                                                                                                                                    if (eachRole.task_assign_detail.step === 1) {
+                                                                                                                                        return (
+                                                                                                                                            <>
+                                                                                                                                                <div className="assigned-details-wrapper">
+                                                                                                                                                    <div className="selected-proj-assigned-member-wrapper">
+                                                                                                                                                        <span className="selected-project-assigned-member">
+                                                                                                                                                            {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                    ?.charAt(0)?.toUpperCase()
+                                                                                                                                                            }
+                                                                                                                                                        </span>
+
+                                                                                                                                                        <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                            <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                                {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
+                                                                                                                                                {
+                                                                                                                                                    (selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each?.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request')) && selectedFileRow?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
+                                                                                                                                                        <div className="unassigned-members-wrapper">
+                                                                                                                                                            <Tooltip title={t("assign_reviewer")} placement="top" arrow>
+                                                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
+                                                                                                                                                                    <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                </button>
+                                                                                                                                                            </Tooltip>
+                                                                                                                                                        </div>
+                                                                                                                                                    )
+                                                                                                                                                }
+                                                                                                                                            </>
+                                                                                                                                        )
+                                                                                                                                    }
+                                                                                                                                    if (eachRole.task_assign_detail.step === 2) {
+                                                                                                                                        return (
+                                                                                                                                            <>
+                                                                                                                                                {
+                                                                                                                                                    (selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each?.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request')) && selectedFileRow?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
+                                                                                                                                                        <div className="unassigned-members-wrapper">
+                                                                                                                                                            <Tooltip title={t("assign_editor")} placement="top" arrow>
+                                                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
+                                                                                                                                                                    <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                                                </button>
+                                                                                                                                                            </Tooltip>
+                                                                                                                                                        </div>
+                                                                                                                                                    )
+                                                                                                                                                }
+                                                                                                                                                <div className="assigned-details-wrapper">
+                                                                                                                                                    <div className="selected-proj-assigned-member-wrapper">
+                                                                                                                                                        <span className="selected-project-assigned-member">
+                                                                                                                                                            {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
+                                                                                                                                                                (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
+                                                                                                                                                                    ?.charAt(0)?.toUpperCase()
+                                                                                                                                                            }
+                                                                                                                                                        </span>
+
+                                                                                                                                                        <div className="assigned-task-info-box-main-wrapper">
+                                                                                                                                                            <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </>
+                                                                                                                                        )
+                                                                                                                                    }
+                                                                                                                                })
+                                                                                                                            )
+                                                                                                                        }
+                                                                                                                    </>
+                                                                                                                )
+                                                                                                                : (selectedProjectFile?.assignable && userDetails?.agency && !is_internal_meber_editor) && (
+                                                                                                                    <>
+                                                                                                                        <div className="unassigned-members-wrapper">
+                                                                                                                            {
+                                                                                                                                (
+                                                                                                                                    selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request'))
+                                                                                                                                ) && (
                                                                                                                                     <Tooltip title={t("assign_editor")} placement="top" arrow>
                                                                                                                                         <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
                                                                                                                                             <span className="fileopen-new-btn">{t("assign_editor")}</span>
                                                                                                                                         </button>
                                                                                                                                     </Tooltip>
-                                                                                                                                    {   // show assign reviewer button only if project has reviewer step
-                                                                                                                                        (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && (
-                                                                                                                                            <Tooltip title={t("assign_reviewer")} placement="top" arrow>
-                                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
-                                                                                                                                                    <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                </button>
-                                                                                                                                            </Tooltip>
-                                                                                                                                        )
-                                                                                                                                    }
-                                                                                                                                </div>
-                                                                                                                            </>
-                                                                                                                        )
-                                                                                                                    }
-        
-                                                                                                                    {/* Re-assign task info for agency/LSP it will show the assigned info card - shows for LSP only */}
-                                                                                                                    {(typeof selectedProjectFile?.task_reassign_info !== 'boolean' && selectedProjectFile?.task_reassign_info?.length) ?
-                                                                                                                        (
-                                                                                                                            <>
-                                                                                                                                {selectedProjectFile?.task_reassign_info?.sort((a, b) => a.task_assign_detail.step - b.task_assign_detail.step)?.map(each => console.log())}
-                                                                                                                                {
-                                                                                                                                    (selectedProjectFile?.task_reassign_info?.find(each => (Config.userState?.id === each?.assign_to_details?.id)) !== undefined ||
-                                                                                                                                        selectedProjectFile?.task_reassign_info?.find(each => Config.userState?.id === each.assigned_by_details.id) !== undefined) ? (
-                                                                                                                                        selectedProjectFile?.task_reassign_info?.map((eachRole) => {
-                                                                                                                                            if (Config.userState?.id === eachRole?.assign_to_details.id || eachRole?.assign_to_details?.managers?.find(user => user === userDetails.pk)) {    // task is assigned to me
-                                                                                                                                                if (eachRole.task_assign_detail.step === 1 || eachRole.task_assign_detail.step === 2) {
-                                                                                                                                                    return (
-                                                                                                                                                        <div className="assigned-details-wrapper">
-                                                                                                                                                            <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
-                                                                                                                                                                <span className="selected-project-assigned-member">
-                                                                                                                                                                    {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                        (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                            ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                    }
-                                                                                                                                                                </span>
-                                                                                                                                                                <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                    <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
-                                                                                                                                                                </div>
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                            } else if (Config.userState?.id === eachRole?.assigned_by_details.id) {    // // task is assigned by me to someone
-                                                                                                                                                if (eachRole.task_assign_detail.step === 1) {
-                                                                                                                                                    return (
-                                                                                                                                                        <>
-                                                                                                                                                            <div className="assigned-details-wrapper">
-                                                                                                                                                                <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
-                                                                                                                                                                    <span className="selected-project-assigned-member">
-                                                                                                                                                                        {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                            (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                                ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                        }
-                                                                                                                                                                    </span>
-                                                                                                                                                                    <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                        <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
-                                                                                                                                                                    </div>
-                                                                                                                                                                </div>
-                                                                                                                                                            </div>
-                                                                                                                                                            {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
-                                                                                                                                                            {
-                                                                                                                                                                (selectedProjectFile?.task_assign_info?.find(each => (userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each?.task_ven_status === 'task_accepted' && !is_internal_meber_editor) &&
-                                                                                                                                                                    selectedProjectFile?.task_reassign_info?.length === 1) && (
-                                                                                                                                                                    <div className="unassigned-members-wrapper">
-                                                                                                                                                                        <Tooltip title={t("assign_reviewer")} placement="top" arrow>
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </Tooltip>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )
-                                                                                                                                                            }
-                                                                                                                                                        </>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                                if (eachRole.task_assign_detail.step === 2) {
-                                                                                                                                                    return (
-                                                                                                                                                        <>
-                                                                                                                                                            {
-                                                                                                                                                                (selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each?.task_ven_status === 'task_accepted') && !is_internal_meber_editor) &&
-                                                                                                                                                                    selectedProjectFile?.task_reassign_info?.length === 1) && (
-                                                                                                                                                                    <div className="unassigned-members-wrapper">
-                                                                                                                                                                        <Tooltip title={t("assign_editor")} placement="top" arrow>
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </Tooltip>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )
-                                                                                                                                                            }
-                                                                                                                                                            <div className="assigned-details-wrapper">
-                                                                                                                                                                <div className="selected-proj-assigned-member-wrapper" onClick={(e) => handleShowAssignMemberInfo(e, selectedProjectFile.id)}>
-                                                                                                                                                                    <span className="selected-project-assigned-member">
-                                                                                                                                                                        {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                            (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                                ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                        }
-                                                                                                                                                                    </span>
-                                                                                                                                                                    <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                        <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
-                                                                                                                                                                    </div>
-                                                                                                                                                                </div>
-                                                                                                                                                            </div>
-                                                                                                                                                        </>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                            } else {
-                                                                                                                                                if (eachRole.task_assign_detail.step === 1) {
-                                                                                                                                                    return (
-                                                                                                                                                        <>
-                                                                                                                                                            <div className="assigned-details-wrapper">
-                                                                                                                                                                <div className="selected-proj-assigned-member-wrapper">
-                                                                                                                                                                    <span className="selected-project-assigned-member">
-                                                                                                                                                                        {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                            (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                                ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                        }
-                                                                                                                                                                    </span>
-                                                                                                                                                                    <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                        <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
-                                                                                                                                                                    </div>
-                                                                                                                                                                </div>
-                                                                                                                                                            </div>
-                                                                                                                                                            {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
-                                                                                                                                                            {
-                                                                                                                                                                (selectedProjectFile?.task_assign_info?.length === 1 && (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && !is_internal_meber_editor) && (
-                                                                                                                                                                    <div className="unassigned-members-wrapper">
-                                                                                                                                                                        <Tooltip title={t("assign_reviewer")} placement="top" arrow>
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </Tooltip>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )
-                                                                                                                                                            }
-                                                                                                                                                        </>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                                if (eachRole.task_assign_detail.step === 2) {
-                                                                                                                                                    return (
-                                                                                                                                                        <>
-                                                                                                                                                            {
-                                                                                                                                                                (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
-                                                                                                                                                                    <div className="unassigned-members-wrapper">
-                                                                                                                                                                        <Tooltip title={t("assign_editor")} placement="top" arrow>
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                            </button>
-                                                                                                                                                                        </Tooltip>
-                                                                                                                                                                    </div>
-                                                                                                                                                                )
-                                                                                                                                                            }
-                                                                                                                                                            <div className="assigned-details-wrapper">
-                                                                                                                                                                <div className="selected-proj-assigned-member-wrapper">
-                                                                                                                                                                    <span className="selected-project-assigned-member">
-                                                                                                                                                                        {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                            (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                                ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                        }
-                                                                                                                                                                    </span>
-        
-                                                                                                                                                                    <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                        <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
-                                                                                                                                                                    </div>
-                                                                                                                                                                </div>
-                                                                                                                                                            </div>
-                                                                                                                                                        </>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        })
-                                                                                                                                    ) : (
-                                                                                                                                        selectedProjectFile?.task_reassign_info?.map((eachRole) => {
-                                                                                                                                            if (eachRole.task_assign_detail.step === 1) {
-                                                                                                                                                return (
-                                                                                                                                                    <>
-                                                                                                                                                        <div className="assigned-details-wrapper">
-                                                                                                                                                            <div className="selected-proj-assigned-member-wrapper">
-                                                                                                                                                                <span className="selected-project-assigned-member">
-                                                                                                                                                                   {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                        (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                            ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                    }
-                                                                                                                                                                </span>
-        
-                                                                                                                                                                <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                    <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
-                                                                                                                                                                </div>
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
-                                                                                                                                                        {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
-                                                                                                                                                        {
-                                                                                                                                                            (selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each?.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request')) && selectedFileRow?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
-                                                                                                                                                                <div className="unassigned-members-wrapper">
-                                                                                                                                                                    <Tooltip title={t("assign_reviewer")} placement="top" arrow>
-                                                                                                                                                                        <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
-                                                                                                                                                                            <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                        </button>
-                                                                                                                                                                    </Tooltip>
-                                                                                                                                                                </div>
-                                                                                                                                                            )
-                                                                                                                                                        }
-                                                                                                                                                    </>
-                                                                                                                                                )
-                                                                                                                                            }
-                                                                                                                                            if (eachRole.task_assign_detail.step === 2) {
-                                                                                                                                                return (
-                                                                                                                                                    <>
-                                                                                                                                                        {
-                                                                                                                                                            (selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each?.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request')) && selectedFileRow?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
-                                                                                                                                                                <div className="unassigned-members-wrapper">
-                                                                                                                                                                    <Tooltip title={t("assign_editor")} placement="top" arrow>
-                                                                                                                                                                        <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
-                                                                                                                                                                            <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                                        </button>
-                                                                                                                                                                    </Tooltip>
-                                                                                                                                                                </div>
-                                                                                                                                                            )
-                                                                                                                                                        }
-                                                                                                                                                        <div className="assigned-details-wrapper">
-                                                                                                                                                            <div className="selected-proj-assigned-member-wrapper">
-                                                                                                                                                                <span className="selected-project-assigned-member">
-                                                                                                                                                                   {(Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name) &&
-                                                                                                                                                                        (Config.userState?.id === eachRole?.assign_to_details?.id ? eachRole?.assigned_by_details?.name : eachRole?.assign_to_details?.name)
-                                                                                                                                                                            ?.charAt(0)?.toUpperCase()
-                                                                                                                                                                    }
-                                                                                                                                                                </span>
-        
-                                                                                                                                                                <div className="assigned-task-info-box-main-wrapper">
-                                                                                                                                                                    <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
-                                                                                                                                                                </div>
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
-                                                                                                                                                    </>
-                                                                                                                                                )
-                                                                                                                                            }
-                                                                                                                                        })
-                                                                                                                                    )
-                                                                                                                                }
-                                                                                                                            </>
-                                                                                                                        )
-                                                                                                                        : (selectedProjectFile?.assignable && userDetails?.agency && !is_internal_meber_editor) && (
-                                                                                                                            <>
-                                                                                                                                <div className="unassigned-members-wrapper">
+                                                                                                                                )
+                                                                                                                            }
+                                                                                                                            {   // show assign reviewer button only if project has reviewer step
+                                                                                                                                (
+                                                                                                                                    selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request'))
+                                                                                                                                ) && (
+                                                                                                                                    <Tooltip title={t("assign_reviewer")} placement="top" arrow>
+                                                                                                                                        <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
+                                                                                                                                            <span className="fileopen-new-btn">{t("assign_editor")}</span>
+                                                                                                                                        </button>
+                                                                                                                                    </Tooltip>
+                                                                                                                                )
+                                                                                                                            }
+                                                                                                                        </div>
+                                                                                                                    </>
+                                                                                                                )
+                                                                                                            }
+                                                                                                        </div>
+
+                                                                                                        {/* Task action button logic ---- STARTS HERE */}
+                                                                                                        {/* {console.log(selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))))} */}
+                                                                                                        <div className="project-list-action-wrap">
+                                                                                                            {selectedProjectFile?.task_assign_info?.length ? (  // if task is assigned
+                                                                                                                selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))) !== undefined ? (  // if task is assigned to same loged in user (assigned to me)
+                                                                                                                    selectedProjectFile?.task_assign_info?.map((eachRole, index) => {  // loop for different types of service type (editor, reviewer..)
+                                                                                                                        if ((Config.userState?.id === eachRole?.assign_to_details.id || eachRole.assign_to_details?.managers?.find(each => each === userDetails?.pk)) && ((eachRole.task_assign_detail.step === 1 || eachRole.task_assign_detail.step === 2)) && (eachRole?.assign_to_details?.external_editor)) {  // condition if editor is external editor
+                                                                                                                            return (
+                                                                                                                                <>
                                                                                                                                     {
-                                                                                                                                        (
-                                                                                                                                            selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request'))
-                                                                                                                                        ) && (
-                                                                                                                                            <Tooltip title={t("assign_editor")} placement="top" arrow>
-                                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
-                                                                                                                                                    <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                </button>
-                                                                                                                                            </Tooltip>
-                                                                                                                                        )
-                                                                                                                                    }
-                                                                                                                                    {   // show assign reviewer button only if project has reviewer step
-                                                                                                                                        (
-                                                                                                                                            selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request'))
-                                                                                                                                        ) && (
-                                                                                                                                            <Tooltip title={t("assign_reviewer")} placement="top" arrow>
-                                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
-                                                                                                                                                    <span className="fileopen-new-btn">{t("assign_editor")}</span>
-                                                                                                                                                </button>
-                                                                                                                                            </Tooltip>
-                                                                                                                                        )
-                                                                                                                                    }
-                                                                                                                                </div>
-                                                                                                                            </>
-                                                                                                                        )
-                                                                                                                    }
-                                                                                                                </div>
-        
-                                                                                                                {/* Task action button logic ---- STARTS HERE */}
-                                                                                                                {/* {console.log(selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))))} */}
-                                                                                                                <div className="project-list-action-wrap">
-                                                                                                                    {selectedProjectFile?.task_assign_info?.length ? (  // if task is assigned
-                                                                                                                        selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))) !== undefined ? (  // if task is assigned to same loged in user (assigned to me)
-                                                                                                                            selectedProjectFile?.task_assign_info?.map((eachRole, index) => {  // loop for different types of service type (editor, reviewer..)
-                                                                                                                                if ((Config.userState?.id === eachRole?.assign_to_details.id || eachRole.assign_to_details?.managers?.find(each => each === userDetails?.pk)) && ((eachRole.task_assign_detail.step === 1 || eachRole.task_assign_detail.step === 2)) && (eachRole?.assign_to_details?.external_editor)) {  // condition if editor is external editor
-                                                                                                                                    return (
                                                                                                                                         <>
                                                                                                                                             {
-                                                                                                                                                <>
-                                                                                                                                                    {
-                                                                                                                                                        eachRole?.task_ven_status == null ? (
-                                                                                                                                                            selectedProjectFile?.task_assign_info?.filter(each => (each.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers?.find(user => user === userDetails.pk)))?.length == 1 ? (
-                                                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                                    type="button"
-                                                                                                                                                                    // onMouseUp={() => handleAcceptBtn(eachRole?.assignment_id, selectedProjectFile?.id, eachRole?.task_assign_detail.step, selectedProjectFile?.task_reassign_info)}
-                                                                                                                                                                    onMouseUp={() => handleGeneralPurposeOpenBtn(project, eachRole, selectedProjectFile)}
-                                                                                                                                                                >
-                                                                                                                                                                    <span className="fileopen-new-btn">{t("open")}</span>
-                                                                                                                                                                </button>
-                                                                                                                                                            ) : (selectedProjectFile?.task_assign_info?.filter(each => each.task_ven_status === 'task_accepted')?.length === 1) ? (
-                                                                                                                                                                index === 0 &&
-                                                                                                                                                                <div className="open-as-button-wrapper">
-                                                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                                        style={{
-                                                                                                                                                                            paddingLeft: "15px",
-                                                                                                                                                                            paddingRight: "15px"
-                                                                                                                                                                        }}
-                                                                                                                                                                        type="button" onClick={(e) => handleOpenAsOption(e, selectedProjectFile.id)}>
-                                                                                                                                                                        <span className="fileopen-new-btn">{t("open_as")}</span>
-                                                                                                                                                                        <KeyboardArrowRightIcon className="arrow2-right" />
-                                                                                                                                                                    </button>
-                                                                                                                                                                    {
-                                                                                                                                                                        (openEl && (showOpenAs === selectedProjectFile.id)) &&
-                                                                                                                                                                        <>
-                                                                                                                                                                            <div className="menu-wrapper" ref={showOpenasOutside}>
-                                                                                                                                                                                <ul>
-                                                                                                                                                                                    <li
-                                                                                                                                                                                        className="list-item"
-                                                                                                                                                                                        onClick={() => {
-                                                                                                                                                                                            handleOpenAsButton(
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                key,
-                                                                                                                                                                                                selectedProjectFile.id,
-                                                                                                                                                                                                selectedProjectFile.document_url,
-                                                                                                                                                                                                selectedProjectFile.first_time_open,
-                                                                                                                                                                                                selectedProjectFile.open_in,
-                                                                                                                                                                                                project.project_name,
-                                                                                                                                                                                                project.id,
-                                                                                                                                                                                                project?.get_project_type,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                'editor',
-                                                                                                                                                                                                selectedProjectFile?.task_assign_info,
-                                                                                                                                                                                                selectedProjectFile
-                                                                                                                                                                                            )
-                                                                                                                                                                                        }}
-                                                                                                                                                                                    >
-                                                                                                                                                                                        <div className="item-wrap">
-                                                                                                                                                                                            <span className="text">{t("editor")}</span>
-                                                                                                                                                                                        </div>
-                                                                                                                                                                                    </li>
-                                                                                                                                                                                    <li
-                                                                                                                                                                                        className="list-item"
-                                                                                                                                                                                        onClick={() => {
-                                                                                                                                                                                            handleOpenAsButton(
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                key,
-                                                                                                                                                                                                selectedProjectFile.id,
-                                                                                                                                                                                                selectedProjectFile.document_url,
-                                                                                                                                                                                                selectedProjectFile.first_time_open,
-                                                                                                                                                                                                selectedProjectFile.open_in,
-                                                                                                                                                                                                project.project_name,
-                                                                                                                                                                                                project.id,
-                                                                                                                                                                                                project?.get_project_type,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                'reviewer',
-                                                                                                                                                                                                selectedProjectFile?.task_assign_info,
-                                                                                                                                                                                                selectedProjectFile
-                                                                                                                                                                                            )
-                                                                                                                                                                                        }}
-                                                                                                                                                                                    >
-                                                                                                                                                                                        <div className="item-wrap">
-                                                                                                                                                                                            <span className="text">{t("reviewer")}</span>
-                                                                                                                                                                                        </div>
-                                                                                                                                                                                    </li>
-                                                                                                                                                                                </ul>
-                                                                                                                                                                            </div>
-                                                                                                                                                                        </>
-                                                                                                                                                                    }
-                                                                                                                                                                </div>
-                                                                                                                                                            ) : (
-                                                                                                                                                                index === 0 &&
-                                                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                                    type="button"
-                                                                                                                                                                    // onMouseUp={() => handleAcceptBtn(eachRole?.assignment_id, selectedProjectFile?.id, eachRole?.task_assign_detail.step, selectedProjectFile?.task_reassign_info)}
-                                                                                                                                                                    onMouseUp={() => handleGeneralPurposeOpenBtn(project, eachRole, selectedProjectFile)}
-                                                                                                                                                                >
-                                                                                                                                                                    <span className="fileopen-new-btn">{t("open")}</span>
-                                                                                                                                                                </button>
-                                                                                                                                                            )
-                                                                                                                                                        ) : eachRole?.task_ven_status === "change_request" ? (
-                                                                                                                                                            selectedProjectFile?.task_assign_info?.filter(each => (each.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers?.find(user => user === userDetails.pk)))?.length == 1 ? (
-                                                                                                                                                                index === 0 &&
-                                                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                                    type="button"
-                                                                                                                                                                    style={{
-                                                                                                                                                                        backgroundColor: '#cccccc', color: '#666666', paddingLeft: "15px",
-                                                                                                                                                                        paddingRight: "15px"
-                                                                                                                                                                    }}
-                                                                                                                                                                    disabled={true}
-                                                                                                                                                                >
-                                                                                                                                                                    <span className="fileopen-new-btn">{t("request_sent")}</span>
-                                                                                                                                                                </button>
-                                                                                                                                                            ) : (
-                                                                                                                                                                index === 0 &&
-                                                                                                                                                                <div className="open-as-button-wrapper">
-                                                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                                        style={{
-                                                                                                                                                                            paddingLeft: "15px",
-                                                                                                                                                                            paddingRight: "15px"
-                                                                                                                                                                        }}
-                                                                                                                                                                        type="button" onClick={(e) => handleOpenAsOption(e, selectedProjectFile.id)}>
-                                                                                                                                                                        <span className="fileopen-new-btn">{t("open_as")}</span>
-                                                                                                                                                                        <KeyboardArrowRightIcon className="arrow2-right" />
-                                                                                                                                                                    </button>
-                                                                                                                                                                    {
-                                                                                                                                                                        (openEl && (showOpenAs === selectedProjectFile.id)) &&
-                                                                                                                                                                        <>
-                                                                                                                                                                            <div className="menu-wrapper" ref={showOpenasOutside}>
-                                                                                                                                                                                <ul>
-                                                                                                                                                                                    <li
-                                                                                                                                                                                        className="list-item"
-                                                                                                                                                                                        onClick={() => {
-                                                                                                                                                                                            handleOpenAsButton(
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                key,
-                                                                                                                                                                                                selectedProjectFile.id,
-                                                                                                                                                                                                selectedProjectFile.document_url,
-                                                                                                                                                                                                selectedProjectFile.first_time_open,
-                                                                                                                                                                                                selectedProjectFile.open_in,
-                                                                                                                                                                                                project.project_name,
-                                                                                                                                                                                                project.id,
-                                                                                                                                                                                                project?.get_project_type,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                'editor',
-                                                                                                                                                                                                selectedProjectFile?.task_assign_info,
-                                                                                                                                                                                                selectedProjectFile
-                                                                                                                                                                                            )
-                                                                                                                                                                                        }}
-                                                                                                                                                                                    >
-                                                                                                                                                                                        <div className="item-wrap">
-                                                                                                                                                                                            <span className="text">{t("editor")}</span>
-                                                                                                                                                                                        </div>
-                                                                                                                                                                                    </li>
-                                                                                                                                                                                    <li
-                                                                                                                                                                                        className="list-item"
-                                                                                                                                                                                        onClick={() => {
-                                                                                                                                                                                            handleOpenAsButton(
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                key,
-                                                                                                                                                                                                selectedProjectFile.id,
-                                                                                                                                                                                                selectedProjectFile.document_url,
-                                                                                                                                                                                                selectedProjectFile.first_time_open,
-                                                                                                                                                                                                selectedProjectFile.open_in,
-                                                                                                                                                                                                project.project_name,
-                                                                                                                                                                                                project.id,
-                                                                                                                                                                                                project?.get_project_type,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                null,
-                                                                                                                                                                                                'reviewer',
-                                                                                                                                                                                                selectedProjectFile?.task_assign_info,
-                                                                                                                                                                                                selectedProjectFile
-                                                                                                                                                                                            )
-                                                                                                                                                                                        }}
-                                                                                                                                                                                    >
-                                                                                                                                                                                        <div className="item-wrap">
-                                                                                                                                                                                            <span className="text">{t("reviewer")}</span>
-                                                                                                                                                                                        </div>
-                                                                                                                                                                                    </li>
-                                                                                                                                                                                </ul>
-                                                                                                                                                                            </div>
-                                                                                                                                                                        </>
-                                                                                                                                                                    }
-                                                                                                                                                                </div>
-                                                                                                                                                            )
-                                                                                                                                                        ) : eachRole?.task_ven_status === "task_accepted" ? (
-                                                                                                                                                            selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false ? (
-                                                                                                                                                                clickedOpenButton == key ? (
-                                                                                                                                                                    <>
-                                                                                                                                                                        <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                                                            <span className="fileopen-new-btn">
-                                                                                                                                                                                <ButtonLoader />
-                                                                                                                                                                                {t("transcribing")}
-                                                                                                                                                                            </span>
-                                                                                                                                                                        </button>
-                                                                                                                                                                        <span className="more-icon-empty"></span>
-                                                                                                                                                                    </>
-                                                                                                                                                                ) : (
-                                                                                                                                                                    (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
-                                                                                                                                                                        <>
-                                                                                                                                                                            <ProgressAnimateButton />
-                                                                                                                                                                            <span className="more-icon-empty"></span>
-                                                                                                                                                                        </>
-                                                                                                                                                                    ) : (
-                                                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                                            type="button"
-                                                                                                                                                                            onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
-                                                                                                                                                                            disabled={selectedProjectFile?.pre_trans_processing}
-                                                                                                                                                                            style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
-                                                                                                                                                                        >
-                                                                                                                                                                            <span className="fileopen-new-btn">{t("transcribe")}</span>
-                                                                                                                                                                        </button>
-                                                                                                                                                                    )
-                                                                                                                                                                )
-                                                                                                                                                            ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (    // this wil show submit button for writer document
+                                                                                                                                                eachRole?.task_ven_status == null ? (
+                                                                                                                                                    selectedProjectFile?.task_assign_info?.filter(each => (each.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers?.find(user => user === userDetails.pk)))?.length == 1 ? (
+                                                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                            type="button"
+                                                                                                                                                            // onMouseUp={() => handleAcceptBtn(eachRole?.assignment_id, selectedProjectFile?.id, eachRole?.task_assign_detail.step, selectedProjectFile?.task_reassign_info)}
+                                                                                                                                                            onMouseUp={() => handleGeneralPurposeOpenBtn(project, eachRole, selectedProjectFile)}
+                                                                                                                                                        >
+                                                                                                                                                            <span className="fileopen-new-btn">{t("open")}</span>
+                                                                                                                                                        </button>
+                                                                                                                                                    ) : (selectedProjectFile?.task_assign_info?.filter(each => each.task_ven_status === 'task_accepted')?.length === 1) ? (
+                                                                                                                                                        index === 0 &&
+                                                                                                                                                        <div className="open-as-button-wrapper">
+                                                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                                style={{
+                                                                                                                                                                    paddingLeft: "15px",
+                                                                                                                                                                    paddingRight: "15px"
+                                                                                                                                                                }}
+                                                                                                                                                                type="button" onClick={(e) => handleOpenAsOption(e, selectedProjectFile.id)}>
+                                                                                                                                                                <span className="fileopen-new-btn">{t("open_as")}</span>
+                                                                                                                                                                <KeyboardArrowRightIcon className="arrow2-right" />
+                                                                                                                                                            </button>
+                                                                                                                                                            {
+                                                                                                                                                                (openEl && (showOpenAs === selectedProjectFile.id)) &&
                                                                                                                                                                 <>
-                                                                                                                                                                    {(eachRole?.task_assign_detail?.task_status === 'In Progress') &&
-                                                                                                                                                                        <button
-                                                                                                                                                                            type="button"
-                                                                                                                                                                            className="workspace-files-SubmitProjectButton"
-                                                                                                                                                                            onMouseUp={() => setDocumentSubmitParameters({
-                                                                                                                                                                                taskid: selectedProjectFile?.id,
-                                                                                                                                                                                step: eachRole?.task_assign_detail?.step,
-                                                                                                                                                                                confirm: selectedProjectFile?.progress?.confirmed_segments,
-                                                                                                                                                                                total: selectedProjectFile?.progress?.total_segments,
-                                                                                                                                                                                isTaskReassigned: (typeof selectedProjectFile.task_reassign_info === 'boolean' ? true : false)
-                                                                                                                                                                            })}
-                                                                                                                                                                        >
-                                                                                                                                                                            <span className="file-submit-new-btn">{t("submit")}</span>
-                                                                                                                                                                        </button>
-                                                                                                                                                                    }
-                                                                                                                                                                    <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                                            type="button"
-                                                                                                                                                                            style={{
-                                                                                                                                                                                paddingLeft: "30px",
-                                                                                                                                                                                paddingRight: "30px"
-                                                                                                                                                                            }}
-                                                                                                                                                                            onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id, true)}
-                                                                                                                                                                        >
-                                                                                                                                                                            <span className="fileopen-new-btn">{t("view")}</span>
-                                                                                                                                                                        </button>
-                                                                                                                                                                    </Tooltip>
-                                                                                                                                                                </>
-                                                                                                                                                            ) : (
-                                                                                                                                                                <>
-                                                                                                                                                                    {/* remove disabled and style props to remove or unlock the editor/reviewer */}
-                                                                                                                                                                    {(userDetails?.agency && selectedProjectFile?.task_assign_info?.length > 1) ? (
-                                                                                                                                                                        (index === 0) &&
-                                                                                                                                                                        <div className="open-as-button-wrapper">
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                                                style={{
-                                                                                                                                                                                    paddingLeft: "15px",
-                                                                                                                                                                                    paddingRight: "15px"
-                                                                                                                                                                                }}
-                                                                                                                                                                                type="button" onClick={(e) => handleOpenAsOption(e, selectedProjectFile.id)}>
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("open_as")}</span>
-                                                                                                                                                                                <KeyboardArrowRightIcon className="arrow2-right" />
-                                                                                                                                                                            </button>
-                                                                                                                                                                            {
-                                                                                                                                                                                (openEl && (showOpenAs === selectedProjectFile.id)) &&
-                                                                                                                                                                                <>
-                                                                                                                                                                                    <div className="menu-wrapper" ref={showOpenasOutside}>
-                                                                                                                                                                                        <ul>
-                                                                                                                                                                                            <li
-                                                                                                                                                                                                className="list-item"
-                                                                                                                                                                                                onClick={() => {
-                                                                                                                                                                                                    handleOpenAsButton(
-                                                                                                                                                                                                        null,
-                                                                                                                                                                                                        key,
-                                                                                                                                                                                                        selectedProjectFile.id,
-                                                                                                                                                                                                        selectedProjectFile.document_url,
-                                                                                                                                                                                                        selectedProjectFile.first_time_open,
-                                                                                                                                                                                                        selectedProjectFile.open_in,
-                                                                                                                                                                                                        project.project_name,
-                                                                                                                                                                                                        project.id,
-                                                                                                                                                                                                        project?.get_project_type,
-                                                                                                                                                                                                        null,
-                                                                                                                                                                                                        null,
-                                                                                                                                                                                                        null,
-                                                                                                                                                                                                        'editor',
-                                                                                                                                                                                                        selectedProjectFile?.task_assign_info,
-                                                                                                                                                                                                        selectedProjectFile
-                                                                                                                                                                                                    )
-                                                                                                                                                                                                }}
-                                                                                                                                                                                            >
-                                                                                                                                                                                                <div className="item-wrap">
-                                                                                                                                                                                                    <span className="text">{t("editor")}</span>
-                                                                                                                                                                                                </div>
-                                                                                                                                                                                            </li>
-                                                                                                                                                                                            <li
-                                                                                                                                                                                                className="list-item"
-                                                                                                                                                                                                onClick={() => {
-                                                                                                                                                                                                    handleOpenAsButton(
-                                                                                                                                                                                                        null,
-                                                                                                                                                                                                        key,
-                                                                                                                                                                                                        selectedProjectFile.id,
-                                                                                                                                                                                                        selectedProjectFile.document_url,
-                                                                                                                                                                                                        selectedProjectFile.first_time_open,
-                                                                                                                                                                                                        selectedProjectFile.open_in,
-                                                                                                                                                                                                        project.project_name,
-                                                                                                                                                                                                        project.id,
-                                                                                                                                                                                                        project?.get_project_type,
-                                                                                                                                                                                                        null,
-                                                                                                                                                                                                        null,
-                                                                                                                                                                                                        null,
-                                                                                                                                                                                                        'reviewer',
-                                                                                                                                                                                                        selectedProjectFile?.task_assign_info,
-                                                                                                                                                                                                        selectedProjectFile
-                                                                                                                                                                                                    )
-                                                                                                                                                                                                }}
-                                                                                                                                                                                            >
-                                                                                                                                                                                                <div className="item-wrap">
-                                                                                                                                                                                                    <span className="text">{t("reviewer")}</span>
-                                                                                                                                                                                                </div>
-                                                                                                                                                                                            </li>
-                                                                                                                                                                                        </ul>
-                                                                                                                                                                                    </div>
-                                                                                                                                                                                </>
-                                                                                                                                                                            }
-                                                                                                                                                                        </div>
-                                                                                                                                                                    ) : (
-                                                                                                                                                                        (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
-                                                                                                                                                                            <ProgressAnimateButton />
-                                                                                                                                                                        ) : (
-                                                                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                                                type="button"
-                                                                                                                                                                                // style={!eachRole?.task_assign_detail?.can_open ? {backgroundColor: '#cccccc', color: '#666666', paddingLeft: "30px",  paddingRight: "30px"} : {paddingLeft: "30px",  paddingRight: "30px"}}
-                                                                                                                                                                                onMouseUp={(e) =>
-                                                                                                                                                                                    openFile(
-                                                                                                                                                                                        e,
+                                                                                                                                                                    <div className="menu-wrapper" ref={showOpenasOutside}>
+                                                                                                                                                                        <ul>
+                                                                                                                                                                            <li
+                                                                                                                                                                                className="list-item"
+                                                                                                                                                                                onClick={() => {
+                                                                                                                                                                                    handleOpenAsButton(
+                                                                                                                                                                                        null,
                                                                                                                                                                                         key,
                                                                                                                                                                                         selectedProjectFile.id,
                                                                                                                                                                                         selectedProjectFile.document_url,
@@ -6722,330 +6229,319 @@ function MyStories(props) {
                                                                                                                                                                                         project.project_name,
                                                                                                                                                                                         project.id,
                                                                                                                                                                                         project?.get_project_type,
-                                                                                                                                                                                        null, null, null, eachRole.task_assign_detail.step === 1 ? 'editor' : 'reviewer',
-                                                                                                                                                                                        selectedProjectFile,
-                                                                                                                                                                                        project
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        'editor',
+                                                                                                                                                                                        selectedProjectFile?.task_assign_info,
+                                                                                                                                                                                        selectedProjectFile
                                                                                                                                                                                     )
-                                                                                                                                                                                }
+                                                                                                                                                                                }}
                                                                                                                                                                             >
-                                                                                                                                                                                <span className="fileopen-new-btn">{t("open")}</span>
-                                                                                                                                                                            </button>
-                                                                                                                                                                        )
-                                                                                                                                                                    )}
-                                                                                                                                                                </>
-                                                                                                                                                            )
-                                                                                                                                                        ) : null
-                                                                                                                                                    }
-                                                                                                                                                    {
-                                                                                                                                                        (index === 0) &&
-                                                                                                                                                        <div className="more-options-wrap">
-                                                                                                                                                            <ButtonBase onClick={(e) => handleMoreVertOption(e, selectedProjectFile?.id)} className="sorting-icon">
-                                                                                                                                                                <MoreVertIcon className="more-icon" />
-                                                                                                                                                            </ButtonBase>
-                                                                                                                                                            {(moreEl && (openedMoreOption === selectedProjectFile?.id)) &&
-                                                                                                                                                                <>
-                                                                                                                                                                    <div className="menu-wrapper" ref={moreOptionOutside} onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
-                                                                                                                                                                        <ul>
-                                                                                                                                                                            {
-                                                                                                                                                                                moreOptions?.filter(item => item.label === 'View PO')?.map((item) => {
-                                                                                                                                                                                    return (
-                                                                                                                                                                                        <li
-                                                                                                                                                                                            key={item.id}
-                                                                                                                                                                                            className="list-item"
-                                                                                                                                                                                            onClick={(e) =>
-                                                                                                                                                                                                item?.label === 'View PO' && getPODetailsForTask(selectedProjectFile.id)
-                                                                                                                                                                                            }
-                                                                                                                                                                                            style={selectedProjectFile?.pre_trans_processing ? { opacity: 0.7, pointerEvents: 'none' } : {}}
-                                                                                                                                                                                        // onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))}
-                                                                                                                                                                                        >
-                                                                                                                                                                                            <div className="item-wrap">
-                                                                                                                                                                                                <span className="icon">{item.icon}</span>
-                                                                                                                                                                                                <span className="text">{item.label}</span>
-                                                                                                                                                                                            </div>
-                                                                                                                                                                                            {
-                                                                                                                                                                                                item.arrow_icon &&
-                                                                                                                                                                                                <>
-                                                                                                                                                                                                    {item.arrow_icon}
-                                                                                                                                                                                                </>
-                                                                                                                                                                                            }
-                                                                                                                                                                                        </li>
+                                                                                                                                                                                <div className="item-wrap">
+                                                                                                                                                                                    <span className="text">{t("editor")}</span>
+                                                                                                                                                                                </div>
+                                                                                                                                                                            </li>
+                                                                                                                                                                            <li
+                                                                                                                                                                                className="list-item"
+                                                                                                                                                                                onClick={() => {
+                                                                                                                                                                                    handleOpenAsButton(
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        key,
+                                                                                                                                                                                        selectedProjectFile.id,
+                                                                                                                                                                                        selectedProjectFile.document_url,
+                                                                                                                                                                                        selectedProjectFile.first_time_open,
+                                                                                                                                                                                        selectedProjectFile.open_in,
+                                                                                                                                                                                        project.project_name,
+                                                                                                                                                                                        project.id,
+                                                                                                                                                                                        project?.get_project_type,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        'reviewer',
+                                                                                                                                                                                        selectedProjectFile?.task_assign_info,
+                                                                                                                                                                                        selectedProjectFile
                                                                                                                                                                                     )
-                                                                                                                                                                                })
-                                                                                                                                                                            }
+                                                                                                                                                                                }}
+                                                                                                                                                                            >
+                                                                                                                                                                                <div className="item-wrap">
+                                                                                                                                                                                    <span className="text">{t("reviewer")}</span>
+                                                                                                                                                                                </div>
+                                                                                                                                                                            </li>
                                                                                                                                                                         </ul>
                                                                                                                                                                     </div>
                                                                                                                                                                 </>
                                                                                                                                                             }
                                                                                                                                                         </div>
-                                                                                                                                                    }
-                                                                                                                                                </>
-                                                                                                                                            }
-                                                                                                                                        </>
-        
-                                                                                                                                    )
-                                                                                                                                }
-                                                                                                                                else if (!eachRole?.assign_to_details?.external_editor && Config.userState?.id === eachRole?.assign_to_details.id) {  // condition if editor is not external editor (user is internal editor)
-                                                                                                                                    return (
-                                                                                                                                        selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false ? (
-                                                                                                                                            clickedOpenButton == key ? (
-                                                                                                                                                <>
-                                                                                                                                                    <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                                        <span className="fileopen-new-btn">
-                                                                                                                                                            <ButtonLoader />
-                                                                                                                                                            {t("transcribing")}
-                                                                                                                                                        </span>
-                                                                                                                                                    </button>
-                                                                                                                                                    <span className="more-icon-empty"></span>
-                                                                                                                                                </>
-                                                                                                                                            ) : (
-                                                                                                                                                (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
-                                                                                                                                                    <ProgressAnimateButton />
-                                                                                                                                                ) : (
-                                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                        type="button"
-                                                                                                                                                        onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
-                                                                                                                                                        disabled={selectedProjectFile?.pre_trans_processing}
-                                                                                                                                                        style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
-                                                                                                                                                    >
-                                                                                                                                                        <span className="fileopen-new-btn">{t("transcribe")}</span>
-                                                                                                                                                    </button>
-                                                                                                                                                )
-                                                                                                                                            )
-                                                                                                                                        ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (
-                                                                                                                                            <>
-                                                                                                                                                {(eachRole?.task_assign_detail?.task_status === 'In Progress') &&
-                                                                                                                                                    <button
-                                                                                                                                                        type="button"
-                                                                                                                                                        className="mr-2 workspace-files-SubmitProjectButton"
-                                                                                                                                                        onMouseUp={() => setDocumentSubmitParameters({
-                                                                                                                                                            taskid: selectedProjectFile?.id,
-                                                                                                                                                            step: eachRole?.task_assign_detail?.step,
-                                                                                                                                                            confirm: selectedProjectFile?.progress?.confirmed_segments,
-                                                                                                                                                            total: selectedProjectFile?.progress?.total_segments,
-                                                                                                                                                            isTaskReassigned: (typeof selectedProjectFile.task_reassign_info === 'boolean' ? true : false)
-                                                                                                                                                        })}
-                                                                                                                                                    >
-                                                                                                                                                        <span className="file-submit-new-btn">{t("submit")}</span>
-                                                                                                                                                    </button>
-                                                                                                                                                }
-                                                                                                                                                <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                        type="button"
-                                                                                                                                                        style={{
-                                                                                                                                                            paddingLeft: "30px",
-                                                                                                                                                            paddingRight: "30px"
-                                                                                                                                                        }}
-                                                                                                                                                        onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id, true)}
-                                                                                                                                                    >
-                                                                                                                                                        <span className="fileopen-new-btn">{t("view")}</span>
-                                                                                                                                                    </button>
-                                                                                                                                                </Tooltip>
-                                                                                                                                            </>
-                                                                                                                                        ) : (
-                                                                                                                                            (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
-                                                                                                                                                <ProgressAnimateButton />
-                                                                                                                                            ) : (
-                                                                                                                                                clickedOpenButton == key ? (
-                                                                                                                                                    <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                                        <span className="fileopen-new-btn">
-                                                                                                                                                            <ButtonLoader />
-                                                                                                                                                            {t("opening")}
-                                                                                                                                                        </span>
-                                                                                                                                                    </button>
-                                                                                                                                                ) : (
-                                                                                                                                                    <button className="workspace-files-OpenProjectButton"        
-                                                                                                                                                        type="button"
-                                                                                                                                                        // disabled={!eachRole?.task_assign_detail?.can_open}
-                                                                                                                                                        onMouseUp={(e) =>
-                                                                                                                                                            openFile(
-                                                                                                                                                                e,
-                                                                                                                                                                key,
-                                                                                                                                                                selectedProjectFile.id,
-                                                                                                                                                                selectedProjectFile.document_url,
-                                                                                                                                                                selectedProjectFile.first_time_open,
-                                                                                                                                                                selectedProjectFile.open_in,
-                                                                                                                                                                project.project_name,
-                                                                                                                                                                project.id,
-                                                                                                                                                                project?.get_project_type,
-                                                                                                                                                                null,
-                                                                                                                                                                null,
-                                                                                                                                                                null,
-                                                                                                                                                                null,
-                                                                                                                                                                selectedProjectFile,
-                                                                                                                                                                project
+                                                                                                                                                    ) : (
+                                                                                                                                                        index === 0 &&
+                                                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                            type="button"
+                                                                                                                                                            // onMouseUp={() => handleAcceptBtn(eachRole?.assignment_id, selectedProjectFile?.id, eachRole?.task_assign_detail.step, selectedProjectFile?.task_reassign_info)}
+                                                                                                                                                            onMouseUp={() => handleGeneralPurposeOpenBtn(project, eachRole, selectedProjectFile)}
+                                                                                                                                                        >
+                                                                                                                                                            <span className="fileopen-new-btn">{t("open")}</span>
+                                                                                                                                                        </button>
+                                                                                                                                                    )
+                                                                                                                                                ) : eachRole?.task_ven_status === "change_request" ? (
+                                                                                                                                                    selectedProjectFile?.task_assign_info?.filter(each => (each.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers?.find(user => user === userDetails.pk)))?.length == 1 ? (
+                                                                                                                                                        index === 0 &&
+                                                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                            type="button"
+                                                                                                                                                            style={{
+                                                                                                                                                                backgroundColor: '#cccccc', color: '#666666', paddingLeft: "15px",
+                                                                                                                                                                paddingRight: "15px"
+                                                                                                                                                            }}
+                                                                                                                                                            disabled={true}
+                                                                                                                                                        >
+                                                                                                                                                            <span className="fileopen-new-btn">{t("request_sent")}</span>
+                                                                                                                                                        </button>
+                                                                                                                                                    ) : (
+                                                                                                                                                        index === 0 &&
+                                                                                                                                                        <div className="open-as-button-wrapper">
+                                                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                                style={{
+                                                                                                                                                                    paddingLeft: "15px",
+                                                                                                                                                                    paddingRight: "15px"
+                                                                                                                                                                }}
+                                                                                                                                                                type="button" onClick={(e) => handleOpenAsOption(e, selectedProjectFile.id)}>
+                                                                                                                                                                <span className="fileopen-new-btn">{t("open_as")}</span>
+                                                                                                                                                                <KeyboardArrowRightIcon className="arrow2-right" />
+                                                                                                                                                            </button>
+                                                                                                                                                            {
+                                                                                                                                                                (openEl && (showOpenAs === selectedProjectFile.id)) &&
+                                                                                                                                                                <>
+                                                                                                                                                                    <div className="menu-wrapper" ref={showOpenasOutside}>
+                                                                                                                                                                        <ul>
+                                                                                                                                                                            <li
+                                                                                                                                                                                className="list-item"
+                                                                                                                                                                                onClick={() => {
+                                                                                                                                                                                    handleOpenAsButton(
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        key,
+                                                                                                                                                                                        selectedProjectFile.id,
+                                                                                                                                                                                        selectedProjectFile.document_url,
+                                                                                                                                                                                        selectedProjectFile.first_time_open,
+                                                                                                                                                                                        selectedProjectFile.open_in,
+                                                                                                                                                                                        project.project_name,
+                                                                                                                                                                                        project.id,
+                                                                                                                                                                                        project?.get_project_type,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        'editor',
+                                                                                                                                                                                        selectedProjectFile?.task_assign_info,
+                                                                                                                                                                                        selectedProjectFile
+                                                                                                                                                                                    )
+                                                                                                                                                                                }}
+                                                                                                                                                                            >
+                                                                                                                                                                                <div className="item-wrap">
+                                                                                                                                                                                    <span className="text">{t("editor")}</span>
+                                                                                                                                                                                </div>
+                                                                                                                                                                            </li>
+                                                                                                                                                                            <li
+                                                                                                                                                                                className="list-item"
+                                                                                                                                                                                onClick={() => {
+                                                                                                                                                                                    handleOpenAsButton(
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        key,
+                                                                                                                                                                                        selectedProjectFile.id,
+                                                                                                                                                                                        selectedProjectFile.document_url,
+                                                                                                                                                                                        selectedProjectFile.first_time_open,
+                                                                                                                                                                                        selectedProjectFile.open_in,
+                                                                                                                                                                                        project.project_name,
+                                                                                                                                                                                        project.id,
+                                                                                                                                                                                        project?.get_project_type,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        null,
+                                                                                                                                                                                        'reviewer',
+                                                                                                                                                                                        selectedProjectFile?.task_assign_info,
+                                                                                                                                                                                        selectedProjectFile
+                                                                                                                                                                                    )
+                                                                                                                                                                                }}
+                                                                                                                                                                            >
+                                                                                                                                                                                <div className="item-wrap">
+                                                                                                                                                                                    <span className="text">{t("reviewer")}</span>
+                                                                                                                                                                                </div>
+                                                                                                                                                                            </li>
+                                                                                                                                                                        </ul>
+                                                                                                                                                                    </div>
+                                                                                                                                                                </>
+                                                                                                                                                            }
+                                                                                                                                                        </div>
+                                                                                                                                                    )
+                                                                                                                                                ) : eachRole?.task_ven_status === "task_accepted" ? (
+                                                                                                                                                    selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false ? (
+                                                                                                                                                        clickedOpenButton == key ? (
+                                                                                                                                                            <>
+                                                                                                                                                                <button className="workspace-files-OpeningProjectButton" type="button">
+                                                                                                                                                                    <span className="fileopen-new-btn">
+                                                                                                                                                                        <ButtonLoader />
+                                                                                                                                                                        {t("transcribing")}
+                                                                                                                                                                    </span>
+                                                                                                                                                                </button>
+                                                                                                                                                                <span className="more-icon-empty"></span>
+                                                                                                                                                            </>
+                                                                                                                                                        ) : (
+                                                                                                                                                            (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                                                                <>
+                                                                                                                                                                    <ProgressAnimateButton />
+                                                                                                                                                                    <span className="more-icon-empty"></span>
+                                                                                                                                                                </>
+                                                                                                                                                            ) : (
+                                                                                                                                                                <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                                    type="button"
+                                                                                                                                                                    onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
+                                                                                                                                                                    disabled={selectedProjectFile?.pre_trans_processing}
+                                                                                                                                                                    style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
+                                                                                                                                                                >
+                                                                                                                                                                    <span className="fileopen-new-btn">{t("transcribe")}</span>
+                                                                                                                                                                </button>
                                                                                                                                                             )
-                                                                                                                                                        }
-                                                                                                                                                    >
-                                                                                                                                                        <span className="fileopen-new-btn">{t("open")}</span>
-                                                                                                                                                    </button>
-                                                                                                                                                )
-                                                                                                                                            )
-                                                                                                                                        )
-                                                                                                                                    )
-                                                                                                                                }
-                                                                                                                            })
-                                                                                                                        ) : selectedProjectFile?.task_assign_info?.find(each => Config.userState?.id === each.assigned_by_details.id) !== undefined ? (   // if task is assigned by me (I assigned the task to someone)
-                                                                                                                            (selectedProjectFile?.open_in == 'Download' && !selectedProjectFile?.text_to_speech_convert_enable) || selectedProjectFile?.audio_file_url != undefined ? (
-                                                                                                                                <>
-                                                                                                                                    {/* {
-                                                                                                                                !selectedProjectFile?.pre_trans_processing && (
-                                                                                                                                    <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
-                                                                                                                                        <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
-                                                                                                                                            <img
-                                                                                                                                                src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
-                                                                                                                                                alt="close_black"
-                                                                                                                                            />
-                                                                                                                                        </span>
-                                                                                                                                    </Tooltip>
-                                                                                                                                )
-                                                                                                                            } */}
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        style={{
-                                                                                                                                            paddingLeft: "16px",
-                                                                                                                                            paddingRight: "16px"
-                                                                                                                                        }}
-                                                                                                                                        onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                                    >
-                                                                                                                                        <span className="fileopen-new-btn">{t("download")}</span>
-                                                                                                                                    </button>
-                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                </>
-                                                                                                                            ) : selectedProjectFile?.open_in == 'Download' && selectedProjectFile?.text_to_speech_convert_enable ? (
-                                                                                                                                <>
-                                                                                                                                    {/* {
-                                                                                                                                !selectedProjectFile?.pre_trans_processing && (
-                                                                                                                                    <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
-                                                                                                                                        <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
-                                                                                                                                            <img
-                                                                                                                                                src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
-                                                                                                                                                alt="close_black"
-                                                                                                                                            />
-                                                                                                                                        </span>
-                                                                                                                                    </Tooltip>
-                                                                                                                                )
-                                                                                                                            } */}
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        style={{
-                                                                                                                                            paddingLeft: "22px",
-                                                                                                                                            paddingRight: "22px"
-                                                                                                                                        }}
-                                                                                                                                        onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                                    >
-                                                                                                                                        <span className="fileopen-new-btn">{t("convert")}</span>
-                                                                                                                                    </button>
-                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                </>
-                                                                                                                            ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false ? (
-                                                                                                                                clickedOpenButton == key ? (
-                                                                                                                                    <>
-                                                                                                                                        <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                            <span className="fileopen-new-btn">
-                                                                                                                                                <ButtonLoader />
-                                                                                                                                                {t("transcribing")}
-                                                                                                                                            </span>
-                                                                                                                                        </button>
-                                                                                                                                        <span className="more-icon-empty"></span>
-                                                                                                                                    </>
-                                                                                                                                ) : (
-                                                                                                                                    (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
-                                                                                                                                        <ProgressAnimateButton />
-                                                                                                                                    ) : (
-                                                                                                                                        <>
-                                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                type="button"
-                                                                                                                                                onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
-                                                                                                                                                disabled={selectedProjectFile?.pre_trans_processing}
-                                                                                                                                                style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
-                                                                                                                                            >
-                                                                                                                                                <span className="fileopen-new-btn">{t("transcribe")}</span>
-                                                                                                                                            </button>
-                                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                        </>
-                                                                                                                                    )
-                                                                                                                                )
-                                                                                                                            ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (
-                                                                                                                                <>
-                                                                                                                                    <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                            type="button"
-                                                                                                                                            style={{
-                                                                                                                                                paddingLeft: "30px",
-                                                                                                                                                paddingRight: "30px"
-                                                                                                                                            }}
-                                                                                                                                            onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}
-                                                                                                                                        >
-                                                                                                                                            <span className="fileopen-new-btn">{t("view")}</span>
-                                                                                                                                        </button>
-                                                                                                                                    </Tooltip>
-                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                </>
-                                                                                                                            ) : (
-                                                                                                                                (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
-                                                                                                                                    <ProgressAnimateButton />
-                                                                                                                                ) : (
-                                                                                                                                    <>
-                                                                                                                                        {
-                                                                                                                                            clickedOpenButton == key ? (
-                                                                                                                                                <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                                    <span className="fileopen-new-btn">
-                                                                                                                                                        <ButtonLoader />
-                                                                                                                                                        {t("opening")}
-                                                                                                                                                    </span>
-                                                                                                                                                </button>
-                                                                                                                                            ) : (
-                                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                    type="button"
-                                                                                                                                                    onMouseUp={(e) =>
-                                                                                                                                                        openFile(
-                                                                                                                                                            e,
-                                                                                                                                                            key,
-                                                                                                                                                            selectedProjectFile.id,
-                                                                                                                                                            selectedProjectFile.document_url,
-                                                                                                                                                            selectedProjectFile.first_time_open,
-                                                                                                                                                            selectedProjectFile.open_in,
-                                                                                                                                                            project.project_name,
-                                                                                                                                                            project.id,
-                                                                                                                                                            project?.get_project_type,
-                                                                                                                                                            null,
-                                                                                                                                                            null,
-                                                                                                                                                            null,
-                                                                                                                                                            null,
-                                                                                                                                                            selectedProjectFile,
-                                                                                                                                                            project
                                                                                                                                                         )
-                                                                                                                                                    }
-                                                                                                                                                >
-                                                                                                                                                    <span className="fileopen-new-btn">{t("open")}</span>
-                                                                                                                                                </button>
-                                                                                                                                            )
-                                                                                                                                        }
-                                                                                                                                        {isFederal && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === 'Completed') && (
-                                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                type="button"
-                                                                                                                                                style={
-                                                                                                                                                    selectedProjectFile?.push_detail ? 
-                                                                                                                                                    {backgroundColor: "#9d9db1"} : {}
-                                                                                                                                                }
-                                                                                                                                                onClick={(e) => {
-                                                                                                                                                    selectedProjectFile?.push_detail ?
-                                                                                                                                                    Config.toast("Story already has been pushed") : pushStoryToCMS(e, selectedProjectFile, project?.id)
-                                                                                                                                                }}
-                                                                                                                                            >
-                                                                                                                                                <span className="fileopen-new-btn">
-                                                                                                                                                    {isStoryIdPushing === selectedProjectFile?.id && (
-                                                                                                                                                        <ButtonLoader />
-                                                                                                                                                    )}
-                                                                                                                                                    {selectedProjectFile?.push_detail ? t("pushed") : t("push")}
-                                                                                                                                                </span>
-                                                                                                                                            </button>
-                                                                                                                                        )}
-                                                                                                                                        <div className="more-options-wrap">
-                                                                                                                                            {project.get_project_type === 6 ? (
-                                                                                                                                                <MoreOptionsIconDesigner project={project} removeDelete={false} assigned={selectedProjectFile.task_assign_info == null ? false : true} removeEdit={true} selectedProjectFile={selectedProjectFile} />
-                                                                                                                                            ) : (
-                                                                                                                                                <>
+                                                                                                                                                    ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (    // this wil show submit button for writer document
+                                                                                                                                                        <>
+                                                                                                                                                            {(eachRole?.task_assign_detail?.task_status === 'In Progress') &&
+                                                                                                                                                                <button
+                                                                                                                                                                    type="button"
+                                                                                                                                                                    className="workspace-files-SubmitProjectButton"
+                                                                                                                                                                    onMouseUp={() => setDocumentSubmitParameters({
+                                                                                                                                                                        taskid: selectedProjectFile?.id,
+                                                                                                                                                                        step: eachRole?.task_assign_detail?.step,
+                                                                                                                                                                        confirm: selectedProjectFile?.progress?.confirmed_segments,
+                                                                                                                                                                        total: selectedProjectFile?.progress?.total_segments,
+                                                                                                                                                                        isTaskReassigned: (typeof selectedProjectFile.task_reassign_info === 'boolean' ? true : false)
+                                                                                                                                                                    })}
+                                                                                                                                                                >
+                                                                                                                                                                    <span className="file-submit-new-btn">{t("submit")}</span>
+                                                                                                                                                                </button>
+                                                                                                                                                            }
+                                                                                                                                                            <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
+                                                                                                                                                                <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                                    type="button"
+                                                                                                                                                                    style={{
+                                                                                                                                                                        paddingLeft: "30px",
+                                                                                                                                                                        paddingRight: "30px"
+                                                                                                                                                                    }}
+                                                                                                                                                                    onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id, true)}
+                                                                                                                                                                >
+                                                                                                                                                                    <span className="fileopen-new-btn">{t("view")}</span>
+                                                                                                                                                                </button>
+                                                                                                                                                            </Tooltip>
+                                                                                                                                                        </>
+                                                                                                                                                    ) : (
+                                                                                                                                                        <>
+                                                                                                                                                            {/* remove disabled and style props to remove or unlock the editor/reviewer */}
+                                                                                                                                                            {(userDetails?.agency && selectedProjectFile?.task_assign_info?.length > 1) ? (
+                                                                                                                                                                (index === 0) &&
+                                                                                                                                                                <div className="open-as-button-wrapper">
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                                        style={{
+                                                                                                                                                                            paddingLeft: "15px",
+                                                                                                                                                                            paddingRight: "15px"
+                                                                                                                                                                        }}
+                                                                                                                                                                        type="button" onClick={(e) => handleOpenAsOption(e, selectedProjectFile.id)}>
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("open_as")}</span>
+                                                                                                                                                                        <KeyboardArrowRightIcon className="arrow2-right" />
+                                                                                                                                                                    </button>
+                                                                                                                                                                    {
+                                                                                                                                                                        (openEl && (showOpenAs === selectedProjectFile.id)) &&
+                                                                                                                                                                        <>
+                                                                                                                                                                            <div className="menu-wrapper" ref={showOpenasOutside}>
+                                                                                                                                                                                <ul>
+                                                                                                                                                                                    <li
+                                                                                                                                                                                        className="list-item"
+                                                                                                                                                                                        onClick={() => {
+                                                                                                                                                                                            handleOpenAsButton(
+                                                                                                                                                                                                null,
+                                                                                                                                                                                                key,
+                                                                                                                                                                                                selectedProjectFile.id,
+                                                                                                                                                                                                selectedProjectFile.document_url,
+                                                                                                                                                                                                selectedProjectFile.first_time_open,
+                                                                                                                                                                                                selectedProjectFile.open_in,
+                                                                                                                                                                                                project.project_name,
+                                                                                                                                                                                                project.id,
+                                                                                                                                                                                                project?.get_project_type,
+                                                                                                                                                                                                null,
+                                                                                                                                                                                                null,
+                                                                                                                                                                                                null,
+                                                                                                                                                                                                'editor',
+                                                                                                                                                                                                selectedProjectFile?.task_assign_info,
+                                                                                                                                                                                                selectedProjectFile
+                                                                                                                                                                                            )
+                                                                                                                                                                                        }}
+                                                                                                                                                                                    >
+                                                                                                                                                                                        <div className="item-wrap">
+                                                                                                                                                                                            <span className="text">{t("editor")}</span>
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                    </li>
+                                                                                                                                                                                    <li
+                                                                                                                                                                                        className="list-item"
+                                                                                                                                                                                        onClick={() => {
+                                                                                                                                                                                            handleOpenAsButton(
+                                                                                                                                                                                                null,
+                                                                                                                                                                                                key,
+                                                                                                                                                                                                selectedProjectFile.id,
+                                                                                                                                                                                                selectedProjectFile.document_url,
+                                                                                                                                                                                                selectedProjectFile.first_time_open,
+                                                                                                                                                                                                selectedProjectFile.open_in,
+                                                                                                                                                                                                project.project_name,
+                                                                                                                                                                                                project.id,
+                                                                                                                                                                                                project?.get_project_type,
+                                                                                                                                                                                                null,
+                                                                                                                                                                                                null,
+                                                                                                                                                                                                null,
+                                                                                                                                                                                                'reviewer',
+                                                                                                                                                                                                selectedProjectFile?.task_assign_info,
+                                                                                                                                                                                                selectedProjectFile
+                                                                                                                                                                                            )
+                                                                                                                                                                                        }}
+                                                                                                                                                                                    >
+                                                                                                                                                                                        <div className="item-wrap">
+                                                                                                                                                                                            <span className="text">{t("reviewer")}</span>
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                    </li>
+                                                                                                                                                                                </ul>
+                                                                                                                                                                            </div>
+                                                                                                                                                                        </>
+                                                                                                                                                                    }
+                                                                                                                                                                </div>
+                                                                                                                                                            ) : (
+                                                                                                                                                                (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                                                                    <ProgressAnimateButton />
+                                                                                                                                                                ) : (
+                                                                                                                                                                    <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                                        type="button"
+                                                                                                                                                                        // style={!eachRole?.task_assign_detail?.can_open ? {backgroundColor: '#cccccc', color: '#666666', paddingLeft: "30px",  paddingRight: "30px"} : {paddingLeft: "30px",  paddingRight: "30px"}}
+                                                                                                                                                                        onMouseUp={(e) =>
+                                                                                                                                                                            openFile(
+                                                                                                                                                                                e,
+                                                                                                                                                                                key,
+                                                                                                                                                                                selectedProjectFile.id,
+                                                                                                                                                                                selectedProjectFile.document_url,
+                                                                                                                                                                                selectedProjectFile.first_time_open,
+                                                                                                                                                                                selectedProjectFile.open_in,
+                                                                                                                                                                                project.project_name,
+                                                                                                                                                                                project.id,
+                                                                                                                                                                                project?.get_project_type,
+                                                                                                                                                                                null, null, null, eachRole.task_assign_detail.step === 1 ? 'editor' : 'reviewer',
+                                                                                                                                                                                selectedProjectFile,
+                                                                                                                                                                                project
+                                                                                                                                                                            )
+                                                                                                                                                                        }
+                                                                                                                                                                    >
+                                                                                                                                                                        <span className="fileopen-new-btn">{t("open")}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                )
+                                                                                                                                                            )}
+                                                                                                                                                        </>
+                                                                                                                                                    )
+                                                                                                                                                ) : null
+                                                                                                                                            }
+                                                                                                                                            {
+                                                                                                                                                (index === 0) &&
+                                                                                                                                                <div className="more-options-wrap">
                                                                                                                                                     <ButtonBase onClick={(e) => handleMoreVertOption(e, selectedProjectFile?.id)} className="sorting-icon">
                                                                                                                                                         <MoreVertIcon className="more-icon" />
                                                                                                                                                     </ButtonBase>
@@ -7054,21 +6550,16 @@ function MyStories(props) {
                                                                                                                                                             <div className="menu-wrapper" ref={moreOptionOutside} onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
                                                                                                                                                                 <ul>
                                                                                                                                                                     {
-                                                                                                                                                                        moreOptions?.filter(item => (
-                                                                                                                                                                            (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
-                                                                                                                                                                                (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
-                                                                                                                                                                                : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
-                                                                                                                                                                        ))?.map((item) => {
+                                                                                                                                                                        moreOptions?.filter(item => item.label === 'View PO')?.map((item) => {
                                                                                                                                                                             return (
                                                                                                                                                                                 <li
                                                                                                                                                                                     key={item.id}
                                                                                                                                                                                     className="list-item"
                                                                                                                                                                                     onClick={(e) =>
-                                                                                                                                                                                        item?.label === 'Delete' ? handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info) :
-                                                                                                                                                                                            item?.label === 'View PO' && getPODetailsForTask(selectedProjectFile.id)
+                                                                                                                                                                                        item?.label === 'View PO' && getPODetailsForTask(selectedProjectFile.id)
                                                                                                                                                                                     }
                                                                                                                                                                                     style={selectedProjectFile?.pre_trans_processing ? { opacity: 0.7, pointerEvents: 'none' } : {}}
-                                                                                                                                                                                    onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))}
+                                                                                                                                                                                // onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))}
                                                                                                                                                                                 >
                                                                                                                                                                                     <div className="item-wrap">
                                                                                                                                                                                         <span className="icon">{item.icon}</span>
@@ -7085,132 +6576,34 @@ function MyStories(props) {
                                                                                                                                                                         })
                                                                                                                                                                     }
                                                                                                                                                                 </ul>
-                                                                                                                                                                {
-                                                                                                                                                                    subDownloadOption &&
-                                                                                                                                                                    <>
-                                                                                                                                                                        <div className="download-sub-menu" onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
-                                                                                                                                                                            <ul>
-                                                                                                                                                                                {
-                                                                                                                                                                                    subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
-                                                                                                                                                                                        return (
-                                                                                                                                                                                            <li
-                                                                                                                                                                                                key={item.id}
-                                                                                                                                                                                                className="list-inner-item"
-                                                                                                                                                                                                style={
-                                                                                                                                                                                                    (selectedProjectFile?.isTaskDownloading != item?.value) ?
-                                                                                                                                                                                                        {} : { opacity: 0.7 }
-                                                                                                                                                                                                }
-                                                                                                                                                                                                onClick={(e) => {
-                                                                                                                                                                                                    docCreditCheckAlertRef.current = selectedProjectFile.mt_only_credit_check;
-                                                                                                                                                                                                    (selectedProjectFile?.isTaskDownloading != item?.value) &&
-                                                                                                                                                                                                        downloadDifferentFile(
-                                                                                                                                                                                                            item?.value,
-                                                                                                                                                                                                            selectedProjectFile?.document,
-                                                                                                                                                                                                            e,
-                                                                                                                                                                                                            key,
-                                                                                                                                                                                                            selectedProjectFile.id,
-                                                                                                                                                                                                            selectedProjectFile.document_url,
-                                                                                                                                                                                                            selectedProjectFile.first_time_open,
-                                                                                                                                                                                                            selectedProjectFile.open_in,
-                                                                                                                                                                                                            project.project_name,
-                                                                                                                                                                                                            project.id,
-                                                                                                                                                                                                            project?.get_project_type,
-                                                                                                                                                                                                            selectedProjectFile?.filename,
-                                                                                                                                                                                                            selectedProjectFile
-                                                                                                                                                                                                        )
-                                                                                                                                                                                                }}
-                                                                                                                                                                                            >
-                                                                                                                                                                                                {item.label}
-                                                                                                                                                                                            </li>
-                                                                                                                                                                                        )
-                                                                                                                                                                                    })
-                                                                                                                                                                                }
-                                                                                                                                                                            </ul>
-                                                                                                                                                                        </div>
-                                                                                                                                                                    </>
-                                                                                                                                                                }
                                                                                                                                                             </div>
                                                                                                                                                         </>
                                                                                                                                                     }
-                                                                                                                                                </>
-                                                                                                                                            )}
-                                                                                                                                            
-                                                                                                                                        </div>
-                                                                                                                                    </>
-                                                                                                                                )
+                                                                                                                                                </div>
+                                                                                                                                            }
+                                                                                                                                        </>
+                                                                                                                                    }
+                                                                                                                                </>
+
                                                                                                                             )
-                                                                                                                        ) : (   // task is assigned, but the task is not assigned by me and the task is not assined to me (internal editor -> project owner) (project-owner view)
-                                                                                                                            (selectedProjectFile?.open_in == 'Download' && !selectedProjectFile?.text_to_speech_convert_enable) || selectedProjectFile?.audio_file_url != undefined ? (
-                                                                                                                                <>
-                                                                                                                                    {/* {
-                                                                                                                                !selectedProjectFile?.pre_trans_processing && (
-                                                                                                                                    <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
-                                                                                                                                        <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
-                                                                                                                                            <img
-                                                                                                                                                src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
-                                                                                                                                                alt="close_black"
-                                                                                                                                            />
-                                                                                                                                        </span>
-                                                                                                                                    </Tooltip>
-                                                                                                                                )
-                                                                                                                            } */}
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        style={{
-                                                                                                                                            paddingLeft: "16px",
-                                                                                                                                            paddingRight: "16px"
-                                                                                                                                        }}
-                                                                                                                                        type="button"
-                                                                                                                                        onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                                    >
-                                                                                                                                        <span className="fileopen-new-btn">{t("download")}</span>
-                                                                                                                                    </button>
-                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                </>
-                                                                                                                            ) : selectedProjectFile?.open_in == 'Download' && selectedProjectFile?.text_to_speech_convert_enable ? (
-                                                                                                                                <>
-                                                                                                                                    {/* {
-                                                                                                                                !selectedProjectFile?.pre_trans_processing && (
-                                                                                                                                    <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
-                                                                                                                                        <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
-                                                                                                                                            <img
-                                                                                                                                                src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
-                                                                                                                                                alt="close_black"
-                                                                                                                                            />
-                                                                                                                                        </span>
-                                                                                                                                    </Tooltip>
-                                                                                                                                )
-                                                                                                                            } */}
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        style={{
-                                                                                                                                            paddingLeft: "22px",
-                                                                                                                                            paddingRight: "22px"
-                                                                                                                                        }}
-                                                                                                                                        onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                                    >
-                                                                                                                                        <span className="fileopen-new-btn">{t("convert")}</span>
-                                                                                                                                    </button>
-                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                </>
-                                                                                                                            ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false ? (
-                                                                                                                                clickedOpenButton == key ? (
-                                                                                                                                    <>
-                                                                                                                                        <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                            <span className="fileopen-new-btn">
-                                                                                                                                                <ButtonLoader />
-                                                                                                                                                {t("transcribing")}
-                                                                                                                                            </span>
-                                                                                                                                        </button>
-                                                                                                                                        <span className="more-icon-empty"></span>
-                                                                                                                                    </>
-                                                                                                                                ) : (
-                                                                                                                                    (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                        }
+                                                                                                                        else if (!eachRole?.assign_to_details?.external_editor && Config.userState?.id === eachRole?.assign_to_details.id) {  // condition if editor is not external editor (user is internal editor)
+                                                                                                                            return (
+                                                                                                                                selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false ? (
+                                                                                                                                    clickedOpenButton == key ? (
                                                                                                                                         <>
-                                                                                                                                            <ProgressAnimateButton />
+                                                                                                                                            <button className="workspace-files-OpeningProjectButton" type="button">
+                                                                                                                                                <span className="fileopen-new-btn">
+                                                                                                                                                    <ButtonLoader />
+                                                                                                                                                    {t("transcribing")}
+                                                                                                                                                </span>
+                                                                                                                                            </button>
                                                                                                                                             <span className="more-icon-empty"></span>
                                                                                                                                         </>
                                                                                                                                     ) : (
-                                                                                                                                        <>
+                                                                                                                                        (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                                            <ProgressAnimateButton />
+                                                                                                                                        ) : (
                                                                                                                                             <button className="workspace-files-OpenProjectButton"
                                                                                                                                                 type="button"
                                                                                                                                                 onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
@@ -7219,439 +6612,39 @@ function MyStories(props) {
                                                                                                                                             >
                                                                                                                                                 <span className="fileopen-new-btn">{t("transcribe")}</span>
                                                                                                                                             </button>
-                                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                        </>
+                                                                                                                                        )
                                                                                                                                     )
-                                                                                                                                )
-                                                                                                                            ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (
-                                                                                                                                <>
-                                                                                                                                    <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                            type="button"
-                                                                                                                                            style={{
-                                                                                                                                                paddingLeft: "30px",
-                                                                                                                                                paddingRight: "30px"
-                                                                                                                                            }}
-                                                                                                                                            onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}
-                                                                                                                                        >
-                                                                                                                                            <span className="fileopen-new-btn">{t("view")}</span>
-                                                                                                                                        </button>
-                                                                                                                                    </Tooltip>
-                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                </>
-                                                                                                                            ) : (
-                                                                                                                                (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
-                                                                                                                                    <ProgressAnimateButton />
-                                                                                                                                ) : (
+                                                                                                                                ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (
                                                                                                                                     <>
-                                                                                                                                        {
-                                                                                                                                            clickedOpenButton == key ? (
-                                                                                                                                                <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                                    <span className="fileopen-new-btn">
-                                                                                                                                                        <ButtonLoader />
-                                                                                                                                                        {t("opening")}
-                                                                                                                                                    </span>
-                                                                                                                                                </button>
-                                                                                                                                            ) : (
-                                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                                    type="button"
-                                                                                                                                                    onMouseUp={(e) =>
-                                                                                                                                                        openFile(
-                                                                                                                                                            e,
-                                                                                                                                                            key,
-                                                                                                                                                            selectedProjectFile.id,
-                                                                                                                                                            selectedProjectFile.document_url,
-                                                                                                                                                            selectedProjectFile.first_time_open,
-                                                                                                                                                            selectedProjectFile.open_in,
-                                                                                                                                                            project.project_name,
-                                                                                                                                                            project.id,
-                                                                                                                                                            project?.get_project_type,
-                                                                                                                                                            null,
-                                                                                                                                                            null,
-                                                                                                                                                            null,
-                                                                                                                                                            null,
-                                                                                                                                                            selectedProjectFile,
-                                                                                                                                                            project
-                                                                                                                                                        )
-                                                                                                                                                    }
-                                                                                                                                                >
-                                                                                                                                                    <span className="fileopen-new-btn">{t("open")}</span>
-                                                                                                                                                </button>
-                                                                                                                                            )
-                                                                                                                                        }
-                                                                                                                                        {isFederal && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === 'Completed') && (
-                                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                        {(eachRole?.task_assign_detail?.task_status === 'In Progress') &&
+                                                                                                                                            <button
                                                                                                                                                 type="button"
-                                                                                                                                                style={
-                                                                                                                                                    selectedProjectFile?.push_detail ? 
-                                                                                                                                                    {backgroundColor: "#9d9db1"} : {}
-                                                                                                                                                }
-                                                                                                                                                onClick={(e) => {
-                                                                                                                                                    selectedProjectFile?.push_detail ?
-                                                                                                                                                    Config.toast("Story already has been pushed") : pushStoryToCMS(e, selectedProjectFile, project?.id)
-                                                                                                                                                }}
+                                                                                                                                                className="mr-2 workspace-files-SubmitProjectButton"
+                                                                                                                                                onMouseUp={() => setDocumentSubmitParameters({
+                                                                                                                                                    taskid: selectedProjectFile?.id,
+                                                                                                                                                    step: eachRole?.task_assign_detail?.step,
+                                                                                                                                                    confirm: selectedProjectFile?.progress?.confirmed_segments,
+                                                                                                                                                    total: selectedProjectFile?.progress?.total_segments,
+                                                                                                                                                    isTaskReassigned: (typeof selectedProjectFile.task_reassign_info === 'boolean' ? true : false)
+                                                                                                                                                })}
                                                                                                                                             >
-                                                                                                                                                <span className="fileopen-new-btn">
-                                                                                                                                                    {isStoryIdPushing === selectedProjectFile?.id && (
-                                                                                                                                                        <ButtonLoader />
-                                                                                                                                                    )}
-                                                                                                                                                    {selectedProjectFile?.push_detail ? t("pushed") : t("push")}
-                                                                                                                                                </span>
+                                                                                                                                                <span className="file-submit-new-btn">{t("submit")}</span>
                                                                                                                                             </button>
-                                                                                                                                        )}
-                                                                                                                                        <div className="more-options-wrap">
-                                                                                                                                            {project.get_project_type === 6 ? (
-                                                                                                                                                <MoreOptionsIconDesigner project={project} removeDelete={false} assigned={selectedProjectFile.task_assign_info == null ? false : true} removeEdit={true} selectedProjectFile={selectedProjectFile} />
-                                                                                                                                            ) : (
-                                                                                                                                                <>
-                                                                                                                                                    <ButtonBase onClick={(e) => handleMoreVertOption(e, selectedProjectFile?.id)} className="sorting-icon">
-                                                                                                                                                        <MoreVertIcon className="more-icon" />
-                                                                                                                                                    </ButtonBase>
-                                                                                                                                                    {(moreEl && (openedMoreOption === selectedProjectFile?.id)) &&
-                                                                                                                                                        <>
-                                                                                                                                                            <div className="menu-wrapper" ref={moreOptionOutside} onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
-                                                                                                                                                                <ul>
-                                                                                                                                                                    {
-                                                                                                                                                                        moreOptions?.filter(item => (
-                                                                                                                                                                            (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
-                                                                                                                                                                                (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
-                                                                                                                                                                                : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
-                                                                                                                                                                        ))?.map((item) => {
-                                                                                                                                                                            return (
-                                                                                                                                                                                <li
-                                                                                                                                                                                    key={item.id}
-                                                                                                                                                                                    className="list-item"
-                                                                                                                                                                                    onClick={(e) =>
-                                                                                                                                                                                        item?.label === 'Delete' ? handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info) :
-                                                                                                                                                                                            item?.label === 'View PO' && getPODetailsForTask(selectedProjectFile.id)
-                                                                                                                                                                                    }
-                                                                                                                                                                                    style={selectedProjectFile?.pre_trans_processing ? { opacity: 0.7, pointerEvents: 'none' } : {}}
-                                                                                                                                                                                    onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))}
-                                                                                                                                                                                >
-                                                                                                                                                                                    <div className="item-wrap">
-                                                                                                                                                                                        <span className="icon">{item.icon}</span>
-                                                                                                                                                                                        <span className="text">{item.label}</span>
-                                                                                                                                                                                    </div>
-                                                                                                                                                                                    {
-                                                                                                                                                                                        item.arrow_icon &&
-                                                                                                                                                                                        <>
-                                                                                                                                                                                            {item.arrow_icon}
-                                                                                                                                                                                        </>
-                                                                                                                                                                                    }
-                                                                                                                                                                                </li>
-                                                                                                                                                                            )
-                                                                                                                                                                        })
-                                                                                                                                                                    }
-                                                                                                                                                                </ul>
-                                                                                                                                                                {
-                                                                                                                                                                    subDownloadOption &&
-                                                                                                                                                                    <>
-                                                                                                                                                                        <div className="download-sub-menu" onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
-                                                                                                                                                                            <ul>
-                                                                                                                                                                                {
-                                                                                                                                                                                    subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
-                                                                                                                                                                                        return (
-                                                                                                                                                                                            <li
-                                                                                                                                                                                                key={item.id}
-                                                                                                                                                                                                className="list-inner-item"
-                                                                                                                                                                                                style={
-                                                                                                                                                                                                    (selectedProjectFile?.isTaskDownloading != item?.value) ?
-                                                                                                                                                                                                        {} : { opacity: 0.7 }
-                                                                                                                                                                                                }
-                                                                                                                                                                                                onClick={(e) => {
-                                                                                                                                                                                                    docCreditCheckAlertRef.current = selectedProjectFile.mt_only_credit_check;
-                                                                                                                                                                                                    (selectedProjectFile?.isTaskDownloading != item?.value) &&
-                                                                                                                                                                                                        downloadDifferentFile(
-                                                                                                                                                                                                            item?.value,
-                                                                                                                                                                                                            selectedProjectFile?.document,
-                                                                                                                                                                                                            e,
-                                                                                                                                                                                                            key,
-                                                                                                                                                                                                            selectedProjectFile.id,
-                                                                                                                                                                                                            selectedProjectFile.document_url,
-                                                                                                                                                                                                            selectedProjectFile.first_time_open,
-                                                                                                                                                                                                            selectedProjectFile.open_in,
-                                                                                                                                                                                                            project.project_name,
-                                                                                                                                                                                                            project.id,
-                                                                                                                                                                                                            project?.get_project_type,
-                                                                                                                                                                                                            selectedProjectFile?.filename,
-                                                                                                                                                                                                            selectedProjectFile
-                                                                                                                                                                                                        )
-                                                                                                                                                                                                }}
-                                                                                                                                                                                            >
-                                                                                                                                                                                                {item.label}
-                                                                                                                                                                                            </li>
-                                                                                                                                                                                        )
-                                                                                                                                                                                    })
-                                                                                                                                                                                }
-                                                                                                                                                                            </ul>
-                                                                                                                                                                        </div>
-                                                                                                                                                                    </>
-                                                                                                                                                                }
-                                                                                                                                                            </div>
-                                                                                                                                                        </>
-                                                                                                                                                    }
-                                                                                                                                                </>
-                                                                                                                                            )}
-                                                                                                                                        </div>
-                                                                                                                                    </>
-                                                                                                                                )
-                                                                                                                            )
-                                                                                                                        )
-        
-                                                                                                                    ) : (    // if project is not assigned to anyone
-                                                                                                                        (selectedProjectFile?.converted != null && (project?.get_project_type == 1 || project?.get_project_type == 2)) ? (   // pdf convert logic 
-                                                                                                                            selectedProjectFile?.converted ? (    // if pdf is converted
-                                                                                                                                <>
-                                                                                                                                    {
-                                                                                                                                        selectedProjectFile?.open_in === 'google-ocr' ? (
-                                                                                                                                            <>
-                                                                                                                                                {/* {
-                                                                                                                                                    !selectedProjectFile?.pre_trans_processing && (
-                                                                                                                                                        <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
-                                                                                                                                                            <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
-                                                                                                                                                                <img
-                                                                                                                                                                    src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
-                                                                                                                                                                    alt="close_black"
-                                                                                                                                                                />
-                                                                                                                                                            </span>
-                                                                                                                                                        </Tooltip>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                                <Tooltip className="dont-open-list" title={t("download")} placement="top">
-                                                                                                                                                    <span className="mr-4" onMouseUp={() => downloadConvertDocxFile(selectedProjectFile?.id)}>
-                                                                                                                                                        <img
-                                                                                                                                                            src={Config.HOST_URL + "assets/images/new-ui-icons/file_download.svg"}
-                                                                                                                                                            alt="bulk download"
-                                                                                                                                                            should-open-files="dont-open"
-                                                                                                                                                        />
-                                                                                                                                                    </span>
-                                                                                                                                                </Tooltip> */}
-                                                                                                                                                <Tooltip title={t("view_docx_file_in_writer")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                                    <button
-                                                                                                                                                        className="workspace-files-OpenProjectButton" type="button" onMouseUp={() => openWriter(selectedProjectFile?.id, selectedProjectFile?.filename, project?.id)}>
-                                                                                                                                                        <span className="fileopen-new-btn">{t("view")}</span>
-                                                                                                                                                    </button>
-                                                                                                                                                </Tooltip>
-                                                                                                                                                <MoreOptionsIconPDF selectedProjectFile={selectedProjectFile} project={project} taskPDF={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                            </>
-                                                                                                                                        ) : selectedProjectFile?.open_in === 'convertio' ? (
-                                                                                                                                            <>
-                                                                                                                                                {
-                                                                                                                                                    !selectedProjectFile?.is_task_translated ? (    // if task is not translated (translation task is not created)
-                                                                                                                                                        <>
-                                                                                                                                                            {
-                                                                                                                                                                !selectedProjectFile?.pre_trans_processing && (
-                                                                                                                                                                    <Tooltip TransitionComponent={Zoom} title={t("delete")} placement="top">
-                                                                                                                                                                        <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
-                                                                                                                                                                            <img
-                                                                                                                                                                                src={DeleteBinIcon}
-                                                                                                                                                                                alt="close_black"
-                                                                                                                                                                            />
-                                                                                                                                                                        </span>
-                                                                                                                                                                    </Tooltip>
-                                                                                                                                                                )
-                                                                                                                                                            }
-                                                                                                                                                            <Tooltip className="dont-open-list" title={t("download")} placement="top">
-                                                                                                                                                                <span className="mr-4" onMouseUp={() => downloadConvertDocxFile(selectedProjectFile?.id)}>
-                                                                                                                                                                    <img
-                                                                                                                                                                        src={DownloadIcon}
-                                                                                                                                                                        alt="bulk download"
-                                                                                                                                                                        should-open-files="dont-open"
-                                                                                                                                                                    />
-                                                                                                                                                                </span>
-                                                                                                                                                            </Tooltip>
-                                                                                                                                                            <Tooltip title={t("create_trans_text")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" onMouseUp={(e) => { !isPdfTranslating && translateFromPdfTask(selectedProjectFile?.id, project?.id) }}>
-                                                                                                                                                                    <span className="fileopen-new-btn">{isPdfTranslating && <ButtonLoader style={{ marginLeft: '5px' }} />} {isPdfTranslating ? t("translating") : t("translate")}</span>
-                                                                                                                                                                </button>
-                                                                                                                                                            </Tooltip>
-                                                                                                                                                        </>
-                                                                                                                                                    ) : (   // the task is translated (translation task has been created)
-                                                                                                                                                        <>
-                                                                                                                                                            <Tooltip className="dont-open-list" title={t("download")} placement="top">
-                                                                                                                                                                <button
-                                                                                                                                                                    style={{
-                                                                                                                                                                        paddingLeft: "16px",
-                                                                                                                                                                        paddingRight: "16px"
-                                                                                                                                                                    }}
-                                                                                                                                                                    className="workspace-files-OpenProjectButton" type="button" onMouseUp={() => downloadConvertDocxFile(selectedProjectFile?.id)}>
-                                                                                                                                                                    <span className="fileopen-new-btn">{t("download")}</span>
-                                                                                                                                                                </button>
-                                                                                                                                                            </Tooltip>
-                                                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                                        </>
-                                                                                                                                                    )
-                                                                                                                                                }
-                                                                                                                                            </>
-                                                                                                                                        ) : selectedProjectFile?.open_in === 'FileCorrupted' ? (
-                                                                                                                                            <>
-                                                                                                                                                <Tooltip title={t("file_cannot_be_processed")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" style={{ opacity: 0.7, paddingLeft: "22px", paddingRight: "22px" }}>
-                                                                                                                                                        <span className="fileopen-new-btn">{t("convert")}</span>
-                                                                                                                                                    </button>
-                                                                                                                                                </Tooltip>
-                                                                                                                                                <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                            </>
-                                                                                                                                        ) : selectedProjectFile?.open_in == null ? (
-                                                                                                                                            <>
-                                                                                                                                                <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                                    <span className="fileopen-new-btn">
-                                                                                                                                                        <ButtonLoader />
-                                                                                                                                                        {t("converting")}
-                                                                                                                                                    </span>
-                                                                                                                                                </button>
-                                                                                                                                                <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={true} />
-                                                                                                                                            </>
-                                                                                                                                        ) : null
-                                                                                                                                    }
-                                                                                                                                </>
-                                                                                                                            ) : (   // if pdf is not converted
-                                                                                                                                clickedOpenButton == selectedProjectFile?.id ? (
-                                                                                                                                    <>
-                                                                                                                                        <ProgressAnimateButton name={"Converting"} />
-                                                                                                                                        <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={true} />
-                                                                                                                                    </>
-                                                                                                                                ) : (
-                                                                                                                                    <>
-                                                                                                                                        {selectedProjectFile?.isPDFConverting ? (
-                                                                                                                                            <ProgressAnimateButton name={"Converting"} />
-                                                                                                                                        ) : (
+                                                                                                                                        }
+                                                                                                                                        <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
                                                                                                                                             <button className="workspace-files-OpenProjectButton"
                                                                                                                                                 type="button"
                                                                                                                                                 style={{
-                                                                                                                                                    paddingLeft: "22px",
-                                                                                                                                                    paddingRight: "22px"
+                                                                                                                                                    paddingLeft: "30px",
+                                                                                                                                                    paddingRight: "30px"
                                                                                                                                                 }}
-                                                                                                                                                onMouseUp={(e) => checkPdfConversionStatus(selectedProjectFile?.id, project?.id, 'first')}
+                                                                                                                                                onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id, true)}
                                                                                                                                             >
-                                                                                                                                                <span className="fileopen-new-btn">{t("convert")}</span>
+                                                                                                                                                <span className="fileopen-new-btn">{t("view")}</span>
                                                                                                                                             </button>
-                                                                                                                                        )}
-                                                                                                                                        <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                    </>
-                                                                                                                                )
-                                                                                                                            )
-                                                                                                                        ) : (project?.get_project_type === 4 && ((selectedProjectFile?.open_in === 'Download' && !selectedProjectFile?.text_to_speech_convert_enable) || selectedProjectFile?.audio_file_url != undefined)) ? (
-                                                                                                                            <>
-                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                    type="button"
-                                                                                                                                    style={{
-                                                                                                                                        paddingLeft: "16px",
-                                                                                                                                        paddingRight: "16px"
-                                                                                                                                    }}
-                                                                                                                                    onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                                >
-                                                                                                                                    <span className="fileopen-new-btn">{t("download")}</span>
-                                                                                                                                </button>
-                                                                                                                                <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                            </>
-                                                                                                                        ) : (project?.get_project_type === 4 && selectedProjectFile?.open_in === 'Download' && selectedProjectFile?.text_to_speech_convert_enable) ? (
-                                                                                                                            clickedOpenButton == selectedProjectFile?.id ? (
-                                                                                                                                <>
-                                                                                                                                    <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                        <span className="fileopen-new-btn">
-                                                                                                                                            <ButtonLoader />
-                                                                                                                                            {t("converting")}
-                                                                                                                                        </span>
-                                                                                                                                    </button>
-                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={true} />
-                                                                                                                                </>
-                                                                                                                            ) : (
-                                                                                                                                <>
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        style={{
-                                                                                                                                            paddingLeft: "22px",
-                                                                                                                                            paddingRight: "22px"
-                                                                                                                                        }}
-                                                                                                                                        type="button"
-                                                                                                                                        onMouseUp={(e) => convertSourceFileToAudio(selectedProjectFile?.id)}
-                                                                                                                                    >
-                                                                                                                                        <span className="fileopen-new-btn">{t("convert")}</span>
-                                                                                                                                    </button>
-                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                </>
-                                                                                                                            )
-                                                                                                                        ) : (selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed) ? (
-                                                                                                                            <>
-                                                                                                                                <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        style={{
-                                                                                                                                            paddingLeft: "30px",
-                                                                                                                                            paddingRight: "30px"
-                                                                                                                                        }}
-                                                                                                                                        onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}
-                                                                                                                                    >
-                                                                                                                                        <span className="fileopen-new-btn">{t("view")}</span>
-                                                                                                                                    </button>
-                                                                                                                                </Tooltip>
-                                                                                                                                <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                            </>
-                                                                                                                        ) : (selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false) ? (
-                                                                                                                            clickedOpenButton == key ? (
-                                                                                                                                <>
-                                                                                                                                    <button className="workspace-files-OpeningProjectButton" type="button">
-                                                                                                                                        <span className="fileopen-new-btn">
-                                                                                                                                            <ButtonLoader />
-                                                                                                                                            {t("transcribing")}
-                                                                                                                                        </span>
-                                                                                                                                    </button>
-                                                                                                                                    <span className="more-icon-empty"></span>
-                                                                                                                                </>
-                                                                                                                            ) : (
-                                                                                                                                (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
-                                                                                                                                    <>
-                                                                                                                                        <ProgressAnimateButton />
-                                                                                                                                        <span className="more-icon-empty"></span>
+                                                                                                                                        </Tooltip>
                                                                                                                                     </>
                                                                                                                                 ) : (
-                                                                                                                                    <>
-                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                            type="button"
-                                                                                                                                            onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
-                                                                                                                                            disabled={selectedProjectFile?.pre_trans_processing}
-                                                                                                                                            style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
-                                                                                                                                        >
-                                                                                                                                            <span className="fileopen-new-btn">{t("transcribe")}</span>
-                                                                                                                                        </button>
-                                                                                                                                        <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                                    </>
-                                                                                                                                )
-                                                                                                                            )
-                                                                                                                        ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (
-                                                                                                                            <>
-                                                                                                                                {selectedProjectFile?.file_translate_done ? (   // if file is translated show download btn
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        style={{
-                                                                                                                                            paddingLeft: "16px",
-                                                                                                                                            paddingRight: "16px"
-                                                                                                                                        }}
-                                                                                                                                        onMouseUp={(e) => downloadTaskTargetFile(selectedProjectFile)}
-                                                                                                                                    >
-                                                                                                                                        <span className="fileopen-new-btn">{t("download")}</span>
-                                                                                                                                    </button>
-                                                                                                                                ) : (   // not translated then show translate btn
-                                                                                                                                    selectedProjectFile?.isProcessing ? (
-                                                                                                                                        <ProgressAnimateButton />
-                                                                                                                                    ) : (
-                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                            type="button"
-                                                                                                                                            style={{
-                                                                                                                                                paddingLeft: "16px",
-                                                                                                                                                paddingRight: "16px"
-                                                                                                                                            }}
-                                                                                                                                            onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)}
-                                                                                                                                        >
-                                                                                                                                            <span className="fileopen-new-btn">{t("translate")}</span>
-                                                                                                                                        </button>
-                                                                                                                                    )
-                                                                                                                                )}
-                                                                                                                                <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
-                                                                                                                            </>
-                                                                                                                        ) : (
-                                                                                                                            <>
-                                                                                                                                {
                                                                                                                                     (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
                                                                                                                                         <ProgressAnimateButton />
                                                                                                                                     ) : (
@@ -7663,8 +6656,9 @@ function MyStories(props) {
                                                                                                                                                 </span>
                                                                                                                                             </button>
                                                                                                                                         ) : (
-                                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                            <button className="workspace-files-OpenProjectButton"        
                                                                                                                                                 type="button"
+                                                                                                                                                // disabled={!eachRole?.task_assign_detail?.can_open}
                                                                                                                                                 onMouseUp={(e) =>
                                                                                                                                                     openFile(
                                                                                                                                                         e,
@@ -7689,44 +6683,167 @@ function MyStories(props) {
                                                                                                                                             </button>
                                                                                                                                         )
                                                                                                                                     )
-                                                                                                                                }
-                                                                                                                                {/* story push button */}
-                                                                                                                                {selectedProjectFile?.push_detail ? (
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                    type="button"
-                                                                                                                                    style={{backgroundColor: "#9d9db1"}}
-                                                                                                                                    onClick={(e) => {
-                                                                                                                                        (Config.toast('Story already has been pushed'))
-                                                                                                                                    }}
-                                                                                                                                >
+                                                                                                                                )
+                                                                                                                            )
+                                                                                                                        }
+                                                                                                                    })
+                                                                                                                ) : selectedProjectFile?.task_assign_info?.find(each => Config.userState?.id === each.assigned_by_details.id) !== undefined ? (   // if task is assigned by me (I assigned the task to someone)
+                                                                                                                    (selectedProjectFile?.open_in == 'Download' && !selectedProjectFile?.text_to_speech_convert_enable) || selectedProjectFile?.audio_file_url != undefined ? (
+                                                                                                                        <>
+                                                                                                                            {/* {
+                                                                                                                        !selectedProjectFile?.pre_trans_processing && (
+                                                                                                                            <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
+                                                                                                                                <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
+                                                                                                                                    <img
+                                                                                                                                        src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
+                                                                                                                                        alt="close_black"
+                                                                                                                                    />
+                                                                                                                                </span>
+                                                                                                                            </Tooltip>
+                                                                                                                        )
+                                                                                                                    } */}
+                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                type="button"
+                                                                                                                                style={{
+                                                                                                                                    paddingLeft: "16px",
+                                                                                                                                    paddingRight: "16px"
+                                                                                                                                }}
+                                                                                                                                onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
+                                                                                                                            >
+                                                                                                                                <span className="fileopen-new-btn">{t("download")}</span>
+                                                                                                                            </button>
+                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                        </>
+                                                                                                                    ) : selectedProjectFile?.open_in == 'Download' && selectedProjectFile?.text_to_speech_convert_enable ? (
+                                                                                                                        <>
+                                                                                                                            {/* {
+                                                                                                                        !selectedProjectFile?.pre_trans_processing && (
+                                                                                                                            <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
+                                                                                                                                <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
+                                                                                                                                    <img
+                                                                                                                                        src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
+                                                                                                                                        alt="close_black"
+                                                                                                                                    />
+                                                                                                                                </span>
+                                                                                                                            </Tooltip>
+                                                                                                                        )
+                                                                                                                    } */}
+                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                type="button"
+                                                                                                                                style={{
+                                                                                                                                    paddingLeft: "22px",
+                                                                                                                                    paddingRight: "22px"
+                                                                                                                                }}
+                                                                                                                                onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
+                                                                                                                            >
+                                                                                                                                <span className="fileopen-new-btn">{t("convert")}</span>
+                                                                                                                            </button>
+                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                        </>
+                                                                                                                    ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false ? (
+                                                                                                                        clickedOpenButton == key ? (
+                                                                                                                            <>
+                                                                                                                                <button className="workspace-files-OpeningProjectButton" type="button">
                                                                                                                                     <span className="fileopen-new-btn">
-                                                                                                                                        {t("pushed")}
+                                                                                                                                        <ButtonLoader />
+                                                                                                                                        {t("transcribing")}
                                                                                                                                     </span>
                                                                                                                                 </button>
-                                                                                                                                ) : (
-                                                                                                                                    isFederal && (
-                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                            type="button"
-                                                                                                                                            style={
-                                                                                                                                                (selectedProjectFile?.news_detail?.tar_json_exists) ? 
-                                                                                                                                                {} : {backgroundColor: "#9d9db1"}
-                                                                                                                                            }
-                                                                                                                                            onClick={(e) => {
-                                                                                                                                                (selectedProjectFile?.news_detail?.tar_json_exists) ? 
-                                                                                                                                                (isStoryIdPushing !== selectedProjectFile?.id) && pushStoryToCMS(e, selectedProjectFile, project?.id) :
-                                                                                                                                                (Config.toast('Task is not yet started', 'warning'))
-                                                                                                                                            }}
-                                                                                                                                        >
+                                                                                                                                <span className="more-icon-empty"></span>
+                                                                                                                            </>
+                                                                                                                        ) : (
+                                                                                                                            (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                                <ProgressAnimateButton />
+                                                                                                                            ) : (
+                                                                                                                                <>
+                                                                                                                                    <button className="workspace-files-OpenProjectButton"
+                                                                                                                                        type="button"
+                                                                                                                                        onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
+                                                                                                                                        disabled={selectedProjectFile?.pre_trans_processing}
+                                                                                                                                        style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
+                                                                                                                                    >
+                                                                                                                                        <span className="fileopen-new-btn">{t("transcribe")}</span>
+                                                                                                                                    </button>
+                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                                </>
+                                                                                                                            )
+                                                                                                                        )
+                                                                                                                    ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (
+                                                                                                                        <>
+                                                                                                                            <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
+                                                                                                                                <button className="workspace-files-OpenProjectButton"
+                                                                                                                                    type="button"
+                                                                                                                                    style={{
+                                                                                                                                        paddingLeft: "30px",
+                                                                                                                                        paddingRight: "30px"
+                                                                                                                                    }}
+                                                                                                                                    onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}
+                                                                                                                                >
+                                                                                                                                    <span className="fileopen-new-btn">{t("view")}</span>
+                                                                                                                                </button>
+                                                                                                                            </Tooltip>
+                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                        </>
+                                                                                                                    ) : (
+                                                                                                                        (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                            <ProgressAnimateButton />
+                                                                                                                        ) : (
+                                                                                                                            <>
+                                                                                                                                {
+                                                                                                                                    clickedOpenButton == key ? (
+                                                                                                                                        <button className="workspace-files-OpeningProjectButton" type="button">
                                                                                                                                             <span className="fileopen-new-btn">
-                                                                                                                                                {isStoryIdPushing === selectedProjectFile?.id && (
-                                                                                                                                                    <ButtonLoader />
-                                                                                                                                                )}
-                                                                                                                                                {t("push")}
+                                                                                                                                                <ButtonLoader />
+                                                                                                                                                {t("opening")}
                                                                                                                                             </span>
                                                                                                                                         </button>
+                                                                                                                                    ) : (
+                                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                                            type="button"
+                                                                                                                                            onMouseUp={(e) =>
+                                                                                                                                                openFile(
+                                                                                                                                                    e,
+                                                                                                                                                    key,
+                                                                                                                                                    selectedProjectFile.id,
+                                                                                                                                                    selectedProjectFile.document_url,
+                                                                                                                                                    selectedProjectFile.first_time_open,
+                                                                                                                                                    selectedProjectFile.open_in,
+                                                                                                                                                    project.project_name,
+                                                                                                                                                    project.id,
+                                                                                                                                                    project?.get_project_type,
+                                                                                                                                                    null,
+                                                                                                                                                    null,
+                                                                                                                                                    null,
+                                                                                                                                                    null,
+                                                                                                                                                    selectedProjectFile,
+                                                                                                                                                    project
+                                                                                                                                                )
+                                                                                                                                            }
+                                                                                                                                        >
+                                                                                                                                            <span className="fileopen-new-btn">{t("open")}</span>
+                                                                                                                                        </button>
                                                                                                                                     )
+                                                                                                                                }
+                                                                                                                                {isFederal && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === 'Completed') && (
+                                                                                                                                    <button className="workspace-files-OpenProjectButton"
+                                                                                                                                        type="button"
+                                                                                                                                        style={
+                                                                                                                                            selectedProjectFile?.push_detail ? 
+                                                                                                                                            {backgroundColor: "#9d9db1"} : {}
+                                                                                                                                        }
+                                                                                                                                        onClick={(e) => {
+                                                                                                                                            selectedProjectFile?.push_detail ?
+                                                                                                                                            Config.toast("Story already has been pushed") : pushStoryToCMS(e, selectedProjectFile, project?.id)
+                                                                                                                                        }}
+                                                                                                                                    >
+                                                                                                                                        <span className="fileopen-new-btn">
+                                                                                                                                            {isStoryIdPushing === selectedProjectFile?.id && (
+                                                                                                                                                <ButtonLoader />
+                                                                                                                                            )}
+                                                                                                                                            {selectedProjectFile?.push_detail ? t("pushed") : t("push")}
+                                                                                                                                        </span>
+                                                                                                                                    </button>
                                                                                                                                 )}
-                                                                                                                                
                                                                                                                                 <div className="more-options-wrap">
                                                                                                                                     {project.get_project_type === 6 ? (
                                                                                                                                         <MoreOptionsIconDesigner project={project} removeDelete={false} assigned={selectedProjectFile.task_assign_info == null ? false : true} removeEdit={true} selectedProjectFile={selectedProjectFile} />
@@ -7741,7 +6858,264 @@ function MyStories(props) {
                                                                                                                                                         <ul>
                                                                                                                                                             {
                                                                                                                                                                 moreOptions?.filter(item => (
-                                                                                                                                                                    project?.file_translate ? item?.id === 2 :
+                                                                                                                                                                    (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
+                                                                                                                                                                        (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
+                                                                                                                                                                        : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
+                                                                                                                                                                ))?.map((item) => {
+                                                                                                                                                                    return (
+                                                                                                                                                                        <li
+                                                                                                                                                                            key={item.id}
+                                                                                                                                                                            className="list-item"
+                                                                                                                                                                            onClick={(e) =>
+                                                                                                                                                                                item?.label === 'Delete' ? handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info) :
+                                                                                                                                                                                    item?.label === 'View PO' && getPODetailsForTask(selectedProjectFile.id)
+                                                                                                                                                                            }
+                                                                                                                                                                            style={selectedProjectFile?.pre_trans_processing ? { opacity: 0.7, pointerEvents: 'none' } : {}}
+                                                                                                                                                                            onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))}
+                                                                                                                                                                        >
+                                                                                                                                                                            <div className="item-wrap">
+                                                                                                                                                                                <span className="icon">{item.icon}</span>
+                                                                                                                                                                                <span className="text">{item.label}</span>
+                                                                                                                                                                            </div>
+                                                                                                                                                                            {
+                                                                                                                                                                                item.arrow_icon &&
+                                                                                                                                                                                <>
+                                                                                                                                                                                    {item.arrow_icon}
+                                                                                                                                                                                </>
+                                                                                                                                                                            }
+                                                                                                                                                                        </li>
+                                                                                                                                                                    )
+                                                                                                                                                                })
+                                                                                                                                                            }
+                                                                                                                                                        </ul>
+                                                                                                                                                        {
+                                                                                                                                                            subDownloadOption &&
+                                                                                                                                                            <>
+                                                                                                                                                                <div className="download-sub-menu" onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
+                                                                                                                                                                    <ul>
+                                                                                                                                                                        {
+                                                                                                                                                                            subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
+                                                                                                                                                                                return (
+                                                                                                                                                                                    <li
+                                                                                                                                                                                        key={item.id}
+                                                                                                                                                                                        className="list-inner-item"
+                                                                                                                                                                                        style={
+                                                                                                                                                                                            (selectedProjectFile?.isTaskDownloading != item?.value) ?
+                                                                                                                                                                                                {} : { opacity: 0.7 }
+                                                                                                                                                                                        }
+                                                                                                                                                                                        onClick={(e) => {
+                                                                                                                                                                                            docCreditCheckAlertRef.current = selectedProjectFile.mt_only_credit_check;
+                                                                                                                                                                                            (selectedProjectFile?.isTaskDownloading != item?.value) &&
+                                                                                                                                                                                                downloadDifferentFile(
+                                                                                                                                                                                                    item?.value,
+                                                                                                                                                                                                    selectedProjectFile?.document,
+                                                                                                                                                                                                    e,
+                                                                                                                                                                                                    key,
+                                                                                                                                                                                                    selectedProjectFile.id,
+                                                                                                                                                                                                    selectedProjectFile.document_url,
+                                                                                                                                                                                                    selectedProjectFile.first_time_open,
+                                                                                                                                                                                                    selectedProjectFile.open_in,
+                                                                                                                                                                                                    project.project_name,
+                                                                                                                                                                                                    project.id,
+                                                                                                                                                                                                    project?.get_project_type,
+                                                                                                                                                                                                    selectedProjectFile?.filename,
+                                                                                                                                                                                                    selectedProjectFile
+                                                                                                                                                                                                )
+                                                                                                                                                                                        }}
+                                                                                                                                                                                    >
+                                                                                                                                                                                        {item.label}
+                                                                                                                                                                                    </li>
+                                                                                                                                                                                )
+                                                                                                                                                                            })
+                                                                                                                                                                        }
+                                                                                                                                                                    </ul>
+                                                                                                                                                                </div>
+                                                                                                                                                            </>
+                                                                                                                                                        }
+                                                                                                                                                    </div>
+                                                                                                                                                </>
+                                                                                                                                            }
+                                                                                                                                        </>
+                                                                                                                                    )}
+                                                                                                                                    
+                                                                                                                                </div>
+                                                                                                                            </>
+                                                                                                                        )
+                                                                                                                    )
+                                                                                                                ) : (   // task is assigned, but the task is not assigned by me and the task is not assined to me (internal editor -> project owner) (project-owner view)
+                                                                                                                    (selectedProjectFile?.open_in == 'Download' && !selectedProjectFile?.text_to_speech_convert_enable) || selectedProjectFile?.audio_file_url != undefined ? (
+                                                                                                                        <>
+                                                                                                                            {/* {
+                                                                                                                        !selectedProjectFile?.pre_trans_processing && (
+                                                                                                                            <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
+                                                                                                                                <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
+                                                                                                                                    <img
+                                                                                                                                        src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
+                                                                                                                                        alt="close_black"
+                                                                                                                                    />
+                                                                                                                                </span>
+                                                                                                                            </Tooltip>
+                                                                                                                        )
+                                                                                                                    } */}
+                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                style={{
+                                                                                                                                    paddingLeft: "16px",
+                                                                                                                                    paddingRight: "16px"
+                                                                                                                                }}
+                                                                                                                                type="button"
+                                                                                                                                onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
+                                                                                                                            >
+                                                                                                                                <span className="fileopen-new-btn">{t("download")}</span>
+                                                                                                                            </button>
+                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                        </>
+                                                                                                                    ) : selectedProjectFile?.open_in == 'Download' && selectedProjectFile?.text_to_speech_convert_enable ? (
+                                                                                                                        <>
+                                                                                                                            {/* {
+                                                                                                                        !selectedProjectFile?.pre_trans_processing && (
+                                                                                                                            <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
+                                                                                                                                <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
+                                                                                                                                    <img
+                                                                                                                                        src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
+                                                                                                                                        alt="close_black"
+                                                                                                                                    />
+                                                                                                                                </span>
+                                                                                                                            </Tooltip>
+                                                                                                                        )
+                                                                                                                    } */}
+                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                type="button"
+                                                                                                                                style={{
+                                                                                                                                    paddingLeft: "22px",
+                                                                                                                                    paddingRight: "22px"
+                                                                                                                                }}
+                                                                                                                                onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
+                                                                                                                            >
+                                                                                                                                <span className="fileopen-new-btn">{t("convert")}</span>
+                                                                                                                            </button>
+                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                        </>
+                                                                                                                    ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false ? (
+                                                                                                                        clickedOpenButton == key ? (
+                                                                                                                            <>
+                                                                                                                                <button className="workspace-files-OpeningProjectButton" type="button">
+                                                                                                                                    <span className="fileopen-new-btn">
+                                                                                                                                        <ButtonLoader />
+                                                                                                                                        {t("transcribing")}
+                                                                                                                                    </span>
+                                                                                                                                </button>
+                                                                                                                                <span className="more-icon-empty"></span>
+                                                                                                                            </>
+                                                                                                                        ) : (
+                                                                                                                            (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                                <>
+                                                                                                                                    <ProgressAnimateButton />
+                                                                                                                                    <span className="more-icon-empty"></span>
+                                                                                                                                </>
+                                                                                                                            ) : (
+                                                                                                                                <>
+                                                                                                                                    <button className="workspace-files-OpenProjectButton"
+                                                                                                                                        type="button"
+                                                                                                                                        onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
+                                                                                                                                        disabled={selectedProjectFile?.pre_trans_processing}
+                                                                                                                                        style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
+                                                                                                                                    >
+                                                                                                                                        <span className="fileopen-new-btn">{t("transcribe")}</span>
+                                                                                                                                    </button>
+                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                                </>
+                                                                                                                            )
+                                                                                                                        )
+                                                                                                                    ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (
+                                                                                                                        <>
+                                                                                                                            <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
+                                                                                                                                <button className="workspace-files-OpenProjectButton"
+                                                                                                                                    type="button"
+                                                                                                                                    style={{
+                                                                                                                                        paddingLeft: "30px",
+                                                                                                                                        paddingRight: "30px"
+                                                                                                                                    }}
+                                                                                                                                    onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}
+                                                                                                                                >
+                                                                                                                                    <span className="fileopen-new-btn">{t("view")}</span>
+                                                                                                                                </button>
+                                                                                                                            </Tooltip>
+                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                        </>
+                                                                                                                    ) : (
+                                                                                                                        (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                            <ProgressAnimateButton />
+                                                                                                                        ) : (
+                                                                                                                            <>
+                                                                                                                                {
+                                                                                                                                    clickedOpenButton == key ? (
+                                                                                                                                        <button className="workspace-files-OpeningProjectButton" type="button">
+                                                                                                                                            <span className="fileopen-new-btn">
+                                                                                                                                                <ButtonLoader />
+                                                                                                                                                {t("opening")}
+                                                                                                                                            </span>
+                                                                                                                                        </button>
+                                                                                                                                    ) : (
+                                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                                            type="button"
+                                                                                                                                            onMouseUp={(e) =>
+                                                                                                                                                openFile(
+                                                                                                                                                    e,
+                                                                                                                                                    key,
+                                                                                                                                                    selectedProjectFile.id,
+                                                                                                                                                    selectedProjectFile.document_url,
+                                                                                                                                                    selectedProjectFile.first_time_open,
+                                                                                                                                                    selectedProjectFile.open_in,
+                                                                                                                                                    project.project_name,
+                                                                                                                                                    project.id,
+                                                                                                                                                    project?.get_project_type,
+                                                                                                                                                    null,
+                                                                                                                                                    null,
+                                                                                                                                                    null,
+                                                                                                                                                    null,
+                                                                                                                                                    selectedProjectFile,
+                                                                                                                                                    project
+                                                                                                                                                )
+                                                                                                                                            }
+                                                                                                                                        >
+                                                                                                                                            <span className="fileopen-new-btn">{t("open")}</span>
+                                                                                                                                        </button>
+                                                                                                                                    )
+                                                                                                                                }
+                                                                                                                                {isFederal && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === 'Completed') && (
+                                                                                                                                    <button className="workspace-files-OpenProjectButton"
+                                                                                                                                        type="button"
+                                                                                                                                        style={
+                                                                                                                                            selectedProjectFile?.push_detail ? 
+                                                                                                                                            {backgroundColor: "#9d9db1"} : {}
+                                                                                                                                        }
+                                                                                                                                        onClick={(e) => {
+                                                                                                                                            selectedProjectFile?.push_detail ?
+                                                                                                                                            Config.toast("Story already has been pushed") : pushStoryToCMS(e, selectedProjectFile, project?.id)
+                                                                                                                                        }}
+                                                                                                                                    >
+                                                                                                                                        <span className="fileopen-new-btn">
+                                                                                                                                            {isStoryIdPushing === selectedProjectFile?.id && (
+                                                                                                                                                <ButtonLoader />
+                                                                                                                                            )}
+                                                                                                                                            {selectedProjectFile?.push_detail ? t("pushed") : t("push")}
+                                                                                                                                        </span>
+                                                                                                                                    </button>
+                                                                                                                                )}
+                                                                                                                                <div className="more-options-wrap">
+                                                                                                                                    {project.get_project_type === 6 ? (
+                                                                                                                                        <MoreOptionsIconDesigner project={project} removeDelete={false} assigned={selectedProjectFile.task_assign_info == null ? false : true} removeEdit={true} selectedProjectFile={selectedProjectFile} />
+                                                                                                                                    ) : (
+                                                                                                                                        <>
+                                                                                                                                            <ButtonBase onClick={(e) => handleMoreVertOption(e, selectedProjectFile?.id)} className="sorting-icon">
+                                                                                                                                                <MoreVertIcon className="more-icon" />
+                                                                                                                                            </ButtonBase>
+                                                                                                                                            {(moreEl && (openedMoreOption === selectedProjectFile?.id)) &&
+                                                                                                                                                <>
+                                                                                                                                                    <div className="menu-wrapper" ref={moreOptionOutside} onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
+                                                                                                                                                        <ul>
+                                                                                                                                                            {
+                                                                                                                                                                moreOptions?.filter(item => (
                                                                                                                                                                     (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
                                                                                                                                                                         (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
                                                                                                                                                                         : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
@@ -7824,237 +7198,574 @@ function MyStories(props) {
                                                                                                                                 </div>
                                                                                                                             </>
                                                                                                                         )
-                                                                                                                    )}
-                                                                                                                </div>
-                                                                                                            </div>
+                                                                                                                    )
+                                                                                                                )
+
+                                                                                                            ) : (    // if project is not assigned to anyone
+                                                                                                                (selectedProjectFile?.converted != null && (project?.get_project_type == 1 || project?.get_project_type == 2)) ? (   // pdf convert logic 
+                                                                                                                    selectedProjectFile?.converted ? (    // if pdf is converted
+                                                                                                                        <>
+                                                                                                                            {
+                                                                                                                                selectedProjectFile?.open_in === 'google-ocr' ? (
+                                                                                                                                    <>
+                                                                                                                                        {/* {
+                                                                                                                                            !selectedProjectFile?.pre_trans_processing && (
+                                                                                                                                                <Tooltip TransitionComponent={Zoom} title="Delete" placement="top">
+                                                                                                                                                    <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
+                                                                                                                                                        <img
+                                                                                                                                                            src={Config.HOST_URL + "assets/images/new-ui-icons/assets-delete-icon.svg"}
+                                                                                                                                                            alt="close_black"
+                                                                                                                                                        />
+                                                                                                                                                    </span>
+                                                                                                                                                </Tooltip>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                        <Tooltip className="dont-open-list" title={t("download")} placement="top">
+                                                                                                                                            <span className="mr-4" onMouseUp={() => downloadConvertDocxFile(selectedProjectFile?.id)}>
+                                                                                                                                                <img
+                                                                                                                                                    src={Config.HOST_URL + "assets/images/new-ui-icons/file_download.svg"}
+                                                                                                                                                    alt="bulk download"
+                                                                                                                                                    should-open-files="dont-open"
+                                                                                                                                                />
+                                                                                                                                            </span>
+                                                                                                                                        </Tooltip> */}
+                                                                                                                                        <Tooltip title={t("view_docx_file_in_writer")} TransitionComponent={Zoom} placement="top">
+                                                                                                                                            <button
+                                                                                                                                                className="workspace-files-OpenProjectButton" type="button" onMouseUp={() => openWriter(selectedProjectFile?.id, selectedProjectFile?.filename, project?.id)}>
+                                                                                                                                                <span className="fileopen-new-btn">{t("view")}</span>
+                                                                                                                                            </button>
+                                                                                                                                        </Tooltip>
+                                                                                                                                        <MoreOptionsIconPDF selectedProjectFile={selectedProjectFile} project={project} taskPDF={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                                    </>
+                                                                                                                                ) : selectedProjectFile?.open_in === 'convertio' ? (
+                                                                                                                                    <>
+                                                                                                                                        {
+                                                                                                                                            !selectedProjectFile?.is_task_translated ? (    // if task is not translated (translation task is not created)
+                                                                                                                                                <>
+                                                                                                                                                    {
+                                                                                                                                                        !selectedProjectFile?.pre_trans_processing && (
+                                                                                                                                                            <Tooltip TransitionComponent={Zoom} title={t("delete")} placement="top">
+                                                                                                                                                                <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
+                                                                                                                                                                    <img
+                                                                                                                                                                        src={DeleteBinIcon}
+                                                                                                                                                                        alt="close_black"
+                                                                                                                                                                    />
+                                                                                                                                                                </span>
+                                                                                                                                                            </Tooltip>
+                                                                                                                                                        )
+                                                                                                                                                    }
+                                                                                                                                                    <Tooltip className="dont-open-list" title={t("download")} placement="top">
+                                                                                                                                                        <span className="mr-4" onMouseUp={() => downloadConvertDocxFile(selectedProjectFile?.id)}>
+                                                                                                                                                            <img
+                                                                                                                                                                src={DownloadIcon}
+                                                                                                                                                                alt="bulk download"
+                                                                                                                                                                should-open-files="dont-open"
+                                                                                                                                                            />
+                                                                                                                                                        </span>
+                                                                                                                                                    </Tooltip>
+                                                                                                                                                    <Tooltip title={t("create_trans_text")} TransitionComponent={Zoom} placement="top">
+                                                                                                                                                        <button className="workspace-files-OpenProjectButton" type="button" onMouseUp={(e) => { !isPdfTranslating && translateFromPdfTask(selectedProjectFile?.id, project?.id) }}>
+                                                                                                                                                            <span className="fileopen-new-btn">{isPdfTranslating && <ButtonLoader style={{ marginLeft: '5px' }} />} {isPdfTranslating ? t("translating") : t("translate")}</span>
+                                                                                                                                                        </button>
+                                                                                                                                                    </Tooltip>
+                                                                                                                                                </>
+                                                                                                                                            ) : (   // the task is translated (translation task has been created)
+                                                                                                                                                <>
+                                                                                                                                                    <Tooltip className="dont-open-list" title={t("download")} placement="top">
+                                                                                                                                                        <button
+                                                                                                                                                            style={{
+                                                                                                                                                                paddingLeft: "16px",
+                                                                                                                                                                paddingRight: "16px"
+                                                                                                                                                            }}
+                                                                                                                                                            className="workspace-files-OpenProjectButton" type="button" onMouseUp={() => downloadConvertDocxFile(selectedProjectFile?.id)}>
+                                                                                                                                                            <span className="fileopen-new-btn">{t("download")}</span>
+                                                                                                                                                        </button>
+                                                                                                                                                    </Tooltip>
+                                                                                                                                                    <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                                                </>
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                    </>
+                                                                                                                                ) : selectedProjectFile?.open_in === 'FileCorrupted' ? (
+                                                                                                                                    <>
+                                                                                                                                        <Tooltip title={t("file_cannot_be_processed")} TransitionComponent={Zoom} placement="top">
+                                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" style={{ opacity: 0.7, paddingLeft: "22px", paddingRight: "22px" }}>
+                                                                                                                                                <span className="fileopen-new-btn">{t("convert")}</span>
+                                                                                                                                            </button>
+                                                                                                                                        </Tooltip>
+                                                                                                                                        <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                                    </>
+                                                                                                                                ) : selectedProjectFile?.open_in == null ? (
+                                                                                                                                    <>
+                                                                                                                                        <button className="workspace-files-OpeningProjectButton" type="button">
+                                                                                                                                            <span className="fileopen-new-btn">
+                                                                                                                                                <ButtonLoader />
+                                                                                                                                                {t("converting")}
+                                                                                                                                            </span>
+                                                                                                                                        </button>
+                                                                                                                                        <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={true} />
+                                                                                                                                    </>
+                                                                                                                                ) : null
+                                                                                                                            }
+                                                                                                                        </>
+                                                                                                                    ) : (   // if pdf is not converted
+                                                                                                                        clickedOpenButton == selectedProjectFile?.id ? (
+                                                                                                                            <>
+                                                                                                                                <ProgressAnimateButton name={"Converting"} />
+                                                                                                                                <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={true} />
+                                                                                                                            </>
+                                                                                                                        ) : (
+                                                                                                                            <>
+                                                                                                                                {selectedProjectFile?.isPDFConverting ? (
+                                                                                                                                    <ProgressAnimateButton name={"Converting"} />
+                                                                                                                                ) : (
+                                                                                                                                    <button className="workspace-files-OpenProjectButton"
+                                                                                                                                        type="button"
+                                                                                                                                        style={{
+                                                                                                                                            paddingLeft: "22px",
+                                                                                                                                            paddingRight: "22px"
+                                                                                                                                        }}
+                                                                                                                                        onMouseUp={(e) => checkPdfConversionStatus(selectedProjectFile?.id, project?.id, 'first')}
+                                                                                                                                    >
+                                                                                                                                        <span className="fileopen-new-btn">{t("convert")}</span>
+                                                                                                                                    </button>
+                                                                                                                                )}
+                                                                                                                                <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                            </>
+                                                                                                                        )
+                                                                                                                    )
+                                                                                                                ) : (project?.get_project_type === 4 && ((selectedProjectFile?.open_in === 'Download' && !selectedProjectFile?.text_to_speech_convert_enable) || selectedProjectFile?.audio_file_url != undefined)) ? (
+                                                                                                                    <>
+                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                            type="button"
+                                                                                                                            style={{
+                                                                                                                                paddingLeft: "16px",
+                                                                                                                                paddingRight: "16px"
+                                                                                                                            }}
+                                                                                                                            onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
+                                                                                                                        >
+                                                                                                                            <span className="fileopen-new-btn">{t("download")}</span>
+                                                                                                                        </button>
+                                                                                                                        <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                    </>
+                                                                                                                ) : (project?.get_project_type === 4 && selectedProjectFile?.open_in === 'Download' && selectedProjectFile?.text_to_speech_convert_enable) ? (
+                                                                                                                    clickedOpenButton == selectedProjectFile?.id ? (
+                                                                                                                        <>
+                                                                                                                            <button className="workspace-files-OpeningProjectButton" type="button">
+                                                                                                                                <span className="fileopen-new-btn">
+                                                                                                                                    <ButtonLoader />
+                                                                                                                                    {t("converting")}
+                                                                                                                                </span>
+                                                                                                                            </button>
+                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={true} />
+                                                                                                                        </>
+                                                                                                                    ) : (
+                                                                                                                        <>
+                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                style={{
+                                                                                                                                    paddingLeft: "22px",
+                                                                                                                                    paddingRight: "22px"
+                                                                                                                                }}
+                                                                                                                                type="button"
+                                                                                                                                onMouseUp={(e) => convertSourceFileToAudio(selectedProjectFile?.id)}
+                                                                                                                            >
+                                                                                                                                <span className="fileopen-new-btn">{t("convert")}</span>
+                                                                                                                            </button>
+                                                                                                                            <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                        </>
+                                                                                                                    )
+                                                                                                                ) : (selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed) ? (
+                                                                                                                    <>
+                                                                                                                        <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
+                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                type="button"
+                                                                                                                                style={{
+                                                                                                                                    paddingLeft: "30px",
+                                                                                                                                    paddingRight: "30px"
+                                                                                                                                }}
+                                                                                                                                onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}
+                                                                                                                            >
+                                                                                                                                <span className="fileopen-new-btn">{t("view")}</span>
+                                                                                                                            </button>
+                                                                                                                        </Tooltip>
+                                                                                                                        <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                    </>
+                                                                                                                ) : (selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed === false) ? (
+                                                                                                                    clickedOpenButton == key ? (
+                                                                                                                        <>
+                                                                                                                            <button className="workspace-files-OpeningProjectButton" type="button">
+                                                                                                                                <span className="fileopen-new-btn">
+                                                                                                                                    <ButtonLoader />
+                                                                                                                                    {t("transcribing")}
+                                                                                                                                </span>
+                                                                                                                            </button>
+                                                                                                                            <span className="more-icon-empty"></span>
+                                                                                                                        </>
+                                                                                                                    ) : (
+                                                                                                                        (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                            <>
+                                                                                                                                <ProgressAnimateButton />
+                                                                                                                                <span className="more-icon-empty"></span>
+                                                                                                                            </>
+                                                                                                                        ) : (
+                                                                                                                            <>
+                                                                                                                                <button className="workspace-files-OpenProjectButton"
+                                                                                                                                    type="button"
+                                                                                                                                    onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
+                                                                                                                                    disabled={selectedProjectFile?.pre_trans_processing}
+                                                                                                                                    style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
+                                                                                                                                >
+                                                                                                                                    <span className="fileopen-new-btn">{t("transcribe")}</span>
+                                                                                                                                </button>
+                                                                                                                                <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                            </>
+                                                                                                                        )
+                                                                                                                    )
+                                                                                                                ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (
+                                                                                                                    <>
+                                                                                                                        {selectedProjectFile?.file_translate_done ? (   // if file is translated show download btn
+                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                type="button"
+                                                                                                                                style={{
+                                                                                                                                    paddingLeft: "16px",
+                                                                                                                                    paddingRight: "16px"
+                                                                                                                                }}
+                                                                                                                                onMouseUp={(e) => downloadTaskTargetFile(selectedProjectFile)}
+                                                                                                                            >
+                                                                                                                                <span className="fileopen-new-btn">{t("download")}</span>
+                                                                                                                            </button>
+                                                                                                                        ) : (   // not translated then show translate btn
+                                                                                                                            selectedProjectFile?.isProcessing ? (
+                                                                                                                                <ProgressAnimateButton />
+                                                                                                                            ) : (
+                                                                                                                                <button className="workspace-files-OpenProjectButton"
+                                                                                                                                    type="button"
+                                                                                                                                    style={{
+                                                                                                                                        paddingLeft: "16px",
+                                                                                                                                        paddingRight: "16px"
+                                                                                                                                    }}
+                                                                                                                                    onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)}
+                                                                                                                                >
+                                                                                                                                    <span className="fileopen-new-btn">{t("translate")}</span>
+                                                                                                                                </button>
+                                                                                                                            )
+                                                                                                                        )}
+                                                                                                                        <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
+                                                                                                                    </>
+                                                                                                                ) : (
+                                                                                                                    <>
+                                                                                                                        {
+                                                                                                                            (selectedProjectFile?.pre_trans_processing || downloadingFilesList.current?.find(each => each == selectedProjectFile?.id)) ? (
+                                                                                                                                <ProgressAnimateButton />
+                                                                                                                            ) : (
+                                                                                                                                clickedOpenButton == key ? (
+                                                                                                                                    <button className="workspace-files-OpeningProjectButton" type="button">
+                                                                                                                                        <span className="fileopen-new-btn">
+                                                                                                                                            <ButtonLoader />
+                                                                                                                                            {t("opening")}
+                                                                                                                                        </span>
+                                                                                                                                    </button>
+                                                                                                                                ) : (
+                                                                                                                                    <button className="workspace-files-OpenProjectButton"
+                                                                                                                                        type="button"
+                                                                                                                                        onMouseUp={(e) =>
+                                                                                                                                            openFile(
+                                                                                                                                                e,
+                                                                                                                                                key,
+                                                                                                                                                selectedProjectFile.id,
+                                                                                                                                                selectedProjectFile.document_url,
+                                                                                                                                                selectedProjectFile.first_time_open,
+                                                                                                                                                selectedProjectFile.open_in,
+                                                                                                                                                project.project_name,
+                                                                                                                                                project.id,
+                                                                                                                                                project?.get_project_type,
+                                                                                                                                                null,
+                                                                                                                                                null,
+                                                                                                                                                null,
+                                                                                                                                                null,
+                                                                                                                                                selectedProjectFile,
+                                                                                                                                                project
+                                                                                                                                            )
+                                                                                                                                        }
+                                                                                                                                    >
+                                                                                                                                        <span className="fileopen-new-btn">{t("open")}</span>
+                                                                                                                                    </button>
+                                                                                                                                )
+                                                                                                                            )
+                                                                                                                        }
+                                                                                                                        {/* story push button */}
+                                                                                                                        {selectedProjectFile?.push_detail ? (
+                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                            type="button"
+                                                                                                                            style={{backgroundColor: "#9d9db1"}}
+                                                                                                                            onClick={(e) => {
+                                                                                                                                (Config.toast('Story already has been pushed'))
+                                                                                                                            }}
+                                                                                                                        >
+                                                                                                                            <span className="fileopen-new-btn">
+                                                                                                                                {t("pushed")}
+                                                                                                                            </span>
+                                                                                                                        </button>
+                                                                                                                        ) : (
+                                                                                                                            isFederal && (
+                                                                                                                                <button className="workspace-files-OpenProjectButton"
+                                                                                                                                    type="button"
+                                                                                                                                    style={
+                                                                                                                                        (selectedProjectFile?.news_detail?.tar_json_exists) ? 
+                                                                                                                                        {} : {backgroundColor: "#9d9db1"}
+                                                                                                                                    }
+                                                                                                                                    onClick={(e) => {
+                                                                                                                                        (selectedProjectFile?.news_detail?.tar_json_exists) ? 
+                                                                                                                                        (isStoryIdPushing !== selectedProjectFile?.id) && pushStoryToCMS(e, selectedProjectFile, project?.id) :
+                                                                                                                                        (Config.toast('Task is not yet started', 'warning'))
+                                                                                                                                    }}
+                                                                                                                                >
+                                                                                                                                    <span className="fileopen-new-btn">
+                                                                                                                                        {isStoryIdPushing === selectedProjectFile?.id && (
+                                                                                                                                            <ButtonLoader />
+                                                                                                                                        )}
+                                                                                                                                        {t("push")}
+                                                                                                                                    </span>
+                                                                                                                                </button>
+                                                                                                                            )
+                                                                                                                        )}
+                                                                                                                        
+                                                                                                                        <div className="more-options-wrap">
+                                                                                                                            {project.get_project_type === 6 ? (
+                                                                                                                                <MoreOptionsIconDesigner project={project} removeDelete={false} assigned={selectedProjectFile.task_assign_info == null ? false : true} removeEdit={true} selectedProjectFile={selectedProjectFile} />
+                                                                                                                            ) : (
+                                                                                                                                <>
+                                                                                                                                    <ButtonBase onClick={(e) => handleMoreVertOption(e, selectedProjectFile?.id)} className="sorting-icon">
+                                                                                                                                        <MoreVertIcon className="more-icon" />
+                                                                                                                                    </ButtonBase>
+                                                                                                                                    {(moreEl && (openedMoreOption === selectedProjectFile?.id)) &&
+                                                                                                                                        <>
+                                                                                                                                            <div className="menu-wrapper" ref={moreOptionOutside} onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
+                                                                                                                                                <ul>
+                                                                                                                                                    {
+                                                                                                                                                        moreOptions?.filter(item => (
+                                                                                                                                                            project?.file_translate ? item?.id === 2 :
+                                                                                                                                                            (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
+                                                                                                                                                                (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
+                                                                                                                                                                : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
+                                                                                                                                                        ))?.map((item) => {
+                                                                                                                                                            return (
+                                                                                                                                                                <li
+                                                                                                                                                                    key={item.id}
+                                                                                                                                                                    className="list-item"
+                                                                                                                                                                    onClick={(e) =>
+                                                                                                                                                                        item?.label === 'Delete' ? handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info) :
+                                                                                                                                                                            item?.label === 'View PO' && getPODetailsForTask(selectedProjectFile.id)
+                                                                                                                                                                    }
+                                                                                                                                                                    style={selectedProjectFile?.pre_trans_processing ? { opacity: 0.7, pointerEvents: 'none' } : {}}
+                                                                                                                                                                    onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))}
+                                                                                                                                                                >
+                                                                                                                                                                    <div className="item-wrap">
+                                                                                                                                                                        <span className="icon">{item.icon}</span>
+                                                                                                                                                                        <span className="text">{item.label}</span>
+                                                                                                                                                                    </div>
+                                                                                                                                                                    {
+                                                                                                                                                                        item.arrow_icon &&
+                                                                                                                                                                        <>
+                                                                                                                                                                            {item.arrow_icon}
+                                                                                                                                                                        </>
+                                                                                                                                                                    }
+                                                                                                                                                                </li>
+                                                                                                                                                            )
+                                                                                                                                                        })
+                                                                                                                                                    }
+                                                                                                                                                </ul>
+                                                                                                                                                {
+                                                                                                                                                    subDownloadOption &&
+                                                                                                                                                    <>
+                                                                                                                                                        <div className="download-sub-menu" onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
+                                                                                                                                                            <ul>
+                                                                                                                                                                {
+                                                                                                                                                                    subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
+                                                                                                                                                                        return (
+                                                                                                                                                                            <li
+                                                                                                                                                                                key={item.id}
+                                                                                                                                                                                className="list-inner-item"
+                                                                                                                                                                                style={
+                                                                                                                                                                                    (selectedProjectFile?.isTaskDownloading != item?.value) ?
+                                                                                                                                                                                        {} : { opacity: 0.7 }
+                                                                                                                                                                                }
+                                                                                                                                                                                onClick={(e) => {
+                                                                                                                                                                                    docCreditCheckAlertRef.current = selectedProjectFile.mt_only_credit_check;
+                                                                                                                                                                                    (selectedProjectFile?.isTaskDownloading != item?.value) &&
+                                                                                                                                                                                        downloadDifferentFile(
+                                                                                                                                                                                            item?.value,
+                                                                                                                                                                                            selectedProjectFile?.document,
+                                                                                                                                                                                            e,
+                                                                                                                                                                                            key,
+                                                                                                                                                                                            selectedProjectFile.id,
+                                                                                                                                                                                            selectedProjectFile.document_url,
+                                                                                                                                                                                            selectedProjectFile.first_time_open,
+                                                                                                                                                                                            selectedProjectFile.open_in,
+                                                                                                                                                                                            project.project_name,
+                                                                                                                                                                                            project.id,
+                                                                                                                                                                                            project?.get_project_type,
+                                                                                                                                                                                            selectedProjectFile?.filename,
+                                                                                                                                                                                            selectedProjectFile
+                                                                                                                                                                                        )
+                                                                                                                                                                                }}
+                                                                                                                                                                            >
+                                                                                                                                                                                {item.label}
+                                                                                                                                                                            </li>
+                                                                                                                                                                        )
+                                                                                                                                                                    })
+                                                                                                                                                                }
+                                                                                                                                                            </ul>
+                                                                                                                                                        </div>
+                                                                                                                                                    </>
+                                                                                                                                                }
+                                                                                                                                            </div>
+                                                                                                                                        </>
+                                                                                                                                    }
+                                                                                                                                </>
+                                                                                                                            )}
+                                                                                                                        </div>
+                                                                                                                    </>
+                                                                                                                )
+                                                                                                            )}
                                                                                                         </div>
                                                                                                     </div>
-                                                                                                );
-                                                                                                selectedFilesData = <div className="task-row-wrapper">{selectedFilesData}</div>
-                                                                                                return selectedFilesData;
-                                                                                            })
-                                                                                        ) : (
-                                                                                            <div>
-                                                                                                {Array(project.tasks_count)
-                                                                                                    .fill(null)
-                                                                                                    .map((value, key) => (
-                                                                                                        <div className="file-edit-inner-table" key={key}>
-                                                                                                            <div className="file-edit-list-inner-table-row">
-                                                                                                                <div className="file-edit-list-inner-table-cell">
-                                                                                                                    {/* <div className='check-box-wrap'>
-                                                                                                                        <Skeleton
-                                                                                                                            animation="wave"
-                                                                                                                            variant="circular"
-                                                                                                                            width={25}
-                                                                                                                            height={25}
-                                                                                                                        />
-                                                                                                                    </div> */}
-                                                                                                                    <div className="my-stories-doc-info-wrapper">
-                                                                                                                        <div className="doc-icon-wrapper">
-                                                                                                                            <span className="doc-icon">
-                                                                                                                                <Skeleton
-                                                                                                                                    animation="wave"
-                                                                                                                                    variant="rounded"
-                                                                                                                                    style={{ width: "100%", height: "100%" }}
-                                                                                                                                />
-                                                                                                                            </span>
-                                                                                                                        </div>
-                                                                                                                        <div className="story-info-wrap">
-                                                                                                                            <Skeleton
-                                                                                                                                animation="wave"
-                                                                                                                                style={{ marginBottom: "15px" }}
-                                                                                                                                variant="rounded"
-                                                                                                                                width={80}
-                                                                                                                                height={10}
-                                                                                                                            />
-                                                                                                                            <div className="d-flex flex-column">
-                                                                                                                                <Skeleton
-                                                                                                                                    animation="wave"
-                                                                                                                                    variant="rounded"
-                                                                                                                                    width={200}
-                                                                                                                                    height={15}
-                                                                                                                                />
-                                                                                                                                <Skeleton
-                                                                                                                                    animation="wave"
-                                                                                                                                    style={{ marginTop: "0.5rem" }}
-                                                                                                                                    variant="rounded"
-                                                                                                                                    width={100}
-                                                                                                                                    height={15}
-                                                                                                                                />
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                    <div style={{ marginTop: "10px" }} className="d-flex align-items-center">
-                                                                                                                        <Skeleton
-                                                                                                                            animation="wave"
-                                                                                                                            style={{ marginLeft: "0.2rem" }}
-                                                                                                                            variant="rounded"
-                                                                                                                            width={20}
-                                                                                                                            height={10}
-                                                                                                                        />
-                                                                                                                        <Skeleton
-                                                                                                                            animation="wave"
-                                                                                                                            style={{ marginLeft: "0.2rem" }}
-                                                                                                                            variant="rounded"
-                                                                                                                            width={20}
-                                                                                                                            height={10}
-                                                                                                                        />
-                                                                                                                        <Skeleton
-                                                                                                                            animation="wave"
-                                                                                                                            style={{ marginLeft: "0.2rem" }}
-                                                                                                                            variant="rounded"
-                                                                                                                            width={20}
-                                                                                                                            height={10}
-                                                                                                                        />
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                                <div className="file-edit-list-inner-table-cell">
-                                                                                                                    <div className="status-conditions-part">
-                                                                                                                        <div className="d-flex align-items-center">
-                                                                                                                            <Skeleton
-                                                                                                                                animation="wave"
-                                                                                                                                style={{ marginRight: "1rem" }}
-                                                                                                                                variant="text"
-                                                                                                                                width={20}
-                                                                                                                            />
-                                                                                                                            <Skeleton animation="wave" variant="text" width={55} />
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                                <div className="file-edit-list-inner-table-cell">
-                                                                                                                    <div className="d-flex align-items-center justify-content-end w-100">
-                                                                                                                        <div className="d-flex align-items-center">
-                                                                                                                            <Skeleton
-                                                                                                                                animation="wave"
-                                                                                                                                style={{ marginRight: "14px" }}
-                                                                                                                                variant="rounded"
-                                                                                                                                width={80}
-                                                                                                                                height={28}
-                                                                                                                            />
-                                                                                                                            <Skeleton
-                                                                                                                                animation="wave"
-                                                                                                                                style={{ marginRight: "14px" }}
-                                                                                                                                variant="rounded"
-                                                                                                                                width={80}
-                                                                                                                                height={28}
-                                                                                                                            />
-                                                                                                                            <Skeleton
-                                                                                                                                animation="wave"
-                                                                                                                                style={{ marginRight: "14px" }}
-                                                                                                                                variant="rounded"
-                                                                                                                                width={80}
-                                                                                                                                height={28}
-                                                                                                                            />
-                                                                                                                            <Skeleton
-                                                                                                                                animation="wave"
-                                                                                                                                variant="circular"
-                                                                                                                                width={25}
-                                                                                                                                height={25}
-                                                                                                                            />
-                                                                                                                        </div>
-                                                                                                                    </div>    
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    ))}
+                                                                                                </div>
                                                                                             </div>
-                                                                                        ))
-                                                                                        /*(selectedProjectFiles.length == 0) && (
-                                                                                                        <div className="file-edit-inner-table">
-                                                                                                            <div className="file-edit-list-inner-table-row">
-                                                                                                                <div className="file-edit-list-inner-table-cell">
-                                                                                                                    <div className="file-edit-translation-txt">
-                                                                                                                        No Files Found
+                                                                                        );
+                                                                                        selectedFilesData = <div className="task-row-wrapper">{selectedFilesData}</div>
+                                                                                        return selectedFilesData;
+                                                                                    })
+                                                                                ) : (
+                                                                                    <div>
+                                                                                        {Array(project.tasks_count)
+                                                                                            .fill(null)
+                                                                                            .map((value, key) => (
+                                                                                                <div className="file-edit-inner-table" key={key}>
+                                                                                                    <div className="file-edit-list-inner-table-row">
+                                                                                                        <div className="file-edit-list-inner-table-cell">
+                                                                                                            {/* <div className='check-box-wrap'>
+                                                                                                                <Skeleton
+                                                                                                                    animation="wave"
+                                                                                                                    variant="circular"
+                                                                                                                    width={25}
+                                                                                                                    height={25}
+                                                                                                                />
+                                                                                                            </div> */}
+                                                                                                            <div className="my-stories-doc-info-wrapper">
+                                                                                                                <div className="doc-icon-wrapper">
+                                                                                                                    <span className="doc-icon">
+                                                                                                                        <Skeleton
+                                                                                                                            animation="wave"
+                                                                                                                            variant="rounded"
+                                                                                                                            style={{ width: "100%", height: "100%" }}
+                                                                                                                        />
+                                                                                                                    </span>
+                                                                                                                </div>
+                                                                                                                <div className="story-info-wrap">
+                                                                                                                    <Skeleton
+                                                                                                                        animation="wave"
+                                                                                                                        style={{ marginBottom: "15px" }}
+                                                                                                                        variant="rounded"
+                                                                                                                        width={80}
+                                                                                                                        height={10}
+                                                                                                                    />
+                                                                                                                    <div className="d-flex flex-column">
+                                                                                                                        <Skeleton
+                                                                                                                            animation="wave"
+                                                                                                                            variant="rounded"
+                                                                                                                            width={200}
+                                                                                                                            height={15}
+                                                                                                                        />
+                                                                                                                        <Skeleton
+                                                                                                                            animation="wave"
+                                                                                                                            style={{ marginTop: "0.5rem" }}
+                                                                                                                            variant="rounded"
+                                                                                                                            width={100}
+                                                                                                                            height={15}
+                                                                                                                        />
                                                                                                                     </div>
                                                                                                                 </div>
-                                                                                                                <div className="file-edit-list-inner-table-cell">
+                                                                                                            </div>
+                                                                                                            <div style={{ marginTop: "10px" }} className="d-flex align-items-center">
+                                                                                                                <Skeleton
+                                                                                                                    animation="wave"
+                                                                                                                    style={{ marginLeft: "0.2rem" }}
+                                                                                                                    variant="rounded"
+                                                                                                                    width={20}
+                                                                                                                    height={10}
+                                                                                                                />
+                                                                                                                <Skeleton
+                                                                                                                    animation="wave"
+                                                                                                                    style={{ marginLeft: "0.2rem" }}
+                                                                                                                    variant="rounded"
+                                                                                                                    width={20}
+                                                                                                                    height={10}
+                                                                                                                />
+                                                                                                                <Skeleton
+                                                                                                                    animation="wave"
+                                                                                                                    style={{ marginLeft: "0.2rem" }}
+                                                                                                                    variant="rounded"
+                                                                                                                    width={20}
+                                                                                                                    height={10}
+                                                                                                                />
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div className="file-edit-list-inner-table-cell">
+                                                                                                            <div className="status-conditions-part">
+                                                                                                                <div className="d-flex align-items-center">
+                                                                                                                    <Skeleton
+                                                                                                                        animation="wave"
+                                                                                                                        style={{ marginRight: "1rem" }}
+                                                                                                                        variant="text"
+                                                                                                                        width={20}
+                                                                                                                    />
+                                                                                                                    <Skeleton animation="wave" variant="text" width={55} />
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                    )*/
-                                                                                    }
-                                                                                </Collapse>
-                                                                            </div>
-                                                                        );
-                                                                //     }
-                                                                // }
-                                                                // for displaying choicelist 
-                                                                // else if (activeProjTab === 6) {
-                                                                //     return (
-                                                                //         <div
-                                                                //             className="file-edit-list-table-row"
-                                                                //             key={project.id}
-                                                                //         >
-                                                                //             <div className="file-edit-list-table-cell-wrap">
-                                                                //                 <div className="file-edit-list-table-cell">
-                                                                //                     <div className="proj-title-list-container">
-                                                                //                         <div className="blog-category-icon">
-                                                                //                             {/* {
-                                                                //                                 item?.document_type__type === 'Blog' ? (
-                                                                //                                     <Tooltip title="Blog article" TransitionComponent={Zoom} placement="top" arrow>
-                                                                //                                         <img src={Config.HOST_URL + "assets/images/blog-article.svg"} alt="blog article icon" />
-                                                                //                                     </Tooltip>
-                                                                //                                 ) : item?.open_as == 'BlogWizard' ? (
-                                                                //                                     <Tooltip title="Blog wizard" TransitionComponent={Zoom} placement="top" arrow>
-                                                                //                                         <img src={Config.HOST_URL + "assets/images/blog-wizard.svg"} alt="blog article icon" />
-                                                                //                                     </Tooltip>
-                                                                //                                 ) : (
-                                                                //                                     <img src={Config.BASE_URL +"/app/extension-image/docx"} alt="document" />
-                                                                //                                     )
-                                                                //                                 } */}
-                                                                //                             <img src={Config.HOST_URL + "assets/images/choicelist.svg"} alt="choicelist-icon" />
-                                                                //                         </div>
-                                                                //                         <div className="proj-list-info">
-                                                                //                             <div className="proj-information">
-                                                                //                                 {/* <Tooltip TransitionComponent={Zoom} title={item.doc_name} placement="top" arrow>
-                                                                //                             </Tooltip> */}
-                                                                //                                 <span className="file-edit-proj-txt-tmx">
-                                                                //                                     {project.name}
-                                                                //                                 </span>
-                                                                //                             </div>
-                                                                //                             <div className="proj-file-type">
-                                                                //                                 <span className="glossary-text-name">
-                                                                //                                     {languageOptionsList?.find(each => each.id === project?.language)?.language}
-                                                                //                                 </span>
-                                                                //                             </div>
-                                                                //                         </div>
-                                                                //                     </div>
-                                                                //                 </div>
-                                                                //                 <div className="file-edit-list-table-cell">
-                                                                //                     <div className="file-edit-translation-txt word-count">
-
-                                                                //                         <span className="file-edit-proj-txt-tmx" >
-                                                                //                             {
-                                                                //                                 Config.getProjectCreatedDate(project?.created_at)
-                                                                //                             }
-                                                                //                         </span>
-                                                                //                     </div>
-                                                                //                 </div>
-                                                                //                 <div className="file-edit-list-table-cell">
-                                                                //                     <div className="status-conditions-part dont-open-list">
-                                                                //                         {/* <Tooltip title={item?.open_as == 'BlogWizard' ? "Open in Blog" : "Open in Writter"} TransitionComponent={Zoom} placement="top">
-                                                                //                             <button 
-                                                                //                             style={{
-                                                                //                                 paddingLeft: "30px",
-                                                                //                                 paddingRight: "30px"
-                                                                //                             }}
-                                                                //                             className="workspace-files-OpenProjectButton" type="button" onMouseUp={() =>  item?.open_as == 'BlogWizard' ? history(`/writer-blog/?blog=${item?.id}`, {prevPath: window.location.pathname + window.location.search}) : openWriter(item?.id, item?.doc_name)}>
-                                                                //                                 <span className="fileopen-new-btn">Open</span>
-                                                                //                             </button>
-                                                                //                         </Tooltip> */}
-                                                                //                         <button
-                                                                //                             className="workspace-files-OpenProjectButton"
-                                                                //                             onClick={() => handleOpenButton(project.id)}
-                                                                //                         >
-                                                                //                             <span className="fileopen-new-btn">{t("open")}</span>
-                                                                //                         </button>
-                                                                //                         <MoreOptionsIconChoiceList choiceListItem={project} />
-                                                                //                     </div>
-                                                                //                 </div>
-                                                                //             </div>
-                                                                //         </div>
-                                                                //     )
-                                                                // }
+                                                                                                        <div className="file-edit-list-inner-table-cell">
+                                                                                                            <div className="d-flex align-items-center justify-content-end w-100">
+                                                                                                                <div className="d-flex align-items-center">
+                                                                                                                    <Skeleton
+                                                                                                                        animation="wave"
+                                                                                                                        style={{ marginRight: "14px" }}
+                                                                                                                        variant="rounded"
+                                                                                                                        width={80}
+                                                                                                                        height={28}
+                                                                                                                    />
+                                                                                                                    <Skeleton
+                                                                                                                        animation="wave"
+                                                                                                                        style={{ marginRight: "14px" }}
+                                                                                                                        variant="rounded"
+                                                                                                                        width={80}
+                                                                                                                        height={28}
+                                                                                                                    />
+                                                                                                                    <Skeleton
+                                                                                                                        animation="wave"
+                                                                                                                        style={{ marginRight: "14px" }}
+                                                                                                                        variant="rounded"
+                                                                                                                        width={80}
+                                                                                                                        height={28}
+                                                                                                                    />
+                                                                                                                    <Skeleton
+                                                                                                                        animation="wave"
+                                                                                                                        variant="circular"
+                                                                                                                        width={25}
+                                                                                                                        height={25}
+                                                                                                                    />
+                                                                                                                </div>
+                                                                                                            </div>    
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            ))}
+                                                                                    </div>
+                                                                                ))
+                                                                            }
+                                                                        </Collapse>
+                                                                    </div>
+                                                                );
                                                             }
                                                         )}
                                                     </React.Fragment>
@@ -8281,7 +7992,6 @@ function MyStories(props) {
                         hideSettingsModal={hideSettingsModal}
                         showSettings={showSettings}
                         setshowSettings={setshowSettings}
-                        setShowChoiceListCreateModal={setShowChoiceListCreateModal}
                         isNewsProject={true}
                     />
                 }
@@ -9146,111 +8856,6 @@ function MyStories(props) {
                     </div>
                 </Rodal>
             )}
-            {/* New choicelist creation modal */}
-            {showChoiceListCreateModal && (
-                <Rodal
-                    visible={showChoiceListCreateModal}
-                    showCloseButton={false}
-                    onClose={() => { console.log() }}
-                    className={"edit-instant-project-box " + ((showSrcLangModal) ? "z-index-reduce" : "z-index-increase")}
-                >
-                    <div className="header-wrapper">
-                        <div className="header-text">
-                            {!isChoiceListModalEdit ? (
-                                <h1>{t("create_choicelist")}</h1>
-                            ) : (
-                                <h1>{t("edit_choicelist")}</h1>
-                            )}
-                        </div>
-                        <span className="modal-close-btn" onClick={() => { setShowChoiceListCreateModal(false); setIsChoiceListModalEdit(false) }}>
-                            <img src={BlackCloseIcon} alt="close_black" />
-                        </span>
-                    </div>
-                    <div className="body-wrapper">
-                        <div className="language-details mb-3">
-                            <h2>{t("choicelist_name")}</h2>
-                            <input
-                                type='text'
-                                value={choiceListProjectName}
-                                placeholder={t("choicelist_name")}
-                                className="ai-sl-tl-btn input"
-                                onChange={(e) => setChoiceListProjectName(e.target.value)}
-                            />
-                        </div>
-                        <div className="language-details mb-3">
-                            <h2>{t("select_language")}</h2>
-                            <ButtonBase
-                                style={isChoiceListModalEdit ? { pointerEvents: 'none', opacity: 0.7 } : {}}
-                                onClick={() => setshowSrcLangModal(true)}
-                            >
-                                <div className="ai-sl-tl-btn">
-                                    <span className="text" style={choiceListLanguage?.value !== undefined ? { color: '#343a40' } : { color: '#ababab' }}>
-                                        {choiceListLanguage?.value !== undefined ? `${choiceListLanguage?.name}` : t("select_language")}
-                                    </span>
-                                </div>
-                            </ButtonBase>
-                            {isChoiceListModalEdit && (
-                                <div className="choicelist-edit-note">
-                                    <span className="note-content">
-                                        <ErrorOutlineOutlinedIcon className="imp-icon" />
-                                        {t("choicelist_lang_edit_restricted")}
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-                        <div className="edit-proj-button-row">
-                            <ButtonBase className="instant-edit-delete-btn" onClick={() => { setShowChoiceListCreateModal(false); setIsChoiceListModalEdit(false) }}>
-                                {t("discard")}
-                            </ButtonBase>
-                            {!isChoiceListModalEdit ? (
-                                <ButtonBase className="instant-edit-update-btn" onClick={() => { !isCreating && createChoiceList() }}>
-                                    {isCreating && <ButtonLoader />}
-                                    {isCreating ? t("creating") : t("create")}
-                                </ButtonBase>
-                            ) : (
-                                <ButtonBase className="instant-edit-update-btn" onClick={() => { !isUpdating && updateChoiceList() }}>
-                                    {isUpdating && <ButtonLoader />}
-                                    {isUpdating ? t("updating") : t("update")}
-                                </ButtonBase>
-                            )}
-                        </div>
-                    </div>
-                </Rodal>
-            )}
-
-            {showChoiceListDeleteModal && (<Rodal
-                visible={showChoiceListDeleteModal}
-                {...modaloptions}
-                showCloseButton={false}
-                className="ai-mark-confirm-box"
-            >
-                <div className="confirmation-warning-wrapper" style={isChoiceListDeleting ? { pointerEvents: 'none' } : {}}>
-                    <div className="confirm-top">
-                        <div><span onClick={() => { setShowChoiceListDeleteModal(false) }}><CloseIcon /></span></div>
-                        <div>{t("are_you_sure")}</div>
-                        <div>{t("choicelist_delete_note")}</div>
-                    </div>
-                    <div className="confirm-bottom">
-                        <div>
-                            <Button onClick={() => { setShowChoiceListDeleteModal(false) }}>{t("discard")}</Button>
-                            <Button
-                                style={isChoiceListDeleting ? { display: 'flex', alignItems: 'baseline' } : {}}
-                                onClick={() => !isChoiceListDeleting && deleteSelectedChoiceList(selectedChoiceListDataRef.current)}
-                                variant="contained"
-                            >
-                                {isChoiceListDeleting ? (
-                                    <>
-                                        <ButtonLoader />
-                                        {t("deleting")}
-                                    </>
-                                ) : (
-                                    t("delete")
-                                )}
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </Rodal>)}
             
             {showFileErrorModal && (
                 <Rodal 
@@ -9282,10 +8887,6 @@ function MyStories(props) {
                     </div>
                 </Rodal>
             )}
-
-            {/* {showReportModal && (
-                <UserWorkReportModal showReportModal={showReportModal} setShowReportModal={setShowReportModal} />
-            )} */}
         </React.Fragment>
     );
 }
