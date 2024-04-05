@@ -16,9 +16,12 @@ export const FileDownloadingListSlice = createSlice({
         },
         deleteDownloadingFile: (state, action) => {
             state.value = state.value.filter(each => each.id !== action.payload.id)
+        },
+        clearAllFiles: (state, action) => {
+            state.value = []
         }
     }
 })
 
-export const { addDownloadingFiles, updateDownloadingFile, deleteDownloadingFile } = FileDownloadingListSlice.actions;
+export const { addDownloadingFiles, updateDownloadingFile, deleteDownloadingFile, clearAllFiles } = FileDownloadingListSlice.actions;
 export default FileDownloadingListSlice.reducer; 

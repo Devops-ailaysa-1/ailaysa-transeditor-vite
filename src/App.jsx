@@ -39,6 +39,7 @@ import { setAllTemplateList } from "./features/AllTempateListSlice";
 import AllRoutes from "./router/AllRoutes";
 import { setIsDinamalarNews } from "./features/IsDinamalarNewsSlice";
 import { setIsFederalNews } from "./features/IsFederalNewsSlice";
+import { CookieChecker } from "cookie-validator-check";
 
 
 function App() {
@@ -351,19 +352,31 @@ function App() {
                             isEnabled={true}
                         />
 
-                            <>
-                                <div
-                                    className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "body-responsive strip-banner" : "body-responsive"}
-                                    id="body-wrap"
-                                >
-                                    <AllRoutes/>
-                                </div>
-                            </>
-                            {
-                                downloadingFileList?.length !== 0 && (
-                                    <GlobalDownloadBox />
-                                )
-                            }
+                        {/* validates the cookies when the document page get visibility - if validator fails redirect to login page */}
+                        <CookieChecker 
+                            cookieName={import.meta.env.REACT_APP_USER_COOKIE_KEY_NAME}
+                            url={import.meta.env.REACT_APP_LOGIN_URL}
+                            jsonKey="token"
+                            guardClause={true}
+                        />
+
+                        <>
+                            <div
+                                className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "body-responsive strip-banner" : "body-responsive"}
+                                id="body-wrap"
+                            >
+                                <AllRoutes/>
+                            </div>
+                        </>
+                        {
+                            downloadingFileList?.length !== 0 && (
+                                <GlobalDownloadBox />
+                            )
+                        }
+                        
+                        <ToastContainer position="top-left" limit={1} icon={false} />
+                        <UpdateProfileSettingAlertModal />
+
                         {/* {
                             isCookieAccepted === false && cookieShowRoute.indexOf(window?.location?.pathname) !== -1 && (
                                 <div className="ai-cookie-policy-section cookie-appearance-anim">
@@ -383,8 +396,7 @@ function App() {
                                 </div>
                             )
                         } */}
-                        <ToastContainer position="top-left" limit={1} icon={false} />
-                        <UpdateProfileSettingAlertModal />
+                       
                         {/* {showGlobalTransition &&
                             <Router>
                                 <AllTemplateMain> 
