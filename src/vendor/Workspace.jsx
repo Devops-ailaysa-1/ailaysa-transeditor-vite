@@ -7464,8 +7464,8 @@ function Workspace(props) {
 
     return (
         <React.Fragment>
-            {/* <Navbar documentId={documentId} sourceLanguage={sourceLanguage} targetLanguage={targetLanguage} targetLanguageScript={targetLanguageScript} projectName={projectName} fileName={fileName} isWhite={true} /> */}
             <Navbar
+                showViewOnlyTag={true}
                 documentId={documentId}
                 projectName={projectName}
                 fileName={fileName}

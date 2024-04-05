@@ -68,7 +68,8 @@ function Navbar(props) {
         mobileVersion,
         aiChatMobileTab,
         handlePreviousPage,
-        showTaskAssignActionBtn
+        showTaskAssignActionBtn,
+        showViewOnlyTag
     } = props
 
     const { t } = useTranslation();
@@ -1192,7 +1193,7 @@ function Navbar(props) {
                                             <span>{targetLanguageScript}</span>
                                         </span>
                                     )}
-                                    {(props.isWhite && !isWorkspaceEditable && !props.isGlossary) && (
+                                    {(props.isWhite && showViewOnlyTag && (!isWorkspaceEditable || !languagePairObject?.edit_allowed)) && (
                                         <span className="view-only-tag">
                                             <RemoveRedEyeOutlinedIcon className="eye-icon" />
                                             {t("view_only")}
