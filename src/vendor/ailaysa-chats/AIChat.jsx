@@ -402,7 +402,7 @@ const AIChat = () => {
     }
 
     const scroll = (element) => {
-        document.querySelector(`.page-${element}`)?.scrollIntoView({ behavior: "smooth",block: 'nearest',
+        document.querySelector(`.page-${element}`)?.scrollIntoView({ behavior: "smooth",block: 'start',
         inline: 'center' });
       }
 
