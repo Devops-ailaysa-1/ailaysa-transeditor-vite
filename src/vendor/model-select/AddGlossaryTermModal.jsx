@@ -390,22 +390,24 @@ const AddGlossaryTermModal = (props) => {
                                 onChange={handleInputDataChange}
                             />
                         </div>
-                        <div className="add-glossary-row">
-                            <label>{t("parts_of_speech")}</label>
-                            <div style={{flex: 1}}>
-                                <Select 
-                                    name="pos"
-                                    options={partOfSpeechOptions}
-                                    isSearchable={true}
-                                    menuPlacement="auto"
-                                    styles={posSelectStyle}
-                                    value={selectedWordChoicePOS}
-                                    placeholder={t("select")}
-                                    components={{DropdownIndicator, IndicatorSeparator: () => null}}
-                                    onChange={(selectOption) => setSelectedWordChoicePOS(selectOption)}
-                                />
+                        {!isDinamalar && 
+                            <div className="add-glossary-row">
+                                <label>{t("parts_of_speech")}</label>
+                                <div style={{flex: 1}}>
+                                    <Select 
+                                        name="pos"
+                                        options={partOfSpeechOptions}
+                                        isSearchable={true}
+                                        menuPlacement="auto"
+                                        styles={posSelectStyle}
+                                        value={selectedWordChoicePOS}
+                                        placeholder={t("select")}
+                                        components={{DropdownIndicator, IndicatorSeparator: () => null}}
+                                        onChange={(selectOption) => setSelectedWordChoicePOS(selectOption)}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                     <div className="confirm-bottom">
                         <div>

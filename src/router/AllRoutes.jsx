@@ -96,8 +96,8 @@ const AllRoutes = (props) => {
                 
                 <Route exact path="/default-glossary-workspace" element={<Suspense fallback={<MainAILoader />}><DefaultGlossaryWorkspace /></Suspense>} />
                 
-                <Route exact path="/wordchoice-workspace/:projectId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
-                <Route exact path="/wordchoice-workspace/:projectId/:taskId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
+                {/* <Route exact path="/wordchoice-workspace/:projectId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
+                <Route exact path="/wordchoice-workspace/:projectId/:taskId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} /> */}
 
                 <Route exact path="/accept/:uid/:token" element={<Invitation />} />
                 <Route exact path="/confirm/:uid/:token" element={<Invitation />} />
