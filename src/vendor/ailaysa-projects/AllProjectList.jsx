@@ -117,7 +117,7 @@ import NoEditorsFound2 from "../../assets/images/no-editors-found-2.svg"
 import EmptyProjectsFolder from "../../assets/images/empty-projects-folder.svg"
 import HowToRegister from "../../assets/images/new-ui-icons/how_to_register.svg"
 import ReactRouterPrompt from 'react-router-prompt'
-import ChoicelistIcon from "../../assets/images/choicelist.svg"
+import WordchoiceIcon from "../../assets/images/choicelist.svg"
 
 function AllProjectList(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -5573,7 +5573,7 @@ function AllProjectList(props) {
                                                                                                                         : project?.get_project_type === 6 ?
                                                                                                                         <img src={DesignerIcon} alt="designer-project-icon" /> 
                                                                                                                         : project?.get_project_type === 10 ?
-                                                                                                                            <img src={ChoicelistIcon} alt="choicelist-icon" />
+                                                                                                                            <img src={WordchoiceIcon} alt="wordchoice-icon" />
                                                                                                                         : ""
                                                                                                 }
     

@@ -461,7 +461,6 @@ const DefaultGlossaryWorkspace = (props) => {
             <Navbar
                 isWhite={true}
                 prevPathRef={prevPathRef}
-                isChoiceList={true}
             />
             <section className="padding-correction">
                 <div className="choicelist-main-header-wrapper">

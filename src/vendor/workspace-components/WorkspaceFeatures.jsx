@@ -76,9 +76,6 @@ const WorkspaceFeatures = (props) => {
         replaceWithNewPara,
         rightAlignLangs,
         targetLanguage,
-        selfLearnWordsList,
-        addWordToChoiceList,
-        removeWordFromSelfLearnList,
         commentsLoader,
         segmentHistoryLoader,
         showSegmentComments
@@ -872,45 +869,6 @@ const WorkspaceFeatures = (props) => {
                                         <MessageTypingAnimation />
                                     </div>
                                 )) : null}
-                        </section>
-                    </div>
-                    <div className="tab-pane fade" id="pills-choicelist" role="tabpanel" aria-labelledby="pills-choicelist-tab">
-                        <section className="paraphrase-section">
-                            <div className="choice-list-inner-wrapper">
-                                <div className="choice-list-source-div">
-                                </div>
-                                <div className="choice-list-result-div">
-                                    <ul className="list-unstyled">
-                                        {(selfLearnWordsList?.map((obj, index) => {
-                                            return (
-                                                <li key={index}>
-                                                    <div className="capsule-wrapper">
-                                                        <div className="choices-wrapper">
-                                                            <span className="text strike-out">{obj.old_word}</span>
-                                                            <span className="icon"><EastOutlinedIcon className="arrow-icon" /></span>
-                                                            <span className="text">{obj.new_word}</span>
-                                                        </div>
-                                                        <div className="choices-wrapper-btn-list">
-                                                            <ButtonBase
-                                                                className="add-to-list-btn"
-                                                                onClick={() => addWordToChoiceList(obj.old_word, obj.new_word, index)}
-                                                            >
-                                                                {t("add_to_list")}
-                                                            </ButtonBase>
-                                                            <ButtonBase
-                                                                className="ignore-btn"
-                                                                onClick={() => removeWordFromSelfLearnList(index)}
-                                                            >
-                                                                {t("ignore")}
-                                                            </ButtonBase>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            )
-                                        }))}
-                                    </ul>
-                                </div>
-                            </div>
                         </section>
                     </div>
                 </div>

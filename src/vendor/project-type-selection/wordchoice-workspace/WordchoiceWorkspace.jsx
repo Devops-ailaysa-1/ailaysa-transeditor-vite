@@ -903,7 +903,6 @@ const WordchoiceWorkspace = (props) => {
             <Navbar
                 isWhite={true}
                 prevPathRef={prevPathRef}
-                isChoiceList={true}
                 languagePairObject={languagePairObject}
                 termdownload={true}
                 handleDownloadFile={handleTermsDownload}

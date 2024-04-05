@@ -62,8 +62,6 @@ const AilaysaProjects = () => {
             setActiveProjTab(6)
         } else if (window.location.pathname?.includes("toolkit")) {
             setActiveProjTab(7)
-        } else if (window.location.pathname?.includes("choicelist")) {
-            setActiveProjTab(8)
         } else if (window.location.pathname?.includes("design")) {
             setActiveProjTab(9)
         }
@@ -280,18 +278,6 @@ const AilaysaProjects = () => {
                                         <NavLink className={"project-setup-btn " + (activeProjTab == 7 ? 'active' : '')}>{t("proj_list_cate_toolkit")}</NavLink>
                                     </NavItem>
                                 )}
-
-                                {/* {(!is_internal_meber_editor) && (
-                                    <NavItem
-                                        className={"setup-button-global " + classnames({ active: activeProjTab == 8 })}
-                                        onClick={() => {
-                                            setActiveProjTab(8);
-                                            history("/choicelist?page=1")
-                                        }}
-                                    >
-                                        <NavLink className={"project-setup-btn " + (activeProjTab == 8 ? 'active' : '')}>{t("proj_list_cate_choicelist")}</NavLink>
-                                    </NavItem>
-                                )} */}
                             </Nav>
                         </div>
                     </div>
