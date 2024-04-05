@@ -44,8 +44,10 @@ const AssetsModule = (props) => {
             case "search-terms":
                 return <SearchTerms />;
         }
-    } else if (params?.menu === "wordchoice") {
-        return <CreateWordchoice />
+    } 
+    else if (params?.menu === "wordchoice") {
+        return <Navigate to="create/all-templates/" />;
+        // <CreateWordchoice />
     }
 };
 

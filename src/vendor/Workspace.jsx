@@ -1971,10 +1971,10 @@ function Workspace(props) {
         }
     }, [document.querySelector('#page-num')])
 
-    // get the list of glossaries based on the task_id
+    // get the list of wordchoices based on the task_id
     useEffect(() => {
         if(documentTaskIdRef.current !== null){
-            getWordChoiceListForDocument()
+            // getWordChoiceListForDocument()
         }
     }, [documentTaskIdRef.current])
     
@@ -7562,14 +7562,16 @@ function Workspace(props) {
                                             </div>
                                         </Tooltip>
                                     </li>
-                                    {/* isDinamalar && */}
-                                    {<li onClick={(e) => handleAddGlossaryTermBtn()}>
-                                        <Tooltip title={isDinamalar ? t("add_glossary") : t("add_wordchoice")} placement="bottom" arrow>
-                                            <div ref={showGlossaryRef} className="toolbar-list-icons-align">
-                                                <div className="toolbar-list-icon-bg glossary"></div>
-                                            </div>
-                                        </Tooltip>
-                                    </li>}
+                                    
+                                    {isDinamalar && 
+                                        <li onClick={(e) => handleAddGlossaryTermBtn()}>
+                                            <Tooltip title={isDinamalar ? t("add_glossary") : t("add_wordchoice")} placement="bottom" arrow>
+                                                <div ref={showGlossaryRef} className="toolbar-list-icons-align">
+                                                    <div className="toolbar-list-icon-bg glossary"></div>
+                                                </div>
+                                            </Tooltip>
+                                        </li>
+                                    }
                                     <li onClick={(e) => showHideToolbarElement("showSpecialCharacters")}>
                                         <Tooltip title={t("special_characters")} placement="bottom" arrow>
                                             <div ref={showSpecialCharactersRef} className="toolbar-list-icons-align">

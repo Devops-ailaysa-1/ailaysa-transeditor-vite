@@ -1193,7 +1193,7 @@ function Navbar(props) {
                                             <span>{targetLanguageScript}</span>
                                         </span>
                                     )}
-                                    {(props.isWhite && showViewOnlyTag && (!isWorkspaceEditable || !languagePairObject?.edit_allowed)) && (
+                                    {(props.isWhite && showViewOnlyTag && !isWorkspaceEditable) && (
                                         <span className="view-only-tag">
                                             <RemoveRedEyeOutlinedIcon className="eye-icon" />
                                             {t("view_only")}

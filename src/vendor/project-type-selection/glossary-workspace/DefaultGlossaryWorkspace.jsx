@@ -435,7 +435,7 @@ const DefaultGlossaryWorkspace = (props) => {
             // console.log("=====addition:=========")
             // console.log(Math.round(scrollTop) + Math.round(clientHeight))
             // console.log(Math.round(scrollTop) + Math.round(clientHeight) === Math.round(scrollHeight))
-            if (Math.round(scrollTop) + Math.round(clientHeight) === Math.round(scrollHeight)) {
+            if (Math.abs((Math.round(scrollTop) + Math.round(clientHeight)) - Math.round(scrollHeight)) <= 4) {
                 // This will be triggered after hitting the last element.
                 // API call should be made here while implementing pagination.
                 setTimeout(() => {
