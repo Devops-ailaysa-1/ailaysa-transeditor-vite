@@ -44178,7 +44178,8 @@ h1.chat-file-title{
   .pdf-view-main-wrapper .react-pdf__Document{
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
+    flex-direction: column;
     height: calc(100vh - 240px) !important;
     overflow: auto !important;
     overflow-x: auto !important;
@@ -44189,7 +44190,7 @@ h1.chat-file-title{
   }
 
   .pdf-view-main-wrapper .react-pdf__Page{
-    height: calc(100vh - 240px) !important;
+    /* height: calc(100vh - 240px) !important; */
  
  
 

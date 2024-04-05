@@ -132,10 +132,13 @@ const PDFViewer = (props) => {
                             
                            
         <Document onMouseUp={handleMouseUp} ref={pdfref}  className={`pdf-page ${hasScrollBarX ? 'hasScroll' : ''}`}  file={pdfData} onLoadSuccess={onDocumentLoadSuccess}  >
-          
-                        <Page
+              {Array(...Array(numPages))
+                .map((x, i) => i + 1)
+                .map(page => (
+                    <Page
                             pageNumber={page}
                             scale={scale}
+                            className={`page-${page}`}
                             // onGetTextSuccess={
                             //     (text) => console.log(text)
                             // }
@@ -146,6 +149,8 @@ const PDFViewer = (props) => {
                             onGetTextSuccess={({items}) => console.log("onGetTextSuccess",items)}
                             loading=""
                         />
+                ))}
+                        
            
         </Document>
         </section>

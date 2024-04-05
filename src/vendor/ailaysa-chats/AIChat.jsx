@@ -30,6 +30,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PDFViewer from "./PdfViewr";
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import SidebarOutIcon from "../../assets/images/SidebarOutIcon";
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
 const AIChat = () => {
     const { t } = useTranslation();
@@ -395,11 +396,22 @@ const AIChat = () => {
     const [showSideBar, setShowSideBar] = useState(true)
     
     const handleSideBarClose = () => {
-        setShowSideBar(false)
+        if(selectedChatFile != null){
+            setShowSideBar(false)
+        }
     }
 
-    const [pageNumber, setPageNumber] = useState(1);
+    const scroll = (element) => {
+        document.querySelector(`.page-${element}`)?.scrollIntoView({ behavior: "smooth",block: 'start',
+        inline: 'center' });
+      }
 
+    const [pageNumber, setPageNumber] = useState(1);
+    const handleReference = (page) => {
+        setPageNumber(page)
+        scroll(page)
+      
+    }
  
     return (
         <>
@@ -408,7 +420,9 @@ const AIChat = () => {
                 <SidebarOutIcon color='#FFFFFF' handleColor='#4F4F55'  />
             </span>}
             <section className="chat-book-main-wrapper">
-                {showSideBar && <div className={`chat-book-main-wrapper__upload-access-wrapper ${selectedChatFile != null ? 'absolute' : ''}`}>
+                {showSideBar && 
+                <ClickAwayListener onClickAway={handleSideBarClose}>
+                <div className={`chat-book-main-wrapper__upload-access-wrapper ${selectedChatFile != null ? 'absolute' : ''}`}>
                 {/* {selectedChatFile != null && <div className='close-sidebar' onClick={handleSideBarClose}>
                         <ArrowBackIosRoundedIcon fontSize='small' className='close-sidebar-icon' />
                         </div>} */}
@@ -666,7 +680,9 @@ const AIChat = () => {
                             </small>
                         </Tooltip>
                     </div>
-                </div>}
+                </div>
+                </ClickAwayListener>
+                }
                 <div className="chat-book-main-wrapper__chatting-wrapper">
                     <div className="chat-with-files-wrapper">
                         <div className="chatbook-header-wrapper">
@@ -783,7 +799,7 @@ const AIChat = () => {
                                                                 <span className="reference-label">Reference:</span>
                                                                 {chat?.pdf_chat_page_ref?.map((each) => {
                                                                     return(
-                                                                        <span onClick={() => setPageNumber(each.page_no)} className="page-no" key={each?.page_no}>{each?.page_no},</span>
+                                                                        <span onClick={() => handleReference(each.page_no)} className="page-no" key={each?.page_no}>{each?.page_no},</span>
                                                                     )
                                                                 })}
                                                             </div>
