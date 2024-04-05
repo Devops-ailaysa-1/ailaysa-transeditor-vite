@@ -31668,7 +31668,7 @@ label.settings-TBXConvertButton {
     display: flex;
     height: 44px;
     border-bottom: 1px solid #E1E5E6;
-    padding: 0 30px;
+    padding: 0 10px;
     width: 100%;
     flex-direction: row;
 }
@@ -39298,7 +39298,7 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
     visibility: visible;
 }
 
-.choicelist-action-wrapper .action-list-item {
+.choicelist-action-wrapper .action-list-item, .icon{
     width: 40px;
     height: 40px;
     font-style: normal;
@@ -39338,12 +39338,12 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
 .choicelist-action-wrapper .action-list-item .list-cancel-icon,
 .choicelist-action-wrapper .action-list-item .list-update-icon,
 .choicelist-action-wrapper .action-list-item .list-edit-icon,
-.choicelist-action-wrapper .action-list-item .list-delete-icon {
+.choicelist-action-wrapper .action-list-item .list-delete-icon, .icon {
     color: #474848;
     font-size: 20px;
 }
 
-.choicelist-action-wrapper .action-list-item:hover {
+.choicelist-action-wrapper .action-list-item:hover, .icon:hover {
     background-color: #002f530f;
 }
 

@@ -1315,10 +1315,6 @@ function Fileupload(props) {
         let pageParam = URL_SEARCH_PARAMS.get("page")
         if (pageParam !== null && pageParam !== undefined) {
             listProjects(controller);
-            // if (activeProjTab !== 6) {
-            // } else {
-            //     listAssetsProject(controller)
-            // }
         }
         mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
 
@@ -1334,15 +1330,7 @@ function Fileupload(props) {
         let order = URL_SEARCH_PARAMS.get("order_by")
         if (order !== null && order !== undefined) {
             setOrderBySelectedValue(activeProjTab !== 6 ? orderByOptions?.find(each => each?.value == order) : orderByOptionsForAssets?.find(each => each?.value == order))
-            // didMountRef.current++
-            // if(didMountRef.current !== 2){
-            //     // console.log('from order');
-            // }
             listProjects(controller);
-            // if (activeProjTab !== 6) {
-            // } else {
-            //     listAssetsProject(controller)
-            // }
         }
 
         return () => {
@@ -1375,21 +1363,10 @@ function Fileupload(props) {
 
         let searchParam = URL_SEARCH_PARAMS.get("search")
         if (searchParam !== null && searchParam !== undefined) {
-            // didMountRef.current++
-            // if(didMountRef.current !== 2){
-            // console.log('from search');
             setProjectSearchTerm(searchParam)
             listProjects(controller);
-            // if (activeProjTab !== 6) {
-            // } else {
-            //     listAssetsProject(controller)
-            // }
         } else if (isSearchTermDelete) {
             listProjects(controller);
-            // if (activeProjTab !== 6) {
-            // } else {
-            //     listAssetsProject(controller)
-            // }
         }
 
         return () => {
