@@ -27,6 +27,9 @@ import UploadFolder from "../../assets/images/new-ui-icons/upload-folder.svg"
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import PDFViewer from "./PdfViewr";
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import SidebarOutIcon from "../../assets/images/SidebarOutIcon";
 
 const AIChat = () => {
     const { t } = useTranslation();
@@ -165,7 +168,7 @@ const AIChat = () => {
         console.log(newArr)
         setChatFiles(newArr)
 
-
+        setPageNumber(1)
         setSelectedChatFile(file)
         getChatBook(file?.id)
     };
@@ -383,18 +386,39 @@ const AIChat = () => {
         <span>Remaining questions : ${chatBookRemainingStatus?.total_msgs_left} </span><br/>
         <span>Remaining files : ${chatBookRemainingStatus?.total_files_left} </span>
     </span>`
-    
 
+    
+    const handleMouseUp = () => {
+
+    }
+
+    const [showSideBar, setShowSideBar] = useState(true)
+    
+    const handleSideBarClose = () => {
+        setShowSideBar(false)
+    }
+
+    const [pageNumber, setPageNumber] = useState(1);
+
+ 
     return (
         <>
             <Navbar isAiChatBook={true} />
+            {!showSideBar && <span className='sidebar-open' onClick={() => setShowSideBar(true)}>
+                <SidebarOutIcon color='#FFFFFF' handleColor='#4F4F55'  />
+            </span>}
             <section className="chat-book-main-wrapper">
-                <div className="chat-book-main-wrapper__upload-access-wrapper">
+                {showSideBar && <div className={`chat-book-main-wrapper__upload-access-wrapper ${selectedChatFile != null ? 'absolute' : ''}`}>
+                {/* {selectedChatFile != null && <div className='close-sidebar' onClick={handleSideBarClose}>
+                        <ArrowBackIosRoundedIcon fontSize='small' className='close-sidebar-icon' />
+                        </div>} */}
                     <div className="chatbook-header-wrapper">
                     <p className="chat-book-label-title">Upload files</p>
+                    {selectedChatFile != null && <span className="close-icon-chatbook-sidebar" onClick={handleSideBarClose}>
+                        <CloseIcon />
+                    </span>}
                     {/* <span className="chat-book-label-title" onClick={getChatBookRemainingStatus}>Remaining files : {chatBookRemainingStatus?.total_files_left}</span> */}
                     </div>
-                   
 
                     <DragandDrop  handleDrop={handleDrop} isChatBook={true}>
                         <div className={"button-wrap sa"} ref={fileUploadDiv}>
@@ -642,7 +666,7 @@ const AIChat = () => {
                             </small>
                         </Tooltip>
                     </div>
-                </div>
+                </div>}
                 <div className="chat-book-main-wrapper__chatting-wrapper">
                     <div className="chat-with-files-wrapper">
                         <div className="chatbook-header-wrapper">
@@ -654,6 +678,11 @@ const AIChat = () => {
                                                 {/* <span onClick={getChatBookRemainingStatus}>Remaining messages : {chatBookRemainingStatus?.total_msgs_left}</span> */}
                                                 {/* {selectedChatFile !== null && <span onClick={getChatBookRemainingStatus}>Remaining messages : {chatBookRemainingStatus?.total_msgs_left}</span>} */}
                                                 </div>
+                        <div style={{display:'flex', flexDirection:'row'}}>
+                                                {selectedChatFile != null && 
+                                                
+                                       <PDFViewer  handleMouseUp={handleMouseUp} page={pageNumber} setPage={setPageNumber} width={'669px'}  pdf={Config.BASE_URL + selectedChatFile?.file}/>
+                                    }
                         <div className="chat-with-files-wrapper__working-area">
                             {selectedChatFile === null ? (
                                 <>
@@ -750,6 +779,14 @@ const AIChat = () => {
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div className="reference-bar">
+                                                                <span className="reference-label">Reference:</span>
+                                                                {chat?.pdf_chat_page_ref?.map((each) => {
+                                                                    return(
+                                                                        <span onClick={() => setPageNumber(each.page_no)} className="page-no" key={each?.page_no}>{each?.page_no},</span>
+                                                                    )
+                                                                })}
+                                                            </div>
                                                         </div>
                                                     )
                                                 })
@@ -820,6 +857,7 @@ const AIChat = () => {
                                     </div>
                                 </>
                             )}
+                        </div>
                         </div>
                     </div>
                 </div>

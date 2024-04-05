@@ -44074,6 +44074,7 @@ h1.chat-file-title{
     color: #E74C3C;
     margin-left: 8px;
 }
+
 .create-wordchoice-form.new-file-proj-setup-wrapper{
     margin: 15px auto auto auto;
 }
@@ -44123,4 +44124,151 @@ h1.chat-file-title{
 
 .radio-btn-label{
     width: fit-content !important;
+}
+
+.pdf-view-main-wrapper{
+    box-shadow: 0 14px 26px #414a511a;
+    background-color: #ffffff;
+    width: 100%;
+    min-width: 60%;
+    max-width: 60%;
+
+}
+
+.chat-book-main-wrapper__upload-access-wrapper{
+    position: relative;
+}
+
+.close-sidebar{
+    height: 60px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: -20px;
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .chat-book-main-wrapper__chatting-wrapper{
+    width: 100%;
+  }
+
+  .sidebar-open{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -30px;
+    cursor: pointer;
+    transition: 0.3s ease all;
+    z-index: 1;
+
+  }
+
+  .sidebar-open:hover{
+
+    left: -20px;
+    transition: 0.3s ease all;
+
+  }
+
+  .pdf-view-main-wrapper .react-pdf__Document{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 240px) !important;
+    overflow: auto !important;
+    overflow-x: auto !important;
+  }
+
+  .pdf-view-main-wrapper .control-panel{
+    justify-content: center !important;
+  }
+
+  .pdf-view-main-wrapper .react-pdf__Page{
+    height: calc(100vh - 240px) !important;
+ 
+ 
+
+  }
+
+  .reference-bar{
+    align-items: stretch;
+    width: 100%;
+    background-color: #eaeaea;
+    border-radius: 3px;
+    padding: 10px;
+  }
+
+  .reference-label{
+    white-space: pre-line;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #242424;
+  }
+
+  .reference-bar .page-no{
+    margin-left: 10px;
+    text-decoration: underline;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #0074d3;
+    cursor: pointer;
+  }
+
+  .clickable{
+    cursor: pointer;
+  }
+
+  .chat-book-main-wrapper__upload-access-wrapper.absolute {
+    position: absolute;
+    background: #FFFFFF;
+    z-index: 5;
+    box-shadow: 4px 0px 64.5px 0px rgba(0, 0, 0, 0.25);
+}
+
+.react-pdf__Document::-webkit-scrollbar {
+    background: #ffffff;
+}
+
+.react-pdf__Document::-webkit-scrollbar-thumb {
+    background-color: #DADDE0 !important;
+    border-radius: 50px;
+    border: 6px solid #ffffff !important;
+}
+
+.react-pdf__Document::-webkit-scrollbar-track {
+    background-color: #ffffff;
+}
+
+body{
+    overflow: hidden;
+}
+
+.zoom-in-button.disabled {
+    opacity: 0.5;
+}
+
+.chat-book-main-wrapper__upload-access-wrapper .close-sidebar{
+    background-color: #FFFFFF;
+    right: -16px;
+    border-radius: 0 10px 10px 0;
+    box-shadow: 4px 0px 64.5px 0px rgba(0, 0, 0, 0.25);
+}
+
+.close-icon-chatbook-sidebar{
+    padding: 0px 22px;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+
+.pdf-view-main-wrapper .react-pdf__Document.hasScroll{
+    display: block;
 }
