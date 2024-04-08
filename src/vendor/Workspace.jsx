@@ -6864,6 +6864,7 @@ function Workspace(props) {
         div.appendChild(clonedSelection);
         let selectedHTML = div.innerHTML;
         let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
+        selTxt = removeSpecificTag(selTxt, 'mark')
 
         setTargetSelectionText(selTxt)
         if(window.getSelection().toString()?.trim() === '' || dictionaryTerm !== selTxt){
@@ -6884,7 +6885,9 @@ function Workspace(props) {
         div.appendChild(clonedSelection);
         let selectedHTML = div.innerHTML;
         let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
+        selTxt = removeSpecificTag(selTxt, 'mark')
 
+        console.log(selTxt)
         setSourceSelectionText(selTxt)
     }
 
