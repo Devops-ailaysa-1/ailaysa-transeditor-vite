@@ -39305,7 +39305,8 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
     visibility: visible;
 }
 
-.choicelist-action-wrapper .action-list-item, .icon{
+.choicelist-action-wrapper .action-list-item, 
+.download-list-header .icon{
     width: 40px;
     height: 40px;
     font-style: normal;
@@ -39345,12 +39346,14 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
 .choicelist-action-wrapper .action-list-item .list-cancel-icon,
 .choicelist-action-wrapper .action-list-item .list-update-icon,
 .choicelist-action-wrapper .action-list-item .list-edit-icon,
-.choicelist-action-wrapper .action-list-item .list-delete-icon, .icon {
+.choicelist-action-wrapper .action-list-item .list-delete-icon, 
+.download-list-header .icon {
     color: #474848;
     font-size: 20px;
 }
 
-.choicelist-action-wrapper .action-list-item:hover, .icon:hover {
+.choicelist-action-wrapper .action-list-item:hover, 
+.download-list-header .icon:hover {
     background-color: #002f530f;
 }
 
