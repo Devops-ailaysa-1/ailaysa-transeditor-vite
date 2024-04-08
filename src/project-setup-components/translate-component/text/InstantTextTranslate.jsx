@@ -1000,16 +1000,8 @@ const InstantTextTranslate = (props) => {
 
     useEffect(() => {
         let scrollingDiv = document.querySelector('.ai-new-project-setup-wrapper')
-        const handleScroll = () => {
-            const stickyDiv = document.getElementById('transphrase-sticky');
-            const parentContainer = document.querySelector('.ai-instant-text-nlp-feature-list');
-            const elementRect = stickyDiv?.getBoundingClientRect();
-            const parentRect = parentContainer.getBoundingClientRect();
-
-            setIsSticky(elementRect.bottom >= parentRect.bottom);
-        };
-
         if (scrollingDiv) handleScroll()
+
         scrollingDiv?.addEventListener('scroll', handleScroll);
         return () => {
             scrollingDiv?.removeEventListener('scroll', handleScroll);
@@ -1018,16 +1010,14 @@ const InstantTextTranslate = (props) => {
 
     useEffect(() => {
         if (translateResultText) {
-            const stickyDiv = document.getElementById('transphrase-sticky');
-            const rect = stickyDiv?.getBoundingClientRect();
-            setIsSticky(rect.bottom >= window.innerHeight);
+            // based on the target content length decide whether it should be stick or not
+            handleScroll()
             debounce(symSpellCheck)
         }
     }, [translateResultText])
 
 
     useEffect(() => {
-        console.log(selectedTaskDetails)
         if (selectedTaskDetails !== null && (userDetails?.agency ? selectedTaskDetails?.task_data?.task_reassign_info === null : selectedTaskDetails?.task_data?.task_assign_info === null)) {
             setShowAssignIcon(true)
         }
@@ -1507,7 +1497,16 @@ const InstantTextTranslate = (props) => {
 
     // ==========================================================================
 
-    
+    // This is calculate the sticky element bottom and the div element bottom 
+    // and decide whether the rewrite bar should be sticky or not 
+    const handleScroll = () => {
+        const stickyDiv = document.getElementById('transphrase-sticky');
+        const parentContainer = document.querySelector('.ai-instant-text-nlp-feature-list');
+        const elementRect = stickyDiv?.getBoundingClientRect();
+        const parentRect = parentContainer.getBoundingClientRect();
+        setIsSticky(elementRect.bottom === parentRect.bottom);
+    };
+
     const DropdownIndicator = (props) => {
         return (
             <components.DropdownIndicator {...props}>
@@ -3051,22 +3050,19 @@ const InstantTextTranslate = (props) => {
     // const [showmodelwarning,setShowmodelwarning]=useState(false)
 
 
-    const handleBlockedNavigation = nextLocation => {
-        if (!confirmedNavigation && pathname) {
-            setLastLocation(nextLocation)
-            if (nextLocation.hash != "#!" && nextLocation.pathname != "/file-upload" && nextLocation.search == '') {
-                setSidebarActiveTab(2)
-                setNavigationModalVisible(true)
-                return false
-            }
-            if (nextLocation.state === null && nextLocation.pathname == "/file-upload" && nextLocation.search == '') {
-                setSidebarActiveTab(2)
-                setNavigationModalVisible(true)
-                return false
-            }
+    const handleBlockedNavigation = ({
+        currentLocation,
+        nextLocation,
+        historyAction
+      }) => {
+        
+        if (
+            !nextLocation.pathname?.includes('/instant-text') && 
+            (checkform.current || isOpenFromList.current)
+        ) {
+            return true
         }
-        // return true
-
+        return false
     }
 
     const handleConfirmNavigationClick = () => {
@@ -3531,461 +3527,6 @@ const InstantTextTranslate = (props) => {
         });
     }
 
-
-    // source div
-    // if(srcDivRef.current !== null){
-    //     srcDivRef.current?.addEventListener('paste', function pasteAsPlainText(e) {
-    //         console.log(e.clipboardData.getData("text/plain"))            
-    //         e.preventDefault();
-    //         var text = "";
-    //         if (e.clipboardData && e.clipboardData.getData) {
-    //             text = e.clipboardData.getData("text/plain");
-    //         } else if (window.clipboardData && window.clipboardData.getData) {
-    //             text = window.clipboardData.getData("Text");
-    //         }
-    //         document.execCommand("insertHTML", false, text);
-    //         setSourceText(srcDivRef.current?.innerText)
-    //         setSourceTextLength(srcDivRef.current?.textContent?.length)
-    //     });
-
-    //     let settings = {
-    //         maxLen: 5000,
-    //     }
-
-    //     let keys = {
-    //         'backspace': 8,
-    //         'shift': 16,
-    //         'ctrl': 17,
-    //         'alt': 18,
-    //         'delete': 46,
-    //         // 'cmd':
-    //         'leftArrow': 37,
-    //         'upArrow': 38,
-    //         'rightArrow': 39,
-    //         'downArrow': 40,
-    //     }
-
-    //     let utils = {
-    //         special: {},
-    //         navigational: {},
-    //         isSpecial(e) {
-    //           return typeof this.special[e.keyCode] !== 'undefined';
-    //         },
-    //         isNavigational(e) {
-    //           return typeof this.navigational[e.keyCode] !== 'undefined';
-    //         }
-    //     }
-
-    //     utils.special[keys['backspace']] = true;
-    //     utils.special[keys['shift']] = true;
-    //     utils.special[keys['ctrl']] = true;
-    //     utils.special[keys['alt']] = true;
-    //     utils.special[keys['delete']] = true;
-
-    //     utils.navigational[keys['upArrow']] = true;
-    //     utils.navigational[keys['downArrow']] = true;
-    //     utils.navigational[keys['leftArrow']] = true;
-    //     utils.navigational[keys['rightArrow']] = true;
-
-    //     srcDivRef.current.addEventListener('keydown', function(event) {
-    //         let len = event.target.textContent.trim().length;
-    //         let hasSelection = false;
-    //         let selection = window.getSelection();
-    //         let isSpecial = utils.isSpecial(event);
-    //         let isNavigational = utils.isNavigational(event);
-
-    //         if (selection) {
-    //           hasSelection = !!selection.toString();
-    //         }
-
-    //         if (isSpecial || isNavigational) {
-    //           return true;
-    //         }
-
-    //         if (len >= settings.maxLen && !hasSelection) {
-    //           event.preventDefault();
-    //           return false;
-    //         }
-
-    //     });
-
-    // }
-
-
-
-
-
-
-
-
-    // const spellchecktoggle =(e)=>{
-    //     setSpellcheck(current => !current)
-
-    //     setEnableSynonym(false)
-    //     setEnableParaphrase(false)
-    //     if(taskId && spellcheck){
-    //         let element = document.querySelector('.target-summernote').querySelector('.note-editable')
-    //         element.innerHTML = getSummerNotePlainText(summernoteEditorRef.current)
-    //     }
-    // }
-
-
-    // const checkIt = (element, word, highlightClass = "spellcheck-highlight") => {
-    //     if (element != null) {
-    //         for (let i = 0; i < element.childNodes.length; ++i) {
-    //             let node = element.childNodes[i];
-    //             if (node.nodeType === Node.TEXT_NODE) {
-    //                 if (wrap(node, word, highlightClass)) {
-    //                     changeSavedCaretPosition();
-    //                     ++i;
-    //                 }
-    //             } else if (node.nodeType === Node.ELEMENT_NODE) {
-    //                 checkIt.call(node);
-    //             }
-    //         }
-    //     }
-    // };
-
-    // const UnCheckIt = (element) => {
-    //     if (element?.childNodes != null) {
-    //         for (let i = 0; i < element.childNodes.length; ++i) {
-    //             let node = element.childNodes[i];
-    //             if (node.nodeType === Node.ELEMENT_NODE) {
-    //                 if (!node.classList.contains("tag") && !node.classList.contains("search-highlight")) unwrap(node);
-    //                 ++i;
-    //             } else if (node.nodeType === Node.TEXT_NODE) {
-    //                 UnCheckIt.call(node);
-    //             }
-    //         }
-    //     }
-    // };
-
-    // const changeSavedCaretPosition = () => {
-    //     let element = document.querySelector('.target-summernote').querySelector('.note-editable')
-    //     if (element) {
-    //         Cursor.setCurrentCursorPosition(caretRange.current, element);
-    //         element.focus();
-    //     }
-    // };
-
-    // const wrap = (textNode, str, cName) => {
-    //     // str = str.replace(/\+/g, " ").trim().split(" ").sort((a, b) => b.length - a.length)
-    //     let wholeWordRegExp = new RegExp("\\b" + str + "\\b");
-    //     let pos = textNode.nodeValue.search(wholeWordRegExp);
-    //     if (pos < 0) return false;
-    //     let newNode = textNode.splitText(pos);
-    //     let randomNumber = Math.floor(Math.random() * 1000);
-    //     while (replaceContentUsedIds.indexOf(randomNumber) != -1) randomNumber = Math.floor(Math.random() * 1000);
-    //     setReplaceContentUsedIds((prevState) => [...prevState, randomNumber]);
-    //     let mark = document.createElement("mark");
-    //     // mark.setAttribute("id", 'replaceable-content-' + randomNumber)
-    //     // mark.setAttribute("contenteditable", true)
-    //     // mark.className = cName
-    //     textNode.parentNode.insertBefore(mark, newNode);
-    //     newNode.splitText(str.length);
-    //     mark.appendChild(newNode);
-    //     let markElement = (
-    //         <mark contentEditable={true} suppressContentEditableWarning={true} id={"replaceable-content-" + randomNumber} className={cName}>
-    //             {str}
-    //         </mark>
-    //     );
-    //     replaceNodeWithReactComponent(markElement, mark);
-    //     return true;
-    // };
-    // const unwrap = (node) => {
-    //     if (node?.parentNode?.NodeType) {
-    //         node?.parentNode?.insertBefore(node?.firstChild, node);
-    //         node?.parentNode?.removeChild(node);
-    //     }
-    // };
-    // const replaceNodeWithReactComponent = (reactComponent, element) => {
-    //     const parent = document.createElement("div");
-    //     ReactDOM.render(reactComponent, parent, () => {
-    //         element.replaceWith(...Array.from(parent.childNodes));
-    //     });
-    // };
-
-    // const correctWord = (e, replaceableWord) => {
-    //     // saveCaretPosition() // Can't use. the replaced word doesn't have the same range because of the length difference
-    //     e.target.innerHTML = replaceableWord;
-    //     // changeSavedCaretPosition() // Can't use. the replaced word doesn't have the same range because of the length difference
-    //     e.target.classList.remove("spellcheck-highlight");
-    //     e.target.classList.add("spellcheck-replaced");
-    //     setPopoverOpen(false);
-    //     setPopoverTarget(null);
-    //     setSpellCheckPopoverContent("");
-    // };
-
-    // const debouncespellcheck = (e, callback) => {
-    //     console.log('func1');
-    //     if (typingTimeout.current) clearTimeout(typingTimeout.current);
-    //     typing.current = false;
-    //     typingTimeout.current = setTimeout(() => {
-    //         callback(e);
-    //         console.log('func2');
-    //     }, 1000);
-    // };
-
-    // useEffect(() => {
-    //     const handleMouseover = (e) => {
-    //         if (e.target.classList.contains("spellcheck-highlight")) {
-    //             // If it's a wrong word and hoghlight for spellcheck
-    //             setPopoverTarget(null); //Make the spellcheck target parent empty
-    //             let cursorWord = e.target.innerHTML; //Current hovering word
-    //             let thisWordData = spellCheckData.current.find((element) => element.word == cursorWord); // Get the hovering words spellcheck suggestions
-    //             setSpellCheckPopoverContent(""); // Make the spellcheck corrected words data as empty
-    //             setPopoverOpen(false); // Make the spellcheck popover closed
-    //             if (thisWordData != null)
-    //                 if (thisWordData["Suggested Words"] != null) {
-    //                     // If the word has corrected word suggestion data
-    //                     let suggestedWords = thisWordData["Suggested Words"];
-    //                     let spellCheckPopoverContent = [];
-    //                     /* Put the popover contents - start */
-    //                     suggestedWords.map((value) => {
-    //                         // correctWordRef.current[value] = createRef()
-    //                         spellCheckPopoverContent.push(
-    //                             <p
-    //                                 key={value}
-    //                                 /* ref={elem => correctWordRef.current[value] = elem}*/ href="#!"
-    //                                 className="corrected-word"
-    //                                 onClick={(event) => correctWord(e, value)}
-    //                             >
-    //                                 {value}
-    //                             </p>
-    //                         );
-    //                     });
-    //                     /* Put the popover contents - end */
-    //                     if (document.getElementById(e.target.id)) {
-    //                         // Get the current hovering span id
-    //                         setSpellCheckPopoverContent(spellCheckPopoverContent); // Load the popover content
-    //                         setPopoverTarget(e.target.id); //Make the current hovering id as the spellcheck content target
-    //                         setPopoverOpen(true); // Make the spellcheck suggestions visible
-    //                     }
-    //                     else{
-    //                         setPopoverOpen(false); // Make the spellcheck suggestions visible
-    //                         setPopoverTarget(null); //Make the current hovering id as the spellcheck content target
-    //                     }
-    //                 }
-
-    //         }
-    //     };
-    //     document.addEventListener("mouseup", handleMouseover, false);
-    //     return () => {
-    //         document.removeEventListener("mouseup", handleMouseover);
-    //     };
-    // });
-
-    // useEffect(()=>{
-    //     const handleremovepoper = (e) =>{
-    //             if(!e.target.classList.contains('corrected-word')){
-    //                 setPopoverTarget(null);
-    //                 setPopoverOpen(false); 
-    //             }
-    //     }
-    //     document.addEventListener('mousedown',handleremovepoper,false)
-    //     return () => {
-    //         document.removeEventListener("mousedown", handleremovepoper);
-    //     };
-    // })
-
-    // const getspellcheck =()=>{
-    // setTimeout(() => {
-    //     console.log(spellcheck);
-    //     console.log(temptaskid.current);
-    //         let formData = new FormData();
-    //         let thisElement = document.querySelector('.target-summernote').querySelector('.note-editable')
-
-    //         console.log(taskId);
-
-    //             formData.append("task_id", temptaskid.current)
-    //         formData.append("target", getSummerNotePlainText(summernoteEditorRef.current))
-    //         Config.axios({
-    //             url: Config.BASE_URL + "/workspace_okapi/spellcheck/",
-    //             method: "POST",
-    //             auth: true,
-    //             data: formData,
-    //             success: (response) =>  {
-    //                 console.log(response.data.result);
-    //                 let result = response.data.result;
-    //                 setIsWordsCorrected(response.data.result.length === 0 ? true : false)
-    //                     setIsWordsCorrectedTrigger(!isWordsCorrectedTrigger)
-    //                     spellCheckData.current = result;
-
-    //                 result.map((value) => {
-    //                     checkIt(thisElement, value.word);
-    //                 });
-
-    //             },
-    //         }) 
-
-    // }, 300);
-
-    // }
-
-    //    useEffect(()=>{
-    //        if(spellcheck){
-    //             getspellcheck()
-    //        }
-    //    },[spellcheck])
-
- 
-
-    // Synonyms and pharaphrase popover
-    //    const arrow = document.querySelector('#arrow');
-    //    const arrowTop = 'arrow-top';
-    //    const arrowBottom = 'arrow-bottom';
-
-    //    function changeArrow(dir) {
-    //     if (!arrow) return;
-    //     if (dir == 'up') {
-    //         arrow.classList.remove(arrowTop)
-    //         arrow.classList.add(arrowBottom);
-    //     }
-    //     else {
-    //         arrow.classList.remove(arrowBottom)
-    //         arrow.classList.add(arrowTop);
-    //     }
-    // }
-
-    //    const [isMakePopInsideViewPort, setIsMakePopInsideViewPort] = useState(false)
-
-    //    function decidePopPosition(rect) {
-
-    //     let x = rect.left - document.querySelector('.ai-instant-text-nlp-feature-list')?.getBoundingClientRect().left + (rect.width) / 2 - document.querySelector('#pop')?.clientWidth / 2 + document.querySelector('.ai-instant-text-nlp-feature-list').scrollLeft;
-    //     if (x < 0)
-    //         x = 0;
-    //     else if (x + document.querySelector('#pop')?.clientWidth > document.querySelector('.ai-instant-text-nlp-feature-list')?.clientWidth)
-    //         x = document.querySelector('.ai-instant-text-nlp-feature-list')?.clientWidth - document.querySelector('#pop')?.clientWidth;
-
-    //     let y, dir;
-    //     if (rect.top > window.innerHeight - rect.bottom) {
-
-    //         y = rect.top - document.querySelector('.ai-instant-text-nlp-feature-list')?.getBoundingClientRect().top + document.querySelector('.ai-instant-text-nlp-feature-list').scrollTop - document.querySelector('#pop').clientHeight - 8
-    //         dir = 'up';
-    //         if (y < 0) {
-    //             y = rect.bottom - document.querySelector('.ai-instant-text-nlp-feature-list')?.getBoundingClientRect().top + document.querySelector('.ai-instant-text-nlp-feature-list').scrollTop + 8
-    //             dir = 'down';
-    //         }
-    //     }
-    //     else {
-    //         y = rect.bottom - document.querySelector('.ai-instant-text-nlp-feature-list')?.getBoundingClientRect().top + document.querySelector('.ai-instant-text-nlp-feature-list').scrollTop + 8
-    //         dir = 'down';
-    //     }
-    //     return { x: x, y: y, dir: dir };
-
-    // }
-
-
-
-
-    //     function checkSelection() {
-
-
-    //     if(targetLabel == 'English' && !spellcheck){
-    //         setTimeout(() => {
-    //             let selection = window.getSelection();
-    //             setSelectionString(document.getSelection().toString())
-    //             let range = selection && selection.rangeCount && selection.getRangeAt(0);
-    //             let x = ( document.querySelector('.target-summernote')?.querySelector('.note-editable')?.getBoundingClientRect().width) / 2 - document.querySelector('#pop')?.clientWidth / 2 +  document.querySelector('.target-summernote')?.querySelector('.note-editable')?.scrollLeft;
-    //             let y = ( document.querySelector('.target-summernote')?.querySelector('.note-editable')?.getBoundingClientRect().height) / 2 - document.querySelector('#pop')?.clientHeight +  document.querySelector('.target-summernote')?.querySelector('.note-editable')?.scrollTop;
-    //             if (!range) {
-    //                 if (document.querySelector('#pop')) {
-    //                     document.querySelector('#pop').style.opacity = '0';
-
-    //                     document.querySelector('#pop').style.visibility = 'hidden'
-    //                     document.querySelector('#pop').style.left = x + 'px';
-    //                     document.querySelector('#pop').style.top = y + 'px';
-    //                 }
-    //                 return;
-    //             }
-    //             let rect = range?.getBoundingClientRect();
-    //             if (Math.floor(rect.width) > 0 && document.querySelector('.ai-instant-text-nlp-feature-list')?.contains(range.commonAncestorContainer)) {
-    //                 let pos = decidePopPosition(rect);
-    //                 let top = pos.y - document.querySelector('.ai-instant-text-nlp-feature-list').scrollTop;
-    //                 let left = pos.x - document.querySelector('.ai-instant-text-nlp-feature-list').scrollLeft;
-    //                 if (top < 0)
-    //                     top = document.querySelector('.ai-instant-text-nlp-feature-list').scrollTop + 20;
-    //                 else if (top + document.querySelector('#pop').clientHeight > document.querySelector('.ai-instant-text-nlp-feature-list').clientHeight)
-    //                     top = document.querySelector('.ai-instant-text-nlp-feature-list').clientHeight - document.querySelector('#pop').clientHeight + document.querySelector('.ai-instant-text-nlp-feature-list').scrollTop - 20;
-    //                 if (left < 0)
-    //                     left = document.querySelector('.ai-instant-text-nlp-feature-list').scrollLeft + 20;
-    //                 else if (left + document.querySelector('#pop').clientWidth > document.querySelector('.ai-instant-text-nlp-feature-list').clientWidth)
-    //                     left = document.querySelector('.ai-instant-text-nlp-feature-list').clientWidth - document.querySelector('#pop').clientWidth + document.querySelector('.ai-instant-text-nlp-feature-list').scrollLeft - 20;
-    //                 if (isMakePopInsideViewPort && (top != pos.y - document.querySelector('.ai-instant-text-nlp-feature-list').scrollTop || left != pos.x - document.querySelector('.ai-instant-text-nlp-feature-list').scrollLeft)) {
-    //                     document.querySelector('#pop').style.top = `${top}px`;
-    //                     document.querySelector('#pop').style.left = `${left}px`;
-    //                 }
-    //                 else
-    //                     document.querySelector('#pop').style.top = `${pos.y}px`;
-    //                 document.querySelector('#pop').style.left = `${pos.x}px`;
-    //                 changeArrow(pos.dir);
-    //                 document.querySelector('#pop').style.visibility = 'visible';
-    //                 document.querySelector('#pop').style.opacity = '1';
-
-    //             }
-    //             else {
-    //                 if (document.querySelector('#pop')) {
-    //                     document.querySelector('#pop').style.opacity = '0';
-    //                     document.querySelector('#pop').style.visibility = 'hidden'
-    //                 }
-    //             }
-
-    //         }, 100);
-    //     }
-
-
-    //     }
-
-
-    // useEffect(() => {
-    //     // if (!historyTab) {
-    //         document.addEventListener('mouseup', checkSelection);
-    //     // }
-    // }, [])
-
-    // useEffect(()=>{
-
-    //         const addeventintardivonly = () =>{
-    //            if(enableSynonym || enableParaphrase || enableselection){
-    //                     checkSelection()
-
-    //            }
-    //         }
-
-
-    //     document.querySelector('.target-summernote').querySelector('.note-editable').addEventListener('mouseup',addeventintardivonly)
-
-    //     return ()=>{
-    //         document.querySelector('.target-summernote')?.querySelector('.note-editable')?.removeEventListener('mouseup',addeventintardivonly)
-    //     }
-
-
-    // })
-
-    // window.addEventListener('resize', checkSelection);
-    // window.addEventListener('scroll', checkSelection);
-
-    // let resizeObserver = new ResizeObserver(() => {
-    //     checkSelection();
-    // });
-
-    // addScrollListners( document?.querySelector('.target-summernote')?.querySelector('.note-editable'), checkSelection);
-    //         function addScrollListners(elm, callback) {
-    //             if (!elm || elm == document.body) return;
-    //             elm.addEventListener('scroll', callback);
-    //             addScrollListners(elm.parentNode);
-    //         }
-
-    // if (document.querySelector('.ai-instant-text-nlp-feature-list')) {
-    //     resizeObserver.observe(document.querySelector('.ai-instant-text-nlp-feature-list')
-    //     );
-    // }
-
-    // const debounced = useDebouncedCallback((callback) => {
-    //     if(spellcheck){
-    //         callback()
-    //     }
-    //   }, 1000);
 
     const isTargetEmpty = () => {
         if (tarDivRef.current.value?.trim()?.length === 0)
@@ -6035,7 +5576,7 @@ const InstantTextTranslate = (props) => {
                 when={checkform.current || isOpenFromList.current}
                 message={handleBlockedNavigation}
             /> */}
-            <ReactRouterPrompt when={checkform.current || isOpenFromList.current}>
+            <ReactRouterPrompt when={handleBlockedNavigation}>
             {({ isActive, onConfirm, onCancel }) => {
                 return (
                     <Rodal
