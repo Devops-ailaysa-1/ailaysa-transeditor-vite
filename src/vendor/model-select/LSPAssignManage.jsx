@@ -927,6 +927,13 @@ const LSPAssignManage = (props) => {
         taskSearchFunctionality()
     }, [taskSearchText])
 
+    const limitToFourDecimalPlaces = (number) => {
+        // Use the toFixed() method to round the number to four decimal places
+        const roundedNumber = Number(number).toFixed(4);
+    
+        // Convert the result back to a number
+        return Number(roundedNumber);
+    }
 
     /* Handling all the project creation form */
     const handleAdditionalFilesChange = (e) => {
@@ -1139,7 +1146,7 @@ const LSPAssignManage = (props) => {
 
     // This will get all the language pairs of that project and adds [All pairs] option to the language drop-down
     const getVendorDashboard = () => {
-        console.log(selectedFileRow.current)
+        // console.log(selectedFileRow.current)
         Config.axios({
             url: `${Config.BASE_URL}/workspace/vendor/dashboard/${selectedFileRow.current?.project}`,
             auth: true,
@@ -1420,7 +1427,7 @@ const LSPAssignManage = (props) => {
                             name === 'mtpe_count_unit' ? { [name]: unitTypeValue?.value }
                                 : name === 'account_raw_count' ? { [name]: countTypeValue?.value }
                                     : name === 'estimated_hours' ? { [name]: parseInt(value) }
-                                        : name === 'mtpe_rate' ? { [name]: parseFloat(value) } : { [name]: value }
+                                        : name === 'mtpe_rate' ? { [name]: (parseFloat(limitToFourDecimalPlaces(value))) } : { [name]: value }
                         ),
                         ...(
                             (name === 'mtpe_count_unit' && (unitTypeValue?.value === 3 || unitTypeValue?.value === 4)) && { account_raw_count: "True" }
@@ -1670,7 +1677,7 @@ const LSPAssignManage = (props) => {
                                 <CloseIcon className="header-close" />
                             </span>
                         </div>
-                        {/* <AnimatePresence>
+                        {/* <AnimatePresence exitBeforeEnter>
 						{
 							assignManageSwitch === "assign-and-manage" ?
 							<motion.div
@@ -1866,7 +1873,7 @@ const LSPAssignManage = (props) => {
                                                                                             <div className="document-wrap">
                                                                                                 <img src={Config.BASE_URL + `/app/extension-image/${task?.filename?.split(".")?.pop()}`} alt="file" />
                                                                                                 <div className="proj-name">
-                                                                                                    <p>{task.filename?.split(".")?.slice(0, -1)?.join(".") ? task.filename?.split(".")?.slice(0, -1)?.join(".") : selectedFileRow.current.project_data?.get_project_type === 6 ? t("designer_file") : t("glossary_file")}</p>
+                                                                                                    <p>{task.filename?.split(".")?.slice(0, -1)?.join(".") ? task.filename?.split(".")?.slice(0, -1)?.join(".") : selectedFileRow.current.project_data?.get_project_type === 6 ? t("designer_file") : selectedFileRow.current.project_data?.get_project_type === 10 ? t("wordchoice_file") : t("glossary_file")}</p>
                                                                                                     <span className="extension">{task.filename?.split(".")?.pop() ? "." + task.filename?.split(".")?.pop() : ''}</span>
                                                                                                 </div>
                                                                                                 {
@@ -2171,7 +2178,7 @@ const LSPAssignManage = (props) => {
                                                                                                                     (editor.avatar === null || editor.avatar === "") ?
                                                                                                                         <div className="no-avatar">{editor.name.charAt(0).toUpperCase()}</div>
                                                                                                                         :
-                                                                                                                        <img src={`${Config.BASE_URL}${editor.avatar}`} alt="profile-pic" />
+                                                                                                                        <img src={`${Config.BASE_URL + editor.avatar}`} alt="profile-pic" />
                                                                                                                 }
                                                                                                                 <div className="name">{editor.name}</div>
                                                                                                                 {editor.status === "Credentials Sent" && (
@@ -2278,7 +2285,7 @@ const LSPAssignManage = (props) => {
                                                                                                                     (editor.avatar === null || editor.avatar === "") ?
                                                                                                                         <div className="no-avatar">{editor.name.charAt(0).toUpperCase()}</div>
                                                                                                                         :
-                                                                                                                        <img src={`${Config.BASE_URL}${editor.avatar}`} alt="profile-pic" />
+                                                                                                                        <img src={`${Config.BASE_URL + editor.avatar}`} alt="profile-pic" />
                                                                                                                 }
                                                                                                                 <div className="name">{editor.name}</div>
                                                                                                                 {editor.status === "Invite Sent" && (
@@ -2525,7 +2532,7 @@ const LSPAssignManage = (props) => {
                                                                                 id="rate"
                                                                                 min={0}
                                                                                 value={unitRate}
-                                                                                onChange={(e) => setUnitRate(e.target.value)}
+                                                                                onChange={(e) => setUnitRate(limitToFourDecimalPlaces(e.target.value))}
                                                                             // disabled={isTaskAssigned || isInternalEditor || isEditorAilaysa}
                                                                             />
                                                                         </div>

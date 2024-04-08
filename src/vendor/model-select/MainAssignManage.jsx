@@ -33,6 +33,7 @@ import { TextareaAutosize } from "@mui/material";
 import { ButtonLoader } from "../../loader/CommonBtnLoader";
 import Skeleton from '@mui/material/Skeleton';
 import { t } from "i18next";
+import { useLocation } from "react-router";
 import FileDownloadBlack from "../../assets/images/file_download_black.svg"
 import NoEditorInfo from "../../assets/images/new-project-setup/no-editor-info-icon.svg"
 import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
@@ -318,10 +319,12 @@ const MainAssignManage = (props) => {
     } = props
 
     const dispatch = useDispatch()
+    const location = useLocation()
     const userDetails = useSelector((state) => state.userDetails.value)
     const currencyOption = useSelector((state) => state.currencyOptions.value)
     const unitTypeOption = useSelector((state) => state.unitTypeOptions.value)
     const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
+    let isEnterprise = userDetails?.is_enterprise 
 
     // for federal news - it displays only internal editor list for assignment
     const isFederalInternalEditorOnly = location.pathname?.includes('my-stories') ? true : false
@@ -436,42 +439,13 @@ const MainAssignManage = (props) => {
         }
     }, []);
 
-    // useEffect(() => {
-    // 	const handleEditorScroll = () => {
-    // 	  const element = editorListWrapRef.current;
-    // 	  if (element) {
-    // 		const scrollTop = element.scrollTop;
-    // 		if (scrollTop > 0) {
-    // 			setEditorListHasScrollAtBottom(true);
-    // 		} else {
-    // 			setEditorListHasScrollAtBottom(false);
-    // 		}
-    // 	  }
-    // 	};
-
-    // 	const element = editorListWrapRef.current;
-    // 	if (element) {
-    // 	  element.addEventListener('scroll', handleEditorScroll);
-    // 	}
-
-    // 	return () => {
-    // 	  if (element) {
-    // 		element.removeEventListener('scroll', handleEditorScroll);
-    // 	  }
-    // 	};
-    //   }, []);
-
-    useEffect(() => {
-        console.log(unitTypeSelect);
-    }, [unitTypeSelect])
-
 
     useEffect(() => {
         const checkAssignManageScrollbar = () => {
             const divElement = assignManageWrapRef.current;
             if (divElement) {
                 const hasScrollbar = divElement.clientHeight < divElement.scrollHeight;
-                console.log(hasScrollbar)
+                // console.log(hasScrollbar)
                 setAssignManageHasScrollbar(hasScrollbar);
             }
         };
@@ -490,30 +464,6 @@ const MainAssignManage = (props) => {
         }
     }, [selectedEditor?.id !== undefined]);
 
-    // useEffect(() => {
-    // 	const handleAssignManageScroll = () => {
-    // 	  const element = assignManageWrapRef.current;
-    // 	  if (element) {
-    // 		const scrollTop = element.scrollTop;
-    // 		if (scrollTop > 0) {
-    // 			setAssignManageHasScrollAtBottom(true);
-    // 		} else {
-    // 			setAssignManageHasScrollAtBottom(false);
-    // 		}
-    // 	  }
-    // 	};
-
-    // 	const element = assignManageWrapRef.current;
-    // 	if (element) {
-    // 	  element.addEventListener('scroll', handleAssignManageScroll);
-    // 	}
-
-    // 	return () => {
-    // 	  if (element) {
-    // 		element.removeEventListener('scroll', handleAssignManageScroll);
-    // 	  }
-    // 	};
-    // }, []);
 
     useEffect(() => {
         if (selectedFileRow.current !== null) {
@@ -546,33 +496,6 @@ const MainAssignManage = (props) => {
                 setUserSubscriptionName(response.data.subscription_name)
             },
         });
-    };
-
-    //Slide click
-    const slide = (shift) => {
-        scrl.current.scrollLeft += shift;
-        setscrollX(scrollX + shift);
-
-        if (
-            Math.floor(scrl.current.scrollWidth - scrl.current.scrollLeft) <=
-            scrl.current.offsetWidth
-        ) {
-            setscrolEnd(true);
-        } else {
-            setscrolEnd(false);
-        }
-    };
-
-    const scrollCheck = () => {
-        setscrollX(scrl.current.scrollLeft);
-        if (
-            Math.floor(scrl.current.scrollWidth - scrl.current.scrollLeft) <=
-            scrl.current.offsetWidth
-        ) {
-            setscrolEnd(true);
-        } else {
-            setscrolEnd(false);
-        }
     };
 
     useEffect(() => {
@@ -628,8 +551,9 @@ const MainAssignManage = (props) => {
 
     // by default set the view all editor - internal to true
     useEffect(() => {
-        if(isDinamalar) setViewAllEditor({ external: false, internal: true, agency: false })
-    }, [isDinamalar])
+        if(isEnterprise) setViewAllEditor({ external: false, internal: true, agency: false })
+    }, [isEnterprise])
+    
 
     const DropdownIndicatorSelect = (props) => {
         return (
@@ -788,6 +712,13 @@ const MainAssignManage = (props) => {
         }
     }, [currencySelect])
 
+    const limitToFourDecimalPlaces = (number) => {
+        // Use the toFixed() method to round the number to four decimal places
+        const roundedNumber = Number(number).toFixed(4);
+    
+        // Convert the result back to a number
+        return Number(roundedNumber);
+    }
 
     const getAllEditorsList = () => {
         setIsEditorListLoading(true)
@@ -873,7 +804,7 @@ const MainAssignManage = (props) => {
             },
             error: (error) => {
                 if (error?.response?.status == 400) {
-                    Config.toast(error?.response?.data?.mtpe_rate, "warning");
+                    Config.toast(t("assig_failed"), "warning");
                 }
                 if (error.response?.data?.message == "integrirty error") Config.toast(t("already_assigned"), "warning");
                 setIsAssigning(false)
@@ -897,7 +828,9 @@ const MainAssignManage = (props) => {
         formData.append("task", selectedFileRow.current?.task);
 
         let deadlineUTC = Config.convertLocalToUTC(deadline);
-        formData.append("deadline", deadlineUTC);
+        if(deadlineUTC !== null && deadlineUTC !== undefined){
+            formData.append("deadline", deadlineUTC);
+        }
 
         if (taskDetailsFromApi?.assignTo?.id !== selectedEditor?.id) {
             formData.append("assign_to", selectedEditor?.id);
@@ -984,6 +917,7 @@ const MainAssignManage = (props) => {
                             setSelectedEditor(eachRole?.assign_to_details);
                             if (!eachRole?.assign_to_details?.external_editor) {
                                 setIsInternalEditorSelected(true)
+                                setIsInternalEditor(true)
                             }
 
                             setDeadline(Config.convertUTCToLocal(eachRole?.deadline));
@@ -1181,7 +1115,7 @@ const MainAssignManage = (props) => {
     }
 
     useEffect(() => {
-        console.log(selectedFileRow.current)
+        // console.log(selectedFileRow.current)
         if (selectedFileRow.current) {
             let sourceData = getLanguageNameFromId(selectedFileRow.current?.task_data?.source_language);
             let targetData = getLanguageNameFromId(selectedFileRow.current?.task_data?.target_language);
@@ -1189,10 +1123,6 @@ const MainAssignManage = (props) => {
         }
     }, [selectedFileRow.current])
 
-    useEffect(() => {
-      console.log(redirectionToMarketplace)
-    }, [redirectionToMarketplace])
-    
 
     const downloadInstructionFile = async (file_id, file_name, ext) => {
         let url = `${Config.BASE_URL}/workspace/instruction_file_download/${file_id}`
@@ -1271,7 +1201,7 @@ const MainAssignManage = (props) => {
                                                                                 (taskDetailsFromApi?.assignTo?.avatar === null || taskDetailsFromApi?.assignTo?.avatar === "") ?
                                                                                     <div className="no-avatar">{taskDetailsFromApi?.assignTo?.name?.charAt(0).toUpperCase()}</div>
                                                                                     :
-                                                                                    <img src={`${Config.BASE_URL}${taskDetailsFromApi?.assignTo?.avatar}`} alt="profile-pic" />
+                                                                                    <img src={`${Config.BASE_URL + taskDetailsFromApi?.assignTo?.avatar}`} alt="profile-pic" />
                                                                             }
                                                                             <span className="input-label">{taskDetailsFromApi?.assignTo?.name}</span>
                                                                         </div>
@@ -1337,7 +1267,7 @@ const MainAssignManage = (props) => {
                                                                                                                 (editor.avatar === null || editor.avatar === "") ?
                                                                                                                     <div className="no-avatar">{editor.name?.charAt(0).toUpperCase()}</div>
                                                                                                                     :
-                                                                                                                    <img src={`${Config.BASE_URL}${editor.avatar}`} alt="profile-pic" />
+                                                                                                                    <img src={`${Config.BASE_URL + editor.avatar}`} alt="profile-pic" />
                                                                                                             }
                                                                                                             <div className="name">{editor.name}</div>
                                                                                                             {editor.status === "Invite Sent" && (
@@ -1373,7 +1303,7 @@ const MainAssignManage = (props) => {
                                                     <div className="internal-users">
                                                         <div className="header">
                                                             <p>{t("internal_users")}</p>
-                                                            {(!isDinamalar && editorList?.internal_editors?.length > 2 && !isEditorListLoading) && (
+                                                            {(!isEnterprise && editorList?.internal_editors?.length > 2 && !isEditorListLoading) && (
                                                                 <span className="link" onClick={() => handleViewAllBtn('internal')}>
                                                                     {viewAllEditor.internal ? t("view_less") : t("view_all")}
                                                                 </span>
@@ -1426,7 +1356,7 @@ const MainAssignManage = (props) => {
                                                                                                             (editor.avatar === null || editor.avatar === "") ?
                                                                                                                 <div className="no-avatar">{editor.name?.charAt(0).toUpperCase()}</div>
                                                                                                                 :
-                                                                                                                <img src={`${Config.BASE_URL}${editor.avatar}`} alt="profile-pic" />
+                                                                                                                <img src={`${Config.BASE_URL + editor.avatar}`} alt="profile-pic" />
                                                                                                         }
                                                                                                         <div className="name">{editor.name}</div>
                                                                                                         {editor.status === "Credentials Sent" && (
@@ -1522,7 +1452,7 @@ const MainAssignManage = (props) => {
                                                                                                             (editor.avatar === null || editor.avatar === "") ?
                                                                                                                 <div className="no-avatar">{editor.name?.charAt(0).toUpperCase()}</div>
                                                                                                                 :
-                                                                                                                <img src={`${Config.BASE_URL}${editor.avatar}`} alt="profile-pic" />
+                                                                                                                <img src={`${Config.BASE_URL + editor.avatar}`} alt="profile-pic" />
                                                                                                         }
                                                                                                         <div className="name">{editor.name}</div>
                                                                                                         {editor.status === "Invite Sent" && (
@@ -1748,7 +1678,7 @@ const MainAssignManage = (props) => {
                                                                             id="rate"
                                                                             min={0}
                                                                             value={UnitRate}
-                                                                            onChange={(e) => setUnitRate(e.target.value)}
+                                                                            onChange={(e) => setUnitRate(limitToFourDecimalPlaces(e.target.value))}
                                                                             disabled={taskVenStatus === 'task_accepted' && taskDetailsFromApi?.assignTo?.id === selectedEditor?.id}
                                                                         />
                                                                     </div>
@@ -1907,7 +1837,7 @@ const MainAssignManage = (props) => {
                                                     <div className="editor-info-wrap">
                                                         {
                                                             (taskAssignmentDataRef.current?.assigned_by_details?.avatar) ?
-                                                                <img src={`${Config.BASE_URL}${taskAssignmentDataRef.current?.assigned_by_details?.avatar}`} alt="profile-pic" />
+                                                                <img src={`${Config.BASE_URL + taskAssignmentDataRef.current?.assigned_by_details?.avatar}`} alt="profile-pic" />
                                                                 :
                                                                 <div className="no-avatar">{taskAssignmentDataRef.current?.assigned_by_details?.name?.charAt(0).toUpperCase()}</div>
                                                         }
