@@ -5043,6 +5043,13 @@ mark {
     animation: border_anim 0.4s linear forwards;
 }
 
+.ner-highlight {
+    background-color: #85E01A !important;
+    color: inherit;
+    padding: 0;
+    line-height: 1.4;
+}
+
 @keyframes border_anim {
     0% {
         width: 0%;
