@@ -455,7 +455,6 @@ function Workspace(props) {
     const [recognizedText, setRecognizedText] = useState('');
 
     const [commentsDataCopy, setCommentsDataCopy] = useState([]);
-    const [selfLearnWordsList, setSelfLearnWordsList] = useState([]);
     const [isDocumentSubmitting, setIsDocumentSubmitting] = useState(false);
 
     const [isAssignEnable, setIsAssignEnable] = useState(true)
@@ -3731,7 +3730,6 @@ function Workspace(props) {
 
                         // if confirm button is clicked, this will move the focus to next unconfirmed segment otherwise focus the un-opned segment  
                         if (!isTemp) {
-                            // getSelfLearnWords(id)
                             setIsSegmentConfirming(false)
                             
                             // confirm current segment then move to next unconfimed segment
@@ -4103,7 +4101,7 @@ function Workspace(props) {
             }
         }
 
-        handleToggleVisibility(pushPinActive ? true : (advancedOptionVisibility && Object.keys(selfLearnWordsList)?.length !== 0) ? true : false);
+        handleToggleVisibility(pushPinActive ? true : (advancedOptionVisibility) ? true : false);
 
         highlightFocusedSegment(id);
 

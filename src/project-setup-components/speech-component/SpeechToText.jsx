@@ -935,7 +935,7 @@ function SpeechToText(props) {
                 // console.log(response.data)
                 // if(operationValue === 'translate'){
                 Config.toast("Project created successfully");
-                history(`/file-upload?page=1&open-project=${response?.data?.id}`)
+                history(`/transcriptions?page=1&open-project=${response?.data?.id}`)
                 // } 
                 // operationValue === 'download' && downloadSourceAudioFile(response?.data?.id)
             },
@@ -1020,9 +1020,9 @@ function SpeechToText(props) {
                 Config.toast(t("proj_updated_success"));
                 // history(`/file-upload?page=1&order_by=-id&open-project=${response?.data?.id}`)
                 if (prevPageInfo.current) {
-                    history(`/file-upload?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`)
+                    history(`/transcriptions?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`)
                 } else {
-                    history(`/file-upload?page=1&order_by=-id$&search=${response.data?.project_name}&open-project=${response.data?.id}`)
+                    history(`/transcriptions?page=1&order_by=-id$&search=${response.data?.project_name}&open-project=${response.data?.id}`)
                 }
                 // } 
                 // operationValue === 'download' && downloadSourceAudioFile(response?.data?.id)
@@ -1108,10 +1108,10 @@ function SpeechToText(props) {
         historyAction
     }) => {
 
-        if (files.length > 0 || audioData.length > 0) {
-            return true
+        if (files.length <= 0 || audioData.length <= 0 || nextLocation.pathname?.includes('/transcriptions')) {
+            return false
         }
-        return false
+        return true
     }
 
     const modaloptions = {

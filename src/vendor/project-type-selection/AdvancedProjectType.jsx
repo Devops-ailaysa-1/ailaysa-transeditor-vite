@@ -54,7 +54,8 @@ function AdvancedProjectType(props) {
         mtpeEngineOptions,
         handleMTEngineChange,
         translationByPage,
-        setTranslationByPage
+        setTranslationByPage,
+        projectDataFromApi
     } = props;
 
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -425,9 +426,9 @@ function AdvancedProjectType(props) {
                                                     <Radio
                                                         checked={translationByPage}
                                                         id="translate-by-page"
-                                                        onChange={() => setTranslationByPage(true)}
-                                                        size="small"
                                                         className="radio-btn"
+                                                        size="small"
+                                                        onChange={() => projectDataFromApi.current?.wc_selected ? Config.toast(`Can't change to page wise translation because wordchoice has been added for this project`, 'warning') : setTranslationByPage(true)}
                                                     /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
                                                     &nbsp;&nbsp;
                                                     <Radio

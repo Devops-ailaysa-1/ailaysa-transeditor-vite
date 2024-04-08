@@ -3524,6 +3524,7 @@ function TranslateFiles(props) {
                                         selectedMTEngine={selectedMTEngine}
                                         mtpeEngineOptions={mtpeEngineOptions}
                                         handleMTEngineChange={handleMTEngineChange}
+                                        projectDataFromApi={projectDataFromApi}
                                     />
                                 </div>
                             )}
