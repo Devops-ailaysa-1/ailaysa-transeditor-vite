@@ -2008,7 +2008,7 @@ function MyStories(props) {
 
 
         }else if (openIn === "ExpressEditor") {
-            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, { filename: fileName })
+            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, {state: { filename: fileName }})
         }else if (openIn === "News") {
             setClickedOpenButton(key);
 
@@ -2039,10 +2039,10 @@ function MyStories(props) {
                         //         open_as
                         //     });
                         // }
-                        history(`/news-workspace/${response.data.task}`, {
-                        prevPath: location.pathname + location.search,
-                        open_as
-                    });
+                        history(`/news-workspace/${response.data.task}`, {state: {
+                            prevPath: location.pathname + location.search,
+                            open_as
+                        }});
                     });
                 },
                 error: (err) => {
@@ -2121,15 +2121,15 @@ function MyStories(props) {
                                     // window.location.href = 'workspace/' + response.data.document_id
                                     let lastPageAvailable = localStorage.getItem(response.data.document_id)
                                     if (lastPageAvailable) {
-                                        history(lastPageAvailable, {
+                                        history(lastPageAvailable, {state: {
                                             prevPath: location.pathname + location.search,
                                             open_as
-                                        });
+                                        }});
                                     } else {
-                                        history(`/workspace/${response.data?.document_id}?page=1`, {
+                                        history(`/workspace/${response.data?.document_id}?page=1`, {state: {
                                             prevPath: location.pathname + location.search,
                                             open_as
-                                        });
+                                        }});
                                     }
                                 });
                             }
@@ -2141,16 +2141,16 @@ function MyStories(props) {
                                     // window.location.href = 'workspace/' + response.data.document_id
                                     let lastPageAvailable = localStorage.getItem(response.data?.doc_data?.document_id)
                                     if (lastPageAvailable) {
-                                        history(lastPageAvailable, {
+                                        history(lastPageAvailable, {state: {
                                             prevPath: location.pathname + location.search,
                                             open_as
-                                        });
+                                        }});
                                     } else {
-                                        history(`/workspace/${response.data?.doc_data?.document_id}?page=1`, {
+                                        history(`/workspace/${response.data?.doc_data?.document_id}?page=1`, {state: {
                                             partial: true,
                                             prevPath: location.pathname + location.search,
                                             open_as
-                                        });
+                                        }});
                                     }
                                 });
                             }
@@ -2217,10 +2217,10 @@ function MyStories(props) {
             if (projectType === 3) {
                 setTimeout(() => {
                     // window.location.href = 'workspace/' + response.data.document_id
-                    history(`glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`, {
+                    history(`glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`, {state: {
                         prevPageInfo: prevPageInfo,
                         prevPath: location.pathname + location.search
-                    });
+                    }});
                 });
             }
         }
@@ -3017,7 +3017,7 @@ function MyStories(props) {
     }
 
     const openAilaysaWriter = (projectID, taskID, assignToMe = false) => {
-        history(`word-processor/?project=${projectID}&transcription-task=${taskID}`, {
+        history(`word-processor/?project=${projectID}&transcription-task=${taskID}`, {state: {
             assignToMe,
             prevPageInfo: {
                 pageNo: URL_SEARCH_PARAMS.get("page"),
@@ -3028,7 +3028,7 @@ function MyStories(props) {
                 fromProjectList: true
             },
             prevPath: location.pathname + location.search
-        });
+        }});
     }
 
     const handleDocumentSubmit = (taskID, step) => {
@@ -3279,7 +3279,7 @@ function MyStories(props) {
         if (lastPageAvailable) {
             history(lastPageAvailable);
         } else {
-            history("workspace/" + openFileId.current, { partial: true });
+            history("workspace/" + openFileId.current, {state: { partial: true }});
         }
     }
 
@@ -3593,12 +3593,12 @@ function MyStories(props) {
             projectId: projectId,
             fromProjectList: true
         }
-        history(`/word-processor?task=${id}`, {
+        history(`/word-processor?task=${id}`, {state: {
             docName: name,
             projectId,
             prevPageInfo,
             prevPath: location.pathname + location.search
-        })
+        }})
     }
 
     const translateFromPdfTask = (taskId, projectId) => {
