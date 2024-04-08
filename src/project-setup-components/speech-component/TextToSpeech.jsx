@@ -1359,7 +1359,7 @@ const TextToSpeech = (props) => {
                 setProjectId(response.data?.id)
                 if (operationValue === 'translate') {
                     Config.toast(t("project_created_success"));
-                    history(`/file-upload?page=1&order_by=-id&open-project=${response?.data?.id}`)
+                    history(`/ai-voices?page=1&order_by=-id&open-project=${response?.data?.id}`)
                 }
                 if (operationValue === 'download') {
                     Config.toast(t("project_created_success"));
@@ -1456,7 +1456,7 @@ const TextToSpeech = (props) => {
             success: (response) => {
                 setShowBtnLoader(false)
                 Config.toast(t("project_updated_success"));
-                history(`/file-upload?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`)
+                history(`/ai-voices?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`)
                 operationValue === 'download' && downloadSourceAudioFile(response?.data?.id)
             },
         });
@@ -1472,7 +1472,7 @@ const TextToSpeech = (props) => {
             success: (response) => {
                 Config.toast(t("proj_deleted"));
                 setIsProjectDeleting(false)
-                history("/file-upload?page=1&order_by=-id");
+                history("/ai-voices?page=1&order_by=-id");
             },
             error: (err) => {
                 if (err?.response?.data?.msg?.includes('assigned')) {
@@ -1913,10 +1913,13 @@ const TextToSpeech = (props) => {
         nextLocation,
         historyAction
       }) => {
-        if (files.length > 0 || dictationInput != "" || translateSrcContent != "") {
-            return true
+        if (
+            files.length <= 0 || dictationInput?.trim() === "" || translateSrcContent?.trim() === "" || 
+            nextLocation.pathname?.includes('/text-to-speech') || nextLocation.pathname?.includes('/ai-voices')
+        ) {
+            return false
         }
-        return false
+        return true
     }
 
     const modaloptions = {
@@ -2935,7 +2938,7 @@ const TextToSpeech = (props) => {
                 </div>
             </Rodal>)}
             {showCreditAlertModal && (<Rodal className="ts-rodal-mask" visible={showCreditAlertModal} {...convertmodaloption} showCloseButton={false}>
-                <span className="modal-close-btn lang-close" onClick={(e) => { setShowCreditAlertModal(false); history(`/file-upload?page=1&order_by=-id&open-project=${projectId}`) }}>
+                <span className="modal-close-btn lang-close" onClick={(e) => { setShowCreditAlertModal(false); history(`/ai-voices?page=1&order_by=-id&open-project=${projectId}`) }}>
                     <img src={CloseBlack} alt="close_black" />
                 </span>
                 <div className="credits-text-cont">

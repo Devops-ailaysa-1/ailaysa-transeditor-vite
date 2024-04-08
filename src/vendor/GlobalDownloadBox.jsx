@@ -40,11 +40,11 @@ export const GlobalDownloadBox = () => {
                         id="panel1a-header"
                     >
                         <div className="d-flex justify-between w-100">
-                            <div className="d-flex">
+                            <div className="d-flex items-center">
                                 <span className="download-list-header-title">{downloadingFileList.filter(each => each.status === 1)?.length !== 0 ? "Downloading" : "Downloaded"} &nbsp;</span>
                                 {downloadingFileList?.length !== 0 &&<span className='file-downloading-count'>{downloadingFileList?.length}</span>}
                             </div>
-                            <div className='d-flex'>
+                            <div className='d-flex items-center'>
                                 <span className="icon">
                                     {isExpand ? <ExpandMoreIcon /> : <ExpandLessIcon />}
                                 </span>
