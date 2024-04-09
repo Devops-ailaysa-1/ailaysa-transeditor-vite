@@ -78,7 +78,6 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import NewMagnifier from "../assets/images/new-ui-icons/new-magnifier.svg"
 import NorCopyContent from "../assets/images/new-ui-icons/nor-copy-content.svg"
-import autosizeInput from 'autosize-input'
 import WorkspaceFeatures from "./workspace-components/WorkspaceFeatures";
 import {ClickAwayListener} from '@mui/base/ClickAwayListener';
 import AddGlossaryTermModal from "./model-select/AddGlossaryTermModal";
@@ -1963,12 +1962,6 @@ function Workspace(props) {
         }
     }, [mergeSelectedSegmentIds, translatedResponseRef.current])
 
-    // autosizeinput() method will adjust the size of the page number input box
-    useEffect(() => {
-        if(document.querySelector('#page-num')){
-            autosizeInput(document.querySelector('#page-num'),{ minWidth: true })
-        }
-    }, [document.querySelector('#page-num')])
 
     // get the list of wordchoices based on the task_id
     useEffect(() => {
@@ -4009,7 +4002,7 @@ function Workspace(props) {
                 );
             content.push(
                 <React.Fragment key={currentPage}>
-                    <input id="page-num" type="number" defaultValue={currentPage} onChange={(e) => debouncePageNumber(e, url)} />
+                    <input id="page-num" style={{width: '26px', boxSizing: 'content-box'}} type="number" defaultValue={currentPage} onChange={(e) => debouncePageNumber(e, url)} />
                     {t("of") + " " + Math.ceil(totalPages) + " " + t("pages")}
                 </React.Fragment>
             );
@@ -4051,7 +4044,12 @@ function Workspace(props) {
                 // history(url + value);
                 storeLastVisitedPageNumber(url + value)
             }
-            else Config.toast(t("page_not_found"), "warning");
+            else {
+                Config.toast(t("page_not_found"), "warning");
+                // reset the input value to the current page number
+                let pageParam = URL_SEARCH_PARAMS.get("page");
+                e.target.value = pageParam
+            }
         }
     };
 

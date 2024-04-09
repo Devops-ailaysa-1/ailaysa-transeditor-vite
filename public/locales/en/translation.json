@@ -1140,5 +1140,7 @@
     "existing": "Existing",
     "new_wordchoices_name": "New wordchoices name",
     "indent": "Indent",
-    "outdent": "Outdent"
+    "outdent": "Outdent",
+    "download_current_page": "Download current page",
+    "download_full_book": "Download full book"
 }
