@@ -3389,109 +3389,10 @@ function TranslateFiles(props) {
                                                         />
                                                     </div>
                                                 </Tooltip>
-
-                                                {/* <p>Recently used: &nbsp;
-							{
-								recentlyUsedLangs?.map((eachLang, index) => {
-									if(index < 5){
-										return(
-											<span className="recent-target-lang" onClick={() => handleRecentLangClick(eachLang)}>{`${eachLang?.language}${index !== 4 ? ", " : ""}`}</span>
-										)
-									}
-								})
-							}
-						</p> */}
                                                 {sourceTargetValidation.target && <small className="text-danger">{t("target_validation_note")}</small>}
                                             </div>
                                         </div>
-                                        {/* <div className="form-fields">
-                      <div className="form-group mb-2">
-                        <label htmlFor="exampleFormControlFile1">
-                          Machine translation engine
-                        </label>
-                        <Select
-                          className="select-width"
-                          isSearchable={false}
-                          name="machine-translation-software"
-                          id="machine-translation-software"
-                          value={selectedMTEngine}
-                          options={mtpeEngineOptions}
-                          // isOptionDisabled={(option) => option.disabled}
-                          isDisabled={
-                            mtpeEngineOptions.length === 0 ? true : false
-                          }
-                          onChange={handleMTEngineChange}
-                          styles={customStepSelectStyles}
-                          placeholder={
-                            <div className="select-placeholder-text">
-                              Select MT
-                            </div>
-                          }
-                          components={{
-                            DropdownIndicator,
-                            IndicatorSeparator: () => null,
-                          }}
-                        />
-                      </div>
-                    </div> */}
                                     </div>
-                                    {/* {sourceLanguageError !== "" ||
-                    (targetLanguageError !== "" && (
-                      <div className="d-flex align-items-center gap-3">
-                        <div className="form-fields mr-3">
-                          <div className="form-group">
-                            {sourceLanguageError !== "" ? (
-                              <span className="text-danger">
-                                {sourceLanguageError}
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
-                        <div className="form-fields">
-                          <div className="form-group">
-                            {targetLanguageError !== "" ? (
-                              <span className="text-danger">
-                                {targetLanguageError}
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
-                      </div>
-                    ))} */}
-                                    {/* <div className="d-flex  gap-3 files-space-align w-50 g-30">
-                    <div className="form-fields">
-                      <div className="form-group mb-2">
-                        <label htmlFor="exampleFormControlFile1">
-                          Machine translation engine
-                        </label>
-                        <Select
-                          className="select-width"
-                          isSearchable={false}
-                          name="machine-translation-software"
-                          id="machine-translation-software"
-                          value={selectedMTEngine}
-                          options={mtpeEngineOptions}
-                          // isOptionDisabled={(option) => option.disabled}
-                          isDisabled={
-                            mtpeEngineOptions.length === 0 ? true : false
-                          }
-                          onChange={handleMTEngineChange}
-                          styles={customStepSelectStyles}
-                          placeholder={
-                            <div className="select-placeholder-text">
-                              Select MT
-                            </div>
-                          }
-                          components={{
-                            DropdownIndicator,
-                            IndicatorSeparator: () => null,
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="form-fields"></div>
-                  </div> */}
-
                                     <AdvancedProjectType
                                         isLoading={isLoading}
                                         projectType={projectType}
