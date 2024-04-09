@@ -855,7 +855,7 @@ function Navbar(props) {
                                                     onClick={() => !isCurrentChaperDownloading && handleDownloadCurrentChapter()}
                                                     onMouseLeave={() => setTimeout(() => {setIsCurrentChaperDownloading(false)}, 500)}
                                                 >
-                                                    Download current file
+                                                    {t("download_current_page")}
                                                 </a>
                                             </li>
                                             <li>
@@ -863,7 +863,7 @@ function Navbar(props) {
                                                 onClick={() => !isFullBookDownloading && handleDownloadFullBook()}
                                                 onMouseLeave={() => setTimeout(() => {setIsFullBookDownloading(false)}, 500)}
                                                 >
-                                                    Download full book
+                                                    {t("download_full_book")}
                                                 </a>
                                             </li>
                                         </ul>
