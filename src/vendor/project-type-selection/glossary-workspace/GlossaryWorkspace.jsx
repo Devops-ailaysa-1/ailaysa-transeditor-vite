@@ -961,7 +961,6 @@ function GlossaryWorkspace(props) {
         <React.Fragment>
             <Navbar 
                 isWhite={true} 
-                showViewOnlyTag={true}
                 isGlossary={true} 
                 glossaryProjectName={projectName} 
                 languagePairObject={languagePairObject} 
