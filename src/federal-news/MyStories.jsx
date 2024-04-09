@@ -3922,6 +3922,20 @@ function MyStories(props) {
                 dispatch(deleteDownloadingFile({ id: uniqueKey }))
                 // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
                 setIsDownloading(false)
+            } else{
+                const newArr = selectedProjectFiles?.map(obj => {
+                    if (obj.id === id) {
+                        return {
+                            ...obj,
+                            isTaskDownloading: null
+                        };
+                    }
+                    return obj;
+                });
+                setSelectedProjectFiles(newArr)
+                dispatch(deleteDownloadingFile({ id: uniqueKey }))
+                setIsDownloading(false)
+                Config.toast(t("download_failed"), 'error')
             }
         }
     };
@@ -4675,21 +4689,25 @@ function MyStories(props) {
         let {id, filename} = task_data
         let {name, extension} = Config.getNameAndExtension(filename)
         
-        // add in download list
-        dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }))
-
-        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`
-        const response = await Config.downloadFileFromApi(url);
-
-        // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
-        setTimeout(() => {
-            // remove the downloaded file from list
-            dispatch(deleteDownloadingFile({ id: id }))
-        }, 8000);
+        try{
+            // add in download list
+            dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }))
+    
+            let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`
+            const response = await Config.downloadFileFromApi(url);
+    
+            // update the list once download completed
+            dispatch(updateDownloadingFile({ id: id, status: 2 }))
+    
+            Config.downloadFileInBrowser(response)
+    
+            setTimeout(() => {
+                // remove the downloaded file from list
+                dispatch(deleteDownloadingFile({ id: id }))
+            }, 8000);
+        } catch (e) {
+            console.log(e)
+        }
     } 
 
     // this api will initiate the file translate process and provide the status of each task
