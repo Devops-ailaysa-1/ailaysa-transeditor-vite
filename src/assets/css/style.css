@@ -3982,10 +3982,11 @@ ul.submenu {
     -webkit-box-shadow: 0px 2px 8px #00000029;
     -moz-box-shadow: 0px 2px 8px #00000029;
     box-shadow: 0px 2px 8px #00000029;
-    -webkit-animation-duration: 0.5s;
+    /* -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
     -webkit-animation-delay: 0.1s;
-    animation-delay: 0.1s;
+    animation-delay: 0.1s; */
+    animation: none;
     width: 195px;
     height: auto;
     padding: 8px 0px;

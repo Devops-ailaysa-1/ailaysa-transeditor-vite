@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import ClearIcon from '@mui/icons-material/Clear';
 import generateKey from './../../project-setup-components/speech-component/speech-to-text/recorder-components/utils/GenerateKey';
 import Config from '../Config';
-// import AutowidthInput from "react-autowidth-input";
-// import autosizeInput from 'autosize-input'
 
 export const ChipInputField = (props) => {
     let {
@@ -114,14 +112,6 @@ export const ChipInputField = (props) => {
         setChipsArray(chipsCopyArray)
         setIsChipEditId("")
     }
-
-    // autosizeinput() method will adjust the size of the page number input box
-    useEffect(() => {
-        if(document.querySelector('#page-num')){
-            autosizeInput(document.querySelector('#page-num'),{ minWidth: true })
-        }
-    }, [document.querySelector('#page-num')])
-
 
     useEffect(() => {
         setChipsCopyArray(chipsArray)
