@@ -4140,6 +4140,9 @@ function Workspace(props) {
         let thisSegmentTag = segmentData?.target_tags;
         let textTag = "" + thisSegmentTag
 
+        searchTbxForDoc(e)
+        searchGlossaryForDoc(e)
+        
         if(segment_status) return
 
         Config.axios({
@@ -4243,12 +4246,11 @@ function Workspace(props) {
         setGrammarPopoverOpen(false)
         setgrammarCheckPopoverTarget("")
         setPopoverOpen(false)
+    };
+
+    const searchTbxForDoc = (e) => {
         let tbxFormdata = new FormData();
         let sourceText = e.target.getAttribute("data-source-text");
-        if (paraphraseText === "" || grammarCheckPopoverTarget === "") {
-            // console.log('sarvesh')
-            // sourceText = removeAllTags(sourceText);
-        }
         tbxFormdata.append("user_input", sourceText);
         tbxFormdata.append("doc_id", documentId);
         tbxFormdata.append("lang", targetLanguage);
@@ -4278,9 +4280,11 @@ function Workspace(props) {
             },
             error: (error) => { },
         });
+    }
 
+    const searchGlossaryForDoc = (e) => {
         let glossaryFormdata = new FormData();
-
+        let sourceText = e.target.getAttribute("data-source-text");
         glossaryFormdata.append("user_input", sourceText);
         glossaryFormdata.append("doc_id", documentId);
         let glossaryUrl = Config.BASE_URL + "/glex/glossary_term_search/";
@@ -4308,8 +4312,7 @@ function Workspace(props) {
             },
             error: (error) => { },
         });
-
-    };
+    } 
 
     /* Replace the give string with the tags span element. Also can skip some tags to prevent replacing */
     const replaceTextWithTags = (targetText, exculudeTags = []) => {

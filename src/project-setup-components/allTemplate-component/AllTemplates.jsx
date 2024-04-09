@@ -216,49 +216,6 @@ const AllTemplate = (props) => {
                 <div className="all-template-header">
                     <div className="all-templates-container">
                         <h1>{t("workflows_and_templates")}</h1>
-                    {/* <div 
-                        className="position-relative" 
-                        style={{marginBottom: "30px"}}
-                        // style={{visibility:activeTab == null ? 'visible' : 'hidden'}}
-                        >
-                            <div className={"project-list-search-box " + (fileListSearchEnlarge ? "active" : "")}>
-                                <div className="img-box">
-                                    <img src={Config.HOST_URL + "assets/images/chat/chat-search.svg"} alt="search-icon" />
-                                </div>
-                                <input 
-                                    onClick={() => setFileListSearchEnlarge(true)}
-                                    value={projectSearchTerm}
-                                    // autoFocus={projectSearchTerm ? true : false}
-                                    onChange={(e) => setProjectSearchTerm(e.target.value)}
-                                    type="search"
-                                    placeholder={t("search_all_templates")}
-                                    onKeyUp={(e) => SearchTermFilterEnter(e)}
-                                    onFocus={() => setFileListSearchEnlarge(true)}
-                                    onBlur={(e) => {
-                                        setFileListSearchEnlarge(false);
-                                    }}
-                                />
-                                <span className={"close " + ((fileListSearchEnlarge || projectSearchTerm !== "") ? "show " : " ")}
-                                    onClick={() => handleCloseSearchBox()}
-                                >
-                                    <img src={Config.HOST_URL + "assets/images/assign-page/search-bar-close.svg"} alt="search-bar-close" />
-                                </span>
-                            </div>
-                            {/* <div ref={searchTermCloseOutside} className={"search-results-bar project-list-search-bar " + (fileListSearchEnlarge ? "show" : "hide")}>
-                                <div name="search-dropdown" onMouseDown={(e)=>(projectSearchTerm !== "" ? handleSearchDropDownClick(e) : "")} className={"search-results-item " + (projectSearchTerm !== "" ? " " : "cursor-change")}>
-                                    <SearchIcon className="search-icon" name="search-dropdown" />
-                                    <div className="searched-results-info" name="search-dropdown">
-                                        <p className="searched-term" name="search-dropdown">{projectSearchTerm}</p>
-                                        {
-                                            projectSearchTerm !== "" ? 
-                                                <p className="results-link" name="search-dropdown">{t("search_results_1")} <span>{t("search_results_2")}</span></p>
-                                            :
-                                                <p className="results-link">{t("search_results_proj_list_1")} <span>{t("search_results_proj_list_2")}</span></p>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}
                         <ul className="templates-tab-list">
                             <li className={activeTab === null ? "active" : ""} onClick={() => {
                                 setDataItem(DataItem.current);
