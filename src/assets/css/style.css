@@ -12071,14 +12071,14 @@ ul.qa-file-list-wrapper .selected-job-value {
 .navbar-display-show {
     display: flex;
     height: 100%;
-    padding: 10px 14px;
+    padding: 10px 8px;
 }
 
 .nav-projects-link {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0px 5px;
+    padding-right: 5px;
     border-radius: 2px;
     transition: 0.4s all ease;
     cursor: pointer;
@@ -12095,6 +12095,7 @@ ul.qa-file-list-wrapper .selected-job-value {
     line-height: 14px;
     position: relative;
     top: 0px;
+    text-wrap: nowrap;
 }
 
 .nav-projects-link:hover {

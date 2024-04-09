@@ -164,6 +164,10 @@ const CoAuthorPanel = (props, ref) => {
             },
 
         }),
+        valueContainer: (provided, state) => ({
+            ...provided,
+            padding: '2px 7px'
+        }),
     };
 
     const DropdownIndicator = props => {
