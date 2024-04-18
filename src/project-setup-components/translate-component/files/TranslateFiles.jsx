@@ -610,7 +610,7 @@ function TranslateFiles(props) {
     }, [mtpeEngineOptions]);
 
     useEffect(() => {
-        if (projectEditable.current && commonMtpeEngine) {
+        if (!projectEditable.current && commonMtpeEngine) {
             let engines = [];
             const engine = mtEngineOptionRef.current?.filter((value) =>
                 commonMtpeEngine?.includes(value?.id)
@@ -1751,11 +1751,7 @@ function TranslateFiles(props) {
                 setAlreadySelectedTarLang(tar);
                 setAlreadySelecetedTarLangID(tarID);
                 setIsEdit(true);
-                // console.log(mtEngineOptionRef.current);
                 let selected_mt = mtEngineOptionRef.current?.find((engine) => engine?.id === data?.mt_engine_id);
-                // console.log(selected_mt);
-                // console.log(data?.mt_engine_id);
-
 
                 setShowTeamEdit(data.team_edit);
                 setTeamSelect(
@@ -1807,24 +1803,19 @@ function TranslateFiles(props) {
                     setTargetLanguage(editTargetLanguages);
                     setSubjectField(editSubjectFields);
                     setContentType(editContentTypes);
-                    setSelectedMTFromAPI({
+                    let a = {
                         value: selected_mt?.id,
                         label: selected_mt?.name?.replaceAll("_", " "),
-                    })
-                    setSelectedMTEngine({
-                        value: selected_mt?.id,
-                        label: selected_mt?.name?.replaceAll("_", " "),
-                    });
+                    }
+                    setSelectedMTFromAPI(a)
+                    setSelectedMTEngine(a);
+                    
                     setLoading(false);
                 }, 50);
                 setFileError("");
             },
         });
     };
-
-    // useEffect(() => {
-    //   console.log(selectedMTEngine);
-    // }, [selectedMTEngine])
 
 
     // const handleStepSelection = (selectedStepOptions) => {
@@ -2686,14 +2677,6 @@ function TranslateFiles(props) {
 
     } 
 
-    useEffect(() => {
-      console.log(projectTaskList)
-    }, [projectTaskList])
-    
-    useEffect(() => {
-      console.log(deadline)
-    }, [deadline])
-    
 
     return (
         <React.Fragment>
@@ -3933,7 +3916,7 @@ function TranslateFiles(props) {
                             </div>
                             <p className="insuffient-desc text-center">{t("file_err_note")}</p>
                             <div className="mt-3">
-                                <p className="insuffient-desc" style={{fontSize: '12px'}} dangerouslySetInnerHTML={{__html: sanitizeHtml(t("translate_edit_foot_note"))}}></p>
+                                <p className="insuffient-desc" style={{fontSize: '12px'}} dangerouslySetInnerHTML={{__html: t("translate_edit_foot_note")}}></p>
                             </div>
                         </React.Fragment>
                     </div>

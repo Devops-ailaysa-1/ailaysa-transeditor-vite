@@ -5961,7 +5961,7 @@ const FederalWorkspace = (props) => {
                                                                                     style={targetLanguageFontSize != null ? { fontSize: targetLanguageFontSize } : {}}
                                                                                     spellCheck="false"
                                                                                     suppressContentEditableWarning={true}
-                                                                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(translation.target) }}
+                                                                                    dangerouslySetInnerHTML={{ __html: translation.target }}
                                                                                 ></div> 
                                                                            )}
                                                                         </div>
