@@ -416,21 +416,23 @@ const AIChat = () => {
     return (
         <>
             <Navbar isAiChatBook={true} />
-            {!showSideBar && <span className='sidebar-open' onClick={() => setShowSideBar(true)}>
+            {/* {!showSideBar && <span className='sidebar-open' onClick={() => setShowSideBar(true)}>
                 <SidebarOutIcon color='#FFFFFF' handleColor='#4F4F55'  />
-            </span>}
+            </span>} */}
             <section className="chat-book-main-wrapper">
-                {showSideBar && 
-                <ClickAwayListener onClickAway={handleSideBarClose}>
-                <div className={`chat-book-main-wrapper__upload-access-wrapper ${selectedChatFile != null ? 'absolute' : ''}`}>
+                {/* {showSideBar &&  */}
+                 {/* <ClickAwayListener onClickAway={handleSideBarClose}> */}
+                {/* <div className={`chat-book-main-wrapper__upload-access-wrapper ${selectedChatFile != null ? 'absolute' : ''}`}> */}
+                <div className={`chat-book-main-wrapper__upload-access-wrapper`}>
+
                 {/* {selectedChatFile != null && <div className='close-sidebar' onClick={handleSideBarClose}>
                         <ArrowBackIosRoundedIcon fontSize='small' className='close-sidebar-icon' />
                         </div>} */}
                     <div className="chatbook-header-wrapper">
                     <p className="chat-book-label-title">Upload files</p>
-                    {selectedChatFile != null && <span className="close-icon-chatbook-sidebar" onClick={handleSideBarClose}>
+                    {/* {selectedChatFile != null && <span className="close-icon-chatbook-sidebar" onClick={handleSideBarClose}>
                         <CloseIcon />
-                    </span>}
+                    </span>} */}
                     {/* <span className="chat-book-label-title" onClick={getChatBookRemainingStatus}>Remaining files : {chatBookRemainingStatus?.total_files_left}</span> */}
                     </div>
 
@@ -681,8 +683,8 @@ const AIChat = () => {
                         </Tooltip>
                     </div>
                 </div>
-                </ClickAwayListener>
-                }
+                 {/* </ClickAwayListener> */}
+                {/* } */}
                 <div className="chat-book-main-wrapper__chatting-wrapper">
                     <div className="chat-with-files-wrapper">
                         <div className="chatbook-header-wrapper">
@@ -695,10 +697,10 @@ const AIChat = () => {
                                                 {/* {selectedChatFile !== null && <span onClick={getChatBookRemainingStatus}>Remaining messages : {chatBookRemainingStatus?.total_msgs_left}</span>} */}
                                                 </div>
                         <div style={{display:'flex', flexDirection:'row'}}>
-                                                {selectedChatFile != null && 
+                                                {/* {selectedChatFile != null && 
                                                 
                                        <PDFViewer  handleMouseUp={handleMouseUp} page={pageNumber} setPage={setPageNumber} width={'669px'}  pdf={Config.BASE_URL + selectedChatFile?.file}/>
-                                    }
+                                    } */}
                         <div className="chat-with-files-wrapper__working-area">
                             {selectedChatFile === null ? (
                                 <>
@@ -795,14 +797,14 @@ const AIChat = () => {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div className="reference-bar">
+                                                            {/* <div className="reference-bar">
                                                                 <span className="reference-label">Reference:</span>
                                                                 {chat?.pdf_chat_page_ref?.map((each) => {
                                                                     return(
                                                                         <span onClick={() => handleReference(each.page_no)} className="page-no" key={each?.page_no}>{each?.page_no},</span>
                                                                     )
                                                                 })}
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                                     )
                                                 })
