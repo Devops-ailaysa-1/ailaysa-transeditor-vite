@@ -141,8 +141,13 @@ const AllRoutes = (props) => {
                 <Route exact path="/create/:category/:menu" element={<Suspense fallback={<MainAILoader />}><ProjectSetup /></Suspense>} />
                 <Route exact path="/create/:category/:menu/:action" element={<Suspense fallback={<MainAILoader />}><ProjectSetup /></Suspense>} />
                 {Config.userState?.internal_member_team_detail?.role != 'Editor' && <Route exact path="/create/:category" element={<Suspense fallback={<MainAILoader />}><ProjectSetup /></Suspense>} />}
+                
+                {console.log("isEnterprise === false: "  +isEnterprise === false)}
+                {console.log("Config.userState?.internal_member_team_detail?.role === 'Editor': "  +Config.userState?.internal_member_team_detail?.role === 'Editor')}
+                {console.log("is_internal_meber_editor: "+is_internal_meber_editor)}
+
                 {isEnterprise === false ? (
-                    is_internal_meber_editor ? (
+                    Config.userState?.internal_member_team_detail?.role === 'Editor' ? (
                         <Route path="*" element={<Navigate to="/file-upload"/>} />
                     ) : (
                         <Route path="*" element={<Navigate to="/create/all-templates"/>} />
