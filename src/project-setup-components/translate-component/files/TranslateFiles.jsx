@@ -3933,7 +3933,7 @@ function TranslateFiles(props) {
                             </div>
                             <p className="insuffient-desc text-center">{t("file_err_note")}</p>
                             <div className="mt-3">
-                                <p className="insuffient-desc" style={{fontSize: '12px'}} dangerouslySetInnerHTML={{__html: sanitizeHtml(t("translate_edit_foot_note"))}}></p>
+                                <p className="insuffient-desc" style={{fontSize: '12px'}} dangerouslySetInnerHTML={{__html: t("translate_edit_foot_note")}}></p>
                             </div>
                         </React.Fragment>
                     </div>

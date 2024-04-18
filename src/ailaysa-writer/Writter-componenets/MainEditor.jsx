@@ -2263,7 +2263,7 @@ const MainEditor = (props) => {
                                     <strong className="ai-writter-popover-modal-content" >
                                         <div
                                             className="ai-writter-popover-modal-content-leaf"
-                                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(customizationResult?.replace(/\n/g, "<br />")) }}
+                                            dangerouslySetInnerHTML={{ __html: customizationResult?.replace(/\n/g, "<br />") }}
                                         ></div>
 
                                     </strong>

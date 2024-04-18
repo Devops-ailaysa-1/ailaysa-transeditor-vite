@@ -4176,6 +4176,7 @@ function Workspace(props) {
                                     :
                                     mtTmResponse?.tm[0]?.target + segmentData.target_tags
                             );
+                            console.log(mtTmResponse.mt_raw + segmentData.target_tags)
 
                             updateSegmentStatus(
                                 id,
@@ -4509,7 +4510,7 @@ function Workspace(props) {
                 if (isShowTags.current) replacedText = replaceTextWithTags(translatedText); //Hide for not to show tags
                 else replacedText = replaceTextWithTagsTemp(translatedText); //Added for not to show tags
                 // console.log(translatedText);
-                // console.log(replacedText);
+                console.log(replacedText);
                 // console.log(targetFindTerm);
 
                 if (targetFindTerm != "") {
@@ -4543,7 +4544,7 @@ function Workspace(props) {
                 if (response.data?.alert_msg == "MT Disabled") {
                     setShowMtDisabledModal(true)
                 }
-                // console.log(translatedText);
+                console.log(translatedText);
                 updateTranslatedResponseSegment(segmentId, "temp_target", translatedText);
                 updateSegmentStatus(segmentId, 103);
                 changeEditedStatus(segmentId, "unsaved");
@@ -8345,7 +8346,7 @@ function Workspace(props) {
                                                                             className={rightAlignLangs.current.indexOf(targetLanguage) != -1 ? "workspace-textarea align-right" : "workspace-textarea"}
                                                                             spellCheck="false"
                                                                             suppressContentEditableWarning={true}
-                                                                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(translation) }}
+                                                                            dangerouslySetInnerHTML={{ __html: translation }}
                                                                         ></div>
                                                                     </div>
                                                                     <div data-id={id} className="target-lang-row-align trigger-focus">
@@ -8900,7 +8901,7 @@ function Workspace(props) {
                                         partialPretranslate ?
                                             <p className="insuffient-desc">{t("pre-translation_modal_text")}</p>
                                         :
-                                            <p className="insuffient-desc" dangerouslySetInnerHTML={{ __html: sanitizeHtml(creditAlertTxt) }}></p>
+                                            <p className="insuffient-desc" dangerouslySetInnerHTML={{ __html: creditAlertTxt }}></p>
                                     }
 
                                     {/* {(!Config.userState?.is_internal_member && enableFileDownload && isAssignEnable) && (
@@ -8938,7 +8939,7 @@ function Workspace(props) {
                                         partialPretranslate ?
                                             <p className="credits-text-cont-txt text-center">{t("pre-translation_modal_text")}</p>
                                             :
-                                            <p className="credits-text-cont-txt text-center" dangerouslySetInnerHTML={{ __html: sanitizeHtml(creditAlertTxt) }}></p>
+                                            <p className="credits-text-cont-txt text-center" dangerouslySetInnerHTML={{ __html: creditAlertTxt }}></p>
                                     }
 
                                     {(!Config.userState?.is_internal_member && enableFileDownload && isAssignEnable) && (
