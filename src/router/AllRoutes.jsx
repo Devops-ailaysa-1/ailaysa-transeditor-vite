@@ -64,11 +64,12 @@ const AllRoutes = (props) => {
     const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
     let isEnterprise = userDetails?.is_enterprise
 
+    // console.log("is_internal_meber_editor: "+is_internal_meber_editor)
+
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route>
 
-                {/* <Route exact path="/" component={Dashboard} /> */}
                 <Route exact path="/chat-books" element={<Suspense fallback={<MainAILoader />}><AilaysaChat /></Suspense>} />
                 
                 <Route exact path="/file-upload" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
@@ -83,7 +84,6 @@ const AllRoutes = (props) => {
                     <Route exact path="/toolkit" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
                 )}
 
-                
                 {/* Federal News Project */}
                 {/* get story route */}
                 {(isFederal && !is_internal_meber_editor) && (
@@ -142,7 +142,11 @@ const AllRoutes = (props) => {
                 <Route exact path="/create/:category/:menu/:action" element={<Suspense fallback={<MainAILoader />}><ProjectSetup /></Suspense>} />
                 {Config.userState?.internal_member_team_detail?.role != 'Editor' && <Route exact path="/create/:category" element={<Suspense fallback={<MainAILoader />}><ProjectSetup /></Suspense>} />}
                 {isEnterprise === false ? (
-                    <Route path="*" element={<Navigate to="/create/all-templates"/>} />
+                    is_internal_meber_editor ? (
+                        <Route path="*" element={<Navigate to="/file-upload"/>} />
+                    ) : (
+                        <Route path="*" element={<Navigate to="/create/all-templates"/>} />
+                    )
                 ) : (
                     isDinamalar ? (
                         <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
@@ -162,15 +166,14 @@ const AllRoutes = (props) => {
                         )
                     )
                 )}
-
-
-                {is_internal_meber_editor && (
-                    isEnterprise === false ? (
+               
+                {/* {is_internal_meber_editor && (
+                    isEnterprise == false ? (
                         <Route path="*" element={<Navigate to="/file-upload"/>} />
                     ) : (
                         <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
                     )
-                )}
+                )} */}
 
             </Route>
         )

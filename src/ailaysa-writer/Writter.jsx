@@ -4062,20 +4062,18 @@ const Writter = (props) => {
     }
 
     // conditions for when to show the leaving modal for writer page
-    const handleBlockedNavigationForWriter = nextLocation => {
+    const handleBlockedNavigationForWriter = ({
+        currentLocation,
+        nextLocation,
+        historyAction
+    }) => {
         let docIdParam = URL_SEARCH_PARAMS.get('document-id')
-       
-        if (!confirmedNavigation && location.pathname) {
-            setLastLocation(nextLocation)
-            // console.log(nextLocation.pathname)
-            if (!isTranslateProceeding && nextLocation.hash != "#!" && !nextLocation.pathname?.includes('/word-processor') && docIdParam) {
-                setShowWriterPageLeavingAlertModal(true)
-                return false
-            }
-            if (!isTranslateProceeding && nextLocation.state === null && !nextLocation.pathname?.includes('/word-processor') && docIdParam) {
-                setShowWriterPageLeavingAlertModal(true)
-                return false
-            }
+        if(
+            !docIdParam || nextLocation.pathname?.includes('/file-upload') ||
+            nextLocation.pathname?.includes('create/translate/files') || 
+            nextLocation.pathname?.includes('create/speech/speech')
+        ){
+            return false
         }
         return true
     }
@@ -4952,7 +4950,7 @@ const Writter = (props) => {
                 when={writerPageActive}
                 message={handleBlockedNavigationForWriter}
             /> */}
-            <ReactRouterPrompt when={writerPageActive}>
+            <ReactRouterPrompt when={handleBlockedNavigationForWriter}>
             {({ isActive, onConfirm, onCancel }) => {
                 return (
                     <Rodal
