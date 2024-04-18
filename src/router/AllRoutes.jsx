@@ -146,19 +146,21 @@ const AllRoutes = (props) => {
                 {console.log("Config.userState?.internal_member_team_detail?.role === 'Editor': "  +Config.userState?.internal_member_team_detail?.role === 'Editor')}
                 {console.log("is_internal_meber_editor: "+is_internal_meber_editor)}
 
-                {isEnterprise === false ? (
-                    Config.userState?.internal_member_team_detail?.role === 'Editor' ? (
-                        <Route path="*" element={<Navigate to="/file-upload"/>} />
+                {setTimeout(() => {
+                    {isEnterprise === false ? (
+                        Config.userState?.internal_member_team_detail?.role === 'Editor' ? (
+                            <Route path="*" element={<Navigate to="/file-upload"/>} />
+                        ) : (
+                            <Route path="*" element={<Navigate to="/create/all-templates"/>} />
+                        )
                     ) : (
-                        <Route path="*" element={<Navigate to="/create/all-templates"/>} />
-                    )
-                ) : (
-                    isDinamalar ? (
-                        <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
-                    ) : (
-                        <Route path="*" element={<Navigate to="/all-stories?page=1"/>} />
-                    )
-                )}
+                        isDinamalar ? (
+                            <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
+                        ) : (
+                            <Route path="*" element={<Navigate to="/all-stories?page=1"/>} />
+                        )
+                    )}
+                }, 200)}
 
                 {!is_internal_meber_editor && (
                     isEnterprise === false ? (
