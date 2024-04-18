@@ -613,13 +613,14 @@ function Workspace(props) {
     const deleteSegmentTranslationRef = createRef();
     const showFormatSizeRef = createRef();
     const showFindReplaceRef = createRef();
-    const showConcoradanceRef = createRef();
+    // const showConcoradanceRef = createRef();
     const showSpecialCharactersRef = createRef();
     const contentEditableParentRef = createRef();
     const selectionRangeRef = useRef();
     const lowCreditAlertCounter = useRef(1)
     const segmentDiffButton = useRef(null)
 
+    const showConcoradanceRef = useRef(null)
     const prevPathRef = useRef(null)
 
     const pageSizeFromApi = useRef(null)
@@ -4143,7 +4144,7 @@ function Workspace(props) {
         searchTbxForDoc(e)
         searchGlossaryForDoc(e)
         
-        if(segment_status) return
+        // if(segment_status) return
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace_okapi/mt_raw_and_tm/${id}?mt_uc=false`,
@@ -4176,7 +4177,6 @@ function Workspace(props) {
                                     :
                                     mtTmResponse?.tm[0]?.target + segmentData.target_tags
                             );
-                            console.log(mtTmResponse.mt_raw + segmentData.target_tags)
 
                             updateSegmentStatus(
                                 id,
@@ -5292,15 +5292,20 @@ function Workspace(props) {
             url: url,
             auth: true,
             success: (response) => {
-                showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
-                handleToggleVisibility(true);
-                scrollLeft()
-                response.data.map((value, index) => {
-                    response.data[index].source = higlightText(value.source, selectedText);
-                });
-                setTimeout(() => {
-                    setConcordanceData(response.data);
-                }, 100);
+                try{
+                    showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
+                    handleToggleVisibility(true);
+                    scrollLeft()
+                    
+                    response.data.map((value, index) => {
+                        response.data[index].source = higlightText(value.source, selectedText);
+                    });
+                    setTimeout(() => {
+                        setConcordanceData(response.data);
+                    }, 100);
+                }catch(e){
+                    console.log(e)
+                }
             },
             error: (error) => {
                 Config.log(error);
@@ -7463,6 +7468,13 @@ function Workspace(props) {
         targetFindTermTemp,
         textUnit;
     let bgColor = "#0074D3";
+    
+    useEffect(() => {
+        console.log(translationMatches)
+    }, [translationMatches])
+    useEffect(() => {
+        console.log(glossaryData)
+    }, [glossaryData])
     
 
     return (

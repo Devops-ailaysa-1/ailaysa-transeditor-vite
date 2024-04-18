@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import NavigateBeforeSharpIcon from '@mui/icons-material/NavigateBeforeSharp';
 import NavigateNextSharpIcon from '@mui/icons-material/NavigateNextSharp';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -15,6 +15,7 @@ import { MessageTypingAnimation } from "../../loader/MessageTypingAnimation";
 import sanitizeHtml from 'sanitize-html-react';
 import ContentCopyIcon from "../styles-svg/Content-copy-icon";
 import Skeleton from '@mui/material/Skeleton';
+import parse from "html-react-parser";
 
 
 const WorkspaceFeatures = (props) => {
@@ -440,63 +441,13 @@ const WorkspaceFeatures = (props) => {
                                 <div className="modal-top-body">
                                     <div className="tm-tb-main-row">
                                         <div className="tm-container tm-side-border">
-                                            <div className="top-section-title-align">
+                                            <div className="top-section-title-align" style={{display: 'block'}}>
                                                 <div className="top-body-title-1">
                                                     <p>
                                                         <span>{t("source_language")}:</span> {sourceLanguage}
                                                     </p>
                                                 </div>
-                                                <div className="translation_memories-1">
-                                                    {glossaryData.map((each, key) => {
-                                                        return (
-                                                            <ul key={key}>
-                                                                {
-                                                                    each.data.map((value, ind) => {
-                                                                        return (
-                                                                            <>
-                                                                                <li key={ind}>
-                                                                                    <div className="glossary-data-wrapper">
-                                                                                        <div className="glossary-data-src-wrapper">
-                                                                                            <p className="top-body-title pl-0">{each?.glossary}</p>
-                                                                                            <div className="tm-tb-sub-cont-2">
-                                                                                                <div className="translation-list-src-part">
-                                                                                                    <p className="settings-file-names-new">{value.source}</p>
-                                                                                                </div>
-                                                                                                <div className="translation-list-src-part">
-                                                                                                    <img src={ArrowRightAltColor} />
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div className="translation-list-tar-part">
-                                                                                            <div className="target-lang-align-1">
-                                                                                                <p className="settings-file-names-new target-tb-lang-part">{value.target}</p>
-                                                                                            </div>
-                                                                                            <div className="translation-list-value-copy-btn">
-                                                                                                <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top">
-                                                                                                    <button
-                                                                                                        type="button"
-                                                                                                        className="workspace-feature-btn-new"
-                                                                                                        onClick={(e) => copyText(value.target)}
-                                                                                                        onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 500)}
-                                                                                                    >
-                                                                                                        <img
-                                                                                                            src={NorCopyContent}
-                                                                                                            className="content-copy"
-                                                                                                            alt="copy text"
-                                                                                                        />
-                                                                                                    </button>
-                                                                                                </Tooltip>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </li>
-                                                                            </>
-                                                                        )
-                                                                    })
-                                                                }
-                                                            </ul>
-                                                        )
-                                                    })}
+                                                <div className="translation_memories-1" style={{marginTop: '8px'}}>
                                                     <ul>
                                                         {concordanceData.map((value, key) => {
                                                             return (
