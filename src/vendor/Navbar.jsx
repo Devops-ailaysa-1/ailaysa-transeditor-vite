@@ -294,8 +294,9 @@ function Navbar(props) {
             window.location.pathname.includes("designs") ||
             window.location.pathname.includes("transcriptions") ||
             window.location.pathname.includes("ai-voices") ||
-            window.location.pathname.includes("assets") ||
-            window.location.pathname.includes("toolkit")) {
+            (window.location.pathname.includes("assets") && !window.location.pathname.includes('all-templates/assets')) ||
+            (window.location.pathname.includes("toolkit") && !window.location.pathname.includes('all-templates/toolkit'))
+        ) {
                 setMyProjectsSelected(true)
         }
         else if(window.location.pathname.includes("all-stories") ||

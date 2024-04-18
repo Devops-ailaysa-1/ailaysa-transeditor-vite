@@ -3836,24 +3836,12 @@ function MyStories(props) {
             }
         ))
 
-
-        // throw new Error("uncomment this line to mock failure of API");
-        let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) : null
-        );
-        let token = userCacheData != null ? userCacheData?.token : "";
         try {
-            const response = await axios.get(
-                openIn !== "News" ? `${Config.BASE_URL}/workspace_okapi/document/to/file/${documentId}?output_type=${type}` :
-                `${Config.BASE_URL}/workspace_okapi/download_federal_file/?task_id=${taskData?.id}&output_type=${type}`,
-                {
-                    responseType: "blob",
-                    headers: {
-                        "Access-Control-Expose-Headers": "Content-Disposition",
-                        "Authorization": `Bearer ${token}`, // add authentication information as required by the backend APIs.
-                    },
-                },
-            );
+            let url = openIn !== "News" ? `${Config.BASE_URL}/workspace_okapi/document/to/file/${documentId}?output_type=${type}` :
+            `${Config.BASE_URL}/workspace_okapi/download_federal_file/?task_id=${taskData?.id}&output_type=${type}`
+
+            const response = await Config.downloadFileFromApi(url);
+
             if (response !== undefined) {
 
                 // update the list once download completed
