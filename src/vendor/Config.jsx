@@ -507,6 +507,22 @@ const Config = {
             }
             return 0;
         };
+    },
+    
+    openLinksInWindow: (link) => {
+        const specs = 'width=800,height=600'
+        var screenWidth = window.screen.width;
+        var screenHeight = window.screen.height;
+
+        var windowWidth = parseInt(specs.split(",")[0].split("=")[1]);
+        var windowHeight = parseInt(specs.split(",")[1].split("=")[1]);
+
+        var left = (screenWidth - windowWidth) / 2;
+        var top = (screenHeight - windowHeight) / 2;
+
+        var newSpecs = specs + ',top=' + top + ',left=' + left;
+        window.open(link, '_blank', newSpecs);
+        return false;
     }
 };
 export default Config;
