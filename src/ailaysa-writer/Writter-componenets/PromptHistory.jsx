@@ -759,7 +759,7 @@ export const PromptHistory = (props) => {
                                                         return item?.map((result) => {
                                                             return (
                                                                 <div key={result.id} className='history-content-details'>
-                                                                    <p className={rightAlignLangId?.find(lang => lang === result?.result_lang) ? 'right-align-lang-style' : ''} dangerouslySetInnerHTML={{ __html: sanitizeHtml(result?.api_result !== null ? result?.api_result?.replace(/\n/g, "<br />") : result?.translated_prompt_result?.replace(/\n/g, "<br />")) }}></p>
+                                                                    <p className={rightAlignLangId?.find(lang => lang === result?.result_lang) ? 'right-align-lang-style' : ''} dangerouslySetInnerHTML={{ __html: result?.api_result !== null ? result?.api_result?.replace(/\n/g, "<br />") : result?.translated_prompt_result?.replace(/\n/g, "<br />") }}></p>
                                                                     <div className="result-toolbar">
                                                                         <div className="word-box-wrapper">
                                                                             <div className="word-container">{targetLanguageOptionsRef.current?.find(each => each.id === result?.result_lang)?.language}</div>
@@ -878,9 +878,9 @@ export const PromptHistory = (props) => {
                                                 <div key={eachCustom?.id} className='history-content-details'>
                                                     {
                                                         (eachCustom.customize !== 23) ? (   //if customization option is not Translate
-                                                            <p className={rightAlignLangId?.find(lang => lang === eachCustom?.user_text_lang) ? 'right-align-lang-style' : ''} dangerouslySetInnerHTML={{ __html: sanitizeHtml(eachCustom?.user_text_lang === 17 ? eachCustom?.api_result?.replace(/\n/g, "<br />") : eachCustom?.prompt_result?.replace(/\n/g, "<br />")) }}></p>
+                                                            <p className={rightAlignLangId?.find(lang => lang === eachCustom?.user_text_lang) ? 'right-align-lang-style' : ''} dangerouslySetInnerHTML={{ __html: eachCustom?.user_text_lang === 17 ? eachCustom?.api_result?.replace(/\n/g, "<br />") : eachCustom?.prompt_result?.replace(/\n/g, "<br />") }}></p>
                                                         ) : (
-                                                            <p className={rightAlignLangId?.find(lang => lang === eachCustom?.user_text_lang) ? 'right-align-lang-style' : ''} dangerouslySetInnerHTML={{ __html: sanitizeHtml(eachCustom?.customization[0]?.result?.replace(/\n/g, "<br />")) }}></p>
+                                                            <p className={rightAlignLangId?.find(lang => lang === eachCustom?.user_text_lang) ? 'right-align-lang-style' : ''} dangerouslySetInnerHTML={{ __html: eachCustom?.customization[0]?.result?.replace(/\n/g, "<br />") }}></p>
                                                         )
                                                     }
 
