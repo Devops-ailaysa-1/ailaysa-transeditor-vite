@@ -1379,7 +1379,7 @@ function Navbar(props) {
                                                 <a target="_blank" href="https://knowledgebase.ailaysa.com/article-categories/transeditor-pe/">Knowledge base</a>
                                             </li> */}
                                                 <li>
-                                                    <a onClick={props.showHowToTour}>{t("how_to_edit_&_download")}</a>
+                                                    <a onClick={() => {props.showHowToTour(); setHelpDrpVisibility(false)}}>{t("how_to_edit_&_download")}</a>
                                                 </li>
                                                 <li>
                                                     <a onClick={props.showTagsTour}>{t("how_to_apply_formatting_using_tags")}</a>
