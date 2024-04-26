@@ -89,7 +89,7 @@ const AllRoutes = (props) => {
                     <Route exact path="/all-stories" element={<Suspense fallback={<MainAILoader />}><NewsProjects /></Suspense>} />
                 )}
                 {/* my story project route */}
-                {(isFederal || isDinamalar) && (
+                {((isFederal || isDinamalar) && !is_internal_meber_editor) && (
                     <Route exact path="/my-stories" element={<Suspense fallback={<MainAILoader />}><NewsProjects /></Suspense>} />
                 )}
                 
@@ -164,6 +164,7 @@ const AllRoutes = (props) => {
                         )
                     )
                 )}
+                
 
                 {!is_internal_meber_editor && (
                     isEnterprise === false ? (
