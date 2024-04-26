@@ -69,6 +69,37 @@ const AllRoutes = (props) => {
         createRoutesFromElements(
             <Route>
 
+                {isEnterprise === false ? (
+                    is_internal_meber_editor ? (
+                        <Route path="*" element={<Navigate to="/file-upload"/>} />
+                    ) : (
+                        <Route path="*" element={<Navigate to="/create/all-templates"/>} />
+                    )
+                ) : (
+                    isDinamalar ? (
+                        <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
+                    ) : (
+                        !is_internal_meber_editor ? (
+                            <Route path="*" element={<Navigate to="/all-stories?page=1"/>} />
+                        ) : (
+                            <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
+                        )
+                    )
+                )}
+                
+
+                {!is_internal_meber_editor && (
+                    isEnterprise === false ? (
+                        <Route path="/" element={<Navigate to="/create/all-templates"/>} />
+                    ) : (
+                        isDinamalar ? (
+                            <Route path="/" element={<Navigate to="/my-stories?page=1"/>} />
+                        ) : (
+                            <Route path="/" element={<Navigate to="/all-stories?page=1"/>} />
+                        )
+                    )
+                )}
+
                 <Route exact path="/chat-books" element={<Suspense fallback={<MainAILoader />}><AilaysaChat /></Suspense>} />
                 
                 <Route exact path="/file-upload" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
@@ -89,7 +120,7 @@ const AllRoutes = (props) => {
                     <Route exact path="/all-stories" element={<Suspense fallback={<MainAILoader />}><NewsProjects /></Suspense>} />
                 )}
                 {/* my story project route */}
-                {((isFederal || isDinamalar) && !is_internal_meber_editor) && (
+                {(isFederal || isDinamalar) && (
                     <Route exact path="/my-stories" element={<Suspense fallback={<MainAILoader />}><NewsProjects /></Suspense>} />
                 )}
                 
@@ -147,36 +178,7 @@ const AllRoutes = (props) => {
                 {Config.userState?.internal_member_team_detail?.role != 'Editor' && <Route exact path="/create/:category" element={<Suspense fallback={<MainAILoader />}><ProjectSetup /></Suspense>} />}
                 
 
-                {isEnterprise === false ? (
-                    is_internal_meber_editor ? (
-                        <Route path="*" element={<Navigate to="/file-upload"/>} />
-                    ) : (
-                        <Route path="*" element={<Navigate to="/create/all-templates"/>} />
-                    )
-                ) : (
-                    isDinamalar ? (
-                        <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
-                    ) : (
-                        !is_internal_meber_editor ? (
-                            <Route path="*" element={<Navigate to="/all-stories?page=1"/>} />
-                        ) : (
-                            <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
-                        )
-                    )
-                )}
                 
-
-                {!is_internal_meber_editor && (
-                    isEnterprise === false ? (
-                        <Route path="/" element={<Navigate to="/create/all-templates"/>} />
-                    ) : (
-                        isDinamalar ? (
-                            <Route path="/" element={<Navigate to="/my-stories?page=1"/>} />
-                        ) : (
-                            <Route path="/" element={<Navigate to="/all-stories?page=1"/>} />
-                        )
-                    )
-                )}
 
             </Route>
         )
