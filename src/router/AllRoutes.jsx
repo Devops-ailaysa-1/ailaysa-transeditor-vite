@@ -157,7 +157,11 @@ const AllRoutes = (props) => {
                     isDinamalar ? (
                         <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
                     ) : (
-                        <Route path="*" element={<Navigate to="/all-stories?page=1"/>} />
+                        !is_internal_meber_editor ? (
+                            <Route path="*" element={<Navigate to="/all-stories?page=1"/>} />
+                        ) : (
+                            <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
+                        )
                     )
                 )}
 
