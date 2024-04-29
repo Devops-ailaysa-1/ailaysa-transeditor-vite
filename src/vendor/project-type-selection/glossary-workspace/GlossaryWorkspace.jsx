@@ -647,6 +647,8 @@ function GlossaryWorkspace(props) {
             
         }catch(e) {
             console.log(e)
+            Config.toast(t("no_terms_gloss"), 'warning');
+            dispatch(deleteDownloadingFile({ id: documentId.current }))
             setisTbxDownloading(false)
         }
     }
