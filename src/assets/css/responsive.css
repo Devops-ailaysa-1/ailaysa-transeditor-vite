@@ -3912,7 +3912,7 @@ max-width: 29.5%;
 }
 
 
-@media (max-width: 991px){
+/* @media (max-width: 991px){
   .ail-work-nav {
     flex-wrap: nowrap !important;
   }
@@ -4026,4 +4026,4 @@ max-width: 29.5%;
     border: 0px solid #ebebeb;
     width: 100%;
   }
-}
+} */
