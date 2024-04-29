@@ -897,7 +897,8 @@ function SpeechToText(props) {
         }
         formdata.append("project_type", "4"); // by default project type if 4 for voice project
         formdata.append("sub_category", "1"); // sub category is 1 for speech to text
-
+        if(mtEnable) formdata.append("get_mt_by_page", translationByPage);
+        
         let deadlineUTC = Config.convertLocalToUTC(deadline);
         deadline && formdata.append("project_deadline", deadlineUTC);
 
@@ -961,7 +962,6 @@ function SpeechToText(props) {
         formdata.append("mt_enable", mtEnable);
 
         if(mtEnable) formdata.append("get_mt_by_page", translationByPage);
-
 
         setClickedOpenButton(key);
         selectedSteps?.map((each) => {
