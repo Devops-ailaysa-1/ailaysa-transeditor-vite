@@ -368,7 +368,6 @@ function Workspace(props) {
     const [creditAlertTxt, setCreditAlertTxt] = useState(t("insufficient_credits_note"));
     const [showIME, setShowIME] = useState(false);
     const [synonymData, setSynonymData] = useState([]);
-    const [showSynonymPopover, setShowSynonymPopover] = useState(false);
     const [synonymPopoverContent, setSynonymPopoverContent] = useState("");
     const [synonymPopoverOpen, setSynonymPopoverOpen] = useState(false);
     const [synonymPopoverTarget, setSynonymPopoverTarget] = useState(null);
@@ -1321,16 +1320,16 @@ function Workspace(props) {
         }
     }, [synonymPopoverTarget])
 
-    useEffect(() => {
-        if (synonymsResList.length !== 0) {
-            document.addEventListener('mousedown', outsideClickHandler)
-            document.addEventListener('keyup', outsideClickHandler)
-        }
-        return () => {
-            document.removeEventListener('mousedown', outsideClickHandler);
-            document.removeEventListener('keyup', outsideClickHandler);
-        }
-    }, [synonymsResList])
+    // useEffect(() => {
+    //     if (synonymsResList.length !== 0) {
+    //         document.addEventListener('mousedown', outsideClickHandler)
+    //         document.addEventListener('keyup', outsideClickHandler)
+    //     }
+    //     return () => {
+    //         document.removeEventListener('mousedown', outsideClickHandler);
+    //         document.removeEventListener('keyup', outsideClickHandler);
+    //     }
+    // }, [synonymsResList])
 
     useEffect(() => {
         // console.log(isWordsCorrected)
@@ -3050,11 +3049,11 @@ function Workspace(props) {
 
     // reset all NLP state variables
     const resetSynonymStates = () => {
-        setSynonymPopoverOpen(false)
-        setSynonymPopoverTarget("")
-        setSynonymsResList([])
-        setSynonymText("")
-        setSynonumSelectionObject(null)
+        // setSynonymPopoverOpen(false)
+        // setSynonymPopoverTarget("")
+        // setSynonymsResList([])
+        // setSynonymText("")
+        // setSynonumSelectionObject(null)
     }
 
 

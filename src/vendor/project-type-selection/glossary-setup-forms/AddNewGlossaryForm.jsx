@@ -675,6 +675,7 @@ const AddNewGlossaryForm = (props) => {
                                             maxLength={20}
                                             onChange={(e) => setPrimaryGlossarySourceName(e.target.value)}
                                         />
+                                        <small style={{ opacity: 0.7, float: 'right' }}>{primaryGlossarySourceName?.trim()?.length}/20</small>
                                     </div>
                                 </div>
                             </div>
@@ -692,6 +693,7 @@ const AddNewGlossaryForm = (props) => {
                                             maxLength={50}
                                             onChange={(e) => setGlossaryCopyrightOwner(e.target.value)}
                                         />
+                                        <small style={{ opacity: 0.7, float: 'right' }}>{glossaryCopyrightOwner?.trim()?.length}/50</small>
                                     </div>
                                 </div>
                             </div>
@@ -703,9 +705,11 @@ const AddNewGlossaryForm = (props) => {
                                             className="input-select-width"
                                             id="project-name"
                                             name="projectName"
+                                            maxLength={300}
                                             value={detailsOfPrimaryGlossarySourceName}
                                             onChange={(e) => setDetailsOfPrimaryGlossarySourceName(e.target.value)}
                                         />
+                                        <small style={{ opacity: 0.7, float: 'right' }}>{detailsOfPrimaryGlossarySourceName?.trim()?.length}/300</small>
                                     </div>
                                 </div>
                             </div>
@@ -719,9 +723,11 @@ const AddNewGlossaryForm = (props) => {
                                             className="input-select-width"
                                             id="project-name"
                                             name="projectName"
+                                            maxLength={300}
                                             value={glossaryGeneralNotes}
                                             onChange={(e) => setglossaryGeneralNotes(e.target.value)}
                                         />
+                                        <small style={{ opacity: 0.7, float: 'right' }}>{glossaryGeneralNotes?.trim()?.length}/300</small>
                                     </div>
                                 </div>
                             </div>
@@ -759,6 +765,7 @@ const AddNewGlossaryForm = (props) => {
                                             maxLength={30}
                                             onChange={(e) => setGlossaryLicense(e.target.value)}
                                         />
+                                        <small style={{ opacity: 0.7, float: 'right' }}>{glossaryLicense?.trim()?.length}/30</small>
                                     </div>
                                 </div>
                             </div>
