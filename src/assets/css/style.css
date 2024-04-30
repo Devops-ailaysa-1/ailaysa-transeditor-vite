@@ -42972,7 +42972,7 @@ h1.chat-file-title{
 .input-box-transliterate::after {
     content: '|'; /* The cursor symbol */
     display: inline-block;
-    margin-left: 1px; /* Adjust the spacing between content and cursor */
+    margin-left: -1px; /* Adjust the spacing between content and cursor */
     animation: blink 1s infinite;
   }
 
