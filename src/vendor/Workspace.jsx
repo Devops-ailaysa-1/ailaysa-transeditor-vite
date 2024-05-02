@@ -1320,16 +1320,16 @@ function Workspace(props) {
         }
     }, [synonymPopoverTarget])
 
-    // useEffect(() => {
-    //     if (synonymsResList.length !== 0) {
-    //         document.addEventListener('mousedown', outsideClickHandler)
-    //         document.addEventListener('keyup', outsideClickHandler)
-    //     }
-    //     return () => {
-    //         document.removeEventListener('mousedown', outsideClickHandler);
-    //         document.removeEventListener('keyup', outsideClickHandler);
-    //     }
-    // }, [synonymsResList])
+    useEffect(() => {
+        if (synonymsResList.length !== 0) {
+            document.addEventListener('mousedown', outsideClickHandler)
+            document.addEventListener('keyup', outsideClickHandler)
+        }
+        return () => {
+            document.removeEventListener('mousedown', outsideClickHandler);
+            document.removeEventListener('keyup', outsideClickHandler);
+        }
+    }, [synonymsResList])
 
     useEffect(() => {
         // console.log(isWordsCorrected)
@@ -3049,11 +3049,11 @@ function Workspace(props) {
 
     // reset all NLP state variables
     const resetSynonymStates = () => {
-        // setSynonymPopoverOpen(false)
-        // setSynonymPopoverTarget("")
-        // setSynonymsResList([])
-        // setSynonymText("")
-        // setSynonumSelectionObject(null)
+        setSynonymPopoverOpen(false)
+        setSynonymPopoverTarget("")
+        setSynonymsResList([])
+        setSynonymText("")
+        setSynonumSelectionObject(null)
     }
 
 
@@ -8773,27 +8773,13 @@ function Workspace(props) {
                     </Popover>
                 </div>
             )}
-            {/* {synonymPopoverTarget != null && (
-                <div>
-                    <Popover
-                        className="synonym-popover-box"
-                        placement="bottom"
-                        isOpen={synonymPopoverOpen && document.getElementById(synonymPopoverTarget) != null}
-                        target={synonymPopoverTarget}
-                    >
-                        <span>{synonymPopoverContent}</span>
-                    </Popover>
-                </div>
-            )} */}
-
-            
            
             {/* Synonym popover */}
             {
                 (synonymPopoverTarget?.length && synonymPopoverOpen) ? (
                     <div>
                         <Popover
-                            className="paraphrase-popover-box spellcheck-popover-box"
+                            className="paraphrase-popover-box spellcheck-popover-box synonym-popover-drop-down"
                             placement="bottom"
                             isOpen={synonymPopoverOpen && (document?.getElementById(synonymPopoverTarget) !== null || document.getElementById(synonymPopoverTarget) !== undefined)}
                             target={synonymPopoverTarget}

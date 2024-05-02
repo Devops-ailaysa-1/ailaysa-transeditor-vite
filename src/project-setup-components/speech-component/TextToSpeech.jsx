@@ -475,68 +475,6 @@ const TextToSpeech = (props) => {
         setSelectedVoiceValue(selected)
     }
 
-    // useEffect(() => {
-    //   console.log(dictationInput);
-    // }, [dictationInput])
-
-
-    // const AiMarkSubmit = withStyles((theme) => ({
-    //     root: {
-    //       backgroundColor: "#0078D4",
-    //       boxShadow: "none",
-    //       borderRadius: "3px",
-    //       textTransform: "none",
-    //       height: "40px",
-    //       padding: 0,
-    //       "&:hover": {
-    //         backgroundColor: "#0069B9",
-    //         boxShadow: "none",
-    //       },
-    //       "&:disabled": {
-    //         opacity: "0.6",
-    //       },
-    //     },
-    // }))(Button);
-
-    //   const AiMarkCancel = withStyles((theme) => ({
-    //     root: {
-    //       backgroundColor: "#ffffff",
-    //       boxShadow: "none",
-    //       borderRadius: "4px",
-    //       border: "1px solid #DADCE0",
-    //       textTransform: "none",
-    //       height: "40px",
-    //       padding: 0,
-    //       "&:hover": {
-    //         boxShadow: "none",
-    //         height: "40px",
-    //       },
-    //       "&:focus": {
-    //         border: "1px solid #0078D4",
-    //         height: "40px",
-    //       },
-    //     },
-    // }))(Button);
-
-    //   const TranslationFlowButton = withStyles((theme) => ({
-    //     root: {
-    //       backgroundColor: "#ffffff",
-    //       boxShadow: "none",
-    //       borderRadius: "3px",
-    //       border: "1px solid #0078D480",
-    //       fontFamily: "Roboto",
-    //       fontWeight: "500",
-    //       fontSize: "15px",
-    //       lineHeight: "20px",
-    //       color: "#0078D4",
-    //       textTransform: "none",
-    //       padding: '4.5px 10px 5.5px 8px',
-    //       "&:hover": {
-    //         border: "1px solid #0078D4",
-    //         background: 'none',
-    //       },
-    //     },
-    // }))(Button);
 
     // Initial Api calls
     useEffect(() => {
@@ -605,17 +543,6 @@ const TextToSpeech = (props) => {
 
 
     const hideSettingsModal = () => setshowSettings(false);
-
-    const Option = (props) => {
-        return (
-            <div>
-                <components.Option {...props} className="step-options-list">
-                    <input className="step-options-list-checkbox" type="checkbox" checked={props.isSelected} onChange={() => null} />
-                    <label className="step-options-list-label">{props.label}</label>
-                </components.Option>
-            </div>
-        );
-    };
 
     const DropdownIndicator = (props) => {
         return (
@@ -750,6 +677,14 @@ const TextToSpeech = (props) => {
         }
     }, [location.state])
 
+    // auto detect language when content is typed or pasted in textarea
+    useEffect(() => {
+        if(translateSrcContent?.trim() !== ''){
+            Config.debounceApiCalls(() => detectSourceLanguage())
+        }
+    }, [translateSrcContent])
+    
+
     // handler for steps selection
     const handleSelectedSteps = (selected) => {
         setSelectedSteps(selected);
@@ -825,11 +760,6 @@ const TextToSpeech = (props) => {
     const deleteEditFile = (e, canDelete = false, editFileId) => {
         // console.log(editFileId)
         if (canDelete) {
-            /* Config.axios({
-                        url: `${Config.BASE_URL}/workspace/project/quick/setup/${editProjectId}/?file_delete_ids=${editFileId}`,
-                        method: 'PUT',
-                        auth: true,
-                        success: (response) => {*/
             let editFilesTemp = editFiles;
             let deleteValue = editFiles.find((element) => element.id == editFileId);
             setEditFiles(Config.removeItemFromArray(editFilesTemp, deleteValue));
@@ -902,8 +832,6 @@ const TextToSpeech = (props) => {
         // console.log(a)
         let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
         setTargetLangListToRemove(targetLangToRemove);
-        console.log(targetLangToRemove)
-        console.log(targetLanguage)
     }, [targetLanguage]);
 
     // useEffect(() => {
@@ -971,20 +899,6 @@ const TextToSpeech = (props) => {
         setSelectedProjectFiles(newArr)
     }
 
-    // useEffect(() => {
-    //     console.log(taskID)
-    //   if(audioGender !== null){
-    //     const newArr = selectedProjectFiles?.map(obj => {
-    //         if (obj.id === taskID) {
-    //           return {...obj, voice_gender: audioGender?.label};
-    //         }
-    //         return obj;
-    //     });
-    //     console.log(newArr)
-    //     setSelectedProjectFiles(newArr)
-    //   }
-    // }, [audioGender])
-
 
     useEffect(() => {
         if (localeOptions?.length !== 0) {
@@ -994,14 +908,6 @@ const TextToSpeech = (props) => {
             setAudioGender(genderOptions[0])
         }
     }, [localeOptions, genderOptions])
-
-    // useEffect(() => {
-    //   console.log(audioGender)
-    // }, [audioGender])
-
-    // useEffect(() => {
-    //   console.log(voiceType)
-    // }, [voiceType])
 
 
     useEffect(() => {
@@ -1032,12 +938,7 @@ const TextToSpeech = (props) => {
             const filteredVoiceType = filteredRes?.reduce((a, item) => (
                 Object.assign(a, { [item?.voice_type]: item })
             ), {})
-            // console.log(filteredVoiceType)
-
-            // set voice-type as Neural(1st priority) then Standard(2nd priority) and then Wavenet(3rd priority)
-            // if(filteredVoiceType?.Neural2 !== undefined){
-            //     setVoiceType(filteredVoiceType?.Neural2?.voice_name)
-            // }else 
+           
             if (filteredVoiceType?.Wavenet !== undefined) {
                 setVoiceType(filteredVoiceType?.Wavenet?.voice_name)
             } else if (filteredVoiceType?.Standard !== undefined) {
@@ -1046,9 +947,6 @@ const TextToSpeech = (props) => {
         }
     }, [audioLocale, audioGender])
 
-    // useEffect(() => {
-    //   console.log(voiceType)
-    // }, [voiceType])
 
 
     // ============= Voice option selection logic ends =============
@@ -1144,17 +1042,6 @@ const TextToSpeech = (props) => {
 
     const handleProjectNamechange = (e) => {
         setProjectName(e.target.innerText);
-        // if(projectName == ""){
-        //     setValidationState({
-        //         ...validationState,
-        //         projectName: true
-        //     })
-        // }else{
-        //     setValidationState({
-        //         ...validationState,
-        //         projectName: false
-        //     })
-        // }
     };
 
     const handleHideIcon = () => {
@@ -1183,11 +1070,7 @@ const TextToSpeech = (props) => {
 
     /* File upload drag and drop handling */
     const handleDrop = (filesTemp) => {
-        // console.log(filesTemp[0]);
-        // if(filesTemp[0].name.length>=201){
-        //     Config.toast('Filename value too long for type character varying(200)', "error");
-        //     return
-        //  }
+       
         for (let i = 0; i < (filesTemp).length; i++) {
             if (filesTemp[i].name.length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
@@ -1485,13 +1368,6 @@ const TextToSpeech = (props) => {
         });
     };
 
-    // useEffect(() => {
-    //   console.log(validationState);
-    // }, [validationState])
-
-    // useEffect(() => {
-    //   console.log(voiceType);
-    // }, [voiceType])
     useEffect(() => {
         if (mtEnable === false) {
             setPreTranslate(false)
@@ -1515,16 +1391,7 @@ const TextToSpeech = (props) => {
             setHasFocus(true);
             return false
         }
-        // if(projectName === ""){
-        //     setValidationState({
-        //         ...validationState,
-        //         projectName: true
-        //     })
-        //     contentprojectNameRef.current.scrollIntoView()
-        //     contentprojectNameRef.current.focus();
-        //     setHasFocus(true);
-        //     return false
-        // }
+      
         if (translateSrcContent.trim() === "" && textToSpeechSwitch === 1) {
             setValidationState({
                 ...validationState,
@@ -1634,10 +1501,6 @@ const TextToSpeech = (props) => {
 
         if (target === 'project') setClickedOpenButton(true)
 
-        // console.log(ID);
-        // console.log(target);
-        // console.log(voiceGender);
-        // console.log(voiceLocale);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/convert_text_to_speech_source/?${target === 'task' ? "task=" + ID : ''}${target === 'project' ? "project=" + ID : ''}${voiceGender !== null ? "&gender=" + voiceGender?.label?.toUpperCase() : ''}${voiceLocale !== null ? "&language_locale=" + voiceLocale?.label : ''}${voiceType !== null ? "&voice_name=" + voiceType : ''}`,
             auth: true,
@@ -1697,9 +1560,6 @@ const TextToSpeech = (props) => {
                                 convertSourceFileToAudioFile(projectId, 'project', audioGender, audioLocale)
                             }, 8000);
                         }
-                        // setShowProcessingModal(true)
-                        // setIsConversionGoing(true)
-                        // setAnimate(null)
 
                     }
                 } else {
@@ -1801,9 +1661,7 @@ const TextToSpeech = (props) => {
             // console.log(totDuration)
             const sliderPercent = ((currentAudioTime / totDuration) * 100).toFixed(2)
             const audioTime = currentAudioTime
-            // console.log(currentAudioTime)
-            // console.log(sliderPercent)
-
+          
             setSliderPercentage(+sliderPercent)
             document.getElementById(currentTimeText).innerHTML = secondsToHms(audioTime?.toFixed(2))
         }
@@ -1848,9 +1706,6 @@ const TextToSpeech = (props) => {
         }
     }
 
-    const openProjectUpdate = () => {
-        window.location.href = window.location.origin + "/create/speech/text-to-speech?get-project-info=" + projectId + "&type=4"
-    }
 
     useEffect(() => {
         if (dictationInput !== "") {
@@ -1980,6 +1835,22 @@ const TextToSpeech = (props) => {
             if (sourceLangRef.current !== null) sourceLangRef.current.style = 'border: 1px solid #ced4da;'
         }, 1000);
     }
+
+    const detectSourceLanguage = () => {
+        if(translateSrcContent?.trim() !== ""){
+            Config.axios({
+                url: Config.BASE_URL + "/auth/lang_detect/?text=" + translateSrcContent.split(' ').splice(0, 10).join(" "),
+                auth: true,
+                success: (response) => {
+                    setSourceLanguage(response.data?.lang_id)
+                    setSourceLabel(response.data?.language)
+                },
+                error: (err) => {
+                    // setAutoDetectIndication(false)
+                }
+            });
+        }
+    } 
 
 
 
