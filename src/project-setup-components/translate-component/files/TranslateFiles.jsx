@@ -3413,14 +3413,61 @@ function TranslateFiles(props) {
                                 </div>
                             )}
                             <div className="col-xs-12">
-                                <div className="new-btn-grp">
-                                    {editProjectId != null ? (
-                                        showUpdateLoader ? (
+                                <div className="d-flex justify-between">
+                                    {editProjectId != null && (
+                                        <button
+                                            className="glossaryglobalform-StepCancelButton"
+                                            onClick={() => history(-1)}
+                                        >
+                                            <span className="prev-btn">
+                                                {t("cancel")}
+                                            </span>
+                                        </button>
+                                    )}
+                                    <div className="new-btn-grp">
+                                        {editProjectId != null ? (
+                                            showUpdateLoader ? (
+                                                <React.Fragment>
+                                                    <button className="convert-pdf-list-UploadProjectButton" type="submit">
+                                                        <span className="fileupload-new-btn">
+                                                            <SaveButtonLoader />
+                                                            {t("updating")}
+                                                        </span>
+                                                    </button>
+                                                </React.Fragment>
+                                            ) : (
+                                                <React.Fragment>
+                                                    <button className="convert-pdf-list-UploadProjectButton"
+                                                        type="submit"
+                                                        onMouseUp={(e) => handleUpdate(e)}
+                                                    >
+                                                        <span className="fileupload-new-btn">{t("update")}</span>
+                                                    </button>
+                                                    {editProjectId && (
+                                                        <div
+                                                            onClick={() => setShowDeleteConfirmationModal(true)}
+                                                            className={
+                                                                projectType === 3
+                                                                    ? "edit-delete-btn glossary-btn-wrap"
+                                                                    : "edit-delete-btn "
+                                                            }
+                                                        >
+                                                            <ButtonBase>
+                                                                <div className="edit-delete-btn-cont">
+                                                                    <div className="delete-icon"></div>
+                                                                    {t("delete_project")}
+                                                                </div>
+                                                            </ButtonBase>
+                                                        </div>
+                                                    )}
+                                                </React.Fragment>
+                                            )
+                                        ) : showCreateLoader ? (
                                             <React.Fragment>
                                                 <button className="convert-pdf-list-UploadProjectButton" type="submit">
                                                     <span className="fileupload-new-btn">
                                                         <SaveButtonLoader />
-                                                        {t("updating")}
+                                                        {t("creating")}
                                                     </span>
                                                 </button>
                                             </React.Fragment>
@@ -3428,69 +3475,34 @@ function TranslateFiles(props) {
                                             <React.Fragment>
                                                 <button className="convert-pdf-list-UploadProjectButton"
                                                     type="submit"
-                                                    onMouseUp={(e) => handleUpdate(e)}
+                                                    onMouseUp={(e) => handleSubmit(e)}
                                                 >
-                                                    <span className="fileupload-new-btn">{t("update")}</span>
+                                                    <span className="fileupload-new-btn">
+                                                        {t("translate_edit_download")}
+                                                        <ArrowForwardIcon
+                                                            style={{
+                                                                fontSize: 15,
+                                                                color: "#FFFFFF",
+                                                            }}
+                                                        />
+                                                    </span>
                                                 </button>
-                                                {editProjectId && (
-                                                    <div
-                                                        onClick={() => setShowDeleteConfirmationModal(true)}
-                                                        className={
-                                                            projectType === 3
-                                                                ? "edit-delete-btn glossary-btn-wrap"
-                                                                : "edit-delete-btn "
-                                                        }
-                                                    >
-                                                        <ButtonBase>
-                                                            <div className="edit-delete-btn-cont">
-                                                                <div className="delete-icon"></div>
-                                                                {t("delete_project")}
-                                                            </div>
-                                                        </ButtonBase>
-                                                    </div>
-                                                )}
                                             </React.Fragment>
-                                        )
-                                    ) : showCreateLoader ? (
-                                        <React.Fragment>
-                                            <button className="convert-pdf-list-UploadProjectButton" type="submit">
-                                                <span className="fileupload-new-btn">
-                                                    <SaveButtonLoader />
-                                                    {t("creating")}
-                                                </span>
-                                            </button>
-                                        </React.Fragment>
-                                    ) : (
-                                        <React.Fragment>
+                                        )}
+                                        {(editProjectId == null && showTranslateAndDownloadBtn) && (
                                             <button className="convert-pdf-list-UploadProjectButton"
                                                 type="submit"
-                                                onMouseUp={(e) => handleSubmit(e)}
+                                                onMouseUp={(e) => !translateDownloadBtnLoader && handleSubmit(e, 'trans-download')}
                                             >
                                                 <span className="fileupload-new-btn">
-                                                    {t("translate_edit_download")}
-                                                    <ArrowForwardIcon
-                                                        style={{
-                                                            fontSize: 15,
-                                                            color: "#FFFFFF",
-                                                        }}
-                                                    />
+                                                    {translateDownloadBtnLoader && (
+                                                        <SaveButtonLoader />
+                                                    )}
+                                                    {t("translate_and_download")}
                                                 </span>
                                             </button>
-                                        </React.Fragment>
-                                    )}
-                                    {(editProjectId == null && showTranslateAndDownloadBtn) && (
-                                        <button className="convert-pdf-list-UploadProjectButton"
-                                            type="submit"
-                                            onMouseUp={(e) => !translateDownloadBtnLoader && handleSubmit(e, 'trans-download')}
-                                        >
-                                            <span className="fileupload-new-btn">
-                                                {translateDownloadBtnLoader && (
-                                                    <SaveButtonLoader />
-                                                )}
-                                                {t("translate_and_download")}
-                                            </span>
-                                        </button>
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </React.Fragment>

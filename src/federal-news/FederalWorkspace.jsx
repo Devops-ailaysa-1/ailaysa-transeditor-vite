@@ -898,7 +898,7 @@ const FederalWorkspace = (props) => {
     // });
 
     useEffect(() => {
-        if (didMount) setDocumentId(props.match.params.documentId);
+        if (didMount) setDocumentId(params.documentId);
     }, [window.location.pathname, window.location.search]); // Wheever the url and query param changes
 
     // useEffect(() => {

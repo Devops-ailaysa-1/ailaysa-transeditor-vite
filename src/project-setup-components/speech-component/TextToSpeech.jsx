@@ -2482,91 +2482,82 @@ const TextToSpeech = (props) => {
                                             setTranslationByPage={setTranslationByPage}
                                         />}
                                     </div>
-                                    <div className="new-btn-grp">
-                                        {flowSwitch === 2 &&
-                                            <div className="action-btns">
-                                                {showBtnLoader ? (
-                                                    <button className="speech-to-text-UploadProjectButton">
-                                                        <span className="trans-btn-txt">
-                                                            <ButtonLoader />
-                                                            {!isEdit ? t("creating") : t("updating")}
+                                    <div className="d-flex justify-between">
+                                        {isEdit && (
+                                            <button
+                                                className="glossaryglobalform-StepCancelButton"
+                                                onClick={() => history(-1)}
+                                            >
+                                                <span className="prev-btn">
+                                                    {t("cancel")}
+                                                </span>
+                                            </button>
+                                        )}
+                                        <div className="new-btn-grp">
+                                            {flowSwitch === 2 &&
+                                                <div className="action-btns">
+                                                    {showBtnLoader ? (
+                                                        <button className="speech-to-text-UploadProjectButton">
+                                                            <span className="trans-btn-txt">
+                                                                <ButtonLoader />
+                                                                {!isEdit ? t("creating") : t("updating")}
+                                                            </span>
+                                                        </button>
+                                                    ) : (
+                                                        <button className="speech-to-text-UploadProjectButton" disabled={textToSpeechSwitch === 3 && !browserSupportsSpeechRecognition} onMouseUp={() => isValidate('translate') && (!isEdit ? createTextToSpeechProject('translate') : updateTextToSpeechProject('translate'))}>
+                                                            <span className="trans-btn-txt">
+                                                                {!isEdit ? t("translate_or_download") : t("update")}
+                                                                <span>
+                                                                    <i className="fas fa-arrow-right"></i>
+                                                                </span>
+                                                            </span>
+                                                        </button>
+                                                    )
+                                                    }
+                                                    {isEdit && <div
+                                                        onClick={() => setShowDeleteConfirmationModal(true)}
+                                                        className="edit-delete-btn"
+                                                    >
+                                                        <ButtonBase>
+                                                            <div className="edit-delete-btn-cont">
+                                                                <div className="delete-icon"></div>
+                                                                {t("delete_project")}
+                                                            </div>
+                                                        </ButtonBase>
+                                                    </div>}
+                                                </div>
+                                            }
+                                            {(!isEdit && flowSwitch == 1) &&
+                                                <>
+                                                    <button className="speech-to-text-UploadProjectButton-process" disabled={textToSpeechSwitch === 3 && !browserSupportsSpeechRecognition} onMouseUp={() => isValidate('download') && createTextToSpeechProject('download')}>
+                                                        
+                                                        
+                                                        {showBtnLoader ? (<span className="trans-btn-txt trans-btn-gap">
+                                                        <span className="save-btn-spinner">
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
                                                         </span>
-                                                    </button>
-                                                ) : (
-                                                    <button className="speech-to-text-UploadProjectButton" disabled={textToSpeechSwitch === 3 && !browserSupportsSpeechRecognition} onMouseUp={() => isValidate('translate') && (!isEdit ? createTextToSpeechProject('translate') : updateTextToSpeechProject('translate'))}>
-                                                        <span className="trans-btn-txt">
-                                                            {!isEdit ? t("translate_or_download") : t("update")}
+                                                        {t("processing")}
+                                                        </span>) :(<span className="trans-btn-txt">
+                                                            {t("process")}
                                                             <span>
                                                                 <i className="fas fa-arrow-right"></i>
                                                             </span>
-                                                        </span>
+                                                        </span>)}
                                                     </button>
-                                                )
-                                                }
-                                                {isEdit && <div
-                                                    onClick={() => setShowDeleteConfirmationModal(true)}
-                                                    className="edit-delete-btn"
-                                                >
-                                                    <ButtonBase>
-                                                        <div className="edit-delete-btn-cont">
-                                                            <div className="delete-icon"></div>
-                                                            {t("delete_project")}
-                                                        </div>
-                                                    </ButtonBase>
-                                                </div>}
-                                            </div>
-                                        }
-                                        {(!isEdit && flowSwitch == 1) &&
-                                            <>
-                                                <button className="speech-to-text-UploadProjectButton-process" disabled={textToSpeechSwitch === 3 && !browserSupportsSpeechRecognition} onMouseUp={() => isValidate('download') && createTextToSpeechProject('download')}>
-                                                    
-                                                    
-                                                    {showBtnLoader ? (<span className="trans-btn-txt trans-btn-gap">
-                                                    <span className="save-btn-spinner">
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                    </span>
-                                                    {t("processing")}
-                                                    </span>) :(<span className="trans-btn-txt">
-                                                        {t("process")}
-                                                        <span>
-                                                            <i className="fas fa-arrow-right"></i>
-                                                        </span>
-                                                    </span>)}
-                                                </button>
-                                            </>
-                                        }
-                                        {/* {!isEdit && <GoBackButton onClick={() => {setTextToSpeechGlbSwitch(1); setTextToSpeechSwitch(1)}}>
-                                    <span className="prev-btn">
-                                        <span className="prev-icon-align">
-                                            <i className="fas fa-arrow-left"></i>
-                                        </span>{" "}
-                                        Go back
-                                    </span>
-                                </GoBackButton>} */}
-                                        {/* {editProjectId && (
-                                    <div
-                                        onClick={() => setShowDeleteConfirmationModal(true)}
-                                        className="edit-delete-btn"
-                                    >
-                                        <ButtonBase>
-                                        <div className="edit-delete-btn-cont">
-                                            <div className="delete-icon"></div>Delete
-                                            project
+                                                </>
+                                            }
                                         </div>
-                                        </ButtonBase>
-                                    </div>
-                                )} */}
                                     </div>
                                 </div>)}
                             {textToSpeechSwitch == 2 &&
