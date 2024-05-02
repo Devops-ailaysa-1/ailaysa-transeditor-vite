@@ -90,6 +90,7 @@ import NoMemberImg from "../../../assets/images/assign-page/no-member-img.png"
 import ConfirmIcon from "../../../assets/images/new-ui-icons/confirm-icon.svg"
 import sanitizeHtml from 'sanitize-html-react';
 import ReactRouterPrompt from 'react-router-prompt'
+import useStateWithHistory from "../../../vendor/custom-component/useStateWithHistory";
 
 const InstantTextTranslate = (props) => {
     const {
@@ -108,6 +109,8 @@ const InstantTextTranslate = (props) => {
     const { pathname } = useLocation()
     const userDetails = useSelector((state) => state.userDetails.value)
     let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
+    const [historyArrState, setHistoryArrState, { historyArr, pointer, back, forward, go }] = useStateWithHistory("")
+
 
     const [navigationModalVisible, setNavigationModalVisible] = useState(false)
     const [lastLocation, setLastLocation] = useState(null)
@@ -375,6 +378,7 @@ const InstantTextTranslate = (props) => {
     const [spellCheckWordsOptions, setSpellCheckWordsOptions] = useState([]);
     
     const [rectElement, setRectElement] = useState(null);
+    
 
     const temptaskid = useRef()
     const selectedFileRow = useRef(null)
@@ -3002,7 +3006,56 @@ const InstantTextTranslate = (props) => {
             setChangesSaved(false)
         }
     }
+    
+    const handleTargetKeyDown = (e) => {
+        if(e.ctrlKey){
+            if(e.which === 90){
+                console.log("pointer: "+ pointer)
+                console.log(historyArr)
+                console.log('undo')
+                back()
 
+                if(historyArrState !== '') {
+                    setTranslateResultText(historyArrState)
+                    copyTarDivRef.current.innerHTML = historyArrState
+                }
+            } 
+            if(e.which === 89){
+                console.log("pointer: "+ pointer)
+                console.log(historyArr)
+                console.log('redo')
+                forward()
+                if(historyArrState !== '') {
+                    setTranslateResultText(historyArrState)
+                    copyTarDivRef.current.innerHTML = historyArrState
+                }
+            } 
+        }
+    } 
+
+    const handleActionBtn = (target) => {
+        if(target === 'undo'){
+            console.log("pointer: "+ pointer)
+            console.log(historyArr)
+            console.log('undo')
+            back
+
+            if(historyArrState !== '') {
+                setTranslateResultText(historyArrState)
+                copyTarDivRef.current.innerHTML = historyArrState
+            }
+        } 
+        if(target === 'redo'){
+            console.log("pointer: "+ pointer)
+            console.log(historyArr)
+            console.log('redo')
+            forward
+            if(historyArrState !== '') {
+                setTranslateResultText(historyArrState)
+                copyTarDivRef.current.innerHTML = historyArrState
+            }
+        } 
+    } 
 
     const detectBrowserName = () => {
         let userAgent = navigator.userAgent;
@@ -3804,6 +3857,8 @@ const InstantTextTranslate = (props) => {
         var currentInstance = -1;
 
         // Use a custom replace function to replace the specific instance
+        setHistoryArrState(prevState => { return text})
+
         var newText = text.replace(regex, function(match) {
             currentInstance++;
             if (currentInstance === instanceToReplace) {
@@ -3817,9 +3872,10 @@ const InstantTextTranslate = (props) => {
         document.querySelector('#pop').style.opacity = '0';
 
         setTranslateResultText(newText)
+        setHistoryArrState(prevState => { return newText})
         copyTarDivRef.current.innerHTML = newText
     }
-    
+
     function escapeRegExp(str) {
         return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
@@ -4275,6 +4331,7 @@ const InstantTextTranslate = (props) => {
                                                     maxLength="5000"
                                                     spellCheck="false"
                                                     onChange={(e) => handleTargetChange(e)}
+                                                    onKeyDown={handleTargetKeyDown}
                                                 />
                                             </div>
                                             {/* <form style={isCustomizationProcessing ? { display: 'none' } : {}}>
@@ -4298,10 +4355,10 @@ const InstantTextTranslate = (props) => {
                                             </div>
                                             <div ref={instantFeatureStickyRef} id="transphrase-sticky" className={"translate-features-tab-switch featured-sticky-class " + (!isSticky ? "sticky-occured" : "")}>
                                                 <ul style={(!isSrcTextEmpty) ? ((isCustomizationProcessing || isSourceTextChanged) ? { pointerEvents: 'none', opacity: '0.7' } : {}) : { pointerEvents: 'none', opacity: '0.7' }}>
-                                                    <li className={translatedTextTab === 1 && "active"} onClick={() => handleTranslateTabSwitch(1)}>{t("standard")}</li>
-                                                    <li className={translatedTextTab === 4 && "active"} onClick={() => handleTranslateTabSwitch(4)}>{t("rewrite")}</li>
-                                                    <li className={translatedTextTab === 2 && "active"} onClick={() => handleTranslateTabSwitch(2)}>{t("simplified")}</li>
-                                                    <li className={translatedTextTab === 3 && "active"} onClick={() => handleTranslateTabSwitch(3)}>{t("shortened")}</li>
+                                                    <li className={translatedTextTab === 1 ? "active" : ""} onClick={() => handleTranslateTabSwitch(1)}>{t("standard")}</li>
+                                                    <li className={translatedTextTab === 4 ? "active" : ""} onClick={() => handleTranslateTabSwitch(4)}>{t("rewrite")}</li>
+                                                    <li className={translatedTextTab === 2 ? "active" : ""} onClick={() => handleTranslateTabSwitch(2)}>{t("simplified")}</li>
+                                                    <li className={translatedTextTab === 3 ? "active" : ""} onClick={() => handleTranslateTabSwitch(3)}>{t("shortened")}</li>
                                                 </ul>
                                             </div>
                                             {/* <div id="pop" >
@@ -4742,7 +4799,9 @@ const InstantTextTranslate = (props) => {
                 </div>
 
             </div>
-
+            
+            <button onClick={() => handleActionBtn('undo')}>Back</button>
+            <button onClick={() => handleActionBtn('redo')}>Forward</button>
             {/* Synonym popover JSX */}
             {/* {
                 (selectiontarget?.length && synonymPopoverOpen) ? (
