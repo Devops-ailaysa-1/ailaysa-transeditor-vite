@@ -1512,7 +1512,7 @@ const TextToSpeech = (props) => {
                         if (obj.id === ID) {
                             return {
                                 ...obj,
-                                audio_file_url: response.data?.source_audio_file,
+                                audio_file_url: Config.BASE_URL + response.data?.source_audio_file,
                             };
                         }
                         return obj;
@@ -1523,7 +1523,7 @@ const TextToSpeech = (props) => {
                 if (target === 'project') {
                     const newArr = selectedProjectFiles?.map(obj => {
                         if (obj.id == response.data?.find(each => each?.task == obj.id)?.task) {
-                            return { ...obj, audio_file_url: response.data?.find(each => each?.task == obj.id)?.source_audio_file };
+                            return { ...obj, audio_file_url: Config.BASE_URL + response.data?.find(each => each?.task == obj.id)?.source_audio_file };
                         }
                         return obj;
                     });
@@ -2546,10 +2546,10 @@ const TextToSpeech = (props) => {
                                                                         <div className="audio-thumb" id={`audio-thumb-${index}`} ref={sliderThumbRef}></div>
                                                                         <input type="range"
                                                                             id={`audio-slider-${index}`}
-                                                                            value={sliderPercentage}
+                                                                            // value={sliderPercentage}
                                                                             ref={sliderRangeRef}
                                                                             step="0.01"
-                                                                            onChange={(e) => handleSlider(Config.BASE_URL + `${item?.audio_file_url}`, item?.id, e, `audio-slider-${index}`, `audio-thumb-${index}`, `bar-${index}`, `audio-play-pause-${index}`)}
+                                                                            onChange={(e) => handleSlider(`${item?.audio_file_url}`, item?.id, e, `audio-slider-${index}`, `audio-thumb-${index}`, `bar-${index}`, `audio-play-pause-${index}`)}
                                                                             className="slider-range"
                                                                         />
                                                                     </div>
@@ -2560,12 +2560,12 @@ const TextToSpeech = (props) => {
                                                                     id={item?.id}
                                                                     preload="auto"
                                                                     className={`player-${index}`}
-                                                                    onLoadedData={(e) => getDurationTime(e, item?.id, Config.BASE_URL + `${item?.audio_file_url}`, `audio-duration-Time-${index}`)}
-                                                                    onTimeUpdate={(e) => getCurrentDuration(e, item?.id, Config.BASE_URL + `${item?.audio_file_url}`, `audio-currentTime-${index}`)}
+                                                                    onLoadedData={(e) => getDurationTime(e, item?.id,  `${item?.audio_file_url}`, `audio-duration-Time-${index}`)}
+                                                                    onTimeUpdate={(e) => getCurrentDuration(e, item?.id,  `${item?.audio_file_url}`, `audio-currentTime-${index}`)}
                                                                     onEnded={(e) => { setPlay(false); }}
                                                                     onPlay={(e) => { sliderPercentage == 100 && setSliderPercentage(0) }}
                                                                 >
-                                                                    <source src={Config.BASE_URL + `${item?.audio_file_url}`} type="audio/mp3" />
+                                                                    <source src={ `${item?.audio_file_url}`} type="audio/mp3" />
                                                                 </audio>
                                                             </div>
                                                         }
