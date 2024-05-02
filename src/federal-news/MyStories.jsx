@@ -3180,57 +3180,6 @@ function MyStories(props) {
         });
     }
 
-    const handleBulkDownload = async (e, project) => {
-        e?.stopPropagation();
-
-        let {id, project_name, get_project_type} = project
-        let url
-        let designDownloadUrl
-        if(get_project_type === 6) {
-            // writer designer project zip download code here 
-            // remove the below return statement after done coding
-            // console.log('designer project zip download')
-            // console.log(project) 
-            if(project.designer_project_detail.type == "image_translate"){
-                designDownloadUrl =  Config.BASE_URL + `/ai-image-translation/image-download?image_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1`
-            }else{
-                const startNumber = 1;
-                const endNumber = project.designer_project_detail.pages;
-                const formattedString = Array.from({ length: endNumber - startNumber + 1 }, (_, index) => {
-                  const numberToMap = index + startNumber;
-                  return `page_number_list=${numberToMap}`;
-                }).join('&');
-                
-                // console.log(formattedString);
-                 designDownloadUrl =  Config.BASE_URL + `/canvas/design-download?canvas_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1&`+formattedString
-                // console.log(url)
-            }
-
-        }
-
-        // add in download list
-        dispatch(addDownloadingFiles({ id: id, file_name: project_name, ext: '.zip', status: 1 }))
-        if(get_project_type === 6) {
-            url = designDownloadUrl
-        }else{
-            url = `${Config.BASE_URL}/workspace/download/${id}/`
-
-        }
-
-        const response = await Config.downloadFileFromApi(url);
-
-        // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
-        setTimeout(() => {
-            // remove the downloaded file from list
-            dispatch(deleteDownloadingFile({ id: id }))
-        }, 8000);
-
-    }
-
     const convertSourceFileToAudio = (taskid) => {
         setClickedOpenButton(taskid)
         Config.axios({
@@ -3910,7 +3859,7 @@ function MyStories(props) {
                 dispatch(deleteDownloadingFile({ id: uniqueKey }))
                 // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
                 setIsDownloading(false)
-            } else{
+            } else {
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === id) {
                         return {
@@ -4513,7 +4462,6 @@ function MyStories(props) {
         }
 
         setIsDesignDeleting(true)
-
        
     } 
 
@@ -4695,6 +4643,8 @@ function MyStories(props) {
             }, 8000);
         } catch (e) {
             console.log(e)
+            dispatch(deleteDownloadingFile({ id: id }))
+            Config.toast(t("download_failed"), 'error')
         }
     } 
 
