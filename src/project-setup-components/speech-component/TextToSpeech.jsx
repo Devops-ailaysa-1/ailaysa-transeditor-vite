@@ -1650,10 +1650,14 @@ const TextToSpeech = (props) => {
 
     const getDurationTime = (e, id, blob, currentDurationId) => {
         let audio = document.getElementById(id)
-        getBlobDuration(blob).then(function (duration) {
-            document.getElementById(currentDurationId).innerHTML = secondsToHms(duration)
-            audio = Math.floor(duration);
-        });
+        try{
+            getBlobDuration(blob).then(function (duration) {
+                document.getElementById(currentDurationId).innerHTML = secondsToHms(duration)
+                audio = Math.floor(duration);
+            });
+        }catch(e) {
+            console.log(e)
+        }
     }
 
     useEffect(() => {
@@ -2542,7 +2546,7 @@ const TextToSpeech = (props) => {
                                                                         <div className="audio-thumb" id={`audio-thumb-${index}`} ref={sliderThumbRef}></div>
                                                                         <input type="range"
                                                                             id={`audio-slider-${index}`}
-                                                                            // value={sliderPercentage}
+                                                                            value={sliderPercentage}
                                                                             ref={sliderRangeRef}
                                                                             step="0.01"
                                                                             onChange={(e) => handleSlider(Config.BASE_URL + `${item?.audio_file_url}`, item?.id, e, `audio-slider-${index}`, `audio-thumb-${index}`, `bar-${index}`, `audio-play-pause-${index}`)}
@@ -2620,7 +2624,7 @@ const TextToSpeech = (props) => {
                                 <div className="ts-bottom-top-area-box">
                                     <div className="source-lang-select-wrap">
                                         <span className="label">{t("source_language")}:</span>
-                                        <span className="selected-src">{selectedProjectFiles?.length !== 0 && targetLanguageOptionRef.current.find(each => each.id == selectedProjectFiles[0]?.source_language)?.language}</span>
+                                        <span className="selected-src">{selectedProjectFiles?.length !== 0 && targetLanguageOptionRef.current?.find(each => each.id == selectedProjectFiles[0]?.source_language)?.language}</span>
                                         <a href={hiddenLinkUrl} download={downloadedFileName.current} className="hidden" ref={downloadref} />
                                     </div>
                                     <div className="audio-file-download-wrap">
