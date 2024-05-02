@@ -3374,6 +3374,8 @@ table#translation_memories_on_off tbody tr:last-child {
 
 .toolbar-mega-section {
     height: 94px;
+    position: relative;
+    z-index: 10;
 }
 
 .toolbar-parts-padd-top-add {
@@ -13298,6 +13300,10 @@ ul.ai-source-langs-list::-webkit-scrollbar-thumb {
     font-weight: normal;
     line-height: 22px;
     color: #3c4043;
+}
+
+.synonym-popover-drop-down .popover {
+    z-index: 1;
 }
 
 .synonym-popover-box .popover .popover-inner p.corrected-word {
