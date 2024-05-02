@@ -4,29 +4,7 @@ import { useTranslation } from "react-i18next";
 import CheckBlue from "../../../assets/images/new-ui-icons/check_blue.svg"
 
 function ContentTypeModal(props) {
-    let selectedContentTypes = useRef([]);
     const { t } = useTranslation();
-    // const AiNavButton = withStyles((theme) => ({
-    //     root: {
-    //         backgroundColor: "#0078D4",
-    //         boxShadow: "none",
-    //         borderRadius: "2px",
-    //         textTransform: "none",
-    //         padding: 0,
-    //         "&:hover": {
-    //             backgroundColor: "#0265b1",
-    //             boxShadow: "none",
-    //         },
-    //     },
-    // }))(Button);
-
-    useEffect(() => {
-        if (props.contentType) {
-            props.contentType?.map((content) => {
-                selectedContentTypes.current?.push(content?.id);
-            });
-        }
-    }, [props.contentType]);
 
     return (
         <React.Fragment>
@@ -38,7 +16,7 @@ function ContentTypeModal(props) {
                                 <li
                                     key={value.id}
                                     onClick={(e) => props.handleContentTypeClick(value, e)}
-                                    className={selectedContentTypes.current.indexOf(value.id) != -1 ? "list selected" : "list"}
+                                    className={props.contentType?.find(each => each.id === value.id) ? "list selected" : "list"}
                                 >
                                     <img className="checked-icon" src={CheckBlue} alt="check_blue" />{" "}
                                     {value.name}

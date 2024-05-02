@@ -400,65 +400,77 @@ const GlossaryGlobalForm = (props) => {
             }
             <div className="glossary-global-setup-wrapper">
                 {showGlossaryForms()}
-                <div className={page == 0 ? "glossary-bottom-btn-align" : "glossary-bottom-btn-align-new"}>
-                    <button className={page == 0 ? "d-none" : "glossaryglobalform-StepCancelButton"} onClick={handlePreviousButton}>
-                        <span className="prev-btn">
-                            <span className="prev-icon-align">
-                                <i className="fas fa-arrow-left"></i>
-                            </span>{" "}
-                            {t("go_back")}
-                        </span>
-                    </button>
+                <div className={"d-flex " + ((isEditable && page === 0) ? "justify-between" : "justify-end")}>
+                    {(isEditable && page === 0) && (
+                        <button
+                            className="glossaryglobalform-StepCancelButton"
+                            onClick={() => history(-1)}
+                        >
+                            <span className="prev-btn">
+                                {t("cancel")}
+                            </span>
+                        </button>
+                    )}
+                    <div className={page == 0 ? "glossary-bottom-btn-align" : "glossary-bottom-btn-align-new"}>
+                        <button className={page == 0 ? "d-none" : "glossaryglobalform-StepCancelButton"} onClick={handlePreviousButton}>
+                            <span className="prev-btn">
+                                <span className="prev-icon-align">
+                                    <i className="fas fa-arrow-left"></i>
+                                </span>{" "}
+                                {t("go_back")}
+                            </span>
+                        </button>
 
-                    {page === 0 ? (
-                        isLoading ?
-                            (
-                                <div className="d-flex">
-                                    <div className="edit-delete-btn mr-4">
-                                        <Skeleton animation="wave" width={120} height={40} />
-                                    </div>
-                                    <Skeleton animation="wave" width={90} height={40} />
-                                </div>
-                            )
-                            :
-                            (
-                                <div className="d-flex">
-                                    {(goBackCreateBtn || isEditable) &&
-                                        <div onClick={() => setShowDeleteConfirmationModal(true)} className="edit-delete-btn mr-4">
-                                            <ButtonBase>
-                                                <div className="edit-delete-btn-cont">
-                                                    <div className="delete-icon"></div>
-                                                    {t("delete_project")}
-                                                </div>
-                                            </ButtonBase>
+                        {page === 0 ? (
+                            isLoading ?
+                                (
+                                    <div className="d-flex">
+                                        <div className="edit-delete-btn mr-4">
+                                            <Skeleton animation="wave" width={120} height={40} />
                                         </div>
-                                    }
-                                    <button className="globalform-StepProcessButton" onMouseUp={(e) => handleNextButton(e)}>
-                                        <span className="version-ctrl-btn-txt-1">
-                                            {t("next")}{" "}
-                                            <span className="icon-align">
-                                                <i className="fas fa-arrow-right"></i>
-                                            </span>
-                                        </span>
-                                    </button>
-                                </div>
-                            )
-                    ) : page === 1 ? (
-                        <div className="glossary-save-btn-wrapper">
-                            {
-                                isUpdating ? (
-                                    <button className="globalform-StepProcessButton">
-                                        <span className="version-ctrl-btn-txt-1"><ButtonLoader /> {isEditable ? `${t("updating")}` : `${t("finishing")}`}</span>
-                                    </button>
-                                ) : (
-                                    <button className="globalform-StepProcessButton" onMouseUp={(e) => handleGlossaryFileUpload(e)}>
-                                        <span className="version-ctrl-btn-txt-1">{isEditable ? `${t("update")}` : `${t("finish")}`}</span>
-                                    </button>
+                                        <Skeleton animation="wave" width={90} height={40} />
+                                    </div>
                                 )
-                            }
+                                :
+                                (
+                                    <div className="d-flex">
+                                        {(goBackCreateBtn || isEditable) &&
+                                            <div onClick={() => setShowDeleteConfirmationModal(true)} className="edit-delete-btn mr-4">
+                                                <ButtonBase>
+                                                    <div className="edit-delete-btn-cont">
+                                                        <div className="delete-icon"></div>
+                                                        {t("delete_project")}
+                                                    </div>
+                                                </ButtonBase>
+                                            </div>
+                                        }
+                                        <button className="globalform-StepProcessButton" onMouseUp={(e) => handleNextButton(e)}>
+                                            <span className="version-ctrl-btn-txt-1">
+                                                {t("next")}{" "}
+                                                <span className="icon-align">
+                                                    <i className="fas fa-arrow-right"></i>
+                                                </span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                )
+                        ) : page === 1 ? (
+                            <div className="glossary-save-btn-wrapper">
+                                {
+                                    isUpdating ? (
+                                        <button className="globalform-StepProcessButton">
+                                            <span className="version-ctrl-btn-txt-1"><ButtonLoader /> {isEditable ? `${t("updating")}` : `${t("finishing")}`}</span>
+                                        </button>
+                                    ) : (
+                                        <button className="globalform-StepProcessButton" onMouseUp={(e) => handleGlossaryFileUpload(e)}>
+                                            <span className="version-ctrl-btn-txt-1">{isEditable ? `${t("update")}` : `${t("finish")}`}</span>
+                                        </button>
+                                    )
+                                }
 
-                        </div>
-                    ) : null}
+                            </div>
+                        ) : null}
+                    </div>
                 </div>
             </div>
             {showDeleteConfirmationModal &&
