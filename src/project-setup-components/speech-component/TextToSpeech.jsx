@@ -81,7 +81,7 @@ const TextToSpeech = (props) => {
     const [targetLanguageOptions, setTargetLanguageOptions] = useState(null);
     const [textToSpeechSwitch, setTextToSpeechSwitch] = useState(1);
     const [flowSwitch, setFlowSwitch] = useState(1) // 1 - for source downlaod, 2 - for translate and download
-    const [textToSpeechGlbSwitch, setTextToSpeechGlbSwitch] = useState(3);
+    const [textToSpeechGlbSwitch, setTextToSpeechGlbSwitch] = useState(2);
     const [sourceLanguage, setSourceLanguage] = useState("");
     const [sourceLanguageOptions, setSourceLanguageOptions] = useState(null);
     const [sourceLabel, setSourceLabel] = useState(t("source_language"));
@@ -137,29 +137,7 @@ const TextToSpeech = (props) => {
     const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
     const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
     const [projectId, setProjectId] = useState(null)
-    const [selectedProjectFiles, setSelectedProjectFiles] = useState([
-        {
-            "id": 1014,
-            "project_name": "Project-276(2024-05-02)",
-            "source_lang": "English",
-            "punctuation_support": true,
-            "transcription_source_file": "/media/u480926/u480926p1079/source/The.txt",
-            "transcripted_text": null,
-            "source_audio_file": "https://aidev4.ailaysa.com/media/u480926/u480926p1079/source/Audio/The_source_en.mp3",
-            "translated_audio_file": null,
-            "transcripted_file_writer": null,
-            "audio_file_url": "https://aidev4.ailaysa.com/media/u480926/u480926p1079/source/Audio/The_source_en.mp3",
-            "quill_data": null,
-            "html_data": null,
-            "audio_file_length": null,
-            "created_at": "2024-05-02T10:53:40.383109Z",
-            "updated_at": "2024-05-02T10:53:40.383144Z",
-            "writer_project_updated_count": null,
-            "writer_filename": null,
-            "task": 17741,
-            "user": 1162
-        }
-    ]);
+    const [selectedProjectFiles, setSelectedProjectFiles] = useState([]);
     const [animate, setAnimate] = useState(null)
     const [clickedOpenButton, setClickedOpenButton] = useState(false);
     const [taskID, setTaskID] = useState(null)
@@ -1614,31 +1592,34 @@ const TextToSpeech = (props) => {
     useEffect(() => {
         // console.log(sliderPercentage)
         const slider = document.getElementById(currentSlider);
-        const temp = document.getElementById(currentSlider);
+        console.log(slider)
         if (slider !== undefined) {
             try {
+                console.log(sliderPercentage)
                 slider.value = sliderPercentage
             } catch (e) {
-                // console.log(e)
+                console.log(e)
             }
         }
         let thumb = document.getElementById(currentThumb);
+        console.log(thumb)
         const sliderRangeWidth = slider?.getBoundingClientRect()?.width
         const thumbWidth = thumb?.getBoundingClientRect()?.width
-        const centerThumb = (thumbWidth / 100) * sliderPercentage * -1
+        const centerThumb = (thumbWidth / 100) * sliderPercentage * - 1
         const centerProgressBar = thumbWidth + sliderRangeWidth / 100 * sliderPercentage - (thumbWidth / 100 * sliderPercentage)
         try {
             thumb.style.left = `${sliderPercentage}%`
             thumb.style.marginLeft = `${centerThumb}px`
         } catch (e) {
-            // console.log(e)
+            console.log(e)
         }
 
         let progressBar = document.getElementById(bar)
         try {
+            console.log(progressBar)
             progressBar.style.width = `${centerProgressBar}px`
         } catch (e) {
-            // console.log(e)
+            console.log(e)
         }
     }, [sliderPercentage])
 
