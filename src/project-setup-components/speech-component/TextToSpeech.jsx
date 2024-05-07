@@ -1592,7 +1592,6 @@ const TextToSpeech = (props) => {
     useEffect(() => {
         // console.log(sliderPercentage)
         const slider = document.getElementById(currentSlider);
-        console.log(slider)
         if (slider !== undefined) {
             try {
                 console.log(sliderPercentage)
@@ -1602,7 +1601,6 @@ const TextToSpeech = (props) => {
             }
         }
         let thumb = document.getElementById(currentThumb);
-        console.log(thumb)
         const sliderRangeWidth = slider?.getBoundingClientRect()?.width
         const thumbWidth = thumb?.getBoundingClientRect()?.width
         const centerThumb = (thumbWidth / 100) * sliderPercentage * - 1

@@ -15,8 +15,6 @@ import ButtonBase from '@mui/material/ButtonBase';
 // import AssignManage from "./vendor/assign-tabs/AssignManage";
 // import ProjectManagement from "./project-setup-components/ProjectManagement";
 // import VoiceWorkspace from "./vendor/voice-workspace/VoiceWorkspace";
-// import * as Sentry from "@sentry/browser";
-// import { BrowserTracing } from "@sentry/tracing";
 import packageJson from '../package.json';
 import { CacheBuster } from './CacheBuster';
 import { Maintenance } from "./vendor/Maintenance";
@@ -414,7 +412,6 @@ function App() {
                     </>
                 )
             }
-
         </>
     );
 }

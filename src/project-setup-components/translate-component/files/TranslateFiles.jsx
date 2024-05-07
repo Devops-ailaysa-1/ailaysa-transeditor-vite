@@ -395,6 +395,7 @@ function TranslateFiles(props) {
             // console.log('from param');
             // console.log(targetLanguageOptionsRef.current);
             // console.log(mtEngineOptionRef.current);
+        
         }
     }, [targetLanguageOptionsRef.current, mtEngineOptionRef.current, URL_SEARCH_PARAMS.get("get-project-info")]);
 
