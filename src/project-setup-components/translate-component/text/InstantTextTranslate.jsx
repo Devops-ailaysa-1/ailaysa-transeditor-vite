@@ -4800,8 +4800,8 @@ const InstantTextTranslate = (props) => {
 
             </div>
             
-            <button onClick={() => handleActionBtn('undo')}>Back</button>
-            <button onClick={() => handleActionBtn('redo')}>Forward</button>
+            {/* <button onClick={() => handleActionBtn('undo')}>Back</button>
+            <button onClick={() => handleActionBtn('redo')}>Forward</button> */}
             {/* Synonym popover JSX */}
             {/* {
                 (selectiontarget?.length && synonymPopoverOpen) ? (
