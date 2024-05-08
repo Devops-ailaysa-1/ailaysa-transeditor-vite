@@ -1105,10 +1105,10 @@ const MainEditor = (props) => {
                     className: "drop-default summernote-list summernote-style-list",
                     contents:
                         // '<ul class="lang-list-writter-voice-wrap">' +
-                        '<a href="#" style="font-size: 16px" class="writer-style-list dropdown-item " aria-valuetext="normal"><i class="note-icon-menu-check"></i>Normal</a>' +
-                        '<a href="#" style="font-size: 40px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h1"><i class="note-icon-menu-check"></i>Heading 1</a>' +
-                        '<a href="#" style="font-size: 32px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h2"><i class="note-icon-menu-check"></i> Heading 2</a>' +
-                        '<a href="#" style="font-size: 28px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h3"><i class="note-icon-menu-check"></i> Heading 3</a>',
+                        '<a style="font-size: 16px" class="writer-style-list dropdown-item " aria-valuetext="normal"><i class="note-icon-menu-check"></i>Normal</a>' +
+                        '<a style="font-size: 40px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h1"><i class="note-icon-menu-check"></i>Heading 1</a>' +
+                        '<a style="font-size: 32px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h2"><i class="note-icon-menu-check"></i> Heading 2</a>' +
+                        '<a style="font-size: 28px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h3"><i class="note-icon-menu-check"></i> Heading 3</a>',
                     click: function (e) {
     
                         try {

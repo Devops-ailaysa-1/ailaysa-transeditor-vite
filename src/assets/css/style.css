@@ -44294,3 +44294,6 @@ body{
 .pdf-view-main-wrapper .react-pdf__Document.hasScroll{
     display: block;
 }
+.dropdown-item.writer-style-list{
+    cursor: pointer;
+}
