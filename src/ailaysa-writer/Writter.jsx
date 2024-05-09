@@ -946,6 +946,19 @@ const Writter = (props) => {
     }
 
 
+    // remove break
+
+    const removeBreakParagraphs = (htmlContent) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, 'text/html');
+        const paragraphs = doc.querySelectorAll('p.break');
+        paragraphs.forEach(paragraph => {
+            paragraph.parentNode.removeChild(paragraph);
+        });
+        return doc.body.innerHTML;
+    };
+
+
     const handleFormateArticle = () => {
         document.querySelector('.note-editable').classList.remove('note-editable-loader')
 
@@ -957,12 +970,14 @@ const Writter = (props) => {
             if (liTag) {
                 return liTag; // Keep <li> tags unchanged
             } else {
-                return "<p><br></p>"; // Replace line breaks with <p><br></p>
+                return ""; // Replace line breaks with <p><br></p>
             }
         });
 
-        document.querySelector('.note-editable').innerHTML = sanitizeHtml(final)
-        document.querySelector('.note-editable-backdrop').innerHTML = sanitizeHtml(document.querySelector('.note-editable').innerHTML)
+
+
+        document.querySelector('.note-editable').innerHTML = final
+        document.querySelector('.note-editable-backdrop').innerHTML = document.querySelector('.note-editable').innerHTML
         scrollToTop()
         setTimeout(() => {
 
@@ -1451,7 +1466,7 @@ const Writter = (props) => {
         // console.log(summerNoteData)
 
         // var htmlData = summerNoteEditorRef.current.summernote('code')
-
+        console.log(summerNoteData)
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -2095,8 +2110,8 @@ const Writter = (props) => {
         if (target == 'article') {
             let data = document.querySelector('.note-editable').innerText
             let html = convert.render(data)
-            let final = html.replace(/(?:\r\n|\r|\n)/g, '<p><br></p>');
-            formdata.append("html_data", final);
+            let final = html.replace(/(?:\r\n|\r|\n)/g, '');
+            formdata.append("html_data",final);
 
         } else {
             formdata.append("html_data", summerNoteEditorRef.current.summernote('code'));
