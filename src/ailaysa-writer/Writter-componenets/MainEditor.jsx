@@ -663,7 +663,7 @@ const MainEditor = (props) => {
                 notStyle: 'position:absolute;top:0;left:0;right:0', // Position of Notification
                 keepTagContents: ['a'], //Remove tags and keep the contents
                 badTags: ['applet', 'col', 'colgroup', 'embed', 'noframes', 'noscript','svg', 'script', 'style', 'title', 'meta', 'link', 'head','input'], //Remove full tags with contents
-                badAttributes: ['bgcolor', 'border', 'height', 'cellpadding', 'cellspacing', 'lang', 'start', 'valign', 'width', 'data-(.*?)'], //Remove attributes from remaining tags
+                badAttributes: ['bgcolor', 'border', 'height', 'cellpadding', 'cellspacing', 'lang', 'style', 'start', 'valign', 'width', 'data-(.*?)'], //Remove attributes from remaining tags
                 limitChars: 0, // 0|# 0 disables option
                 limitDisplay: 'none', // none|text|html|both
                 limitStop: false, // true/false
