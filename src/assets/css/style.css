@@ -32635,6 +32635,7 @@ button.hamburger .line {
     display: flex !important;
     gap: 8px !important;
     align-items: center !important;
+    cursor: pointer;
 }
 
 .writer-style-list .note-icon-menu-check {
@@ -44293,7 +44294,4 @@ body{
 
 .pdf-view-main-wrapper .react-pdf__Document.hasScroll{
     display: block;
-}
-.dropdown-item.writer-style-list{
-    cursor: pointer;
 }
