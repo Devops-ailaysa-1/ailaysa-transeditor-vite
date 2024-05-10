@@ -1466,7 +1466,6 @@ const Writter = (props) => {
         // console.log(summerNoteData)
 
         // var htmlData = summerNoteEditorRef.current.summernote('code')
-        console.log(summerNoteData)
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -1518,6 +1517,9 @@ const Writter = (props) => {
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
 
         formData.append("html", removedStyleAttribFromImg)
+
+        console.log(removedStyleAttribFromImg)
+
         // formData.append("html", clean)
 
         // formData.append("name", documentNameRef.current.innerText);
