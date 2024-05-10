@@ -544,7 +544,7 @@ const MainEditor = (props) => {
 
 
                         // console.log(img.width, img.height)
-                        $('.summernote').summernote("insertNode", loaderPTag);
+                        // $('.summernote').summernote("insertNode", loaderPTag);
                     }
                     let lastDot = name?.lastIndexOf(".");
                     let ext = "." + name?.substring(lastDot + 1);

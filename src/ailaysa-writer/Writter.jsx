@@ -3948,7 +3948,7 @@ const Writter = (props) => {
             console.log(img.height)
 
             // console.log(img.width, img.height)
-            summerNoteEditorRef.current.summernote("insertNode", loaderPTag);
+            // summerNoteEditorRef.current.summernote("insertNode", loaderPTag);
         }
         let lastDot = name?.lastIndexOf(".");
         let ext = "." + name?.substring(lastDot + 1);
@@ -4009,14 +4009,14 @@ const Writter = (props) => {
                 // const range = $.summernote.range;
                 const rng = $('.summernote').summernote('editor.getLastRange');
                 console.log(rng)
-                let loaderPtags = document.querySelectorAll('.img-loader-tag')
-                console.log(loaderPtags)
-                loaderPtags?.forEach(each => {
-                    console.log(each)
-                    each.removeAttribute('style')
-                    each.removeAttribute('class')
-                    each.removeAttribute('id')
-                })
+                // let loaderPtags = document.querySelectorAll('.img-loader-tag')
+                // console.log(loaderPtags)
+                // loaderPtags?.forEach(each => {
+                //     console.log(each)
+                //     each.removeAttribute('style')
+                //     each.removeAttribute('class')
+                //     each.removeAttribute('id')
+                // })
     
                 // let imgNode = document.createElement('img');
                 // imgNode.src = `${Config.BASE_URL}${response.image}`
