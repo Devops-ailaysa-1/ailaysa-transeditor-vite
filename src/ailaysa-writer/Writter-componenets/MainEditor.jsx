@@ -311,7 +311,9 @@ const MainEditor = (props) => {
                     const sanitizedHtml2 = pastedData?.replace(/\s/g, '');
                     console.log(sanitizedHtml1)
                     console.log(sanitizedHtml2)
-
+                    if(sanitizedHtml1 != sanitizedHtml2){
+                        isCopiedFromSummernoteRef.current = false
+                    }
                     if(!isCopiedFromSummernoteRef.current){
                         e.preventDefault()
 
@@ -1766,7 +1768,7 @@ const MainEditor = (props) => {
         }
         
         e.clipboardData.setData('text/html', html);
-        // e.clipboardData.setData('text/plain', txt);
+        e.clipboardData.setData('text/plain', txt);
         copiedContentRef.current = '<html>\n<body>\n<!--StartFragment-->' + html + '<!--EndFragment-->\n</body>\n</html>'
 
             console.log(e)
