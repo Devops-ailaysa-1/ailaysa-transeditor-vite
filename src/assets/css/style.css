@@ -44346,3 +44346,7 @@ body{
     overflow-x: hidden !important;
 
 }
+
+.note-style .style-select-btn{
+    min-width: 88px;
+}
