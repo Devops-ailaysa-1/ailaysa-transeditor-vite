@@ -44326,3 +44326,7 @@ body{
 .note-editable-backdrop h6, .note-editable h6{
     margin: 20px 0 0 0 !important;
 }
+
+.note-editable{
+    cursor: text;
+}
