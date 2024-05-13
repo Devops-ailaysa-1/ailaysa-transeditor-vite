@@ -2454,8 +2454,8 @@ const Writter = (props) => {
             
             window.addEventListener('resize', debounceApiCall);
             window.addEventListener('scroll', debounceApiCall);
-            if (document.querySelector('.note-editing-area')) {
-                document.querySelector('.note-editing-area').addEventListener('scroll', hideTabtoWriteMore)
+            if (document.querySelector('.note-editable')) {
+                document.querySelector('.note-editable').addEventListener('scroll', hideTabtoWriteMore)
             }
             addScrollListners(root, debounceApiCall);
             function addScrollListners(elm, callback) {
@@ -2472,8 +2472,8 @@ const Writter = (props) => {
                     window.removeEventListener('resize', debounceApiCall);
                     window.removeEventListener('scroll', debounceApiCall);
                     document.removeEventListener('contextmenu', debounceApiCall);
-                    if (document.querySelector('.note-editing-area')) {
-                        document.querySelector('.note-editing-area').removeEventListener('scroll', hideTabtoWriteMore)
+                    if (document.querySelector('.note-editable')) {
+                        document.querySelector('.note-editable').removeEventListener('scroll', hideTabtoWriteMore)
                     }
                 }catch(e){
                     console.log(e)

@@ -44343,5 +44343,6 @@ body{
 .note-editable{
     overflow: auto !important;
     height: calc(100vh - 145px);
+    overflow-x: hidden !important;
 
 }
