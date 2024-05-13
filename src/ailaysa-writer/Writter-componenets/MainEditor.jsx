@@ -299,6 +299,27 @@ const MainEditor = (props) => {
         return tempDiv.innerHTML;
       }
 
+      function unwrapDivAndKeepPTags(htmlString) {
+        // Create a temporary element to parse the HTML string
+        const tempElement = document.createElement('div');
+        tempElement.innerHTML = htmlString;
+      
+        // Unwrap div tags
+        const divChildren = Array.from(tempElement.querySelectorAll('div'));
+        divChildren.forEach(div => {
+          while (div.firstChild) {
+            div.parentNode.insertBefore(div.firstChild, div);
+          }
+          div.parentNode.removeChild(div);
+        });
+      
+        // Get the innerHTML of the temporary element which now contains only p tags
+        const resultHTML = tempElement.innerHTML;
+      
+        // Return the result
+        return resultHTML;
+      }
+
     useEffect(() => {
         // customFn()
         $('.summernote').summernote({
@@ -309,8 +330,7 @@ const MainEditor = (props) => {
                     var pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
                     const sanitizedHtml1 = copiedContentRef.current?.replace(/\s/g, '');
                     const sanitizedHtml2 = pastedData?.replace(/\s/g, '');
-                    console.log(sanitizedHtml1)
-                    console.log(sanitizedHtml2)
+       
                     if(sanitizedHtml1 != sanitizedHtml2){
                         isCopiedFromSummernoteRef.current = false
                     }
@@ -336,7 +356,8 @@ const MainEditor = (props) => {
                         // Insert the cleaned HTML into the contenteditable div
                         var cleanedHTML = tempDiv.innerHTML;
                         var clean = removeFormElements(removeImgTags(cleanedHTML))
-                        document.execCommand('insertHTML', false, clean);
+                        console.log(unwrapDivAndKeepPTags(cleanedHTML))
+                        document.execCommand('insertHTML', false, unwrapDivAndKeepPTags(clean));
                         // $('summernote').summernote('pasteHTML', cleanedHTML)
                     }
                     if(sanitizedHtml1 != sanitizedHtml2){
