@@ -1516,7 +1516,8 @@ const Writter = (props) => {
 
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
 
-        formData.append("html", removedStyleAttribFromImg)
+        formData.append("html_str", removedStyleAttribFromImg)
+        formData.append("name", "name")
 
         console.log(removedStyleAttribFromImg)
 
@@ -1527,9 +1528,10 @@ const Writter = (props) => {
         axios({
             method: "POST",
             // url: "https://apinode.ailaysa.com/docx-generator",
-            url: "https://apinodestaging.ailaysa.com/docx-generator",
+            // url: "https://apinodestaging.ailaysa.com/docx-generator",
             // url: "http://localhost:8000/docx-generator",
             // url: `${Config.BASE_URL}/workspace/docx_convertor/`,
+             url: `${Config.BASE_URL}/workspace/html2docx`,
             data: formData,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },
