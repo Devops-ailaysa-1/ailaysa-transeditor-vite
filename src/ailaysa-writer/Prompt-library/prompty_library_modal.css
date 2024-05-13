@@ -1,0 +1,270 @@
+/* utility class */
+.custom-scroll-bar::-webkit-scrollbar{
+    width: 6px;
+}
+.custom-scroll-bar::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+    outline: 4px solid #F5F5F5;
+}
+.custom-scroll-bar::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background-color: #D9D9D9;
+}
+.custom-scroll-bar::-webkit-scrollbar-thumb:hover{
+    background-color: #c7c6c6;
+}
+/* ======================== */
+
+.prompt-library-modal .rodal-dialog{
+    padding: 24px !important;
+    height: 85dvh !important;
+    width: 85dvw !important;
+    max-width: 1300px;
+    max-height: 750px;
+}
+.prompt-library-wrapper{
+    height: calc(100% - 0px);
+}
+.prompt-library-wrapper .header-close{
+    font-size: 22px;
+}
+.prompt-lib-modal-body {
+    margin-top: 18px;
+    height: calc(100% - 48px);
+}
+.prompt-lib-modal-body .tab-item {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
+    padding: 10px 14px;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+}
+.prompt-lib-modal-body .tab-item.active{
+    color: #0073DF;
+    font-weight: 500;
+    border-bottom: 3px solid #0073DF;
+    background-color: #E8F0FE;
+}
+.prompt-container{
+    height: calc(100% - 47px);
+}
+.prompt-lib-modal-body .prompt-container .left-box {
+    width: 40%;
+    padding-right: 18px;
+    margin-right: 18px;
+    border-right: 1px solid #DFDFDF;
+}
+.prompt-lib-modal-body .prompt-container .right-box {
+    width: 60%;
+}
+.right-box .add-prompt-btn {
+    width: 100%;
+}
+
+.prompt-cards-list {
+    overflow: auto;
+    padding-right: 14px;
+}
+.prompt-cards-list-without-btn {
+    height: calc(100% - 4px);
+}
+.prompt-cards-list-with-btn {
+    height: calc(100% - 50px);
+}
+
+.prompt-container .search-box{
+    border-radius: 4px;
+    border: 1px solid #DBE0E4;
+    padding: 8px 10px;
+    margin-top: 28px;
+    margin-bottom: 18px;
+}
+.prompt-container .search-box .search-input{
+    border: none;
+    margin-left: 8px;
+    width: 100%;
+}
+.domain-capsule-container{
+    overflow: auto;
+}
+.domain-capsule-container::-webkit-scrollbar{
+    display: none;
+}
+.domain-capsule-container .domain-capsule{
+    color: #222;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    border-radius: 22px;
+    background: #D3D8DC80;
+    padding: 3px 12px;
+    box-shadow: 0px 3px 3px 0px rgba(0, 0, 0, 0.02);
+    margin-right: 12px;
+    cursor: pointer;
+}
+.domain-capsule-container .domain-capsule.active{
+    color: #FFFFFF;
+    background: #0073DF;
+}
+.category-list-container{
+    height: calc(100% - 140px);
+    margin-top: 18px;
+}
+.category-list {
+    list-style: none;
+    padding: 0;
+    width: 50%;
+    margin: 0;
+    overflow-x: auto;
+    padding-right: 8px;
+}
+
+.category-list .list-item {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 8px 18px;
+    margin-bottom: 1px;
+}
+.category-list .list-item:hover {
+    background-color: #F3F3F3;
+}
+.category-list .list-item.active{
+    background-color: rgba(0, 115, 223, 0.06);
+    color: #0073DF;
+}
+.sub-category-list{
+    padding-left: 8px;
+}
+
+.right-box .prompt-card {
+    border-radius: 6px;
+    border: 1px solid #DFDFDF;
+    padding: 14px;
+    margin-bottom: 14px;
+}
+.right-box .prompt-card .prompt-text {
+    color: #303030;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+}
+.right-box .prompt-card .prompt-text .prompt-placeholder{
+    color: #1B8EFF;
+}
+.action-btn-wrapper {
+    display: flex;
+    justify-content: end;
+    gap: 15px;
+}
+.action-btn-wrapper .prompt-btn{
+    padding: 9px 18px;
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: normal;
+}
+.action-btn-wrapper .prompt-primary-btn {
+    background-color: #0073DF;
+    color: #FFF;
+}
+.action-btn-wrapper .danger-btn {
+    background-color: #E41E3F;
+    color: #FFF;
+}
+.action-btn-wrapper .simple-btn {
+    color: #3C4043;
+    border: 1px solid #D3D8DC;
+    background-color: #FFF;
+}
+
+.action-btn-wrapper .action-icon{
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #5F6368;
+}
+.action-btn-wrapper .delete-bin-icon:hover{
+    background-color: #fbe6e3;
+    color: #E41E3F !important;
+}
+.action-btn-wrapper .edit-icon:hover{
+    background-color: #F3F3F3;
+}
+
+.swiper-slide { 
+    width: max-content !important;
+}
+.swiper-button-prev {
+    background-image: url(../../assets/images/swiper/swiper-left-arrow.svg) !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    left: 0 !important;
+    background-color: #FFF;
+}
+.swiper-button-next {
+    background-image: url(../../assets/images/swiper/swiper-right-arrow.svg) !important;
+    background-repeat: no-repeat;
+    background-position: center;
+    right: 0 !important;
+    background-color: #FFF;
+}
+.swiper-button-prev.swiper-button-disabled, .swiper-button-next.swiper-button-disabled{
+    opacity: 0 !important;
+}
+.swiper-button-next::after {
+    display: none;
+}
+.swiper-button-prev::after {
+    display: none;
+}
+
+.add-prompt-category-btn.category-btn {
+    margin-right: 14px;
+}
+.add-prompt-category-btn {
+    margin-top: 10px;
+    text-align: left;
+    color: #0073DF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 8px 22px;
+    width: 50%;
+    border: none;
+    background: #FFF;
+    cursor: pointer;
+}
+.add-prompt-category-btn:hover {
+    background-color: #F3F3F3;
+}
+
+
+
+
+
+@media screen and (max-width: 1300px) { 
+    .prompt-lib-modal-body .prompt-container .left-box {
+        width: 45%;
+    }
+    .prompt-lib-modal-body .prompt-container .right-box {
+        width: 55%;
+    }
+}
+
+@media screen and (max-width: 1100px) { 
+    .prompt-lib-modal-body .prompt-container .left-box {
+        width: 50%;
+    }
+    .prompt-lib-modal-body .prompt-container .right-box {
+        width: 50%;
+    }
+}
