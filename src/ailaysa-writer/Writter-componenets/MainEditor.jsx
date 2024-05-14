@@ -1193,9 +1193,9 @@ const MainEditor = (props) => {
                             // console.log(current_text)
                             // console.log(current_node?.classList?.contains('note-editable'))
                             if (e.target.ariaValueText === 'normal') {
-                                // $('.summernote').summernote('formatPara');
+                                $('.summernote').summernote('formatPara');
                                 // const rng = $('.summernote').summernote('editor.getLastRange');
-                                replaceSelectedHeadingWithParagraph()
+                                // replaceSelectedHeadingWithParagraph()
                                 // rng.select()
                                 // $('.summernote').summernote('insertText', '');
     
