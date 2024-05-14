@@ -660,9 +660,9 @@ const MainEditor = (props) => {
             toolbar: [
                 // ['mybutton', ['copy','paste','pasteFormat',]],
                 Config.userState?.internal_member_team_detail?.role !== 'Editor' && ['document', ['newDoc', 'openDoc']],
-                // ['style', ['style']],
+                ['style', ['style']],
                 ['style', ['undo', 'redo']],
-                ['style', ['styleDropdown']],
+                // ['style', ['styleDropdown']],
                 ['style', ['bold', 'italic', 'underline']],
                 ['font', ['superscript', 'subscript']],
                 ['color', ['forecolor']],
