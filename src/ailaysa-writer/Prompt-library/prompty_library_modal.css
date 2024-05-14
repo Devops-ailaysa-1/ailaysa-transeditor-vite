@@ -247,9 +247,30 @@
     background-color: #F3F3F3;
 }
 
+.category-list .list-item-input input {
+    border-radius: 3px;
+    border: 1px solid #0073DF;
+    outline: none;
+    padding: 6px 14px;
+    margin-bottom: 5px;
+} 
 
+.prompt-card .prompt-textarea{
+    border-radius: 3px;
+    outline: none;
+    padding: 6px 14px;
+    width: 100%;
+    border: 1px solid #DFDFDF;
+}
+.prompt-card .prompt-textarea:focus{
+    border: 1px solid #0073DF;
+}
 
-
+.prompt-card.active{
+    border: 1px solid #0073DF;
+    background: #FFF;
+    box-shadow: 0px 1px 8px 1px rgba(0, 115, 223, 0.18);
+}
 
 @media screen and (max-width: 1300px) { 
     .prompt-lib-modal-body .prompt-container .left-box {
