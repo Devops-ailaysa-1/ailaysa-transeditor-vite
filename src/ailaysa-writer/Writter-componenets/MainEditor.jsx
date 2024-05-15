@@ -354,7 +354,7 @@ const MainEditor = (props) => {
                         // });
 
                         const clean = sanitizeHtml(pastedData, {
-                            allowedTags: ['p','h1','h2','h3','h4','h5','h6','a','img','span','li','ul','ol'],
+                            allowedTags: ["div","table", "tbody", "td", "tfoot", "th", "thead", "tr",'b', 'i','p','h1','h2','h3','h4','h5','h6','a','img','span','li','ul','ol'],
                             // allowedAttributes: {
                             //   'p': ["style"],
                             // },
@@ -391,7 +391,7 @@ const MainEditor = (props) => {
                         // var cleanedHTML = tempDiv.innerHTML;
                         // var clean = removeFormElements(removeImgTags(cleanedHTML))
                         // console.log(unwrapDivAndKeepPTags(cleanedHTML))
-                        document.execCommand('insertHTML', false, unwrapDivAndKeepPTags(sanitizedHtmlString));
+                        document.execCommand('insertHTML', false, sanitizedHtmlString);
                         // $('summernote').summernote('pasteHTML', cleanedHTML)
                     // }
                     // if(sanitizedHtml1 != sanitizedHtml2){
