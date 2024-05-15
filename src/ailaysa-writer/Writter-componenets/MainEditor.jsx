@@ -312,7 +312,7 @@ const MainEditor = (props) => {
           }
           div.parentNode.removeChild(div);
         });
-      
+    
         // Get the innerHTML of the temporary element which now contains only p tags
         const resultHTML = tempElement.innerHTML;
       
