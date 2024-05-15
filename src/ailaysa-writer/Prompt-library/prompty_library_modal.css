@@ -272,6 +272,10 @@
     box-shadow: 0px 1px 8px 1px rgba(0, 115, 223, 0.18);
 }
 
+.highlight-prompt-placeholder{
+    color: #0073DF;
+}
+
 @media screen and (max-width: 1300px) { 
     .prompt-lib-modal-body .prompt-container .left-box {
         width: 45%;

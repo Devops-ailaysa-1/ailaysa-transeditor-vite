@@ -76,15 +76,15 @@ export const PromptLibraryModal = () => {
     let promptCardsListInit = [
         {
             id: 1,
-            label: `Create a detailed profile for your character. Include details such as <span className="prompt-placeholder">[Name]</span>, <span className="prompt-placeholder">[Age]</span>, <span className="prompt-placeholder">[Occupation]</span>, <span className="prompt-placeholder">[Personality Traits]</span>, <span className="prompt-placeholder">[Background]</span>, and <span className="prompt-placeholder">[Goals]</span>.`
+            label: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
         },
         {
             id: 2,
-            label: `Create a detailed profile for your character. Include details such as <span className="prompt-placeholder">[Name]</span>, <span className="prompt-placeholder">[Age]</span>, <span className="prompt-placeholder">[Occupation]</span>, <span className="prompt-placeholder">[Personality Traits]</span>, <span className="prompt-placeholder">[Background]</span>, and <span className="prompt-placeholder">[Goals]</span>.`
+            label: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
         },
         {
             id: 3,
-            label: `Create a detailed profile for your character. Include details such as <span className="prompt-placeholder">[Name]</span>, <span className="prompt-placeholder">[Age]</span>, <span className="prompt-placeholder">[Occupation]</span>, <span className="prompt-placeholder">[Personality Traits]</span>, <span className="prompt-placeholder">[Background]</span>, and <span className="prompt-placeholder">[Goals]</span>.`
+            label: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
         },
     ]
 
@@ -183,7 +183,7 @@ export const PromptLibraryModal = () => {
                 ) : (
                     <p className="prompt-text">
                         {prompt}
-                        {/* Create a detailed profile for your character. Include details such as <span className="prompt-placeholder">[Name]</span>, <span className="prompt-placeholder">[Age]</span>, <span className="prompt-placeholder">[Occupation]</span>, <span className="prompt-placeholder">[Personality Traits]</span>, <span className="prompt-placeholder">[Background]</span>, and <span className="prompt-placeholder">[Goals]</span>. */}
+                        {/* Create a detailed profile for your character. Include details such as [Name]</span>, <span className="prompt-placeholder">[Age]</span>, <span className="prompt-placeholder">[Occupation]</span>, <span className="prompt-placeholder">[Personality Traits]</span>, <span className="prompt-placeholder">[Background]</span>, and <span className="prompt-placeholder">[Goals]</span>. */}
                     </p>
                 )}
                 <div className="action-btn-wrapper items-center">
@@ -313,7 +313,13 @@ export const PromptLibraryModal = () => {
         setPromptCardsList(closePromptEdit)
     }
 
-
+    const styleTextWithinBrackets = (text) => {
+        // Regular expression to match text within square brackets, including the brackets
+        const regex = /(\[[^\]]+\])/g;
+        // Replace text within brackets with styled span elements
+        const styledText = text.replace(regex, '<span class="highlight-prompt-placeholder">$1</span>');
+        return styledText;
+    };
 
 
     return (
@@ -456,8 +462,8 @@ export const PromptLibraryModal = () => {
                                                         value={prompt}
                                                     ></textarea>
                                                 ) : (
-                                                    <p className="prompt-text">
-                                                        {each.label}
+                                                    <p className="prompt-text" dangerouslySetInnerHTML={{__html: styleTextWithinBrackets(each.label)}}>
+                                                        {/* {each.label} */}
                                                         {/* Create a detailed profile for your character. Include details such as <span className="prompt-placeholder">[Name]</span>, <span className="prompt-placeholder">[Age]</span>, <span className="prompt-placeholder">[Occupation]</span>, <span className="prompt-placeholder">[Personality Traits]</span>, <span className="prompt-placeholder">[Background]</span>, and <span className="prompt-placeholder">[Goals]</span>. */}
                                                     </p>
                                                 )}
