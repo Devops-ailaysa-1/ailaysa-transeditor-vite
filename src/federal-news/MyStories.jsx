@@ -719,11 +719,11 @@ function MyStories(props) {
             icon: <DeleteIcon style="delete" />,
             label: t("delete"),
         },
-        {
-            id: 3,
-            icon: <ReceiptLongOutlinedIcon />,
-            label: t("view_po"),
-        }
+        // {
+        //     id: 3,
+        //     icon: <ReceiptLongOutlinedIcon />,
+        //     label: t("view_po"),
+        // }
     ]
 
     const moreOptionsForPDF = [
@@ -1473,12 +1473,8 @@ function MyStories(props) {
                 // console.log(createdProjectsList?.find(each => each?.id == id))
                 if(!createdProjectsList?.find(each => each?.id == id) && !isProjectListEmptyRef.current) {
                     listProjects()
-                }else{
+                }else if(!isProjectListEmptyRef.current){
                     let selectedRow = document.querySelector(`div[data-key='${id}']`)
-                    // selectedRow?.scrollIntoView({
-                    //     behavior: 'smooth',
-                    //     block: 'center',
-                    // });
                     setSelectFileRow(true)
                     selectProjectById(id)
                 }
