@@ -1188,18 +1188,34 @@ const ChapterPanel = (props) => {
         var myHeaders = new Headers();
         var formdata = new FormData();
 
-        formdata.append("html", removedStyleAttribFromImg);
+        let userCacheData = JSON.parse(
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
+        );
 
+        let token = userCacheData != null ? userCacheData?.token : "";
+
+        let headers = {
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`
+        };
+
+        // formdata.append("html", removedStyleAttribFromImg);
+        formdata.append("html_str", removedStyleAttribFromImg)
+        formdata.append("name", "name")
+        
         var requestOptions = {
             method: 'POST',
             body: formdata,
-            headers: myHeaders,
+            headers: headers,
             redirect: 'follow'
         };
        
 
         try{
-            let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
+            // let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
+            let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions)
+          
             if (data.status === 200) {
                 let response = await data.blob()
     
