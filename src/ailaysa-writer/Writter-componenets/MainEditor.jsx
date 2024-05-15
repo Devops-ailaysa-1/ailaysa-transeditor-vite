@@ -374,12 +374,12 @@ const MainEditor = (props) => {
 
                           const allowedDomain = 'https://aidev4.ailaysa.com';
                             const parser = new DOMParser();
-                            const doc = parser.parseFromString(clean, 'text/html');
-                            const images = doc.querySelectorAll('img');
+                            const doc = parser?.parseFromString(clean, 'text/html');
+                            const images = doc?.querySelectorAll('img');
 
                             images.forEach(img => {
                             const src = img.getAttribute('src');
-                            if (!src.startsWith(allowedDomain)) {
+                            if (!src?.startsWith(allowedDomain)) {
                                 img.remove();
                             }
                             });
