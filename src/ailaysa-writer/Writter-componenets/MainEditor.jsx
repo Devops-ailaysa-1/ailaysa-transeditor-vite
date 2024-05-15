@@ -354,7 +354,7 @@ const MainEditor = (props) => {
                         // });
 
                         const clean = sanitizeHtml(pastedData, {
-                            allowedTags: ['p','h1','h2','h3','h4','h5','h6','a','img'],
+                            allowedTags: ['p','h1','h2','h3','h4','h5','h6','a','img','span','li','ul','ol'],
                             // allowedAttributes: {
                             //   'p': ["style"],
                             // },
