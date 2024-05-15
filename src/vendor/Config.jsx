@@ -491,7 +491,7 @@ const Config = {
         // Create the formatted date string
         const formattedDate = `${year}-${month}-${day}`;
 
-        console.log(formattedDate);
+        // console.log(formattedDate);
         return formattedDate
     },
 
