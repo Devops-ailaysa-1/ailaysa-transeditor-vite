@@ -401,9 +401,9 @@ const ChapterPanel = (props) => {
         
        
         let final = ''
+        let html = convert.render(text)
+        
         if(isContentGenerateRef.current){
-
-            let html = convert.render(text)
             // let final = html.replace(/(?:\r\n|\r|\n)/g, '<p><br></p>');
             final = html.replace(/(<li>[^]*?<\/li>)|(\r\n|\r|\n)/g, (match, liTag, lineBreak) => {
                 if (liTag) {
@@ -414,7 +414,7 @@ const ChapterPanel = (props) => {
             });
             // console.log(final)
         }else{
-            final = text
+            final = html
         }
 
         $('.summernote').summernote('code', final)
