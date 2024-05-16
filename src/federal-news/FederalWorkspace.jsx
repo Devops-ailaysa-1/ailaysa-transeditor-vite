@@ -13,7 +13,6 @@ import Draggable from "react-draggable";
 import Tooltip from '@mui/material/Tooltip';
 // import { makeStyles } from '@mui/styles';
 import ButtonBase from '@mui/material/ButtonBase';
-// import AutosizeInput from "react-input-autosize";
 // import { TransliterationProvider } from "../vendor/google-input-tools/transliteration-provider";
 // import "../vendor/google-input-tools/styles/style.scss"
 import Cookies from "js-cookie";
@@ -899,7 +898,7 @@ const FederalWorkspace = (props) => {
     // });
 
     useEffect(() => {
-        if (didMount) setDocumentId(props.match.params.documentId);
+        if (didMount) setDocumentId(params.documentId);
     }, [window.location.pathname, window.location.search]); // Wheever the url and query param changes
 
     // useEffect(() => {
@@ -3557,39 +3556,7 @@ const FederalWorkspace = (props) => {
 
     /* Pagination content data generate */
     const paginationContentFunction = (page = 1) => {
-        // page = page == 0 ? 1 : page;
-        // page = parseInt(page);
-        // let content = [];
-        // if (totalPages != 0) {
-        //     // let findParams = "";
-        //     // if (findStatus.length) findParams += "&status=" + findStatus.toString();
-        //     let url = "/workspace/" + documentId + "?page=";
-        //     /*Pagination logic starts*/
-        //     if (page > 1)
-        //         content.push(
-        //             <span key={"prev" + currentPage} className="back-btn" onClick={() => { storeLastVisitedPageNumber(url + (page - 1)); pageSelect(page - 1) }}>
-        //                 {" "}
-        //                 <i className="fas fa-chevron-left"></i>{" "}
-        //             </span>
-        //         );
-        //     content.push(
-        //         <React.Fragment key={currentPage}>
-        //             <AutosizeInput type="number" defaultValue={currentPage} onChange={(e) => debouncePageNumber(e, url)} />
-        //             {t("of") + " " + Math.ceil(totalPages) + " " + t("pages")}
-        //         </React.Fragment>
-        //     );
-        //     if (page < totalPages)
-        //         content.push(
-        //             <span key={"next" + currentPage} className="forw-btn" onClick={() => { storeLastVisitedPageNumber(url + (page + 1)); pageSelect(page + 1) }}>
-        //                 {" "}
-        //                 <i className="fas fa-chevron-right"></i>{" "}
-        //             </span>
-        //         );
-        //     /*Pagination logic ends*/
-        // }
-        // setTimeout(() => {
-        //     setPaginationContent(content);
-        // }, 100);
+        
     };
 
     /* Handling page number enter */
@@ -5994,7 +5961,7 @@ const FederalWorkspace = (props) => {
                                                                                     style={targetLanguageFontSize != null ? { fontSize: targetLanguageFontSize } : {}}
                                                                                     spellCheck="false"
                                                                                     suppressContentEditableWarning={true}
-                                                                                    dangerouslySetInnerHTML={{ __html: sanitizeHtml(translation.target) }}
+                                                                                    dangerouslySetInnerHTML={{ __html: translation.target }}
                                                                                 ></div> 
                                                                            )}
                                                                         </div>

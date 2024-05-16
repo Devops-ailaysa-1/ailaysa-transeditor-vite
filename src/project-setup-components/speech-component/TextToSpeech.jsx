@@ -475,68 +475,6 @@ const TextToSpeech = (props) => {
         setSelectedVoiceValue(selected)
     }
 
-    // useEffect(() => {
-    //   console.log(dictationInput);
-    // }, [dictationInput])
-
-
-    // const AiMarkSubmit = withStyles((theme) => ({
-    //     root: {
-    //       backgroundColor: "#0078D4",
-    //       boxShadow: "none",
-    //       borderRadius: "3px",
-    //       textTransform: "none",
-    //       height: "40px",
-    //       padding: 0,
-    //       "&:hover": {
-    //         backgroundColor: "#0069B9",
-    //         boxShadow: "none",
-    //       },
-    //       "&:disabled": {
-    //         opacity: "0.6",
-    //       },
-    //     },
-    // }))(Button);
-
-    //   const AiMarkCancel = withStyles((theme) => ({
-    //     root: {
-    //       backgroundColor: "#ffffff",
-    //       boxShadow: "none",
-    //       borderRadius: "4px",
-    //       border: "1px solid #DADCE0",
-    //       textTransform: "none",
-    //       height: "40px",
-    //       padding: 0,
-    //       "&:hover": {
-    //         boxShadow: "none",
-    //         height: "40px",
-    //       },
-    //       "&:focus": {
-    //         border: "1px solid #0078D4",
-    //         height: "40px",
-    //       },
-    //     },
-    // }))(Button);
-
-    //   const TranslationFlowButton = withStyles((theme) => ({
-    //     root: {
-    //       backgroundColor: "#ffffff",
-    //       boxShadow: "none",
-    //       borderRadius: "3px",
-    //       border: "1px solid #0078D480",
-    //       fontFamily: "Roboto",
-    //       fontWeight: "500",
-    //       fontSize: "15px",
-    //       lineHeight: "20px",
-    //       color: "#0078D4",
-    //       textTransform: "none",
-    //       padding: '4.5px 10px 5.5px 8px',
-    //       "&:hover": {
-    //         border: "1px solid #0078D4",
-    //         background: 'none',
-    //       },
-    //     },
-    // }))(Button);
 
     // Initial Api calls
     useEffect(() => {
@@ -605,17 +543,6 @@ const TextToSpeech = (props) => {
 
 
     const hideSettingsModal = () => setshowSettings(false);
-
-    const Option = (props) => {
-        return (
-            <div>
-                <components.Option {...props} className="step-options-list">
-                    <input className="step-options-list-checkbox" type="checkbox" checked={props.isSelected} onChange={() => null} />
-                    <label className="step-options-list-label">{props.label}</label>
-                </components.Option>
-            </div>
-        );
-    };
 
     const DropdownIndicator = (props) => {
         return (
@@ -750,6 +677,14 @@ const TextToSpeech = (props) => {
         }
     }, [location.state])
 
+    // auto detect language when content is typed or pasted in textarea
+    useEffect(() => {
+        if(translateSrcContent?.trim() !== ''){
+            Config.debounceApiCalls(() => detectSourceLanguage())
+        }
+    }, [translateSrcContent])
+    
+
     // handler for steps selection
     const handleSelectedSteps = (selected) => {
         setSelectedSteps(selected);
@@ -825,11 +760,6 @@ const TextToSpeech = (props) => {
     const deleteEditFile = (e, canDelete = false, editFileId) => {
         // console.log(editFileId)
         if (canDelete) {
-            /* Config.axios({
-                        url: `${Config.BASE_URL}/workspace/project/quick/setup/${editProjectId}/?file_delete_ids=${editFileId}`,
-                        method: 'PUT',
-                        auth: true,
-                        success: (response) => {*/
             let editFilesTemp = editFiles;
             let deleteValue = editFiles.find((element) => element.id == editFileId);
             setEditFiles(Config.removeItemFromArray(editFilesTemp, deleteValue));
@@ -902,8 +832,6 @@ const TextToSpeech = (props) => {
         // console.log(a)
         let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
         setTargetLangListToRemove(targetLangToRemove);
-        console.log(targetLangToRemove)
-        console.log(targetLanguage)
     }, [targetLanguage]);
 
     // useEffect(() => {
@@ -971,20 +899,6 @@ const TextToSpeech = (props) => {
         setSelectedProjectFiles(newArr)
     }
 
-    // useEffect(() => {
-    //     console.log(taskID)
-    //   if(audioGender !== null){
-    //     const newArr = selectedProjectFiles?.map(obj => {
-    //         if (obj.id === taskID) {
-    //           return {...obj, voice_gender: audioGender?.label};
-    //         }
-    //         return obj;
-    //     });
-    //     console.log(newArr)
-    //     setSelectedProjectFiles(newArr)
-    //   }
-    // }, [audioGender])
-
 
     useEffect(() => {
         if (localeOptions?.length !== 0) {
@@ -994,14 +908,6 @@ const TextToSpeech = (props) => {
             setAudioGender(genderOptions[0])
         }
     }, [localeOptions, genderOptions])
-
-    // useEffect(() => {
-    //   console.log(audioGender)
-    // }, [audioGender])
-
-    // useEffect(() => {
-    //   console.log(voiceType)
-    // }, [voiceType])
 
 
     useEffect(() => {
@@ -1032,12 +938,7 @@ const TextToSpeech = (props) => {
             const filteredVoiceType = filteredRes?.reduce((a, item) => (
                 Object.assign(a, { [item?.voice_type]: item })
             ), {})
-            // console.log(filteredVoiceType)
-
-            // set voice-type as Neural(1st priority) then Standard(2nd priority) and then Wavenet(3rd priority)
-            // if(filteredVoiceType?.Neural2 !== undefined){
-            //     setVoiceType(filteredVoiceType?.Neural2?.voice_name)
-            // }else 
+           
             if (filteredVoiceType?.Wavenet !== undefined) {
                 setVoiceType(filteredVoiceType?.Wavenet?.voice_name)
             } else if (filteredVoiceType?.Standard !== undefined) {
@@ -1046,9 +947,6 @@ const TextToSpeech = (props) => {
         }
     }, [audioLocale, audioGender])
 
-    // useEffect(() => {
-    //   console.log(voiceType)
-    // }, [voiceType])
 
 
     // ============= Voice option selection logic ends =============
@@ -1144,17 +1042,6 @@ const TextToSpeech = (props) => {
 
     const handleProjectNamechange = (e) => {
         setProjectName(e.target.innerText);
-        // if(projectName == ""){
-        //     setValidationState({
-        //         ...validationState,
-        //         projectName: true
-        //     })
-        // }else{
-        //     setValidationState({
-        //         ...validationState,
-        //         projectName: false
-        //     })
-        // }
     };
 
     const handleHideIcon = () => {
@@ -1183,11 +1070,7 @@ const TextToSpeech = (props) => {
 
     /* File upload drag and drop handling */
     const handleDrop = (filesTemp) => {
-        // console.log(filesTemp[0]);
-        // if(filesTemp[0].name.length>=201){
-        //     Config.toast('Filename value too long for type character varying(200)', "error");
-        //     return
-        //  }
+       
         for (let i = 0; i < (filesTemp).length; i++) {
             if (filesTemp[i].name.length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
@@ -1485,13 +1368,6 @@ const TextToSpeech = (props) => {
         });
     };
 
-    // useEffect(() => {
-    //   console.log(validationState);
-    // }, [validationState])
-
-    // useEffect(() => {
-    //   console.log(voiceType);
-    // }, [voiceType])
     useEffect(() => {
         if (mtEnable === false) {
             setPreTranslate(false)
@@ -1515,16 +1391,7 @@ const TextToSpeech = (props) => {
             setHasFocus(true);
             return false
         }
-        // if(projectName === ""){
-        //     setValidationState({
-        //         ...validationState,
-        //         projectName: true
-        //     })
-        //     contentprojectNameRef.current.scrollIntoView()
-        //     contentprojectNameRef.current.focus();
-        //     setHasFocus(true);
-        //     return false
-        // }
+      
         if (translateSrcContent.trim() === "" && textToSpeechSwitch === 1) {
             setValidationState({
                 ...validationState,
@@ -1634,10 +1501,6 @@ const TextToSpeech = (props) => {
 
         if (target === 'project') setClickedOpenButton(true)
 
-        // console.log(ID);
-        // console.log(target);
-        // console.log(voiceGender);
-        // console.log(voiceLocale);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/convert_text_to_speech_source/?${target === 'task' ? "task=" + ID : ''}${target === 'project' ? "project=" + ID : ''}${voiceGender !== null ? "&gender=" + voiceGender?.label?.toUpperCase() : ''}${voiceLocale !== null ? "&language_locale=" + voiceLocale?.label : ''}${voiceType !== null ? "&voice_name=" + voiceType : ''}`,
             auth: true,
@@ -1649,7 +1512,7 @@ const TextToSpeech = (props) => {
                         if (obj.id === ID) {
                             return {
                                 ...obj,
-                                audio_file_url: response.data?.source_audio_file,
+                                audio_file_url: Config.BASE_URL + response.data?.source_audio_file,
                             };
                         }
                         return obj;
@@ -1660,7 +1523,7 @@ const TextToSpeech = (props) => {
                 if (target === 'project') {
                     const newArr = selectedProjectFiles?.map(obj => {
                         if (obj.id == response.data?.find(each => each?.task == obj.id)?.task) {
-                            return { ...obj, audio_file_url: response.data?.find(each => each?.task == obj.id)?.source_audio_file };
+                            return { ...obj, audio_file_url: Config.BASE_URL + response.data?.find(each => each?.task == obj.id)?.source_audio_file };
                         }
                         return obj;
                     });
@@ -1697,9 +1560,6 @@ const TextToSpeech = (props) => {
                                 convertSourceFileToAudioFile(projectId, 'project', audioGender, audioLocale)
                             }, 8000);
                         }
-                        // setShowProcessingModal(true)
-                        // setIsConversionGoing(true)
-                        // setAnimate(null)
 
                     }
                 } else {
@@ -1732,31 +1592,32 @@ const TextToSpeech = (props) => {
     useEffect(() => {
         // console.log(sliderPercentage)
         const slider = document.getElementById(currentSlider);
-        const temp = document.getElementById(currentSlider);
         if (slider !== undefined) {
             try {
+                console.log(sliderPercentage)
                 slider.value = sliderPercentage
             } catch (e) {
-                // console.log(e)
+                console.log(e)
             }
         }
         let thumb = document.getElementById(currentThumb);
         const sliderRangeWidth = slider?.getBoundingClientRect()?.width
         const thumbWidth = thumb?.getBoundingClientRect()?.width
-        const centerThumb = (thumbWidth / 100) * sliderPercentage * -1
+        const centerThumb = (thumbWidth / 100) * sliderPercentage * - 1
         const centerProgressBar = thumbWidth + sliderRangeWidth / 100 * sliderPercentage - (thumbWidth / 100 * sliderPercentage)
         try {
             thumb.style.left = `${sliderPercentage}%`
             thumb.style.marginLeft = `${centerThumb}px`
         } catch (e) {
-            // console.log(e)
+            console.log(e)
         }
 
         let progressBar = document.getElementById(bar)
         try {
+            console.log(progressBar)
             progressBar.style.width = `${centerProgressBar}px`
         } catch (e) {
-            // console.log(e)
+            console.log(e)
         }
     }, [sliderPercentage])
 
@@ -1790,10 +1651,14 @@ const TextToSpeech = (props) => {
 
     const getDurationTime = (e, id, blob, currentDurationId) => {
         let audio = document.getElementById(id)
-        getBlobDuration(blob).then(function (duration) {
-            document.getElementById(currentDurationId).innerHTML = secondsToHms(duration)
-            audio = Math.floor(duration);
-        });
+        try{
+            getBlobDuration(blob).then(function (duration) {
+                document.getElementById(currentDurationId).innerHTML = secondsToHms(duration)
+                audio = Math.floor(duration);
+            });
+        }catch(e) {
+            console.log(e)
+        }
     }
 
     useEffect(() => {
@@ -1801,9 +1666,7 @@ const TextToSpeech = (props) => {
             // console.log(totDuration)
             const sliderPercent = ((currentAudioTime / totDuration) * 100).toFixed(2)
             const audioTime = currentAudioTime
-            // console.log(currentAudioTime)
-            // console.log(sliderPercent)
-
+          
             setSliderPercentage(+sliderPercent)
             document.getElementById(currentTimeText).innerHTML = secondsToHms(audioTime?.toFixed(2))
         }
@@ -1848,9 +1711,6 @@ const TextToSpeech = (props) => {
         }
     }
 
-    const openProjectUpdate = () => {
-        window.location.href = window.location.origin + "/create/speech/text-to-speech?get-project-info=" + projectId + "&type=4"
-    }
 
     useEffect(() => {
         if (dictationInput !== "") {
@@ -1980,6 +1840,22 @@ const TextToSpeech = (props) => {
             if (sourceLangRef.current !== null) sourceLangRef.current.style = 'border: 1px solid #ced4da;'
         }, 1000);
     }
+
+    const detectSourceLanguage = () => {
+        if(translateSrcContent?.trim() !== ""){
+            Config.axios({
+                url: Config.BASE_URL + "/auth/lang_detect/?text=" + translateSrcContent.split(' ').splice(0, 10).join(" "),
+                auth: true,
+                success: (response) => {
+                    setSourceLanguage(response.data?.lang_id)
+                    setSourceLabel(response.data?.language)
+                },
+                error: (err) => {
+                    // setAutoDetectIndication(false)
+                }
+            });
+        }
+    } 
 
 
 
@@ -2482,91 +2358,82 @@ const TextToSpeech = (props) => {
                                             setTranslationByPage={setTranslationByPage}
                                         />}
                                     </div>
-                                    <div className="new-btn-grp">
-                                        {flowSwitch === 2 &&
-                                            <div className="action-btns">
-                                                {showBtnLoader ? (
-                                                    <button className="speech-to-text-UploadProjectButton">
-                                                        <span className="trans-btn-txt">
-                                                            <ButtonLoader />
-                                                            {!isEdit ? t("creating") : t("updating")}
+                                    <div className="d-flex justify-between">
+                                        {isEdit && (
+                                            <button
+                                                className="glossaryglobalform-StepCancelButton"
+                                                onClick={() => history(-1)}
+                                            >
+                                                <span className="prev-btn">
+                                                    {t("cancel")}
+                                                </span>
+                                            </button>
+                                        )}
+                                        <div className="new-btn-grp">
+                                            {flowSwitch === 2 &&
+                                                <div className="action-btns">
+                                                    {showBtnLoader ? (
+                                                        <button className="speech-to-text-UploadProjectButton">
+                                                            <span className="trans-btn-txt">
+                                                                <ButtonLoader />
+                                                                {!isEdit ? t("creating") : t("updating")}
+                                                            </span>
+                                                        </button>
+                                                    ) : (
+                                                        <button className="speech-to-text-UploadProjectButton" disabled={textToSpeechSwitch === 3 && !browserSupportsSpeechRecognition} onMouseUp={() => isValidate('translate') && (!isEdit ? createTextToSpeechProject('translate') : updateTextToSpeechProject('translate'))}>
+                                                            <span className="trans-btn-txt">
+                                                                {!isEdit ? t("translate_or_download") : t("update")}
+                                                                <span>
+                                                                    <i className="fas fa-arrow-right"></i>
+                                                                </span>
+                                                            </span>
+                                                        </button>
+                                                    )
+                                                    }
+                                                    {isEdit && <div
+                                                        onClick={() => setShowDeleteConfirmationModal(true)}
+                                                        className="edit-delete-btn"
+                                                    >
+                                                        <ButtonBase>
+                                                            <div className="edit-delete-btn-cont">
+                                                                <div className="delete-icon"></div>
+                                                                {t("delete_project")}
+                                                            </div>
+                                                        </ButtonBase>
+                                                    </div>}
+                                                </div>
+                                            }
+                                            {(!isEdit && flowSwitch == 1) &&
+                                                <>
+                                                    <button className="speech-to-text-UploadProjectButton-process" disabled={textToSpeechSwitch === 3 && !browserSupportsSpeechRecognition} onMouseUp={() => isValidate('download') && createTextToSpeechProject('download')}>
+                                                        
+                                                        
+                                                        {showBtnLoader ? (<span className="trans-btn-txt trans-btn-gap">
+                                                        <span className="save-btn-spinner">
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
+                                                            <div></div>
                                                         </span>
-                                                    </button>
-                                                ) : (
-                                                    <button className="speech-to-text-UploadProjectButton" disabled={textToSpeechSwitch === 3 && !browserSupportsSpeechRecognition} onMouseUp={() => isValidate('translate') && (!isEdit ? createTextToSpeechProject('translate') : updateTextToSpeechProject('translate'))}>
-                                                        <span className="trans-btn-txt">
-                                                            {!isEdit ? t("translate_or_download") : t("update")}
+                                                        {t("processing")}
+                                                        </span>) :(<span className="trans-btn-txt">
+                                                            {t("process")}
                                                             <span>
                                                                 <i className="fas fa-arrow-right"></i>
                                                             </span>
-                                                        </span>
+                                                        </span>)}
                                                     </button>
-                                                )
-                                                }
-                                                {isEdit && <div
-                                                    onClick={() => setShowDeleteConfirmationModal(true)}
-                                                    className="edit-delete-btn"
-                                                >
-                                                    <ButtonBase>
-                                                        <div className="edit-delete-btn-cont">
-                                                            <div className="delete-icon"></div>
-                                                            {t("delete_project")}
-                                                        </div>
-                                                    </ButtonBase>
-                                                </div>}
-                                            </div>
-                                        }
-                                        {(!isEdit && flowSwitch == 1) &&
-                                            <>
-                                                <button className="speech-to-text-UploadProjectButton-process" disabled={textToSpeechSwitch === 3 && !browserSupportsSpeechRecognition} onMouseUp={() => isValidate('download') && createTextToSpeechProject('download')}>
-                                                    
-                                                    
-                                                    {showBtnLoader ? (<span className="trans-btn-txt trans-btn-gap">
-                                                    <span className="save-btn-spinner">
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                        <div></div>
-                                                    </span>
-                                                    {t("processing")}
-                                                    </span>) :(<span className="trans-btn-txt">
-                                                        {t("process")}
-                                                        <span>
-                                                            <i className="fas fa-arrow-right"></i>
-                                                        </span>
-                                                    </span>)}
-                                                </button>
-                                            </>
-                                        }
-                                        {/* {!isEdit && <GoBackButton onClick={() => {setTextToSpeechGlbSwitch(1); setTextToSpeechSwitch(1)}}>
-                                    <span className="prev-btn">
-                                        <span className="prev-icon-align">
-                                            <i className="fas fa-arrow-left"></i>
-                                        </span>{" "}
-                                        Go back
-                                    </span>
-                                </GoBackButton>} */}
-                                        {/* {editProjectId && (
-                                    <div
-                                        onClick={() => setShowDeleteConfirmationModal(true)}
-                                        className="edit-delete-btn"
-                                    >
-                                        <ButtonBase>
-                                        <div className="edit-delete-btn-cont">
-                                            <div className="delete-icon"></div>Delete
-                                            project
+                                                </>
+                                            }
                                         </div>
-                                        </ButtonBase>
-                                    </div>
-                                )} */}
                                     </div>
                                 </div>)}
                             {textToSpeechSwitch == 2 &&
@@ -2683,7 +2550,7 @@ const TextToSpeech = (props) => {
                                                                             // value={sliderPercentage}
                                                                             ref={sliderRangeRef}
                                                                             step="0.01"
-                                                                            onChange={(e) => handleSlider(Config.BASE_URL + `${item?.audio_file_url}`, item?.id, e, `audio-slider-${index}`, `audio-thumb-${index}`, `bar-${index}`, `audio-play-pause-${index}`)}
+                                                                            onChange={(e) => handleSlider(`${item?.audio_file_url}`, item?.id, e, `audio-slider-${index}`, `audio-thumb-${index}`, `bar-${index}`, `audio-play-pause-${index}`)}
                                                                             className="slider-range"
                                                                         />
                                                                     </div>
@@ -2694,12 +2561,12 @@ const TextToSpeech = (props) => {
                                                                     id={item?.id}
                                                                     preload="auto"
                                                                     className={`player-${index}`}
-                                                                    onLoadedData={(e) => getDurationTime(e, item?.id, Config.BASE_URL + `${item?.audio_file_url}`, `audio-duration-Time-${index}`)}
-                                                                    onTimeUpdate={(e) => getCurrentDuration(e, item?.id, Config.BASE_URL + `${item?.audio_file_url}`, `audio-currentTime-${index}`)}
+                                                                    onLoadedData={(e) => getDurationTime(e, item?.id,  `${item?.audio_file_url}`, `audio-duration-Time-${index}`)}
+                                                                    onTimeUpdate={(e) => getCurrentDuration(e, item?.id,  `${item?.audio_file_url}`, `audio-currentTime-${index}`)}
                                                                     onEnded={(e) => { setPlay(false); }}
                                                                     onPlay={(e) => { sliderPercentage == 100 && setSliderPercentage(0) }}
                                                                 >
-                                                                    <source src={Config.BASE_URL + `${item?.audio_file_url}`} type="audio/mp3" />
+                                                                    <source src={ `${item?.audio_file_url}`} type="audio/mp3" />
                                                                 </audio>
                                                             </div>
                                                         }
@@ -2758,7 +2625,7 @@ const TextToSpeech = (props) => {
                                 <div className="ts-bottom-top-area-box">
                                     <div className="source-lang-select-wrap">
                                         <span className="label">{t("source_language")}:</span>
-                                        <span className="selected-src">{selectedProjectFiles?.length !== 0 && targetLanguageOptionRef.current.find(each => each.id == selectedProjectFiles[0]?.source_language)?.language}</span>
+                                        <span className="selected-src">{selectedProjectFiles?.length !== 0 && targetLanguageOptionRef.current?.find(each => each.id == selectedProjectFiles[0]?.source_language)?.language}</span>
                                         <a href={hiddenLinkUrl} download={downloadedFileName.current} className="hidden" ref={downloadref} />
                                     </div>
                                     <div className="audio-file-download-wrap">

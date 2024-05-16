@@ -294,8 +294,9 @@ function Navbar(props) {
             window.location.pathname.includes("designs") ||
             window.location.pathname.includes("transcriptions") ||
             window.location.pathname.includes("ai-voices") ||
-            window.location.pathname.includes("assets") ||
-            window.location.pathname.includes("toolkit")) {
+            (window.location.pathname.includes("assets") && !window.location.pathname.includes('all-templates/assets')) ||
+            (window.location.pathname.includes("toolkit") && !window.location.pathname.includes('all-templates/toolkit'))
+        ) {
                 setMyProjectsSelected(true)
         }
         else if(window.location.pathname.includes("all-stories") ||
@@ -1035,7 +1036,6 @@ function Navbar(props) {
                             />
                         </Link>
                         <div
-                            // onClick={()=> {(props.prevPageInfo?.fromProjectList) ? history(`/file-upload?page=${props.prevPageInfo?.pageNo}&order_by=${props.prevPageInfo?.orderBy}${(props.prevPageInfo?.projectTypeFilter !== 'all' && props.prevPageInfo?.projectTypeFilter != null) ? `&filter=${props.prevPageInfo?.projectTypeFilter}` : ""}${props.prevPageInfo?.search != null ? `&search=${props.prevPageInfo?.search}` : ""}&open-project=${props.prevPageInfo?.projectId}`) : history.goBack()}}
                             onClick={() => props.prevPathRef.current ? history(props.prevPathRef.current) : history('/file-upload?page=1')}
                             className={props.isWhite ? "navbar-display-show" : "navbar-display-hide"}
                         >
@@ -1330,18 +1330,22 @@ function Navbar(props) {
                                                                             </MenuItem>
                                                                         )
                                                                     }
-                                                                    <MenuItem className={"menu-list-item " + (animateDownloding === 'SOURCE' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "SOURCE")}>
-                                                                        {t("source_file")}
-                                                                        {animateDownloding === 'SOURCE' && <DownloadAnimation />}
-                                                                    </MenuItem>
-                                                                    <MenuItem className={"menu-list-item " + (animateDownloding === 'TMX' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "TMX")}>
-                                                                        TMX
-                                                                        {animateDownloding === 'TMX' && <DownloadAnimation />}
-                                                                    </MenuItem>
-                                                                    <MenuItem className={"menu-list-item " + (animateDownloding === 'XLIFF' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "XLIFF")}>
-                                                                        XLIFF
-                                                                        {animateDownloding === 'XLIFF' && <DownloadAnimation />}
-                                                                    </MenuItem>
+                                                                    {!props?.prevPathRef?.current?.includes('my-stories') && (
+                                                                        <>
+                                                                            <MenuItem className={"menu-list-item " + (animateDownloding === 'SOURCE' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "SOURCE")}>
+                                                                                {t("source_file")}
+                                                                                {animateDownloding === 'SOURCE' && <DownloadAnimation />}
+                                                                            </MenuItem>
+                                                                            <MenuItem className={"menu-list-item " + (animateDownloding === 'TMX' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "TMX")}>
+                                                                                TMX
+                                                                                {animateDownloding === 'TMX' && <DownloadAnimation />}
+                                                                            </MenuItem>
+                                                                            <MenuItem className={"menu-list-item " + (animateDownloding === 'XLIFF' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "XLIFF")}>
+                                                                                XLIFF
+                                                                                {animateDownloding === 'XLIFF' && <DownloadAnimation />}
+                                                                            </MenuItem>
+                                                                        </>
+                                                                    )}
                                                                 </MenuList>
                                                             </ClickAwayListener>
                                                         </Paper>
@@ -1379,7 +1383,7 @@ function Navbar(props) {
                                                 <a target="_blank" href="https://knowledgebase.ailaysa.com/article-categories/transeditor-pe/">Knowledge base</a>
                                             </li> */}
                                                 <li>
-                                                    <a onClick={props.showHowToTour}>{t("how_to_edit_&_download")}</a>
+                                                    <a onClick={() => {props.showHowToTour(); setHelpDrpVisibility(false)}}>{t("how_to_edit_&_download")}</a>
                                                 </li>
                                                 <li>
                                                     <a onClick={props.showTagsTour}>{t("how_to_apply_formatting_using_tags")}</a>

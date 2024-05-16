@@ -946,6 +946,19 @@ const Writter = (props) => {
     }
 
 
+    // remove break
+
+    const removeBreakParagraphs = (htmlContent) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, 'text/html');
+        const paragraphs = doc.querySelectorAll('p.break');
+        paragraphs.forEach(paragraph => {
+            paragraph.parentNode.removeChild(paragraph);
+        });
+        return doc.body.innerHTML;
+    };
+
+
     const handleFormateArticle = () => {
         document.querySelector('.note-editable').classList.remove('note-editable-loader')
 
@@ -957,12 +970,14 @@ const Writter = (props) => {
             if (liTag) {
                 return liTag; // Keep <li> tags unchanged
             } else {
-                return "<p><br></p>"; // Replace line breaks with <p><br></p>
+                return ""; // Replace line breaks with <p><br></p>
             }
         });
 
-        document.querySelector('.note-editable').innerHTML = sanitizeHtml(final)
-        document.querySelector('.note-editable-backdrop').innerHTML = sanitizeHtml(document.querySelector('.note-editable').innerHTML)
+
+
+        document.querySelector('.note-editable').innerHTML = final
+        document.querySelector('.note-editable-backdrop').innerHTML = document.querySelector('.note-editable').innerHTML
         scrollToTop()
         setTimeout(() => {
 
@@ -1451,7 +1466,7 @@ const Writter = (props) => {
         // console.log(summerNoteData)
 
         // var htmlData = summerNoteEditorRef.current.summernote('code')
-
+        console.log(summerNoteData)
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -2095,8 +2110,8 @@ const Writter = (props) => {
         if (target == 'article') {
             let data = document.querySelector('.note-editable').innerText
             let html = convert.render(data)
-            let final = html.replace(/(?:\r\n|\r|\n)/g, '<p><br></p>');
-            formdata.append("html_data", final);
+            let final = html.replace(/(?:\r\n|\r|\n)/g, '');
+            formdata.append("html_data",final);
 
         } else {
             formdata.append("html_data", summerNoteEditorRef.current.summernote('code'));
@@ -4062,20 +4077,18 @@ const Writter = (props) => {
     }
 
     // conditions for when to show the leaving modal for writer page
-    const handleBlockedNavigationForWriter = nextLocation => {
+    const handleBlockedNavigationForWriter = ({
+        currentLocation,
+        nextLocation,
+        historyAction
+    }) => {
         let docIdParam = URL_SEARCH_PARAMS.get('document-id')
-       
-        if (!confirmedNavigation && location.pathname) {
-            setLastLocation(nextLocation)
-            // console.log(nextLocation.pathname)
-            if (!isTranslateProceeding && nextLocation.hash != "#!" && !nextLocation.pathname?.includes('/word-processor') && docIdParam) {
-                setShowWriterPageLeavingAlertModal(true)
-                return false
-            }
-            if (!isTranslateProceeding && nextLocation.state === null && !nextLocation.pathname?.includes('/word-processor') && docIdParam) {
-                setShowWriterPageLeavingAlertModal(true)
-                return false
-            }
+        if(
+            !docIdParam || nextLocation.pathname?.includes('/file-upload') ||
+            nextLocation.pathname?.includes('create/translate/files') || 
+            nextLocation.pathname?.includes('create/speech/speech')
+        ){
+            return false
         }
         return true
     }
@@ -4952,7 +4965,7 @@ const Writter = (props) => {
                 when={writerPageActive}
                 message={handleBlockedNavigationForWriter}
             /> */}
-            <ReactRouterPrompt when={writerPageActive}>
+            <ReactRouterPrompt when={handleBlockedNavigationForWriter}>
             {({ isActive, onConfirm, onCancel }) => {
                 return (
                     <Rodal

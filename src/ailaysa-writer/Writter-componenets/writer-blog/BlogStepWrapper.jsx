@@ -103,6 +103,8 @@ const BlogStepWrapper = (props) => {
 
   
     const getTotalBlogCreationObject = (blogId) => {
+        if(!blogId) return 
+         
         Config.axios({
             url: `${Config.BASE_URL}/openai/blogcreation/${blogId}`,
             method: "GET",

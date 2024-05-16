@@ -395,6 +395,7 @@ function TranslateFiles(props) {
             // console.log('from param');
             // console.log(targetLanguageOptionsRef.current);
             // console.log(mtEngineOptionRef.current);
+        
         }
     }, [targetLanguageOptionsRef.current, mtEngineOptionRef.current, URL_SEARCH_PARAMS.get("get-project-info")]);
 
@@ -610,7 +611,7 @@ function TranslateFiles(props) {
     }, [mtpeEngineOptions]);
 
     useEffect(() => {
-        if (projectEditable.current && commonMtpeEngine) {
+        if (!projectEditable.current && commonMtpeEngine) {
             let engines = [];
             const engine = mtEngineOptionRef.current?.filter((value) =>
                 commonMtpeEngine?.includes(value?.id)
@@ -1751,11 +1752,7 @@ function TranslateFiles(props) {
                 setAlreadySelectedTarLang(tar);
                 setAlreadySelecetedTarLangID(tarID);
                 setIsEdit(true);
-                // console.log(mtEngineOptionRef.current);
                 let selected_mt = mtEngineOptionRef.current?.find((engine) => engine?.id === data?.mt_engine_id);
-                // console.log(selected_mt);
-                // console.log(data?.mt_engine_id);
-
 
                 setShowTeamEdit(data.team_edit);
                 setTeamSelect(
@@ -1807,24 +1804,19 @@ function TranslateFiles(props) {
                     setTargetLanguage(editTargetLanguages);
                     setSubjectField(editSubjectFields);
                     setContentType(editContentTypes);
-                    setSelectedMTFromAPI({
+                    let a = {
                         value: selected_mt?.id,
                         label: selected_mt?.name?.replaceAll("_", " "),
-                    })
-                    setSelectedMTEngine({
-                        value: selected_mt?.id,
-                        label: selected_mt?.name?.replaceAll("_", " "),
-                    });
+                    }
+                    setSelectedMTFromAPI(a)
+                    setSelectedMTEngine(a);
+                    
                     setLoading(false);
                 }, 50);
                 setFileError("");
             },
         });
     };
-
-    // useEffect(() => {
-    //   console.log(selectedMTEngine);
-    // }, [selectedMTEngine])
 
 
     // const handleStepSelection = (selectedStepOptions) => {
@@ -2686,14 +2678,6 @@ function TranslateFiles(props) {
 
     } 
 
-    useEffect(() => {
-      console.log(projectTaskList)
-    }, [projectTaskList])
-    
-    useEffect(() => {
-      console.log(deadline)
-    }, [deadline])
-    
 
     return (
         <React.Fragment>
@@ -3389,109 +3373,10 @@ function TranslateFiles(props) {
                                                         />
                                                     </div>
                                                 </Tooltip>
-
-                                                {/* <p>Recently used: &nbsp;
-							{
-								recentlyUsedLangs?.map((eachLang, index) => {
-									if(index < 5){
-										return(
-											<span className="recent-target-lang" onClick={() => handleRecentLangClick(eachLang)}>{`${eachLang?.language}${index !== 4 ? ", " : ""}`}</span>
-										)
-									}
-								})
-							}
-						</p> */}
                                                 {sourceTargetValidation.target && <small className="text-danger">{t("target_validation_note")}</small>}
                                             </div>
                                         </div>
-                                        {/* <div className="form-fields">
-                      <div className="form-group mb-2">
-                        <label htmlFor="exampleFormControlFile1">
-                          Machine translation engine
-                        </label>
-                        <Select
-                          className="select-width"
-                          isSearchable={false}
-                          name="machine-translation-software"
-                          id="machine-translation-software"
-                          value={selectedMTEngine}
-                          options={mtpeEngineOptions}
-                          // isOptionDisabled={(option) => option.disabled}
-                          isDisabled={
-                            mtpeEngineOptions.length === 0 ? true : false
-                          }
-                          onChange={handleMTEngineChange}
-                          styles={customStepSelectStyles}
-                          placeholder={
-                            <div className="select-placeholder-text">
-                              Select MT
-                            </div>
-                          }
-                          components={{
-                            DropdownIndicator,
-                            IndicatorSeparator: () => null,
-                          }}
-                        />
-                      </div>
-                    </div> */}
                                     </div>
-                                    {/* {sourceLanguageError !== "" ||
-                    (targetLanguageError !== "" && (
-                      <div className="d-flex align-items-center gap-3">
-                        <div className="form-fields mr-3">
-                          <div className="form-group">
-                            {sourceLanguageError !== "" ? (
-                              <span className="text-danger">
-                                {sourceLanguageError}
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
-                        <div className="form-fields">
-                          <div className="form-group">
-                            {targetLanguageError !== "" ? (
-                              <span className="text-danger">
-                                {targetLanguageError}
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
-                      </div>
-                    ))} */}
-                                    {/* <div className="d-flex  gap-3 files-space-align w-50 g-30">
-                    <div className="form-fields">
-                      <div className="form-group mb-2">
-                        <label htmlFor="exampleFormControlFile1">
-                          Machine translation engine
-                        </label>
-                        <Select
-                          className="select-width"
-                          isSearchable={false}
-                          name="machine-translation-software"
-                          id="machine-translation-software"
-                          value={selectedMTEngine}
-                          options={mtpeEngineOptions}
-                          // isOptionDisabled={(option) => option.disabled}
-                          isDisabled={
-                            mtpeEngineOptions.length === 0 ? true : false
-                          }
-                          onChange={handleMTEngineChange}
-                          styles={customStepSelectStyles}
-                          placeholder={
-                            <div className="select-placeholder-text">
-                              Select MT
-                            </div>
-                          }
-                          components={{
-                            DropdownIndicator,
-                            IndicatorSeparator: () => null,
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="form-fields"></div>
-                  </div> */}
-
                                     <AdvancedProjectType
                                         isLoading={isLoading}
                                         projectType={projectType}
@@ -3529,14 +3414,61 @@ function TranslateFiles(props) {
                                 </div>
                             )}
                             <div className="col-xs-12">
-                                <div className="new-btn-grp">
-                                    {editProjectId != null ? (
-                                        showUpdateLoader ? (
+                                <div className="d-flex justify-between">
+                                    {editProjectId != null && (
+                                        <button
+                                            className="glossaryglobalform-StepCancelButton"
+                                            onClick={() => history(-1)}
+                                        >
+                                            <span className="prev-btn">
+                                                {t("cancel")}
+                                            </span>
+                                        </button>
+                                    )}
+                                    <div className="new-btn-grp">
+                                        {editProjectId != null ? (
+                                            showUpdateLoader ? (
+                                                <React.Fragment>
+                                                    <button className="convert-pdf-list-UploadProjectButton" type="submit">
+                                                        <span className="fileupload-new-btn">
+                                                            <SaveButtonLoader />
+                                                            {t("updating")}
+                                                        </span>
+                                                    </button>
+                                                </React.Fragment>
+                                            ) : (
+                                                <React.Fragment>
+                                                    <button className="convert-pdf-list-UploadProjectButton"
+                                                        type="submit"
+                                                        onMouseUp={(e) => handleUpdate(e)}
+                                                    >
+                                                        <span className="fileupload-new-btn">{t("update")}</span>
+                                                    </button>
+                                                    {editProjectId && (
+                                                        <div
+                                                            onClick={() => setShowDeleteConfirmationModal(true)}
+                                                            className={
+                                                                projectType === 3
+                                                                    ? "edit-delete-btn glossary-btn-wrap"
+                                                                    : "edit-delete-btn "
+                                                            }
+                                                        >
+                                                            <ButtonBase>
+                                                                <div className="edit-delete-btn-cont">
+                                                                    <div className="delete-icon"></div>
+                                                                    {t("delete_project")}
+                                                                </div>
+                                                            </ButtonBase>
+                                                        </div>
+                                                    )}
+                                                </React.Fragment>
+                                            )
+                                        ) : showCreateLoader ? (
                                             <React.Fragment>
                                                 <button className="convert-pdf-list-UploadProjectButton" type="submit">
                                                     <span className="fileupload-new-btn">
                                                         <SaveButtonLoader />
-                                                        {t("updating")}
+                                                        {t("creating")}
                                                     </span>
                                                 </button>
                                             </React.Fragment>
@@ -3544,69 +3476,34 @@ function TranslateFiles(props) {
                                             <React.Fragment>
                                                 <button className="convert-pdf-list-UploadProjectButton"
                                                     type="submit"
-                                                    onMouseUp={(e) => handleUpdate(e)}
+                                                    onMouseUp={(e) => handleSubmit(e)}
                                                 >
-                                                    <span className="fileupload-new-btn">{t("update")}</span>
+                                                    <span className="fileupload-new-btn">
+                                                        {t("translate_edit_download")}
+                                                        <ArrowForwardIcon
+                                                            style={{
+                                                                fontSize: 15,
+                                                                color: "#FFFFFF",
+                                                            }}
+                                                        />
+                                                    </span>
                                                 </button>
-                                                {editProjectId && (
-                                                    <div
-                                                        onClick={() => setShowDeleteConfirmationModal(true)}
-                                                        className={
-                                                            projectType === 3
-                                                                ? "edit-delete-btn glossary-btn-wrap"
-                                                                : "edit-delete-btn "
-                                                        }
-                                                    >
-                                                        <ButtonBase>
-                                                            <div className="edit-delete-btn-cont">
-                                                                <div className="delete-icon"></div>
-                                                                {t("delete_project")}
-                                                            </div>
-                                                        </ButtonBase>
-                                                    </div>
-                                                )}
                                             </React.Fragment>
-                                        )
-                                    ) : showCreateLoader ? (
-                                        <React.Fragment>
-                                            <button className="convert-pdf-list-UploadProjectButton" type="submit">
-                                                <span className="fileupload-new-btn">
-                                                    <SaveButtonLoader />
-                                                    {t("creating")}
-                                                </span>
-                                            </button>
-                                        </React.Fragment>
-                                    ) : (
-                                        <React.Fragment>
+                                        )}
+                                        {(editProjectId == null && showTranslateAndDownloadBtn) && (
                                             <button className="convert-pdf-list-UploadProjectButton"
                                                 type="submit"
-                                                onMouseUp={(e) => handleSubmit(e)}
+                                                onMouseUp={(e) => !translateDownloadBtnLoader && handleSubmit(e, 'trans-download')}
                                             >
                                                 <span className="fileupload-new-btn">
-                                                    {t("translate_edit_download")}
-                                                    <ArrowForwardIcon
-                                                        style={{
-                                                            fontSize: 15,
-                                                            color: "#FFFFFF",
-                                                        }}
-                                                    />
+                                                    {translateDownloadBtnLoader && (
+                                                        <SaveButtonLoader />
+                                                    )}
+                                                    {t("translate_and_download")}
                                                 </span>
                                             </button>
-                                        </React.Fragment>
-                                    )}
-                                    {(editProjectId == null && showTranslateAndDownloadBtn) && (
-                                        <button className="convert-pdf-list-UploadProjectButton"
-                                            type="submit"
-                                            onMouseUp={(e) => !translateDownloadBtnLoader && handleSubmit(e, 'trans-download')}
-                                        >
-                                            <span className="fileupload-new-btn">
-                                                {translateDownloadBtnLoader && (
-                                                    <SaveButtonLoader />
-                                                )}
-                                                {t("translate_and_download")}
-                                            </span>
-                                        </button>
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </React.Fragment>
@@ -4032,7 +3929,7 @@ function TranslateFiles(props) {
                             </div>
                             <p className="insuffient-desc text-center">{t("file_err_note")}</p>
                             <div className="mt-3">
-                                <p className="insuffient-desc" style={{fontSize: '12px'}} dangerouslySetInnerHTML={{__html: sanitizeHtml(t("translate_edit_foot_note"))}}></p>
+                                <p className="insuffient-desc" style={{fontSize: '12px'}} dangerouslySetInnerHTML={{__html: t("translate_edit_foot_note")}}></p>
                             </div>
                         </React.Fragment>
                     </div>

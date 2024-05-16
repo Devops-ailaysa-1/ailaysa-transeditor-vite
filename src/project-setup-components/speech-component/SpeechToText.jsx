@@ -897,7 +897,8 @@ function SpeechToText(props) {
         }
         formdata.append("project_type", "4"); // by default project type if 4 for voice project
         formdata.append("sub_category", "1"); // sub category is 1 for speech to text
-
+        if(mtEnable) formdata.append("get_mt_by_page", translationByPage);
+        
         let deadlineUTC = Config.convertLocalToUTC(deadline);
         deadline && formdata.append("project_deadline", deadlineUTC);
 
@@ -961,7 +962,6 @@ function SpeechToText(props) {
         formdata.append("mt_enable", mtEnable);
 
         if(mtEnable) formdata.append("get_mt_by_page", translationByPage);
-
 
         setClickedOpenButton(key);
         selectedSteps?.map((each) => {
@@ -1387,57 +1387,56 @@ function SpeechToText(props) {
                                 translationByPage={translationByPage}
                                 setTranslationByPage={setTranslationByPage}
                             />
-                            <div className="voice-work-area-button-row">
-                                {/* <div className="ai-sl-tl-cont">
-                                <div className="position-relative">
-                                    <ButtonBase onClick={() => setshowSrcLangModal(true)}>
-                                        <div className="ai-sl-tl-btn">
-                                            <span className="text">{sourceLabel}</span>
-                                            <span className="icon">
-                                                <i className="fas fa-caret-down"></i>
+                            <div className="d-flex justify-between">
+                                {isEdit && (
+                                    <button
+                                        className="glossaryglobalform-StepCancelButton"
+                                        onClick={() => history(-1)}
+                                    >
+                                        <span className="prev-btn">
+                                            {t("cancel")}
+                                        </span>
+                                    </button>
+                                )}
+                                <div className="voice-work-area-button-row">
+                                    {clickedOpenButton == 'key' ? (
+                                        <button className="speech-to-text-UploadProjectButton" type="button">
+                                            <span className="fileopen-new-btn">
+                                                <ButtonLoader />
+                                                {!isEdit ? t("creating") : t("updating")}
                                             </span>
+                                        </button>
+                                    ) : (
+                                        <button className="speech-to-text-UploadProjectButton"
+                                            type="button"
+                                            onMouseUp={(e) => { handleCreateUpdateBtn() }}
+                                        >
+                                            <span className="fileupload-new-btn">
+                                                {!isEdit ? t("create_a_transcription_project") : t("update")}
+                                                <ArrowForwardIcon
+                                                    style={{
+                                                        fontSize: 15,
+                                                        color: "#FFFFFF",
+                                                    }}
+                                                />
+                                            </span>
+                                        </button>
+                                    )}
+                                    {editProjectId && (
+                                        <div
+                                            onClick={() => setShowDeleteConfirmationModal(true)}
+                                            className="edit-delete-btn"
+                                        >
+                                            <ButtonBase>
+                                                <div className="edit-delete-btn-cont">
+                                                    <div className="delete-icon"></div>
+                                                    {t("delete_project")}
+                                                </div>
+                                            </ButtonBase>
                                         </div>
-                                    </ButtonBase>
+                                    )}
+                                    {/* </div> */}
                                 </div>
-                            </div> */}
-                                {/* <div className="d-flex gap-5 flex-row-reverse"> */}
-                                {clickedOpenButton == 'key' ? (
-                                    <button className="speech-to-text-UploadProjectButton" type="button">
-                                        <span className="fileopen-new-btn">
-                                            <ButtonLoader />
-                                            {!isEdit ? t("creating") : t("updating")}
-                                        </span>
-                                    </button>
-                                ) : (
-                                    <button className="speech-to-text-UploadProjectButton"
-                                        type="button"
-                                        onMouseUp={(e) => { handleCreateUpdateBtn() }}
-                                    >
-                                        <span className="fileupload-new-btn">
-                                            {!isEdit ? t("create_a_transcription_project") : t("update")}
-                                            <ArrowForwardIcon
-                                                style={{
-                                                    fontSize: 15,
-                                                    color: "#FFFFFF",
-                                                }}
-                                            />
-                                        </span>
-                                    </button>
-                                )}
-                                {editProjectId && (
-                                    <div
-                                        onClick={() => setShowDeleteConfirmationModal(true)}
-                                        className="edit-delete-btn"
-                                    >
-                                        <ButtonBase>
-                                            <div className="edit-delete-btn-cont">
-                                                <div className="delete-icon"></div>
-                                                {t("delete_project")}
-                                            </div>
-                                        </ButtonBase>
-                                    </div>
-                                )}
-                                {/* </div> */}
                             </div>
                         </div>)}
                     {

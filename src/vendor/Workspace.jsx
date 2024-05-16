@@ -78,7 +78,6 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import NewMagnifier from "../assets/images/new-ui-icons/new-magnifier.svg"
 import NorCopyContent from "../assets/images/new-ui-icons/nor-copy-content.svg"
-import autosizeInput from 'autosize-input'
 import WorkspaceFeatures from "./workspace-components/WorkspaceFeatures";
 import {ClickAwayListener} from '@mui/base/ClickAwayListener';
 import AddGlossaryTermModal from "./model-select/AddGlossaryTermModal";
@@ -369,7 +368,6 @@ function Workspace(props) {
     const [creditAlertTxt, setCreditAlertTxt] = useState(t("insufficient_credits_note"));
     const [showIME, setShowIME] = useState(false);
     const [synonymData, setSynonymData] = useState([]);
-    const [showSynonymPopover, setShowSynonymPopover] = useState(false);
     const [synonymPopoverContent, setSynonymPopoverContent] = useState("");
     const [synonymPopoverOpen, setSynonymPopoverOpen] = useState(false);
     const [synonymPopoverTarget, setSynonymPopoverTarget] = useState(null);
@@ -614,13 +612,14 @@ function Workspace(props) {
     const deleteSegmentTranslationRef = createRef();
     const showFormatSizeRef = createRef();
     const showFindReplaceRef = createRef();
-    const showConcoradanceRef = createRef();
+    // const showConcoradanceRef = createRef();
     const showSpecialCharactersRef = createRef();
     const contentEditableParentRef = createRef();
     const selectionRangeRef = useRef();
     const lowCreditAlertCounter = useRef(1)
     const segmentDiffButton = useRef(null)
 
+    const showConcoradanceRef = useRef(null)
     const prevPathRef = useRef(null)
 
     const pageSizeFromApi = useRef(null)
@@ -1963,12 +1962,6 @@ function Workspace(props) {
         }
     }, [mergeSelectedSegmentIds, translatedResponseRef.current])
 
-    // autosizeinput() method will adjust the size of the page number input box
-    useEffect(() => {
-        if(document.querySelector('#page-num')){
-            autosizeInput(document.querySelector('#page-num'),{ minWidth: true })
-        }
-    }, [document.querySelector('#page-num')])
 
     // get the list of wordchoices based on the task_id
     useEffect(() => {
@@ -4009,7 +4002,7 @@ function Workspace(props) {
                 );
             content.push(
                 <React.Fragment key={currentPage}>
-                    <input id="page-num" type="number" defaultValue={currentPage} onChange={(e) => debouncePageNumber(e, url)} />
+                    <input id="page-num" style={{width: '26px', boxSizing: 'content-box'}} type="number" defaultValue={currentPage} onChange={(e) => debouncePageNumber(e, url)} />
                     {t("of") + " " + Math.ceil(totalPages) + " " + t("pages")}
                 </React.Fragment>
             );
@@ -4051,7 +4044,12 @@ function Workspace(props) {
                 // history(url + value);
                 storeLastVisitedPageNumber(url + value)
             }
-            else Config.toast(t("page_not_found"), "warning");
+            else {
+                Config.toast(t("page_not_found"), "warning");
+                // reset the input value to the current page number
+                let pageParam = URL_SEARCH_PARAMS.get("page");
+                e.target.value = pageParam
+            }
         }
     };
 
@@ -4142,7 +4140,10 @@ function Workspace(props) {
         let thisSegmentTag = segmentData?.target_tags;
         let textTag = "" + thisSegmentTag
 
-        if(segment_status) return
+        searchTbxForDoc(e)
+        searchGlossaryForDoc(e)
+        
+        // if(segment_status) return
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace_okapi/mt_raw_and_tm/${id}?mt_uc=false`,
@@ -4245,12 +4246,11 @@ function Workspace(props) {
         setGrammarPopoverOpen(false)
         setgrammarCheckPopoverTarget("")
         setPopoverOpen(false)
+    };
+
+    const searchTbxForDoc = (e) => {
         let tbxFormdata = new FormData();
         let sourceText = e.target.getAttribute("data-source-text");
-        if (paraphraseText === "" || grammarCheckPopoverTarget === "") {
-            // console.log('sarvesh')
-            // sourceText = removeAllTags(sourceText);
-        }
         tbxFormdata.append("user_input", sourceText);
         tbxFormdata.append("doc_id", documentId);
         tbxFormdata.append("lang", targetLanguage);
@@ -4280,9 +4280,11 @@ function Workspace(props) {
             },
             error: (error) => { },
         });
+    }
 
+    const searchGlossaryForDoc = (e) => {
         let glossaryFormdata = new FormData();
-
+        let sourceText = e.target.getAttribute("data-source-text");
         glossaryFormdata.append("user_input", sourceText);
         glossaryFormdata.append("doc_id", documentId);
         let glossaryUrl = Config.BASE_URL + "/glex/glossary_term_search/";
@@ -4310,8 +4312,7 @@ function Workspace(props) {
             },
             error: (error) => { },
         });
-
-    };
+    } 
 
     /* Replace the give string with the tags span element. Also can skip some tags to prevent replacing */
     const replaceTextWithTags = (targetText, exculudeTags = []) => {
@@ -4508,7 +4509,7 @@ function Workspace(props) {
                 if (isShowTags.current) replacedText = replaceTextWithTags(translatedText); //Hide for not to show tags
                 else replacedText = replaceTextWithTagsTemp(translatedText); //Added for not to show tags
                 // console.log(translatedText);
-                // console.log(replacedText);
+                console.log(replacedText);
                 // console.log(targetFindTerm);
 
                 if (targetFindTerm != "") {
@@ -4542,7 +4543,7 @@ function Workspace(props) {
                 if (response.data?.alert_msg == "MT Disabled") {
                     setShowMtDisabledModal(true)
                 }
-                // console.log(translatedText);
+                console.log(translatedText);
                 updateTranslatedResponseSegment(segmentId, "temp_target", translatedText);
                 updateSegmentStatus(segmentId, 103);
                 changeEditedStatus(segmentId, "unsaved");
@@ -5290,15 +5291,20 @@ function Workspace(props) {
             url: url,
             auth: true,
             success: (response) => {
-                showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
-                handleToggleVisibility(true);
-                scrollLeft()
-                response.data.map((value, index) => {
-                    response.data[index].source = higlightText(value.source, selectedText);
-                });
-                setTimeout(() => {
-                    setConcordanceData(response.data);
-                }, 100);
+                try{
+                    showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
+                    handleToggleVisibility(true);
+                    scrollLeft()
+                    
+                    response.data.map((value, index) => {
+                        response.data[index].source = higlightText(value.source, selectedText);
+                    });
+                    setTimeout(() => {
+                        setConcordanceData(response.data);
+                    }, 100);
+                }catch(e){
+                    console.log(e)
+                }
             },
             error: (error) => {
                 Config.log(error);
@@ -6864,6 +6870,7 @@ function Workspace(props) {
         div.appendChild(clonedSelection);
         let selectedHTML = div.innerHTML;
         let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
+        selTxt = removeSpecificTag(selTxt, 'mark')
 
         setTargetSelectionText(selTxt)
         if(window.getSelection().toString()?.trim() === '' || dictionaryTerm !== selTxt){
@@ -6884,7 +6891,9 @@ function Workspace(props) {
         div.appendChild(clonedSelection);
         let selectedHTML = div.innerHTML;
         let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
+        selTxt = removeSpecificTag(selTxt, 'mark')
 
+        console.log(selTxt)
         setSourceSelectionText(selTxt)
     }
 
@@ -7458,6 +7467,13 @@ function Workspace(props) {
         targetFindTermTemp,
         textUnit;
     let bgColor = "#0074D3";
+    
+    useEffect(() => {
+        console.log(translationMatches)
+    }, [translationMatches])
+    useEffect(() => {
+        console.log(glossaryData)
+    }, [glossaryData])
     
 
     return (
@@ -8341,7 +8357,7 @@ function Workspace(props) {
                                                                             className={rightAlignLangs.current.indexOf(targetLanguage) != -1 ? "workspace-textarea align-right" : "workspace-textarea"}
                                                                             spellCheck="false"
                                                                             suppressContentEditableWarning={true}
-                                                                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(translation) }}
+                                                                            dangerouslySetInnerHTML={{ __html: translation }}
                                                                         ></div>
                                                                     </div>
                                                                     <div data-id={id} className="target-lang-row-align trigger-focus">
@@ -8757,27 +8773,13 @@ function Workspace(props) {
                     </Popover>
                 </div>
             )}
-            {/* {synonymPopoverTarget != null && (
-                <div>
-                    <Popover
-                        className="synonym-popover-box"
-                        placement="bottom"
-                        isOpen={synonymPopoverOpen && document.getElementById(synonymPopoverTarget) != null}
-                        target={synonymPopoverTarget}
-                    >
-                        <span>{synonymPopoverContent}</span>
-                    </Popover>
-                </div>
-            )} */}
-
-            
            
             {/* Synonym popover */}
             {
                 (synonymPopoverTarget?.length && synonymPopoverOpen) ? (
                     <div>
                         <Popover
-                            className="paraphrase-popover-box spellcheck-popover-box"
+                            className="paraphrase-popover-box spellcheck-popover-box synonym-popover-drop-down"
                             placement="bottom"
                             isOpen={synonymPopoverOpen && (document?.getElementById(synonymPopoverTarget) !== null || document.getElementById(synonymPopoverTarget) !== undefined)}
                             target={synonymPopoverTarget}
@@ -8896,7 +8898,7 @@ function Workspace(props) {
                                         partialPretranslate ?
                                             <p className="insuffient-desc">{t("pre-translation_modal_text")}</p>
                                         :
-                                            <p className="insuffient-desc" dangerouslySetInnerHTML={{ __html: sanitizeHtml(creditAlertTxt) }}></p>
+                                            <p className="insuffient-desc" dangerouslySetInnerHTML={{ __html: creditAlertTxt }}></p>
                                     }
 
                                     {/* {(!Config.userState?.is_internal_member && enableFileDownload && isAssignEnable) && (
@@ -8934,7 +8936,7 @@ function Workspace(props) {
                                         partialPretranslate ?
                                             <p className="credits-text-cont-txt text-center">{t("pre-translation_modal_text")}</p>
                                             :
-                                            <p className="credits-text-cont-txt text-center" dangerouslySetInnerHTML={{ __html: sanitizeHtml(creditAlertTxt) }}></p>
+                                            <p className="credits-text-cont-txt text-center" dangerouslySetInnerHTML={{ __html: creditAlertTxt }}></p>
                                     }
 
                                     {(!Config.userState?.is_internal_member && enableFileDownload && isAssignEnable) && (

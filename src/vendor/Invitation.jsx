@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Config from './Config'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import ButtonBase from '@mui/material/ButtonBase';
 import lottie from "lottie-web"
 import ThumpsUp from "../vendor/thumb-up.json"
@@ -11,6 +11,7 @@ import LinkIcon from "../assets/images/new-ui-icons/link-icon.svg"
 
 function Invitation(props) {
     const location = useLocation()
+    const params = useParams();
 
     const [alertMessage, setAlertMessage] = useState(null)
     const [isError, setIsError] = useState(false)
@@ -36,8 +37,8 @@ function Invitation(props) {
         if (location.pathname.indexOf('confirm') != -1) //If the url contains confirm. Means this is confirmation not accept
             url = `${Config.BASE_URL}/auth/confirm/`
         let formData = new FormData()
-        formData.append('uid', props.match.params.uid)
-        formData.append('token', props.match.params.token)
+        formData.append('uid', params.uid)
+        formData.append('token', params.token)
         setIsLoading(true)
         Config.axios({
             url: url,

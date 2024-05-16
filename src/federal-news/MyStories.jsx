@@ -719,11 +719,11 @@ function MyStories(props) {
             icon: <DeleteIcon style="delete" />,
             label: t("delete"),
         },
-        {
-            id: 3,
-            icon: <ReceiptLongOutlinedIcon />,
-            label: t("view_po"),
-        }
+        // {
+        //     id: 3,
+        //     icon: <ReceiptLongOutlinedIcon />,
+        //     label: t("view_po"),
+        // }
     ]
 
     const moreOptionsForPDF = [
@@ -1473,12 +1473,8 @@ function MyStories(props) {
                 // console.log(createdProjectsList?.find(each => each?.id == id))
                 if(!createdProjectsList?.find(each => each?.id == id) && !isProjectListEmptyRef.current) {
                     listProjects()
-                }else{
+                }else if(!isProjectListEmptyRef.current){
                     let selectedRow = document.querySelector(`div[data-key='${id}']`)
-                    // selectedRow?.scrollIntoView({
-                    //     behavior: 'smooth',
-                    //     block: 'center',
-                    // });
                     setSelectFileRow(true)
                     selectProjectById(id)
                 }
@@ -3180,57 +3176,6 @@ function MyStories(props) {
         });
     }
 
-    const handleBulkDownload = async (e, project) => {
-        e?.stopPropagation();
-
-        let {id, project_name, get_project_type} = project
-        let url
-        let designDownloadUrl
-        if(get_project_type === 6) {
-            // writer designer project zip download code here 
-            // remove the below return statement after done coding
-            // console.log('designer project zip download')
-            // console.log(project) 
-            if(project.designer_project_detail.type == "image_translate"){
-                designDownloadUrl =  Config.BASE_URL + `/ai-image-translation/image-download?image_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1`
-            }else{
-                const startNumber = 1;
-                const endNumber = project.designer_project_detail.pages;
-                const formattedString = Array.from({ length: endNumber - startNumber + 1 }, (_, index) => {
-                  const numberToMap = index + startNumber;
-                  return `page_number_list=${numberToMap}`;
-                }).join('&');
-                
-                // console.log(formattedString);
-                 designDownloadUrl =  Config.BASE_URL + `/canvas/design-download?canvas_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1&`+formattedString
-                // console.log(url)
-            }
-
-        }
-
-        // add in download list
-        dispatch(addDownloadingFiles({ id: id, file_name: project_name, ext: '.zip', status: 1 }))
-        if(get_project_type === 6) {
-            url = designDownloadUrl
-        }else{
-            url = `${Config.BASE_URL}/workspace/download/${id}/`
-
-        }
-
-        const response = await Config.downloadFileFromApi(url);
-
-        // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
-        setTimeout(() => {
-            // remove the downloaded file from list
-            dispatch(deleteDownloadingFile({ id: id }))
-        }, 8000);
-
-    }
-
     const convertSourceFileToAudio = (taskid) => {
         setClickedOpenButton(taskid)
         Config.axios({
@@ -3836,24 +3781,12 @@ function MyStories(props) {
             }
         ))
 
-
-        // throw new Error("uncomment this line to mock failure of API");
-        let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) : null
-        );
-        let token = userCacheData != null ? userCacheData?.token : "";
         try {
-            const response = await axios.get(
-                openIn !== "News" ? `${Config.BASE_URL}/workspace_okapi/document/to/file/${documentId}?output_type=${type}` :
-                `${Config.BASE_URL}/workspace_okapi/download_federal_file/?task_id=${taskData?.id}&output_type=${type}`,
-                {
-                    responseType: "blob",
-                    headers: {
-                        "Access-Control-Expose-Headers": "Content-Disposition",
-                        "Authorization": `Bearer ${token}`, // add authentication information as required by the backend APIs.
-                    },
-                },
-            );
+            let url = openIn !== "News" ? `${Config.BASE_URL}/workspace_okapi/document/to/file/${documentId}?output_type=${type}` :
+            `${Config.BASE_URL}/workspace_okapi/download_federal_file/?task_id=${taskData?.id}&output_type=${type}`
+
+            const response = await Config.downloadFileFromApi(url);
+
             if (response !== undefined) {
 
                 // update the list once download completed
@@ -3922,6 +3855,20 @@ function MyStories(props) {
                 dispatch(deleteDownloadingFile({ id: uniqueKey }))
                 // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
                 setIsDownloading(false)
+            } else {
+                const newArr = selectedProjectFiles?.map(obj => {
+                    if (obj.id === id) {
+                        return {
+                            ...obj,
+                            isTaskDownloading: null
+                        };
+                    }
+                    return obj;
+                });
+                setSelectedProjectFiles(newArr)
+                dispatch(deleteDownloadingFile({ id: uniqueKey }))
+                setIsDownloading(false)
+                Config.toast(t("download_failed"), 'error')
             }
         }
     };
@@ -4511,7 +4458,6 @@ function MyStories(props) {
         }
 
         setIsDesignDeleting(true)
-
        
     } 
 
@@ -4675,21 +4621,27 @@ function MyStories(props) {
         let {id, filename} = task_data
         let {name, extension} = Config.getNameAndExtension(filename)
         
-        // add in download list
-        dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }))
-
-        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`
-        const response = await Config.downloadFileFromApi(url);
-
-        // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
-        setTimeout(() => {
-            // remove the downloaded file from list
+        try{
+            // add in download list
+            dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }))
+    
+            let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`
+            const response = await Config.downloadFileFromApi(url);
+    
+            // update the list once download completed
+            dispatch(updateDownloadingFile({ id: id, status: 2 }))
+    
+            Config.downloadFileInBrowser(response)
+    
+            setTimeout(() => {
+                // remove the downloaded file from list
+                dispatch(deleteDownloadingFile({ id: id }))
+            }, 8000);
+        } catch (e) {
+            console.log(e)
             dispatch(deleteDownloadingFile({ id: id }))
-        }, 8000);
+            Config.toast(t("download_failed"), 'error')
+        }
     } 
 
     // this api will initiate the file translate process and provide the status of each task

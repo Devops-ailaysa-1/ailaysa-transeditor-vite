@@ -3374,6 +3374,8 @@ table#translation_memories_on_off tbody tr:last-child {
 
 .toolbar-mega-section {
     height: 94px;
+    position: relative;
+    z-index: 10;
 }
 
 .toolbar-parts-padd-top-add {
@@ -3982,10 +3984,11 @@ ul.submenu {
     -webkit-box-shadow: 0px 2px 8px #00000029;
     -moz-box-shadow: 0px 2px 8px #00000029;
     box-shadow: 0px 2px 8px #00000029;
-    -webkit-animation-duration: 0.5s;
+    /* -webkit-animation-duration: 0.5s;
     animation-duration: 0.5s;
     -webkit-animation-delay: 0.1s;
-    animation-delay: 0.1s;
+    animation-delay: 0.1s; */
+    animation: none;
     width: 195px;
     height: auto;
     padding: 8px 0px;
@@ -12070,14 +12073,14 @@ ul.qa-file-list-wrapper .selected-job-value {
 .navbar-display-show {
     display: flex;
     height: 100%;
-    padding: 10px 14px;
+    padding: 10px 8px;
 }
 
 .nav-projects-link {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0px 5px;
+    padding-right: 5px;
     border-radius: 2px;
     transition: 0.4s all ease;
     cursor: pointer;
@@ -12094,6 +12097,7 @@ ul.qa-file-list-wrapper .selected-job-value {
     line-height: 14px;
     position: relative;
     top: 0px;
+    text-wrap: nowrap;
 }
 
 .nav-projects-link:hover {
@@ -13296,6 +13300,10 @@ ul.ai-source-langs-list::-webkit-scrollbar-thumb {
     font-weight: normal;
     line-height: 22px;
     color: #3c4043;
+}
+
+.synonym-popover-drop-down .popover {
+    z-index: 1;
 }
 
 .synonym-popover-box .popover .popover-inner p.corrected-word {
@@ -14507,6 +14515,7 @@ ul.ai-source-langs-list::-webkit-scrollbar-thumb {
     border: 1px solid #ced4da;
     border-radius: 3px;
     cursor: pointer;
+    background-color: #fff;
 }
 
 .datetimepicker-box input {
@@ -18866,6 +18875,7 @@ ul#workspace li:hover .segment-checkbox {
     align-items: center;
     justify-content: space-between;
     padding: 0px 20px;
+    width: 100%;
 }
 
 .term-data-setup-container {
@@ -23300,7 +23310,6 @@ ul.share-row-list-outer>li.share-row-item span.share-icon-wrap:hover,
     justify-content: flex-start;
     width: 100%;
     height: 40px;
-    margin-top: 20px;
     flex-direction: row-reverse;
     gap: 12px;
 }
@@ -26910,7 +26919,7 @@ ul.templates-tab-list li:hover {
 }
 
 .strip-banner .ailaysa-writter-main-wrapper {
-    padding-top: 92px;
+    /* padding-top: 92px; */
 }
 
 .ailaysa-writter-main-wrapper {
@@ -32627,6 +32636,7 @@ button.hamburger .line {
     display: flex !important;
     gap: 8px !important;
     align-items: center !important;
+    cursor: pointer;
 }
 
 .writer-style-list .note-icon-menu-check {
@@ -39305,7 +39315,8 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
     visibility: visible;
 }
 
-.choicelist-action-wrapper .action-list-item, .icon{
+.choicelist-action-wrapper .action-list-item, 
+.download-list-header .icon{
     width: 40px;
     height: 40px;
     font-style: normal;
@@ -39345,12 +39356,14 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
 .choicelist-action-wrapper .action-list-item .list-cancel-icon,
 .choicelist-action-wrapper .action-list-item .list-update-icon,
 .choicelist-action-wrapper .action-list-item .list-edit-icon,
-.choicelist-action-wrapper .action-list-item .list-delete-icon, .icon {
+.choicelist-action-wrapper .action-list-item .list-delete-icon, 
+.download-list-header .icon {
     color: #474848;
     font-size: 20px;
 }
 
-.choicelist-action-wrapper .action-list-item:hover, .icon:hover {
+.choicelist-action-wrapper .action-list-item:hover, 
+.download-list-header .icon:hover {
     background-color: #002f530f;
 }
 
@@ -42967,7 +42980,7 @@ h1.chat-file-title{
 .input-box-transliterate::after {
     content: '|'; /* The cursor symbol */
     display: inline-block;
-    margin-left: 1px; /* Adjust the spacing between content and cursor */
+    margin-left: -1px; /* Adjust the spacing between content and cursor */
     animation: blink 1s infinite;
   }
 
@@ -43315,7 +43328,7 @@ h1.chat-file-title{
 }
 
 .editor-roles-wrapper .editor-roles-table-wrap .editor-roles-header-wrap .editor-title.bill{
-    color: #1A73E8;
+    /* color: #1A73E8; */
 }
 
 .editor-roles-wrapper .editor-roles-table-wrap .editor-roles-value-wrap .editor-list-item .editor-list-value:first-child,
@@ -43830,6 +43843,9 @@ h1.chat-file-title{
     }
     .justify-between{
         justify-content: space-between;
+    }
+    .justify-end{
+        justify-content: flex-end;
     }
 
     

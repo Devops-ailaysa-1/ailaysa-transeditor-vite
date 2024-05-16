@@ -647,6 +647,8 @@ function GlossaryWorkspace(props) {
             
         }catch(e) {
             console.log(e)
+            Config.toast(t("no_terms_gloss"), 'warning');
+            dispatch(deleteDownloadingFile({ id: documentId.current }))
             setisTbxDownloading(false)
         }
     }
@@ -961,7 +963,6 @@ function GlossaryWorkspace(props) {
         <React.Fragment>
             <Navbar 
                 isWhite={true} 
-                showViewOnlyTag={true}
                 isGlossary={true} 
                 glossaryProjectName={projectName} 
                 languagePairObject={languagePairObject} 
