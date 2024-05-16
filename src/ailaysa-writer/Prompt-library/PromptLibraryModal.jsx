@@ -249,6 +249,13 @@ export const PromptLibraryModal = () => {
         let newArr = [newItem, ...list]
         setList(newArr)
     } 
+
+    const handleInputKeyDown = (e, itemId, list, setList) => {
+        if(e.target.value?.trim() === '') return 
+        if(e.which === 13){
+            handleInputBlur(e, itemId, list, setList)
+        }
+    }
     
     const handleInputBlur = (e, itemId, list, setList) => {
         if(e.target.value?.trim() === ''){
@@ -367,6 +374,7 @@ export const PromptLibraryModal = () => {
                                                             autoFocus={true}
                                                             value={each.label}
                                                             onChange={(e) => handleInputChange(e, each.id, categoryList, setCategoryList)}
+                                                            onKeyDown={(e) => handleInputKeyDown(e, each.id, categoryList, setCategoryList)}
                                                             onBlur={(e) => handleInputBlur(e, each.id, categoryList, setCategoryList)}
                                                         />
                                                     </li>
@@ -396,6 +404,7 @@ export const PromptLibraryModal = () => {
                                                             autoFocus={true} 
                                                             value={each.label}
                                                             onChange={(e) => handleInputChange(e, each.id, subCategoryList, setSubCategoryList)}
+                                                            onKeyDown={(e) => handleInputKeyDown(e, each.id, subCategoryList, setSubCategoryList)}
                                                             onBlur={(e) => handleInputBlur(e, each.id, subCategoryList, setSubCategoryList)}
                                                         />
                                                     </li>
