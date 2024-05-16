@@ -415,26 +415,22 @@ const ChapterPanel = (props) => {
         
        
         let final = ''
-        let preProcessedhtml = ''
         let html = convert.render(text)
-
+        
         if(isContentGenerateRef.current){
-
             // let final = html.replace(/(?:\r\n|\r|\n)/g, '<p><br></p>');
-            preProcessedhtml = html.replace(/(<li>[^]*?<\/li>)|(\r\n|\r|\n)/g, (match, liTag, lineBreak) => {
+            final = html.replace(/(<li>[^]*?<\/li>)|(\r\n|\r|\n)/g, (match, liTag, lineBreak) => {
                 if (liTag) {
                     return liTag; // Keep <li> tags unchanged
                 } else {
-                    return ""; // Replace line breaks with <p><br></p>
+                    return "<p><br></p>"; // Replace line breaks with <p><br></p>
                 }
             });
-           final =  preProcessedhtml
             // console.log(final)
         }else{
-            console.log(text)
             final = html
         }
-        console.log(final)
+
         $('.summernote').summernote('code', final)
         $('.summernote').summernote('commit');
 
