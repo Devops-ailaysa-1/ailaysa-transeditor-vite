@@ -624,21 +624,21 @@ const ChapterPanel = (props) => {
 
                 getBookDetails(createdBookIdRef.current)
 
-                setTimeout(() => {
-                    // once the new chapter/matter-item is saved in list : then generate data for chapter/item
-                    if(matter === 'front'){
-                        isContentGenerateRef.current = true
-                        updateSearchParamInURL('front', response.data?.id)
-                        // handleFrontMatterOptionClick(response.data)
-                    }else if(matter === 'body'){
-                        // handleBodyMatterOptionClick(response.data)
-                        updateSearchParamInURL('body', response.data?.id)
-                    }else if(matter === 'back'){
-                        isContentGenerateRef.current = true
-                        // handleBackMatterOptionClick(response.data)
-                        updateSearchParamInURL('back', response.data?.id)
-                    }
-                }, 80);
+                // setTimeout(() => {
+                //     // once the new chapter/matter-item is saved in list : then generate data for chapter/item
+                //     if(matter === 'front'){
+                //         isContentGenerateRef.current = true
+                //         updateSearchParamInURL('front', response.data?.id)
+                //         // handleFrontMatterOptionClick(response.data)
+                //     }else if(matter === 'body'){
+                //         // handleBodyMatterOptionClick(response.data)
+                //         updateSearchParamInURL('body', response.data?.id)
+                //     }else if(matter === 'back'){
+                //         isContentGenerateRef.current = true
+                //         // handleBackMatterOptionClick(response.data)
+                //         updateSearchParamInURL('back', response.data?.id)
+                //     }
+                // }, 80);
             },
             error: (err) => {
                 // console.log('inside error')
