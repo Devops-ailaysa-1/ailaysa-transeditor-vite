@@ -1330,18 +1330,22 @@ function Navbar(props) {
                                                                             </MenuItem>
                                                                         )
                                                                     }
-                                                                    <MenuItem className={"menu-list-item " + (animateDownloding === 'SOURCE' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "SOURCE")}>
-                                                                        {t("source_file")}
-                                                                        {animateDownloding === 'SOURCE' && <DownloadAnimation />}
-                                                                    </MenuItem>
-                                                                    <MenuItem className={"menu-list-item " + (animateDownloding === 'TMX' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "TMX")}>
-                                                                        TMX
-                                                                        {animateDownloding === 'TMX' && <DownloadAnimation />}
-                                                                    </MenuItem>
-                                                                    <MenuItem className={"menu-list-item " + (animateDownloding === 'XLIFF' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "XLIFF")}>
-                                                                        XLIFF
-                                                                        {animateDownloding === 'XLIFF' && <DownloadAnimation />}
-                                                                    </MenuItem>
+                                                                    {!props?.prevPathRef?.current?.includes('my-stories') && (
+                                                                        <>
+                                                                            <MenuItem className={"menu-list-item " + (animateDownloding === 'SOURCE' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "SOURCE")}>
+                                                                                {t("source_file")}
+                                                                                {animateDownloding === 'SOURCE' && <DownloadAnimation />}
+                                                                            </MenuItem>
+                                                                            <MenuItem className={"menu-list-item " + (animateDownloding === 'TMX' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "TMX")}>
+                                                                                TMX
+                                                                                {animateDownloding === 'TMX' && <DownloadAnimation />}
+                                                                            </MenuItem>
+                                                                            <MenuItem className={"menu-list-item " + (animateDownloding === 'XLIFF' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "XLIFF")}>
+                                                                                XLIFF
+                                                                                {animateDownloding === 'XLIFF' && <DownloadAnimation />}
+                                                                            </MenuItem>
+                                                                        </>
+                                                                    )}
                                                                 </MenuList>
                                                             </ClickAwayListener>
                                                         </Paper>
