@@ -260,6 +260,20 @@ const ChapterPanel = (props) => {
             setRerender(!rerender)
         }
     }, [bodyMatterCollapse, frontMatterCollapse, backMatterCollapse])
+
+
+    // remove break
+
+    const removeBreakParagraphs = (htmlContent) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, 'text/html');
+        const paragraphs = doc.querySelectorAll('p.break');
+        paragraphs.forEach(paragraph => {
+          paragraph.parentNode.removeChild(paragraph);
+        });
+        return doc.body.innerHTML;
+      };
+
     
 
     // scroll the summernote editor to bottom
@@ -723,7 +737,7 @@ const ChapterPanel = (props) => {
                     
                     }
     
-                    let final = text.replace(/\\n/g, "<p><br/></p>")
+                    let final = text.replace(/\\n/g, `<p class="break"><br/></p>`)
                     // let final = text.replace(/\\n/g, " ")
                     let update = final.replace('/\u200c/g', " ")
                     document.querySelector('.note-editable').innerHTML += final
@@ -787,10 +801,11 @@ const ChapterPanel = (props) => {
             if (liTag) {
                 return liTag; // Keep <li> tags unchanged
             } else {
-                return "<p><br></p>"; // Replace line breaks with <p><br></p>
+                return ``; // Replace line breaks with <p><br></p>
             }
         });
 
+       
         document.querySelector('.note-editable').innerHTML = final
         document.querySelector('.note-editable-backdrop').innerHTML = document.querySelector('.note-editable').innerHTML
        
@@ -799,6 +814,8 @@ const ChapterPanel = (props) => {
             updateHTMLInMatterItem(id,'last',final)
             document.querySelector('.pop-overlay').style.pointerEvents = 'all';
             props.closeOverlay()
+      
+    
             // $('.summernote').summernote('commit');
         }, 500);
     }
@@ -810,8 +827,9 @@ const ChapterPanel = (props) => {
 
         let data = document.querySelector('.note-editable').innerText
         let html = convert.render(data)
-        let final = html.replace(/(?:\r\n|\r|\n)/g, '<p><br></p>');
-        formdata.append("html_data", isLast ? htmlaData : final);
+        let final = html.replace(/(?:\r\n|\r|\n)/g, '');
+        let spaceRemovedHtml = final
+        formdata.append("html_data", isLast ? htmlaData : spaceRemovedHtml);
 
         Config.axios({
             url: `${Config.BASE_URL}/openai/bookbodymatter/${id}/`,
