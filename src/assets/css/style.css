@@ -42585,7 +42585,7 @@ h1.chat-file-title{
 
 .view-story-modal-wrapper .rodal-dialog{
     width: 767px !important;
-    height: calc(100vh - 50px - 50px) !important;
+    /* height: calc(100vh - 50px - 50px) !important; */
     padding: 0px !important;
 }
 
@@ -42700,7 +42700,9 @@ h1.chat-file-title{
 
 .view-story-modal-wrapper.add-story-modal .rodal-dialog{
     width: min(90%, 1024px) !important;
-    height: calc(100vh - 200px - 200px) !important;
+    /* height: calc(100vh - 200px - 200px) !important; */
+    /* height: 100%; */
+    min-height: 550px;
 }
 
 .federal-segment-wrapper .writer-form-component .note-toolbar.card-header,
