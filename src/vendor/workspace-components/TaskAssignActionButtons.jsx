@@ -20,8 +20,6 @@ const TaskAssignActionButtons = (props) => {
     const [isApproving, setIsApproving] = useState(false)
     const [isReworkSending, setIsReworkSending] = useState(false)
     
-    
-
     // function for customer side so that customer can approve or reject the task
     const clientSideTaskResponseUpdate = (response) => {
         let { task_id, step, reassign } = clientResponseDataRef.current
@@ -58,7 +56,17 @@ const TaskAssignActionButtons = (props) => {
                         Config.toast(`${t('work_approved')}`)
                         setTimeout(() => {
                             toast.dismiss();
-                            history.push(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=inprogress")
+                            try{
+                                const URL_SEARCH_PARAMS = new URLSearchParams(`?${prevPathRef.current?.split('?')[1]}`);
+                                URL_SEARCH_PARAMS.set('filter', 'inprogress')
+                                prevPathRef.current = prevPathRef.current?.split('?')[0] + '?' + URL_SEARCH_PARAMS.toString()
+                                
+                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=inprogress")
+                            }catch(e) {
+                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=inprogress")
+                                console.log(e)
+                            }
+
                         }, 900);
                     } else if (response === 2) {
                         Config.toast(`${t("rework_initiate")}`)
