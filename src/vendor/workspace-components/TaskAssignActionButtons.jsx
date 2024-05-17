@@ -58,7 +58,7 @@ const TaskAssignActionButtons = (props) => {
                         Config.toast(`${t('work_approved')}`)
                         setTimeout(() => {
                             toast.dismiss();
-                            history.push(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=inprogress")
+                            history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=inprogress")
                         }, 900);
                     } else if (response === 2) {
                         Config.toast(`${t("rework_initiate")}`)

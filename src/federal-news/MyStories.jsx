@@ -479,6 +479,8 @@ function MyStories(props) {
     const isProjectListEmptyRef = useRef(false)
     const editorDropDownBoxRef = useRef(null)
 
+    const openProjectListCounterRef = useRef(0)
+
     let paginationTimeOut = null
 
 
@@ -1355,33 +1357,24 @@ function MyStories(props) {
 
         let pageParam = URL_SEARCH_PARAMS.get("page")
         let editorParam = URL_SEARCH_PARAMS.get("editor")
-        console.log(editorParam)
+        // console.log(editorParam)
 		// console.log(pageParam)
         if (pageParam !== null && pageParam !== undefined) {
             listProjects()
             if(editorParam === null) setCheckedEditors([])
-
+            else {setCheckedEditors(editorParam?.split(',')?.map(each => parseInt(each)))}
         }else if((pageParam == null || pageParam == undefined)){		// add page param only for my stories list
 			URL_SEARCH_PARAMS.set('page', 1)
-			history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
+			history.push(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
 		}
         mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
 
         return () => {
             controller.abort()
         }
-    }, [URL_SEARCH_PARAMS.get("page"), URL_SEARCH_PARAMS.get("editor")]);
+    }, [URL_SEARCH_PARAMS.get("page"), URL_SEARCH_PARAMS.get("editor")]);    
 
     
-    // useEffect(() => {
-    //     let editorParam = URL_SEARCH_PARAMS.get("editor")
-    //     listProjects()
-    // }, [URL_SEARCH_PARAMS.get("editor")])
-
-    // useEffect(() => {
-    //     assignEditorFilter()
-    // }, [checkedEditors])
-
     useEffect(() => {
         const controller = new AbortController();
 
@@ -1472,7 +1465,13 @@ function MyStories(props) {
             try{
                 // console.log(createdProjectsList?.find(each => each?.id == id))
                 if(!createdProjectsList?.find(each => each?.id == id) && !isProjectListEmptyRef.current) {
-                    listProjects()
+                    if(openProjectListCounterRef.current < 2){
+                        listProjects()
+                        openProjectListCounterRef.current += 1
+                    }
+                    if(openProjectListCounterRef.current > 2){
+                        openProjectListCounterRef.current = 0
+                    }
                 }else if(!isProjectListEmptyRef.current){
                     let selectedRow = document.querySelector(`div[data-key='${id}']`)
                     setSelectFileRow(true)
@@ -1487,6 +1486,10 @@ function MyStories(props) {
 		}
     }, [createdProjectsList, URL_SEARCH_PARAMS.get("open-project")]);
 
+    useEffect(() => {
+      console.log("counter : "+openProjectListCounterRef.current)
+    }, [openProjectListCounterRef.current])
+    
 
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
