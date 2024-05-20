@@ -1469,9 +1469,7 @@ function MyStories(props) {
                         listProjects()
                         openProjectListCounterRef.current += 1
                     }
-                    if(openProjectListCounterRef.current > 2){
-                        openProjectListCounterRef.current = 0
-                    }
+                    
                 }else if(!isProjectListEmptyRef.current){
                     let selectedRow = document.querySelector(`div[data-key='${id}']`)
                     setSelectFileRow(true)
