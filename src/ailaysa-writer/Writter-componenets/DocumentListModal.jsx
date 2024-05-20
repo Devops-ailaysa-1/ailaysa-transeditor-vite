@@ -117,8 +117,15 @@ const DocumentListModal = (props) => {
         });
     }
 
+    const openInNewTab = (url) => {
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
+      }
+
     const openDocument = (id) => {
-        window.location.href = `/word-processor?document-id=${id}`
+        // window.location.href = `/word-processor?document-id=${id}`
+        openInNewTab(Config.TRANSEDITOR_HOST + `/word-processor?document-id=${id}`)
+
     }
 
     return (

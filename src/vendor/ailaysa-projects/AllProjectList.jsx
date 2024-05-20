@@ -5154,8 +5154,10 @@ function AllProjectList(props) {
         var myHeaders = new Headers();
         var formdata = new FormData();
 
-        formdata.append("html", removedStyleAttribFromImg);
-
+        // formdata.append("html", removedStyleAttribFromImg);
+        formdata.append("html_str", removedStyleAttribFromImg)
+        formdata.append("name", "name")
+        
         var requestOptions = {
             method: 'POST',
             body: formdata,
@@ -5163,7 +5165,9 @@ function AllProjectList(props) {
             redirect: 'follow'
         };
         try{
-            let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
+            // let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
+            let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions)
+         
             if (data.status === 200) {
                 let response = await data.blob()
     
