@@ -2315,11 +2315,7 @@ function TranslateFiles(props) {
         contentprojectNameRef.current.scrollTo(0, 0);
     }
 
-    const handleBlockedNavigation = ({
-        currentLocation,
-        nextLocation,
-        historyAction
-      }) => {
+    const handleBlockedNavigation = ({nextLocation}) => {
         
         if (
             files.length <= 0 || nextLocation.pathname === "/file-upload" ||

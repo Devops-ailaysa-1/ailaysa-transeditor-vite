@@ -1102,11 +1102,7 @@ function SpeechToText(props) {
     }
 
 
-    const handleBlockedNavigation = ({
-        currentLocation,
-        nextLocation,
-        historyAction
-    }) => {
+    const handleBlockedNavigation = ({nextLocation}) => {
 
         if (files.length <= 0 || audioData.length <= 0 || nextLocation.pathname?.includes('/transcriptions')) {
             return false
