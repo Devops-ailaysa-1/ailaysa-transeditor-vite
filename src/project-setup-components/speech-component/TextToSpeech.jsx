@@ -1768,11 +1768,7 @@ const TextToSpeech = (props) => {
         contentprojectNameRef.current.scrollTo(0, 0);
     }
 
-    const handleBlockedNavigation = ({
-        currentLocation,
-        nextLocation,
-        historyAction
-      }) => {
+    const handleBlockedNavigation = ({nextLocation}) => {
         if (
             files.length <= 0 || dictationInput?.trim() === "" || translateSrcContent?.trim() === "" || 
             nextLocation.pathname?.includes('/text-to-speech') || nextLocation.pathname?.includes('/ai-voices')

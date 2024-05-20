@@ -2919,7 +2919,7 @@ const Writter = (props) => {
                     let AiImgName = response.data.prompt
                     setPopupLoading('none')
                     closeOverlay()
-                    createImage(window.getSelection().focusNode.parentElement, AiImgUrl, AiImgName)
+                    createImage(window.getSelection().focusNode?.parentElement, AiImgUrl, AiImgName)
 
                     if (URL_SEARCH_PARAMS.get("pdf-id") || URL_SEARCH_PARAMS.get("task")) {
                         debounce(saveHtmlDataForPdf)
@@ -3759,7 +3759,7 @@ const Writter = (props) => {
     function getSelectedNode()
     {
         if (document.selection)
-            return document.selection.createRange().parentElement();
+            return document.selection.createRange()?.parentElement();
         else
         {
             var selection = window.getSelection();
@@ -4062,11 +4062,7 @@ const Writter = (props) => {
     }
 
     // conditions for when to show the leaving modal for writer page
-    const handleBlockedNavigationForWriter = ({
-        currentLocation,
-        nextLocation,
-        historyAction
-    }) => {
+    const handleBlockedNavigationForWriter = ({nextLocation}) => {
         let docIdParam = URL_SEARCH_PARAMS.get('document-id')
         if(
             !docIdParam || nextLocation.pathname?.includes('/file-upload') ||
