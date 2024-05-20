@@ -276,6 +276,19 @@
     color: #0073DF;
 }
 
+.prompt-library-btn{
+    border-radius: 4px;
+    border: 1px solid #D3D8DC;
+    padding: 10px 16px;
+    background: #FFF;
+    gap: 8px;
+    color: #3C4043;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
 @media screen and (max-width: 1300px) { 
     .prompt-lib-modal-body .prompt-container .left-box {
         width: 45%;

@@ -16,9 +16,11 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import generateKey from '../../project-setup-components/speech-component/speech-to-text/recorder-components/utils/GenerateKey';
+import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
+
 export const PromptLibraryModal = () => {
 
-    const [showPromptLibrary, setShowPromptLibrary] = useState(true)
+    const [showPromptLibrary, setShowPromptLibrary] = useState(false)
     const [activePromptTab, setActivePromptTab] = useState(1)
     const [selectedDomain, setSelectedDomain] = useState(1)
     const [selectedCategory, setselectedCategory] = useState(1)
@@ -331,247 +333,256 @@ export const PromptLibraryModal = () => {
 
     return (
         <>
-            <Rodal 
-                className="prompt-library-modal" 
-                visible={showPromptLibrary} 
-                onClose={() => setShowPromptLibrary(false)}
-                showCloseButton={false}
+            <button 
+                className="prompt-library-btn d-flex items-center"
+                onClick={() => setShowPromptLibrary(!showPromptLibrary)}
             >
-                <div className="prompt-library-wrapper">
-                    <div className="file-list-assign-manage-header d-flex justify-between items-center">
-                        <h3 className="title">Prompt library</h3>
-                        <span className="close-btn" onClick={() => setShowIndividualAssignManage(false)}>
-                            <CloseIcon className="header-close"  />
-                        </span>
-                    </div>
-                    <div className="prompt-lib-modal-body">
-                        <PromptTabs />
-                        <div className="prompt-container d-flex">
-                            <div className="left-box">
-                                <div className="search-box d-flex items-center">
-                                    <SearchOutlinedIcon style={{ color: '#5F6368' }} />
-                                    <input 
-                                        type="text" 
-                                        className="search-input" 
-                                        placeholder='Search...'
-                                    />
-                                </div>
-                                {activePromptTab === 1 && (
-                                    <DomainCapsuleList />
-                                )}
+                <LibraryBooksOutlinedIcon style={{color: "#5F6368", fontSize: "22px"}} />
+                Prompt library
+            </button>
+            {showPromptLibrary && (
+                <Rodal 
+                    className="prompt-library-modal" 
+                    visible={showPromptLibrary} 
+                    onClose={() => setShowPromptLibrary(false)}
+                    showCloseButton={false}
+                >
+                    <div className="prompt-library-wrapper">
+                        <div className="file-list-assign-manage-header d-flex justify-between items-center">
+                            <h3 className="title">Prompt library</h3>
+                            <span className="close-btn" onClick={() => setShowPromptLibrary(false)}>
+                                <CloseIcon className="header-close"  />
+                            </span>
+                        </div>
+                        <div className="prompt-lib-modal-body">
+                            <PromptTabs />
+                            <div className="prompt-container d-flex">
+                                <div className="left-box">
+                                    <div className="search-box d-flex items-center">
+                                        <SearchOutlinedIcon style={{ color: '#5F6368' }} />
+                                        <input 
+                                            type="text" 
+                                            className="search-input" 
+                                            placeholder='Search...'
+                                        />
+                                    </div>
+                                    {activePromptTab === 1 && (
+                                        <DomainCapsuleList />
+                                    )}
 
-                                <div className="d-flex category-list-container">
-                                    <ul className="category-list custom-scroll-bar">
-                                        {categoryList?.map(each => {
-                                            if(each.isNew) {
+                                    <div className="d-flex category-list-container">
+                                        <ul className="category-list custom-scroll-bar">
+                                            {categoryList?.map(each => {
+                                                if(each.isNew) {
+                                                    return (
+                                                        <li 
+                                                            className={"list-item-input" + (selectedCategory === each.id ? "active" : "")}
+                                                        >
+                                                            <input 
+                                                                type="text" 
+                                                                placeholder='Category name'
+                                                                autoFocus={true}
+                                                                value={each.label}
+                                                                onChange={(e) => handleInputChange(e, each.id, categoryList, setCategoryList)}
+                                                                onKeyDown={(e) => handleInputKeyDown(e, each.id, categoryList, setCategoryList)}
+                                                                onBlur={(e) => handleInputBlur(e, each.id, categoryList, setCategoryList)}
+                                                            />
+                                                        </li>
+                                                    )
+                                                }else{
+                                                    return (
+                                                        <li 
+                                                            className={"list-item " + (selectedCategory === each.id ? "active" : "")}
+                                                            onClick={() => setselectedCategory(each.id)}
+                                                        >
+                                                            {each.label}
+                                                        </li>
+                                                    )
+                                                }
+                                            })}
+                                        </ul>
+                                        <ul className="sub-category-list category-list custom-scroll-bar">
+                                            {subCategoryList?.map(each => {
+                                                if(each.isNew){
+                                                    return (
+                                                        <li 
+                                                            className={"list-item-input" + (selectedCategory === each.id ? "active" : "")}
+                                                        >
+                                                            <input 
+                                                                type="text" 
+                                                                placeholder='Category name'
+                                                                autoFocus={true} 
+                                                                value={each.label}
+                                                                onChange={(e) => handleInputChange(e, each.id, subCategoryList, setSubCategoryList)}
+                                                                onKeyDown={(e) => handleInputKeyDown(e, each.id, subCategoryList, setSubCategoryList)}
+                                                                onBlur={(e) => handleInputBlur(e, each.id, subCategoryList, setSubCategoryList)}
+                                                            />
+                                                        </li>
+                                                    )
+                                                }
                                                 return (
                                                     <li 
-                                                        className={"list-item-input" + (selectedCategory === each.id ? "active" : "")}
-                                                    >
-                                                        <input 
-                                                            type="text" 
-                                                            placeholder='Category name'
-                                                            autoFocus={true}
-                                                            value={each.label}
-                                                            onChange={(e) => handleInputChange(e, each.id, categoryList, setCategoryList)}
-                                                            onKeyDown={(e) => handleInputKeyDown(e, each.id, categoryList, setCategoryList)}
-                                                            onBlur={(e) => handleInputBlur(e, each.id, categoryList, setCategoryList)}
-                                                        />
-                                                    </li>
-                                                )
-                                            }else{
-                                                return (
-                                                    <li 
-                                                        className={"list-item " + (selectedCategory === each.id ? "active" : "")}
-                                                        onClick={() => setselectedCategory(each.id)}
+                                                        className={"list-item " + (selectedSubCategory == each.id ? "active" : "")}
+                                                        onClick={() => setselectedSubCategory(each.id)}
                                                     >
                                                         {each.label}
                                                     </li>
                                                 )
-                                            }
-                                        })}
-                                    </ul>
-                                    <ul className="sub-category-list category-list custom-scroll-bar">
-                                        {subCategoryList?.map(each => {
-                                            if(each.isNew){
-                                                return (
-                                                    <li 
-                                                        className={"list-item-input" + (selectedCategory === each.id ? "active" : "")}
-                                                    >
-                                                        <input 
-                                                            type="text" 
-                                                            placeholder='Category name'
-                                                            autoFocus={true} 
-                                                            value={each.label}
-                                                            onChange={(e) => handleInputChange(e, each.id, subCategoryList, setSubCategoryList)}
-                                                            onKeyDown={(e) => handleInputKeyDown(e, each.id, subCategoryList, setSubCategoryList)}
-                                                            onBlur={(e) => handleInputBlur(e, each.id, subCategoryList, setSubCategoryList)}
-                                                        />
-                                                    </li>
-                                                )
-                                            }
-                                            return (
-                                                <li 
-                                                    className={"list-item " + (selectedSubCategory == each.id ? "active" : "")}
-                                                    onClick={() => setselectedSubCategory(each.id)}
+                                            })}
+                                        </ul>
+                                    </div>
+                                    {activePromptTab === 2 && (
+                                        <div className="d-flex">
+                                            <button
+                                                className="add-prompt-category-btn category-btn"
+                                                onClick={(e) => addNewListItemInList(e, categoryList, setCategoryList)}
+                                            >
+                                                <AddOutlinedIcon style={{ color: '#0073DF' }} />
+                                                Add category
+                                            </button>
+                                            <button
+                                                className="add-prompt-category-btn sub-category-list"
+                                                onClick={(e) => addNewListItemInList(e, subCategoryList, setSubCategoryList)}
+                                            >
+                                                <AddOutlinedIcon style={{ color: '#0073DF' }} />
+                                                Add sub-category
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="right-box">
+                                    <div className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}>
+                                        {promptCardsList.map((each, ind) => {
+                                            let prompt = promptCardsListCopy.find(obj => obj.id === each.id)?.label
+                                            return(
+                                                // <PromptCard 
+                                                //     key={each.id} 
+                                                //     id={each.id}
+                                                //     prompt={each.label} 
+                                                //     isNew={each.isNew}
+                                                // />
+                                                <div 
+                                                    key={each.id}
+                                                    className={[
+                                                        "prompt-card",
+                                                        (each?.isNew || each?.isEdit) && "active",
+                                                        (isNewOrEditMode && !each?.isNew && !each?.isEdit) && "disable"
+                                                        
+                                                    ].join(' ')}
                                                 >
-                                                    {each.label}
-                                                </li>
+                                                    {(each?.isNew || each?.isEdit) ? (
+                                                        <textarea 
+                                                            name="new-prompt"
+                                                            className="prompt-textarea"
+                                                            placeholder='Enter your own prompt,  utilizing [square brackets] for placeholders.'                     
+                                                            rows={4}
+                                                            autoFocus={true}
+                                                            onChange={(e) => handlePromptChange(e, each.id)}
+                                                            value={prompt}
+                                                        ></textarea>
+                                                    ) : (
+                                                        <p className="prompt-text" dangerouslySetInnerHTML={{__html: styleTextWithinBrackets(each.label)}}>
+                                                            {/* {each.label} */}
+                                                            {/* Create a detailed profile for your character. Include details such as <span className="prompt-placeholder">[Name]</span>, <span className="prompt-placeholder">[Age]</span>, <span className="prompt-placeholder">[Occupation]</span>, <span className="prompt-placeholder">[Personality Traits]</span>, <span className="prompt-placeholder">[Background]</span>, and <span className="prompt-placeholder">[Goals]</span>. */}
+                                                        </p>
+                                                    )}
+                                                    <div className="action-btn-wrapper items-center">
+                                                        {each?.isNew && (
+                                                            <>
+                                                                <PromptButton 
+                                                                    classname="simple-btn"
+                                                                    onClick={(e) => handlePromptCancelBtn(e, each.id)}
+                                                                >
+                                                                    Cancel
+                                                                </PromptButton>
+                                                                <PromptButton 
+                                                                    classname="prompt-primary-btn"
+                                                                    onClick={(e) => handleAddPromptBtn(e, each.id)}
+                                                                >
+                                                                    Add prompt
+                                                                </PromptButton>
+                                                            </>
+                                                        )}  
+                                                        {each?.isEdit ? (
+                                                            <>
+                                                                <PromptButton 
+                                                                    classname="simple-btn"
+                                                                    onClick={(e) => handleToggleEditPromptCard(e, each.id, false)}
+                                                                >
+                                                                    Cancel
+                                                                </PromptButton>
+                                                                <PromptButton
+                                                                    classname="prompt-primary-btn"
+                                                                    onClick={(e) => handleSavePromptCard(e, each.id)}
+                                                                >
+                                                                    Save prompt
+                                                                </PromptButton>
+                                                            </>
+                                                        ) : (!each?.isNew && !each?.isDelete) && (
+                                                            <>
+                                                                {activePromptTab === 2 && (
+                                                                    <>
+                                                                        <Tooltip title="Delete prompt" placement="top" arrow>
+                                                                            <div 
+                                                                                className="action-icon delete-bin-icon"
+                                                                                onClick={(e) => handleToggleDeletePromptCard(e, each.id, true)}
+                                                                            >
+                                                                                <DeleteIcon />
+                                                                            </div>
+                                                                        </Tooltip>
+                                                                        <Tooltip title="Edit prompt" placement="top" arrow>
+                                                                            <div
+                                                                                className="action-icon edit-icon"
+                                                                                onClick={(e) => handleToggleEditPromptCard(e, each.id, true)}
+                                                                            >
+                                                                                <EditIcon />
+                                                                            </div>
+                                                                        </Tooltip>
+                                                                    </>
+                                                                )}
+                                                                <PromptButton classname="prompt-primary-btn">
+                                                                    Use prompt
+                                                                </PromptButton>
+                                                            </>
+                                                        )}
+                                                        {each.isDelete && (
+                                                            <>
+                                                                <PromptButton 
+                                                                    classname="simple-btn"
+                                                                    onClick={(e) => handleToggleDeletePromptCard(e, each.id, false)}
+                                                                >
+                                                                    Cancel
+                                                                </PromptButton>
+                                                                <PromptButton 
+                                                                    classname="danger-btn"
+                                                                    onClick={(e) => handleDeletePromptCard(e, each.id)}
+                                                                >
+                                                                    Delete prompt
+                                                                </PromptButton>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>
                                             )
                                         })}
-                                    </ul>
-                                </div>
-                                {activePromptTab === 2 && (
-                                    <div className="d-flex">
-                                        <button
-                                            className="add-prompt-category-btn category-btn"
-                                            onClick={(e) => addNewListItemInList(e, categoryList, setCategoryList)}
-                                        >
-                                            <AddOutlinedIcon style={{ color: '#0073DF' }} />
-                                            Add category
-                                        </button>
-                                        <button
-                                            className="add-prompt-category-btn sub-category-list"
-                                            onClick={(e) => addNewListItemInList(e, subCategoryList, setSubCategoryList)}
-                                        >
-                                            <AddOutlinedIcon style={{ color: '#0073DF' }} />
-                                            Add sub-category
-                                        </button>
                                     </div>
-                                )}
-                            </div>
-                            <div className="right-box">
-                                <div className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}>
-                                    {promptCardsList.map((each, ind) => {
-                                        let prompt = promptCardsListCopy.find(obj => obj.id === each.id)?.label
-                                        return(
-                                            // <PromptCard 
-                                            //     key={each.id} 
-                                            //     id={each.id}
-                                            //     prompt={each.label} 
-                                            //     isNew={each.isNew}
-                                            // />
-                                            <div 
-                                                key={each.id}
-                                                className={[
-                                                    "prompt-card",
-                                                    (each?.isNew || each?.isEdit) && "active",
-                                                    (isNewOrEditMode && !each?.isNew && !each?.isEdit) && "disable"
-                                                    
-                                                ].join(' ')}
-                                            >
-                                                {(each?.isNew || each?.isEdit) ? (
-                                                    <textarea 
-                                                        name="new-prompt"
-                                                        className="prompt-textarea"
-                                                        placeholder='Enter your own prompt,  utilizing [square brackets] for placeholders.'                     
-                                                        rows={4}
-                                                        autoFocus={true}
-                                                        onChange={(e) => handlePromptChange(e, each.id)}
-                                                        value={prompt}
-                                                    ></textarea>
-                                                ) : (
-                                                    <p className="prompt-text" dangerouslySetInnerHTML={{__html: styleTextWithinBrackets(each.label)}}>
-                                                        {/* {each.label} */}
-                                                        {/* Create a detailed profile for your character. Include details such as <span className="prompt-placeholder">[Name]</span>, <span className="prompt-placeholder">[Age]</span>, <span className="prompt-placeholder">[Occupation]</span>, <span className="prompt-placeholder">[Personality Traits]</span>, <span className="prompt-placeholder">[Background]</span>, and <span className="prompt-placeholder">[Goals]</span>. */}
-                                                    </p>
-                                                )}
-                                                <div className="action-btn-wrapper items-center">
-                                                    {each?.isNew && (
-                                                        <>
-                                                            <PromptButton 
-                                                                classname="simple-btn"
-                                                                onClick={(e) => handlePromptCancelBtn(e, each.id)}
-                                                            >
-                                                                Cancel
-                                                            </PromptButton>
-                                                            <PromptButton 
-                                                                classname="prompt-primary-btn"
-                                                                onClick={(e) => handleAddPromptBtn(e, each.id)}
-                                                            >
-                                                                Add prompt
-                                                            </PromptButton>
-                                                        </>
-                                                    )}  
-                                                    {each?.isEdit ? (
-                                                        <>
-                                                            <PromptButton 
-                                                                classname="simple-btn"
-                                                                onClick={(e) => handleToggleEditPromptCard(e, each.id, false)}
-                                                            >
-                                                                Cancel
-                                                            </PromptButton>
-                                                            <PromptButton
-                                                                classname="prompt-primary-btn"
-                                                                onClick={(e) => handleSavePromptCard(e, each.id)}
-                                                            >
-                                                                Save prompt
-                                                            </PromptButton>
-                                                        </>
-                                                    ) : (!each?.isNew && !each?.isDelete) && (
-                                                        <>
-                                                            {activePromptTab === 2 && (
-                                                                <>
-                                                                    <Tooltip title="Delete prompt" placement="top" arrow>
-                                                                        <div 
-                                                                            className="action-icon delete-bin-icon"
-                                                                            onClick={(e) => handleToggleDeletePromptCard(e, each.id, true)}
-                                                                        >
-                                                                            <DeleteIcon />
-                                                                        </div>
-                                                                    </Tooltip>
-                                                                    <Tooltip title="Edit prompt" placement="top" arrow>
-                                                                        <div
-                                                                            className="action-icon edit-icon"
-                                                                            onClick={(e) => handleToggleEditPromptCard(e, each.id, true)}
-                                                                        >
-                                                                            <EditIcon />
-                                                                        </div>
-                                                                    </Tooltip>
-                                                                </>
-                                                            )}
-                                                            <PromptButton classname="prompt-primary-btn">
-                                                                Use prompt
-                                                            </PromptButton>
-                                                        </>
-                                                    )}
-                                                    {each.isDelete && (
-                                                        <>
-                                                            <PromptButton 
-                                                                classname="simple-btn"
-                                                                onClick={(e) => handleToggleDeletePromptCard(e, each.id, false)}
-                                                            >
-                                                                Cancel
-                                                            </PromptButton>
-                                                            <PromptButton 
-                                                                classname="danger-btn"
-                                                                onClick={(e) => handleDeletePromptCard(e, each.id)}
-                                                            >
-                                                                Delete prompt
-                                                            </PromptButton>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )
-                                    })}
+                                    {activePromptTab === 2 && (
+                                        <button
+                                            className="add-prompt-category-btn add-prompt-btn"
+                                            onClick={(e) => addNewListItemInList(e, promptCardsList, setPromptCardsList)}
+                                            style={promptCardsList?.find(each => (each?.isNew || each?.isEdit)) ? {pointerEvents: 'none', opacity: 0.5} : {}}
+                                        >
+                                            <AddOutlinedIcon style={{ color: '#0073DF' }} />
+                                            Add prompt
+                                        </button>
+                                    )}
                                 </div>
-                                {activePromptTab === 2 && (
-                                    <button
-                                        className="add-prompt-category-btn add-prompt-btn"
-                                        onClick={(e) => addNewListItemInList(e, promptCardsList, setPromptCardsList)}
-                                        style={promptCardsList?.find(each => (each?.isNew || each?.isEdit)) ? {pointerEvents: 'none', opacity: 0.5} : {}}
-                                    >
-                                        <AddOutlinedIcon style={{ color: '#0073DF' }} />
-                                        Add prompt
-                                    </button>
-                                )}
                             </div>
-                        </div>
 
+                        </div>
                     </div>
-                </div>
-            </Rodal>
+                </Rodal>
+            )}
         </>
     )
 }

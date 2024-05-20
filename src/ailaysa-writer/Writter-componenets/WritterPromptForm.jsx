@@ -24,6 +24,8 @@ import ReloadIcon from "../../assets/images/reload.svg"
 import DoubleArrowIcon from "../../assets/images/new-ui-icons/doubleArrow.svg"
 import Box from '@mui/material/Box';
 import CircularProgress, {circularProgressClasses} from '@mui/material/CircularProgress';
+import { PromptLibraryModal } from "../Prompt-library/PromptLibraryModal";
+import { LangSelectorDropDown } from "../lang-select-drop-down/LangSelectorDropDown";
 
 const WritterPromptForm = (props) => {
 
@@ -1236,6 +1238,8 @@ const WritterPromptForm = (props) => {
 					}  */}
 
                     {/* <CustomBookTooltip /> */}
+                    <PromptLibraryModal />
+                    <LangSelectorDropDown langList={languageOptionsList} />
                 </div>
             </div>
         </>
