@@ -3231,39 +3231,43 @@ function Workspace(props) {
                 redirect: 'follow'
             };
 
-            let data = null
-            if (targetLanguageId == 17) {
-                data = await fetch(Config.BASE_URL + "/workspace_okapi/paraphrase/", requestOptions)
-            } else if (sourceLanguageId == 17) {
-                data = await fetch(Config.BASE_URL + "/workspace_okapi/seg_rewrite/", requestOptions)
-            }
+            try{
+                let data = null
+                if (targetLanguageId == 17) {
+                    data = await fetch(Config.BASE_URL + "/workspace_okapi/paraphrase/", requestOptions)
+                } else if (sourceLanguageId == 17) {
+                    data = await fetch(Config.BASE_URL + "/workspace_okapi/seg_rewrite/", requestOptions)
+                }
 
-            // console.log(data)
-            let response = await data.json()
-            if (data.status === 200) {
-                setParaPhraseResList(response?.result)
-                setparaPhraseTag(response?.tag)
-                setIsParaphrasing(false)
-                if (response?.msg === 'error') {
+                // console.log(data)
+                let response = await data.json()
+                if (data.status === 200) {
+                    setParaPhraseResList(response?.result)
+                    setparaPhraseTag(response?.tag)
                     setIsParaphrasing(false)
+                    if (response?.msg === 'error') {
+                        setIsParaphrasing(false)
+                        setparaphraseTrigger(false)
+                        setIsParaphrasing(false)
+                        Config.toast(t("paraphrase_get_error_1"), 'warning');
+                    }
+                } else if (data.status === 400) {
+                    if (response?.msg === 'Insufficient Credits') {
+                        setShowCreditAlert(true)
+                        if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
+                        else setCreditAlertTxt(t("insufficient_credits"))
+                    }
+                    handleTransphrasePopoverClose()
                     setparaphraseTrigger(false)
                     setIsParaphrasing(false)
-                    Config.toast(t("paraphrase_get_error_1"), 'warning');
+                } else if (data.status === 500) {
+                    handleTransphrasePopoverClose()
+                    Config.toast(t("paraphrase_get_error_3"), 'error')
+                    setparaphraseTrigger(false)
+                    setIsParaphrasing(false)
                 }
-            } else if (data.status === 400) {
-                if (response?.msg === 'Insufficient Credits') {
-                    setShowCreditAlert(true)
-                    if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
-                    else setCreditAlertTxt(t("insufficient_credits"))
-                }
-                handleTransphrasePopoverClose()
-                setparaphraseTrigger(false)
-                setIsParaphrasing(false)
-            } else if (data.status === 500) {
-                handleTransphrasePopoverClose()
-                Config.toast(t("paraphrase_get_error_3"), 'error')
-                setparaphraseTrigger(false)
-                setIsParaphrasing(false)
+            } catch (e) {
+                console.log(e)
             }
         } else {
             handleTransphrasePopoverClose()
