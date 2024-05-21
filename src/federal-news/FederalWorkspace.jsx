@@ -5771,7 +5771,7 @@ const FederalWorkspace = (props) => {
                                     </ul>
                                 )}
                                 
-                                {targetLanguage === "English" && (
+                                {/* {targetLanguage === "English" && (
                                     <ul className="last-row-tools-1" onClick={toggleSynonym}>
                                         <li>
                                             <Tooltip title={t("synonym")} placement="bottom" arrow>
@@ -5781,7 +5781,7 @@ const FederalWorkspace = (props) => {
                                             </Tooltip>
                                         </li>
                                     </ul>
-                                )}
+                                )} */}
                                 
                                 {supportedImeLanguage?.includes(targetLanguageCode) &&  <ul className="last-row-tools-1" onClick={handleIme}>
                                     <li>
