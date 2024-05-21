@@ -407,7 +407,7 @@ function MyStories(props) {
     const moreOptionOutside = useRef();
     const showOpenasOutside = useRef();
     const availCreditOutside = useRef();
-    const projectsPerPage = useRef(20);
+    const projectsPerPage = useRef(10);
     const deletedEditFileIds = useRef([]);
     const deletedJobIds = useRef([]);
     const deletedSubjectIds = useRef([]);
