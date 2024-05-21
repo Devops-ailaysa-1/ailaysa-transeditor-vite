@@ -3102,11 +3102,7 @@ const InstantTextTranslate = (props) => {
     // const [showmodelwarning,setShowmodelwarning]=useState(false)
 
 
-    const handleBlockedNavigation = ({
-        currentLocation,
-        nextLocation,
-        historyAction
-      }) => {
+    const handleBlockedNavigation = ({nextLocation}) => {
         
         if (
             !nextLocation.pathname?.includes('/instant-text') && 

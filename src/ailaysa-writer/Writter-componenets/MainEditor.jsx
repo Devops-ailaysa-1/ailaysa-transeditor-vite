@@ -43,7 +43,6 @@ import DiscardPopup from "../../assets/images/new-ui-icons/discard-popup.svg"
 import DonePopup from "../../assets/images/new-ui-icons/done-popup.svg"
 import ReplacePopup from "../../assets/images/new-ui-icons/replace-popup.svg"
 import CopyPopup from "../../assets/images/new-ui-icons/copy-popup.svg"
-import * as cleaner from 'summernote-cleaner';
 
 const MainEditor = (props) => {
     let {
@@ -224,7 +223,7 @@ const MainEditor = (props) => {
     
     const directChildRef = useRef(null)
     
-
+    const copiedContentRef = useRef(null)
     const contenteditableViewPortTextRef = useRef("")
     
 
@@ -277,41 +276,127 @@ const MainEditor = (props) => {
         const regex = /font-size:\s*(\d*\.?\d+)(rem|px)/g; // matches "font-size:", followed by a number and either "rem" or "px"
         return htmlString.replace(regex, (_, p1, p2) => `font-size:${parseFloat(p1) * (p2 === 'rem' ? remToPxRatio : 1) * pxToPtRatio}pt`);
     }
+
+    function removeImgTags(htmlString) {
+        // Create a temporary div element
+        const tempDiv = document.createElement('div');
+        // Set the HTML content of the div
+        tempDiv.innerHTML = htmlString;
+        // Remove all <img> elements
+        tempDiv.querySelectorAll('img').forEach(img => img.remove());
+        // Return the cleaned HTML content
+        return tempDiv.innerHTML;
+      }
     
+      function removeFormElements(htmlString) {
+        // Create a temporary div element
+        const tempDiv = document.createElement('div');
+        // Set the HTML content of the div
+        tempDiv.innerHTML = htmlString;
+        // Remove all form elements: input, checkbox, and button
+        tempDiv.querySelectorAll('input, checkbox, button').forEach(element => element.remove());
+        // Return the cleaned HTML content
+        return tempDiv.innerHTML;
+      }
+
+      function unwrapDivAndKeepPTags(htmlString) {
+        // Create a temporary element to parse the HTML string
+        const tempElement = document.createElement('div');
+        tempElement.innerHTML = htmlString;
+      
+        // Unwrap div tags
+        const divChildren = Array.from(tempElement.querySelectorAll('div'));
+        divChildren.forEach(div => {
+          while (div.firstChild) {
+            div.parentNode.insertBefore(div.firstChild, div);
+          }
+          div.parentNode.removeChild(div);
+        });
+    
+        // Get the innerHTML of the temporary element which now contains only p tags
+        const resultHTML = tempElement.innerHTML;
+      
+        // Return the result
+        return resultHTML;
+      }
 
     useEffect(() => {
         // customFn()
         $('.summernote').summernote({
             callbacks: {
                 onPaste: async function (e) {
-                    // console.log(isCopiedFromSummernoteRef.current)
-                    // if(!isCopiedFromSummernoteRef.current){
-                    //     e.preventDefault()
-
-                    //     // Get the pasted content as HTML
-                    //     // below two line are very important it gets the clipboard value from noramlly and manually copied data
-                    //     var clipboardData = e.originalEvent.clipboardData || window.clipboardData;
-                    //     var pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
-                    //     // console.log(pastedData)
-                    //     // var pastedHTML = (e.originalEvent || e).clipboardData.getData('text/html');
-    
-                    //     // Create a temporary div to parse and clean the pasted content
-                    //     var tempDiv = document.createElement('span');
-                    //     tempDiv.innerHTML = pastedData;
-    
-                    //     // Remove inline styles and attributes from all elements
-                    //     var elementsWithStyles = tempDiv.querySelectorAll('*[style]');
-                    //     elementsWithStyles.forEach(function(element) {
-                    //         element.removeAttribute('style');
-                    //     });
-    
-                    //     // Insert the cleaned HTML into the contenteditable div
-                    //     var cleanedHTML = tempDiv.innerHTML;
-                    //     console.log(cleanedHTML)
-                    //     document.execCommand('insertHTML', false, cleanedHTML);
-                    //     // $('summernote').summernote('pasteHTML', cleanedHTML)
+            
+                    var clipboardData = e.originalEvent.clipboardData || window.clipboardData;
+                    var pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
+                    const sanitizedHtml1 = copiedContentRef.current?.replace(/\s/g, '');
+                    const sanitizedHtml2 = pastedData?.replace(/\s/g, '');
+       
+                    // if(sanitizedHtml1 != sanitizedHtml2){
+                    //     isCopiedFromSummernoteRef.current = false
                     // }
-                    // isCopiedFromSummernoteRef.current = false
+                    // if(isCopiedFromSummernoteRef.current){
+                        e.preventDefault()
+
+                        // Get the pasted content as HTML
+                        // below two line are very important it gets the clipboard value from noramlly and manually copied data
+                        var clipboardData = e.originalEvent.clipboardData || window.clipboardData;
+                        var pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
+                        // // console.log(pastedData)
+                        // // var pastedHTML = (e.originalEvent || e).clipboardData.getData('text/html');
+    
+                        // // Create a temporary div to parse and clean the pasted content
+                        // var tempDiv = document.createElement('span');
+                        // tempDiv.innerHTML = pastedData;
+                        // // Remove inline styles and attributes from all elements
+                        // var elementsWithStyles = tempDiv.querySelectorAll('*[style]');
+                        // elementsWithStyles.forEach(function(element) {
+                        //     element.removeAttribute('style');
+                        // });
+
+                        const clean = sanitizeHtml(pastedData, {
+                            allowedTags: ["div","table", "tbody", "td", "tfoot", "th", "thead", "tr",'b', 'i','p','h1','h2','h3','h4','h5','h6','a','img','span','li','ul','ol'],
+                            // allowedAttributes: {
+                            //   'p': ["style"],
+                            // },
+                            allowedStyles: {
+                              '*': {
+                                // Match HEX and RGB
+                                'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+                                'text-align': [/^left$/, /^right$/, /^center$/],
+                                // Match any number with px, em, or %
+                                // 'font-size': [/^\d+(?:px|em|%)$/]
+                              },
+                              
+                            }
+                          });
+
+                          console.log(clean)
+
+                          const allowedDomain = 'https://aidev4.ailaysa.com';
+                            const parser = new DOMParser();
+                            const doc = parser?.parseFromString(clean, 'text/html');
+                            const images = doc?.querySelectorAll('img');
+
+                            images.forEach(img => {
+                            const src = img.getAttribute('src');
+                            if (!src?.startsWith(allowedDomain)) {
+                                img.remove();
+                            }
+                            });
+
+                            const sanitizedHtmlString = doc.body.innerHTML;
+                            console.log(sanitizedHtmlString);
+    
+                        // Insert the cleaned HTML into the contenteditable div
+                        // var cleanedHTML = tempDiv.innerHTML;
+                        // var clean = removeFormElements(removeImgTags(cleanedHTML))
+                        // console.log(unwrapDivAndKeepPTags(cleanedHTML))
+                        document.execCommand('insertHTML', false, sanitizedHtmlString);
+                        // $('summernote').summernote('pasteHTML', cleanedHTML)
+                    // }
+                    // if(sanitizedHtml1 != sanitizedHtml2){
+                    //     isCopiedFromSummernoteRef.current = false
+                    // }
 
 
 
@@ -514,7 +599,7 @@ const MainEditor = (props) => {
 
 
                         // console.log(img.width, img.height)
-                        $('.summernote').summernote("insertNode", loaderPTag);
+                        // $('.summernote').summernote("insertNode", loaderPTag);
                     }
                     let lastDot = name?.lastIndexOf(".");
                     let ext = "." + name?.substring(lastDot + 1);
@@ -609,6 +694,7 @@ const MainEditor = (props) => {
             toolbar: [
                 // ['mybutton', ['copy','paste','pasteFormat',]],
                 Config.userState?.internal_member_team_detail?.role !== 'Editor' && ['document', ['newDoc', 'openDoc']],
+                // ['style', ['style']],
                 ['style', ['undo', 'redo']],
                 ['style', ['styleDropdown']],
                 ['style', ['bold', 'italic', 'underline']],
@@ -656,22 +742,24 @@ const MainEditor = (props) => {
                 // ime: transliterationButton,
                 // more:moreDropDown
             },
-            cleaner: {
-                action: 'both', // both|button|paste 'button' only cleans via toolbar button, 'paste' only clean when pasting content, both does both options.
-                icon: '<i class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" id="libre-paintbrush" viewBox="0 0 14 14" width="14" height="14"><path d="m 11.821425,1 q 0.46875,0 0.82031,0.311384 0.35157,0.311384 0.35157,0.780134 0,0.421875 -0.30134,1.01116 -2.22322,4.212054 -3.11384,5.035715 -0.64956,0.609375 -1.45982,0.609375 -0.84375,0 -1.44978,-0.61942 -0.60603,-0.61942 -0.60603,-1.469866 0,-0.857143 0.61608,-1.419643 l 4.27232,-3.877232 Q 11.345985,1 11.821425,1 z m -6.08705,6.924107 q 0.26116,0.508928 0.71317,0.870536 0.45201,0.361607 1.00781,0.508928 l 0.007,0.475447 q 0.0268,1.426339 -0.86719,2.32366 Q 5.700895,13 4.261155,13 q -0.82366,0 -1.45982,-0.311384 -0.63616,-0.311384 -1.0212,-0.853795 -0.38505,-0.54241 -0.57924,-1.225446 -0.1942,-0.683036 -0.1942,-1.473214 0.0469,0.03348 0.27455,0.200893 0.22768,0.16741 0.41518,0.29799 0.1875,0.130581 0.39509,0.24442 0.20759,0.113839 0.30804,0.113839 0.27455,0 0.3683,-0.247767 0.16741,-0.441965 0.38505,-0.753349 0.21763,-0.311383 0.4654,-0.508928 0.24776,-0.197545 0.58928,-0.31808 0.34152,-0.120536 0.68974,-0.170759 0.34821,-0.05022 0.83705,-0.07031 z"/></svg></i>',
-                keepHtml: true,
-                notStyle: 'position:absolute;top:0;left:0;right:0', // Position of Notification
-                keepTagContents: ['a'], //Remove tags and keep the contents
-                badTags: ['applet', 'col', 'colgroup', 'embed', 'noframes', 'noscript','svg', 'script', 'style', 'title', 'meta', 'link', 'head','input'], //Remove full tags with contents
-                badAttributes: ['bgcolor', 'border', 'height', 'cellpadding', 'cellspacing', 'lang', 'style', 'start', 'valign', 'width', 'data-(.*?)'], //Remove attributes from remaining tags
-                limitChars: 0, // 0|# 0 disables option
-                limitDisplay: 'none', // none|text|html|both
-                limitStop: false, // true/false
-                limitType: 'text', // text|html
-                notTimeOut: 850, //time before status message is hidden in miliseconds
-                keepImages: true, // if false replace with imagePlaceholder
-                imagePlaceholder: 'https://via.placeholder.com/200'
-              }
+            // cleaner: {
+            //     action: 'both', // both|button|paste 'button' only cleans via toolbar button, 'paste' only clean when pasting content, both does both options.
+            //     icon: '<i class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" id="libre-paintbrush" viewBox="0 0 14 14" width="14" height="14"><path d="m 11.821425,1 q 0.46875,0 0.82031,0.311384 0.35157,0.311384 0.35157,0.780134 0,0.421875 -0.30134,1.01116 -2.22322,4.212054 -3.11384,5.035715 -0.64956,0.609375 -1.45982,0.609375 -0.84375,0 -1.44978,-0.61942 -0.60603,-0.61942 -0.60603,-1.469866 0,-0.857143 0.61608,-1.419643 l 4.27232,-3.877232 Q 11.345985,1 11.821425,1 z m -6.08705,6.924107 q 0.26116,0.508928 0.71317,0.870536 0.45201,0.361607 1.00781,0.508928 l 0.007,0.475447 q 0.0268,1.426339 -0.86719,2.32366 Q 5.700895,13 4.261155,13 q -0.82366,0 -1.45982,-0.311384 -0.63616,-0.311384 -1.0212,-0.853795 -0.38505,-0.54241 -0.57924,-1.225446 -0.1942,-0.683036 -0.1942,-1.473214 0.0469,0.03348 0.27455,0.200893 0.22768,0.16741 0.41518,0.29799 0.1875,0.130581 0.39509,0.24442 0.20759,0.113839 0.30804,0.113839 0.27455,0 0.3683,-0.247767 0.16741,-0.441965 0.38505,-0.753349 0.21763,-0.311383 0.4654,-0.508928 0.24776,-0.197545 0.58928,-0.31808 0.34152,-0.120536 0.68974,-0.170759 0.34821,-0.05022 0.83705,-0.07031 z"/></svg></i>',
+            //     keepHtml: true,
+            //     webify: true,
+            //     notStyle: 'position:absolute;top:0;left:0;right:0', // Position of Notification
+            //     // newline: '',
+            //     keepTagContents: ['a'], //Remove tags and keep the contents
+            //     badTags: ['applet', 'col', 'colgroup', 'embed', 'noframes', 'noscript','svg', 'script', 'style', 'title', 'meta', 'link', 'head','input'], //Remove full tags with contents
+            //     badAttributes: ['bgcolor', 'border', 'height', 'cellpadding', 'cellspacing', 'lang', 'style', 'start', 'valign', 'width', 'data-(.*?)'], //Remove attributes from remaining tags
+            //     limitChars: 0, // 0|# 0 disables option
+            //     limitDisplay: 'none', // none|text|html|both
+            //     limitStop: false, // true/false
+            //     limitType: 'text', // text|html
+            //     notTimeOut: 850, //time before status message is hidden in miliseconds
+            //     keepImages: true, // if false replace with imagePlaceholder
+            //     imagePlaceholder: 'https://via.placeholder.com/200'
+            //   }
         });
         $('.dropdown-toggle').dropdown();
         $('.summernote').summernote({
@@ -1126,10 +1214,10 @@ const MainEditor = (props) => {
                     className: "drop-default summernote-list summernote-style-list",
                     contents:
                         // '<ul class="lang-list-writter-voice-wrap">' +
-                        '<a href="#" style="font-size: 16px" class="writer-style-list dropdown-item " aria-valuetext="normal"><i class="note-icon-menu-check"></i>Normal</a>' +
-                        '<a href="#" style="font-size: 40px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h1"><i class="note-icon-menu-check"></i>Heading 1</a>' +
-                        '<a href="#" style="font-size: 32px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h2"><i class="note-icon-menu-check"></i> Heading 2</a>' +
-                        '<a href="#" style="font-size: 28px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h3"><i class="note-icon-menu-check"></i> Heading 3</a>',
+                        '<a style="font-size: 16px" class="writer-style-list dropdown-item " aria-valuetext="normal"><i class="note-icon-menu-check"></i>Normal</a>' +
+                        '<a style="font-size: 40px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h1"><i class="note-icon-menu-check"></i>Heading 1</a>' +
+                        '<a style="font-size: 32px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h2"><i class="note-icon-menu-check"></i> Heading 2</a>' +
+                        '<a style="font-size: 28px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h3"><i class="note-icon-menu-check"></i> Heading 3</a>',
                     click: function (e) {
     
                         try {
@@ -1139,9 +1227,9 @@ const MainEditor = (props) => {
                             // console.log(current_text)
                             // console.log(current_node?.classList?.contains('note-editable'))
                             if (e.target.ariaValueText === 'normal') {
-                                // $('.summernote').summernote('formatPara');
+                                $('.summernote').summernote('formatPara');
                                 // const rng = $('.summernote').summernote('editor.getLastRange');
-                                replaceSelectedHeadingWithParagraph()
+                                // replaceSelectedHeadingWithParagraph()
                                 // rng.select()
                                 // $('.summernote').summernote('insertText', '');
     
@@ -1364,6 +1452,7 @@ const MainEditor = (props) => {
     const handleTextCopy = (text) => {
         navigator.clipboard.writeText(text)
         isCopiedFromSummernoteRef.current = true
+        copiedContentRef.current = text
         setTimeout(() => {
             if(isCopiedFromSummernoteRef.current){
                 isCopiedFromSummernoteRef.current = false
@@ -1692,12 +1781,70 @@ const MainEditor = (props) => {
         // return document.querySelector('.note-editable').removeEventListener("keydown", handleTab, false);
     }, []);
 
+    function getSelectionHtml() {
+        var html = "";
+        if (typeof window.getSelection != "undefined") {
+            var sel = window.getSelection();
+            if (sel.rangeCount) {
+                var container = document.createElement("div");
+                for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+                    container.appendChild(sel.getRangeAt(i).cloneContents());
+                }
+                html = container.innerHTML;
+            }
+        } else if (typeof document.selection != "undefined") {
+            if (document.selection.type == "Text") {
+                html = document.selection.createRange().htmlText;
+            }
+        }
+        return html;
+    }
 
-    const handleCopyFromEditor = (e) => {
+    function copyPlainHtml(e)
+    {
+        var html = '';
+        var txt = '';
+        var range;
+        if (window.getSelection) 
+        {
+        var selection = window.getSelection();
+        if (selection.rangeCount > 0) 
+        {
+            range = selection.getRangeAt(0);
+            var clonedSelection = range.cloneContents();
+            var div = document.createElement('div');
+            div.appendChild(clonedSelection);
+            html = div.innerHTML;
+        //     if (selection.baseNode && selection.baseNode.parentElement && selection.baseNode.parentElement.nodeName.toUpperCase() === "LI")
+        //     {
+        //         html = "<li>" + html + "</li>";
+        // }
+            txt = div.textContent;
+        }
+        }
+        
+        e.clipboardData.setData('text/html', html);
+        e.clipboardData.setData('text/plain', txt);
+        copiedContentRef.current = '<html>\n<body>\n<!--StartFragment-->' + html + '<!--EndFragment-->\n</body>\n</html>'
+
+            console.log(e)
+        if (e.type === 'cut') {
+         
+          }else{
+            e.preventDefault();
+
+          }
+        // 
+    }
+
+    const handleCopyFromEditor =async(e) => {
         var editableDiv = document.querySelector('.note-editable');
 
+        // copyPlainHtml(e)
         // Check if the active element is the contenteditable div
         var isFromContentEditable = document.activeElement === editableDiv;
+       
+
         // console.log(document.activeElement)
         // console.log(editableDiv)
         // console.log(isFromContentEditable)
