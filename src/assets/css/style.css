@@ -42585,7 +42585,7 @@ h1.chat-file-title{
 
 .view-story-modal-wrapper .rodal-dialog{
     width: 767px !important;
-    /* height: calc(100vh - 50px - 50px) !important; */
+    height: calc(100vh - 50px - 50px) !important;
     padding: 0px !important;
 }
 
