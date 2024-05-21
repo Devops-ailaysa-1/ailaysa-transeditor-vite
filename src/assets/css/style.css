@@ -44298,3 +44298,63 @@ body{
 .pdf-view-main-wrapper .react-pdf__Document.hasScroll{
     display: block;
 }
+.dropdown-item.writer-style-list{
+    cursor: pointer;
+}
+
+
+.note-editable-backdrop p, .note-editable p{
+    margin: 5px 0 5px 0 !important;
+}
+
+.note-editable-backdrop h1, .note-editable h1{
+    margin: 20px 0 0 0 !important;
+}
+
+.note-editable-backdrop h2, .note-editable h2{
+    margin: 20px 0 0 0 !important;
+}
+
+.note-editable-backdrop h3, .note-editable h3{
+    margin: 20px 0 0 0 !important;
+}
+
+.note-editable-backdrop h4, .note-editable h4{
+    margin: 20px 0 0 0 !important;
+}
+
+.note-editable-backdrop h5, .note-editable h5{
+    margin: 20px 0 0 0 !important;
+}
+
+.note-editable-backdrop h6, .note-editable h6{
+    margin: 20px 0 0 0 !important;
+}
+
+.note-editable{
+    cursor: text;
+}
+
+.note-editing-area {
+    overflow: hidden !important;
+}
+
+.co-author-writer-form-wrapper .note-editable{
+    overflow: auto;
+    height: calc(100vh - 278px) !important;
+}
+
+.note-editable{
+    overflow: auto !important;
+    height: calc(100vh - 145px);
+    overflow-x: hidden !important;
+}
+
+.note-style .style-select-btn{
+    min-width: 88px;
+}
+
+/* parallax scrolling for federal workspace story section */
+.target-lang-part .note-editing-area {
+    overflow: auto !important;
+}

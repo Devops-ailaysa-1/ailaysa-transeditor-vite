@@ -1466,7 +1466,6 @@ const Writter = (props) => {
         // console.log(summerNoteData)
 
         // var htmlData = summerNoteEditorRef.current.summernote('code')
-        console.log(summerNoteData)
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -1517,7 +1516,11 @@ const Writter = (props) => {
 
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
 
-        formData.append("html", removedStyleAttribFromImg)
+        formData.append("html_str", removedStyleAttribFromImg)
+        formData.append("name", "name")
+
+        console.log(removedStyleAttribFromImg)
+
         // formData.append("html", clean)
 
         // formData.append("name", documentNameRef.current.innerText);
@@ -1525,9 +1528,10 @@ const Writter = (props) => {
         axios({
             method: "POST",
             // url: "https://apinode.ailaysa.com/docx-generator",
-            url: "https://apinodestaging.ailaysa.com/docx-generator",
+            // url: "https://apinodestaging.ailaysa.com/docx-generator",
             // url: "http://localhost:8000/docx-generator",
             // url: `${Config.BASE_URL}/workspace/docx_convertor/`,
+             url: `${Config.BASE_URL}/workspace/html2docx`,
             data: formData,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },
@@ -2452,8 +2456,8 @@ const Writter = (props) => {
             
             window.addEventListener('resize', debounceApiCall);
             window.addEventListener('scroll', debounceApiCall);
-            if (document.querySelector('.note-editing-area')) {
-                document.querySelector('.note-editing-area').addEventListener('scroll', hideTabtoWriteMore)
+            if (document.querySelector('.note-editable')) {
+                document.querySelector('.note-editable').addEventListener('scroll', hideTabtoWriteMore)
             }
             addScrollListners(root, debounceApiCall);
             function addScrollListners(elm, callback) {
@@ -2470,8 +2474,8 @@ const Writter = (props) => {
                     window.removeEventListener('resize', debounceApiCall);
                     window.removeEventListener('scroll', debounceApiCall);
                     document.removeEventListener('contextmenu', debounceApiCall);
-                    if (document.querySelector('.note-editing-area')) {
-                        document.querySelector('.note-editing-area').removeEventListener('scroll', hideTabtoWriteMore)
+                    if (document.querySelector('.note-editable')) {
+                        document.querySelector('.note-editable').removeEventListener('scroll', hideTabtoWriteMore)
                     }
                 }catch(e){
                     console.log(e)
@@ -3946,7 +3950,7 @@ const Writter = (props) => {
             console.log(img.height)
 
             // console.log(img.width, img.height)
-            summerNoteEditorRef.current.summernote("insertNode", loaderPTag);
+            // summerNoteEditorRef.current.summernote("insertNode", loaderPTag);
         }
         let lastDot = name?.lastIndexOf(".");
         let ext = "." + name?.substring(lastDot + 1);
@@ -4007,14 +4011,14 @@ const Writter = (props) => {
                 // const range = $.summernote.range;
                 const rng = $('.summernote').summernote('editor.getLastRange');
                 console.log(rng)
-                let loaderPtags = document.querySelectorAll('.img-loader-tag')
-                console.log(loaderPtags)
-                loaderPtags?.forEach(each => {
-                    console.log(each)
-                    each.removeAttribute('style')
-                    each.removeAttribute('class')
-                    each.removeAttribute('id')
-                })
+                // let loaderPtags = document.querySelectorAll('.img-loader-tag')
+                // console.log(loaderPtags)
+                // loaderPtags?.forEach(each => {
+                //     console.log(each)
+                //     each.removeAttribute('style')
+                //     each.removeAttribute('class')
+                //     each.removeAttribute('id')
+                // })
     
                 // let imgNode = document.createElement('img');
                 // imgNode.src = `${Config.BASE_URL}${response.image}`

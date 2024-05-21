@@ -1184,16 +1184,34 @@ const ChapterPanel = (props) => {
         var myHeaders = new Headers();
         var formdata = new FormData();
 
-        formdata.append("html", removedStyleAttribFromImg);
+        let userCacheData = JSON.parse(
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
+        );
 
+        let token = userCacheData != null ? userCacheData?.token : "";
+
+        let headers = {
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`
+        };
+
+        // formdata.append("html", removedStyleAttribFromImg);
+        formdata.append("html_str", removedStyleAttribFromImg)
+        formdata.append("name", "name")
+        
         var requestOptions = {
             method: 'POST',
             body: formdata,
-            headers: myHeaders,
+            headers: headers,
             redirect: 'follow'
         };
+       
+
         try{
-            let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
+            // let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
+            let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions)
+          
             if (data.status === 200) {
                 let response = await data.blob()
     
@@ -1346,8 +1364,8 @@ const ChapterPanel = (props) => {
         // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
 
-        formdata.append("html", removedStyleAttribFromImg);
-
+        formdata.append("html_str", removedStyleAttribFromImg);
+        formdata.append("name", "name");
         let item_id = URL_SEARCH_PARAMS.get('item')
         let matter = URL_SEARCH_PARAMS.get('matter')
         let item = {}
@@ -1369,9 +1387,11 @@ const ChapterPanel = (props) => {
         axios({
             method: "POST",
             // url: "https://apinode.ailaysa.com/docx-generator",
-            url: "https://apinodestaging.ailaysa.com/docx-generator",
+            // url: "https://apinodestaging.ailaysa.com/docx-generator",
             // url: "http://localhost:8000/docx-generator",
             // url: `${Config.BASE_URL}/workspace/docx_convertor/`,
+            url: `${Config.BASE_URL}/workspace/html2docx`,
+
             data: formdata,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },
