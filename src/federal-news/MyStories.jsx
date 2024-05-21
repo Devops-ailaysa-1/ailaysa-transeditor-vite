@@ -138,7 +138,7 @@ function MyStories(props) {
 
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-    const [didMount, setDidMount] = useState(false);
+    const [didMount, setDidMount] = useState(true);
     const [skeletonLoader, setSkeletonLoader] = useState(null);
     const [isSearchTermDelete, setIsSearchTermDelete] = useState(false);
     const [showPOConfirmModal, setShowPOConfirmModal] = useState(false);
@@ -407,7 +407,7 @@ function MyStories(props) {
     const moreOptionOutside = useRef();
     const showOpenasOutside = useRef();
     const availCreditOutside = useRef();
-    const projectsPerPage = useRef(20);
+    const projectsPerPage = useRef(10);
     const deletedEditFileIds = useRef([]);
     const deletedJobIds = useRef([]);
     const deletedSubjectIds = useRef([]);
