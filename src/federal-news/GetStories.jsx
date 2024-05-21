@@ -604,6 +604,7 @@ function GetStories(props) {
         { value: 1, label: 'English' },
         { value: 2, label: 'Telugu' },
         { value: 3, label: 'Kannada' },
+        { value: 4, label: 'Hindi' },
     ]
 
     const projectTypes = [
