@@ -42659,7 +42659,7 @@ h1.chat-file-title{
     overflow-x: hidden !important;
     min-height: 537px !important;
     width: 100%;
-    /* overflow-y: hidden !important; */
+    overflow-y: hidden !important;
     cursor: context-menu;
     font-size: 15px !important;
 }
@@ -44348,9 +44348,13 @@ body{
     overflow: auto !important;
     height: calc(100vh - 145px);
     overflow-x: hidden !important;
-
 }
 
 .note-style .style-select-btn{
     min-width: 88px;
+}
+
+/* parallax scrolling for federal workspace story section */
+.target-lang-part .note-editing-area {
+    overflow: auto !important;
 }
