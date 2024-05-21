@@ -306,3 +306,23 @@
         width: 50%;
     }
 }
+
+
+.editable-div{
+    width: 100%;
+    height: 500px;
+    border: 1px solid #3C4043;
+    outline: none;
+    padding: 4px;
+}
+
+.placeholder {
+    color: #1B8EFF;
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+.editable-div ::selection {
+    background-color: #badefe !important;
+    color: #3C4043 !important;
+}

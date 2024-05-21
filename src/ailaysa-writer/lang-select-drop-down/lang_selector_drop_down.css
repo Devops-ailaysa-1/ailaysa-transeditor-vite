@@ -3,7 +3,11 @@
     border: none;
     padding: 8px;
     border-radius: 5px;
-    background: #F3F3F3;
+    background-color: #FFF;
+}
+.lang-select-drop-down-btn.active,
+.lang-select-drop-down-btn:hover{
+    background-color: #F3F3F3;
 }
 
 /* lang drop down styling */

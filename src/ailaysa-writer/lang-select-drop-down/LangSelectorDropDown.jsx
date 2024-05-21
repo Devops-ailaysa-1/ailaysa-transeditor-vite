@@ -27,6 +27,7 @@ export const LangSelectorDropDown = (props) => {
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        resetLangSearch()
     };
 
     const handleClose = () => {
@@ -41,8 +42,7 @@ export const LangSelectorDropDown = (props) => {
                 return [...prevState, item.id]
             })
         }
-        setLangSearchValue("")
-        setLanguagesList(langList)
+        resetLangSearch()
         if(langSearchValue !== ""){
             setTimeout(() => { scrollIntoSelectedItem(item) }, 20);
         }
@@ -69,6 +69,11 @@ export const LangSelectorDropDown = (props) => {
         setLanguagesList(filteredData)
     } 
 
+    const resetLangSearch = () => {
+        setLangSearchValue("")
+        setLanguagesList(langList)
+    } 
+
     // JSX component for rendering the language list items
     const LangListItem = (props) => {
         let {item} = props
@@ -89,7 +94,7 @@ export const LangSelectorDropDown = (props) => {
     return (
         <>
             <button
-                className="lang-select-drop-down-btn"
+                className={"lang-select-drop-down-btn " + (anchorEl ? "active" : "")}
                 onClick={handleClick}
             >
                 <LanguageIcon style={{color: "#5F6368", fontSize: "24px"}} />
