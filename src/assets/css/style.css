@@ -42658,7 +42658,7 @@ h1.chat-file-title{
     overflow-x: hidden !important;
     min-height: 537px !important;
     width: 100%;
-    /* overflow-y: hidden !important; */
+    overflow-y: hidden !important;
     cursor: context-menu;
     font-size: 15px !important;
 }
