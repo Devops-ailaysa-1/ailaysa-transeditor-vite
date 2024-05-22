@@ -1523,7 +1523,7 @@ function MyStories(props) {
 
         let queryParam = new URLSearchParams(window.location.search)
         queryParam.set('page', 1)
-        queryParam.set('page', 1)
+        queryParam.set('order_by', orderFieldTemp)
         history(window.location.pathname + '?' + queryParam.toString());
         
         // if (orderFieldTemp != null) url += `&order_by=${orderFieldTemp}`;
