@@ -1339,16 +1339,20 @@ function MyStories(props) {
         let filter = URL_SEARCH_PARAMS.get("filter")
         let url = `/my-stories?page=1`
 
-        if (orderby != null) url += `&order_by=${orderby}`;
-        if (filter != null) url += `&filter=${filter}`;
-        let typeParam = URL_SEARCH_PARAMS.get("type")
-        if (typeParam != null) url += `&type=${typeParam}`;
+        let queryParam = new URLSearchParams(window.location.search)
+        queryParam.set('page', 1)
+        
+        // if (orderby != null) url += `&order_by=${orderby}`;
+        // if (filter != null) url += `&filter=${filter}`;
+        // let typeParam = URL_SEARCH_PARAMS.get("type")
+        // if (typeParam != null) url += `&type=${typeParam}`;
+
         if (param !== 'clear-search') {
-            if (projectSearchTerm != null) url += `&search=${projectSearchTerm}`;
+            queryParam.set('search', projectSearchTerm)
         }else if(param === 'clear-search'){
             setIsSearchTermDelete(true)
         }
-        history(url);
+        history(window.location.pathname + '?' + queryParam.toString());
     }
 
     /* Go to the top of the page when move to another pages */
@@ -1483,10 +1487,6 @@ function MyStories(props) {
 			selectProjectById(createdProjectsList[0]?.id, 'open')
 		}
     }, [createdProjectsList, URL_SEARCH_PARAMS.get("open-project")]);
-
-    useEffect(() => {
-      console.log("counter : "+openProjectListCounterRef.current)
-    }, [openProjectListCounterRef.current])
     
 
     /* Set the current page and redirect */
@@ -1494,41 +1494,49 @@ function MyStories(props) {
         clearTimeout(wordCountAnalysisTimeoutRef.current)
         clearTimeout(myTimeoutFunc.current)
         let url = ''
+        let queryParam = new URLSearchParams(window.location.search)
         if (activeProjTab === 2) {
-            url = `/my-stories?page=${page}`;
+            // url = `/my-stories?page=${page}`;
+            queryParam.set('page', page)
+            history(window.location.pathname + '?' + queryParam.toString());
         }
 
-        let queryParam = new URLSearchParams(window.location.search)
-        let orderParam = queryParam.get("order_by");
-        if (orderParam != null) url += `&order_by=${orderParam}`;
-        let projectIdParam = queryParam.get("open-project");
-        if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
-        let filterParam = queryParam.get("filter");
-        if (filterParam != null) url += `&filter=${filterParam}`;
-        let searchParam = queryParam.get("search");
-        if (searchParam != null) url += `&search=${searchParam}`;
-        let typeParam = URL_SEARCH_PARAMS.get("type")
-        if (typeParam != null) url += `&type=${typeParam}`;
-        history(url);
+        // let orderParam = queryParam.get("order_by");
+        // if (orderParam != null) url += `&order_by=${orderParam}`;
+        // let projectIdParam = queryParam.get("open-project");
+        // if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
+        // let filterParam = queryParam.get("filter");
+        // if (filterParam != null) url += `&filter=${filterParam}`;
+        // let searchParam = queryParam.get("search");
+        // if (searchParam != null) url += `&search=${searchParam}`;
+        // let typeParam = URL_SEARCH_PARAMS.get("type")
+        // if (typeParam != null) url += `&type=${typeParam}`;
+        // history(url);
+
     };
 
     /* Set order by value and redirect */
     const orderBy = (orderFieldTemp) => {
         clearTimeout(wordCountAnalysisTimeoutRef.current)
         let page = 1
-        let url = `/my-stories?page=${page}`
-        
-        if (orderFieldTemp != null) url += `&order_by=${orderFieldTemp}`;
+        // let url = `/my-stories?page=${page}`
 
-        let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
-        if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
-        let filter = URL_SEARCH_PARAMS.get("filter");
-        if (filter != null) url += `&filter=${filter}`;
-        let searchParam = URL_SEARCH_PARAMS.get("search");
-        if (searchParam != null) url += `&search=${searchParam}`;
-        let typeParam = URL_SEARCH_PARAMS.get("type")
-        if (typeParam != null) url += `&type=${typeParam}`;
-        history(url);
+        let queryParam = new URLSearchParams(window.location.search)
+        queryParam.set('page', 1)
+        queryParam.set('order_by', orderFieldTemp)
+        history(window.location.pathname + '?' + queryParam.toString());
+        
+        // if (orderFieldTemp != null) url += `&order_by=${orderFieldTemp}`;
+
+        // let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
+        // if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
+        // let filter = URL_SEARCH_PARAMS.get("filter");
+        // if (filter != null) url += `&filter=${filter}`;
+        // let searchParam = URL_SEARCH_PARAMS.get("search");
+        // if (searchParam != null) url += `&search=${searchParam}`;
+        // let typeParam = URL_SEARCH_PARAMS.get("type")
+        // if (typeParam != null) url += `&type=${typeParam}`;
+        // history(url);
     };
 
     // set the selected editor id in the url param for later retrival
