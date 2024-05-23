@@ -5784,15 +5784,13 @@ function Workspace(props) {
             // console.log(txt);
             let replacedText = replaceTextWithTags(txt);
 
-            // console.log(replacedText)
 
-            // setShowParaphraseBtn(false)
             resetSynonymStates()
 
             setTimeout(() => {
-                updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", replacedText);
-                updateSegmentStatus(focusedDivIdRef.current, 103);
-                changeEditedStatus(focusedDivIdRef.current, "unsaved");
+                // updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", replacedText);
+                // updateSegmentStatus(focusedDivIdRef.current, 103);
+                // changeEditedStatus(focusedDivIdRef.current, "unsaved");
 
                 targetContentEditable.current[focusedDivId].current.innerHTML = replacedText;
             }, 150);
@@ -7371,7 +7369,6 @@ function Workspace(props) {
         if(!isDinamalar && sourceLanguage !== "English") return
 
         if(previousSegmentIdRef.current !== null && previousSegmentIdRef.current !== ""){
-            console.log(previousSegmentIdRef.current)
             let content_editable_div = sourceTextDiv.current[previousSegmentIdRef.current].current
             // console.log(content_editable_div)
             if(content_editable_div === null) return 
@@ -7392,7 +7389,6 @@ function Workspace(props) {
             auth: true,
             data: formData,
             success: (response) => {
-                console.log(response.data?.ner)
                 highlightNerTerms(response.data?.ner)
             },
             error: (error) => {},
@@ -7471,14 +7467,7 @@ function Workspace(props) {
         targetFindTermTemp,
         textUnit;
     let bgColor = "#0074D3";
-    
-    useEffect(() => {
-        console.log(translationMatches)
-    }, [translationMatches])
-    useEffect(() => {
-        console.log(glossaryData)
-    }, [glossaryData])
-    
+        
 
     return (
         <React.Fragment>
