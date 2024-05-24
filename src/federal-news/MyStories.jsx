@@ -1491,15 +1491,13 @@ function MyStories(props) {
 
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
+        console.log(pageSelect)
         clearTimeout(wordCountAnalysisTimeoutRef.current)
         clearTimeout(myTimeoutFunc.current)
-        let url = ''
         let queryParam = new URLSearchParams(window.location.search)
-        if (activeProjTab === 2) {
-            // url = `/my-stories?page=${page}`;
-            queryParam.set('page', page)
-            history(window.location.pathname + '?' + queryParam.toString());
-        }
+
+        queryParam.set('page', page)
+        history(window.location.pathname + '?' + queryParam.toString());
 
         // let orderParam = queryParam.get("order_by");
         // if (orderParam != null) url += `&order_by=${orderParam}`;
