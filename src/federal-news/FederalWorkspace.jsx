@@ -602,10 +602,9 @@ const FederalWorkspace = (props) => {
     let userSelectionCallTimer = null;
 
     // filterMenuProps.PaperProps.className = classes.selectOptions;
-    const writerAreaDiv = document.querySelector(".federal-segment-wrapper .note-editing-area");
+    const writerAreaDiv = document.querySelector(".federal-segment-wrapper .note-editable");
     const newsSourceDiv = document.querySelector("#source-text-div-3");
     const targetNoteEditableDiv = document.querySelector('.note-editable');
-   
     // Use useEffect to attach scroll event listeners
     useEffect(() => {
 
@@ -635,40 +634,7 @@ const FederalWorkspace = (props) => {
         };
     }, [newsSourceDiv, writerAreaDiv]); // Empty dependency array ensures the effect runs once when the component mounts
 
-    // const writerAreaDiv = document.querySelector(".federal-segment-wrapper .note-editing-area");
-    // const newsSourceDiv = document.querySelector("#source-text-div-3");
-
-    // useEffect(() => {
-    //     const handleWriterAreaScroll = () => {
-    //       // Sync the scrollTop property of newsSourceDiv with writerAreaDiv
-    //       if(newsSourceDiv && writerAreaDiv){
-    //          newsSourceDiv.scrollTop = writerAreaDiv.scrollTop;
-    //       }
-    //     };
-    
-    //     const handleNewsSourceScroll = () => {    
-    //       // Sync the scrollTop property of writerAreaDiv with newsSourceDiv
-    //       if(newsSourceDiv && writerAreaDiv){
-    //       writerAreaDiv.scrollTop = newsSourceDiv.scrollTop;}
-    //     };
-    
-    //     if(newsSourceDiv && writerAreaDiv){
-    //     // Add scroll event listener to writerAreaDiv
-    //     writerAreaDiv?.addEventListener('scroll', handleWriterAreaScroll);
-    
-    //     // Add scroll event listener to newsSourceDiv
-    //     newsSourceDiv?.addEventListener('scroll', handleNewsSourceScroll);
-    //     }
-    
-    //     // Clean up the event listeners when the component unmounts
-    //     return () => {
-    //         if(newsSourceDiv && writerAreaDiv){
-    //       writerAreaDiv?.removeEventListener('scroll', handleWriterAreaScroll);
-    //       newsSourceDiv?.removeEventListener('scroll', handleNewsSourceScroll);}
-    //     };
-    //   }, []); // Empty dependency array ensures that the effect runs once after the initial render
-    
-
+   
     const customPageSelectStyles = {
         placeholder: (provided, state) => ({
             ...provided,
@@ -747,7 +713,6 @@ const FederalWorkspace = (props) => {
         getSteps();
         setDidMount(true); // Component is mount (App loaded)
         didMountRef.current = true;
-        console.log(params.documentId)
 
         if (location?.state?.sourceLanguage != null) {
             setSourceLanguage(location.state.sourceLanguage);

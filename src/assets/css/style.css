@@ -104,7 +104,7 @@ textarea:focus {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow: auto;
+    overflow: auto !important;
 }
 
 .split-sash-content {
@@ -42682,13 +42682,15 @@ h1.chat-file-title{
     overflow: auto;
 }
 
-/* .federal-segment-wrapper .source-text-div p{
-    overflow: auto;
-    max-height: inherit;
-} */
-
 .federal-segment-wrapper  .note-editable-class-wrapper{
+    height: 455px !important;
+}
+.federal-segment-wrapper  .note-editable-class-wrapper .note-editable{
+    height: inherit !important;
     min-height: auto !important;
+    padding-bottom: 0px !important;
+    overflow: auto !important;
+
 }
 
 .view-story-modal-inner-wrapper .story-main-wrapper{
