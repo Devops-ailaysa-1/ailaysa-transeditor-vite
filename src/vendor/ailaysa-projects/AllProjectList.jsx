@@ -4709,8 +4709,8 @@ function AllProjectList(props) {
         if(selectedProj == null){
             setShowExpressDeleteModal(true)
         }else{
-            console.log(selectedProj)
-            console.log(selectedProjectFilesRef.current)
+            // console.log(selectedProj)
+            // console.log(selectedProjectFilesRef.current)
 
             if(selectedProj.task_assign_info != null){
                 SetShowAssignedProjectDeleteAlert(true)
