@@ -19,7 +19,8 @@ const TaskAssignActionButtons = (props) => {
     const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false)
     const [isApproving, setIsApproving] = useState(false)
     const [isReworkSending, setIsReworkSending] = useState(false)
-    
+    console.log(prevPathRef)
+    console.log(prevPathRef.current)
     // function for customer side so that customer can approve or reject the task
     const clientSideTaskResponseUpdate = (response) => {
         let { task_id, step, reassign } = clientResponseDataRef.current
