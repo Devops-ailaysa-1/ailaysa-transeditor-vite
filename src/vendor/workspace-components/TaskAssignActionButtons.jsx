@@ -58,12 +58,12 @@ const TaskAssignActionButtons = (props) => {
                             toast.dismiss();
                             try{
                                 const URL_SEARCH_PARAMS = new URLSearchParams(`?${prevPathRef.current?.split('?')[1]}`);
-                                URL_SEARCH_PARAMS.set('filter', 'inprogress')
+                                URL_SEARCH_PARAMS.set('filter', 'submitted')
                                 prevPathRef.current = prevPathRef.current?.split('?')[0] + '?' + URL_SEARCH_PARAMS.toString()
                                 
-                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=inprogress")
+                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted")
                             }catch(e) {
-                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=inprogress")
+                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted")
                                 console.log(e)
                             }
 
