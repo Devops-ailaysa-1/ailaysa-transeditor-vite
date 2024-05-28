@@ -60,9 +60,10 @@ const TaskAssignActionButtons = (props) => {
                                 const URL_SEARCH_PARAMS = new URLSearchParams(`?${prevPathRef.current?.split('?')[1]}`);
                                 URL_SEARCH_PARAMS.set('filter', 'submitted')
                                 prevPathRef.current = prevPathRef.current?.split('?')[0] + '?' + URL_SEARCH_PARAMS.toString()
-                                
+                                console.log(prevPathRef.current)
                                 history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted")
                             }catch(e) {
+                                console.log(prevPathRef.current)
                                 history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted")
                                 console.log(e)
                             }
