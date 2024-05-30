@@ -121,6 +121,7 @@ function SpeechToText(props) {
     const targetLanguageOptionsRef = useRef([]);
     const stepOptionsRef = useRef(null)
     const prevPageInfo = useRef(null)
+    const projectDataFromApi = useRef(null)
 
 
     useEffect(() => {
@@ -477,6 +478,8 @@ function SpeechToText(props) {
                 let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                     (element) => element.id == data.jobs[0].source_language
                 );
+
+                projectDataFromApi.current = response.data
                 deletedJobIds.current = [];
                 deletedEditFileIds.current = [];
                 setFiles([]);
@@ -958,11 +961,15 @@ function SpeechToText(props) {
         deadline && formdata.append("project_deadline", deadlineUTC);
 
         formdata.append("team", hasTeam);
-        formdata.append("pre_translate", preTranslate);
         formdata.append("mt_enable", mtEnable);
+        
+        if (projectDataFromApi.current?.pre_translate !== preTranslate) {
+            formdata.append("pre_translate", preTranslate);
+        }
 
-        if(mtEnable) formdata.append("get_mt_by_page", translationByPage);
-
+        if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
+            formdata.append("get_mt_by_page", translationByPage);
+        }
         setClickedOpenButton(key);
         selectedSteps?.map((each) => {
             formdata.append("steps", each.value);
@@ -1382,6 +1389,7 @@ function SpeechToText(props) {
                                 tempWriterFile={tempWriterFile}
                                 translationByPage={translationByPage}
                                 setTranslationByPage={setTranslationByPage}
+                                projectDataFromApi={projectDataFromApi}
                             />
                             <div className="d-flex justify-between">
                                 {isEdit && (

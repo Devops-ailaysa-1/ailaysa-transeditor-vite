@@ -228,6 +228,7 @@ const TextToSpeech = (props) => {
     const stepOptionsRef = useRef(null)
     const prevPageInfo = useRef(null)
     const sourceLangRef = useRef(null)
+    const projectDataFromApi = useRef(null)
 
 
     const handleSelectedConvert = (e) => {
@@ -703,6 +704,9 @@ const TextToSpeech = (props) => {
                 let editSourceLanguage = targetLanguageOptionRef.current?.find(
                     (element) => element.id == data.jobs[0].source_language
                 );
+
+                projectDataFromApi.current = response.data
+
                 deletedJobIds.current = [];
                 deletedEditFileIds.current = [];
                 setFiles([]);
@@ -1287,8 +1291,13 @@ const TextToSpeech = (props) => {
 
         formdata.append("mt_enable", mtEnable);
 
-        formdata.append("pre_translate", preTranslate);
-        formdata.append("get_mt_by_page", translationByPage);
+        if (projectDataFromApi.current?.pre_translate !== preTranslate) {
+            formdata.append("pre_translate", preTranslate);
+        }
+
+        if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
+            formdata.append("get_mt_by_page", translationByPage);
+        }
 
 
         targetLanguage.map((eachTargetLanguage) => {
@@ -2352,6 +2361,7 @@ const TextToSpeech = (props) => {
                                             preTranslate={preTranslate}
                                             translationByPage={translationByPage}
                                             setTranslationByPage={setTranslationByPage}
+                                            projectDataFromApi={projectDataFromApi}
                                         />}
                                     </div>
                                     <div className="d-flex justify-between">
