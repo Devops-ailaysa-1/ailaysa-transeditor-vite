@@ -192,6 +192,7 @@ const NewsProjects = () => {
     const handlePorjectListSwitch = (tab, filter) => {
         const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
         setActiveProjTab(tab);
+        URL_SEARCH_PARAMS.set('page', 1)
         URL_SEARCH_PARAMS.set('filter', filter)
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
 

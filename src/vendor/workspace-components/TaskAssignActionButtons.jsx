@@ -19,7 +19,8 @@ const TaskAssignActionButtons = (props) => {
     const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false)
     const [isApproving, setIsApproving] = useState(false)
     const [isReworkSending, setIsReworkSending] = useState(false)
-    
+    console.log(prevPathRef)
+    console.log(prevPathRef.current)
     // function for customer side so that customer can approve or reject the task
     const clientSideTaskResponseUpdate = (response) => {
         let { task_id, step, reassign } = clientResponseDataRef.current
@@ -58,12 +59,13 @@ const TaskAssignActionButtons = (props) => {
                             toast.dismiss();
                             try{
                                 const URL_SEARCH_PARAMS = new URLSearchParams(`?${prevPathRef.current?.split('?')[1]}`);
-                                URL_SEARCH_PARAMS.set('filter', 'inprogress')
+                                URL_SEARCH_PARAMS.set('filter', 'submitted')
                                 prevPathRef.current = prevPathRef.current?.split('?')[0] + '?' + URL_SEARCH_PARAMS.toString()
-                                
-                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=inprogress")
+                                console.log(prevPathRef.current)
+                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted")
                             }catch(e) {
-                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=inprogress")
+                                console.log(prevPathRef.current)
+                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted")
                                 console.log(e)
                             }
 
