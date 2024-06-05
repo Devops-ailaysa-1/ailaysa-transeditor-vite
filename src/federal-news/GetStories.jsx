@@ -602,8 +602,9 @@ function GetStories(props) {
 
     const federalLangList = [
         { value: 1, label: 'English' },
-        { value: 2, label: 'Telugu' },
+        { value: 4, label: 'Hindi' },
         { value: 3, label: 'Kannada' },
+        { value: 2, label: 'Telugu' },
     ]
 
     const projectTypes = [

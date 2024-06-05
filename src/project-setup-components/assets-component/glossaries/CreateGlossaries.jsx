@@ -1011,11 +1011,7 @@ const CreateGlossaries = (props) => {
 				deletedContentIds.current = [];
 		};
 		
-		const handleBlockedNavigation = ({
-			currentLocation,
-			nextLocation,
-			historyAction
-		  }) => {
+		const handleBlockedNavigation = ({nextLocation}) => {
 			
 			if(glossaryProjectCreationResponse === null && (projectName && sourceLanguage && targetLanguage)){
 				return true

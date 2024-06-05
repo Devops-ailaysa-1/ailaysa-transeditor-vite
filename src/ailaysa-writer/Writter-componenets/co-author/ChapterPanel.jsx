@@ -415,26 +415,22 @@ const ChapterPanel = (props) => {
         
        
         let final = ''
-        let preProcessedhtml = ''
         let html = convert.render(text)
-
+        
         if(isContentGenerateRef.current){
-
             // let final = html.replace(/(?:\r\n|\r|\n)/g, '<p><br></p>');
-            preProcessedhtml = html.replace(/(<li>[^]*?<\/li>)|(\r\n|\r|\n)/g, (match, liTag, lineBreak) => {
+            final = html.replace(/(<li>[^]*?<\/li>)|(\r\n|\r|\n)/g, (match, liTag, lineBreak) => {
                 if (liTag) {
                     return liTag; // Keep <li> tags unchanged
                 } else {
-                    return ""; // Replace line breaks with <p><br></p>
+                    return "<p><br></p>"; // Replace line breaks with <p><br></p>
                 }
             });
-           final =  preProcessedhtml
             // console.log(final)
         }else{
-            console.log(text)
             final = html
         }
-        console.log(final)
+
         $('.summernote').summernote('code', final)
         $('.summernote').summernote('commit');
 
@@ -642,21 +638,21 @@ const ChapterPanel = (props) => {
 
                 getBookDetails(createdBookIdRef.current)
 
-                setTimeout(() => {
-                    // once the new chapter/matter-item is saved in list : then generate data for chapter/item
-                    if(matter === 'front'){
-                        isContentGenerateRef.current = true
-                        updateSearchParamInURL('front', response.data?.id)
-                        // handleFrontMatterOptionClick(response.data)
-                    }else if(matter === 'body'){
-                        // handleBodyMatterOptionClick(response.data)
-                        updateSearchParamInURL('body', response.data?.id)
-                    }else if(matter === 'back'){
-                        isContentGenerateRef.current = true
-                        // handleBackMatterOptionClick(response.data)
-                        updateSearchParamInURL('back', response.data?.id)
-                    }
-                }, 80);
+                // setTimeout(() => {
+                //     // once the new chapter/matter-item is saved in list : then generate data for chapter/item
+                //     if(matter === 'front'){
+                //         isContentGenerateRef.current = true
+                //         updateSearchParamInURL('front', response.data?.id)
+                //         // handleFrontMatterOptionClick(response.data)
+                //     }else if(matter === 'body'){
+                //         // handleBodyMatterOptionClick(response.data)
+                //         updateSearchParamInURL('body', response.data?.id)
+                //     }else if(matter === 'back'){
+                //         isContentGenerateRef.current = true
+                //         // handleBackMatterOptionClick(response.data)
+                //         updateSearchParamInURL('back', response.data?.id)
+                //     }
+                // }, 80);
             },
             error: (err) => {
                 // console.log('inside error')
@@ -1188,16 +1184,34 @@ const ChapterPanel = (props) => {
         var myHeaders = new Headers();
         var formdata = new FormData();
 
-        formdata.append("html", removedStyleAttribFromImg);
+        let userCacheData = JSON.parse(
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
+        );
 
+        let token = userCacheData != null ? userCacheData?.token : "";
+
+        let headers = {
+            "Access-Control-Allow-Origin": "*",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`
+        };
+
+        formdata.append("html", removedStyleAttribFromImg);
+        // formdata.append("html_str", removedStyleAttribFromImg)
+        formdata.append("name", "name")
+        
         var requestOptions = {
             method: 'POST',
             body: formdata,
-            headers: myHeaders,
+            headers: headers,
             redirect: 'follow'
         };
+       
+
         try{
             let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
+            // let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions)
+          
             if (data.status === 200) {
                 let response = await data.blob()
     
@@ -1351,7 +1365,7 @@ const ChapterPanel = (props) => {
         let token = userCacheData != null ? userCacheData?.token : "";
 
         formdata.append("html", removedStyleAttribFromImg);
-
+        formdata.append("name", "name");
         let item_id = URL_SEARCH_PARAMS.get('item')
         let matter = URL_SEARCH_PARAMS.get('matter')
         let item = {}
@@ -1376,6 +1390,8 @@ const ChapterPanel = (props) => {
             url: "https://apinodestaging.ailaysa.com/docx-generator",
             // url: "http://localhost:8000/docx-generator",
             // url: `${Config.BASE_URL}/workspace/docx_convertor/`,
+            // url: `${Config.BASE_URL}/workspace/html2docx`,
+
             data: formdata,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },

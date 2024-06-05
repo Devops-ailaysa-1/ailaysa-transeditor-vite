@@ -312,7 +312,7 @@ const MainEditor = (props) => {
           }
           div.parentNode.removeChild(div);
         });
-      
+    
         // Get the innerHTML of the temporary element which now contains only p tags
         const resultHTML = tempElement.innerHTML;
       
@@ -331,38 +331,72 @@ const MainEditor = (props) => {
                     const sanitizedHtml1 = copiedContentRef.current?.replace(/\s/g, '');
                     const sanitizedHtml2 = pastedData?.replace(/\s/g, '');
        
-                    if(sanitizedHtml1 != sanitizedHtml2){
-                        isCopiedFromSummernoteRef.current = false
-                    }
-                    if(!isCopiedFromSummernoteRef.current){
+                    // if(sanitizedHtml1 != sanitizedHtml2){
+                    //     isCopiedFromSummernoteRef.current = false
+                    // }
+                    // if(isCopiedFromSummernoteRef.current){
                         e.preventDefault()
 
                         // Get the pasted content as HTML
                         // below two line are very important it gets the clipboard value from noramlly and manually copied data
                         var clipboardData = e.originalEvent.clipboardData || window.clipboardData;
                         var pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
-                        // console.log(pastedData)
-                        // var pastedHTML = (e.originalEvent || e).clipboardData.getData('text/html');
+                        // // console.log(pastedData)
+                        // // var pastedHTML = (e.originalEvent || e).clipboardData.getData('text/html');
     
-                        // Create a temporary div to parse and clean the pasted content
-                        var tempDiv = document.createElement('span');
-                        tempDiv.innerHTML = pastedData;
-                        // Remove inline styles and attributes from all elements
-                        var elementsWithStyles = tempDiv.querySelectorAll('*[style]');
-                        elementsWithStyles.forEach(function(element) {
-                            element.removeAttribute('style');
-                        });
+                        // // Create a temporary div to parse and clean the pasted content
+                        // var tempDiv = document.createElement('span');
+                        // tempDiv.innerHTML = pastedData;
+                        // // Remove inline styles and attributes from all elements
+                        // var elementsWithStyles = tempDiv.querySelectorAll('*[style]');
+                        // elementsWithStyles.forEach(function(element) {
+                        //     element.removeAttribute('style');
+                        // });
+
+                        const clean = sanitizeHtml(pastedData, {
+                            allowedTags: ["div","table", "tbody", "td", "tfoot", "th", "thead", "tr",'b', 'i','p','h1','h2','h3','h4','h5','h6','a','img','span','li','ul','ol'],
+                            // allowedAttributes: {
+                            //   'p': ["style"],
+                            // },
+                            allowedStyles: {
+                              '*': {
+                                // Match HEX and RGB
+                                'color': [/^#(0x)?[0-9a-f]+$/i, /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/],
+                                'text-align': [/^left$/, /^right$/, /^center$/],
+                                // Match any number with px, em, or %
+                                // 'font-size': [/^\d+(?:px|em|%)$/]
+                              },
+                              
+                            }
+                          });
+
+                          console.log(clean)
+
+                          const allowedDomain = 'https://aidev4.ailaysa.com';
+                            const parser = new DOMParser();
+                            const doc = parser?.parseFromString(clean, 'text/html');
+                            const images = doc?.querySelectorAll('img');
+
+                            images.forEach(img => {
+                            const src = img.getAttribute('src');
+                            if (!src?.startsWith(allowedDomain)) {
+                                img.remove();
+                            }
+                            });
+
+                            const sanitizedHtmlString = doc.body.innerHTML;
+                            console.log(sanitizedHtmlString);
     
                         // Insert the cleaned HTML into the contenteditable div
-                        var cleanedHTML = tempDiv.innerHTML;
-                        var clean = removeFormElements(removeImgTags(cleanedHTML))
-                        console.log(unwrapDivAndKeepPTags(cleanedHTML))
-                        document.execCommand('insertHTML', false, unwrapDivAndKeepPTags(clean));
+                        // var cleanedHTML = tempDiv.innerHTML;
+                        // var clean = removeFormElements(removeImgTags(cleanedHTML))
+                        // console.log(unwrapDivAndKeepPTags(cleanedHTML))
+                        document.execCommand('insertHTML', false, sanitizedHtmlString);
                         // $('summernote').summernote('pasteHTML', cleanedHTML)
-                    }
-                    if(sanitizedHtml1 != sanitizedHtml2){
-                        isCopiedFromSummernoteRef.current = false
-                    }
+                    // }
+                    // if(sanitizedHtml1 != sanitizedHtml2){
+                    //     isCopiedFromSummernoteRef.current = false
+                    // }
 
 
 
@@ -1180,10 +1214,10 @@ const MainEditor = (props) => {
                     className: "drop-default summernote-list summernote-style-list",
                     contents:
                         // '<ul class="lang-list-writter-voice-wrap">' +
-                        '<a href="#" style="font-size: 16px" class="writer-style-list dropdown-item " aria-valuetext="normal"><i class="note-icon-menu-check"></i>Normal</a>' +
-                        '<a href="#" style="font-size: 40px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h1"><i class="note-icon-menu-check"></i>Heading 1</a>' +
-                        '<a href="#" style="font-size: 32px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h2"><i class="note-icon-menu-check"></i> Heading 2</a>' +
-                        '<a href="#" style="font-size: 28px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h3"><i class="note-icon-menu-check"></i> Heading 3</a>',
+                        '<a style="font-size: 16px" class="writer-style-list dropdown-item " aria-valuetext="normal"><i class="note-icon-menu-check"></i>Normal</a>' +
+                        '<a style="font-size: 40px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h1"><i class="note-icon-menu-check"></i>Heading 1</a>' +
+                        '<a style="font-size: 32px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h2"><i class="note-icon-menu-check"></i> Heading 2</a>' +
+                        '<a style="font-size: 28px; font-weight: 500;" class="writer-style-list dropdown-item " aria-valuetext="h3"><i class="note-icon-menu-check"></i> Heading 3</a>',
                     click: function (e) {
     
                         try {
@@ -1193,9 +1227,9 @@ const MainEditor = (props) => {
                             // console.log(current_text)
                             // console.log(current_node?.classList?.contains('note-editable'))
                             if (e.target.ariaValueText === 'normal') {
-                                // $('.summernote').summernote('formatPara');
+                                $('.summernote').summernote('formatPara');
                                 // const rng = $('.summernote').summernote('editor.getLastRange');
-                                replaceSelectedHeadingWithParagraph()
+                                // replaceSelectedHeadingWithParagraph()
                                 // rng.select()
                                 // $('.summernote').summernote('insertText', '');
     
@@ -1806,7 +1840,7 @@ const MainEditor = (props) => {
     const handleCopyFromEditor =async(e) => {
         var editableDiv = document.querySelector('.note-editable');
 
-        copyPlainHtml(e)
+        // copyPlainHtml(e)
         // Check if the active element is the contenteditable div
         var isFromContentEditable = document.activeElement === editableDiv;
        

@@ -102,12 +102,16 @@ const BIReport = () => {
             ...((controller !== undefined && controller !== null) && {signal: controller.signal}),
             success: (response) => {
                 
+                let activeUser = response?.data?.Additional_info?.filter(each => each.state === "active")
+                let deletedUser = response?.data?.Additional_info?.filter(each => each.state === "deleted")
+                let sortedArr = [...activeUser, ...deletedUser]
+
                 // console.log(response.data)
                 let data = {
                     over_all: {
                         ...response.data
                     },
-                    userData: response?.data?.Additional_info
+                    userData: sortedArr
                 }
                 delete data?.over_all['Additional_info']
                 // console.log(data)

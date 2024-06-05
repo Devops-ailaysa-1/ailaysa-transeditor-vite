@@ -361,7 +361,7 @@ function App() {
 
                         <>
                             <div
-                                className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "body-responsive strip-banner" : "body-responsive"}
+                                className={(userDetails?.is_campaign && showCampaignCouponStrip && false) ? "body-responsive strip-banner" : "body-responsive"}
                                 id="body-wrap"
                             >
                                 <AllRoutes/>

@@ -3231,39 +3231,43 @@ function Workspace(props) {
                 redirect: 'follow'
             };
 
-            let data = null
-            if (targetLanguageId == 17) {
-                data = await fetch(Config.BASE_URL + "/workspace_okapi/paraphrase/", requestOptions)
-            } else if (sourceLanguageId == 17) {
-                data = await fetch(Config.BASE_URL + "/workspace_okapi/seg_rewrite/", requestOptions)
-            }
+            try{
+                let data = null
+                if (targetLanguageId == 17) {
+                    data = await fetch(Config.BASE_URL + "/workspace_okapi/paraphrase/", requestOptions)
+                } else if (sourceLanguageId == 17) {
+                    data = await fetch(Config.BASE_URL + "/workspace_okapi/seg_rewrite/", requestOptions)
+                }
 
-            // console.log(data)
-            let response = await data.json()
-            if (data.status === 200) {
-                setParaPhraseResList(response?.result)
-                setparaPhraseTag(response?.tag)
-                setIsParaphrasing(false)
-                if (response?.msg === 'error') {
+                // console.log(data)
+                let response = await data.json()
+                if (data.status === 200) {
+                    setParaPhraseResList(response?.result)
+                    setparaPhraseTag(response?.tag)
                     setIsParaphrasing(false)
+                    if (response?.msg === 'error') {
+                        setIsParaphrasing(false)
+                        setparaphraseTrigger(false)
+                        setIsParaphrasing(false)
+                        Config.toast(t("paraphrase_get_error_1"), 'warning');
+                    }
+                } else if (data.status === 400) {
+                    if (response?.msg === 'Insufficient Credits') {
+                        setShowCreditAlert(true)
+                        if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
+                        else setCreditAlertTxt(t("insufficient_credits"))
+                    }
+                    handleTransphrasePopoverClose()
                     setparaphraseTrigger(false)
                     setIsParaphrasing(false)
-                    Config.toast(t("paraphrase_get_error_1"), 'warning');
+                } else if (data.status === 500) {
+                    handleTransphrasePopoverClose()
+                    Config.toast(t("paraphrase_get_error_3"), 'error')
+                    setparaphraseTrigger(false)
+                    setIsParaphrasing(false)
                 }
-            } else if (data.status === 400) {
-                if (response?.msg === 'Insufficient Credits') {
-                    setShowCreditAlert(true)
-                    if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
-                    else setCreditAlertTxt(t("insufficient_credits"))
-                }
-                handleTransphrasePopoverClose()
-                setparaphraseTrigger(false)
-                setIsParaphrasing(false)
-            } else if (data.status === 500) {
-                handleTransphrasePopoverClose()
-                Config.toast(t("paraphrase_get_error_3"), 'error')
-                setparaphraseTrigger(false)
-                setIsParaphrasing(false)
+            } catch (e) {
+                console.log(e)
             }
         } else {
             handleTransphrasePopoverClose()
@@ -5780,15 +5784,13 @@ function Workspace(props) {
             // console.log(txt);
             let replacedText = replaceTextWithTags(txt);
 
-            // console.log(replacedText)
 
-            // setShowParaphraseBtn(false)
             resetSynonymStates()
 
             setTimeout(() => {
-                updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", replacedText);
-                updateSegmentStatus(focusedDivIdRef.current, 103);
-                changeEditedStatus(focusedDivIdRef.current, "unsaved");
+                // updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", replacedText);
+                // updateSegmentStatus(focusedDivIdRef.current, 103);
+                // changeEditedStatus(focusedDivIdRef.current, "unsaved");
 
                 targetContentEditable.current[focusedDivId].current.innerHTML = replacedText;
             }, 150);
@@ -7367,7 +7369,6 @@ function Workspace(props) {
         if(!isDinamalar && sourceLanguage !== "English") return
 
         if(previousSegmentIdRef.current !== null && previousSegmentIdRef.current !== ""){
-            console.log(previousSegmentIdRef.current)
             let content_editable_div = sourceTextDiv.current[previousSegmentIdRef.current].current
             // console.log(content_editable_div)
             if(content_editable_div === null) return 
@@ -7388,7 +7389,6 @@ function Workspace(props) {
             auth: true,
             data: formData,
             success: (response) => {
-                console.log(response.data?.ner)
                 highlightNerTerms(response.data?.ner)
             },
             error: (error) => {},
@@ -7467,14 +7467,7 @@ function Workspace(props) {
         targetFindTermTemp,
         textUnit;
     let bgColor = "#0074D3";
-    
-    useEffect(() => {
-        console.log(translationMatches)
-    }, [translationMatches])
-    useEffect(() => {
-        console.log(glossaryData)
-    }, [glossaryData])
-    
+        
 
     return (
         <React.Fragment>

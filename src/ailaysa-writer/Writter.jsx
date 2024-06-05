@@ -1517,6 +1517,7 @@ const Writter = (props) => {
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
 
         formData.append("html", removedStyleAttribFromImg)
+        formData.append("name", "name")
 
         console.log(removedStyleAttribFromImg)
 
@@ -1530,6 +1531,7 @@ const Writter = (props) => {
             url: "https://apinodestaging.ailaysa.com/docx-generator",
             // url: "http://localhost:8000/docx-generator",
             // url: `${Config.BASE_URL}/workspace/docx_convertor/`,
+            //  url: `${Config.BASE_URL}/workspace/html2docx`,
             data: formData,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },
@@ -2936,7 +2938,7 @@ const Writter = (props) => {
                     let AiImgName = response.data.prompt
                     setPopupLoading('none')
                     closeOverlay()
-                    createImage(window.getSelection().focusNode.parentElement, AiImgUrl, AiImgName)
+                    createImage(window.getSelection().focusNode?.parentElement, AiImgUrl, AiImgName)
 
                     if (URL_SEARCH_PARAMS.get("pdf-id") || URL_SEARCH_PARAMS.get("task")) {
                         debounce(saveHtmlDataForPdf)
@@ -3776,7 +3778,7 @@ const Writter = (props) => {
     function getSelectedNode()
     {
         if (document.selection)
-            return document.selection.createRange().parentElement();
+            return document.selection.createRange()?.parentElement();
         else
         {
             var selection = window.getSelection();
@@ -4079,11 +4081,7 @@ const Writter = (props) => {
     }
 
     // conditions for when to show the leaving modal for writer page
-    const handleBlockedNavigationForWriter = ({
-        currentLocation,
-        nextLocation,
-        historyAction
-    }) => {
+    const handleBlockedNavigationForWriter = ({nextLocation}) => {
         let docIdParam = URL_SEARCH_PARAMS.get('document-id')
         if(
             !docIdParam || nextLocation.pathname?.includes('/file-upload') ||
