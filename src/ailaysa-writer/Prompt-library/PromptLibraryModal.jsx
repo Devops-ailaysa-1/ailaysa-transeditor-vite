@@ -17,18 +17,18 @@ import { Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import generateKey from '../../project-setup-components/speech-component/speech-to-text/recorder-components/utils/GenerateKey';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
+import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg"
 
 export const PromptLibraryModal = (props) => {
     let {contenteditableRef, toggleState} = props
 
-    const [showPromptLibrary, setShowPromptLibrary] = useState(false)
+    const [showPromptLibrary, setShowPromptLibrary] = useState(true)
     const [activePromptTab, setActivePromptTab] = useState(1)
     const [selectedDomain, setSelectedDomain] = useState(1)
     const [selectedCategory, setselectedCategory] = useState(1)
     const [selectedSubCategory, setselectedSubCategory] = useState(1)
     const [isNewOrEditMode, setIsNewOrEditMode] = useState(false)
-
-    const promptCardDeleteIdRef = useRef(null)
+    const [searchQueryText, setSearchQueryText] = useState("")
 
     let categoryListInit = [
         {
@@ -343,21 +343,6 @@ export const PromptLibraryModal = (props) => {
     Elaborate on the <span class="placeholder" >[benefits]</span> of our product and how it can positively impact the reader.
     `;
 
-    const handleInput = (evt) => {
-        const selection = window.getSelection();
-        const range = selection.getRangeAt(0);
-        if (range.startContainer.parentNode.className === 'placeholder') {
-          const placeholder = range.startContainer.parentNode;
-          console.log(evt.nativeEvent.data)
-          const newText = document.createTextNode(evt.nativeEvent.data);
-          range.deleteContents();
-          placeholder.replaceWith(newText);
-          range.setStartAfter(newText);
-          selection.removeAllRanges();
-          selection.addRange(range);
-        }
-    };
-
     useEffect(() => {
         // Add click event listener to placeholders
         const placeholders = document.querySelectorAll('.placeholder');
@@ -390,7 +375,6 @@ export const PromptLibraryModal = (props) => {
         contenteditableRef.current.innerHTML = replacePlaceholders(label)
         setShowPromptLibrary(false)
     } 
-    
 
 
     return (
@@ -417,17 +401,27 @@ export const PromptLibraryModal = (props) => {
                             </span>
                         </div>
                         <div className="prompt-lib-modal-body">
-                            <PromptTabs />
+                            <div className="tab-and-search-wrapper d-flex items-center">
+                                <PromptTabs />
+                                <div className="search-box d-flex items-center">
+                                    <SearchOutlinedIcon style={{ color: '#5F6368' }} />
+                                    <input 
+                                        type="text" 
+                                        className="search-input" 
+                                        placeholder='Search...'
+                                        value={searchQueryText}
+                                        onChange={(e) => setSearchQueryText(e.target.value)}
+                                    />
+                                </div>
+                            </div>
                             <div className="prompt-container d-flex">
-                                <div className="left-box">
-                                    <div className="search-box d-flex items-center">
-                                        <SearchOutlinedIcon style={{ color: '#5F6368' }} />
-                                        <input 
-                                            type="text" 
-                                            className="search-input" 
-                                            placeholder='Search...'
-                                        />
-                                    </div>
+                                <div 
+                                    className="left-box"
+                                    style={
+                                        searchQueryText !== "" ? {display: 'none'} : {}
+                                    }
+                                >
+                                    
                                     {activePromptTab === 1 && (
                                         <DomainCapsuleList />
                                     )}
@@ -512,7 +506,12 @@ export const PromptLibraryModal = (props) => {
                                         </div>
                                     )}
                                 </div>
-                                <div className="right-box">
+                                <div 
+                                    className="right-box"
+                                    style={
+                                        searchQueryText !== "" ? {width: '100%'} : {}
+                                    } 
+                                >
                                     <div className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}>
                                         {promptCardsList.map((each, ind) => {
                                             let prompt = promptCardsListCopy.find(obj => obj.id === each.id)?.label
@@ -630,8 +629,26 @@ export const PromptLibraryModal = (props) => {
                                                 </div>
                                             )
                                         })}
+                                        {!true && (
+                                            <div className="d-flex items-center justify-center items-center" style={{height: '100%'}}>
+                                                <div>
+                                                    <img 
+                                                        src={NoEditorsFoundTwo} 
+                                                        style={{margin: '0px auto', display: 'block'}} 
+                                                        className='mb-4'
+                                                        alt="no search found" 
+                                                        width={86}
+                                                    />
+                                                    <p style={{textAlign: 'center'}}><b>No prompts found</b></p>
+                                                    <p style={{textAlign: 'center'}}>
+                                                        We couldn't find any prompts matching your search. <br />Please try using other keywords or phrases.
+                                                    </p>
+
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
-                                    {activePromptTab === 2 && (
+                                    {(activePromptTab === 2 && searchQueryText === "") && (
                                         <button
                                             className="add-prompt-category-btn add-prompt-btn"
                                             onClick={(e) => addNewListItemInList(e, promptCardsList, setPromptCardsList)}

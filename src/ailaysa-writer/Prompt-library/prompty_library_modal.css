@@ -73,15 +73,20 @@
 .prompt-cards-list-with-btn {
     height: calc(100% - 50px);
 }
-
-.prompt-container .search-box{
+.tab-and-search-wrapper {
+    margin-top: 28px;
+    margin-bottom: 20px;
+    gap: 35px;
+}
+.tab-and-search-wrapper .search-box{
     border-radius: 4px;
     border: 1px solid #DBE0E4;
     padding: 8px 10px;
-    margin-top: 28px;
-    margin-bottom: 18px;
 }
-.prompt-container .search-box .search-input{
+.tab-and-search-wrapper .search-box{
+    width: 400px;
+}
+.tab-and-search-wrapper .search-box .search-input{
     border: none;
     margin-left: 8px;
     width: 100%;

@@ -44355,6 +44355,9 @@ body{
 .note-style .style-select-btn{
     min-width: 88px;
 }
+.note-editable span{
+    font-family: inherit !important;
+}
 
 /* parallax scrolling for federal workspace story section */
 .target-lang-part .note-editing-area {
