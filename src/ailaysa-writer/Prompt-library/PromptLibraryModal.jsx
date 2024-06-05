@@ -18,7 +18,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import generateKey from '../../project-setup-components/speech-component/speech-to-text/recorder-components/utils/GenerateKey';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 
-export const PromptLibraryModal = () => {
+export const PromptLibraryModal = (props) => {
+    let {contenteditableRef, toggleState} = props
 
     const [showPromptLibrary, setShowPromptLibrary] = useState(false)
     const [activePromptTab, setActivePromptTab] = useState(1)
@@ -210,7 +211,10 @@ export const PromptLibraryModal = () => {
                                     <EditIcon />
                                 </div>
                             </Tooltip>
-                            <PromptButton classname="prompt-primary-btn">
+                            <PromptButton
+                                classname="prompt-primary-btn" 
+                                onClick={() => handleUsePromptBtn(each.label)}
+                            >
                                 Use prompt
                             </PromptButton>
                         </>
@@ -376,6 +380,16 @@ export const PromptLibraryModal = () => {
         selection.removeAllRanges();
         selection.addRange(range);
     };
+
+    const replacePlaceholders = (text) => {
+        return text.replace(/\[(.*?)\]/g, '<span class="placeholder">[$1]</span>');
+    };
+
+    const handleUsePromptBtn = (label) => {
+        toggleState()
+        contenteditableRef.current.innerHTML = replacePlaceholders(label)
+        setShowPromptLibrary(false)
+    } 
     
 
 
@@ -388,13 +402,6 @@ export const PromptLibraryModal = () => {
                 <LibraryBooksOutlinedIcon style={{color: "#5F6368", fontSize: "22px"}} />
                 Prompt library
             </button>
-            <div
-                contentEditable={true}
-                onInput={handleInput}
-                tagName="div"
-                className="editable-div"
-                dangerouslySetInnerHTML={{__html: initialText}}
-            ></div>
             {showPromptLibrary && (
                 <Rodal 
                     className="prompt-library-modal" 
@@ -595,7 +602,10 @@ export const PromptLibraryModal = () => {
                                                                         </Tooltip>
                                                                     </>
                                                                 )}
-                                                                <PromptButton classname="prompt-primary-btn">
+                                                                <PromptButton
+                                                                    classname="prompt-primary-btn" 
+                                                                    onClick={() => handleUsePromptBtn(each.label)}
+                                                                >
                                                                     Use prompt
                                                                 </PromptButton>
                                                             </>

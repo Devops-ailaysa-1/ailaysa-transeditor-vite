@@ -1238,8 +1238,6 @@ const WritterPromptForm = (props) => {
 					}  */}
 
                     {/* <CustomBookTooltip /> */}
-                    <PromptLibraryModal />
-                    <LangSelectorDropDown langList={languageOptionsList} />
                 </div>
             </div>
         </>

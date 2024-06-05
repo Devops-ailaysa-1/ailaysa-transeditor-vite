@@ -1,0 +1,30 @@
+.prompt-writing-container{
+    margin: 16px 0;
+}
+.prompt-writing-box{
+    gap: 8px;
+    align-items: end;
+    border-radius: 6px;
+    border: 1px solid #EAEEF3;
+    background-color: #FFF;
+    padding: 2px;
+    margin: 8px 0;
+}
+.prompt-writing-box .prompt-writing-contenteditable{
+    flex-grow: 1;
+    padding: 6px;
+    outline: none;
+    border: none;
+}
+.prompt-writing-box.active {
+    outline: 2px solid #0073DF !important;
+}
+.prompt-writing-box .send-btn{
+    font-size: 24px;
+    border: none;
+    background-color: transparent;
+    border-radius: 5px;
+}
+.prompt-writing-box .send-btn:hover{
+    background-color: #F3F3F3;
+}
