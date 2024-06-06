@@ -12,12 +12,15 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import { Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import generateKey from '../../project-setup-components/speech-component/speech-to-text/recorder-components/utils/GenerateKey';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg"
+import { MoreMenu } from './MoreMenu';
+import Config from '../../vendor/Config';
 
 export const PromptLibraryModal = (props) => {
     let {contenteditableRef, toggleState} = props
@@ -30,71 +33,77 @@ export const PromptLibraryModal = (props) => {
     const [isNewOrEditMode, setIsNewOrEditMode] = useState(false)
     const [searchQueryText, setSearchQueryText] = useState("")
 
-    let categoryListInit = [
-        {
-            id: 1,
-            label: "Fiction Writing"
-        },
-        {
-            id: 2,
-            label: "Non-Fiction"
-        },
-        {
-            id: 3,
-            label: "Poetry"
-        },
-        {
-            id: 4,
-            label: "Screen"
-        },
-        {
-            id: 5,
-            label: "Fiction Writing"
-        },
-        {
-            id: 6,
-            label: "Fiction Writing"
-        },
-        {
-            id: 7,
-            label: "Poetry"
-        },
-    ]
-
-    let subCategoryListInit = [
-        {
-            id: 1,
-            label: "Character Development"
-        },
-        {
-            id: 2,
-            label: "Plot Structure"
-        },
-        {
-            id: 3,
-            label: "Dialogue Techniques"
-        },
-    ]
     
+  
     let promptCardsListInit = [
         {
             id: 1,
-            label: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
+            prompt_content: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
         },
         {
             id: 2,
-            label: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
+            prompt_content: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
         },
         {
             id: 3,
-            label: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
+            prompt_content: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
         },
     ]
 
-    const [categoryList, setCategoryList] = useState(categoryListInit)
-    const [subCategoryList, setSubCategoryList] = useState(subCategoryListInit)
+    const [domainList, setDomainList] = useState([])
+    const [categoryList, setCategoryList] = useState([])
+    const [subCategoryList, setSubCategoryList] = useState([])
     const [promptCardsList, setPromptCardsList] = useState(promptCardsListInit)
     const [promptCardsListCopy, setPromptCardsListCopy] = useState(promptCardsListInit)
+    
+    const promptSystemValueRef = useRef([])
+
+    // get all system values on component load
+    useEffect(() => {
+        getPromptLibSysValues()
+    }, [])
+
+    // based on selected domain set category list and select first category
+    useEffect(() => {
+        if(selectedDomain && promptSystemValueRef.current?.length !== 0) {
+            let domain = promptSystemValueRef.current?.find(each => each.id === selectedDomain)
+            let category = domain.domain_category?.map(each => (
+                {id: each.id, name: each.category_name}
+            ))
+            setCategoryList(category)
+            try { setselectedCategory(category[0]?.id) }
+            catch(err){ console.log(err) }
+        }
+    }, [selectedDomain, promptSystemValueRef.current])
+
+    // based on selected category set sub-category list and select first sub-category
+    useEffect(() => {
+        if(selectedCategory && promptSystemValueRef.current?.length !== 0) {
+            let domain = promptSystemValueRef.current?.find(each => each.id === selectedDomain)?.domain_category
+            let category = domain?.find(each => each.id === selectedCategory)
+            let subCategorys = category?.cat_subcategories?.map(each => (
+                {id: each.id, name: each.sub_category_name}
+            )) 
+            setSubCategoryList(subCategorys)
+            console.log(subCategorys)
+            try { setselectedSubCategory(subCategorys[0]?.id) }
+            catch(err) { console.log(err) }
+        }
+    }, [selectedCategory, promptSystemValueRef.current])
+
+    // based on sub-cateogry call getPromptsForSubcategory() method to get all prompts
+    useEffect(() => {
+        if(selectedSubCategory && promptSystemValueRef.current?.length !== 0){
+            getPromptsForSubcategory(selectedSubCategory)
+        }
+    }, [selectedSubCategory, promptSystemValueRef.current])
+
+    useEffect(() => {
+        if(activePromptTab === 1) {
+            
+        }
+    }, [activePromptTab])
+    
     
     // check whether any prompt card is in "edit" or new "state"
     useEffect(() => {
@@ -106,7 +115,7 @@ export const PromptLibraryModal = (props) => {
             }
         }
     }, [promptCardsList])
-    
+
 
     // JSX component for custom button
     const PromptButton = (props) => {
@@ -155,14 +164,16 @@ export const PromptLibraryModal = (props) => {
                     modules={[Navigation]}
                     className="mySwiper"
                 >
-                    {Array(2).fill(null).map((each, ind) => {
-                        return(
-                            <>
-                                <SwiperSlide key={ind}><div className={"domain-capsule " + (selectedDomain === 1 ? 'active' : "")} onClick={() => setSelectedDomain(1)}>Writers</div></SwiperSlide>
-                                <SwiperSlide key={ind}><div className={"domain-capsule " + (selectedDomain === 2 ? 'active' : "")} onClick={() => setSelectedDomain(2)}>Journalist</div></SwiperSlide>
-                                <SwiperSlide key={ind}><div className={"domain-capsule " + (selectedDomain === 3 ? 'active' : "")} onClick={() => setSelectedDomain(3)}>Sales</div></SwiperSlide>
-                                <SwiperSlide key={ind}><div className={"domain-capsule " + (selectedDomain === 4 ? 'active' : "")} onClick={() => setSelectedDomain(4)}>Books</div></SwiperSlide>
-                            </>
+                    {domainList?.map(domain => {
+                        return (
+                            <SwiperSlide key={domain?.id}>
+                                <div 
+                                    className={"domain-capsule " + (selectedDomain === domain?.id ? 'active' : "")} 
+                                    onClick={() => setSelectedDomain(domain?.id)}
+                                >
+                                    {domain?.name}
+                                </div>
+                            </SwiperSlide>
                         )
                     })}
                 </Swiper>
@@ -203,17 +214,17 @@ export const PromptLibraryModal = (props) => {
                         <>
                             <Tooltip title="Delete prompt" placement="top" arrow>
                                 <div className="action-icon delete-bin-icon">
-                                    <DeleteIcon />
+                                    <DeleteOutlinedIcon />
                                 </div>
                             </Tooltip>
                             <Tooltip title="Edit prompt" placement="top" arrow>
                                 <div className="action-icon edit-icon">
-                                    <EditIcon />
+                                    <ModeEditOutlinedIcon />
                                 </div>
                             </Tooltip>
                             <PromptButton
                                 classname="prompt-primary-btn" 
-                                onClick={() => handleUsePromptBtn(each.label)}
+                                onClick={() => handleUsePromptBtn(each.prompt_content)}
                             >
                                 Use prompt
                             </PromptButton>
@@ -228,6 +239,33 @@ export const PromptLibraryModal = (props) => {
                 </div>
             </div>
         )
+    }
+
+    const getPromptLibSysValues = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/app/domain-prompt-library`,
+            auth: true,
+            success: (response) => {
+                promptSystemValueRef.current = response.data
+                let domains = response.data?.map(each => (
+                    {id: each.id, name: each.name}
+                ))
+                setDomainList(domains)
+            },
+        });
+    }
+
+    const getPromptsForSubcategory = (id) => {
+        if(!id) return  // fallback
+
+        Config.axios({
+            url: `${Config.BASE_URL}/app/prompt-library?sub_category_id=${id}`,
+            auth: true,
+            success: (response) => {
+                setPromptCardsList(response.data)
+                setPromptCardsListCopy(response.data)
+            },
+        });
     }
 
     // update the isEdit/isDelete (any specific) key in the list for operation
@@ -246,12 +284,13 @@ export const PromptLibraryModal = (props) => {
     } 
 
 
-    const addNewListItemInList = (e, list, setList) => {
+    const addNewListItemInList = (e, list, setList, key) => {
         let newItem = {
             id: generateKey(),
-            label: '',
-            isNew: true
+            prompt_content: '',
+            [key]: true
         }
+        console.log(list)
         let newArr = [newItem, ...list]
         setList(newArr)
     } 
@@ -264,15 +303,16 @@ export const PromptLibraryModal = (props) => {
     }
     
     const handleInputBlur = (e, itemId, list, setList) => {
+        console.log(e.target.value)
         if(e.target.value?.trim() === ''){
             setList(list.filter(each => each.id !== itemId))
         }else{
-            setList(updateSpecificKeyInList(list, itemId, 'isNew', false))
+            setList(updateSpecificKeyInList(list, itemId, 'isEditable', false))
         }
     } 
 
     const handleInputChange = (e, itemId, list, setList) => {
-        setList(updateSpecificKeyInList(list, itemId, 'label', e.target.value))
+        setList(updateSpecificKeyInList(list, itemId, 'name', e.target.value))
     } 
 
     const handlePromptChange = (e, itemId) => {
@@ -280,7 +320,7 @@ export const PromptLibraryModal = (props) => {
             if(obj.id === itemId){
                 return {
                     ...obj,
-                    label: e.target.value
+                    prompt_content: e.target.value
                 }
             }
             return obj
@@ -295,9 +335,9 @@ export const PromptLibraryModal = (props) => {
     }
     
     const handleAddPromptBtn = (e, itemId) => {
-        if(promptCardsListCopy?.find(each => each.id === itemId)?.label?.trim() === "") return
-        let value = promptCardsListCopy?.find(each => each.id === itemId)?.label?.trim()
-        let updatedPromptArr = updateSpecificKeyInList(promptCardsList, itemId, 'label', value)
+        if(promptCardsListCopy?.find(each => each.id === itemId)?.prompt_content?.trim() === "") return
+        let value = promptCardsListCopy?.find(each => each.id === itemId)?.prompt_content?.trim()
+        let updatedPromptArr = updateSpecificKeyInList(promptCardsList, itemId, 'prompt_content', value)
         let closeNewPrompt = updateSpecificKeyInList(updatedPromptArr, itemId, 'isNew', false)
 
         setPromptCardsList(closeNewPrompt)
@@ -320,8 +360,8 @@ export const PromptLibraryModal = (props) => {
     }
 
     const handleSavePromptCard = (e, itemId) => {
-        let value = promptCardsListCopy.find(each => each.id === itemId)?.label
-        let updatedPromptArr = updateSpecificKeyInList(promptCardsList, itemId, 'label', value)
+        let value = promptCardsListCopy.find(each => each.id === itemId)?.prompt_content
+        let updatedPromptArr = updateSpecificKeyInList(promptCardsList, itemId, 'prompt_content', value)
         let closePromptEdit = updateSpecificKeyInList(updatedPromptArr, itemId, 'isEdit', false)
         setPromptCardsList(closePromptEdit)
     }
@@ -370,10 +410,30 @@ export const PromptLibraryModal = (props) => {
         return text.replace(/\[(.*?)\]/g, '<span class="placeholder">[$1]</span>');
     };
 
-    const handleUsePromptBtn = (label) => {
+    const handleUsePromptBtn = (prompt_content) => {
         toggleState()
-        contenteditableRef.current.innerHTML = replacePlaceholders(label)
+        contenteditableRef.current.innerHTML = replacePlaceholders(prompt_content)
         setShowPromptLibrary(false)
+    } 
+
+
+    const handleSearchPromptChange = (e) => {
+        let value = e.target.value
+        setSearchQueryText(value)
+
+        if(value?.trim() === '') return
+        
+        Config.debounceApiCalls(async() => {
+            // get prompt search results  
+            Config.axios({
+                url: `${Config.BASE_URL}/app/prompt-library?search=${value}`,
+                auth: true,
+                success: (response) => {
+                    setPromptCardsList(response.data)
+                    setPromptCardsListCopy(response.data)
+                },
+            });
+        })
     } 
 
 
@@ -387,7 +447,7 @@ export const PromptLibraryModal = (props) => {
                 Prompt library
             </button>
             {showPromptLibrary && (
-                <Rodal 
+                <Rodal
                     className="prompt-library-modal" 
                     visible={showPromptLibrary} 
                     onClose={() => setShowPromptLibrary(false)}
@@ -410,7 +470,7 @@ export const PromptLibraryModal = (props) => {
                                         className="search-input" 
                                         placeholder='Search...'
                                         value={searchQueryText}
-                                        onChange={(e) => setSearchQueryText(e.target.value)}
+                                        onChange={handleSearchPromptChange}
                                     />
                                 </div>
                             </div>
@@ -428,60 +488,76 @@ export const PromptLibraryModal = (props) => {
 
                                     <div className="d-flex category-list-container">
                                         <ul className="category-list custom-scroll-bar">
-                                            {categoryList?.map(each => {
-                                                if(each.isNew) {
+                                            {categoryList?.map(category => {
+                                                if(category?.isEditable) {
                                                     return (
                                                         <li 
-                                                            className={"list-item-input" + (selectedCategory === each.id ? "active" : "")}
+                                                            className={"list-item-input " + (selectedCategory === category.id ? "active" : "")}
                                                         >
                                                             <input 
                                                                 type="text" 
                                                                 placeholder='Category name'
                                                                 autoFocus={true}
-                                                                value={each.label}
-                                                                onChange={(e) => handleInputChange(e, each.id, categoryList, setCategoryList)}
-                                                                onKeyDown={(e) => handleInputKeyDown(e, each.id, categoryList, setCategoryList)}
-                                                                onBlur={(e) => handleInputBlur(e, each.id, categoryList, setCategoryList)}
+                                                                value={category.name}
+                                                                onChange={(e) => handleInputChange(e, category.id, categoryList, setCategoryList)}
+                                                                onKeyDown={(e) => handleInputKeyDown(e, category.id, categoryList, setCategoryList)}
+                                                                onBlur={(e) => handleInputBlur(e, category.id, categoryList, setCategoryList)}
                                                             />
                                                         </li>
                                                     )
                                                 }else{
                                                     return (
                                                         <li 
-                                                            className={"list-item " + (selectedCategory === each.id ? "active" : "")}
-                                                            onClick={() => setselectedCategory(each.id)}
+                                                            className={"list-item d-flex items-center justify-between " + (selectedCategory === category.id ? "active" : "")}
+                                                            onClick={() => setselectedCategory(category.id)}
                                                         >
-                                                            {each.label}
+                                                            {category.name}
+                                                            {activePromptTab === 2 && (
+                                                                <MoreMenu 
+                                                                    item={category} 
+                                                                    updateSpecificKeyInList={updateSpecificKeyInList}
+                                                                    list={categoryList}
+                                                                    setList={setCategoryList}
+                                                                />
+                                                            )}
                                                         </li>
                                                     )
                                                 }
                                             })}
                                         </ul>
                                         <ul className="sub-category-list category-list custom-scroll-bar">
-                                            {subCategoryList?.map(each => {
-                                                if(each.isNew){
+                                            {subCategoryList?.map(subCategory => {
+                                                if(subCategory?.isEditable){
                                                     return (
                                                         <li 
-                                                            className={"list-item-input" + (selectedCategory === each.id ? "active" : "")}
+                                                            className={"list-item-input " + (selectedSubCategory === subCategory.id ? "active" : "")}
                                                         >
                                                             <input 
                                                                 type="text" 
                                                                 placeholder='Category name'
                                                                 autoFocus={true} 
-                                                                value={each.label}
-                                                                onChange={(e) => handleInputChange(e, each.id, subCategoryList, setSubCategoryList)}
-                                                                onKeyDown={(e) => handleInputKeyDown(e, each.id, subCategoryList, setSubCategoryList)}
-                                                                onBlur={(e) => handleInputBlur(e, each.id, subCategoryList, setSubCategoryList)}
+                                                                value={subCategory.name}
+                                                                onChange={(e) => handleInputChange(e, subCategory.id, subCategoryList, setSubCategoryList)}
+                                                                onKeyDown={(e) => handleInputKeyDown(e, subCategory.id, subCategoryList, setSubCategoryList)}
+                                                                onBlur={(e) => handleInputBlur(e, subCategory.id, subCategoryList, setSubCategoryList)}
                                                             />
                                                         </li>
                                                     )
                                                 }
                                                 return (
                                                     <li 
-                                                        className={"list-item " + (selectedSubCategory == each.id ? "active" : "")}
-                                                        onClick={() => setselectedSubCategory(each.id)}
+                                                        className={"list-item d-flex items-center justify-between " + (selectedSubCategory == subCategory.id ? "active" : "")}
+                                                        onClick={() => setselectedSubCategory(subCategory.id)}
                                                     >
-                                                        {each.label}
+                                                        {subCategory.name}
+                                                        {activePromptTab === 2 && (
+                                                            <MoreMenu 
+                                                                item={subCategory}
+                                                                updateSpecificKeyInList={updateSpecificKeyInList}
+                                                                list={subCategoryList}
+                                                                setList={setSubCategoryList} 
+                                                            />
+                                                        )}
                                                     </li>
                                                 )
                                             })}
@@ -491,14 +567,14 @@ export const PromptLibraryModal = (props) => {
                                         <div className="d-flex">
                                             <button
                                                 className="add-prompt-category-btn category-btn"
-                                                onClick={(e) => addNewListItemInList(e, categoryList, setCategoryList)}
+                                                onClick={(e) => addNewListItemInList(e, categoryList, setCategoryList, 'isEditable')}
                                             >
                                                 <AddOutlinedIcon style={{ color: '#0073DF' }} />
                                                 Add category
                                             </button>
                                             <button
                                                 className="add-prompt-category-btn sub-category-list"
-                                                onClick={(e) => addNewListItemInList(e, subCategoryList, setSubCategoryList)}
+                                                onClick={(e) => addNewListItemInList(e, subCategoryList, setSubCategoryList, 'isEditable')}
                                             >
                                                 <AddOutlinedIcon style={{ color: '#0073DF' }} />
                                                 Add sub-category
@@ -514,12 +590,12 @@ export const PromptLibraryModal = (props) => {
                                 >
                                     <div className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}>
                                         {promptCardsList.map((each, ind) => {
-                                            let prompt = promptCardsListCopy.find(obj => obj.id === each.id)?.label
+                                            let prompt = promptCardsListCopy.find(obj => obj.id === each.id)?.prompt_content
                                             return(
                                                 // <PromptCard 
                                                 //     key={each.id} 
                                                 //     id={each.id}
-                                                //     prompt={each.label} 
+                                                //     prompt={each.prompt_content} 
                                                 //     isNew={each.isNew}
                                                 // />
                                                 <div 
@@ -542,8 +618,8 @@ export const PromptLibraryModal = (props) => {
                                                             value={prompt}
                                                         ></textarea>
                                                     ) : (
-                                                        <p className="prompt-text" dangerouslySetInnerHTML={{__html: styleTextWithinBrackets(each.label)}}>
-                                                            {/* {each.label} */}
+                                                        <p className="prompt-text" dangerouslySetInnerHTML={{__html: styleTextWithinBrackets(each.prompt_content)}}>
+                                                            {/* {each.prompt_content} */}
                                                             {/* Create a detailed profile for your character. Include details such as <span className="prompt-placeholder">[Name]</span>, <span className="prompt-placeholder">[Age]</span>, <span className="prompt-placeholder">[Occupation]</span>, <span className="prompt-placeholder">[Personality Traits]</span>, <span className="prompt-placeholder">[Background]</span>, and <span className="prompt-placeholder">[Goals]</span>. */}
                                                         </p>
                                                     )}
@@ -588,7 +664,7 @@ export const PromptLibraryModal = (props) => {
                                                                                 className="action-icon delete-bin-icon"
                                                                                 onClick={(e) => handleToggleDeletePromptCard(e, each.id, true)}
                                                                             >
-                                                                                <DeleteIcon />
+                                                                                <DeleteOutlinedIcon />
                                                                             </div>
                                                                         </Tooltip>
                                                                         <Tooltip title="Edit prompt" placement="top" arrow>
@@ -596,14 +672,14 @@ export const PromptLibraryModal = (props) => {
                                                                                 className="action-icon edit-icon"
                                                                                 onClick={(e) => handleToggleEditPromptCard(e, each.id, true)}
                                                                             >
-                                                                                <EditIcon />
+                                                                                <ModeEditOutlinedIcon />
                                                                             </div>
                                                                         </Tooltip>
                                                                     </>
                                                                 )}
                                                                 <PromptButton
                                                                     classname="prompt-primary-btn" 
-                                                                    onClick={() => handleUsePromptBtn(each.label)}
+                                                                    onClick={() => handleUsePromptBtn(each.prompt_content)}
                                                                 >
                                                                     Use prompt
                                                                 </PromptButton>
@@ -651,7 +727,7 @@ export const PromptLibraryModal = (props) => {
                                     {(activePromptTab === 2 && searchQueryText === "") && (
                                         <button
                                             className="add-prompt-category-btn add-prompt-btn"
-                                            onClick={(e) => addNewListItemInList(e, promptCardsList, setPromptCardsList)}
+                                            onClick={(e) => addNewListItemInList(e, promptCardsList, setPromptCardsList, 'isNew')}
                                             style={promptCardsList?.find(each => (each?.isNew || each?.isEdit)) ? {pointerEvents: 'none', opacity: 0.5} : {}}
                                         >
                                             <AddOutlinedIcon style={{ color: '#0073DF' }} />

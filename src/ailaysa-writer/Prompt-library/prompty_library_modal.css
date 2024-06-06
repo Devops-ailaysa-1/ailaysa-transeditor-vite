@@ -48,7 +48,7 @@
     background-color: #E8F0FE;
 }
 .prompt-container{
-    height: calc(100% - 47px);
+    height: calc(100% - 70px);
 }
 .prompt-lib-modal-body .prompt-container .left-box {
     width: 40%;
@@ -71,7 +71,7 @@
     height: calc(100% - 4px);
 }
 .prompt-cards-list-with-btn {
-    height: calc(100% - 50px);
+    height: calc(100% - 45px);
 }
 .tab-and-search-wrapper {
     margin-top: 28px;
@@ -115,7 +115,7 @@
     background: #0073DF;
 }
 .category-list-container{
-    height: calc(100% - 140px);
+    height: calc(100% - 63px);
     margin-top: 18px;
 }
 .category-list {
@@ -133,7 +133,7 @@
     font-weight: 400;
     border-radius: 3px;
     cursor: pointer;
-    padding: 8px 18px;
+    padding: 8px 8px 8px 18px;
     margin-bottom: 1px;
 }
 .category-list .list-item:hover {
@@ -143,6 +143,10 @@
     background-color: rgba(0, 115, 223, 0.06);
     color: #0073DF;
 }
+.category-list .list-item .more-icon {
+
+}
+
 .sub-category-list{
     padding-left: 8px;
 }
@@ -204,6 +208,10 @@
     background-color: #F3F3F3;
 }
 
+/* by default the swiper elements are centered, align it to left */
+.swiper {
+    margin-left: 0 !important;      
+}
 .swiper-slide { 
     width: max-content !important;
 }
@@ -258,6 +266,7 @@
     outline: none;
     padding: 6px 14px;
     margin-bottom: 5px;
+    width: 100%;
 } 
 
 .prompt-card .prompt-textarea{

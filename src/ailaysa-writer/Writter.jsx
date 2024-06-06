@@ -4240,7 +4240,7 @@ const Writter = (props) => {
                 </div>
                 <div style={{display: showPlaceHolderDivForBook ? "none" : "flex"}} className={"ailaysa-writter-working-col-wrapper " + (((window.location.pathname.includes("book-writing") && URL_SEARCH_PARAMS.get("matter") && URL_SEARCH_PARAMS.get("item")) ? "co-author-writer-col-wrapper " : " "))} >
                     <div className="ailaysa-writter-inner-working-wrapper">
-                        {/* <PromptWritingBox /> */}
+                        <PromptWritingBox />
                         {/* <button id="focus-btn" onClick={handleBtnClick}>replace</button> */}
                         {
                             <MainEditor
