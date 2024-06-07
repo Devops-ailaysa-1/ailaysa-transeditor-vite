@@ -1,4 +1,7 @@
 /* @import url("https://fonts.cdnfonts.com/css/segoe-ui-4"); */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html,
 body {
@@ -104,7 +107,7 @@ textarea:focus {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow: auto;
+    overflow: auto !important;
 }
 
 .split-sash-content {
@@ -14515,6 +14518,7 @@ ul.ai-source-langs-list::-webkit-scrollbar-thumb {
     border: 1px solid #ced4da;
     border-radius: 3px;
     cursor: pointer;
+    background-color: #fff;
 }
 
 .datetimepicker-box input {
@@ -26918,7 +26922,7 @@ ul.templates-tab-list li:hover {
 }
 
 .strip-banner .ailaysa-writter-main-wrapper {
-    padding-top: 92px;
+    /* padding-top: 92px; */
 }
 
 .ailaysa-writter-main-wrapper {
@@ -32635,6 +32639,7 @@ button.hamburger .line {
     display: flex !important;
     gap: 8px !important;
     align-items: center !important;
+    cursor: pointer;
 }
 
 .writer-style-list .note-icon-menu-check {
@@ -42680,13 +42685,15 @@ h1.chat-file-title{
     overflow: auto;
 }
 
-/* .federal-segment-wrapper .source-text-div p{
-    overflow: auto;
-    max-height: inherit;
-} */
-
 .federal-segment-wrapper  .note-editable-class-wrapper{
+    height: 455px !important;
+}
+.federal-segment-wrapper  .note-editable-class-wrapper .note-editable{
+    height: inherit !important;
     min-height: auto !important;
+    padding-bottom: 0px !important;
+    overflow: auto !important;
+
 }
 
 .view-story-modal-inner-wrapper .story-main-wrapper{
@@ -42698,7 +42705,9 @@ h1.chat-file-title{
 
 .view-story-modal-wrapper.add-story-modal .rodal-dialog{
     width: min(90%, 1024px) !important;
-    height: calc(100vh - 200px - 200px) !important;
+    /* height: calc(100vh - 200px - 200px) !important; */
+    /* height: 100%; */
+    min-height: 550px;
 }
 
 .federal-segment-wrapper .writer-form-component .note-toolbar.card-header,
@@ -43326,7 +43335,7 @@ h1.chat-file-title{
 }
 
 .editor-roles-wrapper .editor-roles-table-wrap .editor-roles-header-wrap .editor-title.bill{
-    color: #1A73E8;
+    /* color: #1A73E8; */
 }
 
 .editor-roles-wrapper .editor-roles-table-wrap .editor-roles-value-wrap .editor-list-item .editor-list-value:first-child,
@@ -44344,9 +44353,24 @@ body{
     overflow: auto !important;
     height: calc(100vh - 145px);
     overflow-x: hidden !important;
-
 }
 
 .note-style .style-select-btn{
     min-width: 88px;
+}
+.note-editable span{
+    font-family: inherit !important;
+}
+.note-editable table tbody tr td{
+    border: 1px solid #ddd !important; 
+}
+.note-editable table tbody tr td{
+    padding: 8px !important;
+    /* line-height: 1.42857143 !important; */
+    /* vertical-align: top !important; */
+}
+
+/* parallax scrolling for federal workspace story section */
+.target-lang-part .note-editing-area {
+    overflow: auto !important;
 }

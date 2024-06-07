@@ -85,6 +85,7 @@ import ConfirmIcon from "../assets/images/new-ui-icons/confirm-icon.svg"
 // import CustomBookTooltip from "./CustomBookTooltip";
 import ReferenceModal from "./Writter-componenets/ReferenceModal";
 import ReactRouterPrompt from 'react-router-prompt'
+// import { PromptWritingBox } from "./prompt-writing-box/PromptWritingBox";
 
 const AudioSlider = styled(Slider)({
     color: '#0078D44D',
@@ -1516,7 +1517,7 @@ const Writter = (props) => {
 
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
 
-        formData.append("html_str", removedStyleAttribFromImg)
+        formData.append("html", removedStyleAttribFromImg)
         formData.append("name", "name")
 
         console.log(removedStyleAttribFromImg)
@@ -1528,10 +1529,10 @@ const Writter = (props) => {
         axios({
             method: "POST",
             // url: "https://apinode.ailaysa.com/docx-generator",
-            // url: "https://apinodestaging.ailaysa.com/docx-generator",
+            url: "https://apinodestaging.ailaysa.com/docx-generator",
             // url: "http://localhost:8000/docx-generator",
             // url: `${Config.BASE_URL}/workspace/docx_convertor/`,
-             url: `${Config.BASE_URL}/workspace/html2docx`,
+            //  url: `${Config.BASE_URL}/workspace/html2docx`,
             data: formData,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },
@@ -2938,7 +2939,7 @@ const Writter = (props) => {
                     let AiImgName = response.data.prompt
                     setPopupLoading('none')
                     closeOverlay()
-                    createImage(window.getSelection().focusNode.parentElement, AiImgUrl, AiImgName)
+                    createImage(window.getSelection().focusNode?.parentElement, AiImgUrl, AiImgName)
 
                     if (URL_SEARCH_PARAMS.get("pdf-id") || URL_SEARCH_PARAMS.get("task")) {
                         debounce(saveHtmlDataForPdf)
@@ -3778,7 +3779,7 @@ const Writter = (props) => {
     function getSelectedNode()
     {
         if (document.selection)
-            return document.selection.createRange().parentElement();
+            return document.selection.createRange()?.parentElement();
         else
         {
             var selection = window.getSelection();
@@ -4081,11 +4082,7 @@ const Writter = (props) => {
     }
 
     // conditions for when to show the leaving modal for writer page
-    const handleBlockedNavigationForWriter = ({
-        currentLocation,
-        nextLocation,
-        historyAction
-    }) => {
+    const handleBlockedNavigationForWriter = ({nextLocation}) => {
         let docIdParam = URL_SEARCH_PARAMS.get('document-id')
         if(
             !docIdParam || nextLocation.pathname?.includes('/file-upload') ||
@@ -4243,6 +4240,7 @@ const Writter = (props) => {
                 </div>
                 <div style={{display: showPlaceHolderDivForBook ? "none" : "flex"}} className={"ailaysa-writter-working-col-wrapper " + (((window.location.pathname.includes("book-writing") && URL_SEARCH_PARAMS.get("matter") && URL_SEARCH_PARAMS.get("item")) ? "co-author-writer-col-wrapper " : " "))} >
                     <div className="ailaysa-writter-inner-working-wrapper">
+                        {/* <PromptWritingBox /> */}
                         {/* <button id="focus-btn" onClick={handleBtnClick}>replace</button> */}
                         {
                             <MainEditor

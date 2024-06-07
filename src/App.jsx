@@ -38,6 +38,7 @@ import AllRoutes from "./router/AllRoutes";
 import { setIsDinamalarNews } from "./features/IsDinamalarNewsSlice";
 import { setIsFederalNews } from "./features/IsFederalNewsSlice";
 import { CookieChecker } from "cookie-validator-check";
+import { PromptLibraryModal } from "./ailaysa-writer/Prompt-library/PromptLibraryModal";
 
 
 function App() {
@@ -360,7 +361,7 @@ function App() {
 
                         <>
                             <div
-                                className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "body-responsive strip-banner" : "body-responsive"}
+                                className={(userDetails?.is_campaign && showCampaignCouponStrip && false) ? "body-responsive strip-banner" : "body-responsive"}
                                 id="body-wrap"
                             >
                                 <AllRoutes/>
@@ -412,6 +413,7 @@ function App() {
                     </>
                 )
             }
+            {/* <PromptLibraryModal /> */}
         </>
     );
 }
