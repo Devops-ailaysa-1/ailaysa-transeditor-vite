@@ -13,7 +13,7 @@ import { Navigation } from 'swiper/modules';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
-import { Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import generateKey from '../../project-setup-components/speech-component/speech-to-text/recorder-components/utils/GenerateKey';
@@ -33,8 +33,6 @@ export const PromptLibraryModal = (props) => {
     const [isNewOrEditMode, setIsNewOrEditMode] = useState(false)
     const [searchQueryText, setSearchQueryText] = useState("")
 
-    
-  
     let promptCardsListInit = [
         {
             id: 1,
@@ -53,10 +51,14 @@ export const PromptLibraryModal = (props) => {
     const [domainList, setDomainList] = useState([])
     const [categoryList, setCategoryList] = useState([])
     const [subCategoryList, setSubCategoryList] = useState([])
-    const [promptCardsList, setPromptCardsList] = useState(promptCardsListInit)
-    const [promptCardsListCopy, setPromptCardsListCopy] = useState(promptCardsListInit)
+    const [promptCardsList, setPromptCardsList] = useState([])
+    const [promptCardsListCopy, setPromptCardsListCopy] = useState([])
+    const [promptSearchResList, setPromptSearchResList] = useState(null)
     
     const promptSystemValueRef = useRef([])
+    const promptCardsContainerRef = useRef(null)
+    const axiosGetPromptCardsAbortControllerRef = useRef(null)
+
 
     // get all system values on component load
     useEffect(() => {
@@ -85,7 +87,6 @@ export const PromptLibraryModal = (props) => {
                 {id: each.id, name: each.sub_category_name}
             )) 
             setSubCategoryList(subCategorys)
-            console.log(subCategorys)
             try { setselectedSubCategory(subCategorys[0]?.id) }
             catch(err) { console.log(err) }
         }
@@ -94,9 +95,11 @@ export const PromptLibraryModal = (props) => {
     // based on sub-cateogry call getPromptsForSubcategory() method to get all prompts
     useEffect(() => {
         if(selectedSubCategory && promptSystemValueRef.current?.length !== 0){
-            getPromptsForSubcategory(selectedSubCategory)
+            if(searchQueryText.trim() === "") {
+                getPromptsForSubcategory(selectedSubCategory)
+            }
         }
-    }, [selectedSubCategory, promptSystemValueRef.current])
+    }, [selectedSubCategory, promptSystemValueRef.current, searchQueryText])
 
     useEffect(() => {
         if(activePromptTab === 1) {
@@ -258,10 +261,20 @@ export const PromptLibraryModal = (props) => {
     const getPromptsForSubcategory = (id) => {
         if(!id) return  // fallback
 
+        // it will abort/cancel the ongoing api request
+        if (axiosGetPromptCardsAbortControllerRef.current) {
+            axiosGetPromptCardsAbortControllerRef.current.abort()
+        }
+    
+        const controller = new AbortController();
+        axiosGetPromptCardsAbortControllerRef.current = controller
+
         Config.axios({
             url: `${Config.BASE_URL}/app/prompt-library?sub_category_id=${id}`,
             auth: true,
+            ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
+                promptCardsContainerRef.current?.scrollTo({top: 0})
                 setPromptCardsList(response.data)
                 setPromptCardsListCopy(response.data)
             },
@@ -472,6 +485,11 @@ export const PromptLibraryModal = (props) => {
                                         value={searchQueryText}
                                         onChange={handleSearchPromptChange}
                                     />
+                                    {searchQueryText !== "" && (
+                                        <IconButton className="p-1" onClick={(e) => setSearchQueryText("")}>
+                                            <CloseIcon style={{fontSize: '20px'}} />
+                                        </IconButton>
+                                    )}
                                 </div>
                             </div>
                             <div className="prompt-container d-flex">
@@ -588,7 +606,11 @@ export const PromptLibraryModal = (props) => {
                                         searchQueryText !== "" ? {width: '100%'} : {}
                                     } 
                                 >
-                                    <div className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}>
+
+                                    <div
+                                        ref={promptCardsContainerRef} 
+                                        className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}
+                                    >
                                         {promptCardsList.map((each, ind) => {
                                             let prompt = promptCardsListCopy.find(obj => obj.id === each.id)?.prompt_content
                                             return(
@@ -705,7 +727,7 @@ export const PromptLibraryModal = (props) => {
                                                 </div>
                                             )
                                         })}
-                                        {!true && (
+                                        {(searchQueryText.trim() !== "" && promptCardsList.length === 0) && (
                                             <div className="d-flex items-center justify-center items-center" style={{height: '100%'}}>
                                                 <div>
                                                     <img 
