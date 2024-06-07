@@ -85,7 +85,7 @@ import ConfirmIcon from "../assets/images/new-ui-icons/confirm-icon.svg"
 // import CustomBookTooltip from "./CustomBookTooltip";
 import ReferenceModal from "./Writter-componenets/ReferenceModal";
 import ReactRouterPrompt from 'react-router-prompt'
-import { PromptWritingBox } from "./prompt-writing-box/PromptWritingBox";
+// import { PromptWritingBox } from "./prompt-writing-box/PromptWritingBox";
 
 const AudioSlider = styled(Slider)({
     color: '#0078D44D',

@@ -1,4 +1,7 @@
 /* @import url("https://fonts.cdnfonts.com/css/segoe-ui-4"); */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 html,
 body {
@@ -44357,6 +44360,14 @@ body{
 }
 .note-editable span{
     font-family: inherit !important;
+}
+.note-editable table tbody tr td{
+    border: 1px solid #ddd !important; 
+}
+.note-editable table tbody tr td{
+    padding: 8px !important;
+    /* line-height: 1.42857143 !important; */
+    /* vertical-align: top !important; */
 }
 
 /* parallax scrolling for federal workspace story section */
