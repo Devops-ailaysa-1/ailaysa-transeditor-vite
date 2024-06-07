@@ -914,20 +914,26 @@ function Navbar(props) {
     /* Show browser notification whenver new notification arrives*/
     useEffect(() => {
         if (didMount) {
-            if (Notification.permission === "denied")
-                // User denied to show
-                return;
-            if (isNewNotification.current && chatNotifications[chatNotifications.length - 1]) {
-                let notification = chatNotifications[chatNotifications.length - 1];
-                if (Notification.permission === "default") {
-                    Notification.requestPermission(); //Ask permission if already not given
+            try {
+                if(Notification){
+                    if (Notification.permission === "denied")
+                        // User denied to show
+                        return;
+                    if (isNewNotification.current && chatNotifications[chatNotifications.length - 1]) {
+                        let notification = chatNotifications[chatNotifications.length - 1];
+                        if (Notification.permission === "default") {
+                            Notification.requestPermission(); //Ask permission if already not given
+                        }
+                        let options = {
+                            body: notification?.message,
+                            icon: Config.BASE_URL + notification?.avatar,
+                            dir: "ltr",
+                        };
+                        new Notification(`Message from ${notification?.sender}`, options); // Show notifications
+                    }
                 }
-                let options = {
-                    body: notification?.message,
-                    icon: Config.BASE_URL + notification?.avatar,
-                    dir: "ltr",
-                };
-                new Notification(`Message from ${notification?.sender}`, options); // Show notifications
+            }catch (err) {
+                console.log(err)
             }
         }
     }, [chatNotifications]);
