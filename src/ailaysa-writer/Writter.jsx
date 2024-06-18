@@ -85,6 +85,7 @@ import ConfirmIcon from "../assets/images/new-ui-icons/confirm-icon.svg"
 // import CustomBookTooltip from "./CustomBookTooltip";
 import ReferenceModal from "./Writter-componenets/ReferenceModal";
 import ReactRouterPrompt from 'react-router-prompt'
+import { setWriterWordCount } from "../features/writer-slices/WriterWordCountSlice";
 // import { PromptWritingBox } from "./prompt-writing-box/PromptWritingBox";
 
 const AudioSlider = styled(Slider)({
@@ -979,6 +980,12 @@ const Writter = (props) => {
 
         document.querySelector('.note-editable').innerHTML = final
         document.querySelector('.note-editable-backdrop').innerHTML = document.querySelector('.note-editable').innerHTML
+        
+        dispatch(setWriterWordCount({
+            char: count(document?.querySelector('.note-editable')?.innerText.replace(/\n/g, '')).chars,
+            word: document?.querySelector('.note-editable')?.innerText?.trim()?.split(/\s+/)?.filter(each => each?.trim() !== '')?.length !== undefined ? document?.querySelector('.note-editable')?.innerText?.trim()?.split(/\s+/)?.filter(each => each?.trim() !== '')?.length : 0
+        }))
+        
         scrollToTop()
         setTimeout(() => {
 
