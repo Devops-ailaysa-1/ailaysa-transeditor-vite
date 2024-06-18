@@ -1234,7 +1234,7 @@ function Navbar(props) {
 
 
                                 {/* default glossary download icon for dinamalar */}
-                                {props?.defaultGlossDownload && (
+                                {(props?.defaultGlossDownload && !is_internal_meber_editor) && (
                                     <Tooltip title={t('download')} arrow placement="bottom">
                                         <li className={props.isWhite ? "nav-item nav-drp-down active" : "navbar-display-hide"} onClick={props?.handleDefaultGlossDownload}>
                                             <span className={props.isWhite ? "nav-link" : ""} >
