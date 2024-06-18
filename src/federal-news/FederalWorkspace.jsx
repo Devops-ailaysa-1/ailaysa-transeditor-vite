@@ -5930,10 +5930,10 @@ const FederalWorkspace = (props) => {
                                                                                 ></div> 
                                                                            )}
                                                                         </div>
-                                                                            {translation?.isFocused && (
+                                                                            {(translation?.isFocused) && (
                                                                                 <div data-id={id} className="target-lang-row-align trigger-focus">
                                                                                     <div data-id={id} className="segment-status trigger-focus">
-                                                                                        {(isWorkspaceEditable) ? (
+                                                                                        {(isWorkspaceEditable && (sourceLanguageId == 17 || targetLanguageId == 17)) ? (
                                                                                             !["Tags", "Keywords", "Author name", "Location"]?.find(each => each === translation?.type) &&
                                                                                                 <>
                                                                                                     <Tooltip title={
