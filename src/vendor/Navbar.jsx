@@ -1232,6 +1232,18 @@ function Navbar(props) {
                                     </Tooltip>
                                 )}
 
+
+                                {/* default glossary download icon for dinamalar */}
+                                {props?.defaultGlossDownload && (
+                                    <Tooltip title={t('download')} arrow placement="bottom">
+                                        <li className={props.isWhite ? "nav-item nav-drp-down active" : "navbar-display-hide"} onClick={props?.handleDefaultGlossDownload}>
+                                            <span className={props.isWhite ? "nav-link" : ""} >
+                                                <img src={FileDownload} alt="file-download" />
+                                            </span>
+                                        </li>
+                                    </Tooltip>
+                                )}
+
                                 <Tooltip title={props.isTbxDownloading ? t('downloading') : t('download')} arrow placement="bottom">
                                     <li className={props.isWhite ? "nav-item nav-drp-down active" : "navbar-display-hide"} onClick={() => !props.isTbxDownloading && props.handleDownloadFile()}>
                                         {
