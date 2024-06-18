@@ -278,7 +278,7 @@ const ChapterPanel = (props) => {
 
     // scroll the summernote editor to bottom
     const scrollToBottom = () => {
-        const element = document.querySelector('.note-editing-area');
+        const element = document.querySelector('.note-editable');
         element.scrollTo({
             top: element.scrollHeight,
             behavior: 'smooth'
@@ -287,7 +287,7 @@ const ChapterPanel = (props) => {
 
     // scroll the summernote editor to top
     const scrollToTop = () => {
-        const element = document.querySelector('.note-editing-area');
+        const element = document.querySelector('.note-editable');
         element.scrollTo({
             top: 0,
             behavior: 'smooth'
