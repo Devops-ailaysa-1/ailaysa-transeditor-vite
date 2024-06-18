@@ -318,7 +318,13 @@ const MainEditor = (props) => {
       
         // Return the result
         return resultHTML;
-      }
+    }
+
+    $(document).on("DOMNodeInserted", '.note-editable', function (e) {
+        if (e.target.tagName === "SPAN") {
+            $(e.target).replaceWith($(e.target).contents());
+        }
+    });
 
     useEffect(() => {
         // customFn()
@@ -2073,7 +2079,7 @@ const MainEditor = (props) => {
     }, [])
 
     useEffect(() => {
-        let noteEditingArea = document.querySelector('.note-editing-area')
+        let noteEditingArea = document.querySelector('.note-editable')
         window.addEventListener('resize', setPopOnPosition)
         noteEditingArea.addEventListener('scroll', setPopOnPosition)
         
