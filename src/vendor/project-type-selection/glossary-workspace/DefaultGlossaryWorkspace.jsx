@@ -18,10 +18,14 @@ import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
 import NoEditor from '../../../assets/images/no-editors-found-2.svg'
 import NoTermFound from '../../../assets/images/no-terms-found.svg'
 import WarningIcon from '../../../assets/images/new-ui-icons/confirm-icon.svg'
+import { addDownloadingFiles, deleteDownloadingFile, updateDownloadingFile } from '../../../features/FileDownloadingListSlice';
+import { useDispatch } from 'react-redux';
+import generateKey from '../../../project-setup-components/speech-component/speech-to-text/recorder-components/utils/GenerateKey';
 
 const DefaultGlossaryWorkspace = (props) => {
     const { t } = useTranslation();
     const location = useLocation()
+    const dispatch = useDispatch()
 
     const [searchBox, setSearchBox] = useState(false);
     const [isSearchTermDelete, setIsSearchTermDelete] = useState(false);
@@ -456,11 +460,40 @@ const DefaultGlossaryWorkspace = (props) => {
         }
     }
 
+    const handleDefaultGlossDownload = async() => {
+        let uniqueId = generateKey()
+
+        try{
+            // add in download list
+            dispatch(addDownloadingFiles({ id: uniqueId, file_name: 'glossary terms', ext: '.xlsx', status: 1 }))
+            
+            let url = `${Config.BASE_URL}/glex/default_glossary_download`
+            const response = await Config.downloadFileFromApi(url);
+            
+            // update the list once download completed
+            dispatch(updateDownloadingFile({ id: uniqueId, status: 2 }))
+
+            Config.downloadFileInBrowser(response)
+            
+            setTimeout(() => {
+                // remove the downloaded file from list
+                dispatch(deleteDownloadingFile({ id: uniqueId }))
+            }, 8000);
+            
+        }catch(e) {
+            console.log(e)
+            Config.toast(t("no_terms_gloss"), 'warning');
+            dispatch(deleteDownloadingFile({ id: uniqueId }))
+        }
+    } 
+
     return (
         <React.Fragment>
             <Navbar
                 isWhite={true}
                 prevPathRef={prevPathRef}
+                defaultGlossDownload={true}
+                handleDefaultGlossDownload={handleDefaultGlossDownload}
             />
             <section className="padding-correction">
                 <div className="choicelist-main-header-wrapper">
