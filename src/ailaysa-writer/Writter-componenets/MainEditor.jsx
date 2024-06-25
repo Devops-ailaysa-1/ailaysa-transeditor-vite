@@ -318,7 +318,13 @@ const MainEditor = (props) => {
       
         // Return the result
         return resultHTML;
-      }
+    }
+
+    $(document).on("DOMNodeInserted", '.note-editable', function (e) {
+        if (e.target.tagName === "SPAN") {
+            $(e.target).replaceWith($(e.target).contents());
+        }
+    });
 
     useEffect(() => {
         // customFn()
@@ -391,7 +397,10 @@ const MainEditor = (props) => {
                         // var cleanedHTML = tempDiv.innerHTML;
                         // var clean = removeFormElements(removeImgTags(cleanedHTML))
                         // console.log(unwrapDivAndKeepPTags(cleanedHTML))
-                        document.execCommand('insertHTML', false, sanitizedHtmlString);
+                        
+                        document.execCommand(clipboardData.getData('text/html')?.length  == 0 ? 'insertText' : 'insertHTML', false, sanitizedHtmlString);
+                        // document.execCommand('insertHTML', false, sanitizedHtmlString);
+
                         // $('summernote').summernote('pasteHTML', cleanedHTML)
                     // }
                     // if(sanitizedHtml1 != sanitizedHtml2){
@@ -2070,7 +2079,7 @@ const MainEditor = (props) => {
     }, [])
 
     useEffect(() => {
-        let noteEditingArea = document.querySelector('.note-editing-area')
+        let noteEditingArea = document.querySelector('.note-editable')
         window.addEventListener('resize', setPopOnPosition)
         noteEditingArea.addEventListener('scroll', setPopOnPosition)
         
