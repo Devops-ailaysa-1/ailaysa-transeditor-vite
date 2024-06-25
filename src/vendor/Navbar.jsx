@@ -1068,7 +1068,7 @@ function Navbar(props) {
                                             </div>
                                         </NavLink>
                                         
-                                        {!isDinamalar && (
+                                        {!is_internal_meber_editor && (
                                             <NavLink 
                                                 to="/file-upload?page=1&order_by=-id" 
                                                 // activeClassName="selected" 
@@ -1081,7 +1081,7 @@ function Navbar(props) {
                                         )}
                                         {isDinamalar && (
                                             <ButtonBase       
-                                                className={props.isWhite && "d-none"}
+                                                className={props.isWhite ? "d-none" : "ml-3"}
                                                 onClick={() => history('/report')}
                                             >
                                                 <div className="btn-text">
@@ -1108,11 +1108,11 @@ function Navbar(props) {
                                     </NavLink>
                                 )}
 
-                                {(!isDinamalar && Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected) ? (
+                                {(Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected) ? (
                                     <ButtonBase       
                                         component={Link}
                                         to="/create/all-templates/" 
-                                        className={props.isWhite && "d-none"}
+                                        className={props.isWhite ? "d-none" : "ml-4"}
                                     >
                                         <div className="btn-text">
                                             <AddIcon
