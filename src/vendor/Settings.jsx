@@ -297,7 +297,7 @@ const Settings = (props) => {
             getJobsByProjectId();
             getTmxFiles();
             getGlossaryList();
-            // getWordchoiceList();
+            getWordchoiceList();
             getTbxFiles();
             getThresholdValues();
             getReferenceFiles();
@@ -1609,7 +1609,7 @@ const Settings = (props) => {
                             >
                                 <NavLink className="settings-setup-btn">{t("ailaysa_glossaries")}</NavLink>
                             </NavItem>
-                            {/* <NavItem
+                            <NavItem
                                 className={"setup-button-modal-btn " + classnames({ active: activeTab === "6" })}
                                 onClick={() => {
                                     toggle("6");
@@ -1618,7 +1618,7 @@ const Settings = (props) => {
                                 }}
                             >
                                 <NavLink className="settings-setup-btn">{t("wordchoice")}</NavLink>
-                            </NavItem> */}
+                            </NavItem>
 
                             <NavItem className={"setup-button-modal-btn " + classnames({ active: (activeTab === "5" && (subQatab === 1 || subQatab === 2)) })} onClick={() => { toggle("5"); toggleInner(1); setQaSubdomain(true); }}>
                                 <NavLink className="settings-setup-btn">
@@ -2367,7 +2367,7 @@ const Settings = (props) => {
                             </TabPane>
                             
                             {/* Wordchoice settings */}
-                            {/* <TabPane tabId="6">
+                            <TabPane tabId="6">
                                 <div className="asset-glossary-wrapper">
                                     <div className="asset-glossary-title-wrap">
                                         <h2 className="asset-gl-head">{t("wordchoice_list")}</h2>
@@ -2430,7 +2430,7 @@ const Settings = (props) => {
                                         )}
                                     </ul>
                                 </div>
-                            </TabPane> */}
+                            </TabPane>
 
                             <TabPane tabId="5">
                                 <TabContent activeTab={subQatab}>
