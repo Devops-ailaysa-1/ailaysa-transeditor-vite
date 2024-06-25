@@ -1966,7 +1966,7 @@ function Workspace(props) {
     // get the list of wordchoices based on the task_id
     useEffect(() => {
         if(documentTaskIdRef.current !== null){
-            // getWordChoiceListForDocument()
+            getWordChoiceListForDocument()
         }
     }, [documentTaskIdRef.current])
     
@@ -7570,7 +7570,7 @@ function Workspace(props) {
                                         </Tooltip>
                                     </li>
                                     
-                                    {isDinamalar && 
+                                    {/* {isDinamalar &&  */}
                                         <li onClick={(e) => handleAddGlossaryTermBtn()}>
                                             <Tooltip title={isDinamalar ? t("add_glossary") : t("add_wordchoice")} placement="bottom" arrow>
                                                 <div ref={showGlossaryRef} className="toolbar-list-icons-align">
@@ -7578,7 +7578,7 @@ function Workspace(props) {
                                                 </div>
                                             </Tooltip>
                                         </li>
-                                    }
+                                    {/* } */}
                                     <li onClick={(e) => showHideToolbarElement("showSpecialCharacters")}>
                                         <Tooltip title={t("special_characters")} placement="bottom" arrow>
                                             <div ref={showSpecialCharactersRef} className="toolbar-list-icons-align">
