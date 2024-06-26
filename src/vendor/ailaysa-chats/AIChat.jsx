@@ -580,7 +580,7 @@ const AIChat = () => {
                                                     <div>
                                                         <label
                                                             key={file?.id}
-                                                            className={"file-name-list " + ((selectedChatFile?.id === file?.id) ? "active " : "") + ((file?.status === 'PENDING' || file?.status === 'ERROR') ? "disable" : "")}
+                                                            className={"file-name-list " + ((selectedChatFile?.id === file?.id) ? "active " : "") + ((file?.status === 'PENDING' ) ? "disable" : "")}
                                                             htmlFor={`chat-book-${file?.id}`}
                                                             // onClick={() => handleFileSelect(file)}
                                                         >
@@ -659,7 +659,7 @@ const AIChat = () => {
                                                                     </span>
                                                                 )}
                                                                 {(file?.status === "ERROR" || file?.status === null) && (
-                                                                    <span className="ai-chat-error-tag">Error</span>
+                                                                    <span className="ai-chat-error-tag">{t("failed")}</span>
                                                                 )}
                                                             </div>
                                                         </label>
