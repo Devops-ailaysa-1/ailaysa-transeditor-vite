@@ -9,11 +9,16 @@ const UploadAudio = (props) => {
     const { t } = useTranslation();
     let { DragandDrop, handleDrop, handleChange, files, removeFile, niceBytes, editFiles, deleteEditFile, removeTempFile} = props
     // console.log(files);
-    // console.log(editFiles);
+    // console.log(editFiles);  
+
+    const params = new URLSearchParams(window.location.search); 
+    const getParams= params.get('task')
+
+
     return (
         <React.Fragment>
             { 
-                !files.length >= 0 && !editFiles?.length >= 0  &&
+               getParams == null &&  !files.length >= 0 && !editFiles?.length >= 0   &&
                 <DragandDrop handleDrop={handleDrop} className='sample'>
                     <div className={(files.length > 0 || editFiles?.length > 0 ) ?  "upload-audio-work-area h-25 fileloaded " : 'upload-audio-work-area' }>
                         <div className="file-drop-area-wrapper">
@@ -66,7 +71,7 @@ const UploadAudio = (props) => {
                                         }
                                     </span>
                                     </div>
-                                    <span
+                                   { getParams == null && <span
                                     className="upload-file-delete"
                                     onClick={(e) =>
                                         editFile?.file ? 
@@ -84,7 +89,7 @@ const UploadAudio = (props) => {
                                         src={CloseBlack}
                                         alt="delete"
                                     />
-                                    </span>
+                                    </span>}
                                 </div>
                             </>
                         )

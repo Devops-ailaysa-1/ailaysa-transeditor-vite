@@ -1142,5 +1142,6 @@
     "indent": "Indent",
     "outdent": "Outdent",
     "download_current_page": "Download current page",
-    "download_full_book": "Download full book"
+    "download_full_book": "Download full book",
+    "failed": "Failed"
 }

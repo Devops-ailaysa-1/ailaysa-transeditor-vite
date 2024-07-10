@@ -17,12 +17,15 @@ const PDFViewer = (props) => {
         page,
         setPage,
         handleMouseUp,
+   
     } = props
 
     const [pdfData, setPdfData] = useState(null)
     const canvasRef = useRef();
 
     const [numPages, setNumPages] = useState(0);
+    const [showScroll, setShowScroll] = useState(false)
+
     const pageRefs = useRef({});
 
     const [scale, setScale] = useState(1);
@@ -81,22 +84,22 @@ const PDFViewer = (props) => {
 
     function highlightPattern(text, pattern) {
         return text.replace(pattern, (value) => `<mark>${value}</mark>`);
-      }
-      
+    }
+
 
     const textRenderer = useCallback(
-      (textItem) => highlightPattern(textItem.str, searchText),
-      [searchText]
+        (textItem) => highlightPattern(textItem.str, searchText),
+        [searchText]
     );
 
     const handleCreate = () => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-    
+
         // // Drawing rectangle
         // ctx.fillStyle = 'blue'; // Fill color
         // ctx.fillRect(50, 50, 100, 75); // x, y, width, height
-    
+
         // Optionally, you can add a stroke
         ctx.strokeStyle = 'black'; // Stroke color
         ctx.lineWidth = 2; // Stroke width
@@ -107,52 +110,83 @@ const PDFViewer = (props) => {
     const pdfref = useRef();
     const hasScrollBar = (element, direction) => {
         if (direction === 'vertical') {
-          return element?.scrollHeight > element?.clientHeight;
+            return element?.scrollHeight > element?.clientHeight;
         } else if (direction === 'horizontal') {
 
-          return element?.scrollWidth > element?.clientWidth;
+            return element?.scrollWidth > element?.clientWidth;
         }
         return false;
-      };
+    };
 
-      const hasScrollBarX = hasScrollBar(document.querySelector('.pdf-page'), 'horizontal');
-      console.log(hasScrollBarX)
+    const hasScrollBarX = hasScrollBar(document.querySelector('.pdf-page'), 'horizontal');
+    console.log(hasScrollBarX)
 
 
-  
+
     return (
-        <section className="pdf-view-main-wrapper"> 
-          <ControlPanel
-          scale={scale}
-          setScale={setScale}
-          numPages={numPages}
-          pageNumber={page}
-          setPageNumber={setPage}
-        />
-                            
-                           
-        <Document onMouseUp={handleMouseUp} ref={pdfref}  className={`pdf-page ${hasScrollBarX ? 'hasScroll' : ''}`}  file={pdfData} onLoadSuccess={onDocumentLoadSuccess}  >
-              {Array(...Array(numPages))
-                .map((x, i) => i + 1)
-                .map(page => (
-                    <Page
-                            pageNumber={page}
-                            scale={scale}
-                            className={`page-${page}`}
-                            // onGetTextSuccess={
-                            //     (text) => console.log(text)
-                            // }
-                            //   width={width}
-                            renderTextLayer={true}
-                            canvasRef={canvasRef}
-                            customTextRenderer={textRenderer}
-                            onGetTextSuccess={({items}) => console.log("onGetTextSuccess",items)}
-                            loading=""
-                        />
-                ))}
-                        
+        <section className="pdf-view-main-wrapper">
+            <div>
+                <ControlPanel
+                    scale={scale}
+                    setScale={setScale}
+                    numPages={numPages}
+                    pageNumber={page}
+                    setPageNumber={setPage}
+                    setShowScroll={setShowScroll}
+                    showScroll={showScroll}
+                />
+            
+            </div>
            
-        </Document>
+
+
+            <Document onMouseUp={handleMouseUp} ref={pdfref} className={`pdf-page ${hasScrollBarX ? 'hasScroll' : ''}`} file={pdfData} onLoadSuccess={onDocumentLoadSuccess}  >
+                <>
+
+
+                </>
+
+                {showScroll ? (
+                    <>
+                        {Array(...Array(numPages))
+                            .map((x, i) => i + 1)
+                            .map(page => (
+                                <Page
+                                    pageNumber={page}
+                                    scale={scale}
+                                    className={`page-${page}`}
+                                    // onGetTextSuccess={
+                                    //     (text) => console.log(text)
+                                    // }
+                                    //   width={width}
+                                    renderTextLayer={true}
+                                    canvasRef={canvasRef}
+                                    customTextRenderer={textRenderer}
+                                    onGetTextSuccess={({ items }) => console.log("onGetTextSuccess", items)}
+                                    loading=""
+                                />
+                            ))}
+                    </>
+                ) : (
+                    <Page
+                        pageNumber={page}
+                        scale={scale}
+                        className={`page-${page}`}
+                        // onGetTextSuccess={
+                        //     (text) => console.log(text)
+                        // }
+                        //   width={width}
+                        renderTextLayer={true}
+                        canvasRef={canvasRef}
+                        customTextRenderer={textRenderer}
+                        onGetTextSuccess={({ items }) => console.log("onGetTextSuccess", items)}
+                        loading=""
+                    />
+                )
+
+                }
+
+            </Document>
         </section>
     );
 };
