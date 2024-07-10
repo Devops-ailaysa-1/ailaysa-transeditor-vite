@@ -160,10 +160,11 @@ const SpellCheckDocumentListModal = (props) => {
             method: "DELETE",
             auth: true,
             success: (response) => {
-                console.log(list)
+                // getMyDocumentList()
                 setDocumentsList(prevState => prevState.filter(item => item.id !== id));
            
             },
+            error: (err) => { }
         });
     }
 

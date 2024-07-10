@@ -374,13 +374,11 @@ const AllTemplate = (props) => {
                                                                             <div class="bottom-area">
                                                                                 <div class="methods-wrap">
                                                                                 </div>
-                                                                                <button class="MuiButtonBase-root getstated-btn css-10d1a0h-MuiButtonBase-root" tabindex="0" type="button">
-                                                                                    Get started
-                                                                                    <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium icon css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="KeyboardArrowRightOutlinedIcon"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"></path>
-                                                                                    </svg>
-                                                                                    <span class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root">
-                                                                                    </span>
-                                                                                </button>
+                                                                                
+                                                                                <ButtonBase className="getstated-btn" >
+                                                                                                {t("get_started")}
+                                                                                                <KeyboardArrowRightOutlinedIcon className="icon" />
+                                                                                </ButtonBase>
                                                                             </div>
                                                                         </div>
                                                                         <div className="template-box-item-overlay">
