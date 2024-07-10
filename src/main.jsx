@@ -46,6 +46,7 @@ import { writerReducers } from './features/writer-reducers/writerReducers';
 import IsFederalNewsReducer from './features/IsFederalNewsSlice';
 import IsDinamalarNewsReducer from './features/IsDinamalarNewsSlice';
 import * as Sentry from "@sentry/react";
+import SpellCheckHtmlDataSlice from './features/SpellCheckHtmlDataSlice';
 
 const store = configureStore({
   reducer: {
@@ -68,6 +69,7 @@ const store = configureStore({
 	individualTemplateList: individualTemplateListReducer,
 	isFederalNews: IsFederalNewsReducer,
 	isDinamalarNews: IsDinamalarNewsReducer,
+	spellCheckData:SpellCheckHtmlDataSlice,
 	...writerReducers        
   }
 })
