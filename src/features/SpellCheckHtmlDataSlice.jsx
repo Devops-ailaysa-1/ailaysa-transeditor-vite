@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export const SpellCheckHtmlDataSlice = createSlice({
     name: 'SpellCheckHtmlDataSlice',
-    initialState: {value: false},
+    initialState: {value: ''},
     reducers: {
         setSpellCheckHtmlData: (state, action) => {
             state.value = action.payload
