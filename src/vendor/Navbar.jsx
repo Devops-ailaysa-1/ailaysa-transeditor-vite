@@ -998,7 +998,7 @@ function Navbar(props) {
     }
 
     const convertNewlinesToBr = (text) => {
-        const htmlText = text.replace(/\n/g, '<br />');
+        const htmlText = text?.split('\n')?.map(line => `<p>${line.trim()}</p>`)?.join('');
         return htmlText;
       }
 

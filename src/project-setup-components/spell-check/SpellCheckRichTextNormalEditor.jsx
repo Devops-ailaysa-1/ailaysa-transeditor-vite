@@ -43,6 +43,28 @@ const SpellCheckRichTextNormalEditor = (props) => {
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 
 
+    const handleSave = () => {
+        let formData = new FormData();
+        formData.append("html_data", copyTarDivRef.current.innerHTML);
+
+
+        Config.axios({
+            url: `${Config.BASE_URL}/openai/ocr-proof-reading/${URL_SEARCH_PARAMS.get('id')}/`,
+            method: "PUT",
+            auth: true,
+            data: formData,
+            success: (response) => {
+                console.log(response)
+               
+            },
+            error: (err) => {
+                console.log(err)
+
+            }
+        });
+    }
+
+
     const handleCreateSpellCheckProject = (docx) => {
         let formData = new FormData();
 
@@ -81,7 +103,9 @@ const SpellCheckRichTextNormalEditor = (props) => {
               console.log(response.data)
               setProject(response.data)
               setReferenceDocument(response?.data?.main_document)
+              copyTarDivRef.current.innerHTML = response.data.html_data
               setTranslateResultText(response.data.html_data)
+              dispatch(setSpellCheckHtmlData(response.data.html_data))
               setIsLoading(false)
 
             },
@@ -91,6 +115,7 @@ const SpellCheckRichTextNormalEditor = (props) => {
 
     useEffect(() => {
         if(window.location.pathname.includes('spell-check') && URL_SEARCH_PARAMS.get('id')){
+            setShowDocumentListModal(false)
             getDocument(URL_SEARCH_PARAMS.get('id'))
         }
     },[])
@@ -272,9 +297,9 @@ const SpellCheckRichTextNormalEditor = (props) => {
 
     useEffect(() => {
         if (translateResultText) {
-            console.log(translateResultText)
             // debounce(symSpellCheck())
             Config.debounceApiCalls(symSpellCheck)
+            // Config.debounceApiCalls(handleSave)
             // based on the target content length decide whether it should be stick or not
         }
     }, [translateResultText])

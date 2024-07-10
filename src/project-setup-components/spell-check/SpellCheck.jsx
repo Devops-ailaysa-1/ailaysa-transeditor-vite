@@ -22,7 +22,7 @@ const SpellCheck = (props) => {
     const [referenceDocument, setReferenceDocument] = useState(null)
     const [project, setProject] = useState(null)
 
-    const supportFileExtensionPdf = useRef([".pdf"]);
+    const supportFileExtensionPdf = useRef([".pdf",".docx",".txt"]);
 
     const pdfInputRef = useRef()
     const prevPathRef = useRef(null)
