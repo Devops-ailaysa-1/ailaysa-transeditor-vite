@@ -362,8 +362,7 @@ const AllTemplate = (props) => {
                                                                         )
                                                                     })
                                                                 }   
-                                                                {console.log(item)}
-                                                                {(item == 'Toolkit' && window.location.pathname.includes('toolkit')) &&
+                                                                {(item == 'Toolkit' && activeTab == 'Toolkit') &&
                                                                     <div className="template-box-item-wrapper" onClick={() => handleOpenSpellCheck()}>
                                                                         <div class="templates-box-item ">
                                                                             <div class="content-area">
