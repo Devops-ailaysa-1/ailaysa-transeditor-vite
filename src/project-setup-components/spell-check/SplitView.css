@@ -395,7 +395,7 @@
       }
       
       .spell-check-view .copy-of-translated-text{
-        overflow: auto !important;
+        overflow: unset !important;
       }
 
       .spell-check-view .close-button{
