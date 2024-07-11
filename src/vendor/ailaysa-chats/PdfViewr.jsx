@@ -163,7 +163,7 @@ const PDFViewer = (props) => {
                                     canvasRef={canvasRef}
                                     customTextRenderer={textRenderer}
                                     onGetTextSuccess={({ items }) => console.log("onGetTextSuccess", items)}
-                                    loading=""
+                                    loading="Loading page…"
                                 />
                             ))}
                     </>
@@ -180,7 +180,7 @@ const PDFViewer = (props) => {
                         canvasRef={canvasRef}
                         customTextRenderer={textRenderer}
                         onGetTextSuccess={({ items }) => console.log("onGetTextSuccess", items)}
-                        loading=""
+                        loading="Loading page…"
                     />
                 )
 

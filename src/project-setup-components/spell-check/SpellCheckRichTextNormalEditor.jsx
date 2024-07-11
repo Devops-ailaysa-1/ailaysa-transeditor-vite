@@ -64,11 +64,15 @@ const SpellCheckRichTextNormalEditor = (props) => {
         });
     }
 
+    const [isFileLoading, setIsFileLoading] = useState(false)
 
     const handleCreateSpellCheckProject = (docx) => {
         let formData = new FormData();
-
+        setProject(null)
+        setTranslateResultText(null)    
+        setIsFileLoading(true)
         formData.append("ocr_result", docx);
+        setShowDocumentListModal(false)
 
 
 
@@ -82,10 +86,11 @@ const SpellCheckRichTextNormalEditor = (props) => {
                 navigate(`/spell-check?id=${response?.data?.id}`)
                 setProject(response.data)
                 setTranslateResultText(response.data.html_data)
-                setShowDocumentListModal(false)
+                setIsFileLoading(false)
             },
             error: (err) => {
                 setDocx(null)
+                setIsFileLoading(false)
                 console.log(err)
 
             }
@@ -93,6 +98,8 @@ const SpellCheckRichTextNormalEditor = (props) => {
     }
 
     const getDocument = (id) => {
+
+
         setIsLoading(true)
         let url = `${Config.BASE_URL}/openai/ocr-proof-reading/${id}`;
         Config.axios({
@@ -100,10 +107,8 @@ const SpellCheckRichTextNormalEditor = (props) => {
             method: "GET",
             auth: true,
             success: (response) => {
-              console.log(response.data)
               setProject(response.data)
               setReferenceDocument(response?.data?.main_document)
-              copyTarDivRef.current.innerHTML = response.data.html_data
               setTranslateResultText(response.data.html_data)
               dispatch(setSpellCheckHtmlData(response.data.html_data))
               setIsLoading(false)
@@ -133,6 +138,8 @@ const SpellCheckRichTextNormalEditor = (props) => {
         }
         return true;
     };
+
+
 
 
     const handleInputFile = (e) => {
@@ -174,11 +181,13 @@ const SpellCheckRichTextNormalEditor = (props) => {
 
     const handleTargetChange = (e) => {
         // setTargetInputBox(e.target.innerText)
+        console.log('target change')
+
         setTranslateResultText(e.target.value)
         copyTarDivRef.current.innerHTML = e.target.value
-        // console.log('target change')
+        console.log('target change')
         dispatch(setSpellCheckHtmlData(copyTarDivRef.current.innerHTML))
-
+     
         if (e.target.value?.trim()?.length === 0) {
             setIsTarTextEmpty(true)
         } else {
@@ -299,7 +308,7 @@ const SpellCheckRichTextNormalEditor = (props) => {
         if (translateResultText) {
             // debounce(symSpellCheck())
             Config.debounceApiCalls(symSpellCheck)
-            // Config.debounceApiCalls(handleSave)
+            Config.debounceApiCalls(handleSave)
             // based on the target content length decide whether it should be stick or not
         }
     }, [translateResultText])
@@ -575,7 +584,7 @@ const SpellCheckRichTextNormalEditor = (props) => {
                         </span>
                     </div>
                     <div className='target-normal-wrapper'>
-            <div className="instant-translate-box-main-wrapper text-area-wizard-wrapper">
+            <div className={`instant-translate-box-main-wrapper text-area-wizard-wrapper ${isFileLoading ? "loading-json-blur" :  ""}`}>
                 <div className="copy-target-text-backdrop">
                     <div
                         ref={copyTarDivRef}
@@ -588,9 +597,8 @@ const SpellCheckRichTextNormalEditor = (props) => {
                     ref={tarDivRef}
                     className="ai-text-area"
                     value={translateResultText}
-                    maxLength="5000"
                     spellCheck="false"
-                    onChange={(e) => handleTargetChange(e)}
+                    onChange={(e) => {handleTargetChange(e)}}
                     onKeyDown={handleTargetKeyDown}
                 />
                 <div id="pop" className="spellcheck-popover-box instant-spell-check-pop" style={{ borderRadius: '5px', background: '#fff' }}>
@@ -612,6 +620,13 @@ const SpellCheckRichTextNormalEditor = (props) => {
                 )}
 
         </div>
+        {isFileLoading && <div id="loading-wrapper">
+            <div class="loader">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>}
         </>
         
     )
