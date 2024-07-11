@@ -283,9 +283,14 @@ const SpellCheckRichTextNormalEditor = (props) => {
                     if (response.data?.result) {
                         spellCheckResponseRef.current = response.data?.result
                         setSpellCheckWordsOptions(response.data?.result)
+                        handleSave()
+
                     }
                 },
-                error: (err) => { }
+                error: (err) => { 
+                    handleSave()
+
+                }
             });
 
 
@@ -295,20 +300,12 @@ const SpellCheckRichTextNormalEditor = (props) => {
     const typing = useRef(false);
     const typingTimeout = useRef(0);
 
-    const debounce = (callback) => {
-        if (typingTimeout.current) clearTimeout(typingTimeout.current);
-        typing.current = false;
-        typingTimeout.current = setTimeout(() => {
-            // projectSearchTerm?.length && callback();
-            callback();
-        }, 500);
-    };
+
 
     useEffect(() => {
         if (translateResultText) {
             // debounce(symSpellCheck())
             Config.debounceApiCalls(symSpellCheck)
-            Config.debounceApiCalls(handleSave)
             // based on the target content length decide whether it should be stick or not
         }
     }, [translateResultText])
