@@ -15,6 +15,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import { id } from 'date-fns/locale';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import ConfirmIcon from "../../assets/images/new-ui-icons/confirm-icon.svg"
+import { ButtonLoader } from '../../loader/CommonBtnLoader';
 
 const SpellCheckDocumentListModal = (props) => {
 
@@ -36,12 +38,21 @@ const SpellCheckDocumentListModal = (props) => {
     const supportFileExtensions = useRef([".docx"]);
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 
+9
+    const [showDeleteFileModal, setShowDeleteFileModal] = useState(false);
+    const selectItemRef = useRef(null)
+
     const dropDownDivRef = useRef(null);
     const isDocNameSearchedRef = useRef(null);
     const searchBoxRef = useRef(null);
     const termFileInputRef = useRef(null)
 
     const navigate = useNavigate()
+
+    const modaloption = {
+        closeMaskOnClick: false,
+        width: 784,
+    };
 
     useEffect(() => {
         getMyDocumentList()
@@ -152,8 +163,10 @@ const SpellCheckDocumentListModal = (props) => {
         termFileInputRef.current.click()
     }
 
+    const [isDeleting, setIsDeleting] = useState(false)
+
     const deleteDoc = (id) => {
-    
+        setIsDeleting(true)
         let url = `${Config.BASE_URL}/openai/ocr-proof-reading/${id}`;
   
         Config.axios({
@@ -162,7 +175,12 @@ const SpellCheckDocumentListModal = (props) => {
             auth: true,
             success: (response) => {
                 // getMyDocumentList()
+                setShowDeleteFileModal(false)
+                setIsDeleting(false)
                 setDocumentsList(prevState => prevState.filter(item => item.id !== id));
+                if(selectItemRef.current?.document == URL_SEARCH_PARAMS.get('id')) {
+                    navigate('/spell-check')
+                }
            
             },
             error: (err) => { }
@@ -245,6 +263,8 @@ const SpellCheckDocumentListModal = (props) => {
                                 <th style={{width:'100%'}}>{t("doc_name")}</th>
                                 {/* <th>{t("created_at")}</th> */}
                                 <th style={{width:'100%',textAlign:'center'}}>{t("action")}</th>
+                                <th style={{width:'100%',textAlign:'center'}}></th>
+
                             </tr>
                         </thead>
                         <tbody className="doc-open-table-body">
@@ -257,8 +277,8 @@ const SpellCheckDocumentListModal = (props) => {
                                                     (
                                                         documentsList?.map(item => {
                                                             return (
-                                                                <tr key={item?.id}>
-                                                                    <td  style={{ position:'relative',minWidth:'80%',maxWidth:'100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                                <tr className='hover-mee' key={item?.id}>
+                                                                    <td  style={{ position:'relative',minWidth:'80%',maxWidth:'100%' }}>
                                                                         {item?.file_name}
                                                                         {
                                                                             item.word_count > 0 &&
@@ -275,9 +295,9 @@ const SpellCheckDocumentListModal = (props) => {
                                                                         
                                                                     </td>
                                                                     <td style={{maxWidth:'5%', textAlign:"center",position:'relative'}}>
-                                                                        <button className="delete-button-icon"  type="button" onMouseUp={() => { deleteDoc(item?.id) }}>
-                                                                                <DeleteOutlineOutlinedIcon />
-                                                                            </button>
+                                                                        <button className="delete-button-icon"  type="button" onMouseUp={() => {setShowDeleteFileModal(true);selectItemRef.current = item  }}>
+                                                                                <DeleteOutlineOutlinedIcon style={{color:'#5F6368'}} />
+                                                                        </button>
                                                                     </td>
                                                                 </tr>
                                                             )
@@ -366,6 +386,29 @@ const SpellCheckDocumentListModal = (props) => {
                         </tbody>
                     </table>
                 </div>
+                {showDeleteFileModal && (<Rodal
+                    visible={showDeleteFileModal}
+                    {...modaloption}
+                    showCloseButton={false}
+                    className="ai-mark-confirm-box"
+                >
+                    <div className="confirmation-wrapper">
+                        <img
+                            src={ConfirmIcon}
+                            alt="confirm-icon"
+                        />
+                        <h2>Are you sure?</h2>
+                        <div className="button-row">
+                            <button className="mydocument-AiMarkCancel" onClick={() => setShowDeleteFileModal(false)}>
+                                <span className="cancel-txt">Cancel</span>
+                            </button>
+                            <button className="mydocument-AiMarkSubmit" onClick={() => {!isDeleting&&deleteDoc(selectItemRef.current?.id)}}>
+                               
+                                <span className="submit-txt"> {isDeleting && <ButtonLoader />} Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                </Rodal>)}
             </div>
         </Rodal>
     )
