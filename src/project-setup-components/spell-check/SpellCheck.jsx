@@ -182,6 +182,9 @@ const SpellCheck = (props) => {
                             }
                         </>
                     )}
+
+                    <b style={{marginTop:'5px',position:'absolute',bottom:'10px',left:'10px'}}>Note: Supported file formats - DOCX, PDF.</b>
+                    
                     </div>
                 {isFileLoading && <div id="loading-wrapper">
                             <div class="loader">

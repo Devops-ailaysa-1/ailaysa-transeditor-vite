@@ -178,12 +178,9 @@ const SpellCheckDocumentListModal = (props) => {
                 setShowDeleteFileModal(false)
                 setIsDeleting(false)
                 setDocumentsList(prevState => prevState.filter(item => item.id !== id));
+                getDocument()
                 if(selectItemRef.current?.document == URL_SEARCH_PARAMS.get('id')) {
                     navigate('/spell-check')
-                }
-
-                if(documentsList?.length == 1) {
-                    getDocument()
                 }
            
             },
@@ -258,7 +255,7 @@ const SpellCheckDocumentListModal = (props) => {
                     </div>
                      <button className='add-new-file-button' onClick={handleInputClick}>
                         <AddIcon />
-                        <span>New File</span>
+                        <span>Add file</span>
                     </button>                
                       <input
                         type="file"
@@ -399,6 +396,7 @@ const SpellCheckDocumentListModal = (props) => {
                         </tbody>
                     </table>
                 </div>
+                <b style={{marginTop:'5px'}}>Note: Supported file formats - DOCX.</b>
                 {showDeleteFileModal && (<Rodal
                     visible={showDeleteFileModal}
                     {...modaloption}
