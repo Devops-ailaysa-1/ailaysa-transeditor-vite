@@ -6,6 +6,7 @@ import './SplitView.css'
 import { useNavigate } from "react-router-dom";
 import SpellCheckRichTextNormalEditor from "./SpellCheckRichTextNormalEditor";
 import VIewer from "./VIewer";
+import CloseIcon from '@mui/icons-material/Close';
 
 const SpellCheck = (props) => {
     const {
@@ -13,6 +14,8 @@ const SpellCheck = (props) => {
     } = props
 
     const [isLoading , setIsLoading] = useState(false)
+    const [isFileLoading , setIsFileLoading] = useState(false)
+
 
     const navigate = useNavigate()
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -50,7 +53,7 @@ const SpellCheck = (props) => {
 
     const handleUploadProofReadingDoc = (pdf) => {
         let formData = new FormData();
-
+        setIsFileLoading(true)
         formData.append("main_document", pdf);
 
         Config.axios({
@@ -62,7 +65,7 @@ const SpellCheck = (props) => {
                 setPdf(null)
                 setProject(response.data)
                 setReferenceDocument(response?.data?.main_document)
-
+                setIsFileLoading(false)
             },
             error: (err) => {
                 console.log(err)
@@ -142,6 +145,10 @@ const SpellCheck = (props) => {
             />
             <section className="split-view spell-check-view">
                 <div className="each-pannel">
+                 
+                    <div className={`${isFileLoading ? "loading-json-blur" :  ""}`} style={{height:'100%',width:'100%'}}>
+
+                    
                     {((project != null && project?.main_document == null) || referenceDocument == null) ? (<><button className='add-new-file-button upload-pdf-button' onClick={handleInputClick}>
                         Upload Reference Pdf
                     </button>
@@ -155,6 +162,9 @@ const SpellCheck = (props) => {
                         />
                     </>) : (
                         <>
+                        <div className="close-button" onClick={() => setReferenceDocument(null)}>
+                            <CloseIcon />
+                        </div>
                         {getExtension(referenceDocument).toLowerCase() === "pdf" ? 
                             (
                                 <PDFViewer handleMouseUp={handleMouseUp} page={pageNumber} setPage={setPageNumber} width={'100%'} pdf={Config.BASE_URL+referenceDocument} />
@@ -167,10 +177,17 @@ const SpellCheck = (props) => {
                             }
                         </>
                     )}
-
+                    </div>
+                {isFileLoading && <div id="loading-wrapper">
+                            <div class="loader">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>}
 
                 </div>
-                <div className="each-pannel">
+                <div className="each-pannel " style={{borderLeft: '1px solid #E1E5E6'}}>
                    
                    
                     <SpellCheckRichTextNormalEditor

@@ -14,6 +14,7 @@ import EmptyProjectFolder from "../../assets/images/empty-projects-folder.svg"
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
 import { id } from 'date-fns/locale';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 const SpellCheckDocumentListModal = (props) => {
 
@@ -257,21 +258,26 @@ const SpellCheckDocumentListModal = (props) => {
                                                         documentsList?.map(item => {
                                                             return (
                                                                 <tr key={item?.id}>
-                                                                    <td  style={{ minWidth:'80%',maxWidth:'100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                                    <td  style={{ position:'relative',minWidth:'80%',maxWidth:'100%', display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                                                                         {item?.file_name}
                                                                         {
                                                                             item.word_count > 0 &&
                                                                             <span className="word-count-capsule"><span >{item.word_count} W</span></span>
                                                                         }
+                                                                          
                                                                     </td>
                                                                     {/* <td>{Config.getProjectCreatedDate(item?.created_at)}</td> */}
-                                                                    <td style={{minWidth:'20%', textAlign:"center"}}>
-                                                                        <button className="openProjectButton" style={{marginRight:'5px'}} type="button" onMouseUp={() => { deleteDoc(item?.id) }}>
-                                                                            <span className="fileopen-new-btn">Delete</span>
-                                                                        </button>
-                                                                        <button className="openProjectButton" type="button" onMouseUp={() => { openDocument(item?.id) }}>
+                                                                    <td style={{maxWidth:'15%', textAlign:"center",position:'relative'}}>
+                                                                      
+                                                                        <button className="openProjectButton" type="button" onMouseUp={() => { openDocument(item?.document) }}>
                                                                             <span className="fileopen-new-btn">{t("open")}</span>
                                                                         </button>
+                                                                        
+                                                                    </td>
+                                                                    <td style={{maxWidth:'5%', textAlign:"center",position:'relative'}}>
+                                                                        <button className="delete-button-icon"  type="button" onMouseUp={() => { deleteDoc(item?.id) }}>
+                                                                                <DeleteOutlineOutlinedIcon />
+                                                                            </button>
                                                                     </td>
                                                                 </tr>
                                                             )
