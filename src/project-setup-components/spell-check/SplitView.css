@@ -393,6 +393,10 @@
         transition: 0.3s ease all;
 
       }
+      
+      .spell-check-view .copy-of-translated-text{
+        overflow: auto !important;
+      }
 
       .spell-check-view .close-button{
         height: 36px;
