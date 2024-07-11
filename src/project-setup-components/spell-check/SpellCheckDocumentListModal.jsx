@@ -181,10 +181,23 @@ const SpellCheckDocumentListModal = (props) => {
                 if(selectItemRef.current?.document == URL_SEARCH_PARAMS.get('id')) {
                     navigate('/spell-check')
                 }
+
+                if(documentsList?.length == 1) {
+                    getDocument()
+                }
            
             },
             error: (err) => { }
         });
+    }
+
+    const handleBack = () => {
+        if(URL_SEARCH_PARAMS.get('id') != null){
+            setShowDocumentListModal(false)
+        }else{
+            setShowDocumentListModal(false)
+            navigate(-1)
+        }
     }
 
 
@@ -196,9 +209,9 @@ const SpellCheckDocumentListModal = (props) => {
             className="ai-open-doc-modal"
             onClose={() => console.log()}
         >
-            {URL_SEARCH_PARAMS.get('id') != null &&<span className="modal-close-btn lang-close" onClick={(e) => { setShowDocumentListModal(false) }}>
+            <span className="modal-close-btn lang-close" onClick={(e) => { handleBack()  }}>
                 <img src={CloseBlack} alt="close_black" />
-            </span>}
+            </span>
             <div className="modal-wrapper-file-manager">
                 <div className="doc-file-open-header">
                     <div className="open-doc-title-container">

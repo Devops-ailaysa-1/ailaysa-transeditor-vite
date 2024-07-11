@@ -8,6 +8,7 @@ import { setSpellCheckHtmlData } from '../../features/SpellCheckHtmlDataSlice'
 import SpellcheckIcon from '@mui/icons-material/Spellcheck';
 import SpellCheckDocumentListModal from "./SpellCheckDocumentListModal";
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 
 const SpellCheckRichTextNormalEditor = (props) => {
@@ -22,6 +23,8 @@ const SpellCheckRichTextNormalEditor = (props) => {
 
     const copyTarDivRef = useRef(null)
     const spellCheckResponseRef = useRef([])
+
+    const { t } = useTranslation()
 
     const navigate = useNavigate()
 
@@ -133,7 +136,8 @@ const SpellCheckRichTextNormalEditor = (props) => {
         let fileName = name.substring(0, lastDot);
         let ext = "." + name.substring(lastDot + 1);
         if (supportFileExtensions.current.indexOf(ext) == -1) {
-            Config.showToast(t("file_format_not_support"), 'warning')
+            console.log(supportFileExtensions.current.indexOf(ext) == -1)
+            Config.toast(t("file_format_not_support"), 'warning')
             return false;
         }
         return true;
@@ -148,7 +152,6 @@ const SpellCheckRichTextNormalEditor = (props) => {
             setDocx(thisFiles)
             handleCreateSpellCheckProject(thisFiles)
         }
-
     }
 
 

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import SpellCheckRichTextNormalEditor from "./SpellCheckRichTextNormalEditor";
 import VIewer from "./VIewer";
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from "react-i18next";
 
 const SpellCheck = (props) => {
     const {
@@ -29,6 +30,8 @@ const SpellCheck = (props) => {
 
     const pdfInputRef = useRef()
     const prevPathRef = useRef(null)
+
+    const { t } = useTranslation()
 
  
     const handleMouseUp = () => {
@@ -99,6 +102,8 @@ const SpellCheck = (props) => {
         if (isSupportedPdfFile(thisFiles)) {
             setPdf(thisFiles)
             handleUploadProofReadingDoc(thisFiles)
+        }else{
+            Config.toast(`Supported file formats are ".pdf",".docx".`,'warning')
         }
 
     }
@@ -150,7 +155,7 @@ const SpellCheck = (props) => {
 
                     
                     {((project != null && project?.main_document == null) || referenceDocument == null) ? (<><button className='add-new-file-button upload-pdf-button' onClick={handleInputClick}>
-                        Upload Reference Pdf
+                        Upload Reference PDF
                     </button>
                         <input
                             type="file"
