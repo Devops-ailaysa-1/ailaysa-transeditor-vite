@@ -45,7 +45,7 @@ const SpellCheckRichTextNormalEditor = (props) => {
 
     const handleSave = () => {
         let formData = new FormData();
-        formData.append("html_data", copyTarDivRef.current.innerHTML);
+        formData.append("html_data", translateResultText);
 
 
         Config.axios({
