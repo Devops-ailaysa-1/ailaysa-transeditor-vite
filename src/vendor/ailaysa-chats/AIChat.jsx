@@ -216,18 +216,7 @@ const AIChat = () => {
         
         formData.append("file", localFiles[0]);
 
-        const data =  {
-            "id": null,
-            "file_name": localFiles[0].name,
-            "created_at": "2024-07-11T09:56:24.754094Z",
-            "updated_at": "2024-07-11T09:56:27.411248Z",
-            "celery_id": null,
-            "status": "PENDING",
-            "user": null,
-            "file": null,
-            "pdf_file_question": []
-        }
-        setChatFiles(oldArray => [...oldArray,data] );
+     
 
         Config.axios({
             url: `${Config.BASE_URL}/nlp/pdf-chat-upload/`,
