@@ -303,6 +303,11 @@ const AddGlossaryTermModal = (props) => {
         });
     } 
     
+    useEffect(() => {
+      console.log(selectedWordChoiceItem)
+    }, [selectedWordChoiceItem])
+    
+
     return (
         <Draggable onDrag={(e) => e.preventDefault()} positionOffset={termAddModalPositionRef.current} enableUserSelectHack={false} cancel={"input, button"}>
             <div ref={addGlossarySectionRef} className="toolbar-parts" id="add-glossary-section">

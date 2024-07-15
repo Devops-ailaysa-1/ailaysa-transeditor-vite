@@ -7439,7 +7439,7 @@ function Workspace(props) {
                     return
                 }
                 // set the first selected wordchoice by default
-                setSelectedWordChoiceItem(wordChoiceListRef.current?.find(each => each?.value === list[0]?.glossary) )
+                setSelectedWordChoiceItem(wordChoiceListRef.current?.find(each => parseInt(each?.value) === list[0]?.glossary) )
             },
         });
     };
