@@ -943,7 +943,7 @@ const WordchoiceWorkspace = (props) => {
                                         searchTerm !== "" ?
                                             <p className="results-link">{t("search_results_1")} <span>{t("search_results_2")}</span></p>
                                             :
-                                            <p className="results-link">{t("search_results_proj_list_1")} <span>{t("search_results_glossary_2")}</span></p>
+                                            <p className="results-link">{t("search_results_proj_list_1")} <span>{t("wordchoice_term")}</span></p>
                                     }
                                 </div>
                             </div>
