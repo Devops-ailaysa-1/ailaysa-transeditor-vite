@@ -1143,5 +1143,6 @@
     "outdent": "Outdent",
     "download_current_page": "Download current page",
     "download_full_book": "Download full book",
-    "failed": "Failed"
+    "failed": "Failed",
+    "wordchoice_term": "wordchoice term"
 }
