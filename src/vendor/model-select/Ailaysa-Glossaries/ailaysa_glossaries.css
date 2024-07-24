@@ -1,0 +1,44 @@
+/* utility class */
+.custom-scroll-bar::-webkit-scrollbar{
+    width: 6px;
+}
+.custom-scroll-bar::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+    outline: 4px solid #F5F5F5;
+}
+.custom-scroll-bar::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background-color: #D9D9D9;
+}
+.custom-scroll-bar::-webkit-scrollbar-thumb:hover{
+    background-color: #c7c6c6;
+}
+/* ======================== */
+
+.prompt-library-modal .rodal-dialog{
+    padding: 24px !important;
+    height: 85dvh !important;
+    width: 85dvw !important;
+    max-width: 1300px;
+    max-height: 750px;
+}
+.prompt-library-wrapper{
+    height: calc(100% - 0px);
+}
+.prompt-library-wrapper .header-close{
+    font-size: 22px;
+}
+.prompt-lib-modal-body {
+    margin-top: 18px;
+    height: calc(100% - 48px);
+}
+.glossary-view-modal .choicelist-wrapper-container {
+    height: calc(100% - 70px) !important;
+
+}
+.glossary-view-modal .choicelist-wrapper-container .choicelist-wrap-list {
+    height: calc(100% - 60px) !important; 
+}
+.glossary-view-modal .choicelist-wrapper-container .choiclist-create-main-wrapper { 
+    margin: 0 26px 0 26px !important;
+}

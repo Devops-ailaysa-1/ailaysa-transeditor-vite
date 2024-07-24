@@ -1144,5 +1144,9 @@
     "download_current_page": "Download current page",
     "download_full_book": "Download full book",
     "failed": "Failed",
-    "wordchoice_term": "wordchoice term"
+    "wordchoice_term": "wordchoice term",
+    "add_to_glossary": "Add to glossary",
+    "open_glossary": "Open glossary",
+    "import_terms": "Import terms",
+    "extract_term": "Extract term"
 }
