@@ -18,7 +18,8 @@ export const BulkFileUploadModal = (props) => {
         isUploading,
         handleUploadBtn,
         filesList,
-        setFilesList
+        setFilesList,
+        nonModal
     } = props
 
     const { t } = useTranslation();
@@ -122,159 +123,304 @@ export const BulkFileUploadModal = (props) => {
     };
 
     return (
-        <Rodal
-            visible={openModal}
-            showCloseButton={false}
-            className={"edit-instant-project-box " }
-        >
-            <div className="header-wrapper">
-                <div className="header-text">
-                    <h1>{t("bulk_upload")}</h1>
-                </div>
-                <span className="modal-close-btn" onClick={() => setOpenModal(false)}>
-                    <img src={CloseBlack} alt="close_black" />
-                </span>
-            </div>
-            <div className="body-wrapper">
-                <div className="language-details">
-                    <div className='d-flex justify-between toast-align'>
-                        <h2>{t("upload_file")}</h2>
-                        <button className="termDataForm-GlossaryDownBtn" onClick={downloadTemplate}>
-                            <span className="glossary-btn-txt">
-                                <span>
-                                    <img src={FileUploadBlueBtn} alt="glossary-temp" />
-                                </span>{" "}
-                                {t("wordchoices_template")}
-                            </span>
-                        </button>
-                    </div>
-                    <div className={filesList?.length !== 0 ? "dropfile-area mt-3" : "col-xs-12 mt-3"}>
-                        <DragandDrop handleDrop={handleDrop}>
-                            <div className={filesList.length > 0 ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
-                                <div className="draganddrop-align">
-                                    <img className={(filesList.length > 0) ? 'img' : ''}
-                                        src={FilesUpload}
-                                        alt="folder"
-                                    />
-                                    {Object.keys(filesList).map((eachKey) => {
-                                        return (
-                                            <div
-                                                key={eachKey + filesList[eachKey].name}
-                                                className="file-name-list"
-                                            >
-                                                <div className="filename">
-                                                    {
-                                                        <img
-                                                            src={
-                                                                import.meta.env.PUBLIC_URL +
-                                                                "/assets/images/document.svg"
-                                                            }
-                                                            alt="document"
-                                                        />
-                                                    }{" "}
-                                                    {filesList[eachKey].name}
-                                                </div>
-                                                <span
-                                                    data-file-index={eachKey}
-                                                    onClick={(e) => removeFile(e, eachKey)}
+        nonModal ? (
+            <div className="edit-instant-project-box ">
+                <div className="body-wrapper">
+                    <div className="language-details">
+                        <div className='d-flex justify-between toast-align'>
+                            <h2>{t("upload_file")}</h2>
+                            <button className="termDataForm-GlossaryDownBtn" onClick={downloadTemplate}>
+                                <span className="glossary-btn-txt">
+                                    <span>
+                                        <img src={FileUploadBlueBtn} alt="glossary-temp" />
+                                    </span>{" "}
+                                    {t("wordchoices_template")}
+                                </span>
+                            </button>
+                        </div>
+                        <div className={filesList?.length !== 0 ? "dropfile-area mt-3" : "col-xs-12 mt-3"}>
+                            <DragandDrop handleDrop={handleDrop}>
+                                <div className={filesList.length > 0 ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
+                                    <div className="draganddrop-align">
+                                        <img className={(filesList.length > 0) ? 'img' : ''}
+                                            src={FilesUpload}
+                                            alt="folder"
+                                        />
+                                        {Object.keys(filesList).map((eachKey) => {
+                                            return (
+                                                <div
+                                                    key={eachKey + filesList[eachKey].name}
+                                                    className="file-name-list"
                                                 >
-                                                    <i className="far fa-trash-alt"></i>
-                                                </span>
-                                            </div>
-                                        );
-                                    })}
-                                    <div style={{marginBottom: "10px"}}>
-                                        <div className="file-upload-align">
-                                            <p className="upload-text">
-                                                {t("drop_your_files_here_or")}{" "}
-                                            </p>
-                                            <div className="upload-link-wrapper">
-                                                <label htmlFor="files">{t("browse")}</label>
-                                                <input
-                                                    ref={inputFileUploadRef}
-                                                    type="file"
-                                                    name="files"
-                                                    className="form-control-file"
-                                                    id="files"
-                                                    accept=".xlsx"
-                                                    onChange={handleChange}
-                                                    multiple
-                                                    hidden
-                                                />
+                                                    <div className="filename">
+                                                        {
+                                                            <img
+                                                                src={
+                                                                    import.meta.env.PUBLIC_URL +
+                                                                    "/assets/images/document.svg"
+                                                                }
+                                                                alt="document"
+                                                            />
+                                                        }{" "}
+                                                        {filesList[eachKey].name}
+                                                    </div>
+                                                    <span
+                                                        data-file-index={eachKey}
+                                                        onClick={(e) => removeFile(e, eachKey)}
+                                                    >
+                                                        <i className="far fa-trash-alt"></i>
+                                                    </span>
+                                                </div>
+                                            );
+                                        })}
+                                        <div style={{marginBottom: "10px"}}>
+                                            <div className="file-upload-align">
+                                                <p className="upload-text">
+                                                    {t("drop_your_files_here_or")}{" "}
+                                                </p>
+                                                <div className="upload-link-wrapper">
+                                                    <label htmlFor="files">{t("browse")}</label>
+                                                    <input
+                                                        ref={inputFileUploadRef}
+                                                        type="file"
+                                                        name="files"
+                                                        className="form-control-file"
+                                                        id="files"
+                                                        accept=".xlsx"
+                                                        onChange={handleChange}
+                                                        multiple
+                                                        hidden
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </DragandDrop>
-                    </div>
+                            </DragandDrop>
+                        </div>
 
-                    <div className={filesList?.length === 0 ? "d-none" : "col-xs-12"}>
-                        <div className="button-wrap-file-list">
-                            <div className="file-list-align">
-                                <div className="file-list">
-                                    {Object.keys(filesList).map((eachKey) => {
-                                        return (
-                                            <div
-                                                key={eachKey + filesList[eachKey].name}
-                                                className="file-name-list"
-                                            >
-                                                <div className="filename" style={{ width: '90%' }}>
-                                                    {
-                                                        <img
-                                                            src={
-                                                                `${Config.BASE_URL}/app/extension-image/` +
+                        <div className={filesList?.length === 0 ? "d-none" : "col-xs-12"}>
+                            <div className="button-wrap-file-list">
+                                <div className="file-list-align">
+                                    <div className="file-list">
+                                        {Object.keys(filesList).map((eachKey) => {
+                                            return (
+                                                <div
+                                                    key={eachKey + filesList[eachKey].name}
+                                                    className="file-name-list"
+                                                >
+                                                    <div className="filename" style={{ width: '90%' }}>
+                                                        {
+                                                            <img
+                                                                src={
+                                                                    `${Config.BASE_URL}/app/extension-image/` +
+                                                                    filesList[eachKey].name
+                                                                        .split(".")
+                                                                        .pop()
+                                                                }
+                                                                alt="document"
+                                                            />
+                                                        }
+                                                        <span className="filename-length">
+                                                            {filesList[eachKey].name
+                                                                .split(".")
+                                                                .slice(0, -1)
+                                                                .join(".")}
+                                                        </span>
+                                                        <span className="extension">
+                                                            {"." +
                                                                 filesList[eachKey].name
                                                                     .split(".")
-                                                                    .pop()
-                                                            }
-                                                            alt="document"
+                                                                    .pop()}
+                                                        </span>
+                                                    </div>
+                                                    <span
+                                                        className="upload-file-delete"
+                                                        data-file-index={eachKey}
+                                                        onClick={(e) =>
+                                                            removeFile(e, eachKey)
+                                                        }
+                                                    >
+                                                        <img
+                                                            src={CloseBlack}
+                                                            alt="delete"
                                                         />
-                                                    }
-                                                    <span className="filename-length">
-                                                        {filesList[eachKey].name
-                                                            .split(".")
-                                                            .slice(0, -1)
-                                                            .join(".")}
-                                                    </span>
-                                                    <span className="extension">
-                                                        {"." +
-                                                            filesList[eachKey].name
-                                                                .split(".")
-                                                                .pop()}
                                                     </span>
                                                 </div>
-                                                <span
-                                                    className="upload-file-delete"
-                                                    data-file-index={eachKey}
-                                                    onClick={(e) =>
-                                                        removeFile(e, eachKey)
-                                                    }
-                                                >
-                                                    <img
-                                                        src={CloseBlack}
-                                                        alt="delete"
-                                                    />
-                                                </span>
-                                            </div>
-                                        );
-                                    })}
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <p className="upload-text mt-2">
+                            {t("note")}: {t("word_choice_bulk_upload_note")}
+                        </p>
                     </div>
-                    <p className="upload-text mt-2">
-                        {t("note")}: {t("word_choice_bulk_upload_note")}
-                    </p>
-                </div>
-                
-                <div className="edit-proj-button-row bulk-term-upload">
-                    <ButtonBase className="instant-edit-update-btn" onClick={handleUploadBtn}>
-                        {isUploading ? t('uploading') : t('upload')}
-                        {isUploading && <ButtonLoader />}
-                    </ButtonBase>
+                    
+                    <div className="edit-proj-button-row bulk-term-upload">
+                        <ButtonBase className="instant-edit-update-btn" onClick={handleUploadBtn}>
+                            {isUploading ? t('uploading') : t('upload')}
+                            {isUploading && <ButtonLoader />}
+                        </ButtonBase>
+                    </div>
                 </div>
             </div>
-        </Rodal>
+        ) : (
+            <Rodal
+                visible={openModal}
+                showCloseButton={false}
+                className={"edit-instant-project-box " }
+            >
+                <div className="header-wrapper">
+                    <div className="header-text">
+                        <h1>{t("bulk_upload")}</h1>
+                    </div>
+                    <span className="modal-close-btn" onClick={() => setOpenModal(false)}>
+                        <img src={CloseBlack} alt="close_black" />
+                    </span>
+                </div>
+                <div className="body-wrapper">
+                    <div className="language-details">
+                        <div className='d-flex justify-between toast-align'>
+                            <h2>{t("upload_file")}</h2>
+                            <button className="termDataForm-GlossaryDownBtn" onClick={downloadTemplate}>
+                                <span className="glossary-btn-txt">
+                                    <span>
+                                        <img src={FileUploadBlueBtn} alt="glossary-temp" />
+                                    </span>{" "}
+                                    {t("wordchoices_template")}
+                                </span>
+                            </button>
+                        </div>
+                        <div className={filesList?.length !== 0 ? "dropfile-area mt-3" : "col-xs-12 mt-3"}>
+                            <DragandDrop handleDrop={handleDrop}>
+                                <div className={filesList.length > 0 ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
+                                    <div className="draganddrop-align">
+                                        <img className={(filesList.length > 0) ? 'img' : ''}
+                                            src={FilesUpload}
+                                            alt="folder"
+                                        />
+                                        {Object.keys(filesList).map((eachKey) => {
+                                            return (
+                                                <div
+                                                    key={eachKey + filesList[eachKey].name}
+                                                    className="file-name-list"
+                                                >
+                                                    <div className="filename">
+                                                        {
+                                                            <img
+                                                                src={
+                                                                    import.meta.env.PUBLIC_URL +
+                                                                    "/assets/images/document.svg"
+                                                                }
+                                                                alt="document"
+                                                            />
+                                                        }{" "}
+                                                        {filesList[eachKey].name}
+                                                    </div>
+                                                    <span
+                                                        data-file-index={eachKey}
+                                                        onClick={(e) => removeFile(e, eachKey)}
+                                                    >
+                                                        <i className="far fa-trash-alt"></i>
+                                                    </span>
+                                                </div>
+                                            );
+                                        })}
+                                        <div style={{marginBottom: "10px"}}>
+                                            <div className="file-upload-align">
+                                                <p className="upload-text">
+                                                    {t("drop_your_files_here_or")}{" "}
+                                                </p>
+                                                <div className="upload-link-wrapper">
+                                                    <label htmlFor="files">{t("browse")}</label>
+                                                    <input
+                                                        ref={inputFileUploadRef}
+                                                        type="file"
+                                                        name="files"
+                                                        className="form-control-file"
+                                                        id="files"
+                                                        accept=".xlsx"
+                                                        onChange={handleChange}
+                                                        multiple
+                                                        hidden
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </DragandDrop>
+                        </div>
+
+                        <div className={filesList?.length === 0 ? "d-none" : "col-xs-12"}>
+                            <div className="button-wrap-file-list">
+                                <div className="file-list-align">
+                                    <div className="file-list">
+                                        {Object.keys(filesList).map((eachKey) => {
+                                            return (
+                                                <div
+                                                    key={eachKey + filesList[eachKey].name}
+                                                    className="file-name-list"
+                                                >
+                                                    <div className="filename" style={{ width: '90%' }}>
+                                                        {
+                                                            <img
+                                                                src={
+                                                                    `${Config.BASE_URL}/app/extension-image/` +
+                                                                    filesList[eachKey].name
+                                                                        .split(".")
+                                                                        .pop()
+                                                                }
+                                                                alt="document"
+                                                            />
+                                                        }
+                                                        <span className="filename-length">
+                                                            {filesList[eachKey].name
+                                                                .split(".")
+                                                                .slice(0, -1)
+                                                                .join(".")}
+                                                        </span>
+                                                        <span className="extension">
+                                                            {"." +
+                                                                filesList[eachKey].name
+                                                                    .split(".")
+                                                                    .pop()}
+                                                        </span>
+                                                    </div>
+                                                    <span
+                                                        className="upload-file-delete"
+                                                        data-file-index={eachKey}
+                                                        onClick={(e) =>
+                                                            removeFile(e, eachKey)
+                                                        }
+                                                    >
+                                                        <img
+                                                            src={CloseBlack}
+                                                            alt="delete"
+                                                        />
+                                                    </span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p className="upload-text mt-2">
+                            {t("note")}: {t("word_choice_bulk_upload_note")}
+                        </p>
+                    </div>
+                    
+                    <div className="edit-proj-button-row bulk-term-upload">
+                        <ButtonBase className="instant-edit-update-btn" onClick={handleUploadBtn}>
+                            {isUploading ? t('uploading') : t('upload')}
+                            {isUploading && <ButtonLoader />}
+                        </ButtonBase>
+                    </div>
+                </div>
+            </Rodal>
+        )
     )
 }

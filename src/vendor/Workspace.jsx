@@ -81,6 +81,7 @@ import NorCopyContent from "../assets/images/new-ui-icons/nor-copy-content.svg"
 import WorkspaceFeatures from "./workspace-components/WorkspaceFeatures";
 import {ClickAwayListener} from '@mui/base/ClickAwayListener';
 import AddGlossaryTermModal from "./model-select/AddGlossaryTermModal";
+import { AilaysaGlossariesModal } from "./model-select/Ailaysa-Glossaries/AilaysaGlossariesModal";
 // import { getTransliterateSuggestions } from "react-transliterate";
 
 // const useStyles = makeStyles((theme) => ({
@@ -9049,6 +9050,7 @@ function Workspace(props) {
                     </div>
                 </div >
             </ClickAwayListener>
+            <AilaysaGlossariesModal />
         </React.Fragment>
     );
 }

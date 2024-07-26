@@ -14,6 +14,8 @@ export const ImportTerms = () => {
     const [isGlossaryListLoading, setIsGlossaryListLoading] = useState(false)
     const [glossaryList, setGlossaryList] = useState([])
     const [openBulkUploadModal, setOpenBulkUploadModal] = useState(true);
+    const [isUploading, setIsUploading] = useState(false)
+    const [filesList, setFilesList] = useState([])
 
 
     const importTermsTabList = [
@@ -36,6 +38,37 @@ export const ImportTerms = () => {
         setActiveImportTab(selOpt.value)
         if(selOpt.value === 3) setOpenBulkUploadModal(true)
     } 
+
+    const handleBulkUploadTerms = (e) => {
+        let formData = new FormData();
+        for (let x = 0; x < filesList.length; x++) {
+            if (typeof filesList[x] != "undefined") formData.append("glossary_file", filesList[x]);
+        }
+       
+        formData.append("job", selectedTaskDataRef.current?.job);
+        setIsUploading(true)
+
+        Config.axios({
+            url: Config.BASE_URL + "/glex/glossary_file_upload/",
+            method: "POST",
+            data: formData,
+            auth: true,
+            success: (response) => {
+                setOpenBulkUploadModal(false)        
+                setIsUploading(false)
+                setFilesList([])
+                getTermsList()
+            },
+            error: (err) => {
+                if (err?.response?.status == 400) {
+                    Config.toast(t("gloss_file_not_support"), 'warning')
+                } else if (err?.response?.status == 500) {
+                    Config.toast(t("gloss_file_not_support"), 'warning')
+                }
+                setIsUploading(false)
+            }
+        });
+    }
     
     return (
         <>
@@ -140,9 +173,9 @@ export const ImportTerms = () => {
                                                 />
                                             </div>
                                             <div className="asset-project-info-wrap">
-                                                <span className="assets-icon">
+                                                {/* <span className="assets-icon">
                                                     <DescriptionOutlinedIcon className="gloss-types" />
-                                                </span>
+                                                </span> */}
                                                 <div className="asset-project-info">
                                                     <span className="title">{value.glossary_name}</span>
                                                     {/* <div className="lang-pair">
@@ -164,6 +197,11 @@ export const ImportTerms = () => {
                 <BulkFileUploadModal 
                     openModal={openBulkUploadModal}
                     setOpenModal={setOpenBulkUploadModal}
+                    handleUploadBtn={handleBulkUploadTerms}
+                    isUploading={isUploading}
+                    filesList={filesList}
+                    setFilesList={setFilesList}
+                    nonModal={true}
                 />
             )}
         </>

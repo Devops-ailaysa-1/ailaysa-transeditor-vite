@@ -42,3 +42,11 @@
 .glossary-view-modal .choicelist-wrapper-container .choiclist-create-main-wrapper { 
     margin: 0 26px 0 26px !important;
 }
+.glossary-view-modal .edit-instant-project-box .body-wrapper {
+    padding: 0;
+}
+.glossary-view-modal .edit-instant-project-box .body-wrapper h2 {
+    font-size: 16px !important;
+    font-weight: 500;
+}
+

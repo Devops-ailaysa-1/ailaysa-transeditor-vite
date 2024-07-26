@@ -45,6 +45,7 @@ import individualTemplateListReducer from './features/IndividualTemplateListSlic
 import { writerReducers } from './features/writer-reducers/writerReducers';
 import IsFederalNewsReducer from './features/IsFederalNewsSlice';
 import IsDinamalarNewsReducer from './features/IsDinamalarNewsSlice';
+import showAilaysaGlossaryModalReducer from './features/ShowAilaysaGlossaryModalSlice';
 import * as Sentry from "@sentry/react";
 
 const store = configureStore({
@@ -68,6 +69,7 @@ const store = configureStore({
 	individualTemplateList: individualTemplateListReducer,
 	isFederalNews: IsFederalNewsReducer,
 	isDinamalarNews: IsDinamalarNewsReducer,
+	showAilaysaGlossaryModal: showAilaysaGlossaryModalReducer,
 	...writerReducers        
   }
 })
