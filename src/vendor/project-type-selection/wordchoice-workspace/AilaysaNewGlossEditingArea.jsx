@@ -129,7 +129,8 @@ const AilaysaNewGlossEditingArea = (props) => {
     let {
         setLanguagePairObject, 
         newGlossEditingImperativeRef,
-        setActiveScreen
+        setActiveScreen,
+        glossTaskId
     } = props
     
     const { t } = useTranslation();
@@ -222,6 +223,13 @@ const AilaysaNewGlossEditingArea = (props) => {
             }
         }
     })
+
+    useEffect(() => {
+        if(glossTaskId){
+            setselectedTaskItem({value: glossTaskId})
+        }
+    }, [glossTaskId])
+    
 
     useEffect(() => {
         if(languageOptionsList?.length){
@@ -857,7 +865,9 @@ const AilaysaNewGlossEditingArea = (props) => {
     return (
         <>
             <div className="choicelist-main-header-wrapper">
-                <h2 className="title">{ t("wordchoice_list")}</h2>
+                {projectId && (
+                    <h2 className="title">{ t("terms_list")}</h2>
+                )}
                 <div className="seach-wrapper-wrap">
                     <div className={"search-wrapper " + (searchBox ? "add-blue-border" : null)}>
                         <div className="search-img">
@@ -1040,7 +1050,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                                                     components={{ DropdownIndicator, IndicatorSeparator: () => null }}
                                                     onBlur={(e) => handleBlur(e, term.id)}
                                                 />
-                                                {term?.changeSaved && (
+                                                {!glossTaskId && term?.changeSaved && (
                                                     <div className="choicelist-action-wrapper visible ml-1">
                                                         <span className="action-list-item" >
                                                             <CheckCircleOutlineOutlinedIcon 

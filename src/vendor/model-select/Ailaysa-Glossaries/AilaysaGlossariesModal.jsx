@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './ailaysa_glossaries.css'
 import { useTranslation } from 'react-i18next'
 import { ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper } from '@mui/material';
@@ -11,8 +11,11 @@ import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutl
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import { useSelector, useDispatch } from 'react-redux';
 import { setShowAilaysaGlossaryModal } from '../../../features/ShowAilaysaGlossaryModalSlice';
+import Config from '../../Config';
 
 export const AilaysaGlossariesModal = (props) => {
+
+    let { documentDetails } = props
 
     const {t} = useTranslation()
     const dispatch = useDispatch()
@@ -20,10 +23,75 @@ export const AilaysaGlossariesModal = (props) => {
     const showAilaysaGlossaryModal = useSelector(state => state.showAilaysaGlossaryModal.value)
 
     const [activeScreen, setActiveScreen] = useState(1);
+    const [defaultGlossDetails, setDefaultGlossDetails] = useState(null);
+
+    const glossaryListRef = useRef([])
+    const selectedGlossaryListRef = useRef([])
+    const projectFilesListRef = useRef([])
+    const defaultGlossDetailsRef = useRef(null)
+
+    useEffect(() => {
+        if(showAilaysaGlossaryModal && documentDetails){
+            setActiveScreen(1)
+            getDefaultGlossDetails()
+        }
+    }, [showAilaysaGlossaryModal, documentDetails])
+    
 
     const closeGlossaryModal = () => {
         dispatch(setShowAilaysaGlossaryModal(false))
     } 
+
+    const getDefaultGlossDetails = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetails.project}&task=${documentDetails.task_id}`,
+            auth: true,
+            success: (response) => {
+                defaultGlossDetailsRef.current = response.data
+                setDefaultGlossDetails(response.data)
+                getGlossaryList()
+                getSelectedGlossaries()
+                getProjectFiles()
+            },
+            error: (err) => {
+                // setisGlossaryListLoading(false)
+            }
+        });
+    } 
+
+    const getGlossaryList = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary`,
+            auth: true,
+            success: (response) => {
+                glossaryListRef.current = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef.current.gloss_id)
+            },
+            error: (err) => {
+                // setisGlossaryListLoading(false)
+            }
+        });
+    };
+
+    const getSelectedGlossaries = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/glossary_selected/?project=${documentDetails.project}&option=glossary`,
+            auth: true,
+            success: (response) => {
+                selectedGlossaryListRef.current = response.data?.filter(each => each.id != defaultGlossDetailsRef.current.gloss_id)
+                
+            },
+        });
+    };
+
+    const getProjectFiles = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace/files_jobs/${documentDetails.project}/`,
+            auth: true,
+            success: (response) => {
+                projectFilesListRef.current = response.data.files
+            },
+        });
+    }
 
     return (
         <>
@@ -63,9 +131,19 @@ export const AilaysaGlossariesModal = (props) => {
                             {activeScreen === 1 ? (
                                 <AilaysaNewGlossEditingArea 
                                     setActiveScreen={setActiveScreen}
+                                    glossTaskId={defaultGlossDetails?.gloss_task_id}
                                 />
                             ) : (
-                                <ImportTerms />
+                                <ImportTerms 
+                                    glossaryListRef={glossaryListRef}
+                                    selectedGlossaryListRef={selectedGlossaryListRef}
+                                    projectFilesListRef={projectFilesListRef}
+                                    projectId={documentDetails.project}
+                                    taskId={documentDetails.task_id}
+                                    getGlossaryList={getGlossaryList}
+                                    getSelectedGlossaries={getSelectedGlossaries}
+                                    setActiveScreen={setActiveScreen}
+                                />
                             )}
                         </div>
                     </div>

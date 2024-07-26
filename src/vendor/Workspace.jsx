@@ -7469,7 +7469,6 @@ function Workspace(props) {
         textUnit;
     let bgColor = "#0074D3";
         
-
     return (
         <React.Fragment>
             <Navbar
@@ -9050,7 +9049,7 @@ function Workspace(props) {
                     </div>
                 </div >
             </ClickAwayListener>
-            <AilaysaGlossariesModal />
+            <AilaysaGlossariesModal documentDetails={documentDetailsRef.current} />
         </React.Fragment>
     );
 }

@@ -19,7 +19,7 @@ export const BulkFileUploadModal = (props) => {
         handleUploadBtn,
         filesList,
         setFilesList,
-        nonModal
+        nonModal,
     } = props
 
     const { t } = useTranslation();
@@ -134,7 +134,7 @@ export const BulkFileUploadModal = (props) => {
                                     <span>
                                         <img src={FileUploadBlueBtn} alt="glossary-temp" />
                                     </span>{" "}
-                                    {t("wordchoices_template")}
+                                    {t("download_template")}
                                 </span>
                             </button>
                         </div>
@@ -258,12 +258,12 @@ export const BulkFileUploadModal = (props) => {
                         </p>
                     </div>
                     
-                    <div className="edit-proj-button-row bulk-term-upload">
+                    {/* <div className="edit-proj-button-row bulk-term-upload">
                         <ButtonBase className="instant-edit-update-btn" onClick={handleUploadBtn}>
                             {isUploading ? t('uploading') : t('upload')}
                             {isUploading && <ButtonLoader />}
                         </ButtonBase>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         ) : (
@@ -289,7 +289,7 @@ export const BulkFileUploadModal = (props) => {
                                     <span>
                                         <img src={FileUploadBlueBtn} alt="glossary-temp" />
                                     </span>{" "}
-                                    {t("wordchoices_template")}
+                                    {t("download_template")}
                                 </span>
                             </button>
                         </div>
@@ -412,7 +412,7 @@ export const BulkFileUploadModal = (props) => {
                             {t("note")}: {t("word_choice_bulk_upload_note")}
                         </p>
                     </div>
-                    
+                
                     <div className="edit-proj-button-row bulk-term-upload">
                         <ButtonBase className="instant-edit-update-btn" onClick={handleUploadBtn}>
                             {isUploading ? t('uploading') : t('upload')}

@@ -50,3 +50,8 @@
     font-weight: 500;
 }
 
+.glossary-view-modal .asset-glossary-list-wrapper {
+    height: calc(100% - 150px);
+    overflow: auto;
+    scrollbar-width: thin;
+}
