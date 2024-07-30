@@ -174,6 +174,7 @@ function Navbar(props) {
     const [isEmailTextHovered, setIsEmailTextHovered] = useState(false);
     const [isFullnameTextHovered, setIsFullnameTextHovered] = useState(false);
 
+    const spellCheckData = useSelector((state) => state.spellCheckData.value)
 
     const handleEmailTextMouseEnter = () => {
         setIsEmailTextHovered(true);
@@ -998,6 +999,52 @@ function Navbar(props) {
         setConfirmedNavigation(true)
     }
 
+    const convertNewlinesToBr = (text) => {
+        const htmlText = text?.split('\n')?.map(line => `<p>${line.trim()}</p>`)?.join('');
+        return htmlText;
+      }
+
+
+    const handleSpellCheckWordDownload = () => {
+        let formData = new FormData();
+        console.log(spellCheckData)
+        formData.append("html", convertNewlinesToBr(spellCheckData))
+        formData.append("name", "name")
+        let userCacheData = JSON.parse(
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
+        );
+        let token = userCacheData != null ? userCacheData?.token : "";
+
+        axios({
+            method: "POST",
+            url: "https://apinodestaging.ailaysa.com/docx-generator",
+            data: formData,
+            responseType: "blob",
+            headers: { Authorization: `Bearer ${token}` },
+            // headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then(function (response) {
+            //handle success
+            downloadHtmlToDocx(response.data)
+
+        })
+        .catch(function (response) {
+            //handle error
+            Config.toast("Failed to download file", 'error')
+      
+        });
+    }
+
+    const downloadHtmlToDocx = async (data) => {
+        var fileDownload = document.createElement("a");
+        document.body.appendChild(fileDownload);
+        fileDownload.href = URL.createObjectURL(data);
+        fileDownload.download = Config.unescape(`${data?.innerText?.split('.')[0] ? data?.innerText?.split('.')[0] : 'Untitled'}.docx`);
+        fileDownload?.click();
+        document.body.removeChild(fileDownload);
+        // update the list once download completed
+    }
+
     return (
         <React.Fragment>
             <div className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "navbar-stripe-wrapper sticky" : "navbar-stripe-wrapper"}>
@@ -1070,7 +1117,7 @@ function Navbar(props) {
                                             </div>
                                         </NavLink>
                                         
-                                        {!isDinamalar && (
+                                        {!is_internal_meber_editor && (
                                             <NavLink 
                                                 to="/file-upload?page=1&order_by=-id" 
                                                 // activeClassName="selected" 
@@ -1083,7 +1130,7 @@ function Navbar(props) {
                                         )}
                                         {isDinamalar && (
                                             <ButtonBase       
-                                                className={props.isWhite && "d-none"}
+                                                className={props.isWhite ? "d-none" : "ml-3"}
                                                 onClick={() => history('/report')}
                                             >
                                                 <div className="btn-text">
@@ -1110,11 +1157,11 @@ function Navbar(props) {
                                     </NavLink>
                                 )}
 
-                                {(!isDinamalar && Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected) ? (
+                                {(Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected) ? (
                                     <ButtonBase       
                                         component={Link}
                                         to="/create/all-templates/" 
-                                        className={props.isWhite && "d-none"}
+                                        className={props.isWhite ? "d-none" : "ml-4"}
                                     >
                                         <div className="btn-text">
                                             <AddIcon
@@ -1223,6 +1270,14 @@ function Navbar(props) {
                                     <Tooltip title={t("submit_tooltip_note")} arrow placement="bottom">
                                         <button className="workspace-files-nav-OpenProjectButton" style={{ marginRight: !showReturnRequestBtn ? '18px' : '8px' }} onClick={() => handleDocumentSubmitBtn(3)}>
                                             <span className="fileopen-new-btn">{t("submit")}</span>
+                                        </button>
+                                    </Tooltip>
+                                )}
+
+                                {window.location.pathname.includes('spell-check') && (
+                                    <Tooltip  arrow placement="bottom">
+                                        <button className="workspace-files-nav-OpenProjectButton" style={{ marginRight: !showReturnRequestBtn ? '18px' : '8px' }} onClick={() => handleSpellCheckWordDownload()}>
+                                            <span className="fileopen-new-btn">{t("download")}</span>
                                         </button>
                                     </Tooltip>
                                 )}

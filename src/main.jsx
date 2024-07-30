@@ -48,6 +48,7 @@ import IsDinamalarNewsReducer from './features/IsDinamalarNewsSlice';
 import showAilaysaGlossaryModalReducer from './features/ShowAilaysaGlossaryModalSlice';
 import toggleGlossTermAddFormReducer from './features/ai-glossary/ToggleGlossTermAddFormSlice';
 import * as Sentry from "@sentry/react";
+import SpellCheckHtmlDataSlice from './features/SpellCheckHtmlDataSlice';
 
 const store = configureStore({
   reducer: {
@@ -72,6 +73,7 @@ const store = configureStore({
 	isDinamalarNews: IsDinamalarNewsReducer,
 	showAilaysaGlossaryModal: showAilaysaGlossaryModalReducer,
 	showGlossTermAddForm: toggleGlossTermAddFormReducer,
+	spellCheckData:SpellCheckHtmlDataSlice,
 	...writerReducers        
   }
 })

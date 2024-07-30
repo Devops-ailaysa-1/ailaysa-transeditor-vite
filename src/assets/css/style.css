@@ -40780,7 +40780,7 @@ ul.dropdown-box__link__item__wrapper{
 }
 
 .chat-book-main-wrapper__upload-access-wrapper{
-    width: 450px;
+    min-width: 450px;
     border-right: 1px solid #EAEEF3;
     padding: 24px 0px;
     position: relative;

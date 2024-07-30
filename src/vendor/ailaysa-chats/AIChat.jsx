@@ -102,6 +102,8 @@ const AIChat = () => {
             console.log(localFiles)
         }
     }, [localFiles])
+
+    console.log(exampleFileQue)
     
 
     useEffect(() => {
@@ -213,6 +215,8 @@ const AIChat = () => {
         let formData = new FormData();
         
         formData.append("file", localFiles[0]);
+
+     
 
         Config.axios({
             url: `${Config.BASE_URL}/nlp/pdf-chat-upload/`,
@@ -412,7 +416,10 @@ const AIChat = () => {
         scroll(page)
       
     }
- 
+
+    console.log(chatFiles)
+
+  
     return (
         <>
             <Navbar isAiChatBook={true} />
