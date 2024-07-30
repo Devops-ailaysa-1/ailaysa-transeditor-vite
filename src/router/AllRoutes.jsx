@@ -16,6 +16,7 @@ import FederalWorkspace from '../federal-news/FederalWorkspace';
 import BIReport from '../federal-news/BIReport';
 import NewsProjects from '../federal-news/NewsProject';
 import { ErrorBoundary } from 'react-error-boundary';
+import SpellCheck from '../project-setup-components/spell-check/SpellCheck';
 
 // a function to retry loading a chunk to avoid chunk load error for out of date code
 const lazyRetry = function (componentImport) {
@@ -141,6 +142,7 @@ const AllRoutes = (props) => {
                 <Route exact path="/writer-blog" element={<Suspense fallback={<MainAILoader />}><WriterBlog /></Suspense>} />
                 <Route exact path="/writer-blog/:steps" element={<Suspense fallback={<MainAILoader />}><WriterBlog /></Suspense>} />
                 {/* conditional routing for writer */}
+                <Route path="/spell-check"  element={<SpellCheck />}/>
                 {
                     Config.userState?.internal_member_team_detail?.role !== 'Editor' ?
                         <Route path="/word-processor" element={<ErrorBoundary onError={(err) => console.log(err)} fallback={<p>Something went wrong. Try again later.</p>}><Suspense fallback={<MainAILoader />}><Writter /></Suspense></ErrorBoundary>} />

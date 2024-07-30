@@ -1136,11 +1136,12 @@ function SpeechToText(props) {
                             ref={contentprojectNameRef}
                             // onInput={projectName}
                             suppressContentEditableWarning={true}
-                            contentEditable="true"
+                            contentEditable={URL_SEARCH_PARAMS.get('task') == null ?  "true" : "false"}
                             onClick={handleHideIcon}
                             // onBlur={() => {
                             //     setHasFocus(false);
                             // }}
+                            
                             onBlur={executeProposalScroll}
                             data-placeholder={t("untitled_project")}
                             onKeyUp={(e) => handleProjectNamechange(e)}
@@ -1426,7 +1427,7 @@ function SpeechToText(props) {
                                             </span>
                                         </button>
                                     )}
-                                    {editProjectId && (
+                                    {URL_SEARCH_PARAMS.get('task') == null && editProjectId && (
                                         <div
                                             onClick={() => setShowDeleteConfirmationModal(true)}
                                             className="edit-delete-btn"
@@ -1444,7 +1445,7 @@ function SpeechToText(props) {
                             </div>
                         </div>)}
                     {
-                        speechTextSwitch === 1 &&
+                      URL_SEARCH_PARAMS.get('task') == null && speechTextSwitch === 1 &&
                         <div className="d-flex align-items-center justify-content-end mt-4">
                             <div className="content-two-info">
                                 <span className="max-word-note">

@@ -87,9 +87,9 @@ const AilaysaProjects = () => {
 
     useEffect(() => {
         // this is restrict the dinamalar users to access the standard project list 
-        if(isDinamalar){
-            history("/my-stories?page=1")
-        }
+        // if(isDinamalar){
+        //     history("/my-stories?page=1")
+        // }
     }, [isDinamalar])
 
 
