@@ -2052,10 +2052,14 @@ function Fileupload(props) {
             if (projectType === 3) {
                 setTimeout(() => {
                     // window.location.href = 'workspace/' + response.data.document_id
-                    history(`/glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`, {state: {
+                    history(`/glossary-workspace/${selectedProjectId}/${id}/`, {state: {
                         prevPageInfo: prevPageInfo,
                         prevPath: location.pathname + location.search
                     }});
+                    // history(`/glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`, {state: {
+                    //     prevPageInfo: prevPageInfo,
+                    //     prevPath: location.pathname + location.search
+                    // }});
                 });
             }
             // if url is null means its non transeditor/translation project [wordchoice porject type = 10]
@@ -3634,7 +3638,7 @@ function Fileupload(props) {
     const mtRawCeleryCheck = async (celeryId, documentId, task_id, uniqueKey) => {
         // setAnimateDownloding('MTRAW')
         let userCacheData = JSON.parse(
-            typeof Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) : null
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
         let token = userCacheData != null ? userCacheData?.token : "";
         try {

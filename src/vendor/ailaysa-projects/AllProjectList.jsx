@@ -2076,7 +2076,11 @@ function AllProjectList(props) {
             if (projectType === 3) {
                 setTimeout(() => {
                     // window.location.href = 'workspace/' + response.data.document_id
-                    history(`/glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`, {state: {
+                    // history(`/glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`, {state: {
+                    //     prevPageInfo: prevPageInfo,
+                    //     prevPath: location.pathname + location.search
+                    // }});
+                    history(`/glossary-workspace/${selectedProjectId}/${id}/`, {state: {
                         prevPageInfo: prevPageInfo,
                         prevPath: location.pathname + location.search
                     }});
