@@ -362,13 +362,12 @@ const AllTemplate = (props) => {
                                                                         )
                                                                     })
                                                                 }   
-                                                                {(item == 'Toolkit' && activeTab == 'Toolkit') &&
+                                                                {/* {(item == 'Toolkit' && activeTab == 'Toolkit') &&
                                                                     <div className="template-box-item-wrapper" onClick={() => handleOpenSpellCheck()}>
                                                                         <div class="templates-box-item ">
                                                                             <div class="content-area">
                                                                                 <img src="https://contentstaging.ailaysa.com/uploads/tool_kit_0943904c14.svg" />
                                                                                 <h3>Spell check</h3>
-                                                                                {/* <p>Get SEO-optimized headlines, meta descriptions and page contents for websites.</p> */}
                                                                             </div>
                                                                             <div class="bottom-area">
                                                                                 <div class="methods-wrap">
@@ -387,9 +386,7 @@ const AllTemplate = (props) => {
                                                                             </div>
                                                                         </div>
                                                                     </div>
-
-
-                                                                }
+                                                                } */}
                                                             </div>
                                                         </motion.div>
                                                     )
