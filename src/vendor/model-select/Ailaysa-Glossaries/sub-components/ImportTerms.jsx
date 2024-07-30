@@ -17,7 +17,8 @@ export const ImportTerms = (props) => {
         taskId,
         getGlossaryList,
         getSelectedGlossaries,
-        setActiveScreen
+        setActiveScreen,
+        isSrcEnglish
     } = props
 
     const {t} = useTranslation()
@@ -212,7 +213,7 @@ export const ImportTerms = (props) => {
             <AITab
                 onChange={handleOnTabChange} 
                 activeTab={activeImportTab}
-                dataList={importTermsTabList}
+                dataList={importTermsTabList?.filter(item => isSrcEnglish ? true : item.value !== 2)}
                 customClass="mb-4 w-2/5"
             />
             <div className="asset-glossary-list-wrapper">

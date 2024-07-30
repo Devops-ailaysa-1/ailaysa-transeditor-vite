@@ -262,7 +262,7 @@ const AilaysaNewGlossEditingArea = (props) => {
             if(currPage === 1) return
 
             let userCacheData = JSON.parse(
-                typeof Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) : null
+                typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
             );
 
             if (axiosTermListPaginationAbortControllerRef.current) {
