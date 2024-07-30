@@ -127,8 +127,8 @@ const AllRoutes = (props) => {
                 
                 <Route exact path="/default-glossary-workspace" element={<Suspense fallback={<MainAILoader />}><DefaultGlossaryWorkspace /></Suspense>} />
                 
-                <Route exact path="/wordchoice-workspace/:projectId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
-                <Route exact path="/wordchoice-workspace/:projectId/:taskId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
+                <Route exact path="/glossary-workspace/:projectId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
+                <Route exact path="/glossary-workspace/:projectId/:taskId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
 
                 <Route exact path="/accept/:uid/:token" element={<Invitation />} />
                 <Route exact path="/confirm/:uid/:token" element={<Invitation />} />
@@ -138,7 +138,7 @@ const AllRoutes = (props) => {
                 <Route exact path="/news-workspace" element={<Suspense fallback={<MainAILoader />}><FederalWorkspace /></Suspense>} />
                 <Route exact path="/news-workspace/:documentId" element={<Suspense fallback={<MainAILoader />}><FederalWorkspace /></Suspense>} />
                 <Route exact path="/chat" element={<Suspense fallback={<MainAILoader />}><Chat /></Suspense>} />
-                <Route exact path="/glossary-workspace" element={<Suspense fallback={<MainAILoader />}><GlossaryWorkspace /></Suspense>} />
+                {/* <Route exact path="/glossary-workspace" element={<Suspense fallback={<MainAILoader />}><GlossaryWorkspace /></Suspense>} /> */}
                 <Route exact path="/writer-blog" element={<Suspense fallback={<MainAILoader />}><WriterBlog /></Suspense>} />
                 <Route exact path="/writer-blog/:steps" element={<Suspense fallback={<MainAILoader />}><WriterBlog /></Suspense>} />
                 {/* conditional routing for writer */}
