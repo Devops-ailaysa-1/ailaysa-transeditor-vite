@@ -82,6 +82,9 @@ import WorkspaceFeatures from "./workspace-components/WorkspaceFeatures";
 import {ClickAwayListener} from '@mui/base/ClickAwayListener';
 import AddGlossaryTermModal from "./model-select/AddGlossaryTermModal";
 import { AilaysaGlossariesModal } from "./model-select/Ailaysa-Glossaries/AilaysaGlossariesModal";
+import { OnTheFlyGlossary } from "./model-select/Ailaysa-Glossaries/on-the-fly-modal/OnTheFlyGlossary";
+import { useDispatch } from "react-redux";
+import { setShowGlossTermAddForm } from "../features/ai-glossary/ToggleGlossTermAddFormSlice";
 // import { getTransliterateSuggestions } from "react-transliterate";
 
 // const useStyles = makeStyles((theme) => ({
@@ -222,6 +225,7 @@ function Workspace(props) {
     const location = useLocation();
     const history = useNavigate();
     const params = useParams();
+    const dispatch = useDispatch()
 
     // const classes = useStyles();
     const userDetails = useSelector((state) => state.userDetails.value)
@@ -483,8 +487,11 @@ function Workspace(props) {
     const [commentsLoader, setCommentsLoader] = useState(false)
     const [segmentHistoryLoader, setSegmentHistoryLoader] = useState(false)
     const [isSegmentDataLoading, setIsSegmentDataLoading] = useState(false)
+    
+    // store selection coordinates
+    const [selectedCoordinates, setSelectedCoordinates] = useState(null)
+    
     const forcedLoaderRef = useRef(false)
-
     const glossarySrcFieldRef = useRef(null)
     const glossaryTarFieldRef = useRef(null)
 
@@ -654,6 +661,9 @@ function Workspace(props) {
     const termAddModalPositionRef = useRef({ x: '-50%', y: '-60%' })
     const wordChoiceListRef = useRef([])
 
+    const defaultGlossDetailsRef = useRef(null)
+
+
     const transphraseId = transphrasePopoverOpen ? "simple-popover" : undefined;
     let userSelectionCallTimer = null;
 
@@ -821,6 +831,11 @@ function Workspace(props) {
         /*Get cursor position in contenteditable - start*/
         const handleSelectionChange = (e) => {
             changeContenteditableSelection();
+
+            if(window.getSelection()?.toString()?.trim()?.length === 0) {
+                // dispatch(setShowGlossTermAddForm(false))
+                // setSelectedCoordinates(null)
+            }
         };
         /*Get cursor position in contenteditable - end*/
         document.addEventListener("selectionchange", handleSelectionChange, false);
@@ -1919,13 +1934,26 @@ function Workspace(props) {
     // used to place the modal at the specified position
     useEffect(() => {
         const workspaceEditor = document.querySelector('.workspace-editor');
-        const handleScroll = () => {
+        const handleScroll = (e) => {
             if (workspaceEditor) {
                 const { scrollTop, scrollHeight, clientHeight } = workspaceEditor;
                 termAddModalPositionRef.current = {
                     ...termAddModalPositionRef.current,
                     y: (scrollTop - 268)
                 }
+
+                let selection = window.getSelection();
+                if(selection?.toString()?.trim()?.length === 0) {
+                    if(selectedCoordinates !== null) {
+                        dispatch(setShowGlossTermAddForm(false))
+                        setSelectedCoordinates(null)
+                    }
+                    return
+                }
+                let range = selection.getRangeAt(0);
+
+                let selectionRect = range.getBoundingClientRect();
+                setSelectedCoordinates(selectionRect)
             }
         }
     
@@ -1967,7 +1995,7 @@ function Workspace(props) {
     // get the list of wordchoices based on the task_id
     useEffect(() => {
         if(documentTaskIdRef.current !== null){
-            getWordChoiceListForDocument()
+            // getWordChoiceListForDocument()
         }
     }, [documentTaskIdRef.current])
     
@@ -2310,6 +2338,8 @@ function Workspace(props) {
                 setEnableFileDownload(responseTemp?.download === "enable" ? true : false);
                 setMtEnable(responseTemp?.mt_enable)
                 setTaskAssignUserDetails(responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id)
+
+                getDefaultGlossDetails()
 
                 if(userDetails?.enterprise_name !== "Enterprise - DIN"){
                     // edit_allowed key will restrict the workspace editing access
@@ -6866,8 +6896,17 @@ function Workspace(props) {
     const checkTargetTextSelection = () => {
         // let selTxt = window.getSelection()?.toString()
         let selection = window.getSelection();
-        if(selection?.toString()?.trim()?.length === 0) return 
+        if(selection?.toString()?.trim()?.length === 0) {
+            setSelectedCoordinates(null)
+            dispatch(setShowGlossTermAddForm(false))
+            return
+        } 
         let range = selection.getRangeAt(0);
+
+        let selectionRect = range.getBoundingClientRect();
+        dispatch(setShowGlossTermAddForm(false))
+        setSelectedCoordinates(selectionRect)
+
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
         div.appendChild(clonedSelection);
@@ -6887,8 +6926,17 @@ function Workspace(props) {
         // console.log(window.getSelection())
         // console.log(selTxt)
         let selection = window.getSelection();
-        if(selection?.toString()?.trim()?.length === 0) return
+        if(selection?.toString()?.trim()?.length === 0) {
+            setSelectedCoordinates(null)
+            dispatch(setShowGlossTermAddForm(false))
+            return
+        }
         let range = selection.getRangeAt(0);
+
+        let selectionRect = range.getBoundingClientRect();
+        dispatch(setShowGlossTermAddForm(false))
+        setSelectedCoordinates(selectionRect)
+
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
         div.appendChild(clonedSelection);
@@ -6896,7 +6944,7 @@ function Workspace(props) {
         let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
         selTxt = removeSpecificTag(selTxt, 'mark')
 
-        console.log(selTxt)
+        // console.log(selTxt)
         setSourceSelectionText(selTxt)
     }
 
@@ -7333,7 +7381,7 @@ function Workspace(props) {
             auth: true,
             data: formData,
             success: (response) => {
-                getWordChoiceListForDocument()
+                // getWordChoiceListForDocument()
                 setIsTermAdding(false)
                 Config.toast(t("term_added_success"))
                 showHideToolbarElement("showGlossaryAddition")
@@ -7444,6 +7492,19 @@ function Workspace(props) {
             },
         });
     };
+
+    const getDefaultGlossDetails = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
+            auth: true,
+            success: (response) => {
+                defaultGlossDetailsRef.current = response.data
+            },
+            error: (err) => {
+                // setisGlossaryListLoading(false)
+            }
+        });
+    } 
 
 
     // ================================================================================================================
@@ -7572,7 +7633,7 @@ function Workspace(props) {
                                     
                                     {/* {isDinamalar &&  */}
                                         <li onClick={(e) => handleAddGlossaryTermBtn()}>
-                                            <Tooltip title={isDinamalar ? t("add_glossary") : t("add_wordchoice")} placement="bottom" arrow>
+                                            <Tooltip title={t("add_glossary")} placement="bottom" arrow>
                                                 <div ref={showGlossaryRef} className="toolbar-list-icons-align">
                                                     <div className="toolbar-list-icon-bg glossary"></div>
                                                 </div>
@@ -9049,7 +9110,19 @@ function Workspace(props) {
                     </div>
                 </div >
             </ClickAwayListener>
-            <AilaysaGlossariesModal documentDetails={documentDetailsRef.current} />
+            <AilaysaGlossariesModal 
+                documentDetails={documentDetailsRef.current}
+                defaultGlossDetailsRef={defaultGlossDetailsRef}
+            />
+            {selectedCoordinates && (
+                <OnTheFlyGlossary 
+                    selectedCoordinates={selectedCoordinates}
+                    setSelectedCoordinates={setSelectedCoordinates} 
+                    sourceSelectionText={sourceSelectionText}
+                    targetSelectionText={targetSelectionText}
+                    defaultGlossDetailsRef={defaultGlossDetailsRef}
+                />
+            )}
         </React.Fragment>
     );
 }

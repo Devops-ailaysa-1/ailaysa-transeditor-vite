@@ -4,6 +4,7 @@ import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDown
 import { ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setShowAilaysaGlossaryModal } from '../../../../features/ShowAilaysaGlossaryModalSlice';
+import { setShowGlossTermAddForm } from '../../../../features/ai-glossary/ToggleGlossTermAddFormSlice';
 
 export const GlossaryMenuDrpDown = (props) => {
     const {t} = useTranslation()
@@ -25,7 +26,10 @@ export const GlossaryMenuDrpDown = (props) => {
     };
 
     const handleMenuItemClick = (menuItemId) => {
-        if(menuItemId === 2) {
+        if(menuItemId === 1){
+            dispatch(setShowGlossTermAddForm(true))
+            setGlossaryOpen(false)
+        }else if(menuItemId === 2) {
             dispatch(setShowAilaysaGlossaryModal(true))
             setGlossaryOpen(false)
         }

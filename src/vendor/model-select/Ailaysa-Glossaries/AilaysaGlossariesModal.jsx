@@ -15,7 +15,7 @@ import Config from '../../Config';
 
 export const AilaysaGlossariesModal = (props) => {
 
-    let { documentDetails } = props
+    let { documentDetails, defaultGlossDetailsRef } = props
 
     const {t} = useTranslation()
     const dispatch = useDispatch()
@@ -28,35 +28,25 @@ export const AilaysaGlossariesModal = (props) => {
     const glossaryListRef = useRef([])
     const selectedGlossaryListRef = useRef([])
     const projectFilesListRef = useRef([])
-    const defaultGlossDetailsRef = useRef(null)
 
     useEffect(() => {
         if(showAilaysaGlossaryModal && documentDetails){
             setActiveScreen(1)
-            getDefaultGlossDetails()
         }
     }, [showAilaysaGlossaryModal, documentDetails])
+
+    useEffect(() => {
+        if(defaultGlossDetailsRef.current){
+            setDefaultGlossDetails(defaultGlossDetailsRef.current)
+            getGlossaryList()
+            getSelectedGlossaries()
+            getProjectFiles()
+        }
+    }, [defaultGlossDetailsRef.current])
     
 
     const closeGlossaryModal = () => {
         dispatch(setShowAilaysaGlossaryModal(false))
-    } 
-
-    const getDefaultGlossDetails = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetails.project}&task=${documentDetails.task_id}`,
-            auth: true,
-            success: (response) => {
-                defaultGlossDetailsRef.current = response.data
-                setDefaultGlossDetails(response.data)
-                getGlossaryList()
-                getSelectedGlossaries()
-                getProjectFiles()
-            },
-            error: (err) => {
-                // setisGlossaryListLoading(false)
-            }
-        });
     } 
 
     const getGlossaryList = () => {
@@ -112,7 +102,13 @@ export const AilaysaGlossariesModal = (props) => {
                                     <ArrowBackOutlinedIcon />
                                 </IconButton>
                                 
-                                <span className={[activeScreen === 1 ? "-ml-10" : "opacity-50"].join(" ")}>
+                                <span 
+                                    className={[
+                                        activeScreen === 1 ? "-ml-10" : "opacity-50",
+                                        activeScreen === 2 && "hover:underline hover:cursor-pointer"
+                                    ].join(" ")}
+                                    onClick={() => activeScreen === 2 && setActiveScreen(1)}
+                                >
                                     {t("ailaysa_glossaries")}
                                 </span>
                                 {activeScreen === 2 && (
@@ -140,6 +136,7 @@ export const AilaysaGlossariesModal = (props) => {
                                     projectFilesListRef={projectFilesListRef}
                                     projectId={documentDetails.project}
                                     taskId={documentDetails.task_id}
+                                    isSrcEnglish={documentDetails.source_language_id === 17 ? true : false}
                                     getGlossaryList={getGlossaryList}
                                     getSelectedGlossaries={getSelectedGlossaries}
                                     setActiveScreen={setActiveScreen}
