@@ -6,6 +6,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import { Checkbox } from '@mui/material';
 import { BulkFileUploadModal } from '../../../project-type-selection/wordchoice-workspace/BulkFileUploadModal';
 import Config from '../../../Config';
+import { ButtonLoader } from '../../../../loader/CommonBtnLoader';
 
 export const ImportTerms = (props) => {
 
@@ -348,10 +349,17 @@ export const ImportTerms = (props) => {
                 >
                     <span className="fileupload-new-btn bulk-upload-span">
                         {
+                            isUploading && (
+                                <ButtonLoader />
+                            )
+                        }
+                        
+                        {
                             activeImportTab === 1 ? t("save") : 
                             activeImportTab === 2 ? t("extract_term") : 
-                            activeImportTab === 3 && t("upload") 
+                            activeImportTab === 3 && (isUploading ? t("uploading") : t("upload")) 
                         }
+                        
                     </span>
                 </button>
         </>

@@ -49,23 +49,6 @@ export const AilaysaGlossariesModal = (props) => {
         dispatch(setShowAilaysaGlossaryModal(false))
     } 
 
-    // const getDefaultGlossDetails = () => {
-    //     Config.axios({
-    //         url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetails.project}&task=${documentDetails.task_id}`,
-    //         auth: true,
-    //         success: (response) => {
-    //             defaultGlossDetailsRef.current = response.data
-    //             setDefaultGlossDetails(response.data)
-    //             getGlossaryList()
-    //             getSelectedGlossaries()
-    //             getProjectFiles()
-    //         },
-    //         error: (err) => {
-    //             // setisGlossaryListLoading(false)
-    //         }
-    //     });
-    // } 
-
     const getGlossaryList = () => {
         Config.axios({
             url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary`,
@@ -119,7 +102,13 @@ export const AilaysaGlossariesModal = (props) => {
                                     <ArrowBackOutlinedIcon />
                                 </IconButton>
                                 
-                                <span className={[activeScreen === 1 ? "-ml-10" : "opacity-50"].join(" ")}>
+                                <span 
+                                    className={[
+                                        activeScreen === 1 ? "-ml-10" : "opacity-50",
+                                        activeScreen === 2 && "hover:underline hover:cursor-pointer"
+                                    ].join(" ")}
+                                    onClick={() => activeScreen === 2 && setActiveScreen(1)}
+                                >
                                     {t("ailaysa_glossaries")}
                                 </span>
                                 {activeScreen === 2 && (
