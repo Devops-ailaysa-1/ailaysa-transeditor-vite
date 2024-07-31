@@ -55,3 +55,23 @@
     overflow: auto;
     scrollbar-width: thin;
 }
+
+.file-status-tag {
+    border-radius: 3px;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 153.846% */
+    padding: 4px 10px;
+}
+
+.file-status-tag.success {
+    background: #DBEAF8;
+    color: #0074D3;
+}
+.file-status-tag.error {
+    background-color: #fce6e3;
+    color: #E74C3C;
+}
