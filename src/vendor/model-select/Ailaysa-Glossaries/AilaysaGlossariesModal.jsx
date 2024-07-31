@@ -24,9 +24,8 @@ export const AilaysaGlossariesModal = (props) => {
 
     const [activeScreen, setActiveScreen] = useState(1);
     const [defaultGlossDetails, setDefaultGlossDetails] = useState(null);
-
-    const glossaryListRef = useRef([])
-    const selectedGlossaryListRef = useRef([])
+    const [glossaryList, setGlossaryList] = useState([])
+    const [selectedGlossaryList, setSelectedGlossaryList] = useState([])
     const projectFilesListRef = useRef([])
 
     useEffect(() => {
@@ -36,13 +35,13 @@ export const AilaysaGlossariesModal = (props) => {
     }, [showAilaysaGlossaryModal, documentDetails])
 
     useEffect(() => {
-        if(defaultGlossDetailsRef.current){
+        if(defaultGlossDetailsRef.current && showAilaysaGlossaryModal){
             setDefaultGlossDetails(defaultGlossDetailsRef.current)
             getGlossaryList()
             getSelectedGlossaries()
             getProjectFiles()
         }
-    }, [defaultGlossDetailsRef.current])
+    }, [defaultGlossDetailsRef.current, showAilaysaGlossaryModal])
     
 
     const closeGlossaryModal = () => {
@@ -54,7 +53,8 @@ export const AilaysaGlossariesModal = (props) => {
             url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary`,
             auth: true,
             success: (response) => {
-                glossaryListRef.current = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef.current.gloss_id)
+                let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef.current.gloss_id)
+                setGlossaryList(res)
             },
             error: (err) => {
                 // setisGlossaryListLoading(false)
@@ -67,8 +67,8 @@ export const AilaysaGlossariesModal = (props) => {
             url: `${Config.BASE_URL}/glex/glossary_selected/?project=${documentDetails.project}&option=glossary`,
             auth: true,
             success: (response) => {
-                selectedGlossaryListRef.current = response.data?.filter(each => each.id != defaultGlossDetailsRef.current.gloss_id)
-                
+                let res = response.data?.filter(each => each.id != defaultGlossDetailsRef.current.gloss_id)
+                setSelectedGlossaryList(res)
             },
         });
     };
@@ -131,15 +131,15 @@ export const AilaysaGlossariesModal = (props) => {
                                 />
                             ) : (
                                 <ImportTerms 
-                                    glossaryListRef={glossaryListRef}
-                                    selectedGlossaryListRef={selectedGlossaryListRef}
+                                    glossaryList={glossaryList}
+                                    selectedGlossaryList={selectedGlossaryList}
                                     projectFilesListRef={projectFilesListRef}
                                     projectId={documentDetails.project}
                                     taskId={documentDetails.task_id}
                                     isSrcEnglish={documentDetails.source_language_id === 17 ? true : false}
-                                    getGlossaryList={getGlossaryList}
                                     getSelectedGlossaries={getSelectedGlossaries}
                                     setActiveScreen={setActiveScreen}
+                                    defaultGlossDetailsRef={defaultGlossDetailsRef}
                                 />
                             )}
                         </div>

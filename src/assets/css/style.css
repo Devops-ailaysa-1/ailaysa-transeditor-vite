@@ -44380,3 +44380,6 @@ body{
 .selected-file-row.collapse.show {
     visibility: visible !important;
 }
+.collapse:not(td):not(tr):not(colgroup) {
+    visibility: visible !important;
+}

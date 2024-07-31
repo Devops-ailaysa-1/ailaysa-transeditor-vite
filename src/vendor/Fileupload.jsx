@@ -4837,12 +4837,12 @@ function Fileupload(props) {
                             onChange={handleSelectedOrderItem}
                         />
                         
-                        {activeProjTab === 6 && (
+                        {/* {activeProjTab === 6 && (
                             <div className="assets-type-filter-wrapper">
                                 <button className={"assets-type-filter-item " + (assetsSelectedTypeFilter === 'glossary' ? "active" : "")} onClick={() => handleAssetsTypeFilterClick('glossary')}>Glossary</button>
                                 <button className={"assets-type-filter-item " + (assetsSelectedTypeFilter === 'wordchoices' ? "active" : "")} onClick={() => handleAssetsTypeFilterClick('wordchoices')}>{t("wordchoice")}</button>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
                 <div className="upload-files-section">
