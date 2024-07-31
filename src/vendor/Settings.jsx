@@ -297,7 +297,7 @@ const Settings = (props) => {
             getJobsByProjectId();
             getTmxFiles();
             getGlossaryList();
-            getWordchoiceList();
+            // getWordchoiceList();
             getTbxFiles();
             getThresholdValues();
             getReferenceFiles();
@@ -670,7 +670,7 @@ const Settings = (props) => {
                 }
                 wordChoiceListRef.current = response.data
                 setIsWordchoiceListLoading(false)
-                getSelectedWordChoice()
+                // getSelectedWordChoice()
             },
             error: (err) => {
                 setIsWordchoiceListLoading(false)
@@ -1616,7 +1616,7 @@ const Settings = (props) => {
                             >
                                 <NavLink className="settings-setup-btn">{t("ailaysa_glossaries")}</NavLink>
                             </NavItem>
-                            <NavItem
+                            {/* <NavItem
                                 className={"setup-button-modal-btn " + classnames({ active: activeTab === "6" })}
                                 onClick={() => {
                                     toggle("6");
@@ -1625,7 +1625,7 @@ const Settings = (props) => {
                                 }}
                             >
                                 <NavLink className="settings-setup-btn">{t("wordchoice")}</NavLink>
-                            </NavItem>
+                            </NavItem> */}
 
                             <NavItem className={"setup-button-modal-btn " + classnames({ active: (activeTab === "5" && (subQatab === 1 || subQatab === 2)) })} onClick={() => { toggle("5"); toggleInner(1); setQaSubdomain(true); }}>
                                 <NavLink className="settings-setup-btn">

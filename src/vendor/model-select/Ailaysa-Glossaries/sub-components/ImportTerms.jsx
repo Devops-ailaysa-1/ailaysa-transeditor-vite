@@ -7,45 +7,55 @@ import { Checkbox } from '@mui/material';
 import { BulkFileUploadModal } from '../../../project-type-selection/wordchoice-workspace/BulkFileUploadModal';
 import Config from '../../../Config';
 import { ButtonLoader } from '../../../../loader/CommonBtnLoader';
+import ProgressAnimateButton from '../../../button-loader/ProgressAnimateButton';
 
 export const ImportTerms = (props) => {
 
     let {
-        glossaryListRef,
-        selectedGlossaryListRef,
+        glossaryList,
+        selectedGlossaryList,
         projectFilesListRef,
         projectId,
         taskId,
-        getGlossaryList,
         getSelectedGlossaries,
         setActiveScreen,
-        isSrcEnglish
+        isSrcEnglish,
+        defaultGlossDetailsRef
     } = props
 
     const {t} = useTranslation()
 
     const [activeImportTab, setActiveImportTab] = useState(1)
     const [isGlossaryListLoading, setIsGlossaryListLoading] = useState(false)
-    const [glossaryList, setGlossaryList] = useState([])
-    const [selectedGlossaryList, setSelectedGlossaryList] = useState([])
     const [checkedGlossary, setCheckedGlossary] = useState([])
     const [isGlossaryChanged, setIsGlossaryChanged] = useState(false)
     const [projectFilesList, setProjectFilesList] = useState([])
     const [openBulkUploadModal, setOpenBulkUploadModal] = useState(true);
-    const [isUploading, setIsUploading] = useState(false)
     const [filesList, setFilesList] = useState([])
+    const [isUploading, setIsUploading] = useState(false)
+    
+    const [selectedFileIds, setSelectedFileIds] = useState([])
 
     const glossaryToRemove = useRef([])
+    const fileExtractionTimeOutRef = useRef(null)
 
-    useEffect(() => {
-        setGlossaryList(glossaryListRef.current)
-    }, [glossaryListRef.current])
+    const importTermsTabList = [
+        {
+            value: 1,
+            label: t("glossary_list")
+        },
+        {
+            value: 2,
+            label: t("extract_term")
+        },
+        {
+            value: 3,
+            label: t("bulk_upload")
+        },
+    ]
     
     useEffect(() => {
-        setSelectedGlossaryList(selectedGlossaryListRef.current)
-    }, [selectedGlossaryListRef.current])
-    
-    useEffect(() => {
+        console.log(projectFilesListRef.current)
         setProjectFilesList(projectFilesListRef.current)
     }, [projectFilesListRef.current])
      
@@ -75,26 +85,23 @@ export const ImportTerms = (props) => {
         }
     }, [checkedGlossary]);
 
-    const importTermsTabList = [
-        {
-            value: 1,
-            label: t("glossary_list")
-        },
-        {
-            value: 2,
-            label: t("extract_term")
-        },
-        {
-            value: 3,
-            label: t("bulk_upload")
-        },
-    ]
+    useEffect(() => {
+        if(activeImportTab === 2){
+            checkExtractionFileStatus()
+        }
+        return () => {
+            clearTimeout(fileExtractionTimeOutRef.current)
+        }
+    }, [activeImportTab])
+    
+
 
     const handleOnTabChange = (selOpt) => {
         setActiveImportTab(selOpt.value)
         if(selOpt.value === 3) setOpenBulkUploadModal(true)
     } 
 
+    // handle glossary checkbox change
     const handleGlossaryCheckbox = (e, glossItem) => {
         if(!checkedGlossary.includes(glossItem.glossary_id))
             setCheckedGlossary([...checkedGlossary, glossItem.glossary_id])
@@ -125,7 +132,6 @@ export const ImportTerms = (props) => {
             success: (response) => {
                 if(response?.status === 201) {
                     setIsGlossaryChanged(false)
-                    // getGlossaryList()
                     getSelectedGlossaries()
                 }
                 Config.toast(t("added_success"))
@@ -141,7 +147,7 @@ export const ImportTerms = (props) => {
         glossaryToRemove.current?.map((each, index) => {
             list += `${each.id}${index !== glossaryToRemove.current?.length - 1 ? "," : ""}`;
         });
-        // console.log(list);
+        console.log(list);
         Config.axios({
             url: `${Config.BASE_URL}/glex/glossary_selected/?to_remove_ids=${list}`,
             auth: true,
@@ -149,7 +155,6 @@ export const ImportTerms = (props) => {
             success: (response) => {
                 Config.toast(t("removed_success"))
                 setIsGlossaryChanged(false)
-                // getGlossaryList()
                 getSelectedGlossaries()
             },
             error: (err) => {
@@ -192,6 +197,87 @@ export const ImportTerms = (props) => {
         });
     }
 
+    // handle extract term file checkbox change
+    const handleFileCheckBoxChange = (e, fileId) => {
+        if(!selectedFileIds.includes(fileId))
+            setSelectedFileIds([...selectedFileIds, fileId])
+        else 
+            setSelectedFileIds(selectedFileIds.filter(item => item != fileId))
+    } 
+
+    
+    // extract terms from project file
+    const extractTermsFromFile = () => {
+        let formData = new FormData();
+        selectedFileIds.forEach(each => {
+            formData.append("file_id", each);
+        })
+        formData.append("gloss_task_id", defaultGlossDetailsRef.current?.gloss_task_id);
+        
+        Config.axios({
+            url: Config.BASE_URL + "/glex/extract_text",
+            method: "POST",
+            data: formData,
+            auth: true,
+            success: (response) => {
+                try{
+                    let newArr = projectFilesList.map(obj => {
+                        if(selectedFileIds.includes(obj.id)){
+                            return {
+                                ...obj,
+                                status: response.data.find(each => each.term_model_file == obj.id).status?.toLowerCase()
+                            }
+                        }
+                        return obj 
+                    })
+                    setProjectFilesList(newArr)
+    
+                    setTimeout(() => {
+                        checkExtractionFileStatus()
+                    }, 1500);
+                }catch(e) {
+                    console.log(e)
+                }
+            },
+            error: (err) => {
+                if (err?.response?.status == 400) {
+                    // Config.toast(t("gloss_file_not_support"), 'warning')
+                } else if (err?.response?.status == 500) {
+                    // Config.toast(t("gloss_file_not_support"), 'warning')
+                }
+            }
+        });
+    }
+
+    const checkExtractionFileStatus = () => {
+        Config.axios({
+            url: Config.BASE_URL + `/glex/get_extract_text_status?project_id=${projectId}`,
+            auth: true,
+            success: (response) => {
+                console.log(response.data)
+                let newArr = projectFilesList.map(obj => {
+                    if(response.data?.find(each => each.term_model_file === obj.id)){
+                        return {
+                            ...obj,
+                            status: response.data.find(each => each.term_model_file == obj.id).status?.toLowerCase()
+                        }
+                    }
+                    return obj
+                })
+                setProjectFilesList(newArr)
+
+                if(response.data?.find(file => file.status === "PENDING")){
+                    fileExtractionTimeOutRef.current = setTimeout(() => {
+                        checkExtractionFileStatus()
+                    }, 5000);
+                }
+            },
+            error: (err) => {
+                
+            }
+        });
+    } 
+
     const handleActionBtn = (e) => {
         if(activeImportTab === 1) {
             if(!isGlossaryChanged) return
@@ -202,11 +288,15 @@ export const ImportTerms = (props) => {
                 addGlossaryToProject()
             }
         }else if(activeImportTab === 2) {
-            
+            extractTermsFromFile()
         }else if(activeImportTab === 3){
             handleBulkUploadTerms()
         }
     } 
+    
+    useEffect(() => {
+      console.log(projectFilesList)
+    }, [projectFilesList])
     
     
     return (
@@ -298,13 +388,13 @@ export const ImportTerms = (props) => {
                             })
                         ) : (
                             projectFilesList?.length !== 0 ?
-                            projectFilesList?.map((value) => {
+                            projectFilesList?.map((file) => {
                                     return (
-                                        <li key={value?.glossary_id}>
+                                        <li key={file?.id} className={file?.done_extraction ? "disable" : ""}>
                                             <div className="asset-project-select-checkbox">
                                                 <Checkbox
-                                                    // checked={checkedGlossary?.find(each => each == value?.glossary_id) ? true : false}
-                                                    // onChange={(e) => handleGlossaryCheckbox(e, value.glossary_id)}
+                                                    checked={selectedFileIds?.find(each => each == file?.id) ? true : false}
+                                                    onChange={(e) => handleFileCheckBoxChange(e, file.id)}
                                                     size="small"
                                                 />
                                             </div>
@@ -314,15 +404,24 @@ export const ImportTerms = (props) => {
                                                     <img
                                                         src={
                                                             `${Config.BASE_URL}/app/extension-image/` +
-                                                            value?.filename?.split(".")?.pop()
+                                                            file?.filename?.split(".")?.pop()
                                                         }
                                                         alt="document"
                                                     />
                                                 }
                                                 </span>
                                                 <div className="asset-project-info">
-                                                    <span className="title">{value?.filename}</span>
+                                                    <span className="title">{file?.filename}</span>
                                                 </div>
+                                                {(file?.done_extraction || file?.status === "finished") && (
+                                                    <span className='file-status-tag success ml-auto'>Extracted</span>
+                                                )}
+                                                {file?.status === "error" && (
+                                                    <span className='file-status-tag error ml-auto'>Failed</span>
+                                                )}
+                                                {file?.status === "pending" && (
+                                                    <ProgressAnimateButton name="Extracting" customclass="ml-auto" />
+                                                )}
                                             </div>
                                         </li>
                                     )
