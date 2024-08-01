@@ -495,7 +495,7 @@ const DefaultGlossaryWorkspace = (props) => {
                 defaultGlossDownload={true}
                 handleDefaultGlossDownload={handleDefaultGlossDownload}
             />
-            <section className="padding-correction">
+            <section className="padding-correction wordchoice-workspace-container">
                 <div className="choicelist-main-header-wrapper">
                     <h2 className="title">{ t("glossary_list")}</h2>
                     <div className="seach-wrapper-wrap">
