@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setShowGlossTermAddForm } from '../../../../features/ai-glossary/ToggleGlossTermAddFormSlice';
 import Draggable from 'react-draggable';
+import { ButtonLoader } from '../../../../loader/CommonBtnLoader';
 
 const posSelectStyle = {
     placeholder: (provided, state) => ({
@@ -234,7 +235,6 @@ export const OnTheFlyGlossary = (props) => {
                     Config.toast(t("term_already_exist"),'warning');
                 }else{
                     Config.toast("Failed to add term!", "error")
-
                 }
                 setIsTermAdding(false)
             },
@@ -322,7 +322,7 @@ export const OnTheFlyGlossary = (props) => {
                                         </button>
                                         <button 
                                             className='add-btn w-1/2'
-                                            onClick={addTermToGlossary}
+                                            onClick={!isTermAdding && addTermToGlossary}
                                         >
                                             {!isTermAdding ? t("add_term") : t("adding")}
                                         </button>
