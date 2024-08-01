@@ -15,7 +15,7 @@ import Config from '../../Config';
 
 export const AilaysaGlossariesModal = (props) => {
 
-    let { documentDetails, defaultGlossDetailsRef } = props
+    let { documentDetails, defaultGlossDetailsRef, getDefaultGlossDetails } = props
 
     const {t} = useTranslation()
     const dispatch = useDispatch()
@@ -42,6 +42,14 @@ export const AilaysaGlossariesModal = (props) => {
             getProjectFiles()
         }
     }, [defaultGlossDetailsRef.current, showAilaysaGlossaryModal])
+    
+    useEffect(() => {
+        if(showAilaysaGlossaryModal){
+            setTimeout(() => {
+                getDefaultGlossDetails()
+            }, 1000);
+        }
+    }, [showAilaysaGlossaryModal])
     
 
     const closeGlossaryModal = () => {
