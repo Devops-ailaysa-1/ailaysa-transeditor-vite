@@ -9126,6 +9126,7 @@ function Workspace(props) {
                     sourceSelectionText={sourceSelectionText}
                     targetSelectionText={targetSelectionText}
                     defaultGlossDetailsRef={defaultGlossDetailsRef}
+                    taskId={defaultGlossDetailsRef.current ? defaultGlossDetailsRef.current?.gloss_task_id : documentDetailsRef.current.task_id}
                 />
             )}
         </React.Fragment>
