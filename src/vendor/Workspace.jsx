@@ -9118,6 +9118,7 @@ function Workspace(props) {
             <AilaysaGlossariesModal 
                 documentDetails={documentDetailsRef.current}
                 defaultGlossDetailsRef={defaultGlossDetailsRef}
+                getDefaultGlossDetails={getDefaultGlossDetails}
             />
             {selectedCoordinates && (
                 <OnTheFlyGlossary 
