@@ -83,7 +83,8 @@ export const OnTheFlyGlossary = (props) => {
         setSelectedCoordinates,
         sourceSelectionText,
         targetSelectionText,
-        defaultGlossDetailsRef
+        defaultGlossDetailsRef,
+        taskId
     } = props
 
     const {t} = useTranslation()
@@ -157,7 +158,7 @@ export const OnTheFlyGlossary = (props) => {
         let formData = new FormData();
         // console.log(documentTaskIdRef.current)
 
-        formData.append("task_id", defaultGlossDetailsRef.current?.gloss_task_id);
+        formData.append("task_id", taskId);
         if(source !== "") formData.append("source", source);
         else if(target !== "") formData.append("target", target);
 
@@ -207,7 +208,7 @@ export const OnTheFlyGlossary = (props) => {
         formData.append('sl_term', inputData?.sl_term);
         formData.append('tl_term', inputData?.tl_term);
         if(selectedPOS?.value) formData.append('pos', selectedPOS?.label);
-        formData.append("task", defaultGlossDetailsRef.current?.gloss_task_id);
+        formData.append("task", taskId);
 
         let url = `${Config.BASE_URL}/glex/term_upload/`
 
