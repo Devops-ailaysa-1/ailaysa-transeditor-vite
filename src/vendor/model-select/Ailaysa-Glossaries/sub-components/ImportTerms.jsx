@@ -186,6 +186,7 @@ export const ImportTerms = (props) => {
             success: (response) => {
                 Config.toast(t("added_success"))
                 setActiveScreen(1)
+                setIsUploading(false)
             },
             error: (err) => {
                 if (err?.response?.status == 400) {
@@ -193,6 +194,7 @@ export const ImportTerms = (props) => {
                 } else if (err?.response?.status == 500) {
                     Config.toast(t("gloss_file_not_support"), 'warning')
                 }
+                setIsUploading(false)
             }
         });
     }
@@ -293,11 +295,6 @@ export const ImportTerms = (props) => {
             handleBulkUploadTerms()
         }
     } 
-    
-    useEffect(() => {
-      console.log(projectFilesList)
-    }, [projectFilesList])
-    
     
     return (
         <>

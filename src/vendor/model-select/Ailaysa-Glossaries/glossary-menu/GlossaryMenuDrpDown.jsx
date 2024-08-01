@@ -11,8 +11,8 @@ export const GlossaryMenuDrpDown = (props) => {
     const dispatch = useDispatch()
     
     const menuList = [
+        {id: 2, name: t("open_glossary")},
         {id: 1, name: t("add_to_glossary")},
-        {id: 2, name: t("open_glossary")}
     ]
 
     const [glossaryOpen, setGlossaryOpen] = useState(false);
