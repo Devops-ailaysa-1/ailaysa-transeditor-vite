@@ -1013,7 +1013,7 @@ const CreateGlossaries = (props) => {
 		
 		const handleBlockedNavigation = ({nextLocation}) => {
 			
-			if(glossaryProjectCreationResponse === null && (projectName && sourceLanguage && targetLanguage)){
+			if(glossaryProjectCreationResponse === null && (projectName && sourceLanguage && targetLanguage) && !nextLocation.pathname.includes('/assets')){
 				return true
 			}
 			return false
