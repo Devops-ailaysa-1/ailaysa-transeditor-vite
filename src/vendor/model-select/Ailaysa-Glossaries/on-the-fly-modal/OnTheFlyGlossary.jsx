@@ -112,9 +112,6 @@ export const OnTheFlyGlossary = (props) => {
         let source = sourceSelectionText
         let target = targetSelectionText
 
-        console.log(source)
-        console.log(target)
-
         if(source?.trim() !== "" || target !== ""){
             setInputData({
                 sl_term: source?.trim(),
@@ -124,9 +121,11 @@ export const OnTheFlyGlossary = (props) => {
                 if(source?.trim() !== "") tarInputRef.current?.focus()
                 if(target?.trim() !== "") srcInputRef.current?.focus()
             }
-            getTermMT(source, target)
+            if(showGlossTermAddForm){
+                getTermMT(source, target)
+            }
         }
-    }, [sourceSelectionText, targetSelectionText])
+    }, [sourceSelectionText, targetSelectionText, showGlossTermAddForm])
 
     
 

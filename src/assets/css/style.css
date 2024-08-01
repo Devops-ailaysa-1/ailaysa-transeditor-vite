@@ -34675,7 +34675,7 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
 .more-options-wrap .download-sub-menu ul li,
 .more-options-wrap .menu-wrapper ul li {
     padding: 6px 14px 6px 20px;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;

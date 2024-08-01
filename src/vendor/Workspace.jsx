@@ -1950,10 +1950,12 @@ function Workspace(props) {
                     }
                     return
                 }
-                let range = selection.getRangeAt(0);
-
-                let selectionRect = range.getBoundingClientRect();
-                setSelectedCoordinates(selectionRect)
+                
+                if(!isDinamalar){
+                    let range = selection.getRangeAt(0);
+                    let selectionRect = range.getBoundingClientRect();
+                    setSelectedCoordinates(selectionRect)
+                }
             }
         }
     
@@ -6903,9 +6905,11 @@ function Workspace(props) {
         } 
         let range = selection.getRangeAt(0);
 
-        let selectionRect = range.getBoundingClientRect();
-        dispatch(setShowGlossTermAddForm(false))
-        setSelectedCoordinates(selectionRect)
+        if(!isDinamalar){
+            let selectionRect = range.getBoundingClientRect();
+            dispatch(setShowGlossTermAddForm(false))
+            setSelectedCoordinates(selectionRect)
+        }
 
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
@@ -6932,10 +6936,11 @@ function Workspace(props) {
             return
         }
         let range = selection.getRangeAt(0);
-
-        let selectionRect = range.getBoundingClientRect();
-        dispatch(setShowGlossTermAddForm(false))
-        setSelectedCoordinates(selectionRect)
+        if(!isDinamalar){
+            let selectionRect = range.getBoundingClientRect();
+            dispatch(setShowGlossTermAddForm(false))
+            setSelectedCoordinates(selectionRect)
+        }
 
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
