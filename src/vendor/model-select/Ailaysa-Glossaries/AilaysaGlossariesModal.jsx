@@ -35,7 +35,7 @@ export const AilaysaGlossariesModal = (props) => {
     }, [showAilaysaGlossaryModal, documentDetails])
 
     useEffect(() => {
-        if(defaultGlossDetailsRef.current && showAilaysaGlossaryModal){
+        if(showAilaysaGlossaryModal){
             setDefaultGlossDetails(defaultGlossDetailsRef.current)
             getGlossaryList()
             getSelectedGlossaries()
@@ -127,7 +127,7 @@ export const AilaysaGlossariesModal = (props) => {
                             {activeScreen === 1 ? (
                                 <AilaysaNewGlossEditingArea 
                                     setActiveScreen={setActiveScreen}
-                                    glossTaskId={defaultGlossDetails?.gloss_task_id}
+                                    glossTaskId={defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails.task_id}
                                 />
                             ) : (
                                 <ImportTerms 
