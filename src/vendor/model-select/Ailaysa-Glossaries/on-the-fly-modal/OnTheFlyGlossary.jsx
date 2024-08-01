@@ -143,6 +143,7 @@ export const OnTheFlyGlossary = (props) => {
     const handleInputDataChange = (e) => {
         let {name, value} = e.target
         setInputData({
+            ...inputData,
             [name]: value
         })
         if(e.target?.value?.trim() !== ""){
@@ -199,7 +200,7 @@ export const OnTheFlyGlossary = (props) => {
                 srcInputRef.current.classList.add('error-field-style')
             }
             if(inputData.tl_term?.trim() === ""){
-                srcInputRef.current.classList.add('error-field-style')
+                tarInputRef.current.classList.add('error-field-style')
             }
             console.log('inside validation')
             return
@@ -239,6 +240,11 @@ export const OnTheFlyGlossary = (props) => {
             },
         });
     } 
+
+    useEffect(() => {
+      console.log(inputData)
+    }, [inputData])
+    
 
     return (
         <>
