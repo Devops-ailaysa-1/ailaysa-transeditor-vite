@@ -1624,7 +1624,29 @@ function Fileupload(props) {
                             }
                             return obj;
                         });
+                        
+                        // update the new task word count in the task list 
+                        if(openedProjectId){
+                            try{
+                                let projTaskWordData = response.data?.out?.find(each => each.proj == openedProjectId)?.task_words
+                                let newArr = selectedProjectFiles.map(obj => {
+                                    if(projTaskWordData.find(each => each[obj.id])){
+                                        return {
+                                            ...obj,
+                                            task_word_count: projTaskWordData.find(each => each[obj.id])[obj.id]
+                                        }
+                                    }
+                                    return obj
+                                })
+                                console.log(newArr)
+                                setSelectedProjectFiles(newArr)
+                            }catch(e) {
+                                console.log(e)
+                            }
+                        }
+
                         setCreatedProjects(newArr)
+
                     }
                 },
                 error: (err) => {
