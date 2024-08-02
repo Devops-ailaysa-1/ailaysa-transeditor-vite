@@ -1149,5 +1149,6 @@
     "open_glossary": "Open glossary",
     "import_terms": "Import terms",
     "extract_term": "Extract term",
-    "upload": "Upload"
+    "upload": "Upload",
+    "no_file_selected_extract": "No file selected to extract"
 }

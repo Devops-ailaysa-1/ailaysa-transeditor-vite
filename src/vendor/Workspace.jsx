@@ -85,67 +85,7 @@ import { AilaysaGlossariesModal } from "./model-select/Ailaysa-Glossaries/Ailays
 import { OnTheFlyGlossary } from "./model-select/Ailaysa-Glossaries/on-the-fly-modal/OnTheFlyGlossary";
 import { useDispatch } from "react-redux";
 import { setShowGlossTermAddForm } from "../features/ai-glossary/ToggleGlossTermAddFormSlice";
-// import { getTransliterateSuggestions } from "react-transliterate";
 
-// const useStyles = makeStyles((theme) => ({
-//     selectBox: {
-//         height: 28,
-//         padding: "4px 2px",
-//         borderRadius: "2px",
-//         backgroundColor: "transparent",
-//         "&:hover, :focus": {
-//             backgroundColor: "#E8F0FE",
-//         },
-//         "& .MuiSelect-select.MuiSelect-select": {
-//             paddingRight: "20px !important",
-//             paddingLeft: 0,
-//             paddingTop: 0,
-//             paddingBottom: 0,
-//             "&:focus": {
-//                 backgroundColor: "transparent",
-//             }
-//         },
-//         "& .MuiOutlinedInput-notchedOutline": {
-//             border: "0px solid darkgrey",
-//             padding: 0,
-//         },
-//         "& .MuiSvgIcon-root": {
-//             color: "#5F6368",
-//             fontSize: 20,
-//         },
-//     },
-//     selectOptions: {
-//         "& .MuiMenu-list": {
-//             padding: "21px 0px"
-//         },
-//         "& .MuiListItem-root": {
-//             fontSize: 14,
-//             lineHeight: 1.3,
-//             color: "#3C4043",
-//         },
-//         "& .MuiListItem-root:hover": {
-//             backgroundColor: "#F1F3F4"
-//         },
-//         "& .MuiListItem-root.Mui-selected": {
-//             color: "#202124",
-//         },
-//         "& .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover": {
-//             backgroundColor: "#F1F3F4"
-//         },
-//         "& .MuiCheckbox-root": {
-//             color: "#5F6368",
-//             padding: "5px",
-//             "&:hover": {
-//                 backgroundColor: "#F1F3F4"
-//             }
-//         },
-//         "& .MuiCheckbox-colorSecondary": {
-//             "&.Mui-checked": {
-//                 color: "#0074D3"
-//             }
-//         }
-//     }
-// }));
 
 const DropdownIndicator = (props) => {
     return (
@@ -230,6 +170,8 @@ function Workspace(props) {
     // const classes = useStyles();
     const userDetails = useSelector((state) => state.userDetails.value)
     const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
+    let isEnterprise = userDetails?.is_enterprise
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
 
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -1951,7 +1893,7 @@ function Workspace(props) {
                     return
                 }
                 
-                if(!isDinamalar){
+                if(!isEnterprise && !is_internal_meber_editor){
                     let range = selection.getRangeAt(0);
                     let selectionRect = range.getBoundingClientRect();
                     setSelectedCoordinates(selectionRect)
@@ -6905,7 +6847,7 @@ function Workspace(props) {
         } 
         let range = selection.getRangeAt(0);
 
-        if(!isDinamalar){
+        if(!isEnterprise && !is_internal_meber_editor){
             let selectionRect = range.getBoundingClientRect();
             dispatch(setShowGlossTermAddForm(false))
             setSelectedCoordinates(selectionRect)
@@ -6936,7 +6878,7 @@ function Workspace(props) {
             return
         }
         let range = selection.getRangeAt(0);
-        if(!isDinamalar){
+        if(!isEnterprise && !is_internal_meber_editor){
             let selectionRect = range.getBoundingClientRect();
             dispatch(setShowGlossTermAddForm(false))
             setSelectedCoordinates(selectionRect)
@@ -9110,7 +9052,7 @@ function Workspace(props) {
                                     <button onClick={(e) => { handlePasteSelection(e)}} className={activeResult == index ?   `active-transliterate-result results-options-button` : 'results-options-button'} key={each}>{each}</button>
                                     </div>
                             ))}
-                            </span>                            
+                            </span>                 
                         </div>
                     </div>
                 </div >
