@@ -210,6 +210,12 @@ export const ImportTerms = (props) => {
     
     // extract terms from project file
     const extractTermsFromFile = () => {
+
+        if(selectedFileIds?.length === 0){
+            Config.toast(t("no_file_selected_extract"), "warning")
+            return
+        }
+
         let formData = new FormData();
         selectedFileIds.forEach(each => {
             formData.append("file_id", each);
@@ -256,7 +262,6 @@ export const ImportTerms = (props) => {
             url: Config.BASE_URL + `/glex/get_extract_text_status?project_id=${projectId}`,
             auth: true,
             success: (response) => {
-                console.log(response.data)
                 let newArr = projectFilesList.map(obj => {
                     if(response.data?.find(each => each.term_model_file === obj.id)){
                         return {
@@ -267,6 +272,8 @@ export const ImportTerms = (props) => {
                     return obj
                 })
                 setProjectFilesList(newArr)
+
+                setSelectedFileIds(selectedFileIds.filter(each => each == newArr.find(each => ["finished", "failed"].includes(each?.status)).id))
 
                 if(response.data?.find(file => file.status === "PENDING")){
                     fileExtractionTimeOutRef.current = setTimeout(() => {
@@ -295,7 +302,7 @@ export const ImportTerms = (props) => {
             handleBulkUploadTerms()
         }
     } 
-    
+
     return (
         <>
             <AITab
@@ -387,7 +394,7 @@ export const ImportTerms = (props) => {
                             projectFilesList?.length !== 0 ?
                             projectFilesList?.map((file) => {
                                     return (
-                                        <li key={file?.id} className={file?.done_extraction ? "disable" : ""}>
+                                        <li key={file?.id} className={(file?.done_extraction || ["finished", "failed"].includes(file?.status)) ? "disable" : ""}>
                                             <div className="asset-project-select-checkbox">
                                                 <Checkbox
                                                     checked={selectedFileIds?.find(each => each == file?.id) ? true : false}

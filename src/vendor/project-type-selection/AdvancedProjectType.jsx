@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+    import React, { useState, useEffect, useRef } from "react";
 import Config from "../Config";
 // import ProjectSetupDatePicker from "../date-time-picker/ProjectSetupDatePicker";
 // import ProjectSetupTimePicker from "../date-time-picker/ProjectSetupTimePicker";
@@ -378,11 +378,9 @@ function AdvancedProjectType(props) {
                                         {projectType !== 4 && <div className="form-group"></div>}
                                     </div>
                                 </div>
-                                {/* <div className={"form-wrapper pt-0 " + (projectType === 4 && "single-advance-project")}> */}
                                 <div className={"form-wrapper pt-0 "}>
                                     <div className="d-flex gap-3 files-space-align">
                                         <div className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3">
-                                            {/* {projectType !== 4 &&  */}
                                                 <>
                                                     <Checkbox
                                                         id="machine-type"
@@ -394,7 +392,6 @@ function AdvancedProjectType(props) {
                                                         {t("apply_mt")}
                                                     </label>
                                                 </>
-                                            {/* } */}
                                             {(isTranslationTaskAvailable || tempWriterFile !== null) &&
                                                 <>
                                                     <Checkbox
@@ -412,112 +409,36 @@ function AdvancedProjectType(props) {
                                                 </>
                                             }
                                         </div>
-                                        {/* <div className="form-group"></div> */}
                                     </div>
+                                    {!preTranslate && (
+                                        <div className="d-flex gap-3 files-space-align">
+                                            <div 
+                                                className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3 mt-2"
+                                                style={!props.mtEnable ? {pointerEvents: 'none', opacity: '0.5', paddingLeft: '10px'} : {paddingLeft: '10px'}}
+                                            >
+                                                    <>
+                                                        <label>{t("get_translation_by")}</label> &nbsp;
+                                                        <Radio
+                                                            checked={translationByPage}
+                                                            id="translate-by-page"
+                                                            className="radio-btn"
+                                                            size="small"
+                                                            onChange={() => projectDataFromApi.current?.wc_selected ? Config.toast(`Can't change to page wise translation because wordchoice has been added for this project`, 'warning') : setTranslationByPage(true)}
+                                                        /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
+                                                        &nbsp;&nbsp;
+                                                        <Radio
+                                                            checked={!translationByPage}
+                                                            id="translate-by-segment"
+                                                            onChange={() => setTranslationByPage(false)}
+                                                            size="small"
+                                                            className="radio-btn"
+                                                        /> <label htmlFor="translate-by-segment" className="assign-manage-radio">{t("sentence_one_by_one")}</label>
 
-                                    <div className="d-flex gap-3 files-space-align">
-                                        <div 
-                                            className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3 mt-2"
-                                            style={!props.mtEnable ? {pointerEvents: 'none', opacity: '0.5', paddingLeft: '10px'} : {paddingLeft: '10px'}}
-                                        >
-                                            {/* {projectType !== 4 &&  */}
-                                                <>
-                                                    <label>{t("get_translation_by")}</label> &nbsp;
-                                                    <Radio
-                                                        checked={translationByPage}
-                                                        id="translate-by-page"
-                                                        className="radio-btn"
-                                                        size="small"
-                                                        onChange={() => projectDataFromApi.current?.wc_selected ? Config.toast(`Can't change to page wise translation because wordchoice has been added for this project`, 'warning') : setTranslationByPage(true)}
-                                                    /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
-                                                    &nbsp;&nbsp;
-                                                    <Radio
-                                                        checked={!translationByPage}
-                                                        id="translate-by-segment"
-                                                        onChange={() => setTranslationByPage(false)}
-                                                        size="small"
-                                                        className="radio-btn"
-                                                    /> <label htmlFor="translate-by-segment" className="assign-manage-radio">{t("sentence_one_by_one")}</label>
-
-                                                </>
-                                            {/* } */}
+                                                    </>
+                                            </div>
                                         </div>
-                                        {/* <div className="form-group"></div> */}
-                                    </div>
-                                    {/* <hr className="mt-4" /> */}
-                                    {/* <div className="d-flex align-items-center gap-3 files-space-align">
-                                        <div className="form-group mb-0">
-                                            <label className="adv-form-label">Select steps</label>
-                                            <Select
-                                                isClearable={false}
-                                                options={stepOptions}
-                                                // defaultValue={stepOptions[0]}
-                                                isMulti
-                                                styles={customStepSelectStyles}
-                                                classNamePrefix="steps-select"
-                                                closeMenuOnSelect={false}
-                                                hideSelectedOptions={false}
-                                                placeholder="Click to select..."
-                                                components={{ Option, DropdownIndicator, IndicatorSeparator: () => null }}
-                                                onChange={handleSelectedSteps}
-                                                allowSelectAll={true}
-                                                value={selectedSteps}
-                                                isOptionDisabled={(option) => option.disabled}
-                                                maximumSelectionLength={2}
-                                                isDisabled={props.isEditable && !revisionStepEdit}
-                                            />
-                                        </div>
-                                        <div className="form-group"></div>
-                                    </div> */}
-
-                                    {/* <div className="form-group mb-0">
-                                        <label>Requirements</label>
-                                    </div> */}
-                                    {/* <div className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mt-4">
-                                        {projectType !== 4 && 
-                                            <>
-                                                <Checkbox
-                                                    id="machine-type"
-                                                    checked={props.mtEnable}
-                                                    onChange={(e) => props.setMtEnable(e.target.checked)}
-                                                    size="small"
-                                                />
-                                                <label htmlFor="machine-type" className={props.mtEnable ? "add-active" : ""}>
-                                                    Apply machine translation
-                                                </label>
-                                            </>
-                                        }
-                                        {(isTranslationTaskAvailable || tempWriterFile !== null) &&
-                                            <>
-                                                <Checkbox
-                                                    id="pre-translate"
-                                                    className="ml-3"
-                                                    checked={preTranslate}
-                                                    disabled={!props.mtEnable || disablePreTranslate}
-                                                    onChange={(e) => setPreTranslate(e.target.checked)}
-                                                    size="small"
-                                                />
-                                                <label htmlFor="pre-translate" style={!props.mtEnable ? {opacity: 0.5} : {}} className={preTranslate ? "add-active" : ""}>
-                                                    Pre-translate files
-                                                </label>{disablePreTranslate && <small style={{marginLeft: '5px'}}>(Pre-translation is on-going)</small>}
-                                            </>
-                                        }
-                                    </div> */}
-
-                                    {/* <div className="form-group mb-0">
-                                        <CustomCellCheckbox
-                                            id="translate-type"
-                                            checked={checkedTwo}
-                                            onChange={(e) => setCheckedTwo(e.target.checked)}
-                                            size="small"
-                                            disabled={props.isEditable ? true : false}
-                                        />
-                                        <label htmlFor="translate-type" className={checkedTwo ? "add-active" : ""}>
-                                            Pre-translate
-                                        </label>
-                                    </div> */}
+                                    )}
                                 </div>
-                            {/* </Collapse> */}
                         </div>
                     </div>
                 </Rodal>)
