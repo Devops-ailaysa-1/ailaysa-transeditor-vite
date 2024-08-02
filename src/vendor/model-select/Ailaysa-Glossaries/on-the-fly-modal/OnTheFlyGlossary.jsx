@@ -280,6 +280,7 @@ export const OnTheFlyGlossary = (props) => {
                                         <input 
                                             className="add-glossary-input form-control"
                                             name='sl_term'
+                                            maxLength={200}
                                             ref={srcInputRef}
                                             value={inputData?.sl_term}
                                             onChange={handleInputDataChange}
@@ -290,6 +291,7 @@ export const OnTheFlyGlossary = (props) => {
                                         <input 
                                             className="add-glossary-input form-control" 
                                             name='tl_term'
+                                            maxLength={200}
                                             ref={tarInputRef}
                                             value={inputData?.tl_term}
                                             onChange={handleInputDataChange}
@@ -324,6 +326,11 @@ export const OnTheFlyGlossary = (props) => {
                                             className='add-btn w-1/2'
                                             onClick={!isTermAdding && addTermToGlossary}
                                         >
+                                            {isTermAdding && (
+                                                <span className='mr-2'>
+                                                    <ButtonLoader />
+                                                </span>
+                                            )}
                                             {!isTermAdding ? t("add_term") : t("adding")}
                                         </button>
                                     </div>

@@ -13114,6 +13114,7 @@ ul.ai-source-langs-list::-webkit-scrollbar-thumb {
     content: attr(data-placeholder);
     color: grey;
     font-style: italic;
+    unicode-bidi: embed;
 }
 
 .ai-cookie-policy-section {
