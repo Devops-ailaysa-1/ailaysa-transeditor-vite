@@ -488,10 +488,16 @@ const AilaysaNewGlossEditingArea = (props) => {
     const handleTermDelete = (term_id) => {
         termIdToDeleteRef.current = term_id
 
-        if (!showTermDeletModal) {
-            setShowTermDeletModal(true)
-            return;
-        }
+        if(termsList.find(each => each?.isDeleting)) return
+
+        // if (!showTermDeletModal) {
+        //     setShowTermDeletModal(true)
+        //     return;
+        // }
+
+        setTermsList(
+            Config.updateSpecificKeyInList(termsList, term_id, 'isDeleting', true)
+        )
 
         Config.axios({
             url: `${Config.BASE_URL}/glex/term_upload/0/?term_delete_ids=${termIdToDeleteRef.current}`,
@@ -502,9 +508,10 @@ const AilaysaNewGlossEditingArea = (props) => {
                 let listAfterDeletion = termsList?.filter(each => each.id !== term_id)
                 termsListRef.current = listAfterDeletion
                 termsListCopyRef.current = listAfterDeletion
+                let listAfterLoaderRemoved = Config.updateSpecificKeyInList(listAfterDeletion, term_id, 'isDeleting', false)
                 
-                setTermsList(listAfterDeletion)
-                setTermsListCopy(listAfterDeletion)
+                setTermsList(listAfterLoaderRemoved)
+                setTermsListCopy(listAfterLoaderRemoved)
                 setShowTermDeletModal(false)
                 setTotalTerms(totalTerms - 1)
             },
@@ -901,7 +908,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                                     searchTerm !== "" ?
                                         <p className="results-link">{t("search_results_1")} <span>{t("search_results_2")}</span></p>
                                         :
-                                        <p className="results-link">{t("search_results_proj_list_1")} <span>{t("wordchoice_term")}</span></p>
+                                        <p className="results-link">{t("search_results_proj_list_1")} <span>{t("search_results_glossary_2")}</span></p>
                                 }
                             </div>
                         </div>
@@ -1064,7 +1071,11 @@ const AilaysaNewGlossEditingArea = (props) => {
                                             
                                             <div className="choicelist-action-wrapper">
                                                 <span className="action-list-item" onClick={() => handleTermDelete(term.id)}>
-                                                    <DeleteOutlineIcon className="list-delete-icon" />
+                                                    {term?.isDeleting ? (
+                                                        <CircularProgress sx={{ color: '#222' }} style={{height: '16px', width: '16px'}} />
+                                                    ) : (
+                                                        <DeleteOutlineIcon className="list-delete-icon" />
+                                                    )}
                                                 </span>
                                             </div>
                                         
@@ -1100,8 +1111,8 @@ const AilaysaNewGlossEditingArea = (props) => {
                             textAlign: 'center',
                             opacity: isListLoading ? 1 : 0
                         }}>
-                            <p className="upload-text mt-2 d-flex items-center justify-center" style={{ fontWeight: 500, fontSize: '17px' }}>
-                                <CircularProgress sx={{color: '#959191'}} style={{width: '24px', height: '24px', marginRight: '10px'}} /> {t("loading_terms")}...
+                            <p className="upload-text mt-2 d-flex items-center justify-center" style={{ fontWeight: 500, fontSize: '14px' }}>
+                                <CircularProgress sx={{color: '#959191'}} style={{width: '20px', height: '20px', marginRight: '10px'}} /> {t("loading_terms")}...
                             </p>
                         </p>
                     </div>
