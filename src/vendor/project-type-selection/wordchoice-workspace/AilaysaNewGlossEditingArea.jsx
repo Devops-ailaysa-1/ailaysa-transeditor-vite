@@ -885,6 +885,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                             type="search"
                             placeholder={`${t("search")}...`}
                             value={searchTerm}
+                            maxLength={200}
                             onChange={handleTermSearchChange}
                             onKeyUp={(e) => SearchTermFilterEnter(e)}
                             onFocus={() => setSearchBox(true)}
@@ -1011,6 +1012,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                                                 ref={(ref) => setRef(term.id, ref)}
                                                 type="text"
                                                 name="sl_term"
+                                                maxLength={200}
                                                 className={rightAlignLangsRef.current?.includes(languageOptionsList?.find(each => selectedTaskDataRef.current?.source_language == each.id)?.language) ? "align-right" : ""}
                                                 value={termsListCopy?.find(each => each.id === term.id)?.sl_term}
                                                 onChange={(e) => handleTermEdit(e, term.id)}
@@ -1029,6 +1031,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                                                 ref={editReplaceTermRef}
                                                 type="text"
                                                 name="tl_term"
+                                                maxLength={200}
                                                 className={rightAlignLangsRef.current?.includes(languageOptionsList?.find(each => selectedTaskDataRef.current?.target_language == each.id)?.language) ? "align-right" : ""}
                                                 value={termsListCopy?.find(each => each.id === term.id)?.tl_term}
                                                 onChange={(e) => handleTermEdit(e, term.id)}
@@ -1123,6 +1126,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                             type="text"
                             ref={newSourceTermRef}
                             name="sl_term"
+                            maxLength={200}
                             placeholder={t("src_term")}
                             value={newTerm?.sl_term}
                             onChange={handleNewTermOnChange}
@@ -1134,6 +1138,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                             type="text"
                             ref={newReplaceTermRef}
                             name="tl_term"
+                            maxLength={200}
                             placeholder={t("tar_term")}
                             value={newTerm?.tl_term}
                             onChange={handleNewTermOnChange}
@@ -1167,7 +1172,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                         >
                             {isTermAdding && <ButtonLoader style={{marginRight: "4px"}} />}
                             <span className="fileopen-new-btn">
-                                {t("add_term")}
+                                {!isTermAdding ? t("add_term") : t("adding")}
                             </span>
                         </button>
                     </div>
