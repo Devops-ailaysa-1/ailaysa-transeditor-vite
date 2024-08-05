@@ -3,11 +3,12 @@ import { AITab } from '../../../../components/AITabs/AITab'
 import { useTranslation } from 'react-i18next'
 import ArrowRightGrey from "../../../../assets/images/arrow_right_grey.svg"
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import { Checkbox } from '@mui/material';
+import { Checkbox, IconButton, Tooltip } from '@mui/material';
 import { BulkFileUploadModal } from '../../../project-type-selection/wordchoice-workspace/BulkFileUploadModal';
 import Config from '../../../Config';
 import { ButtonLoader } from '../../../../loader/CommonBtnLoader';
 import ProgressAnimateButton from '../../../button-loader/ProgressAnimateButton';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 export const ImportTerms = (props) => {
 
@@ -30,6 +31,7 @@ export const ImportTerms = (props) => {
     const [checkedGlossary, setCheckedGlossary] = useState([])
     const [isGlossaryChanged, setIsGlossaryChanged] = useState(false)
     const [projectFilesList, setProjectFilesList] = useState([])
+    const [uploadedFilesList, setUploadedFilesList] = useState([])
     const [openBulkUploadModal, setOpenBulkUploadModal] = useState(true);
     const [filesList, setFilesList] = useState([])
     const [isUploading, setIsUploading] = useState(false)
@@ -38,6 +40,7 @@ export const ImportTerms = (props) => {
 
     const glossaryToRemove = useRef([])
     const fileExtractionTimeOutRef = useRef(null)
+    const bulkUploadTimeOutRef = useRef(null)
 
     const importTermsTabList = [
         {
@@ -90,6 +93,16 @@ export const ImportTerms = (props) => {
         }
         return () => {
             clearTimeout(fileExtractionTimeOutRef.current)
+        }
+    }, [activeImportTab])
+
+
+    useEffect(() => {
+        if(activeImportTab === 3){
+            checkBulkUploadStatus()
+        }
+        return () => {
+            clearTimeout(bulkUploadTimeOutRef.current)
         }
     }, [activeImportTab])
     
@@ -183,8 +196,9 @@ export const ImportTerms = (props) => {
             data: formData,
             auth: true,
             success: (response) => {
-                Config.toast(t("added_success"))
-                setActiveScreen(1)
+                // Config.toast(t("added_success"))
+                // setActiveScreen(1)
+                checkBulkUploadStatus()
                 setIsUploading(false)
             },
             error: (err) => {
@@ -200,25 +214,19 @@ export const ImportTerms = (props) => {
 
     const checkBulkUploadStatus = () => {
         Config.axios({
-            url: Config.BASE_URL + `/glex/glossary_file_upload/${2}`,
+            url: Config.BASE_URL + `/glex/glossary_file_upload?job=${defaultGlossDetailsRef.current.gloss_job_id}`,
             auth: true,
             success: (response) => {
-                let newArr = projectFilesList.map(obj => {
-                    if(response.data?.find(each => each.term_model_file === obj.id)){
-                        return {
-                            ...obj,
-                            status: response.data.find(each => each.term_model_file == obj.id).status?.toLowerCase()
-                        }
-                    }
-                    return obj
-                })
-                setProjectFilesList(newArr)
 
-                setSelectedFileIds(selectedFileIds.filter(each => each == newArr.find(each => ["finished", "failed"].includes(each?.status)).id))
+                setFilesList([])
+                
+                setUploadedFilesList(response.data)
+
+                // setSelectedFileIds(selectedFileIds.filter(each => each == newArr.find(each => ["finished", "failed"].includes(each?.status)).id))
 
                 if(response.data?.find(file => file.status === "PENDING")){
                     fileExtractionTimeOutRef.current = setTimeout(() => {
-                        checkExtractionFileStatus()
+                        checkBulkUploadStatus()
                     }, 5000);
                 }
             },
@@ -422,15 +430,63 @@ export const ImportTerms = (props) => {
                         ) : (
                             projectFilesList?.length !== 0 ?
                             projectFilesList?.map((file) => {
-                                    return (
-                                        <li key={file?.id} className={(file?.done_extraction || ["finished", "failed"].includes(file?.status)) ? "disable" : ""}>
-                                            <div className="asset-project-select-checkbox">
-                                                <Checkbox
-                                                    checked={selectedFileIds?.find(each => each == file?.id) ? true : false}
-                                                    onChange={(e) => handleFileCheckBoxChange(e, file.id)}
-                                                    size="small"
+                                return (
+                                    <li key={file?.id} className={(file?.done_extraction || ["finished", "failed"].includes(file?.status)) ? "disable" : ""}>
+                                        <div className="asset-project-select-checkbox">
+                                            <Checkbox
+                                                checked={selectedFileIds?.find(each => each == file?.id) ? true : false}
+                                                onChange={(e) => handleFileCheckBoxChange(e, file.id)}
+                                                size="small"
+                                            />
+                                        </div>
+                                        <div className="asset-project-info-wrap">
+                                            <span>
+                                            {
+                                                <img
+                                                    src={
+                                                        `${Config.BASE_URL}/app/extension-image/` +
+                                                        file?.filename?.split(".")?.pop()
+                                                    }
+                                                    alt="document"
                                                 />
+                                            }
+                                            </span>
+                                            <div className="asset-project-info">
+                                                <span className="title">{file?.filename}</span>
                                             </div>
+                                            {(file?.done_extraction || file?.status === "finished") && (
+                                                <span className='file-status-tag success ml-auto'>{t("extracted")}</span>
+                                            )}
+                                            {file?.status === "error" && (
+                                                <span className='file-status-tag error ml-auto'>{t("failed")}</span>
+                                            )}
+                                            {file?.status === "pending" && (
+                                                <ProgressAnimateButton name={t("extracting")} customclass="ml-auto" />
+                                            )}
+                                        </div>
+                                    </li>
+                                )
+                            })
+                            :
+                                <span>{t("pdf_not_found_note")}</span>
+                        )}
+                    </ul>
+                ) : activeImportTab === 3 && (
+                    <>
+                        <BulkFileUploadModal 
+                            openModal={openBulkUploadModal}
+                            setOpenModal={setOpenBulkUploadModal}
+                            handleUploadBtn={handleBulkUploadTerms}
+                            isUploading={isUploading}
+                            filesList={filesList}
+                            setFilesList={setFilesList}
+                            nonModal={true}
+                        />
+                        <ul className="asset-glossary-projects-wrap-list mt-6">
+                            {
+                                uploadedFilesList?.map((file) => {
+                                    return (
+                                        <li key={file?.id} className={(["FAILED"].includes(file?.status)) ? "disable" : ""}>
                                             <div className="asset-project-info-wrap">
                                                 <span>
                                                 {
@@ -446,33 +502,27 @@ export const ImportTerms = (props) => {
                                                 <div className="asset-project-info">
                                                     <span className="title">{file?.filename}</span>
                                                 </div>
-                                                {(file?.done_extraction || file?.status === "finished") && (
-                                                    <span className='file-status-tag success ml-auto'>Extracted</span>
+                                                {(file?.status === "FINISHED") && (
+                                                    <Tooltip title={t("delete")} placement='top' arrow>
+                                                        <IconButton className='ml-auto mr-2'>
+                                                            <CloseOutlinedIcon style={{fontSize: '18px'}} />
+                                                        </IconButton>
+                                                    </Tooltip>
                                                 )}
                                                 {file?.status === "error" && (
-                                                    <span className='file-status-tag error ml-auto'>Failed</span>
+                                                    <span className='file-status-tag error ml-auto'>{t("failed")}</span>
                                                 )}
-                                                {file?.status === "pending" && (
-                                                    <ProgressAnimateButton name="Extracting" customclass="ml-auto" />
+                                                {file?.status === "PENDING" && (
+                                                    <ProgressAnimateButton name={t("uploading")} customclass="ml-auto cursor-default" />
                                                 )}
                                             </div>
                                         </li>
                                     )
                                 })
-                            :
-                                <span>{t("pdf_not_found_note")}</span>
-                        )}
-                    </ul>
-                ) : activeImportTab === 3 && (
-                    <BulkFileUploadModal 
-                        openModal={openBulkUploadModal}
-                        setOpenModal={setOpenBulkUploadModal}
-                        handleUploadBtn={handleBulkUploadTerms}
-                        isUploading={isUploading}
-                        filesList={filesList}
-                        setFilesList={setFilesList}
-                        nonModal={true}
-                    />
+
+                            }
+                        </ul>
+                    </>
                 )}
             </div>
                 <button 
