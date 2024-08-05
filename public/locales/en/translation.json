@@ -886,7 +886,7 @@
     "some_content_dictation_tab": "There are some content in dictation tab, switching of tab will loss the dictated content.",
     "translate_text_speech": "To translate this text to speech",
     "press_strt_to_dictate": "Press start to dictate",
-    "gloss_file_not_support": "Anyone of the file(s) does not contain supported data",
+    "gloss_file_not_support": "File could not be processed. Use the template to upload terms",
     "term_upload_note": "To add a list of terms and their associated data, download one of the MS Office Excel templates, fill up data and upload",
     "gloss_temp_lite": "Glossary template - Lite",
     "gloss_temp_standard": "Glossary template - Standard",
@@ -1150,5 +1150,6 @@
     "import_terms": "Import terms",
     "extract_term": "Extract term",
     "upload": "Upload",
-    "no_file_selected_extract": "No file selected to extract"
+    "no_file_selected_extract": "No file selected to extract",
+    "extracted": "Extracted"
 }
