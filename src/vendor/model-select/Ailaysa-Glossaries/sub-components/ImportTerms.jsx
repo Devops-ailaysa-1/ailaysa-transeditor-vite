@@ -55,7 +55,6 @@ export const ImportTerms = (props) => {
     ]
     
     useEffect(() => {
-        console.log(projectFilesListRef.current)
         setProjectFilesList(projectFilesListRef.current)
     }, [projectFilesListRef.current])
      
@@ -147,7 +146,7 @@ export const ImportTerms = (props) => {
         glossaryToRemove.current?.map((each, index) => {
             list += `${each.id}${index !== glossaryToRemove.current?.length - 1 ? "," : ""}`;
         });
-        console.log(list);
+        // console.log(list);
         Config.axios({
             url: `${Config.BASE_URL}/glex/glossary_selected/?to_remove_ids=${list}`,
             auth: true,
@@ -198,6 +197,36 @@ export const ImportTerms = (props) => {
             }
         });
     }
+
+    const checkBulkUploadStatus = () => {
+        Config.axios({
+            url: Config.BASE_URL + `/glex/glossary_file_upload/${2}`,
+            auth: true,
+            success: (response) => {
+                let newArr = projectFilesList.map(obj => {
+                    if(response.data?.find(each => each.term_model_file === obj.id)){
+                        return {
+                            ...obj,
+                            status: response.data.find(each => each.term_model_file == obj.id).status?.toLowerCase()
+                        }
+                    }
+                    return obj
+                })
+                setProjectFilesList(newArr)
+
+                setSelectedFileIds(selectedFileIds.filter(each => each == newArr.find(each => ["finished", "failed"].includes(each?.status)).id))
+
+                if(response.data?.find(file => file.status === "PENDING")){
+                    fileExtractionTimeOutRef.current = setTimeout(() => {
+                        checkExtractionFileStatus()
+                    }, 5000);
+                }
+            },
+            error: (err) => {
+                
+            }
+        });
+    } 
 
     // handle extract term file checkbox change
     const handleFileCheckBoxChange = (e, fileId) => {

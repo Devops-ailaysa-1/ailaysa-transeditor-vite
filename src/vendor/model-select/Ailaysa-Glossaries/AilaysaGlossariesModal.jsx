@@ -58,7 +58,7 @@ export const AilaysaGlossariesModal = (props) => {
 
     const getGlossaryList = () => {
         Config.axios({
-            url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary`,
+            url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary&task=${documentDetails.task_id}`,
             auth: true,
             success: (response) => {
                 let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef.current.gloss_id)
