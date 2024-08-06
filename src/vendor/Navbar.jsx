@@ -54,7 +54,6 @@ import MarketplaceIcon from "../assets/images/ai-marketplace.svg"
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TaskAssignActionButtons from "./workspace-components/TaskAssignActionButtons";
 import ReactRouterPrompt from 'react-router-prompt'
-import { AilaysaGlossariesModal } from "./model-select/Ailaysa-Glossaries/AilaysaGlossariesModal";
 import { GlossaryMenuDrpDown } from "./model-select/Ailaysa-Glossaries/glossary-menu/GlossaryMenuDrpDown";
 
 function Navbar(props) {
@@ -1329,10 +1328,8 @@ function Navbar(props) {
                                 }
                                 
                                 <li id="download-dropdown-wrapper" className={props.isWhite ? "nav-item nav-drp-down active mr-3" : "navbar-display-hide mr-3"}>
-                                    {props.updatedFileDownload && (
-                                       <>
-                                            <GlossaryMenuDrpDown />
-                                        </> 
+                                    {(props.updatedFileDownload && !isEnterprise && !is_internal_meber_editor) && (
+                                        <GlossaryMenuDrpDown />
                                     )}
                                 </li>
 
