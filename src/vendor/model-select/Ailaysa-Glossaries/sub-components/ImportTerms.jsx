@@ -3,7 +3,7 @@ import { AITab } from '../../../../components/AITabs/AITab'
 import { useTranslation } from 'react-i18next'
 import ArrowRightGrey from "../../../../assets/images/arrow_right_grey.svg"
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import { Checkbox, IconButton, Tooltip } from '@mui/material';
+import { Checkbox, CircularProgress, IconButton, Tooltip } from '@mui/material';
 import { BulkFileUploadModal } from '../../../project-type-selection/wordchoice-workspace/BulkFileUploadModal';
 import Config from '../../../Config';
 import { ButtonLoader } from '../../../../loader/CommonBtnLoader';
@@ -324,6 +324,25 @@ export const ImportTerms = (props) => {
         });
     } 
 
+    const handleGlossaryFileDelete = (file) => {
+
+        setUploadedFilesList(Config.updateSpecificKeyInList(uploadedFilesList, file.id, "isDeleting", true))
+
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/glossary_file_upload/?file_delete_ids=${file.id}&job=${defaultGlossDetailsRef.current.gloss_job_id}`,
+            auth: true,
+            method: "DELETE",
+            success: (response) => {
+                Config.toast(t("removed_success"))
+                setUploadedFilesList(uploadedFilesList?.filter(each => each.id != file.id))
+            },
+            error: (err) => {
+                Config.toast(t("deletion_failed"), 'error')
+                setUploadedFilesList(Config.updateSpecificKeyInList(uploadedFilesList, file.id, "isDeleting", false))
+            }
+        });  
+    } 
+
     const handleActionBtn = (e) => {
         if(activeImportTab === 1) {
             if(!isGlossaryChanged) return
@@ -503,9 +522,13 @@ export const ImportTerms = (props) => {
                                                     <span className="title">{file?.filename}</span>
                                                 </div>
                                                 {(file?.status === "FINISHED") && (
-                                                    <Tooltip title={t("delete")} placement='top' arrow>
-                                                        <IconButton className='ml-auto mr-2'>
-                                                            <CloseOutlinedIcon style={{fontSize: '18px'}} />
+                                                    <Tooltip title={file?.isDeleting ? t("deleting") : t("delete") } placement='top' arrow>
+                                                        <IconButton className='ml-auto mr-2' onClick={() => !file?.isDeleting && handleGlossaryFileDelete(file)}>
+                                                            {file?.isDeleting ? (
+                                                                <CircularProgress sx={{ color: 'grey.500' }} style={{height: '16px', width: '16px'}} />
+                                                            ) : (
+                                                                <CloseOutlinedIcon style={{fontSize: '18px'}} />
+                                                            )}
                                                         </IconButton>
                                                     </Tooltip>
                                                 )}
