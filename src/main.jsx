@@ -49,6 +49,7 @@ import showAilaysaGlossaryModalReducer from './features/ShowAilaysaGlossaryModal
 import toggleGlossTermAddFormReducer from './features/ai-glossary/ToggleGlossTermAddFormSlice';
 import * as Sentry from "@sentry/react";
 import SpellCheckHtmlDataSlice from './features/SpellCheckHtmlDataSlice';
+import SegmentChoiceListReducer from './features/transeditor-workspace/SegmentChoiceListSlice';
 
 const store = configureStore({
   reducer: {
@@ -74,6 +75,7 @@ const store = configureStore({
 	showAilaysaGlossaryModal: showAilaysaGlossaryModalReducer,
 	showGlossTermAddForm: toggleGlossTermAddFormReducer,
 	spellCheckData:SpellCheckHtmlDataSlice,
+	segmentChoiceList: SegmentChoiceListReducer,
 	...writerReducers        
   }
 })

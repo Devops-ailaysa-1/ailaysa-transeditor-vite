@@ -39,6 +39,7 @@ import { setIsDinamalarNews } from "./features/IsDinamalarNewsSlice";
 import { setIsFederalNews } from "./features/IsFederalNewsSlice";
 import { CookieChecker } from "cookie-validator-check";
 import { PromptLibraryModal } from "./ailaysa-writer/Prompt-library/PromptLibraryModal";
+import { setSegmentChoiceList } from "./features/transeditor-workspace/SegmentChoiceListSlice";
 
 
 function App() {
@@ -126,6 +127,7 @@ function App() {
         getLanguages()
         getCurrencyOptions()
         getUnitTypeOptions()
+        getSegmentChoice()
         // getCardContent()
         // getFilterCardContent()
     }, []);
@@ -229,6 +231,23 @@ function App() {
             auth: true,
             success: (response) => {
                 dispatch(setLanguageOptionsList(response.data))
+            },
+        };
+        Config.axios(params);
+    };
+
+    /* Get source language options */
+    const getSegmentChoice = () => {
+        let params = {
+            url: Config.BASE_URL + "/app/segment-choice/",
+            auth: true,
+            success: (response) => {
+                dispatch(setSegmentChoiceList(response.data.map(each => {
+                    return {
+                        value: each.id,
+                        label: each.option
+                    }
+                })))
             },
         };
         Config.axios(params);
