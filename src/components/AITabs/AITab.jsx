@@ -8,6 +8,7 @@ export const AITab = ({
     activeTab,
     onChange,
     customClass,
+    innerTabClass,
     ...props
 }) => {
     
@@ -19,7 +20,7 @@ export const AITab = ({
         <div 
             className={[
                 "ai-tabs",
-                customClass
+                customClass,
             ].join(' ')}
         >
             {
@@ -27,7 +28,15 @@ export const AITab = ({
                     <div className="contained-tab-wrapper" {...props}>
                         {dataList?.map((item, index) => {
                             return (
-                                <div key={index} className={"inner-tabs " + (activeTab == item.value ? "active" : '')} onClick={() => changeTab(item)}>
+                                <div 
+                                    key={index} 
+                                    className={[
+                                        "inner-tabs",
+                                        activeTab == item.value ? "active" : '',
+                                        innerTabClass
+                                    ].join(' ')} 
+                                    onClick={() => changeTab(item)}
+                                >
                                     {item.label}
                                 </div>
                             )

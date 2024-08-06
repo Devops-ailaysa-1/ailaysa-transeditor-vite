@@ -1823,7 +1823,7 @@ ul.comments-list li:hover .comment-close-btn {
 }
 
 .focused-row .source-div-icon {
-    display: block;
+    display: flex;
 }
 
 
@@ -5352,6 +5352,8 @@ ul#workspace {
     display: flex;
     align-items: center;
     position: relative;
+    flex: 1;
+    margin-right: 12px;
 }
 
 .segment-status span:first-child {

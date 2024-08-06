@@ -85,6 +85,7 @@ import { AilaysaGlossariesModal } from "./model-select/Ailaysa-Glossaries/Ailays
 import { OnTheFlyGlossary } from "./model-select/Ailaysa-Glossaries/on-the-fly-modal/OnTheFlyGlossary";
 import { useDispatch } from "react-redux";
 import { setShowGlossTermAddForm } from "../features/ai-glossary/ToggleGlossTermAddFormSlice";
+import { AdaptiveMTTabs } from "./workspace-components/AdaptiveMTTabs";
 
 
 const DropdownIndicator = (props) => {
@@ -8363,49 +8364,32 @@ function Workspace(props) {
                                                                     </div>
                                                                     <div data-id={id} className="target-lang-row-align trigger-focus">
                                                                         <div data-id={id} className="segment-status trigger-focus">
-                                                                            {/* <span
-                                                                                    className={
-                                                                                        allSegmentStatusState[id] == 101 || allSegmentStatusState[id] == 103 || allSegmentStatusState[id] == 105 || allSegmentStatusState[id] == 109
-                                                                                            ? "segment-flag status-danger"
-                                                                                            :(allSegmentStatusState[id] == 102 || allSegmentStatusState[id] == 104 || allSegmentStatusState[id] == 106 || allSegmentStatusState[id] == 110) ?
-                                                                                            "segment-flag status-confirmed"
-                                                                                            :
-                                                                                            "segment-flag"
-                                                                                    }
-                                                                                >
-                                                                                    {segmentStatuses[allSegmentStatusState[id]]}
-                                                                                </span>
-                                                                                <span
-                                                                                    ref={notSavedStatus.current[id]}
-                                                                                    id={"not-saved-status-" + id}
-                                                                                    data-id={id}
-                                                                                    style={{ display: "none" }}
-                                                                                    className="text-changes-danger"
-                                                                                >
-                                                                                    Changes not yet saved
-                                                                                </span>
-                                                                                <span
-                                                                                    ref={savedStatus.current[id]}
-                                                                                    id={"saved-status-" + id}
-                                                                                    data-id={id}
-                                                                                    style={{ display: "none" }}
-                                                                                    className="text-changes-success"
-                                                                                >
-                                                                                    Changes Saved!
-                                                                                </span> */}
-                                                                            {(isWorkspaceEditable && (sourceLanguageId == 17 || targetLanguageId == 17)) ? (
+                                                                            {/* old seg rewrite */}
+                                                                            {/* {(isWorkspaceEditable && (sourceLanguageId == 17 || targetLanguageId == 17)) ? (
                                                                                 targetContentEditable.current[id]?.current !== null && targetContentEditable.current[id]?.current?.innerText != "" ? (
                                                                                     <>
                                                                                         <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Rewrite' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Rewrite')}><span>{t("rewrite")}</span></span>
                                                                                         <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Simplify' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Simplify')}><span>{t("simplified")}</span></span>
-                                                                                        {/* <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Shorten' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Shorten')}><span>{t("shortened")}</span></span> */}
                                                                                     </>
                                                                                 ) : null
-                                                                            ) : null}
+                                                                            ) : null} */}
+
+                                                                            
+                                                                            <AdaptiveMTTabs 
+                                                                                segmentId={id}
+                                                                                updateTranslatedResponseSegment={updateTranslatedResponseSegment}
+                                                                                updateSegmentStatus={updateSegmentStatus}
+                                                                                changeEditedStatus={changeEditedStatus}
+                                                                                updateTranslationById={updateTranslationById}
+                                                                                focusedDivIdRef={focusedDivIdRef}
+                                                                                setIsSegmentDataLoading={setIsSegmentDataLoading}
+                                                                                forcedLoaderRef={forcedLoaderRef}
+                                                                            />
+
                                                                         </div>
 
                                                                         <div data-id={id} className="workspace-btn-algin trigger-focus">
-                                                                            <span
+                                                                            {/* <span
                                                                                 ref={notSavedStatus.current[id]}
                                                                                 id={"not-saved-status-" + id}
                                                                                 data-id={id}
@@ -8422,7 +8406,7 @@ function Workspace(props) {
                                                                                 className="text-changes-success"
                                                                             >
                                                                                 Changes Saved!
-                                                                            </span>
+                                                                            </span> */}
 
                                                                             <Tooltip
                                                                                 title={`${segmentStatuses[allSegmentStatusState[id]]}`}
@@ -8467,46 +8451,6 @@ function Workspace(props) {
                                                                                     </div>
                                                                                 </a>
                                                                             </Tooltip>
-
-                                                                            {/* {(targetContentEditable.current[id]?.current?.innerText == "" && mtEnable) ? (
-                                                                                    <a
-                                                                                        type="button"
-                                                                                        className={
-                                                                                            "workspace-feature-btn"
-                                                                                        }
-                                                                                        data-id={id}
-                                                                                        onClick={(e) => { getMachineTranslation(e); restoreMTTranslation() }}
-                                                                                    >
-                                                                                        <Tooltip title="This will replace the content with the MT content" placement="top" arrow>
-                                                                                            <div data-id={id} className="translate"></div>
-                                                                                        </Tooltip>
-                                                                                    </a>
-                                            
-                                                                                ) : (
-                                            
-                                                                                    <a type="button" data-id={id} className={
-                                                                                        "workspace-feature-btn"
-                                                                                    } onClick={(e) => deleteSegmentTranslation(e)}>
-                                                                                        <Tooltip title="Clear target segment" placement="top" arrow>
-                                                                                            <div ref={deleteSegmentTranslationRef}>
-                                                                                                <div data-id={id} className="toolbar-list-icon-bg eraser"></div>
-                                                                                            </div>
-                                                                                        </Tooltip>
-                                                                                    </a>
-                                            
-                                                                                )} */}
-                                                                            {/*                                                                         
-                                                                                {(sourceLanguageId == 17 || targetLanguageId == 17) ? (
-                                                                                    showParaphraseBtn ? (
-                                                                                        <Tooltip
-                                                                                        title="Paraphrase" placement="top" arrow>
-                                                                                            <a type="button" className="workspace-feature-btn" data-id={id} onClick={(e) => getParaphrases()}>
-                                                                                                <div data-id={id} className="paraphrase"></div>
-                                                                                            </a>
-                                                                                        </Tooltip>
-                                                                                    ) : null
-                                                                                ) : null} */}
-
 
                                                                             <Tooltip title={t("add_view_comments")} placement="top" arrow>
                                                                                 <a
