@@ -8365,14 +8365,14 @@ function Workspace(props) {
                                                                     <div data-id={id} className="target-lang-row-align trigger-focus">
                                                                         <div data-id={id} className="segment-status trigger-focus">
                                                                             {/* old seg rewrite */}
-                                                                            {/* {(isWorkspaceEditable && (sourceLanguageId == 17 || targetLanguageId == 17)) ? (
+                                                                            {(isWorkspaceEditable && (sourceLanguageId == 17 || targetLanguageId == 17)) ? (
                                                                                 targetContentEditable.current[id]?.current !== null && targetContentEditable.current[id]?.current?.innerText != "" ? (
                                                                                     <>
                                                                                         <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Rewrite' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Rewrite')}><span>{t("rewrite")}</span></span>
                                                                                         <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Simplify' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Simplify')}><span>{t("simplified")}</span></span>
                                                                                     </>
                                                                                 ) : null
-                                                                            ) : null} */}
+                                                                            ) : null}
 
                                                                             
                                                                             <AdaptiveMTTabs 
