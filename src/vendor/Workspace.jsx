@@ -2284,7 +2284,7 @@ function Workspace(props) {
                 setMtEnable(responseTemp?.mt_enable)
                 setTaskAssignUserDetails(responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id)
 
-                getDefaultGlossDetails()
+                if(!isEnterprise) getDefaultGlossDetails()
 
                 if(userDetails?.enterprise_name !== "Enterprise - DIN"){
                     // edit_allowed key will restrict the workspace editing access
@@ -4087,7 +4087,7 @@ function Workspace(props) {
         setgrammarCheckPopoverTarget("")
         // setPopoverOpen(false)
         showTmSectionFunction(false);
-
+        
         setFocusedDivId(id);
         ctrlAClicked.current = false;
         focusedDivIdRef.current = id;
@@ -5912,32 +5912,32 @@ function Workspace(props) {
     }
 
     const getSegmentDiff = () => {
-        if (focusedDivId != '') {
 
-            if (axiosSegmentHistoryAbortControllerRef.current) {
-                axiosSegmentHistoryAbortControllerRef.current.abort()
-            }
-        
-            const controller = new AbortController();
-            axiosSegmentHistoryAbortControllerRef.current = controller
+        if(!focusedDivIdRef.current) return 
 
-            setSegmentDifference([])
-            setSegmentHistoryLoader(true)
-            Config.axios({
-                url: `${Config.BASE_URL}/workspace_okapi/segment_history/?segment=${focusedDivId}`,
-                method: "GET",
-                auth: true,
-                ...(controller !== undefined && {signal: controller.signal}),
-                success: (response) => {
-                    // console.log(response.data)
-                    setSegmentHistoryLoader(false)
-                    setSegmentDifference(response.data)
-                },
-                error: (err) => {
-                    setSegmentHistoryLoader(false)
-                }
-            });
+        if (axiosSegmentHistoryAbortControllerRef.current) {
+            axiosSegmentHistoryAbortControllerRef.current.abort()
         }
+    
+        const controller = new AbortController();
+        axiosSegmentHistoryAbortControllerRef.current = controller
+
+        setSegmentDifference([])
+        setSegmentHistoryLoader(true)
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace_okapi/segment_history/?segment=${focusedDivIdRef.current}`,
+            method: "GET",
+            auth: true,
+            ...(controller !== undefined && {signal: controller.signal}),
+            success: (response) => {
+                // console.log(response.data)
+                setSegmentHistoryLoader(false)
+                setSegmentDifference(response.data)
+            },
+            error: (err) => {
+                setSegmentHistoryLoader(false)
+            }
+        });
 
     };
 
