@@ -1151,5 +1151,6 @@
     "extract_term": "Extract term",
     "upload": "Upload",
     "no_file_selected_extract": "No file selected to extract",
-    "extracted": "Extracted"
+    "extracted": "Extracted",
+    "select_word_to_add": "Select a word to add!"
 }

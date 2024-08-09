@@ -5,6 +5,7 @@ import { ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from '@mui
 import { useDispatch } from 'react-redux';
 import { setShowAilaysaGlossaryModal } from '../../../../features/ShowAilaysaGlossaryModalSlice';
 import { setShowGlossTermAddForm } from '../../../../features/ai-glossary/ToggleGlossTermAddFormSlice';
+import Config from '../../../Config';
 
 export const GlossaryMenuDrpDown = (props) => {
     const {t} = useTranslation()
@@ -27,6 +28,10 @@ export const GlossaryMenuDrpDown = (props) => {
 
     const handleMenuItemClick = (menuItemId) => {
         if(menuItemId === 1){
+            if(window.getSelection().toString()?.trim() === ""){
+                Config.toast(t("select_word_to_add"), "warning")
+                return
+            }
             dispatch(setShowGlossTermAddForm(true))
             setGlossaryOpen(false)
         }else if(menuItemId === 2) {

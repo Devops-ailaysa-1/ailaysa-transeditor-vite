@@ -241,109 +241,90 @@ export const OnTheFlyGlossary = (props) => {
         });
     } 
 
-    useEffect(() => {
-      console.log(inputData)
-    }, [inputData])
-    
 
     return (
         <>
-            <Draggable onDrag={(e) => e.preventDefault()} positionOffset={{x: selectedCoordinates?.x, y: selectedCoordinates?.bottom }}  enableUserSelectHack={false} cancel={"input, button"}>
-                {/* <Popper
-                    open={selectedCoordinates !== null}
-                    anchorEl={{
-                        getBoundingClientRect: () => ({
-                        top: selectedCoordinates?.bottom,
-                        left: selectedCoordinates?.left,
-                        bottom: selectedCoordinates?.bottom,
-                        right: selectedCoordinates?.left,
-                        width: 0,
-                        height: 0,
-                        }),
-                    }}
-                    placement="bottom-start"
-                    className="z-[9]"
-                > */}
-                    <div className="otf-glossary-wrapper">
-                        {!showGlossTermAddForm ? (
-                            <button className="add-to-glos-btn" onClick={showFormScreen}>
+            <Draggable 
+                onDrag={(e) => {e.preventDefault(); e.stopPropagation()}} 
+                onDragStart={(e) => {e.preventDefault(); e.stopPropagation()}} 
+                positionOffset={{x: selectedCoordinates?.x, y: selectedCoordinates?.bottom }} 
+                enableUserSelectHack={false}
+                cancel={"input, button"} 
+            >
+                <div className="otf-glossary-wrapper">
+                    {!showGlossTermAddForm ? (
+                        <button className="add-to-glos-btn" onClick={showFormScreen}>
+                            Add to glossary
+                        </button>
+                    ) : (
+                        <div className="form-wrapper">
+                            <p className="form-heading">
                                 Add to glossary
-                            </button>
-                        ) : (
-                            <div className="form-wrapper">
-                                <p className="form-heading">
-                                    Add to glossary
-                                </p>
-                                <div className="add-glossary-section">
-                                    <div className="add-glossary-row">
-                                        <label>{t("source_language_term")}</label>
-                                        <input 
-                                            className="add-glossary-input form-control"
-                                            name='sl_term'
-                                            maxLength={200}
-                                            ref={srcInputRef}
-                                            value={inputData?.sl_term}
-                                            onChange={handleInputDataChange}
-                                        />
-                                    </div> 
-                                    <div className="add-glossary-row">
-                                        <label>{t("target_language_term")}</label>
-                                        <input 
-                                            className="add-glossary-input form-control" 
-                                            name='tl_term'
-                                            maxLength={200}
-                                            ref={tarInputRef}
-                                            value={inputData?.tl_term}
-                                            onChange={handleInputDataChange}
-                                        />
-                                    </div>
-                                    <div className="add-glossary-row">
-                                        <label>{t("parts_of_speech")}</label>
-                                        <div className='pos-wrapper'>
-                                            <Select 
-                                                name="pos"
-                                                options={partOfSpeechOptions}
-                                                isSearchable={true}
-                                                menuPlacement="auto"
-                                                styles={posSelectStyle}
-                                                value={selectedPOS}
-                                                placeholder={t("select")}
-                                                components={{DropdownIndicator, IndicatorSeparator: () => null}}
-                                                onChange={(selectOption) => setSelectedPOS(selectOption)}
-                                            />
-                                        </div>
-                                    </div>
+                            </p>
+                            <div className="add-glossary-section">
+                                <div className="add-glossary-row">
+                                    <label>{t("source_language_term")}</label>
+                                    <input 
+                                        className="add-glossary-input form-control"
+                                        name='sl_term'
+                                        maxLength={200}
+                                        ref={srcInputRef}
+                                        value={inputData?.sl_term}
+                                        onChange={handleInputDataChange}
+                                    />
+                                </div> 
+                                <div className="add-glossary-row">
+                                    <label>{t("target_language_term")}</label>
+                                    <input 
+                                        className="add-glossary-input form-control" 
+                                        name='tl_term'
+                                        maxLength={200}
+                                        ref={tarInputRef}
+                                        value={inputData?.tl_term}
+                                        onChange={handleInputDataChange}
+                                    />
                                 </div>
-                                <div className="confirm-bottom mt-3">
-                                    <div className='flex space-x-3'>
-                                        <button 
-                                            className='cancel-btn w-1/2'
-                                            onClick={handleClose}
-                                        >
-                                            {t("cancel")}
-                                        </button>
-                                        <button 
-                                            className='add-btn w-1/2'
-                                            onClick={!isTermAdding && addTermToGlossary}
-                                        >
-                                            {isTermAdding && (
-                                                <span className='mr-2'>
-                                                    <ButtonLoader />
-                                                </span>
-                                            )}
-                                            {!isTermAdding ? t("add_term") : t("adding")}
-                                        </button>
+                                <div className="add-glossary-row">
+                                    <label>{t("parts_of_speech")}</label>
+                                    <div className='pos-wrapper'>
+                                        <Select 
+                                            name="pos"
+                                            options={partOfSpeechOptions}
+                                            isSearchable={true}
+                                            menuPlacement="auto"
+                                            styles={posSelectStyle}
+                                            value={selectedPOS}
+                                            placeholder={t("select")}
+                                            components={{DropdownIndicator, IndicatorSeparator: () => null}}
+                                            onChange={(selectOption) => setSelectedPOS(selectOption)}
+                                        />
                                     </div>
                                 </div>
                             </div>
-                        )}
-                    </div>
-
-                    
-                
-
-
-                {/* </Popper> */}
+                            <div className="confirm-bottom mt-3">
+                                <div className='flex space-x-3'>
+                                    <button 
+                                        className='cancel-btn w-1/2'
+                                        onClick={handleClose}
+                                    >
+                                        {t("cancel")}
+                                    </button>
+                                    <button 
+                                        className='add-btn w-1/2'
+                                        onClick={!isTermAdding && addTermToGlossary}
+                                    >
+                                        {isTermAdding && (
+                                            <span className='mr-2'>
+                                                <ButtonLoader />
+                                            </span>
+                                        )}
+                                        {!isTermAdding ? t("add_term") : t("adding")}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </Draggable>
 
         </>
