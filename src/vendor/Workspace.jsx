@@ -8369,13 +8369,13 @@ function Workspace(props) {
                                                                                 targetContentEditable.current[id]?.current !== null && targetContentEditable.current[id]?.current?.innerText != "" ? (
                                                                                     <>
                                                                                         <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Rewrite' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Rewrite')}><span>{t("rewrite")}</span></span>
-                                                                                        <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Simplify' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Simplify')}><span>{t("simplified")}</span></span>
+                                                                                        {/* <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Simplify' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Simplify')}><span>{t("simplified")}</span></span> */}
                                                                                     </>
                                                                                 ) : null
                                                                             ) : null}
 
                                                                             
-                                                                            <AdaptiveMTTabs 
+                                                                            {/* <AdaptiveMTTabs 
                                                                                 segmentId={id}
                                                                                 updateTranslatedResponseSegment={updateTranslatedResponseSegment}
                                                                                 updateSegmentStatus={updateSegmentStatus}
@@ -8384,7 +8384,7 @@ function Workspace(props) {
                                                                                 focusedDivIdRef={focusedDivIdRef}
                                                                                 setIsSegmentDataLoading={setIsSegmentDataLoading}
                                                                                 forcedLoaderRef={forcedLoaderRef}
-                                                                            />
+                                                                            /> */}
 
                                                                         </div>
 
