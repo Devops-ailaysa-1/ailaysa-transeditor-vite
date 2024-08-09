@@ -7579,7 +7579,7 @@ function Workspace(props) {
                                         </Tooltip>
                                     </li>
                                     
-                                    {/* {isDinamalar &&  */}
+                                    {isDinamalar && 
                                         <li onClick={(e) => handleAddGlossaryTermBtn()}>
                                             <Tooltip title={t("add_glossary")} placement="bottom" arrow>
                                                 <div ref={showGlossaryRef} className="toolbar-list-icons-align">
@@ -7587,7 +7587,7 @@ function Workspace(props) {
                                                 </div>
                                             </Tooltip>
                                         </li>
-                                    {/* } */}
+                                    } 
                                     <li onClick={(e) => showHideToolbarElement("showSpecialCharacters")}>
                                         <Tooltip title={t("special_characters")} placement="bottom" arrow>
                                             <div ref={showSpecialCharactersRef} className="toolbar-list-icons-align">
