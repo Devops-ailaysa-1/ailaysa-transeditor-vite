@@ -423,7 +423,7 @@ function AdvancedProjectType(props) {
                                                             id="translate-by-page"
                                                             className="radio-btn"
                                                             size="small"
-                                                            onChange={() => projectDataFromApi.current?.wc_selected ? Config.toast(`Can't change to page wise translation because wordchoice has been added for this project`, 'warning') : setTranslationByPage(true)}
+                                                            onChange={() => projectDataFromApi.current?.glossary_selected ? Config.toast(t("glossary_selected_warning_text"), 'warning') : setTranslationByPage(true)}
                                                         /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
                                                         &nbsp;&nbsp;
                                                         <Radio

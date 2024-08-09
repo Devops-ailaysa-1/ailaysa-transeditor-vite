@@ -330,7 +330,7 @@
     padding: 4px;
 }
 
-.placeholder {
+.prompt-library-wrapper .placeholder {
     color: #1B8EFF;
     background-color: #f0f0f0;
     padding: 2px 4px;
