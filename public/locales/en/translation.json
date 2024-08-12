@@ -1154,5 +1154,7 @@
     "extracted": "Extracted",
     "select_word_to_add": "Select a word to add!",
     "glossary_selected_warning_text": "Glossaries added. Remove to switch to page translation.",
-    "options": "Options"
+    "options": "Options",
+    "options_and_gloss": "Options & Glossaries"
+
 }
