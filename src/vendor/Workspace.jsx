@@ -431,8 +431,10 @@ function Workspace(props) {
     const [segmentHistoryLoader, setSegmentHistoryLoader] = useState(false)
     const [isSegmentDataLoading, setIsSegmentDataLoading] = useState(false)
     
+    
     // store selection coordinates
     const [selectedCoordinates, setSelectedCoordinates] = useState(null)
+    const [segmentOptionsList, setSegmentOptionsList] = useState([])
     
     const forcedLoaderRef = useRef(false)
     const glossarySrcFieldRef = useRef(null)
@@ -554,6 +556,7 @@ function Workspace(props) {
     const qaSection = createRef();
     const commentTextArea = createRef();
     const tmTabButton = createRef();
+    const segOptionsBtnRef = useRef();
     const concordanceTabButton = createRef();
     const commentsTabButton = createRef();
     const qaTabButton = createRef();
@@ -4130,6 +4133,20 @@ function Workspace(props) {
             auth: true,
             success: (response) => {
                 let mtTmResponse = response.data;
+
+                let segOptList = [
+                    {
+                        id: 1,
+                        option: response.data?.mt_llm_glossary,
+                    },
+                    {
+                        id: 2,
+                        option: response.data?.mt_only
+                    }
+                ]
+
+                setSegmentOptionsList(segOptList)
+
                 let thisSegmentTags = "";
                 let segmentData = translatedResponse.find((element) => element.segment_id == id);
                 let segmentStatus = allSegmentStatuses.current[id];
@@ -8654,6 +8671,7 @@ function Workspace(props) {
                 getSegmentDiff={getSegmentDiff}
                 commentsTabButton={commentsTabButton}
                 tmTabButton={tmTabButton}
+                segOptionsBtnRef={segOptionsBtnRef}
                 dictionaryTabButton={dictionaryTabButton}
                 qaTabButton={qaTabButton}
                 concordanceTabButton={concordanceTabButton}
@@ -8704,6 +8722,7 @@ function Workspace(props) {
                 commentsLoader={commentsLoader}
                 segmentHistoryLoader={segmentHistoryLoader}
                 showSegmentComments={showSegmentComments}
+                segmentOptionsList={segmentOptionsList}
             />
 
             {popoverTarget != null && (

@@ -1153,5 +1153,6 @@
     "no_file_selected_extract": "No file selected to extract",
     "extracted": "Extracted",
     "select_word_to_add": "Select a word to add!",
-    "glossary_selected_warning_text": "Glossaries added. Remove to switch to page translation."
+    "glossary_selected_warning_text": "Glossaries added. Remove to switch to page translation.",
+    "options": "Options"
 }
