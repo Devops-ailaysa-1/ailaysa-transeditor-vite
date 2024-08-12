@@ -85,7 +85,6 @@ import { AilaysaGlossariesModal } from "./model-select/Ailaysa-Glossaries/Ailays
 import { OnTheFlyGlossary } from "./model-select/Ailaysa-Glossaries/on-the-fly-modal/OnTheFlyGlossary";
 import { useDispatch } from "react-redux";
 import { setShowGlossTermAddForm } from "../features/ai-glossary/ToggleGlossTermAddFormSlice";
-import { AdaptiveMTTabs } from "./workspace-components/AdaptiveMTTabs";
 
 
 const DropdownIndicator = (props) => {
@@ -4137,10 +4136,6 @@ function Workspace(props) {
                 let segOptList = [
                     {
                         id: 1,
-                        option: response.data?.mt_llm_glossary,
-                    },
-                    {
-                        id: 2,
                         option: response.data?.mt_only
                     }
                 ]
