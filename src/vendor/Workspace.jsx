@@ -8718,6 +8718,7 @@ function Workspace(props) {
                 segmentHistoryLoader={segmentHistoryLoader}
                 showSegmentComments={showSegmentComments}
                 segmentOptionsList={segmentOptionsList}
+                getTranslationMatch={getTranslationMatch}
             />
 
             {popoverTarget != null && (
