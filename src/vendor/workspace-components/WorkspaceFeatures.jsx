@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavigateBeforeSharpIcon from '@mui/icons-material/NavigateBeforeSharp';
 import NavigateNextSharpIcon from '@mui/icons-material/NavigateNextSharp';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -16,7 +16,7 @@ import sanitizeHtml from 'sanitize-html-react';
 import ContentCopyIcon from "../styles-svg/Content-copy-icon";
 import Skeleton from '@mui/material/Skeleton';
 import parse from "html-react-parser";
-
+import CopyIcon from "../../vendor/styles-svg/CopyIcon";
 
 const WorkspaceFeatures = (props) => {
     let {
@@ -459,10 +459,15 @@ const WorkspaceFeatures = (props) => {
                                     <ul className="qa-list">
                                         {segmentOptionsList.map(item => {
                                             return (
-                                                <li key={item.id}>
+                                                <li key={item.id} className='flex justify-between'>
                                                     <span className="qa-text">
                                                         {item.option}
                                                     </span>
+                                                    <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top" arrow>
+                                                        <div className="tools-box" onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 300)} onClick={() => copyText(item.option)}>
+                                                            <CopyIcon style="copy-icon" />
+                                                        </div>
+                                                    </Tooltip>
                                                 </li>
                                             )
                                         })}
