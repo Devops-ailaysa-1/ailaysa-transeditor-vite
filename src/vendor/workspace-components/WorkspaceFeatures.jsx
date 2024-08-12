@@ -30,6 +30,7 @@ const WorkspaceFeatures = (props) => {
         getSegmentDiff,
         commentsTabButton,
         tmTabButton,
+        segOptionsBtnRef,
         dictionaryTabButton,
         qaTabButton,
         concordanceTabButton,
@@ -79,7 +80,8 @@ const WorkspaceFeatures = (props) => {
         targetLanguage,
         commentsLoader,
         segmentHistoryLoader,
-        showSegmentComments
+        showSegmentComments,
+        segmentOptionsList
     } = props
 
     return (
@@ -146,6 +148,21 @@ const WorkspaceFeatures = (props) => {
                                             aria-selected="true"
                                         >
                                             {t("tm_and_glossary")}
+                                        </a>
+                                    </li>
+                                    <li className="nav-item" role="presentation">
+                                        <a
+                                            ref={segOptionsBtnRef}
+                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
+                                            className="nav-link"
+                                            id="pills-seg-options-tab"
+                                            data-toggle="pill"
+                                            href="#pills-seg-options"
+                                            role="tab"
+                                            aria-controls="pills-seg-options"
+                                            aria-selected="true"
+                                        >
+                                            {t("options")}
                                         </a>
                                     </li>
                                     <li className="nav-item" role="presentation">
@@ -434,6 +451,25 @@ const WorkspaceFeatures = (props) => {
                                 </div>
                             </section>
                         )}
+                    </div>
+                    <div className="tab-pane fade" id="pills-seg-options" role="tabpanel" aria-labelledby="pills-seg-options-tab">
+                        <section className="quest-section">
+                            <div className="quest-section">
+                                <div className="quest-section-align">
+                                    <ul className="qa-list">
+                                        {segmentOptionsList.map(item => {
+                                            return (
+                                                <li key={item.id}>
+                                                    <span className="qa-text">
+                                                        {item.option}
+                                                    </span>
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                     <div className="tab-pane fade" id="pills-concordance" role="tabpanel" aria-labelledby="pills-concordance-tab">
                         {
