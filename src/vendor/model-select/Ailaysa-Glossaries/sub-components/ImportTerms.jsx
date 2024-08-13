@@ -222,7 +222,7 @@ export const ImportTerms = (props) => {
                 
                 setUploadedFilesList(response.data)
 
-                // setSelectedFileIds(selectedFileIds.filter(each => each == newArr.find(each => ["finished", "failed"].includes(each?.status)).id))
+                // setSelectedFileIds(selectedFileIds.filter(each => each != newArr.find(each => ["finished", "failed"].includes(each?.status)).id))
 
                 if(response.data?.find(file => file.status === "PENDING")){
                     fileExtractionTimeOutRef.current = setTimeout(() => {
@@ -266,6 +266,9 @@ export const ImportTerms = (props) => {
             auth: true,
             success: (response) => {
                 try{
+
+                    setSelectedFileIds(selectedFileIds?.filter(each => !response.data.some(file => file.id == each)))
+
                     let newArr = projectFilesList.map(obj => {
                         if(selectedFileIds.includes(obj.id)){
                             return {
@@ -310,7 +313,7 @@ export const ImportTerms = (props) => {
                 })
                 setProjectFilesList(newArr)
 
-                setSelectedFileIds(selectedFileIds.filter(each => each == newArr.find(each => ["finished", "failed"].includes(each?.status)).id))
+                setSelectedFileIds(selectedFileIds.filter(each => each != newArr.find(each => ["finished", "failed", "pending"].includes(each?.status)).id))
 
                 if(response.data?.find(file => file.status === "PENDING")){
                     fileExtractionTimeOutRef.current = setTimeout(() => {
@@ -450,7 +453,7 @@ export const ImportTerms = (props) => {
                             projectFilesList?.length !== 0 ?
                             projectFilesList?.map((file) => {
                                 return (
-                                    <li key={file?.id} className={(file?.done_extraction || ["finished", "failed"].includes(file?.status)) ? "disable" : ""}>
+                                    <li key={file?.id} className={(file?.done_extraction || ["finished", "failed", "pending"].includes(file?.status)) ? "disable" : ""}>
                                         <div className="asset-project-select-checkbox">
                                             <Checkbox
                                                 checked={selectedFileIds?.find(each => each == file?.id) ? true : false}
