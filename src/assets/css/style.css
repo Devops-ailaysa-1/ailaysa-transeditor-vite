@@ -44401,7 +44401,3 @@ body{
 .collapse:not(td):not(tr):not(colgroup) {
     visibility: visible !important;
 }
-
-.seg-options-tab ul.qa-list li::before {
-    content: url(/src/assets/images/new-ui-icons/translate_black.svg);
-}
