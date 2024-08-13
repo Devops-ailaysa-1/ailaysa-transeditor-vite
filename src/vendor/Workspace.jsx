@@ -85,7 +85,8 @@ import { AilaysaGlossariesModal } from "./model-select/Ailaysa-Glossaries/Ailays
 import { OnTheFlyGlossary } from "./model-select/Ailaysa-Glossaries/on-the-fly-modal/OnTheFlyGlossary";
 import { useDispatch } from "react-redux";
 import { setShowGlossTermAddForm } from "../features/ai-glossary/ToggleGlossTermAddFormSlice";
-
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 
 const DropdownIndicator = (props) => {
     return (
@@ -215,6 +216,7 @@ function Workspace(props) {
     const [showReplaceSection, setShowReplaceSection] = useState(false);
     const [showSpecialCharacters, setShowSpecialCharacters] = useState(false);
     const [showFormatSize, setShowFormatSize] = useState(false);
+    const [showTagView, setShowTagView] = useState(true);
     const [findTerm, setFindTerm] = useState("");
     const [findSelectedSegmentId, setFindSelectedSegmentId] = useState(null);
     const [replaceTerm, setReplaceTerm] = useState("");
@@ -564,6 +566,7 @@ function Workspace(props) {
     const dictionaryTermRef = createRef();
     const deleteSegmentTranslationRef = createRef();
     const showFormatSizeRef = createRef();
+    const showTagViewRef = useRef();
     const showFindReplaceRef = createRef();
     // const showConcoradanceRef = createRef();
     const showSpecialCharactersRef = createRef();
@@ -4648,17 +4651,18 @@ function Workspace(props) {
                 else if (showTagsRef.current.classList.contains("toolbar-list-icons-active")) showTagsRef.current.classList.remove("toolbar-list-icons-active");
                 break;
             }
+            case "toggleTagView": {
+                setShowTagView(!showTagView)
+                if(showTagView) showTagViewRef.current.classList.add("toolbar-list-icons-active");
+                else showTagViewRef.current.classList.remove("toolbar-list-icons-active");
+            }
             default: {
                 return;
             }
         }
     };
 
-
-    const toggleIME = () => {
-        setEnableIME(!enableIME);
-    };
-
+    
     // put curosr on the source segment but dont allow any kind of editing (keypress, pasting of content and drag and drop of contentx)
     const handleSourceSegmentClick = (e) => {
         // console.log(e);
@@ -7565,6 +7569,16 @@ function Workspace(props) {
                                             </div>
                                         </Tooltip>
                                     </li>
+
+                                    <li onClick={(e) => showHideToolbarElement("toggleTagView")}>
+                                        <Tooltip title={showTagView ? t("hide_tags") : t("show_tags")} placement="bottom" arrow>
+                                            <div ref={showTagViewRef} className="toolbar-list-icons-align">
+                                                <RemoveRedEyeOutlinedIcon style={{ fontSize: '24px', display: showTagView ? 'unset' : 'none' }} />
+                                                <VisibilityOffOutlinedIcon style={{ fontSize: '24px', display: showTagView ? 'none' : 'unset' }} />
+                                            </div>
+                                        </Tooltip>
+                                    </li>
+
                                 </ul>
                                 <ul>
                                     <li onClick={(e) => showHideToolbarElement("showFindReplace")}>
@@ -7737,6 +7751,7 @@ function Workspace(props) {
                                         </Tooltip>
                                     </li>
                                 </ul>}
+
                                 {/* {webSpeechLang?.find(each => each.name?.toLowerCase() === targetLanguage?.toLowerCase()) && (
                                     <ul>
                                         <Tooltip title={isListening ? t("listening") : t("voice_typing")} placement="bottom" arrow>
@@ -8121,7 +8136,7 @@ function Workspace(props) {
                                     <p>{t("no_segments_has_been_found")}</p>
                                 </div>
                             ) : (
-                                <form className="workspace-form">
+                                <form className={["workspace-form", showTagView ? "show-segment-tags" : "hide-segment-tags"].join(' ')}>
                                     <ul id="workspace" className="display" ref={contentEditableParentRef}>
                                         {
                                             translatedResponse?.map((translation, key) => {
