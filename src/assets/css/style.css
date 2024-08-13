@@ -44401,3 +44401,17 @@ body{
 .collapse:not(td):not(tr):not(colgroup) {
     visibility: visible !important;
 }
+
+.workspace-form.show-segment-tags .tag.tag-open,
+.workspace-form.show-segment-tags .tag.tag-close{
+    display: unset !important;
+}
+.workspace-form.hide-segment-tags .tag.tag-open,
+.workspace-form.hide-segment-tags .tag.tag-close{
+    display: none !important;
+}
+
+.prompt-library-modal .ai-mark-confirm-box .rodal-dialog {
+    width: 400px !important;
+    height: 240px !important;
+} 

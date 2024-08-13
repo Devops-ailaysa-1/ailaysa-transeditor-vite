@@ -27,6 +27,8 @@ import ChatSearchBarClose from "../../../assets/images/assign-page/search-bar-cl
 import NoEditorsFoundTwo from "../../../assets/images/no-editors-found-2.svg"
 import NoTermFound from '../../../assets/images/no-terms-found.svg'
 import WarningIcon from '../../../assets/images/new-ui-icons/confirm-icon.svg'
+import { Checkbox } from '@mui/material';
+import ConfirmIcon from "../../../assets/images/new-ui-icons/confirm-icon.svg"
 
 
 const customProjectTypeSelectStyles = {
@@ -162,6 +164,8 @@ const AilaysaNewGlossEditingArea = (props) => {
     const [filesList, setFilesList] = useState([])
     const [isListLoading, setIsListLoading] = useState(false)
     const [mtTermLoader, setMtTermLoader] = useState(false)
+    const [selectedTermIds, setSelectedTermIds] = useState([])
+    const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false)
     // states for term ordering
     const [orderBySrcToggle, setOrderBySrcToggle] = useState(null)
     const [orderByTarToggle, setOrderByTarToggle] = useState(null)
@@ -869,6 +873,44 @@ const AilaysaNewGlossEditingArea = (props) => {
         editSourceTermRef.current[index] = ref;
     };
 
+    const handleTermCheckbox = (term) => {
+        if(selectedTermIds.includes(term.id)) 
+            setSelectedTermIds(selectedTermIds.filter(each => each != term.id))
+        else
+            setSelectedTermIds([...selectedTermIds, term.id])
+    } 
+
+    const handleBulkTermDelete = () => {
+
+        if(selectedTermIds.length === 0) {
+            Config.toast(t("select_term_to_delete"), 'warning')
+            return
+        }
+
+        if(!showTermDeletModal) {
+            setShowTermDeletModal(true)
+            return
+        }
+
+        let deleteUrl = `${Config.BASE_URL}/glex/term_upload/0/?term_delete_ids=${selectedTermIds.join(',')}`
+        
+        Config.axios({
+            url: deleteUrl, 
+            method: "DELETE",
+            auth: true,
+            success: (response) => {
+                
+                Config.toast(`${t("term_delete_success")}`);
+                setShowTermDeletModal(false)
+
+                setTimeout(() => {
+                    getTermsList();
+                }, 80);
+                setSelectedTermIds([])
+            },
+        });
+    };
+
     return (
         <>
             <div className="choicelist-main-header-wrapper">
@@ -939,6 +981,11 @@ const AilaysaNewGlossEditingArea = (props) => {
                             </span>
                         </button>
                     )}
+                    <button className="mydocument-AiMarkCancel ml-2" onClick={handleBulkTermDelete}>
+                        <span className="fileupload-new-btn bulk-upload-span text-black px-3">
+                            {t("delete_terms")}
+                        </span>
+                    </button>
                 </div>
             </div>
             <div className="choicelist-wrapper-container">
@@ -1008,6 +1055,12 @@ const AilaysaNewGlossEditingArea = (props) => {
                                     // onDoubleClick={(e) => { e.stopPropagation(); toggleEditMode(term.id, 'open') }}
                                     <div key={term.id} className={`choicelist-list-item ${(isEditMode && !term?.isEdit) ? "disabled-choicelist" : term?.isEdit ? "blue-bg" : ""}`}>
                                         <div className="choice-list-source-term-wrap wordchoice">
+                                            <Checkbox 
+                                                className="cell-box"
+                                                size="small"
+                                                checked={selectedTermIds?.includes(term.id)}
+                                                onChange={() => handleTermCheckbox(term)}
+                                            />
                                             <input
                                                 ref={(ref) => setRef(term.id, ref)}
                                                 type="text"
@@ -1193,12 +1246,13 @@ const AilaysaNewGlossEditingArea = (props) => {
                             alt="confirm-icon"
                         />
                         <h2>{t("are_you_sure")}</h2>
+                        <h2>{t("delete_term_alert_note")}</h2> 
 
                         <div className="button-row">
                             <button className="mydocument-AiMarkCancel" onClick={() => setShowTermDeletModal(false)}>
                                 <span className="cancel-txt">{t("cancel")}</span>
                             </button>
-                            <button className="mydocument-AiMarkSubmit" onClick={() => handleTermDelete(termIdToDeleteRef.current)}>
+                            <button className="mydocument-AiMarkSubmit" onClick={handleBulkTermDelete}>
                                 <span className="submit-txt">{t("delete")}</span>
                             </button>
                         </div>
@@ -1216,6 +1270,36 @@ const AilaysaNewGlossEditingArea = (props) => {
                     filesList={filesList}
                     setFilesList={setFilesList}
                 />
+            )}
+
+            {showDeleteConfirmationModal && (
+                <Rodal
+                    visible={showDeleteConfirmationModal}
+                    showCloseButton={false}
+                    onClose={() => showDeleteConfirmationModal(false)}
+                    className="ai-mark-confirm-box"
+                >
+                    <div className="confirmation-wrapper">
+                        <img
+                            src={ConfirmIcon}
+                            alt="confirm-icon"
+                        />
+                        {/* {
+                            termToDeleteId !== null ? 
+                                <h2>{`${t("delete_the_term")} ${termtoDelete}?`}</h2> : 
+                                // <h2>{termtoDelete} terms are selected <br/> Are you sure want to delete?</h2>   
+                            } */}
+                            <h2>{t("delete_term_alert_note")}</h2>   
+                        <div className="button-row">
+                            <button className="mydocument-AiMarkCancel" onClick={() => setShowDeleteConfirmationModal(false)}>
+                            <span className="cancel-txt">{t("cancel")}</span>
+                            </button>
+                            <button className="mydocument-AiMarkSubmit" onClick={handleBulkTermDelete}>
+                            <span className="submit-txt">{t("delete")}</span>
+                            </button>
+                        </div>
+                    </div>
+                </Rodal>
             )}
         </>
     )
