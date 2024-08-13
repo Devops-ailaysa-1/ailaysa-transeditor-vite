@@ -102,6 +102,36 @@ const WorkspaceFeatures = (props) => {
                                 >
                                     <li className="nav-item" role="presentation">
                                         <a
+                                            ref={segOptionsBtnRef}
+                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
+                                            className="nav-link"
+                                            id="pills-seg-options-tab"
+                                            data-toggle="pill"
+                                            href="#pills-seg-options"
+                                            role="tab"
+                                            aria-controls="pills-seg-options"
+                                            aria-selected="true"
+                                        >
+                                            {t("options_and_gloss")}
+                                        </a>
+                                    </li>
+                                    <li className="nav-item" role="presentation">
+                                        <a
+                                            ref={tmTabButton}
+                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
+                                            className="nav-link"
+                                            id="pills-tm-tb-tab"
+                                            data-toggle="pill"
+                                            href="#pills-tm-tb"
+                                            role="tab"
+                                            aria-controls="pills-tm-tb"
+                                            aria-selected="true"
+                                        >
+                                            {t("translation_memories")}
+                                        </a>
+                                    </li>
+                                    <li className="nav-item" role="presentation">
+                                        <a
                                             ref={segmentDiffButton}
                                             onClick={(e) => {
                                                 e.isTrusted && handleToggleVisibility(true)
@@ -134,36 +164,6 @@ const WorkspaceFeatures = (props) => {
                                             aria-selected="false"
                                         >
                                             {t("comments")}
-                                        </a>
-                                    </li>
-                                    <li className="nav-item" role="presentation">
-                                        <a
-                                            ref={tmTabButton}
-                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
-                                            className="nav-link"
-                                            id="pills-tm-tb-tab"
-                                            data-toggle="pill"
-                                            href="#pills-tm-tb"
-                                            role="tab"
-                                            aria-controls="pills-tm-tb"
-                                            aria-selected="true"
-                                        >
-                                            {t("translation_memories")}
-                                        </a>
-                                    </li>
-                                    <li className="nav-item" role="presentation">
-                                        <a
-                                            ref={segOptionsBtnRef}
-                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
-                                            className="nav-link"
-                                            id="pills-seg-options-tab"
-                                            data-toggle="pill"
-                                            href="#pills-seg-options"
-                                            role="tab"
-                                            aria-controls="pills-seg-options"
-                                            aria-selected="true"
-                                        >
-                                            {t("options_and_gloss")}
                                         </a>
                                     </li>
                                     <li className="nav-item" role="presentation">
@@ -263,10 +263,11 @@ const WorkspaceFeatures = (props) => {
                             <section className="top-section-show">
                                 <div className="modal-top-body">
                                     <div className="tm-tb-main-row">
-                                        <div className={translationMatches?.length === 0 ? "tm-container-no-found tm-side-border" : (tbxData?.length === 0 && glossaryData?.length === 0) ? "tm-container-expand tm-container tm-side-border" : "tm-container tm-side-border w-full"}>
+                                        <div className={translationMatches?.length === 0 ? "tm-container-no-found tm-side-border w-full" : (tbxData?.length === 0 && glossaryData?.length === 0) ? "tm-container-expand tm-container tm-side-border" : "tm-container tm-side-border w-full"}>
                                             {
                                                 translationMatches?.length === 0 ?
                                                     <div className="tm-container-no-matches-found">
+                                                        <small>{t("no_matches_found")}</small>
                                                     </div>
                                                     :
                                                     <>
@@ -453,25 +454,28 @@ const WorkspaceFeatures = (props) => {
                             </section>
                         )}
                     </div>
-                    <div className="tab-pane fade" id="pills-seg-options" role="tabpanel" aria-labelledby="pills-seg-options-tab">
+                    <div className="tab-pane fade seg-options-tab" id="pills-seg-options" role="tabpanel" aria-labelledby="pills-seg-options-tab">
                         <section className="quest-section">
                             <div className="quest-section flex">
                                 <div className="quest-section-align w-1/2">
                                     <ul className="qa-list">
-                                        {segmentOptionsList.map(item => {
-                                            return (
-                                                <li key={item.id} className='flex justify-between'>
-                                                    <span className="qa-text">
-                                                        {item.option}
-                                                    </span>
-                                                    <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top" arrow>
-                                                        <div className="tools-box" onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 300)} onClick={() => copyText(item.option)}>
-                                                            <CopyIcon style="copy-icon" />
-                                                        </div>
-                                                    </Tooltip>
-                                                </li>
-                                            )
-                                        })}
+                                        {segmentOptionsList?.length === 0 ? 
+                                            segmentOptionsList?.map(item => {
+                                                return (
+                                                    <li key={item.id} className='flex justify-between'>
+                                                        <span className="qa-text">
+                                                            {item.option}
+                                                        </span>
+                                                        <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top" arrow>
+                                                            <div className="tools-box" onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 300)} onClick={() => copyText(item.option)}>
+                                                                <CopyIcon style="copy-icon" />
+                                                            </div>
+                                                        </Tooltip>
+                                                    </li>
+                                                )
+                                            })
+                                        : <span><small>{t("no_option")}</small></span>
+                                        }
                                     </ul>
                                 </div>
                                 <div className={(tbxData?.length === 0 && glossaryData?.length === 0) ? "tb-container-no-found w-1/2" : translationMatches?.length === 0 ? "tm-container-expand tb-container tm-side-border w-1/2" : "tb-container w-1/2"}>
@@ -524,17 +528,11 @@ const WorkspaceFeatures = (props) => {
                                                                                                 <p className="settings-file-names-new target-tb-lang-part">{value.target}</p>
                                                                                             </div>
                                                                                             <div className="translation-list-value-copy-btn">
-                                                                                                <button
-                                                                                                    type="button"
-                                                                                                    className="workspace-feature-btn-new"
-                                                                                                    onClick={(e) => copyText(value.target)}
-                                                                                                >
-                                                                                                    <img
-                                                                                                        src={NorCopyContent}
-                                                                                                        className="content-copy"
-                                                                                                        alt="copy text"
-                                                                                                    />
-                                                                                                </button>
+                                                                                                <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top" arrow>
+                                                                                                    <div className="tools-box" onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 300)} onClick={() => copyText(value.target)}>
+                                                                                                        <CopyIcon style="copy-icon" />
+                                                                                                    </div>
+                                                                                                </Tooltip>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>

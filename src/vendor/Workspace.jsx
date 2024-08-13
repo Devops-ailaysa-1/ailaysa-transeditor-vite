@@ -4140,7 +4140,7 @@ function Workspace(props) {
                     }
                 ]
 
-                setSegmentOptionsList(segOptList)
+                setSegmentOptionsList(segOptList?.filter(each => each.option?.trim() !== ""))
 
                 let thisSegmentTags = "";
                 let segmentData = translatedResponse.find((element) => element.segment_id == id);
@@ -4289,7 +4289,7 @@ function Workspace(props) {
                 if (response.data !== undefined) {
                     if (response.data.res !== null || response.data.res.length > 0) {
                         setGlossaryData(response.data.res)
-                        showTmSectionFunction();
+                        // showTmSectionFunction();
                         handleToggleVisibility(true);
                         if (!advanceToolbarOpenedForTm) {
                             let segmentData = translatedResponse.find((element) => element.segment_id == id);
