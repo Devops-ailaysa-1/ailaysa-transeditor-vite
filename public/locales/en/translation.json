@@ -1155,7 +1155,7 @@
     "select_word_to_add": "Select a word to add!",
     "glossary_selected_warning_text": "Glossaries added. Remove to switch to page translation.",
     "options": "Options",
-    "options_and_gloss": "Options & Glossaries",
-    "no_option": "No options"
-
+    "show_tags": "Show tags",
+    "hide_tags": "Hide tags",
+    "select_term_to_delete": "Select term(s) to delete"
 }
