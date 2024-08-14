@@ -9041,7 +9041,6 @@ function Workspace(props) {
                     selectedCoordinates={selectedCoordinates}
                     setSelectedCoordinates={setSelectedCoordinates} 
                     sourceSelectionText={sourceSelectionText}
-                    setSourceSelectionText={setSourceSelectionText}
                     targetSelectionText={targetSelectionText}
                     defaultGlossDetailsRef={defaultGlossDetailsRef}
                     taskId={defaultGlossDetailsRef.current ? defaultGlossDetailsRef.current?.gloss_task_id : documentDetailsRef.current.task_id}
