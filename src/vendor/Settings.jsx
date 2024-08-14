@@ -1681,7 +1681,7 @@ const Settings = (props) => {
                                             t("translation_memories")
                                             :
                                             activeTab === "2" ?
-                                                t("translation_memories")
+                                                t("termbases")
                                                 :
                                                 activeTab === "3" ?
                                                     t("ailaysa_glossaries")
