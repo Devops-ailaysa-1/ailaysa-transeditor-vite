@@ -85,7 +85,8 @@ export const OnTheFlyGlossary = (props) => {
         sourceSelectionText,
         targetSelectionText,
         defaultGlossDetailsRef,
-        taskId
+        taskId,
+        focusedDivIdRef
     } = props
 
     const {t} = useTranslation()
@@ -161,6 +162,7 @@ export const OnTheFlyGlossary = (props) => {
         // console.log(documentTaskIdRef.current)
 
         formData.append("task_id", taskId);
+        formData.append("segment_id", focusedDivIdRef.current);
         if(source !== "") formData.append("source", source);
         else if(target !== "") formData.append("target", target);
 
@@ -240,7 +242,6 @@ export const OnTheFlyGlossary = (props) => {
             },
         });
     } 
-
 
     return (
         <>

@@ -6877,7 +6877,7 @@ function Workspace(props) {
         let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
         selTxt = removeSpecificTag(selTxt, 'mark')
 
-        setTargetSelectionText(selTxt)
+        setTargetSelectionText(Config.unescape(selTxt))
         if(window.getSelection().toString()?.trim() === '' || dictionaryTerm !== selTxt){
             showDictionaryRef.current?.classList.remove("toolbar-list-icons-active")
         }
@@ -6909,7 +6909,7 @@ function Workspace(props) {
         selTxt = removeSpecificTag(selTxt, 'mark')
 
         // console.log(selTxt)
-        setSourceSelectionText(selTxt)
+        setSourceSelectionText(Config.unescape(selTxt))
     }
 
     // ================================================================================================================
@@ -9044,6 +9044,7 @@ function Workspace(props) {
                     targetSelectionText={targetSelectionText}
                     defaultGlossDetailsRef={defaultGlossDetailsRef}
                     taskId={defaultGlossDetailsRef.current ? defaultGlossDetailsRef.current?.gloss_task_id : documentDetailsRef.current.task_id}
+                    focusedDivIdRef={focusedDivIdRef}
                 />
             )}
         </React.Fragment>
