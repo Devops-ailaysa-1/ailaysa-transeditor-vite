@@ -83,10 +83,11 @@ export const OnTheFlyGlossary = (props) => {
         selectedCoordinates, 
         setSelectedCoordinates,
         sourceSelectionText,
+        setSourceSelectionText,
         targetSelectionText,
         defaultGlossDetailsRef,
         taskId,
-        focusedDivIdRef
+        focusedDivIdRef,
     } = props
 
     const {t} = useTranslation()
@@ -175,6 +176,8 @@ export const OnTheFlyGlossary = (props) => {
                 let data = response.data
                 // console.log('source: '+source)
                 // console.log('target: '+target)
+
+                setSourceSelectionText(data?.root_word)
                 
                 if(data?.pos_tag){
                     setSelectedPOS(partOfSpeechOptions.find(each => each.label === data?.pos_tag))
