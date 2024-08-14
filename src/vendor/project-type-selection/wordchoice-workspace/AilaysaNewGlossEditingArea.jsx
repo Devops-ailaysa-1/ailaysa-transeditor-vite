@@ -1271,36 +1271,6 @@ const AilaysaNewGlossEditingArea = (props) => {
                     setFilesList={setFilesList}
                 />
             )}
-
-            {showDeleteConfirmationModal && (
-                <Rodal
-                    visible={showDeleteConfirmationModal}
-                    showCloseButton={false}
-                    onClose={() => showDeleteConfirmationModal(false)}
-                    className="ai-mark-confirm-box"
-                >
-                    <div className="confirmation-wrapper">
-                        <img
-                            src={ConfirmIcon}
-                            alt="confirm-icon"
-                        />
-                        {/* {
-                            termToDeleteId !== null ? 
-                                <h2>{`${t("delete_the_term")} ${termtoDelete}?`}</h2> : 
-                                // <h2>{termtoDelete} terms are selected <br/> Are you sure want to delete?</h2>   
-                            } */}
-                            <h2>{t("delete_term_alert_note")}</h2>   
-                        <div className="button-row">
-                            <button className="mydocument-AiMarkCancel" onClick={() => setShowDeleteConfirmationModal(false)}>
-                            <span className="cancel-txt">{t("cancel")}</span>
-                            </button>
-                            <button className="mydocument-AiMarkSubmit" onClick={handleBulkTermDelete}>
-                            <span className="submit-txt">{t("delete")}</span>
-                            </button>
-                        </div>
-                    </div>
-                </Rodal>
-            )}
         </>
     )
 }
