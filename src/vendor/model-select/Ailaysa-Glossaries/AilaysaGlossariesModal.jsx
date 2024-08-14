@@ -83,7 +83,7 @@ export const AilaysaGlossariesModal = (props) => {
 
     const getProjectFiles = () => {
         Config.axios({
-            url: `${Config.BASE_URL}/workspace/files_jobs/${documentDetails.project}/`,
+            url: `${Config.BASE_URL}/workspace/files_jobs/${documentDetails.project}/?task=${documentDetails.task_id}`,
             auth: true,
             success: (response) => {
                 try {
