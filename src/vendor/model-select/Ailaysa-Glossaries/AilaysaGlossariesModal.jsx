@@ -86,7 +86,13 @@ export const AilaysaGlossariesModal = (props) => {
             url: `${Config.BASE_URL}/workspace/files_jobs/${documentDetails.project}/`,
             auth: true,
             success: (response) => {
-                projectFilesListRef.current = response.data.files
+                try {
+                    // exclude the pdf files from the list - pdf files can't be used for term extraction
+                    let list = response.data.files.filter(each => each.filename.split('.')[1].toLowerCase() !== 'pdf')
+                    projectFilesListRef.current = list
+                } catch(e) {
+                    console.log(e)
+                }
             },
         });
     }
