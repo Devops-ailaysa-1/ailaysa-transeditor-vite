@@ -175,6 +175,11 @@ export const OnTheFlyGlossary = (props) => {
                 let data = response.data
                 // console.log('source: '+source)
                 // console.log('target: '+target)
+                
+                if(data?.pos_tag){
+                    setSelectedPOS(partOfSpeechOptions.find(each => each.label === data?.pos_tag))
+                }
+
                 if(source !== ""){
                     setInputData({
                         sl_term: source,
