@@ -258,6 +258,7 @@ export const ImportTerms = (props) => {
             formData.append("file_id", each);
         })
         formData.append("gloss_task_id", defaultGlossDetailsRef.current?.gloss_task_id);
+        formData.append("tans_task_id", taskId);
         
         Config.axios({
             url: Config.BASE_URL + "/glex/extract_text",
@@ -267,7 +268,7 @@ export const ImportTerms = (props) => {
             success: (response) => {
                 try{
 
-                    setSelectedFileIds(selectedFileIds?.filter(each => !response.data.some(file => file.id == each)))
+                    setSelectedFileIds(selectedFileIds?.filter(each => !response.data.some(file => file.term_model_file == each)))
 
                     let newArr = projectFilesList.map(obj => {
                         if(selectedFileIds.includes(obj.id)){
@@ -299,7 +300,7 @@ export const ImportTerms = (props) => {
 
     const checkExtractionFileStatus = () => {
         Config.axios({
-            url: Config.BASE_URL + `/glex/get_extract_text_status?project_id=${projectId}`,
+            url: Config.BASE_URL + `/glex/get_extract_text_status?project_id=${projectId}&task=${taskId}`,
             auth: true,
             success: (response) => {
                 let newArr = projectFilesList.map(obj => {
@@ -313,7 +314,7 @@ export const ImportTerms = (props) => {
                 })
                 setProjectFilesList(newArr)
 
-                setSelectedFileIds(selectedFileIds.filter(each => each != newArr.find(each => ["finished", "failed", "pending"].includes(each?.status)).id))
+                setSelectedFileIds(selectedFileIds.filter(fileId => !newArr.some(each => ["finished", "failed", "pending"].includes(each?.status) && fileId == each.id)))
 
                 if(response.data?.find(file => file.status === "PENDING")){
                     fileExtractionTimeOutRef.current = setTimeout(() => {
