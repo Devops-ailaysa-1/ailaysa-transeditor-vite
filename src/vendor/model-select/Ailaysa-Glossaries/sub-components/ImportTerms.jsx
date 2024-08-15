@@ -258,7 +258,7 @@ export const ImportTerms = (props) => {
             formData.append("file_id", each);
         })
         formData.append("gloss_task_id", defaultGlossDetailsRef.current?.gloss_task_id);
-        formData.append("tans_task_id", taskId);
+        formData.append("trans_task_id", taskId);
         
         Config.axios({
             url: Config.BASE_URL + "/glex/extract_text",
