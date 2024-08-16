@@ -915,22 +915,22 @@ const CreateGlossaries = (props) => {
 				formData.append("mt_enable", mtEnable);
 
 				if(primaryGlossarySourceName !== ""){
-						formData.append("primary_glossary_source_name", primaryGlossarySourceName);
+						formData.append("primary_glossary_source_name", primaryGlossarySourceName !== null ? primaryGlossarySourceName : "");
 				}
 				if(glossaryCopyrightOwner !== ""){
-						formData.append("source_Copyright_owner", glossaryCopyrightOwner);
+						formData.append("source_Copyright_owner", glossaryCopyrightOwner !== null ? glossaryCopyrightOwner : "");
 				}
 				if(detailsOfPrimaryGlossarySourceName !== ""){
-						formData.append("details_of_PGS", detailsOfPrimaryGlossarySourceName);
+						formData.append("details_of_PGS", detailsOfPrimaryGlossarySourceName !== null ? detailsOfPrimaryGlossarySourceName : "");
 				}
 				if(glossaryGeneralNotes !== ""){
-						formData.append("notes", glossaryGeneralNotes);
+						formData.append("notes", glossaryGeneralNotes !== null ? glossaryGeneralNotes : "");
 				}
 				
 				formData.append("usage_permission", selectedUsagePermission?.label);
 				
 				if(glossaryLicense !== ""){
-						formData.append("public_license", glossaryLicense);
+						formData.append("public_license", glossaryLicense !== null ? glossaryLicense : "");
 				}
 
 				let stepsToRemoveList = stepOptions?.filter(stepOpt => selectedSteps?.some(each => stepOpt.value !== each.value))
