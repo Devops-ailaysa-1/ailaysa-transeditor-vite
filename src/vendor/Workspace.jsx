@@ -341,7 +341,7 @@ function Workspace(props) {
 
     const [grammarPopoverOpen, setGrammarPopoverOpen] = useState(false)
     const [paraphrasePopoverOpen, setParaphrasePopoverOpen] = useState(false)
-    const [paraPhraseResList, setParaPhraseResList] = useState([])
+    const [paraPhraseResList, setParaPhraseResList] = useState(null)
     const [paraPhraseTag, setparaPhraseTag] = useState("")
     const [paraPhrasePopoverTarget, setparaPhrasePopoverTarget] = useState("")
     const [synonymsResList, setSynonymsResList] = useState([])
@@ -435,7 +435,6 @@ function Workspace(props) {
     
     // store selection coordinates
     const [selectedCoordinates, setSelectedCoordinates] = useState(null)
-    const [segmentOptionsList, setSegmentOptionsList] = useState([])
     
     const forcedLoaderRef = useRef(false)
     const glossarySrcFieldRef = useRef(null)
@@ -574,6 +573,7 @@ function Workspace(props) {
     const selectionRangeRef = useRef();
     const lowCreditAlertCounter = useRef(1)
     const segmentDiffButton = useRef(null)
+    const rawMtResponseRef = useRef(null)
 
     const showConcoradanceRef = useRef(null)
     const prevPathRef = useRef(null)
@@ -1193,7 +1193,7 @@ function Workspace(props) {
             // spellCheck();
             // reset the paraphrase states when segment focus is changed
             setparaphraseTrigger(false)
-            setParaPhraseResList([])
+            setParaPhraseResList(null)
             setQaData([])
             // setSegmentDifference([])
             setQaContent([])
@@ -3063,14 +3063,18 @@ function Workspace(props) {
         }
     }
 
-    const replaceWithNewPara = (e, value) => {
-        updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", value + paraPhraseTag);
-        updateSegmentStatus(focusedDivIdRef.current, 103);
-        changeEditedStatus(focusedDivIdRef.current, "unsaved");
-        handleTransphrasePopoverClose()
-        setTimeout(() => {
-            updateTranslationById(null, focusedDivIdRef.current, true, { forceUpdate: true });
-        }, 200);
+    const replaceWithNewPara = (e, value, tag = "") => {
+        try {
+            updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", value + tag);
+            updateSegmentStatus(focusedDivIdRef.current, 103);
+            changeEditedStatus(focusedDivIdRef.current, "unsaved");
+            handleTransphrasePopoverClose()
+            setTimeout(() => {
+                updateTranslationById(null, focusedDivIdRef.current, true, { forceUpdate: true });
+            }, 250);
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     const repalceWithNewSynonym = (e, value) => {
@@ -3162,7 +3166,7 @@ function Workspace(props) {
     const getParaphrases = async (option) => {
 
         setIsParaphrasing(true)
-        setParaPhraseResList([]) // reset the paraphrase response list before getting the new list
+        setParaPhraseResList(null) // reset the paraphrase response list before getting the new list
         let text = ''
         if (targetLanguageId == 17) {
             text = replaceTagsWithText(unescape(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML), "")
@@ -3223,8 +3227,8 @@ function Workspace(props) {
                 // console.log(data)
                 let response = await data.json()
                 if (data.status === 200) {
-                    setParaPhraseResList(response?.result)
-                    setparaPhraseTag(response?.tag)
+                    setParaPhraseResList(response)
+                    // setparaPhraseTag(response?.tag)
                     setIsParaphrasing(false)
                     if (response?.msg === 'error') {
                         setIsParaphrasing(false)
@@ -4102,8 +4106,6 @@ function Workspace(props) {
             getNerTerms(id)
         }
 
-        getSegmentDiff()
-
         changeEditedStatus(id);
 
         let advanceToolbarOpenedForTm = false;
@@ -4136,14 +4138,9 @@ function Workspace(props) {
             success: (response) => {
                 let mtTmResponse = response.data;
 
-                let segOptList = [
-                    {
-                        id: 1,
-                        option: response.data?.mt_only
-                    }
-                ]
-
-                setSegmentOptionsList(segOptList?.filter(each => each.option?.trim() !== ""))
+                rawMtResponseRef.current = mtTmResponse?.mt_only
+               
+                getSegmentDiff()
 
                 let thisSegmentTags = "";
                 let segmentData = translatedResponse.find((element) => element.segment_id == id);
@@ -5948,7 +5945,23 @@ function Workspace(props) {
             success: (response) => {
                 // console.log(response.data)
                 setSegmentHistoryLoader(false)
-                setSegmentDifference(response.data)
+                let mtOnlyObj = {
+                    "segment": focusedDivIdRef.current,
+                    "created_at": "",
+                    "user_name": "-",
+                    "status_id": 104,
+                    "isMtOnly": true, 
+                    "step_name": t("original_mt"),
+                    "segment_difference": [
+                        {
+                            "id": generateKey(),
+                            "sentense_diff_result": rawMtResponseRef.current,
+                            "diff_corrected": rawMtResponseRef.current,
+                            "save_type": "-"
+                        }
+                    ]
+                }
+                setSegmentDifference([...response.data, mtOnlyObj])
             },
             error: (err) => {
                 setSegmentHistoryLoader(false)
@@ -8725,14 +8738,12 @@ function Workspace(props) {
                 segmentDifference={segmentDifference}
                 paraphraseTrigger={paraphraseTrigger}
                 selectedParaphrase={selectedParaphrase}
-                paraPhraseResList={paraPhraseResList}
                 replaceWithNewPara={replaceWithNewPara}
                 rightAlignLangs={rightAlignLangs}
                 targetLanguage={targetLanguage}
                 commentsLoader={commentsLoader}
                 segmentHistoryLoader={segmentHistoryLoader}
                 showSegmentComments={showSegmentComments}
-                segmentOptionsList={segmentOptionsList}
                 getTranslationMatch={getTranslationMatch}
             />
 
@@ -8801,7 +8812,7 @@ function Workspace(props) {
                         <div className="header-wrapper">
                             <span className="header-text d-flex">
                                 {selectedParaphrase}
-                                {paraPhraseResList?.length !== 0 && (
+                                {paraPhraseResList !== null && (
                                     <span className="transphrase-reload-icon" onClick={() => getParaphrases(selectedParaphrase)}>
                                         <ReplayIcon style={{ fontSize: '18px' }} />
                                     </span>
@@ -8815,16 +8826,16 @@ function Workspace(props) {
                             </span>
 
                         </div>
-                        {(paraphraseTrigger && paraPhraseResList?.length !== 0) ? (
+                        {(paraphraseTrigger && paraPhraseResList !== null) ? (
                             <div className="paraphrase-result-div">
                                 <ul className="list-unstyled">
-                                    <li onClick={(e) => replaceWithNewPara(e, paraPhraseResList)}>
+                                    <li onClick={(e) => replaceWithNewPara(e, paraPhraseResList?.result, paraPhraseResList?.tag)}>
                                         <div className="capsule-wrapper">
                                             <div className={"capsule " + (rightAlignLangs.current.indexOf(targetLanguage) != -1 ? 'align-right' : '')}>
-                                                {paraPhraseResList}
+                                                {paraPhraseResList?.result}
                                             </div>
-                                            <Tooltip title="Copy to segment" placement="top" arrow>
-                                                <div className="content-copy" onClick={(e) => replaceWithNewPara(e, paraPhraseResList)}>
+                                            <Tooltip title={t("copy_to_segment")} placement="top" arrow>
+                                                <div className="content-copy" onClick={(e) => replaceWithNewPara(e, paraPhraseResList?.result, paraPhraseResList?.tag)}>
                                                     <ContentCopyIcon />
                                                 </div>
                                             </Tooltip>
