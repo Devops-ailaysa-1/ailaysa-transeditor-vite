@@ -1158,5 +1158,6 @@
     "show_tags": "Show tags",
     "hide_tags": "Hide tags",
     "select_term_to_delete": "Select term(s) to delete",
-    "original_mt": "Original machine translation"
+    "original_mt": "Original machine translation",
+    "no_match_found_from_tm": "No matches found from Translation memories"
 }

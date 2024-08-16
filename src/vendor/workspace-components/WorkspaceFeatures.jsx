@@ -242,7 +242,7 @@ const WorkspaceFeatures = (props) => {
                 </div>
                 <div className={advancedOptionVisibility ? "workspace-working-area tab-content" : "workspace-working-area tab-content d-none"} id="pills-tabContent">
                     <div className="tab-pane fade show active" id="pills-tm-tb" role="tabpanel" aria-labelledby="pills-tm-tb-tab">
-                        {showTmSection && (
+                        {/* {showTmSection && ( */}
                             <section className="top-section-show">
                                 <div className="modal-top-body">
                                     <div className="tm-tb-main-row">
@@ -250,7 +250,7 @@ const WorkspaceFeatures = (props) => {
                                             {
                                                 translationMatches?.length === 0 ?
                                                     <div className="tm-container-no-matches-found">
-                                                        <small>{t("no_matches_found")}</small>
+                                                        <small>{t("no_match_found_from_tm")}</small>
                                                     </div>
                                                     :
                                                     <>
@@ -435,7 +435,7 @@ const WorkspaceFeatures = (props) => {
                                     </div>
                                 </div>
                             </section>
-                        )}
+                        {/* )} */}
                     </div>
                     <div className="tab-pane fade" id="pills-concordance" role="tabpanel" aria-labelledby="pills-concordance-tab">
                         {
@@ -772,7 +772,7 @@ const WorkspaceFeatures = (props) => {
                                                                 <Tooltip title={t("copy_to_segment")} placement="top" arrow>
                                                                     <IconButton
                                                                         className="p-[10px]"
-                                                                        onClick={(e) => replaceWithNewPara(e, list?.segment_difference[0]?.diff_corrected)}
+                                                                        onClick={(e) => replaceWithNewPara(e, list?.segment_difference[0]?.diff_corrected, list?.segment_difference[0]?.tags)}
                                                                     >
                                                                         <ContentCopyIcon />
                                                                     </IconButton>
