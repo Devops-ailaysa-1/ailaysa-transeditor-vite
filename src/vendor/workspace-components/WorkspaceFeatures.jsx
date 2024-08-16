@@ -4,7 +4,7 @@ import NavigateNextSharpIcon from '@mui/icons-material/NavigateNextSharp';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Config from "../Config";
-import { TextareaAutosize } from "@mui/material";
+import { IconButton, TextareaAutosize } from "@mui/material";
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from "../../vendor/styles-svg/DeleteIcon";
@@ -74,14 +74,12 @@ const WorkspaceFeatures = (props) => {
         segmentDifference,
         paraphraseTrigger,
         selectedParaphrase,
-        paraPhraseResList,
         replaceWithNewPara,
         rightAlignLangs,
         targetLanguage,
         commentsLoader,
         segmentHistoryLoader,
         showSegmentComments,
-        segmentOptionsList,
         getTranslationMatch
     } = props
 
@@ -760,14 +758,46 @@ const WorkspaceFeatures = (props) => {
                                         ) : segmentDifference?.length !== 0 ? (
                                             segmentDifference?.map((list, index) => {
                                                 return (
-                                                    <tr key={index}>
-                                                        <td><div className="segment-list" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.sentense_diff_result }}></div></td>
-                                                        <td><div className="segment-avatar-list"><span dangerouslySetInnerHTML={{ __html: list?.user_name?.slice(0, 1)?.toUpperCase() }}></span><p className="name" dangerouslySetInnerHTML={{ __html: list?.user_name }}></p></div></td>
-                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.save_type }}></div></td>
-                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.step_name }}></div></td>
-                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.status_id == 104 ? t('machine_translation') : list?.status_id == 103 ? t('machine_translation') : list?.status_id == 105 ? t("manual") : list?.status_id == 106 ? t("manual") : list?.status_id == 101 ? t("translation_mem") : t("translation_mem") }}></div></td>
-                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: Config.getProjectCreatedDate(list?.created_at) }}></div></td>
-                                                    </tr>
+                                                    <>
+                                                        {list?.isMtOnly && (
+                                                            <tr className="border-b-0 -mb-2 mt-1">
+                                                                <td className='flex-1'>
+                                                                    <div className="segment-text font-semibold">{t("original_mt")}</div>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                        <tr key={index}>
+                                                            <td className="flex gap-2 items-center">
+                                                                <div className="segment-list" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.sentense_diff_result }}></div>
+                                                                <Tooltip title={t("copy_to_segment")} placement="top" arrow>
+                                                                    <IconButton
+                                                                        className="p-[10px]"
+                                                                        onClick={(e) => replaceWithNewPara(e, list?.segment_difference[0]?.diff_corrected)}
+                                                                    >
+                                                                        <ContentCopyIcon />
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                            </td>
+                                                            <td>
+                                                                <div className="segment-avatar-list">
+                                                                    {list?.user_name !== "-" && (
+                                                                        <span dangerouslySetInnerHTML={{ __html: list?.user_name?.slice(0, 1)?.toUpperCase() }}></span>
+                                                                    )}
+                                                                    <p className="name" dangerouslySetInnerHTML={{ __html: list?.user_name }}></p>
+                                                                </div>
+                                                            </td>
+                                                            <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.save_type }}></div></td>
+                                                            <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.step_name }}></div></td>
+                                                            <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.status_id == 104 ? t('machine_translation') : list?.status_id == 103 ? t('machine_translation') : list?.status_id == 105 ? t("manual") : list?.status_id == 106 ? t("manual") : list?.status_id == 101 ? t("translation_mem") : t("translation_mem") }}></div></td>
+                                                            <td>
+                                                                {list?.created_at !== "" ? (
+                                                                    <div className="segment-text" dangerouslySetInnerHTML={{ __html: Config.getProjectCreatedDate(list?.created_at) }}></div>
+                                                                ) : (
+                                                                    "-"
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    </>
                                                 )
     
                                             })
@@ -781,19 +811,17 @@ const WorkspaceFeatures = (props) => {
                             </section>
                         }
                     </div>
-                    <div className="tab-pane fade" id="pills-paraphrase" role="tabpanel" aria-labelledby="pills-paraphrase-tab">
+                    {/* <div className="tab-pane fade" id="pills-paraphrase" role="tabpanel" aria-labelledby="pills-paraphrase-tab">
                         <section className="paraphrase-section">
                             {paraphraseTrigger ? (paraPhraseResList?.length !== 0 ?
                                 (
                                     <>
                                         <div className="paraphrase-header-wrap">
                                             <p></p>
-                                            {/* <TrendingFlatIcon className="arrow-icon" /> */}
                                             <p>{selectedParaphrase}</p>
                                         </div>
                                         <div className="paraphrase-div">
                                             <div className="paraphrase-source-div">
-                                                {/* {paraphraseText} */}
                                             </div>
                                             <div className="paraphrase-result-div">
                                                 <ul className="list-unstyled">
@@ -809,12 +837,6 @@ const WorkspaceFeatures = (props) => {
                                                             </Tooltip>
                                                         </div>
                                                     </li>
-                                                    {/* {
-                                                    paraPhraseResList?.map(each => {
-                                                        return (
-                                                        )
-                                                    })
-                                                }     */}
                                                 </ul>
                                             </div>
                                         </div>
@@ -825,7 +847,7 @@ const WorkspaceFeatures = (props) => {
                                     </div>
                                 )) : null}
                         </section>
-                    </div>
+                    </div> */}
                 </div>
             </section>
         </>
