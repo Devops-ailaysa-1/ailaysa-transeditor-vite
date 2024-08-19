@@ -432,6 +432,7 @@ function Workspace(props) {
     const [segmentHistoryLoader, setSegmentHistoryLoader] = useState(false)
     const [isSegmentDataLoading, setIsSegmentDataLoading] = useState(false)
     
+    const [activeFooterTab, setActiveFooterTab] = useState(1)
     
     // store selection coordinates
     const [selectedCoordinates, setSelectedCoordinates] = useState(null)
@@ -545,31 +546,31 @@ function Workspace(props) {
     /*useRef() constants - end*/
 
     /* createRef() constants - start */
-    const toolbarsRef = createRef(null);
-    const specialCharSectionRef = createRef(null);
-    const addGlossarySectionRef = createRef(null);
-    const replaceTargetRef = createRef(null);
-    const findSourceRef = createRef(null);
-    const findTargetRef = createRef(null);
-    const caseMatchRef = createRef(null);
-    const wholeWordMatchRef = createRef(null);
-    const qaSection = createRef();
-    const commentTextArea = createRef();
-    const tmTabButton = createRef();
+    const toolbarsRef = useRef(null);
+    const specialCharSectionRef = useRef(null);
+    const addGlossarySectionRef = useRef(null);
+    const replaceTargetRef = useRef(null);
+    const findSourceRef = useRef(null);
+    const findTargetRef = useRef(null);
+    const caseMatchRef = useRef(null);
+    const wholeWordMatchRef = useRef(null);
+    const qaSection = useRef();
+    const commentTextArea = useRef();
+    const tmTabButton = useRef();
     const segOptionsBtnRef = useRef();
-    const concordanceTabButton = createRef();
-    const commentsTabButton = createRef();
-    const qaTabButton = createRef();
-    const dictionaryTabButton = createRef();
-    const paraphraseTabButton = createRef();
-    const dictionaryTermRef = createRef();
-    const deleteSegmentTranslationRef = createRef();
-    const showFormatSizeRef = createRef();
+    const concordanceTabButton = useRef();
+    const commentsTabButton = useRef();
+    const qaTabButton = useRef();
+    const dictionaryTabButton = useRef();
+    const paraphraseTabButton = useRef();
+    const dictionaryTermRef = useRef();
+    const deleteSegmentTranslationRef = useRef();
+    const showFormatSizeRef = useRef();
     const showTagViewRef = useRef();
-    const showFindReplaceRef = createRef();
-    // const showConcoradanceRef = createRef();
-    const showSpecialCharactersRef = createRef();
-    const contentEditableParentRef = createRef();
+    const showFindReplaceRef = useRef();
+    // const showConcoradanceRef = useRef();
+    const showSpecialCharactersRef = useRef();
+    const contentEditableParentRef = useRef();
     const selectionRangeRef = useRef();
     const lowCreditAlertCounter = useRef(1)
     const segmentDiffButton = useRef(null)
@@ -1702,7 +1703,6 @@ function Workspace(props) {
                 );
                 setQaCountShow(false)
             } else {
-                console.log(qaData)
                 qaData?.map((value, index) => {
                     setQaCountShow(true)
                     if (Object.values(value)[0].source.length || Object.values(value)[0].target.length || Object.values(value)[0].ErrorNote.length) {
@@ -4046,12 +4046,23 @@ function Workspace(props) {
 
     /* Show / hide the TM section in the footer toolbar */
     const showTmSectionFunction = (show = true) => {
-        if (show) {
-            // if (localStorage.getItem('showTmSection') === 'true' || localStorage.getItem('showTmSection') == null)
-            setShowTmSection(true);
-            scrollLeft()
-        } else setShowTmSection(false);
+        console.log("activeFooterTab from tm" + activeFooterTab)
+        setActiveFooterTab(1)
+        // if (show) {
+        //     // tmTabButton.current?.click();
+        //     // if (localStorage.getItem('showTmSection') === 'true' || localStorage.getItem('showTmSection') == null)
+        //     setShowTmSection(true);
+        //     scrollLeft()
+        // } else setShowTmSection(false);
     };
+
+    
+    useEffect(() => {
+        console.log("activeFooterTab")
+        console.log(activeFooterTab)
+    }, [activeFooterTab])
+    
+
 
     const toggleListening = () => {
         if (recognition.current === null) {
@@ -4097,7 +4108,7 @@ function Workspace(props) {
         setGrammarPopoverOpen(false)
         setgrammarCheckPopoverTarget("")
         // setPopoverOpen(false)
-        showTmSectionFunction(false);
+        // showTmSectionFunction();
         
         setFocusedDivId(id);
         ctrlAClicked.current = false;
@@ -4281,6 +4292,7 @@ function Workspace(props) {
     }
 
     const searchGlossaryForDoc = (e) => {
+        setGlossaryData([])
         let glossaryFormdata = new FormData();
         let sourceText = e.target.getAttribute("data-source-text");
         glossaryFormdata.append("user_input", sourceText);
@@ -4294,8 +4306,8 @@ function Workspace(props) {
             success: (response) => {
                 if (response.data !== undefined) {
                     if (response.data.res !== null || response.data.res.length > 0) {
-                        setGlossaryData(response.data.res)
                         showTmSectionFunction();
+                        setGlossaryData(response.data.res)
                         handleToggleVisibility(true);
                         if (!advanceToolbarOpenedForTm) {
                             let segmentData = translatedResponse.find((element) => element.segment_id == id);
@@ -8752,6 +8764,8 @@ function Workspace(props) {
                 segmentHistoryLoader={segmentHistoryLoader}
                 showSegmentComments={showSegmentComments}
                 getTranslationMatch={getTranslationMatch}
+                activeFooterTab={activeFooterTab}
+                setActiveFooterTab={setActiveFooterTab}
             />
 
             {popoverTarget != null && (
