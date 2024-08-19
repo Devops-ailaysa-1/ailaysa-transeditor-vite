@@ -2324,7 +2324,7 @@ function TranslateFiles(props) {
             if(projectTaskList?.find(each => each.isProcessing)) {
                 return true
             }
-            return false
+            return true
         }
         return true
     }
