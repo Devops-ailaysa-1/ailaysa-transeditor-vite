@@ -353,8 +353,8 @@ function App() {
 
                         {/* validates the cookies when the document page get visibility - if validator fails redirect to login page */}
                         <CookieChecker 
-                            cookieName={import.meta.env.REACT_APP_USER_COOKIE_KEY_NAME}
-                            url={import.meta.env.REACT_APP_LOGIN_URL}
+                            cookieName={import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME}
+                            url={import.meta.env.VITE_APP_LOGIN_URL}
                             jsonKey="token"
                             guardClause={true}
                         />

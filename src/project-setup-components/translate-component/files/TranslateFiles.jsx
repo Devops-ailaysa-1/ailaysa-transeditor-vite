@@ -892,9 +892,10 @@ function TranslateFiles(props) {
 
     /* Selected source language should not display on the target language options */
     const removeSelectedSourceFromTarget = () => {
-        setTargetLanguageOptions(
-            targetLanguageOptionsRef.current.filter(
-                (element) => element.id !== sourceLanguage
+        console.log(targetLanguageOptionsRef.current)
+        console.log(sourceLanguage)
+        setTargetLanguageOptions(prevState => targetLanguageOptionsRef.current.filter(
+                (element) => element.id != sourceLanguage
             )
         );
     };
@@ -2324,7 +2325,7 @@ function TranslateFiles(props) {
             if(projectTaskList?.find(each => each.isProcessing)) {
                 return true
             }
-            return true
+            return false
         }
         return true
     }
@@ -2391,12 +2392,18 @@ function TranslateFiles(props) {
         let tar = clickedLang.value.split('->')[1]?.split(',')
         setSourceLabel(targetLanguageOptionsRef.current?.find((element) => element.id == src).language)
         setSourceLanguage(src)
+        console.log(src)
         let selectedTar = []
         tar?.map(eachTar => {
             selectedTar.push(targetLanguageOptionsRef.current?.find((element) => element.id == eachTar))
         })
         setTargetLanguage([...new Set(selectedTar)]);
     }
+
+    useEffect(() => {
+        console.log(targetLanguageOptions)
+    }, [targetLanguageOptions])
+    
 
     const focusSourceLangDiv = () => {
         if (sourceLangRef.current !== null) sourceLangRef.current.style = 'border: 1px solid #E74C3C;'

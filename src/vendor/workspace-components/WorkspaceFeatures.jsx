@@ -772,7 +772,7 @@ const WorkspaceFeatures = (props) => {
                                                                 <Tooltip title={t("copy_to_segment")} placement="top" arrow>
                                                                     <IconButton
                                                                         className="p-[10px]"
-                                                                        onClick={(e) => replaceWithNewPara(e, list?.segment_difference[0]?.diff_corrected, list?.segment_difference[0]?.tags)}
+                                                                        onClick={(e) => replaceWithNewPara(e, list?.segment_difference[0]?.diff_corrected, list?.segment_difference[0]?.target_tags)}
                                                                     >
                                                                         <ContentCopyIcon />
                                                                     </IconButton>
