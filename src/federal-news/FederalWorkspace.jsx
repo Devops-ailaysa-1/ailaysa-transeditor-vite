@@ -167,9 +167,9 @@ const FederalWorkspace = (props) => {
             isLoggedIn: true,
             fromAilaysa: true,
         };
-        Cookies.remove(import.meta.VITE_APP_USER_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
-        Cookies.set(import.meta.VITE_APP_USER_COOKIE_KEY_NAME, JSON.stringify(userState), { domain: Config.COOKIE_DOMAIN });
-        Config.userState = JSON.parse(Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME));
+        Cookies.remove(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
+        Cookies.set(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME, JSON.stringify(userState), { domain: Config.COOKIE_DOMAIN });
+        Config.userState = JSON.parse(Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME));
     } else Config.redirectIfNotLoggedIn(props);
     /* If coming with token from some other app like ailaysa.com. No longer used - start */
 
@@ -3132,7 +3132,7 @@ const FederalWorkspace = (props) => {
     const fetchSynonym = async () => {
         // get token from cache
         let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) : null
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
         let token = userCacheData != null ? userCacheData?.token : "";
 

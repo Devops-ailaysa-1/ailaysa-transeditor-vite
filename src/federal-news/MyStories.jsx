@@ -3669,7 +3669,7 @@ function MyStories(props) {
         // setAnimateDownloding('MTRAW')
         try {
             let userCacheData = JSON.parse(
-                typeof Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) : null
+                typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
             );
             let token = userCacheData != null ? userCacheData?.token : "";
             

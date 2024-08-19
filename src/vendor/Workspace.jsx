@@ -1702,6 +1702,7 @@ function Workspace(props) {
                 );
                 setQaCountShow(false)
             } else {
+                console.log(qaData)
                 qaData?.map((value, index) => {
                     setQaCountShow(true)
                     if (Object.values(value)[0].source.length || Object.values(value)[0].target.length || Object.values(value)[0].ErrorNote.length) {
@@ -3065,11 +3066,12 @@ function Workspace(props) {
 
     const replaceWithNewPara = (e, value, tag = "") => {
         try {
+            console.log(value)
             updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", value + tag);
-            updateSegmentStatus(focusedDivIdRef.current, 103);
-            changeEditedStatus(focusedDivIdRef.current, "unsaved");
             handleTransphrasePopoverClose()
             setTimeout(() => {
+                updateSegmentStatus(focusedDivIdRef.current, 103);
+                changeEditedStatus(focusedDivIdRef.current, "unsaved");
                 updateTranslationById(null, focusedDivIdRef.current, true, { forceUpdate: true });
             }, 250);
         }catch (e) {
@@ -3708,7 +3710,7 @@ function Workspace(props) {
                         }
                         updateSegmentStatus(id, response.data.status);
                         getDocumentProgressData();
-                        if (!isTemp) showSegmentQa(id)
+                        // if (!isTemp) showSegmentQa(id)
 
                         // if confirm button is clicked, this will move the focus to next unconfirmed segment otherwise focus the un-opned segment  
                         if (!isTemp) {
@@ -4137,13 +4139,17 @@ function Workspace(props) {
             auth: true,
             success: (response) => {
                 let mtTmResponse = response.data;
-
-                rawMtResponseRef.current = mtTmResponse?.mt_only
                
                 getSegmentDiff()
 
                 let thisSegmentTags = "";
                 let segmentData = translatedResponse.find((element) => element.segment_id == id);
+
+                rawMtResponseRef.current = {
+                    mt: mtTmResponse?.mt_only,
+                    tags: segmentData.target_tags
+                }
+
                 let segmentStatus = allSegmentStatuses.current[id];
                 if (segmentStatus) {
                     if (segmentStatus == 101 || segmentStatus == 103 || segmentStatus == 105) changeEditedStatus(id, "unsaved");
@@ -5955,8 +5961,9 @@ function Workspace(props) {
                     "segment_difference": [
                         {
                             "id": generateKey(),
-                            "sentense_diff_result": rawMtResponseRef.current,
-                            "diff_corrected": rawMtResponseRef.current,
+                            "sentense_diff_result": rawMtResponseRef.current.mt,
+                            "diff_corrected": rawMtResponseRef.current.mt,
+                            "target_tags": rawMtResponseRef.current.tags,
                             "save_type": "-"
                         }
                     ]
