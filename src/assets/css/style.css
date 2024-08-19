@@ -5511,6 +5511,9 @@ ul#workspace {
     transition: 0.3s ease;
     overflow: auto;
 }
+.workspace-working-area .tab-pane {
+    height: 100%;
+}
 
 .workspace-tools-bar ul {
     padding-left: 27px;
@@ -5576,6 +5579,9 @@ ul#workspace {
 } */
 
 .workspace-tools-bar .nav-link:hover {
+    border-bottom: 2.5px solid #0074d3;
+}
+.workspace-tools-bar .nav-link.active-tab {
     border-bottom: 2.5px solid #0074d3;
 }
 
