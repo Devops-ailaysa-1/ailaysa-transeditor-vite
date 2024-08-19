@@ -4142,6 +4142,8 @@ function Workspace(props) {
 
         searchTbxForDoc(e)
         searchGlossaryForDoc(e)
+
+        showSegmentComments(segmentId, true)
         
         // if(segment_status) return
 
@@ -5259,6 +5261,7 @@ function Workspace(props) {
                             targetUrls: targetUrls,
                         }));
                     }, 100);
+                    setActiveFooterTab(4)
                 },
             });
             /*Wiktionary call - end*/
@@ -5313,6 +5316,7 @@ function Workspace(props) {
                     setTimeout(() => {
                         setConcordanceData(response.data);
                     }, 100);
+                    setActiveFooterTab(6)
                 }catch(e){
                     console.log(e)
                 }
@@ -5435,7 +5439,7 @@ function Workspace(props) {
             // Outside click close the toolbar. Wait for the toolbar is to be closed
             handleToggleVisibility(true);
         }, 100);
-        showSegmentComments(segmentId, true);
+        showSegmentComments(segmentId, true, true);
     };
 
     /* Show QA section in the footer toolbar */
@@ -5582,7 +5586,7 @@ function Workspace(props) {
     }
 
     /* Get and set all segment comments */
-    const showSegmentComments = (segmentId, showLoader = false) => {
+    const showSegmentComments = (segmentId, showLoader = false, activateTab = false) => {
         segmentId = segmentId ? segmentId : focusedDivId
         if(!segmentId) return 
 
@@ -5609,6 +5613,9 @@ function Workspace(props) {
                 setCommentsLoader(false)
                 if (response.data?.length > 0) updateTranslatedResponseSegment(segmentId, "has_comment", true);
                 else updateTranslatedResponseSegment(segmentId, "has_comment", false);
+                if(activateTab){
+                    setActiveFooterTab(3)
+                }
             },
             error: (err) => {
                 if(err?.message !== "canceled") 
@@ -5691,6 +5698,7 @@ function Workspace(props) {
                         })
                     });
                     setQaData(response.data.data);
+                    setActiveFooterTab(5)
                 }
             },
         });
