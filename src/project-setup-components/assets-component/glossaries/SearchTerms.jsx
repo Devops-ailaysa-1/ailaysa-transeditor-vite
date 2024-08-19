@@ -72,7 +72,7 @@ const SearchTerms = (props) => {
 
 
     const handleCloseCreditsPrompt = () => {
-         Cookies.set("isCreditPromptSeen", true, { domain: import.meta.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
+         Cookies.set("isCreditPromptSeen", true, { domain: import.meta.env.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
          setCreditsPromptClose(false)
     }
 

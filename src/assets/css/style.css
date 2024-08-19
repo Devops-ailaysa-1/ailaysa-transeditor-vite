@@ -2939,7 +2939,8 @@ ul#workspace li:hover .workspace-textarea {
     line-height: 1.3;
     color: #fff;
     vertical-align: middle;
-    word-break: break-all;
+    white-space: nowrap;
+    /* word-break: break-all; */
     cursor: -webkit-pointer;
     cursor: pointer;
     /* cursor:url(../images/double-tap-new.svg), auto; */
@@ -34657,7 +34658,7 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
     height: auto;
     top: -1px;
     right: -124px;
-    z-index: 1080;
+    z-index: 10;
     padding: 6px 0px;
 }
 
@@ -34670,7 +34671,7 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
     width: 194px;
     height: auto;
     left: -92px;
-    z-index: 1080;
+    z-index: 10;
     padding: 12px 0px;
 }
 
