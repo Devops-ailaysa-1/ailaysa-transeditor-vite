@@ -493,6 +493,7 @@
     "issue": "issue",
     "issues": "issues",
     "found": "found",
+    "qa": "QA",
     "qa_text": "Quality analysis",
     "restore_tags": "Restore tags",
     "fileupload_joyride_note_1": "View your files for translation",
@@ -1159,5 +1160,6 @@
     "hide_tags": "Hide tags",
     "select_term_to_delete": "Select term(s) to delete",
     "original_mt": "Original machine translation",
-    "no_match_found_from_tm": "No matches found from Translation memories"
+    "no_match_found_from_tm": "No matches found from Translation memories",
+    "no_match_found_from_gloss_tbx": "No matches found from glossaries or tbx"
 }
