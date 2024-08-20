@@ -1161,5 +1161,5 @@
     "select_term_to_delete": "Select term(s) to delete",
     "original_mt": "Original machine translation",
     "no_match_found_from_tm": "No matches found from Translation memories",
-    "no_match_found_from_gloss_tbx": "No matches found from glossaries or tbx"
+    "no_match_found_from_gloss_tbx": "No matches found from glossaries or termbases"
 }

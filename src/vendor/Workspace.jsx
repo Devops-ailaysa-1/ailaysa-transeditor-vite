@@ -1221,6 +1221,7 @@ function Workspace(props) {
             }catch(e) {
                 console.log(e)
             }
+            setConcordanceData([])
             setIsSegmentDataLoading(true)
         }
     }, [focusedDivId]);
@@ -1640,7 +1641,7 @@ function Workspace(props) {
     useEffect(() => {
         if (didMount) {
             concordanceTabButton.current?.click();
-            scrollLeft()
+            // scrollLeft()
         }
     }, [concordanceData]);
 
@@ -4046,8 +4047,8 @@ function Workspace(props) {
 
     /* Show / hide the TM section in the footer toolbar */
     const showTmSectionFunction = (show = true) => {
-        console.log("activeFooterTab from tm" + activeFooterTab)
         setActiveFooterTab(1)
+        scrollLeft()
         // if (show) {
         //     // tmTabButton.current?.click();
         //     // if (localStorage.getItem('showTmSection') === 'true' || localStorage.getItem('showTmSection') == null)
@@ -4055,14 +4056,6 @@ function Workspace(props) {
         //     scrollLeft()
         // } else setShowTmSection(false);
     };
-
-    
-    useEffect(() => {
-        console.log("activeFooterTab")
-        console.log(activeFooterTab)
-    }, [activeFooterTab])
-    
-
 
     const toggleListening = () => {
         if (recognition.current === null) {
@@ -4142,6 +4135,8 @@ function Workspace(props) {
 
         searchTbxForDoc(e)
         searchGlossaryForDoc(e)
+
+        showSegmentComments(segmentId, true)
         
         // if(segment_status) return
 
@@ -5178,7 +5173,7 @@ function Workspace(props) {
 
     /* Show the dictionary data */
     const showDictionaryFunction = () => {
-        showDictionaryRef.current.classList.remove("toolbar-list-icons-active");
+        // showDictionaryRef.current.classList.remove("toolbar-list-icons-active");
         if (window.getSelection().anchorNode == null || window.getSelection().anchorNode.data == null) {
             Config.toast(t("select_text"), "error");
             return;
@@ -5188,7 +5183,7 @@ function Workspace(props) {
         // console.log(selectedText)
         if (selectedText != "") {
             setDictionaryTerm(selectedText);
-            showDictionaryRef.current.classList.add("toolbar-list-icons-active");
+            // showDictionaryRef.current.classList.add("toolbar-list-icons-active");
         } else {
             if (dictionaryTerm == "") {
                 Config.toast(t("select_text"), "error");
@@ -5259,6 +5254,7 @@ function Workspace(props) {
                             targetUrls: targetUrls,
                         }));
                     }, 100);
+                    setActiveFooterTab(4)
                 },
             });
             /*Wiktionary call - end*/
@@ -5303,16 +5299,16 @@ function Workspace(props) {
             auth: true,
             success: (response) => {
                 try{
-                    showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
-                    handleToggleVisibility(true);
-                    scrollLeft()
-                    
+                    // showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
+                    handleToggleVisibility(true);                    
                     response.data.map((value, index) => {
                         response.data[index].source = higlightText(value.source, selectedText);
                     });
                     setTimeout(() => {
                         setConcordanceData(response.data);
                     }, 100);
+                    setActiveFooterTab(6)
+                    scrollRight()
                 }catch(e){
                     console.log(e)
                 }
@@ -5427,7 +5423,7 @@ function Workspace(props) {
     /* Show the segment comment section on the footer toolbar */
     const showCommentSection = (e) => {
         commentsTabButton.current?.click();
-        scrollLeft()
+        // scrollLeft()
         let segmentId = e.target.getAttribute("data-id");
         // targetContentEditable.current[segmentId].current.focus()
         lastCalledArgs.current.functionName = "showCommentSection";
@@ -5435,13 +5431,13 @@ function Workspace(props) {
             // Outside click close the toolbar. Wait for the toolbar is to be closed
             handleToggleVisibility(true);
         }, 100);
-        showSegmentComments(segmentId, true);
+        showSegmentComments(segmentId, true, true);
     };
 
     /* Show QA section in the footer toolbar */
     const showQaSection = (e) => {
         qaTabButton.current?.click();
-        scrollLeft()
+        // scrollLeft()
         let segmentId = e.target.getAttribute("data-id");
         // console.log(e.target);
         // console.log(segmentId);
@@ -5582,7 +5578,7 @@ function Workspace(props) {
     }
 
     /* Get and set all segment comments */
-    const showSegmentComments = (segmentId, showLoader = false) => {
+    const showSegmentComments = (segmentId, showLoader = false, activateTab = false) => {
         segmentId = segmentId ? segmentId : focusedDivId
         if(!segmentId) return 
 
@@ -5609,6 +5605,9 @@ function Workspace(props) {
                 setCommentsLoader(false)
                 if (response.data?.length > 0) updateTranslatedResponseSegment(segmentId, "has_comment", true);
                 else updateTranslatedResponseSegment(segmentId, "has_comment", false);
+                if(activateTab){
+                    setActiveFooterTab(3)
+                }
             },
             error: (err) => {
                 if(err?.message !== "canceled") 
@@ -5691,6 +5690,7 @@ function Workspace(props) {
                         })
                     });
                     setQaData(response.data.data);
+                    setActiveFooterTab(5)
                 }
             },
         });

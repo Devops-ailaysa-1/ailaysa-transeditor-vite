@@ -89,13 +89,9 @@ const WorkspaceFeatures = (props) => {
     const handleFooterNavItemClick = (value) => {
         setActiveFooterTab(value)
         handleToggleVisibility(true)
-    } 
-
-    useEffect(() => {
-        console.log("activeFooterTab")
-        console.log(activeFooterTab)
-    }, [activeFooterTab])
-    
+        if(value == 1) scrollLeft()
+        if(value == 6) scrollRight()
+    }
 
     return (
         <>
@@ -225,6 +221,7 @@ const WorkspaceFeatures = (props) => {
                                     </li>
                                     <li className="nav-item" role="presentation">
                                         <span 
+                                            ref={concordanceTabButton}
                                             className={["nav-link", activeFooterTab == 6 && "active-tab"].join(' ')}
                                             onClick={(e) => handleFooterNavItemClick(6)}
                                         >
@@ -797,14 +794,16 @@ const WorkspaceFeatures = (props) => {
                         <div className="tab-pane ">
                             <section className="top-section-show">
                                 <div className="modal-top-body">
-                                    <div className="tm-tb-main-row">
-                                        <div className="tm-container tm-side-border">
+                                    <div className="tm-tb-main-row w-full">
+                                        <div className="tm-container tm-side-border w-full">
                                             <div className="top-section-title-align" style={{display: 'block'}}>
-                                                <div className="top-body-title-1">
-                                                    <p>
-                                                        <span>{t("source_language")}:</span> {sourceLanguage}
-                                                    </p>
-                                                </div>
+                                                    {concordanceData?.length !== 0 && (
+                                                        <div className="top-body-title-1">
+                                                            <p>
+                                                                <span>{t("source_language")}:</span> {sourceLanguage}
+                                                            </p>
+                                                        </div>
+                                                    )}
                                                 <div className="translation_memories-1" style={{marginTop: '8px'}}>
                                                     <ul>
                                                         {concordanceData.map((value, key) => {
