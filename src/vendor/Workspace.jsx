@@ -1221,6 +1221,7 @@ function Workspace(props) {
             }catch(e) {
                 console.log(e)
             }
+            setConcordanceData([])
             setIsSegmentDataLoading(true)
         }
     }, [focusedDivId]);
@@ -1640,7 +1641,7 @@ function Workspace(props) {
     useEffect(() => {
         if (didMount) {
             concordanceTabButton.current?.click();
-            scrollLeft()
+            // scrollLeft()
         }
     }, [concordanceData]);
 
@@ -4046,8 +4047,8 @@ function Workspace(props) {
 
     /* Show / hide the TM section in the footer toolbar */
     const showTmSectionFunction = (show = true) => {
-        console.log("activeFooterTab from tm" + activeFooterTab)
         setActiveFooterTab(1)
+        scrollLeft()
         // if (show) {
         //     // tmTabButton.current?.click();
         //     // if (localStorage.getItem('showTmSection') === 'true' || localStorage.getItem('showTmSection') == null)
@@ -4055,14 +4056,6 @@ function Workspace(props) {
         //     scrollLeft()
         // } else setShowTmSection(false);
     };
-
-    
-    useEffect(() => {
-        console.log("activeFooterTab")
-        console.log(activeFooterTab)
-    }, [activeFooterTab])
-    
-
 
     const toggleListening = () => {
         if (recognition.current === null) {
@@ -5180,7 +5173,7 @@ function Workspace(props) {
 
     /* Show the dictionary data */
     const showDictionaryFunction = () => {
-        showDictionaryRef.current.classList.remove("toolbar-list-icons-active");
+        // showDictionaryRef.current.classList.remove("toolbar-list-icons-active");
         if (window.getSelection().anchorNode == null || window.getSelection().anchorNode.data == null) {
             Config.toast(t("select_text"), "error");
             return;
@@ -5190,7 +5183,7 @@ function Workspace(props) {
         // console.log(selectedText)
         if (selectedText != "") {
             setDictionaryTerm(selectedText);
-            showDictionaryRef.current.classList.add("toolbar-list-icons-active");
+            // showDictionaryRef.current.classList.add("toolbar-list-icons-active");
         } else {
             if (dictionaryTerm == "") {
                 Config.toast(t("select_text"), "error");
@@ -5306,10 +5299,8 @@ function Workspace(props) {
             auth: true,
             success: (response) => {
                 try{
-                    showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
-                    handleToggleVisibility(true);
-                    scrollLeft()
-                    
+                    // showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
+                    handleToggleVisibility(true);                    
                     response.data.map((value, index) => {
                         response.data[index].source = higlightText(value.source, selectedText);
                     });
@@ -5317,6 +5308,7 @@ function Workspace(props) {
                         setConcordanceData(response.data);
                     }, 100);
                     setActiveFooterTab(6)
+                    scrollRight()
                 }catch(e){
                     console.log(e)
                 }
@@ -5431,7 +5423,7 @@ function Workspace(props) {
     /* Show the segment comment section on the footer toolbar */
     const showCommentSection = (e) => {
         commentsTabButton.current?.click();
-        scrollLeft()
+        // scrollLeft()
         let segmentId = e.target.getAttribute("data-id");
         // targetContentEditable.current[segmentId].current.focus()
         lastCalledArgs.current.functionName = "showCommentSection";
@@ -5445,7 +5437,7 @@ function Workspace(props) {
     /* Show QA section in the footer toolbar */
     const showQaSection = (e) => {
         qaTabButton.current?.click();
-        scrollLeft()
+        // scrollLeft()
         let segmentId = e.target.getAttribute("data-id");
         // console.log(e.target);
         // console.log(segmentId);
