@@ -1202,6 +1202,7 @@ function Workspace(props) {
             setTranslationMatches([])
             setTbxData([])
             setSelectedParaphrase(null)
+            setGlossaryData([])
 
             if(document.querySelector('.MuiTooltip-popper')){
                 let tooltips = document.querySelectorAll('.MuiTooltip-popper')
@@ -1224,7 +1225,7 @@ function Workspace(props) {
             setConcordanceData([])
             setIsSegmentDataLoading(true)
         }
-    }, [focusedDivId]);
+    }, [focusedDivId, URL_SEARCH_PARAMS.get("page"), URL_SEARCH_PARAMS.get("status")]);
 
     // wrap inside mark tag
     useEffect(() => {
@@ -1475,6 +1476,7 @@ function Workspace(props) {
             } else {
                 segmentStatusFilter()
             }
+
         }
     }, [URL_SEARCH_PARAMS.get("page"), documentId, pageSizeFromApi.current]);
 
@@ -5271,14 +5273,6 @@ function Workspace(props) {
         }
     };
 
-    useEffect(() => {
-        console.log("advancedOptionVisibility")
-        console.log(advancedOptionVisibility)
-    }, [advancedOptionVisibility])
-    useEffect(() => {
-        console.log("activeFooterTab")
-        console.log(activeFooterTab)
-    }, [activeFooterTab])
 
     /* Show the concordance data on the footer toolbar */
     const showConcoradance = () => {
