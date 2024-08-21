@@ -1265,9 +1265,28 @@ function Navbar(props) {
                                     />
                                 )}
 
-                                {showDocumentSubmitButton && (
+                                {/* {showDocumentSubmitButton && (
                                     <Tooltip title={t("submit_tooltip_note")} arrow placement="bottom">
-                                        <button className="workspace-files-nav-OpenProjectButton" style={{ marginRight: !showReturnRequestBtn ? '18px' : '8px' }} onClick={() => handleDocumentSubmitBtn(3)}>
+                                        <button 
+                                            className="workspace-files-nav-OpenProjectButton" 
+                                            style={{ marginRight: !showReturnRequestBtn ? '18px' : '8px' }} 
+                                            onClick={() => handleDocumentSubmitBtn(3)}
+                                        >
+                                            <span className="fileopen-new-btn">{t("submit")}</span>
+                                        </button>
+                                    </Tooltip>
+                                )} */}
+                                {is_internal_meber_editor && (
+                                    <Tooltip title={t("submit_tooltip_note")} arrow placement="bottom">
+                                        <button 
+                                            className="workspace-files-nav-OpenProjectButton" 
+                                            style={{ 
+                                                marginRight: !showReturnRequestBtn ? '18px' : '8px',
+                                                opacity: showDocumentSubmitButton ? 1 : 0.6,
+                                                pointerEvents: showDocumentSubmitButton ? 'all' : "none"
+                                             }} 
+                                            onClick={() => handleDocumentSubmitBtn(3)}
+                                        >
                                             <span className="fileopen-new-btn">{t("submit")}</span>
                                         </button>
                                     </Tooltip>
