@@ -2524,7 +2524,6 @@ function Workspace(props) {
                                 isDocumentOpenerVendorRef.current = true
                                 // console.log('vendor view');
                                 if (assign_to_data?.task_assign_detail.task_status !== "Return Request" && assign_to_data?.task_assign_detail.task_status !== "Completed") {
-                                    console.log('return 5')
                                     setShowReturnRequestBtn(true)
                                 }
                                 else setShowReturnRequestBtn(false)
@@ -4166,6 +4165,7 @@ function Workspace(props) {
                             );
                             updateSegmentStatus(id, 105);
                         } else {
+                            console.log(mtTmResponse?.mt_raw)
                             updateTranslatedResponseSegment(
                                 id,
                                 "temp_target",
