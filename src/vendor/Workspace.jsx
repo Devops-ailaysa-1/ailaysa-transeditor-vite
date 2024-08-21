@@ -1638,14 +1638,6 @@ function Workspace(props) {
         }
     }, [dictionaryTerm, dictionaryTermType]);
 
-    useEffect(() => {
-        if (didMount) {
-            concordanceTabButton.current?.click();
-            // scrollLeft()
-        }
-    }, [concordanceData]);
-
-
     /* Whever the findStatus set, redirect it with the selected statuses as query params */
     useEffect(() => {
         if (didMount) {
@@ -5279,6 +5271,15 @@ function Workspace(props) {
         }
     };
 
+    useEffect(() => {
+        console.log("advancedOptionVisibility")
+        console.log(advancedOptionVisibility)
+    }, [advancedOptionVisibility])
+    useEffect(() => {
+        console.log("activeFooterTab")
+        console.log(activeFooterTab)
+    }, [activeFooterTab])
+
     /* Show the concordance data on the footer toolbar */
     const showConcoradance = () => {
         if (window.getSelection().anchorNode == null || window.getSelection().anchorNode.data == null) {
@@ -5439,9 +5440,6 @@ function Workspace(props) {
         qaTabButton.current?.click();
         // scrollLeft()
         let segmentId = e.target.getAttribute("data-id");
-        // console.log(e.target);
-        // console.log(segmentId);
-        // targetContentEditable.current[segmentId].current.focus()
         lastCalledArgs.current.functionName = "showQaSection";
         handleToggleVisibility(true);
         showSegmentQa(segmentId);
@@ -5645,6 +5643,9 @@ function Workspace(props) {
 
     /* Show the segment QA data after getting the response */
     const showSegmentQa = (segmentId) => {
+
+        segmentId = segmentId ? segmentId : focusedDivIdRef.current
+
         setQaData([]);
         let formData = new FormData();
         formData.append("doc_id", documentId);
