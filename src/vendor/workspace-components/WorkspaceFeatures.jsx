@@ -92,7 +92,6 @@ const WorkspaceFeatures = (props) => {
         if(value == 1) scrollLeft()
         if(value == 6) scrollRight()
     }
-    
 
     return (
         <>
