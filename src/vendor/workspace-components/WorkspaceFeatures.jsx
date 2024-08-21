@@ -92,6 +92,7 @@ const WorkspaceFeatures = (props) => {
         if(value == 1) scrollLeft()
         if(value == 6) scrollRight()
     }
+    
 
     return (
         <>
@@ -221,7 +222,6 @@ const WorkspaceFeatures = (props) => {
                                     </li>
                                     <li className="nav-item" role="presentation">
                                         <span 
-                                            ref={concordanceTabButton}
                                             className={["nav-link", activeFooterTab == 6 && "active-tab"].join(' ')}
                                             onClick={(e) => handleFooterNavItemClick(6)}
                                         >
@@ -785,7 +785,16 @@ const WorkspaceFeatures = (props) => {
                             <section className="quest-section">
                                 <div className="quest-section">
                                     <div className="quest-section-align">
-                                        <ul className="qa-list">{qaContent}</ul>
+                                        <ul className="qa-list">
+                                            {qaContent?.length === 0 ? (
+                                                <li className='error-code'>
+                                                    <span className="qa-text">
+                                                        {t("qa_no_errors")}
+                                                    </span>
+                                                </li>
+
+                                            ) : (qaContent)}
+                                        </ul>
                                     </div>
                                 </div>
                             </section>
@@ -797,56 +806,61 @@ const WorkspaceFeatures = (props) => {
                                     <div className="tm-tb-main-row w-full">
                                         <div className="tm-container tm-side-border w-full">
                                             <div className="top-section-title-align" style={{display: 'block'}}>
-                                                    {concordanceData?.length !== 0 && (
-                                                        <div className="top-body-title-1">
-                                                            <p>
-                                                                <span>{t("source_language")}:</span> {sourceLanguage}
-                                                            </p>
-                                                        </div>
-                                                    )}
+                                                {concordanceData?.length !== 0 && (
+                                                    <div className="top-body-title-1">
+                                                        <p>
+                                                            <span>{t("source_language")}:</span> {sourceLanguage}
+                                                        </p>
+                                                    </div>
+                                                )}
                                                 <div className="translation_memories-1" style={{marginTop: '8px'}}>
                                                     <ul>
-                                                        {concordanceData.map((value, key) => {
-                                                            return (
-                                                                <li key={key}>
-                                                                    <div className="tm-tb-sub-cont">
-                                                                        <div className="translation-list-value-src">
-                                                                            <div className="text-left">
-                                                                                <p className="tb-file-src-txt">{parse(value.source)}</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="translation-list-value-tar">
-                                                                            <div className="target-lang-align">
+                                                        {concordanceData?.length !== 0 ?
+                                                            concordanceData.map((value, key) => {
+                                                                return (
+                                                                    <li key={key}>
+                                                                        <div className="tm-tb-sub-cont">
+                                                                            <div className="translation-list-value-src">
                                                                                 <div className="text-left">
-                                                                                    <p className="tb-file-tar-txt">{parse(value.target)}</p>
+                                                                                    <p className="tb-file-src-txt">{parse(value.source)}</p>
                                                                                 </div>
-                                                                                <div className="tmx-links-algin">
-                                                                                    <div className="translation-mem-percent-box">
-                                                                                        <span>{value.percentage}</span>
-                                                                                        <span>% {t("match")}</span>
+                                                                            </div>
+                                                                            <div className="translation-list-value-tar">
+                                                                                <div className="target-lang-align">
+                                                                                    <div className="text-left">
+                                                                                        <p className="tb-file-tar-txt">{parse(value.target)}</p>
+                                                                                    </div>
+                                                                                    <div className="tmx-links-algin">
+                                                                                        <div className="translation-mem-percent-box">
+                                                                                            <span>{value.percentage}</span>
+                                                                                            <span>% {t("match")}</span>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
+                                                                            <div className="translation-list-value-copy-btn">
+                                                                                <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top">
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        className="workspace-feature-btn-new"
+                                                                                        onClick={(e) => copyText(value.target)}
+                                                                                        onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 500)}
+                                                                                    >
+                                                                                        <img
+                                                                                            src={NorCopyContent}
+                                                                                            className="content-copy" alt="copy text"
+                                                                                        />
+                                                                                    </button>
+                                                                                </Tooltip>
+                                                                            </div>
                                                                         </div>
-                                                                        <div className="translation-list-value-copy-btn">
-                                                                            <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top">
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className="workspace-feature-btn-new"
-                                                                                    onClick={(e) => copyText(value.target)}
-                                                                                    onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 500)}
-                                                                                >
-                                                                                    <img
-                                                                                        src={NorCopyContent}
-                                                                                        className="content-copy" alt="copy text"
-                                                                                    />
-                                                                                </button>
-                                                                            </Tooltip>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            );
-                                                        })}
+                                                                    </li>
+                                                                );
+                                                            })
+                                                        : <div className="tm-container-no-matches-found">
+                                                            <small>{t("no_match_for_concordence")}</small>
+                                                        </div>
+                                                        }
                                                     </ul>
                                                 </div>
                                             </div>
