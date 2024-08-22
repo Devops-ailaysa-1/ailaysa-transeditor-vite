@@ -1276,7 +1276,7 @@ function Navbar(props) {
                                         </button>
                                     </Tooltip>
                                 )} */}
-                                {is_internal_meber_editor && (
+                                {(is_internal_meber_editor && props.isWhite && !showViewOnlyTag) && (
                                     <Tooltip title={t("submit_tooltip_note")} arrow placement="bottom">
                                         <button 
                                             className="workspace-files-nav-OpenProjectButton" 
