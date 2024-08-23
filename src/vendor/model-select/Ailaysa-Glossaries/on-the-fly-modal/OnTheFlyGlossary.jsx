@@ -100,6 +100,7 @@ export const OnTheFlyGlossary = (props) => {
         tl_term: ""
     })
     const [selectedPOS, setSelectedPOS] = useState(null)
+    const [suggestedMT, setSuggestedMT] = useState(null)
 
     const srcInputRef = useRef(null)
     const tarInputRef = useRef(null)
@@ -139,6 +140,11 @@ export const OnTheFlyGlossary = (props) => {
     } 
 
     const showFormScreen = () => {
+        let selected_text_length = window.getSelection()?.toString()?.length
+        if(selected_text_length > 200) {
+            Config.toast(t("selected_txt_more_200"), "warning")
+            return
+        }
         dispatch(setShowGlossTermAddForm(true))
     } 
     
@@ -163,8 +169,8 @@ export const OnTheFlyGlossary = (props) => {
 
         formData.append("task_id", taskId);
         formData.append("segment_id", focusedDivIdRef.current);
-        if(source !== "") formData.append("source", source);
-        else if(target !== "") formData.append("target", target);
+        if(source !== "") formData.append("source", source?.slice(0, 200));
+        else if(target !== "") formData.append("target", target?.slice(0, 200));
 
         Config.axios({
             url: `${Config.BASE_URL}/glex/term_mt/`,
@@ -180,17 +186,24 @@ export const OnTheFlyGlossary = (props) => {
                     setSelectedPOS(partOfSpeechOptions.find(each => each.label === data?.pos_tag))
                 }
 
-                if(source !== ""){
-                    setInputData({
-                        sl_term: data?.source ? data?.source : source,
-                        tl_term: data?.target_mt
-                    })
-                }else if(target !== ""){
-                    setInputData({
-                        sl_term: data?.source,
-                        tl_term: target
-                    })
-                }
+                let sugg_mt = source !== "" ? data?.target_mt : data?.source
+
+                setSuggestedMT({
+                    for: source !== "" ? "target" : "source",
+                    mt: sugg_mt
+                })
+
+                // if(source !== ""){
+                //     setInputData({
+                //         sl_term: data?.source ? data?.source : source,
+                //         tl_term: data?.target_mt
+                //     })
+                // }else if(target !== ""){
+                //     setInputData({
+                //         sl_term: data?.source,
+                //         tl_term: target
+                //     })
+                // }
             },
             error: (err) => {
                 if(err.response.data.res === 'Insufficient credits'){
@@ -214,8 +227,8 @@ export const OnTheFlyGlossary = (props) => {
             return
         }
 
-        formData.append('sl_term', inputData?.sl_term);
-        formData.append('tl_term', inputData?.tl_term);
+        formData.append('sl_term', inputData?.sl_term?.slice(0, 200));
+        formData.append('tl_term', inputData?.tl_term?.slice(0, 200));
         if(selectedPOS?.value) formData.append('pos', selectedPOS?.label);
         formData.append("task", taskId);
 
@@ -248,6 +261,20 @@ export const OnTheFlyGlossary = (props) => {
         });
     } 
 
+    const handleSuggestedMtClick = () => {
+        if(suggestedMT?.for === "source"){
+            setInputData({
+                ...inputData,
+                sl_term: suggestedMT?.mt,
+            })
+        }else {
+            setInputData({
+                ...inputData,
+                tl_term: suggestedMT?.mt
+            })
+        }
+    } 
+
     return (
         <>
             <Draggable 
@@ -278,6 +305,13 @@ export const OnTheFlyGlossary = (props) => {
                                         value={inputData?.sl_term}
                                         onChange={handleInputDataChange}
                                     />
+                                    {suggestedMT?.for === "source" && (
+                                        <small className="mt-1">
+                                            <b className='opacity-70'>{t("suggestion")}</b>: <span className="suggested-mt-text" onClick={handleSuggestedMtClick}>
+                                                {suggestedMT?.mt}
+                                            </span>
+                                        </small>
+                                    )}
                                 </div> 
                                 <div className="add-glossary-row">
                                     <label>{t("target_language_term")}</label>
@@ -289,6 +323,13 @@ export const OnTheFlyGlossary = (props) => {
                                         value={inputData?.tl_term}
                                         onChange={handleInputDataChange}
                                     />
+                                    {suggestedMT?.for === "target" && (
+                                        <small className="mt-1">
+                                            <b className='opacity-70'>{t("suggestion")}</b>: <span className="suggested-mt-text" onClick={handleSuggestedMtClick}>
+                                                {suggestedMT?.mt}
+                                            </span>
+                                        </small>
+                                    )}
                                 </div>
                                 <div className="add-glossary-row">
                                     <label>{t("parts_of_speech")}</label>
