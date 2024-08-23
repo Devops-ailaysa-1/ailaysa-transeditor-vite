@@ -44422,3 +44422,13 @@ body{
     width: 400px !important;
     height: 240px !important;
 } 
+
+.suggested-mt-text {
+    font-size: 15px;
+    opacity: 1 !important;
+    color: #0074D3;
+    cursor: pointer;
+}
+.suggested-mt-text:hover {
+    text-decoration: underline;
+}

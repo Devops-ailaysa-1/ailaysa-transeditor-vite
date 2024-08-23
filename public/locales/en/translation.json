@@ -1163,5 +1163,8 @@
     "no_match_found_from_tm": "No matches found from Translation memories",
     "no_match_found_from_gloss_tbx": "No matches found from glossaries or termbases",
     "no_match_for_concordence": "No matches found. Select source segment text to search for Concordance",
-    "qa_no_errors": "No errors found"
+    "qa_no_errors": "No errors found",
+    "selected_txt_more_200": "Selected text should not be more than 200 characters",
+    "suggestion": "Suggestion"
+
 }
