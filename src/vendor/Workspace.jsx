@@ -387,6 +387,7 @@ function Workspace(props) {
 
     const [isWorkspaceEditable, setIsWorkspaceEditable] = useState(true)
     const [showDocumentSubmitButton, setShowDocumentSubmitButton] = useState(false)
+    const [enableDocumentSubmitBtn, setEnableDocumentSubmitBtn] = useState(false)
     const [showVendorComplaintReasonModal, setShowVendorComplaintReasonModal] = useState(false)
     const [vendorReturnRequestReasonText, setVendorReturnRequestReasonText] = useState('')
     const [showReturnRequestBtn, setShowReturnRequestBtn] = useState(false)
@@ -905,33 +906,14 @@ function Workspace(props) {
     useEffect(() => {
         if (didMount) {
             if (targetLanguageCode != "") {
-                /*Google input tools suggestion functionality start*/
-                /* let workspaceTextArea = document.getElementsByClassName("workspace-textarea")
-                for (let i = 0; i < workspaceTextArea.length; i++) {
-                    if (enableIME) {
-                        workspaceTextArea[i].value = workspaceTextArea[i].innerText
-                        enableTransliteration(workspaceTextArea[i], targetLanguageCode)
-                    } else {
-                        disableTransliteration(workspaceTextArea[i])
-                    }
-                } */
+                
                 translatedResponse.map((value, key) => {
-                    //Loop all the target contenteditable
                     if (enableIME) {
                         // If enabled
                         targetContentEditable.current[value.segment_id].current.value = targetContentEditable.current[value.segment_id].current.innerText;
-                        // let instance = new TransliterationProvider(targetContentEditable.current[value.segment_id].current, targetLanguageCode);
-                        // instance.addEvents(); // Enable IME in each target contenteditable
-                        // enabledTransliteration.current.push(instance)
+                      
                     } else if (enableIME == false) {
-                        // If disabled
-                        // let instance = new TransliterationProvider(targetContentEditable.current[value.segment_id].current, targetLanguageCode)
-                        // instance.removeEvents(instance.elements)
-                        /* enabledTransliteration.current.map(value => {
-                            value.disableTransliteration()
-                        }) */
-                        // if (targetContentEditable.current[value.segment_id].current != null)
-                        // disableTransliteration(targetContentEditable.current[value.segment_id].current)
+                      
                     }
                 });
                 if (enableIME == false) {
@@ -939,17 +921,7 @@ function Workspace(props) {
                     if (targetContentEditable.current) {
                         targetContentEditable.current[focusedDivIdRef.current]?.current.blur(); // Make the currently focused contenteditable to save
                     }
-                    // if(document.querySelector('.ks-input-suggestions')){
-                    //     console.log(document.querySelectorAll('.ks-input-suggestions'))
-                    //     const suggestionsArray = document.querySelectorAll('.ks-input-suggestions')
-                    //     console.log(suggestionsArray)
-                    //     suggestionsArray.forEach((each) => {
-                    //         each.remove()
-                    //     })
-                    // }
-                    // removeListenersFromElement(targetContentEditable.current[focusedDivIdRef.current].current, )
-                    // targetContentEditable.current[focusedDivIdRef.current].current.replaceWith(targetContentEditable.current[focusedDivIdRef.current].current.clone()); // Make the currently focused contenteditable to save
-                    // recreateNode(document.querySelector('#workspace'), true)
+                  
                     setTimeout(() => {
                         window.location.reload(); // As of now just reload the page to disable
                         // history(window.location)
@@ -966,54 +938,64 @@ function Workspace(props) {
         }, 200);
     }, [targetLanguageId]);
 
-    // useEffect(() => {
-    //     const insertInputSuggestionClick = (e) => {
-    //         // To insert the clicked text from IME suggestions
-    //         if (e.target.classList.contains("suggestion-div")) {
-    //             changeSavedCaretPosition();
-    //             let text = "" + e.target.innerText;
-    //             // console.log(text)
-    //             document.execCommand("insertText", false, text);
-    //         }
-    //     };
-    //     document.addEventListener("click", insertInputSuggestionClick, false); // Also can merge this with the previous click eventListener
-    //     return () => {
-    //         document.removeEventListener("click", insertInputSuggestionClick);
-    //     };
-    // });
 
     useEffect(() => {
-        if (isDocumentOpenerVendorRef.current) {
+        if (isDocumentOpenerVendorRef.current) {    // for the user to whom task is assigned (editor)
+            console.log(" inside isDocumentOpenerVendorRef")
             if (isWorkspaceEditable) {
+                // show the button to editor if the user has permission to edit the document
+                setShowDocumentSubmitButton(true)
+
                 let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
-                // console.log(isUserIsReviwer)
-                // console.log(documentProgressRef.current)
+                console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
                 if (!isUserIsReviwer ? (segments_confirmed_count === total_segment_count) : isEditorSubmittedDocument.current) {
-                    console.log("editor submnit: "+isEditorSubmittedDocument.current)
-                    if(isEditorSubmittedDocument.current){
-                        setShowDocumentSubmitButton(false)
+                    if(isEditorSubmittedDocument.current){  // if document submitted - don't show the button
+                        setShowDocumentSubmitButton(false)  // this is good
                     }else{
-                        setShowDocumentSubmitButton(true)
+                        setEnableDocumentSubmitBtn(true)    // enable the button if all segments are confirmed
+                        // setShowDocumentSubmitButton(true)
                     }
-                } else {
-                    setShowDocumentSubmitButton(false)
+                } else {    // if all segments are not confirmed (editor) || if document is not submitted (reviewer) 
+                    if(!isUserIsReviwer) {  // for editor - disable the button
+                        setEnableDocumentSubmitBtn(false)
+                        // setShowDocumentSubmitButton(false)
+                    }else {     // for reviwer enable the button - reviewer submittion not depends on the segment confirmation
+                        setEnableDocumentSubmitBtn(true)
+                    }
                 }
-            } else {
+            } else {    // this is good
                 setShowDocumentSubmitButton(false)
             }
-        } else if (taskDataRef.current) {
+        } else if (taskDataRef.current) {   // for the user who assigned the task (owner)
+            console.log(" inside else ")
+
+            console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
             // if post-editing (step-1) is not available but reviewing step is present then the project admin will act as editor the should submit the document 
             // check if step 1 is not preset and task_assign_info length is 1
             if (taskDataRef.current?.task_assign_info?.find(each => each.task_assign_detail.step !== 1) && taskDataRef.current?.task_assign_info?.length === 1) {
+                
+                if(!isEditorSubmittedDocument.current)  // check if document is already submitted - if not submitted show the button 
+                    setShowDocumentSubmitButton(true)
+
                 let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
                 if (segments_confirmed_count === total_segment_count) {
-                    setShowDocumentSubmitButton(true)
+                    // setShowDocumentSubmitButton(true)
+                    setEnableDocumentSubmitBtn(true)
                 } else {
-                    setShowDocumentSubmitButton(false)
+                    setEnableDocumentSubmitBtn(false)
                 }
             }
         }
     }, [isWorkspaceEditable, documentProgressRef.current, isDocumentOpenerVendorRef.current, isUserIsReviwer, isEditorSubmittedDocument.current, taskDataRef.current])
+
+    // useEffect(() => {
+    //     console.log("showDocumentSubmitButton: " + showDocumentSubmitButton)
+    // }, [showDocumentSubmitButton])
+    
+    // useEffect(() => {
+    //     console.log("isEditorSubmittedDocument: " + isEditorSubmittedDocument.current)
+    // }, [isEditorSubmittedDocument.current])
+    
 
     useEffect(() => {
         if (!isWorkspaceEditableRef.current) {
@@ -2291,8 +2273,9 @@ function Workspace(props) {
                     // edit_allowed key will restrict the workspace editing access
                     setIsWorkspaceEditable(responseTemp.edit_allowed)
                     isWorkspaceEditableRef.current = responseTemp.edit_allowed
-                    if (responseTemp.edit_allowed) isEditorSubmittedDocument.current = false
-                    else isEditorSubmittedDocument.current = true
+                    console.log("edit allow: "+responseTemp.edit_allowed)
+                    if (responseTemp.edit_allowed) { isEditorSubmittedDocument.current = false }
+                    else { isEditorSubmittedDocument.current = true }
                     
                 }
 
@@ -2327,7 +2310,7 @@ function Workspace(props) {
 
                 let is_from_reviewer = responseTemp?.assign_detail.filter(each => each.assign_to_id === Config?.userState.id && each.step_id === 2 && location.state?.open_as === 'reviewer')?.length !== 0 ? true : false
 
-                if (location.state?.open_as !== undefined) {
+                if (location.state?.open_as != undefined && location.state?.open_as != null) {
                     if (location.state?.open_as !== 'editor') {
                         setIsUserIsReviwer(is_from_reviewer)
                         is_user_reviewer = is_from_reviewer
@@ -2644,10 +2627,14 @@ function Workspace(props) {
             data: formData,
             auth: true,
             success: (response) => {
+                // hide and disbale the submit button once docuemnt is submitted
+                setShowDocumentSubmitButton(false)
+                setEnableDocumentSubmitBtn(false)
+
                 if(!isDinamalar){
                     setIsWorkspaceEditable(false)
                 }
-                setShowDocumentSubmitButton(false)
+                
                 setShowReturnRequestBtn(false)
                 setShowVendorComplaintReasonModal(false)
                 setShowSubmitConfirmModal(false)
@@ -7555,6 +7542,7 @@ function Workspace(props) {
                 mtEnable={mtEnable}
                 docCreditCheckAlertRef={docCreditCheckAlertRef}
                 showDocumentSubmitButton={showDocumentSubmitButton}
+                enableDocumentSubmitBtn={enableDocumentSubmitBtn}
                 handleDocumentSubmitBtn={handleDocumentSubmitBtn}
                 showReturnRequestBtn={showReturnRequestBtn}
                 isWorkspaceEditable={isWorkspaceEditable}

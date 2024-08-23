@@ -60,6 +60,7 @@ function Navbar(props) {
 
     const {
         showDocumentSubmitButton,
+        enableDocumentSubmitBtn,
         handleDocumentSubmitBtn,
         showReturnRequestBtn,
         isWorkspaceEditable,
@@ -1276,14 +1277,14 @@ function Navbar(props) {
                                         </button>
                                     </Tooltip>
                                 )} */}
-                                {(is_internal_meber_editor && props.isWhite && isWorkspaceEditable) && (
+                                {(showDocumentSubmitButton) && (
                                     <Tooltip title={t("submit_tooltip_note")} arrow placement="bottom">
                                         <button 
                                             className="workspace-files-nav-OpenProjectButton" 
                                             style={{ 
                                                 marginRight: !showReturnRequestBtn ? '18px' : '8px',
-                                                opacity: showDocumentSubmitButton ? 1 : 0.6,
-                                                pointerEvents: showDocumentSubmitButton ? 'all' : "none"
+                                                opacity: enableDocumentSubmitBtn ? 1 : 0.6,
+                                                pointerEvents: enableDocumentSubmitBtn ? 'all' : "none"
                                              }} 
                                             onClick={() => handleDocumentSubmitBtn(3)}
                                         >
