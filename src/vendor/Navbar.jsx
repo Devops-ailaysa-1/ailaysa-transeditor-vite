@@ -1117,17 +1117,18 @@ function Navbar(props) {
                                             </div>
                                         </NavLink>
                                         
-                                        {!is_internal_meber_editor && (
-                                            <NavLink 
-                                                to="/file-upload?page=1&order_by=-id" 
-                                                // activeClassName="selected" 
-                                                className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}
-                                            >
-                                                <div className="nav-assign-manage-link">
-                                                    <span>{t("standard_project")}</span>
-                                                </div>
-                                            </NavLink>
-                                        )}
+                                        {/* {!is_internal_meber_editor && (
+                                        )} */}
+                                        <NavLink 
+                                            to="/file-upload?page=1&order_by=-id" 
+                                            // activeClassName="selected" 
+                                            className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}
+                                        >
+                                            <div className="nav-assign-manage-link">
+                                                <span>{t("standard_project")}</span>
+                                            </div>
+                                        </NavLink>
+
                                         {isDinamalar && (
                                             <ButtonBase       
                                                 className={props.isWhite ? "d-none" : "ml-3"}
