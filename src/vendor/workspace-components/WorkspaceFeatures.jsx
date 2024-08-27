@@ -528,8 +528,8 @@ const WorkspaceFeatures = (props) => {
                                                             </tr>
                                                         )}
                                                         <tr key={index}>
-                                                            <td className="flex gap-2 items-center">
-                                                                <div className="segment-list" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.sentense_diff_result }}></div>
+                                                            <td className="flex gap-2 items-center justify-between">
+                                                                <div className="segment-list flex-grow" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.sentense_diff_result }}></div>
                                                                 <Tooltip title={t("copy_to_segment")} placement="top" arrow>
                                                                     <IconButton
                                                                         className="p-[10px]"
