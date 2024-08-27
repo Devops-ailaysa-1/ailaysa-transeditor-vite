@@ -403,6 +403,7 @@ const FederalWorkspace = (props) => {
 
     const [isWorkspaceEditable, setIsWorkspaceEditable] = useState(true)
     const [showDocumentSubmitButton, setShowDocumentSubmitButton] = useState(false)
+    const [enableDocumentSubmitBtn, setEnableDocumentSubmitBtn] = useState(false)
     const [showVendorComplaintReasonModal, setShowVendorComplaintReasonModal] = useState(false)
     const [vendorReturnRequestReasonText, setVendorReturnRequestReasonText] = useState('')
     const [showReturnRequestBtn, setShowReturnRequestBtn] = useState(false)
@@ -969,14 +970,34 @@ const FederalWorkspace = (props) => {
         // console.log(isDocumentOpenerVendorRef.current)
         if (isDocumentOpenerVendorRef.current) {
             if (isWorkspaceEditable) {
+
+                try{
+                    console.log('inside isWorkspaceEditable')
+                    // show the button to editor if the user has permission to edit the document
+                    setShowDocumentSubmitButton(true)
+
+                }catch (e) {
+                    console.log(e)
+                }
+
                 // let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
 
                 // segments_confirmed_count === total_segment_count
 
                 if (!isUserIsReviwer ? (true) : isEditorSubmittedDocument.current) {
-                    setShowDocumentSubmitButton(true)
+                    console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
+                    if(isEditorSubmittedDocument.current){  // if document submitted - don't show the button
+                        setShowDocumentSubmitButton(false)  // this is good
+                    }else{
+                        setEnableDocumentSubmitBtn(true)    // enable the button if all segments are confirmed
+                    }
                 } else {
-                    setShowDocumentSubmitButton(false)
+                    if(!isUserIsReviwer) {  // for editor - disable the button
+                        setEnableDocumentSubmitBtn(false)
+                        // setShowDocumentSubmitButton(false)
+                    }else {     // for reviwer enable the button - reviewer submittion not depends on the segment confirmation
+                        setEnableDocumentSubmitBtn(true)
+                    }
                 }
             } else {
                 setShowDocumentSubmitButton(false)
@@ -986,14 +1007,23 @@ const FederalWorkspace = (props) => {
             // check if step 1 is not preset and task_assign_info length is 1
             if (taskDataRef.current?.task_assign_info?.find(each => each.task_assign_detail.step !== 1) && taskDataRef.current?.task_assign_info?.length === 1) {
                 // let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
-                if (true) {
+                
+                if(!isEditorSubmittedDocument.current)  // check if document is already submitted - if not submitted show the button 
                     setShowDocumentSubmitButton(true)
-                } else {
-                    setShowDocumentSubmitButton(false)
-                }
+
+                // if (true) {
+                //     setShowDocumentSubmitButton(true)
+                // } else {
+                //     setShowDocumentSubmitButton(false)
+                // }
             }
         }
     }, [isWorkspaceEditable, documentProgressRef.current, isDocumentOpenerVendorRef.current, isUserIsReviwer, isEditorSubmittedDocument.current, taskDataRef.current])
+
+    useEffect(() => {
+        console.log("showDocumentSubmitButton: "+showDocumentSubmitButton)
+    }, [showDocumentSubmitButton])
+    
 
     useEffect(() => {
         if (!isWorkspaceEditableRef.current) {
@@ -1402,7 +1432,7 @@ const FederalWorkspace = (props) => {
     useEffect(() => {
         if (didMount) {
             /*Highlight last segment Find Previous clicked from next page - start*/
-            if (props.location.state?.findHighlightSegment != null) {
+            if (props.location?.state?.findHighlightSegment != null) {
                 findHighlightSegment.current = props.location.state.findHighlightSegment;
                 window.history.replaceState(null, "");
                 // filterWithFindTerm()
@@ -2292,9 +2322,8 @@ const FederalWorkspace = (props) => {
                 setIsWorkspaceEditable(responseTemp.edit_allowed)
                 isWorkspaceEditableRef.current = responseTemp.edit_allowed
             
-                if (responseTemp.edit_allowed) isEditorSubmittedDocument.current = true
-                else isEditorSubmittedDocument.current = false
- 
+                if (responseTemp.edit_allowed) { isEditorSubmittedDocument.current = false }
+                else { isEditorSubmittedDocument.current = true }
  
 
                 documentTaskIdRef.current = responseTemp.task
@@ -2634,7 +2663,11 @@ const FederalWorkspace = (props) => {
             auth: true,
             success: (response) => {
                 setIsWorkspaceEditable(false)
+                
+                // hide and disbale the submit button once docuemnt is submitted
                 setShowDocumentSubmitButton(false)
+                setEnableDocumentSubmitBtn(false)
+
                 setShowReturnRequestBtn(false)
                 setShowVendorComplaintReasonModal(false)
                 setShowSubmitConfirmModal(false)
@@ -5693,6 +5726,7 @@ const FederalWorkspace = (props) => {
                 mtEnable={mtEnable}
                 docCreditCheckAlertRef={docCreditCheckAlertRef}
                 showDocumentSubmitButton={showDocumentSubmitButton}
+                enableDocumentSubmitBtn={enableDocumentSubmitBtn}
                 handleDocumentSubmitBtn={handleDocumentSubmitBtn}
                 showReturnRequestBtn={showReturnRequestBtn}
                 isWorkspaceEditable={isWorkspaceEditable}
