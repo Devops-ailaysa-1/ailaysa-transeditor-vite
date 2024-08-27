@@ -101,7 +101,9 @@ const AllRoutes = (props) => {
                     )
                 )}
 
-                <Route exact path="/chat-books" element={<Suspense fallback={<MainAILoader />}><AilaysaChat /></Suspense>} />
+                {!is_internal_meber_editor && (
+                    <Route exact path="/chat-books" element={<Suspense fallback={<MainAILoader />}><AilaysaChat /></Suspense>} />
+                )}
                 
                 <Route exact path="/file-upload" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
                 <Route exact path="/documents-list" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
