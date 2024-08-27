@@ -947,7 +947,7 @@ function Workspace(props) {
                 setShowDocumentSubmitButton(true)
 
                 let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
-                console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
+                // console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
                 if (!isUserIsReviwer ? (segments_confirmed_count === total_segment_count) : isEditorSubmittedDocument.current) {
                     if(isEditorSubmittedDocument.current){  // if document submitted - don't show the button
                         setShowDocumentSubmitButton(false)  // this is good
@@ -967,7 +967,7 @@ function Workspace(props) {
                 setShowDocumentSubmitButton(false)
             }
         } else if (taskDataRef.current) {   // for the user who assigned the task (owner)
-            console.log(" inside else ")
+            // console.log(" inside else ")
 
             console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
             // if post-editing (step-1) is not available but reviewing step is present then the project admin will act as editor the should submit the document 
