@@ -941,7 +941,7 @@ function Workspace(props) {
 
     useEffect(() => {
         if (isDocumentOpenerVendorRef.current) {    // for the user to whom task is assigned (editor)
-            console.log(" inside isDocumentOpenerVendorRef")
+            // console.log(" inside isDocumentOpenerVendorRef")
             if (isWorkspaceEditable) {
                 // show the button to editor if the user has permission to edit the document
                 setShowDocumentSubmitButton(true)
@@ -969,7 +969,7 @@ function Workspace(props) {
         } else if (taskDataRef.current) {   // for the user who assigned the task (owner)
             // console.log(" inside else ")
 
-            console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
+            // console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
             // if post-editing (step-1) is not available but reviewing step is present then the project admin will act as editor the should submit the document 
             // check if step 1 is not preset and task_assign_info length is 1
             if (taskDataRef.current?.task_assign_info?.find(each => each.task_assign_detail.step !== 1) && taskDataRef.current?.task_assign_info?.length === 1) {
@@ -2273,7 +2273,7 @@ function Workspace(props) {
                     // edit_allowed key will restrict the workspace editing access
                     setIsWorkspaceEditable(responseTemp.edit_allowed)
                     isWorkspaceEditableRef.current = responseTemp.edit_allowed
-                    console.log("edit allow: "+responseTemp.edit_allowed)
+                    // console.log("edit allow: "+responseTemp.edit_allowed)
                     if (responseTemp.edit_allowed) { isEditorSubmittedDocument.current = false }
                     else { isEditorSubmittedDocument.current = true }
                     
@@ -2437,10 +2437,8 @@ function Workspace(props) {
                                 isDocumentOpenerVendorRef.current = true
 
                                 if (task_assign_assign_to_data?.task_assign_detail.task_status !== "Return Request" && task_assign_assign_to_data?.task_assign_detail.task_status !== "Completed" && task_data.task_reassign_info === null) {
-                                    console.log('return 3')
                                     setShowReturnRequestBtn(true)
                                 } else if (task_assign_assign_to_data?.task_assign_detail.task_status !== "Return Request" && task_assign_assign_to_data?.task_assign_detail.task_status !== "Completed" && assign_by_data?.task_assign_detail.task_status === "Return Request") {
-                                    console.log('return 4')
                                     setShowReturnRequestBtn(true)
                                 } else setShowReturnRequestBtn(false)
 
@@ -4152,7 +4150,7 @@ function Workspace(props) {
                             );
                             updateSegmentStatus(id, 105);
                         } else {
-                            console.log(mtTmResponse?.mt_raw)
+                            // console.log(mtTmResponse?.mt_raw)
                             updateTranslatedResponseSegment(
                                 id,
                                 "temp_target",
@@ -4495,7 +4493,7 @@ function Workspace(props) {
                 if (isShowTags.current) replacedText = replaceTextWithTags(translatedText); //Hide for not to show tags
                 else replacedText = replaceTextWithTagsTemp(translatedText); //Added for not to show tags
                 // console.log(translatedText);
-                console.log(replacedText);
+                // console.log(replacedText);
                 // console.log(targetFindTerm);
 
                 if (targetFindTerm != "") {
@@ -4703,7 +4701,7 @@ function Workspace(props) {
         setEnableSpellCheck(false)
         resetSynonymStates()
         toggleSpellCheckBtn.current?.classList?.remove("toolbar-list-icons-active");
-        console.log(focusedDivIdRef.current)
+        // console.log(focusedDivIdRef.current)
 
         if(!focusedDivIdRef.current){
             targetContentEditable.current[translatedResponse[0]?.segment_id].current.focus();
@@ -5687,7 +5685,15 @@ function Workspace(props) {
             targetContentEditable.current[segmentId].current.innerHTML = value
         else*/
         // console.log(translatedResponse);
-        setTranslatedResponse((prevTranslatedResponse) => prevTranslatedResponse?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el)));
+        setTranslatedResponse((prevTranslatedResponse) => prevTranslatedResponse?.map((obj) => {
+            if(obj.segment_id == segmentId){
+                return {
+                    ...obj,
+                    [key]: value
+                }
+            }
+            return obj
+        }));
         translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el))
         // console.log(translatedResponse);
     };
@@ -6969,7 +6975,7 @@ function Workspace(props) {
             showCurrentWordAsLastSuggestion: showCurrentWordAsLastSuggestion,
             lang: lang
         });
-        console.log(data)
+        // console.log(data)
         setOptions(data);
     };
 

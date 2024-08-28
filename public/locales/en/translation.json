@@ -1165,6 +1165,12 @@
     "no_match_for_concordence": "No matches found. Select source segment text to search for Concordance",
     "qa_no_errors": "No errors found",
     "selected_txt_more_200": "Selected text should not be more than 200 characters",
-    "suggestion": "Suggestion"
-
+    "suggestion": "Suggestion",
+    "new_feature": "New feature",    
+    "adaptive_trans": "Adaptive Translation",
+    "adaptive_trans_desc": "Now, adapt translations to your preferred choice of words.",
+    "adaptive_trans_point_1": "Preferred translations on the fly.",
+    "adaptive_trans_point_2": "Preload glossaries or style sheets for adaption.",
+    "adaptive_trans_point_3": "Extract terms from files.",
+    "adaptive_trans_point_4": "Context aware translation with increased accuracy."
 }
