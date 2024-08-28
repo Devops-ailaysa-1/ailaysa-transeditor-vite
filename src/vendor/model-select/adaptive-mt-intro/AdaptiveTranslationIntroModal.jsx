@@ -115,7 +115,7 @@ export const AdaptiveTranslationIntroModal = () => {
                             <ul className="p-0 space-y-2">
                                 {Array(4).fill().map((each, ind) => (
                                     <li className="flex items-center gap-2">
-                                        <CheckCircleRoundedIcon style={{color: "#0673F7"}} />
+                                        <CheckCircleRoundedIcon style={{color: "#0673F7", fontSize: '20px'}} />
                                         {t(`adaptive_trans_point_${ind + 1}`)}
                                     </li> 
                                 ))}
