@@ -39,6 +39,8 @@ import { setIsDinamalarNews } from "./features/IsDinamalarNewsSlice";
 import { setIsFederalNews } from "./features/IsFederalNewsSlice";
 import { CookieChecker } from "cookie-validator-check";
 import { PromptLibraryModal } from "./ailaysa-writer/Prompt-library/PromptLibraryModal";
+import { AdaptiveTranslationIntroModal } from "./vendor/model-select/adaptive-mt-intro/AdaptiveTranslationIntroModal";
+import { setShowAdaptiveMTIntroModal } from "./features/ShowAdaptiveTransIntroModalSlice";
 
 
 function App() {
@@ -129,6 +131,16 @@ function App() {
         // getCardContent()
         // getFilterCardContent()
     }, []);
+
+    useEffect(() => {
+        let pathname = window.location.pathname
+        if(pathname?.includes('/workspace')){
+            if(Cookies.get("adaptive-mt-intro") !== "true") {
+                dispatch(setShowAdaptiveMTIntroModal(true))
+            }
+        }
+    }, [window.location.pathname])
+    
 
     const getUserDetails = () => {
         Config.axios({
@@ -375,6 +387,8 @@ function App() {
                         
                         <ToastContainer position="top-left" limit={1} icon={false} />
                         <UpdateProfileSettingAlertModal />
+
+                        <AdaptiveTranslationIntroModal />
 
                         {/* {
                             isCookieAccepted === false && cookieShowRoute.indexOf(window?.location?.pathname) !== -1 && (
