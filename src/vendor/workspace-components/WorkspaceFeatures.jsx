@@ -611,7 +611,13 @@ const WorkspaceFeatures = (props) => {
                                                             <li key={value.id}>
                                                                 <div className="comment-area-box">
                                                                     <div className="profile-row">
-                                                                        <span className="no-avatar-icon">{value?.commented_by_user?.charAt(0).toUpperCase()}</span>
+                                                                        <span className="no-avatar-icon">
+                                                                            {value?.avatar ? 
+                                                                                <img src={Config.BASE_URL + value?.avatar} className='w-full h-full object-fill' />
+                                                                            : value?.commented_by_user?.charAt(0).toUpperCase()
+                                                                            }
+
+                                                                        </span>
                                                                         <span className="text">{value?.commented_by_user}</span>
                                                                     </div>
                                                                     {value.isEdit ? (
