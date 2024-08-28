@@ -87,6 +87,7 @@ import { useDispatch } from "react-redux";
 import { setShowGlossTermAddForm } from "../features/ai-glossary/ToggleGlossTermAddFormSlice";
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import { setShowAdaptiveMTIntroModal } from "../features/ShowAdaptiveTransIntroModalSlice";
 
 const DropdownIndicator = (props) => {
     return (
@@ -1935,11 +1936,21 @@ function Workspace(props) {
     }, [sourceSelectionText])
 
     // reset the source if target text is selected
-    useEffect(() => {
+useEffect(() => {
         if(targetSelectionText !== "" && !showGlossaryAddition){
             setSourceSelectionText("")
         }
     }, [targetSelectionText])    
+
+    useEffect(() => {
+        if(Cookies.get("adaptive-mt-intro") !== "true") {
+            dispatch(setShowAdaptiveMTIntroModal(true))
+        }
+
+        return () => {
+            dispatch(setShowAdaptiveMTIntroModal(false))
+        }
+    }, [])
 
     // Handle footer pin
     const handlePushPinActive = (show = false) => {

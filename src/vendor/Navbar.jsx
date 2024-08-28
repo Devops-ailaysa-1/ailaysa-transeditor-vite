@@ -55,6 +55,8 @@ import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TaskAssignActionButtons from "./workspace-components/TaskAssignActionButtons";
 import ReactRouterPrompt from 'react-router-prompt'
 import { GlossaryMenuDrpDown } from "./model-select/Ailaysa-Glossaries/glossary-menu/GlossaryMenuDrpDown";
+import { Badge } from "@mui/material";
+import { setShowAdaptiveMTIntroModal } from "../features/ShowAdaptiveTransIntroModalSlice";
 
 function Navbar(props) {
 
@@ -1458,30 +1460,43 @@ function Navbar(props) {
                                 {(isHelpVisible && props.isWhite) &&
                                     <li className="nav-item nav-drp-down-new active">
                                         <Tooltip title="Help" arrow placement="bottom">
-                                            <div
-                                                className="nav-icon-bg"
-                                                // onMouseEnter={() => hideAvailCredits()}
-                                                onClick={() => {
-                                                    handleLogoutDrpVisibility(false);
-                                                    handleAppsDrpVisibility(false);
-                                                    handleChatNotificationVisibility(false);
-                                                    handleHelpDrpVisibility(!helpDrpVisibility);
-                                                }}>
-                                                <img
-                                                    src={
-                                                        props.isWhite
-                                                            ? HelpOutlineGrey
-                                                            : HelpOutline
+                                            <Badge 
+                                                sx={{
+                                                    "& .MuiBadge-badge": {
+                                                        backgroundColor: "#E74C3C",
+                                                        right: "16px",
+                                                        top: "10px",
+                                                        padding: '4.5px',
+                                                        borderRadius: "50%"
                                                     }
-                                                    alt="help"
-                                                />
-                                            </div>
+                                                  }}
+                                                variant="dot"
+                                            >
+                                                <div
+                                                    className="nav-icon-bg"
+                                                    // onMouseEnter={() => hideAvailCredits()}
+                                                    onClick={() => {
+                                                        handleLogoutDrpVisibility(false);
+                                                        handleAppsDrpVisibility(false);
+                                                        handleChatNotificationVisibility(false);
+                                                        handleHelpDrpVisibility(!helpDrpVisibility);
+                                                    }}>
+                                                    <img
+                                                        src={
+                                                            props.isWhite
+                                                                ? HelpOutlineGrey
+                                                                : HelpOutline
+                                                        }
+                                                        alt="help"
+                                                    />
+                                                </div>
+                                            </Badge>
                                         </Tooltip>
                                         {props.isWhite ? (
                                             <ul ref={HelpOutside} className={`submenu submenu-animated submenu_fadeIn ${helpDrpVisibility ? "show" : ""}`}>
-                                                {/* <li>
-                                                <a target="_blank" href="https://knowledgebase.ailaysa.com/article-categories/transeditor-pe/">Knowledge base</a>
-                                            </li> */}
+                                                <li>
+                                                    <a onClick={() => {dispatch(setShowAdaptiveMTIntroModal(true)); setHelpDrpVisibility(false)}}>{t("adaptive_trans_help_text")}</a>
+                                                </li>
                                                 <li>
                                                     <a onClick={() => {props.showHowToTour(); setHelpDrpVisibility(false)}}>{t("how_to_edit_&_download")}</a>
                                                 </li>
@@ -1492,9 +1507,6 @@ function Navbar(props) {
                                         ) : (
                                             props.showTourOption && (
                                                 <ul className="submenu submenu-animated submenu_fadeIn">
-                                                    {/* <li>
-                                                <a target="_blank" href="https://knowledgebase.ailaysa.com/article-categories/transeditor-pm/">Knowledge base</a>
-                                            </li> */}
                                                     {props.showTourOption && (
                                                         <li>
                                                             <a onClick={props.showHowToTour}>{t("how_to_open_a_file")}</a>
