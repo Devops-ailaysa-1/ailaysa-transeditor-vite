@@ -75,7 +75,7 @@ export const AilaysaGlossariesModal = (props) => {
             url: `${Config.BASE_URL}/glex/glossary_selected/?project=${documentDetails.project}&option=glossary`,
             auth: true,
             success: (response) => {
-                let res = response.data?.filter(each => each.id != defaultGlossDetailsRef.current.gloss_id)
+                let res = response.data?.filter(each => each.glossary != defaultGlossDetailsRef.current.gloss_id)
                 setSelectedGlossaryList(res)
             },
         });
