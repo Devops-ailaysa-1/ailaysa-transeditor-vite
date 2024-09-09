@@ -4280,7 +4280,7 @@ useEffect(() => {
         setGlossaryData([])
         let glossaryFormdata = new FormData();
         let sourceText = e.target.getAttribute("data-source-text");
-        glossaryFormdata.append("user_input", sourceText);
+        glossaryFormdata.append("user_input", removeAllTags(sourceText));
         glossaryFormdata.append("doc_id", documentId);
         let glossaryUrl = Config.BASE_URL + "/glex/glossary_term_search/";
         Config.axios({

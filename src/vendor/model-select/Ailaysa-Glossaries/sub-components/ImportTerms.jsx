@@ -156,6 +156,10 @@ export const ImportTerms = (props) => {
     // remove glossary
     const removeGlossaryFromProject = () => {
         let list = "";
+
+        console.log(glossaryToRemove.current)
+
+        return
         glossaryToRemove.current?.map((each, index) => {
             list += `${each.id}${index !== glossaryToRemove.current?.length - 1 ? "," : ""}`;
         });

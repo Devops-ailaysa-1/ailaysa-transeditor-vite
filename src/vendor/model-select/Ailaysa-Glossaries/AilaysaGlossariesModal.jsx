@@ -75,7 +75,13 @@ export const AilaysaGlossariesModal = (props) => {
             url: `${Config.BASE_URL}/glex/glossary_selected/?project=${documentDetails.project}&option=glossary`,
             auth: true,
             success: (response) => {
+                console.log("selected gloss")
+                console.log(response.data)
+                console.log("default gloss")
+                console.log(defaultGlossDetailsRef.current)
                 let res = response.data?.filter(each => each.glossary != defaultGlossDetailsRef.current.gloss_id)
+                console.log("default gloss removed")
+                console.log(res)
                 setSelectedGlossaryList(res)
             },
         });
