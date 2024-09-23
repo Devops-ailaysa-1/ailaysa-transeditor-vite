@@ -20,7 +20,7 @@ export const ImportTerms = (props) => {
         taskId,
         getSelectedGlossaries,
         setActiveScreen,
-        isSrcEnglish,
+        showExtractTermsOption,
         defaultGlossDetailsRef
     } = props
 
@@ -159,7 +159,6 @@ export const ImportTerms = (props) => {
 
         console.log(glossaryToRemove.current)
 
-        return
         glossaryToRemove.current?.map((each, index) => {
             list += `${each.id}${index !== glossaryToRemove.current?.length - 1 ? "," : ""}`;
         });
@@ -372,7 +371,7 @@ export const ImportTerms = (props) => {
             <AITab
                 onChange={handleOnTabChange} 
                 activeTab={activeImportTab}
-                dataList={importTermsTabList?.filter(item => isSrcEnglish ? true : item.value !== 2)}
+                dataList={importTermsTabList?.filter(item => showExtractTermsOption ? true : item.value !== 2)}
                 customClass="mb-4 w-2/5"
             />
             <div className="asset-glossary-list-wrapper">

@@ -156,7 +156,7 @@ export const AilaysaGlossariesModal = (props) => {
                                     projectFilesListRef={projectFilesListRef}
                                     projectId={documentDetails.project}
                                     taskId={documentDetails.task_id}
-                                    isSrcEnglish={documentDetails.source_language_id === 17 ? true : false}
+                                    showExtractTermsOption={[17, 38]?.includes(documentDetails.source_language_id )  ? true : false}
                                     getSelectedGlossaries={getSelectedGlossaries}
                                     setActiveScreen={setActiveScreen}
                                     defaultGlossDetailsRef={defaultGlossDetailsRef}

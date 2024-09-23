@@ -644,9 +644,13 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/glex/glossaries/${projectId}/?option=glossary`,
             auth: true,
             success: (response) => {
-                if(activeTabRef.current === "3"){
-                    setGlossaryList(response.data)
-                }
+                console.log("glossary")
+                console.log(response.data)
+                console.log(response.data.find(each => each.glossary_id == 1110))
+                console.log(response.data.find(each => each.glossary_id == 1113))
+                setGlossaryList(response.data)
+                // if(activeTabRef.current === "3"){
+                // }
                 glossaryListRef.current = response.data
                 setisGlossaryListLoading(false)
                 getSelectedGlossaries()
@@ -664,9 +668,11 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/glex/glossaries/${projectId}/?option=word_choices`,
             auth: true,
             success: (response) => {
+                // console.log("glossary")
+                // console.log(response.data)
+                setGlossaryList(response.data)
                 if(activeTabRef.current === "6"){
                     // console.log('inside wc')
-                    setGlossaryList(response.data)
                 }
                 wordChoiceListRef.current = response.data
                 setIsWordchoiceListLoading(false)
@@ -684,6 +690,8 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/glex/glossary_selected/?project=${projectId}&option=glossary`,
             auth: true,
             success: (response) => {
+                console.log("selected glossary")
+                console.log(response.data)
                 glossarySelectedListRef.current = response.data
                 if(activeTabRef.current === "3"){
                     setGlossarySelectedList(response.data)
