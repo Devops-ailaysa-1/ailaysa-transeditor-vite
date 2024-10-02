@@ -4066,20 +4066,17 @@ useEffect(() => {
         if (e.target.className?.includes('source')) {
             if (sourceTextDiv.current[id].current !== null) {
                 let pos = getHTMLCaretPosition(sourceTextDiv.current[id].current)
-                // console.log(pos);
-                let firstSeg = replaceTagsWithText(unescape(sourceTextDiv.current[id].current.innerHTML).slice(0, pos))
-                let secondSeg = replaceTagsWithText(unescape(sourceTextDiv.current[id].current.innerHTML).slice(pos, unescape(sourceTextDiv.current[id].current.innerHTML).length))
-                // console.log(pos);
-                // console.log(firstSeg);
-                // console.log(secondSeg);
-                if ((pos !== null || pos !== undefined) && mergeSelectedSegmentIds?.length === 0) {
-                    if (e.target.getAttribute('data-id') && e.target.getAttribute('source-data-text-unit')) {
-                        segmentIdRef.current = e.target.getAttribute('data-id')
-                        sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit')
-                        setDisbaleSplitIcon(false)
+                try {
+                    if ((pos !== null || pos !== undefined) && mergeSelectedSegmentIds?.length === 0) {
+                        if (e.target.getAttribute('data-id') && e.target.getAttribute('source-data-text-unit')) {
+                            segmentIdRef.current = e.target.getAttribute('data-id')
+                            sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit')
+                            setDisbaleSplitIcon(false)
+                        }
                     }
+                }catch (e) {
+                    console.log(e)
                 }
-                // console.log(focusedDivIdRef.current)
             }
         }
 
@@ -8305,7 +8302,7 @@ useEffect(() => {
                                                                         id={"source-text-div-" + id}
                                                                         data-id={id}
                                                                         style={sourceLanguageFontSize != null ? { fontSize: sourceLanguageFontSize } : {}}
-                                                                        onFocus={(e) => contentEditableFocus(e, translatedResponse[key].status)}
+                                                                        onFocus={(e) => contentEditableFocus(e)}
                                                                         onClick={(e) => isWorkspaceEditable && handleSourceSegmentClick(e)}
                                                                         onBlur={(e) => isWorkspaceEditable && handleSourceSegmentBlur(e)}
                                                                         onKeyDown={(e) => e.preventDefault()}
@@ -8317,6 +8314,7 @@ useEffect(() => {
                                                                         onSelect={() => debounceApiCall(checkSourceTextSelection)}
                                                                         source-data-text-unit={textUnit}
                                                                         suppressContentEditableWarning={true}
+                                                                        data-source-text={sourceOriginal}
                                                                         spellCheck="false"
                                                                     >
                                                                         {parse(sourceText)}
