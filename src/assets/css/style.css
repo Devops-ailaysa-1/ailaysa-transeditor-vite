@@ -44432,3 +44432,14 @@ body{
 .suggested-mt-text:hover {
     text-decoration: underline;
 }
+
+.my-style-wrapper textarea {
+    border-radius: 4px;
+    border: 1px solid #E7E9EC;
+    resize: none;
+    padding: 16px;
+    width: 100%;
+}
+.my-style-wrapper textarea:focus {
+    border: 1px solid #0073DF;
+}
