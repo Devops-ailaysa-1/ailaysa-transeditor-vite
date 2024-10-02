@@ -86,6 +86,8 @@ import ConfirmIcon from "../assets/images/new-ui-icons/confirm-icon.svg"
 import ReferenceModal from "./Writter-componenets/ReferenceModal";
 import ReactRouterPrompt from 'react-router-prompt'
 import { setWriterWordCount } from "../features/writer-slices/WriterWordCountSlice";
+import { AITab } from "../components/AITabs/AITab";
+import { MyStyleBox } from "./my-style-prompt/MyStyleBox";
 // import { PromptWritingBox } from "./prompt-writing-box/PromptWritingBox";
 
 const AudioSlider = styled(Slider)({
@@ -362,6 +364,17 @@ const Writter = (props) => {
     const [showWriterPageLeavingAlertModal, setShowWriterPageLeavingAlertModal] = useState(false)
     const [isTranslateProceeding, setIsTranslateProceeding] = useState(false)
 
+    const customizationTabList = [
+        {
+            value: 1,
+            label: t("general")
+        },
+        {
+            value: 2,
+            label: t("my_style")
+        },
+    ]
+
     const webSearchResult = {
         "google": [
             {
@@ -524,6 +537,10 @@ const Writter = (props) => {
 
     const [openContentReferenceModal, setOpenContentReferenceModal] = useState(false)
     const [contentReferenceResult, setContentReferenceResult] = useState(null)
+    
+    const [myStyleData, setMyStyleData] = useState(null)
+    const [activeCustomizationTab, setActiveCustomizationTab] = useState(1)
+
 
     const selectedToneRef = useRef(null)
     const documentNameRef = useRef(null)
@@ -595,6 +612,7 @@ const Writter = (props) => {
         getGenreOptions()
         getBookFrontMatterOptions()
         getBookBackMatterOptions()
+        getMyStyle()
         // set browser tab title as "Writer"
         document.title = '';
         setTimeout(() => {
@@ -1258,6 +1276,12 @@ const Writter = (props) => {
     useEffect(() => {
         popoverContentSwitchRef.current = popoverContentSwitch
     }, [popoverContentSwitch])
+
+    useEffect(() => {
+        if(!showCustomSettingsModal){
+            setActiveCustomizationTab(1)
+        }
+    }, [showCustomSettingsModal])
     
 
     const Option = (props) => {
@@ -2594,6 +2618,17 @@ const Writter = (props) => {
             // console.log(sel_customization)
             // if(id === 24) formdata.append("percent", summerizePercentage);
 
+            // my style
+            if(id === 29) {
+                if(myStyleData?.length === 0) {
+                    dispatch(setShowCustomSettingsModal(true))
+                    setActiveCustomizationTab(2)
+                    Config.toast(t("empty_my_style_text2"), "warning")
+                    return
+                }
+                formdata.append("my_style", myStyleData[0]?.id);
+            }
+
             if (id == 23) {
                 formdata.append("language", src);
                 console.log(tar)
@@ -2811,6 +2846,10 @@ const Writter = (props) => {
                             // Config.toast('Insufficient Credits', 'warning')
                             setShowCreditAlertModal(true)
 
+                        } else if(err?.response?.data?.msg?.includes('voice style')) {
+                            dispatch(setShowCustomSettingsModal(true))
+                            setActiveCustomizationTab(2)
+                            Config.toast(t("empty_my_style_text2"), "warning")
                         } else {
                             Config.toast(t("no_output_diff_text_note"), 'warning')
                         }
@@ -4107,6 +4146,22 @@ const Writter = (props) => {
         setShowWriterPageLeavingAlertModal(false)
         setConfirmedNavigation(true)
     }
+
+    // My styles
+    const getMyStyle = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/openai/my-style/`,
+            auth: true,
+            success: (response) => {
+                setMyStyleData(response.data)
+            },
+            error: (err) => { }
+        });
+    } 
+
+    const handleCustomizationTabChange = (item) => {
+        setActiveCustomizationTab(item.value)
+    } 
     
 
     const ailaysaMainWritter = (
@@ -4712,116 +4767,125 @@ const Writter = (props) => {
                             <span onClick={() => dispatch(setShowCustomSettingsModal(false))}><CloseIcon className="close-icon" /></span>
                         </div>
                     </div>
-                    <div className="term-edit-form">
-                        <p className="customization-default-radio-group-label">{t("select_ai_trans_want_to_use")}:</p>
-                        <div className="term-edit-form-control">
-                            <Radio
-                                checked={selectedMtengine === 1}
-                                className="cell-box-radio"
-                                size="small"
-                                id="google"
-                                onChange={() => setSelectedMtengine(1)}
-                            />
-                            <label htmlFor="google">{t("goog_translate")}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <Radio
-                                checked={selectedMtengine === 2}
-                                className="cell-box-radio"
-                                size="small"
-                                id="microsoft"
-                                onChange={() => setSelectedMtengine(2)}
-                            />
-                            <label htmlFor="microsoft">{t("micro_translate")}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <Radio
-                                checked={selectedMtengine === 3}
-                                className="cell-box-radio"
-                                size="small"
-                                id="amazon"
-                                onChange={() => setSelectedMtengine(3)}
-                            />
-                            <label htmlFor="amazon">{t("amazon_translate")}</label>
-                        </div>
-                    </div>
 
-
-                    <div className="term-edit-form">
-                        <p className="customization-default-radio-group-label">{t("adding_generated_result")}:</p>
-                        <div className="term-edit-form-control">
-                            <Radio
-                                checked={newLineResult}
-                                className="cell-box-radio"
-                                size="small"
-                                id="new_line"
-                                onChange={() => setNewLineResult(true)}
-                            />
-                            <label htmlFor="new_line">{t("new_line")}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <Radio
-                                checked={!newLineResult}
-                                className="cell-box-radio"
-                                size="small"
-                                id="same_line"
-                                onChange={() => { setNewLineResult(false); console.log('hello'); }}
-                            />
-                            <label htmlFor="same_line">{t("same_line")}</label>
+                    <AITab
+                        onChange={handleCustomizationTabChange} 
+                        activeTab={activeCustomizationTab}
+                        dataList={customizationTabList}
+                        customClass="w-1/2 mt-4 ml-4"
+                    />
+                    {activeCustomizationTab === 1 ? (
+                        <div className="general-settings-wrapper">
+                            <div className="term-edit-form">
+                                <p className="customization-default-radio-group-label">{t("select_ai_trans_want_to_use")}:</p>
+                                <div className="term-edit-form-control">
+                                    <Radio
+                                        checked={selectedMtengine === 1}
+                                        className="cell-box-radio"
+                                        size="small"
+                                        id="google"
+                                        onChange={() => setSelectedMtengine(1)}
+                                    />
+                                    <label htmlFor="google">{t("goog_translate")}</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <Radio
+                                        checked={selectedMtengine === 2}
+                                        className="cell-box-radio"
+                                        size="small"
+                                        id="microsoft"
+                                        onChange={() => setSelectedMtengine(2)}
+                                    />
+                                    <label htmlFor="microsoft">{t("micro_translate")}</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <Radio
+                                        checked={selectedMtengine === 3}
+                                        className="cell-box-radio"
+                                        size="small"
+                                        id="amazon"
+                                        onChange={() => setSelectedMtengine(3)}
+                                    />
+                                    <label htmlFor="amazon">{t("amazon_translate")}</label>
+                                </div>
+                            </div>
+                            <div className="term-edit-form">
+                                <p className="customization-default-radio-group-label">{t("adding_generated_result")}:</p>
+                                <div className="term-edit-form-control">
+                                    <Radio
+                                        checked={newLineResult}
+                                        className="cell-box-radio"
+                                        size="small"
+                                        id="new_line"
+                                        onChange={() => setNewLineResult(true)}
+                                    />
+                                    <label htmlFor="new_line">{t("new_line")}</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <Radio
+                                        checked={!newLineResult}
+                                        className="cell-box-radio"
+                                        size="small"
+                                        id="same_line"
+                                        onChange={() => { setNewLineResult(false); console.log('hello'); }}
+                                    />
+                                    <label htmlFor="same_line">{t("same_line")}</label>
+                                </div>
+                                <div className="term-edit-form-control">
+                                    <Radio
+                                        checked={appendResult}
+                                        className="cell-box-radio"
+                                        size="small"
+                                        id="append"
+                                        onChange={() => setAppendResult(true)}
+                                    />
+                                    <label htmlFor="append">{t("append")}</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <Radio
+                                        checked={!appendResult}
+                                        className="cell-box-radio"
+                                        size="small"
+                                        id="replace"
+                                        onChange={() => setAppendResult(false)}
+                                    />
+                                    <label htmlFor="replace">{t("replace")}</label>
+                                </div>
+                            </div>
+                            <div className="term-edit-form">
+                                <p className="customization-default-radio-group-label">{t("show_customization_result_in")}</p>
+                                <div className="term-edit-form-control">
+                                    <Radio
+                                        checked={showResultInModal}
+                                        className="cell-box-radio"
+                                        size="small"
+                                        id="in-modal"
+                                        onChange={() => setShowResultInModal(true)}
+                                    />
+                                    <label htmlFor="in-modal">{t("show_in_modal")}</label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <Radio
+                                        checked={!showResultInModal}
+                                        className="cell-box-radio"
+                                        size="small"
+                                        id="in-editor"
+                                        onChange={() => setShowResultInModal(false)}
+                                    />
+                                    <label htmlFor="in-editor">{t("show_in_editor")}</label>
+                                </div>
+                            </div>
+                            <div className="footer-area-wrapper justify-content-end" style={{ padding: '0px 30px 15px 30px' }}>
+                                <div className="term-edit-btn-row">
+                                    <button
+                                        className="uploadProjectButton-writter"
+                                        onClick={() => !isDefaultSettingSaving && handleCustomSettingsSave()}
+                                    >
+                                        <span className="fileupload-new-btn">
+                                            {isDefaultSettingSaving ? `${t("saving")}...` : `${t("save")}`}
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div className="term-edit-form-control">
-                            <Radio
-                                checked={appendResult}
-                                className="cell-box-radio"
-                                size="small"
-                                id="append"
-                                onChange={() => setAppendResult(true)}
-                            />
-                            <label htmlFor="append">{t("append")}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <Radio
-                                checked={!appendResult}
-                                className="cell-box-radio"
-                                size="small"
-                                id="replace"
-                                onChange={() => setAppendResult(false)}
-                            />
-                            <label htmlFor="replace">{t("replace")}</label>
-                        </div>
-                    </div>
-
-                    <div className="term-edit-form">
-                        <p className="customization-default-radio-group-label">{t("show_customization_result_in")}</p>
-                        <div className="term-edit-form-control">
-                            <Radio
-                                checked={showResultInModal}
-                                className="cell-box-radio"
-                                size="small"
-                                id="in-modal"
-                                onChange={() => setShowResultInModal(true)}
-                            />
-                            <label htmlFor="in-modal">{t("show_in_modal")}</label>
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <Radio
-                                checked={!showResultInModal}
-                                className="cell-box-radio"
-                                size="small"
-                                id="in-editor"
-                                onChange={() => setShowResultInModal(false)}
-                            />
-                            <label htmlFor="in-editor">{t("show_in_editor")}</label>
-                        </div>
-                    </div>
-
-                    <div className="footer-area-wrapper justify-content-end" style={{ padding: '0px 30px 15px 30px' }}>
-                        <div className="term-edit-btn-row">
-                            <button
-                                className="uploadProjectButton-writter"
-                                onClick={() => !isDefaultSettingSaving && handleCustomSettingsSave()}
-                            >
-                                <span className="fileupload-new-btn">
-                                    {isDefaultSettingSaving ? `${t("saving")}...` : `${t("save")}`}
-                                </span>
-                            </button>
-                        </div>
-                    </div>
+                    ) : (
+                        <MyStyleBox myStyleData={myStyleData} getMyStyle={getMyStyle} />
+                    )}
                 </Rodal>
             )}
 
@@ -4851,6 +4915,7 @@ const Writter = (props) => {
                     </React.Fragment>
                 </div>
             </Rodal>)}
+
             <SimpleRodals
                 sourceLanguage={location.pathname?.includes('/book-writing') ? bookLanguage : sourceLanguage}
                 showSrcLangModal={showSrcLangModal}
@@ -4936,13 +5001,6 @@ const Writter = (props) => {
                 </Rodal>
             )}
 
-            {/* prompt for book project exit */}
-            {/* <Prompt
-                when={bookPageActive}
-                message={handleBlockedNavigationForBook}
-            /> */}
-            
-
             {/* book page leaving confirmation modal */}
             {showBookPageLeavingAlertModal && (
                 <Rodal
@@ -4969,11 +5027,7 @@ const Writter = (props) => {
                 </Rodal>
             )}
 
-            {/* prompt for document */}
-            {/* <Prompt
-                when={writerPageActive}
-                message={handleBlockedNavigationForWriter}
-            /> */}
+          
             <ReactRouterPrompt when={handleBlockedNavigationForWriter}>
             {({ isActive, onConfirm, onCancel }) => {
                 return (
@@ -5002,6 +5056,7 @@ const Writter = (props) => {
                 )
             }}
             </ReactRouterPrompt>
+
             {/* writer page leaving confirmation modal */}
             {showWriterPageLeavingAlertModal && (
                 <Rodal
