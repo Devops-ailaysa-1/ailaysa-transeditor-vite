@@ -143,6 +143,29 @@ function AdvancedProjectType(props) {
         }),
     };
 
+    useEffect(() => {
+        if (props?.mtEnable === false) {
+            setPreTranslate(false)
+            setAdaptiveTransEnable(false)
+        }
+    }, [props?.mtEnable])
+
+    useEffect(() => {
+        if(adaptiveTransEnable) {
+            setTranslationByPage(false)
+        }
+    }, [adaptiveTransEnable])
+    
+
+    const handlePageWiseTransOption = () => {
+        if(projectDataFromApi.current?.glossary_selected){
+            Config.toast(t("glossary_selected_warning_text"), 'warning')
+        }else {
+            setTranslationByPage(true)
+            setAdaptiveTransEnable(false)
+        }
+    } 
+
     const Option = (props) => {
         return (
             <div>
@@ -395,7 +418,7 @@ function AdvancedProjectType(props) {
                                                 </label>
                                             </>
                                             {(isTranslationTaskAvailable || tempWriterFile !== null) &&
-                                                <>
+                                                <div className="flex items-center" style={!props.mtEnable ? {opacity: 0.5} : {}}>
                                                     <Checkbox
                                                         id="pre-translate"
                                                         // className="ml-3"
@@ -404,27 +427,31 @@ function AdvancedProjectType(props) {
                                                         onChange={(e) => setPreTranslate(e.target.checked)}
                                                         size="small"
                                                     />
-                                                    <label htmlFor="pre-translate" style={!props.mtEnable ? {opacity: 0.5} : {}} className={preTranslate ? "add-active" : ""}>
+                                                    <label htmlFor="pre-translate" className={preTranslate ? "add-active" : ""}>
                                                         {t("pre_translate_files")}
                                                     </label>{disablePreTranslate && <small style={{marginLeft: '5px'}}>({t("pre_translation_on_going")})</small>}
                                                 
-                                                </>
+                                                </div>
                                             }
                                             {/* adaptive translation enable/disable */}
                                             {(isTranslationTaskAvailable || tempWriterFile !== null) && (
-                                                <>
+                                                <div className="flex items-center" style={!props.mtEnable ? {opacity: 0.5} : {}}>
                                                     <Checkbox
                                                         id="adapative_tans"
                                                         checked={adaptiveTransEnable}
+                                                        disabled={!props.mtEnable}
                                                         onChange={(e) => setAdaptiveTransEnable(e.target.checked)}
                                                         size="small"
                                                         className="ml-3"
                                                     />
-                                                    <label htmlFor="adapative_tans" className={adaptiveTransEnable ? "add-active mr-3" : "mr-3"}>
+                                                    <label 
+                                                        htmlFor="adapative_tans" 
+                                                        className={adaptiveTransEnable ? "add-active mr-3" : "mr-3"}
+                                                    >
                                                         {t("adaptive_translation")}
                                                         <span className="beta-tag">{t("beta")}</span>
                                                     </label>
-                                                </>
+                                                </div>
                                             )}
                                         </div>
                                     </div>
@@ -441,7 +468,7 @@ function AdvancedProjectType(props) {
                                                             id="translate-by-page"
                                                             className="radio-btn"
                                                             size="small"
-                                                            onChange={() => projectDataFromApi.current?.glossary_selected ? Config.toast(t("glossary_selected_warning_text"), 'warning') : setTranslationByPage(true)}
+                                                            onChange={handlePageWiseTransOption}
                                                         /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
                                                         &nbsp;&nbsp;
                                                         <Radio

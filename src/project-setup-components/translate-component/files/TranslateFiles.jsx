@@ -2052,12 +2052,6 @@ function TranslateFiles(props) {
         deletedContentIds.current = [];
     };
 
-    useEffect(() => {
-        if (mtEnable === false) {
-            setPreTranslate(false)
-        }
-    }, [mtEnable])
-
 
     /* Delete files when editing */
     const deleteEditFile = (e, canDelete = false, editFileId) => {
