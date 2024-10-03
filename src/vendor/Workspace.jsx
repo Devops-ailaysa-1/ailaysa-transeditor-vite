@@ -438,6 +438,7 @@ function Workspace(props) {
     
     // store selection coordinates
     const [selectedCoordinates, setSelectedCoordinates] = useState(null)
+    const [isAdaptiveTransEnabled, setIsAdaptiveTransEnabled] = useState(false)
     
     const forcedLoaderRef = useRef(false)
     const glossarySrcFieldRef = useRef(null)
@@ -2277,6 +2278,8 @@ useEffect(() => {
                 setEnableFileDownload(responseTemp?.download === "enable" ? true : false);
                 setMtEnable(responseTemp?.mt_enable)
                 setTaskAssignUserDetails(responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id)
+
+                setIsAdaptiveTransEnabled(responseTemp?.isAdaptive)
 
                 if(!isEnterprise) getDefaultGlossDetails()
 

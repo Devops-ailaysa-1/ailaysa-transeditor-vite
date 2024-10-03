@@ -55,7 +55,9 @@ function AdvancedProjectType(props) {
         handleMTEngineChange,
         translationByPage,
         setTranslationByPage,
-        projectDataFromApi
+        projectDataFromApi,
+        adaptiveTransEnable,
+        setAdaptiveTransEnable
     } = props;
 
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -381,17 +383,17 @@ function AdvancedProjectType(props) {
                                 <div className={"form-wrapper pt-0 "}>
                                     <div className="d-flex gap-3 files-space-align">
                                         <div className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3">
-                                                <>
-                                                    <Checkbox
-                                                        id="machine-type"
-                                                        checked={props.mtEnable}
-                                                        onChange={(e) => props.setMtEnable(e.target.checked)}
-                                                        size="small"
-                                                    />
-                                                    <label htmlFor="machine-type" className={props.mtEnable ? "add-active mr-3" : "mr-3"}>
-                                                        {t("apply_mt")}
-                                                    </label>
-                                                </>
+                                            <>
+                                                <Checkbox
+                                                    id="machine-type"
+                                                    checked={props.mtEnable}
+                                                    onChange={(e) => props.setMtEnable(e.target.checked)}
+                                                    size="small"
+                                                />
+                                                <label htmlFor="machine-type" className={props.mtEnable ? "add-active mr-3" : "mr-3"}>
+                                                    {t("apply_mt")}
+                                                </label>
+                                            </>
                                             {(isTranslationTaskAvailable || tempWriterFile !== null) &&
                                                 <>
                                                     <Checkbox
@@ -408,6 +410,21 @@ function AdvancedProjectType(props) {
                                                 
                                                 </>
                                             }
+                                            {/* adaptive translation enable/disable */}
+                                            {isTranslationTaskAvailable && (
+                                                <>
+                                                    <Checkbox
+                                                        id="adapative_tans"
+                                                        checked={adaptiveTransEnable}
+                                                        onChange={(e) => setAdaptiveTransEnable(e.target.checked)}
+                                                        size="small"
+                                                        className="ml-3"
+                                                    />
+                                                    <label htmlFor="adapative_tans" className={adaptiveTransEnable ? "add-active mr-3" : "mr-3"}>
+                                                        {t("adaptive_translation")}
+                                                    </label>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                     {!preTranslate && (
