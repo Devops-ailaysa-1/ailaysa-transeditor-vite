@@ -1179,5 +1179,6 @@
     "save_style": "Save style",
     "empty_my_style_text": "My style cannot be empty!",
     "empty_my_style_text2": "No style provided",
-    "adaptive_translation": "Adaptive Translation (Beta)"
+    "adaptive_translation": "Adaptive Translation",
+    "beta": "Beta"
 }

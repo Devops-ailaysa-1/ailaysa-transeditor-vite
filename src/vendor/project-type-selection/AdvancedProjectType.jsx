@@ -411,7 +411,7 @@ function AdvancedProjectType(props) {
                                                 </>
                                             }
                                             {/* adaptive translation enable/disable */}
-                                            {isTranslationTaskAvailable && (
+                                            {(isTranslationTaskAvailable || tempWriterFile !== null) && (
                                                 <>
                                                     <Checkbox
                                                         id="adapative_tans"
@@ -422,6 +422,7 @@ function AdvancedProjectType(props) {
                                                     />
                                                     <label htmlFor="adapative_tans" className={adaptiveTransEnable ? "add-active mr-3" : "mr-3"}>
                                                         {t("adaptive_translation")}
+                                                        <span className="beta-tag">{t("beta")}</span>
                                                     </label>
                                                 </>
                                             )}
