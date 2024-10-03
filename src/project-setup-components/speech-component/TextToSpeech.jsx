@@ -214,6 +214,9 @@ const TextToSpeech = (props) => {
     const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
     const [navigationModalVisible, setNavigationModalVisible] = useState(false)
 
+    // adaptive translation state
+    const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
+
     const [formValidation, setFormValidation] = useState({
         source: false,
         target: false,
@@ -731,6 +734,7 @@ const TextToSpeech = (props) => {
                 setSourceLanguage(editSourceLanguage?.id);
                 setSourceLabel(editSourceLanguage?.language);
                 setSourceLanguageDisable(true);
+                setAdaptiveTransEnable(data?.isAdaptive)
 
                 let deadlineLocal = Config.convertUTCToLocal(data?.project_deadline);
                 setDeadline(deadlineLocal);
@@ -1231,6 +1235,7 @@ const TextToSpeech = (props) => {
         formdata.append("pre_translate", preTranslate);
         if(mtEnable) formdata.append("get_mt_by_page", translationByPage);
 
+        formdata.append("isAdaptiveTranslation", adaptiveTransEnable);
 
         Config.axios({
             headers: {
@@ -1290,6 +1295,8 @@ const TextToSpeech = (props) => {
 
 
         formdata.append("mt_enable", mtEnable);
+        
+        formdata.append("isAdaptiveTranslation", adaptiveTransEnable);
 
         if (projectDataFromApi.current?.pre_translate !== preTranslate) {
             formdata.append("pre_translate", preTranslate);
@@ -1376,13 +1383,6 @@ const TextToSpeech = (props) => {
             }
         });
     };
-
-    useEffect(() => {
-        if (mtEnable === false) {
-            setPreTranslate(false)
-        }
-    }, [mtEnable])
-
 
 
     const isValidate = (operationValue) => {
@@ -2362,6 +2362,8 @@ const TextToSpeech = (props) => {
                                             translationByPage={translationByPage}
                                             setTranslationByPage={setTranslationByPage}
                                             projectDataFromApi={projectDataFromApi}
+                                            adaptiveTransEnable={adaptiveTransEnable}
+                                            setAdaptiveTransEnable={setAdaptiveTransEnable}
                                         />}
                                     </div>
                                     <div className="d-flex justify-between">
