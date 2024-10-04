@@ -1919,7 +1919,7 @@ function Workspace(props) {
             // console.log(newArr)
             setTranslatedResponse(newArr)
         }
-    }, [mergeSelectedSegmentIds, translatedResponseRef.current])
+    }, [mergeSelectedSegmentIds])
 
 
     // get the list of wordchoices based on the task_id
@@ -4219,7 +4219,7 @@ useEffect(() => {
                         }
                         return obj
                     })
-                    // setTranslatedResponse(newArr)
+                    setTranslatedResponse(newArr)
                     translatedResponseDisableEditRef.current = newArr
                     // console.log(newArr)
                     
@@ -5696,29 +5696,18 @@ useEffect(() => {
             targetContentEditable.current[segmentId].current.innerHTML = value
         else*/
         // console.log(translatedResponse);
-        setTranslatedResponse((prevTranslatedResponse) => {
-            console.log(prevTranslatedResponse?.map((obj) => {
-                if(obj.segment_id == segmentId){
-                    return {
-                        ...obj,
-                        [key]: value
-                    }
-                }
-                return obj
-            }))
-            prevTranslatedResponse?.map((obj) => {
-                if(obj.segment_id == segmentId){
-                    return {
-                        ...obj,
-                        [key]: value
-                    }
-                }
-                return obj
-            })   
-        });
+        console.log(value)
+        setTranslatedResponse(preveState => preveState?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el)));
         translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el))
-        // console.log(translatedResponse);
+        // console.log("ref")
+        // console.log(translatedResponseRef.current)
     };
+
+    // useEffect(() => {
+    //     console.log("state")
+    //     console.log(translatedResponse)
+    // }, [translatedResponse])
+    
 
     /* Toggling the footer toolbar show/hide */
     const handleToggleVisibility = (show = true) => {
@@ -5772,7 +5761,21 @@ useEffect(() => {
             }
         })
         // console.log(newArr)
-        setTranslatedResponse(newArr)
+        setTranslatedResponse((prevState) => {
+            return prevState?.map(obj => {
+                if (obj.segment_id == segmentId) {
+                    return {
+                        ...obj,
+                        isFocused: true
+                    }
+                } else {
+                    return {
+                        ...obj,
+                        isFocused: false
+                    }
+                }
+            })
+        })
 
         // let workspaceRowDiv = "";
         // translatedResponse.map((value) => {
