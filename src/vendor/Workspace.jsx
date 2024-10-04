@@ -5696,26 +5696,15 @@ useEffect(() => {
             targetContentEditable.current[segmentId].current.innerHTML = value
         else*/
         // console.log(translatedResponse);
-        setTranslatedResponse((prevTranslatedResponse) => {
-            console.log(prevTranslatedResponse?.map((obj) => {
-                if(obj.segment_id == segmentId){
-                    return {
-                        ...obj,
-                        [key]: value
-                    }
+        setTranslatedResponse((prevTranslatedResponse) => prevTranslatedResponse?.map((obj) => {
+            if(obj.segment_id == segmentId){
+                return {
+                    ...obj,
+                    [key]: value
                 }
-                return obj
-            }))
-            prevTranslatedResponse?.map((obj) => {
-                if(obj.segment_id == segmentId){
-                    return {
-                        ...obj,
-                        [key]: value
-                    }
-                }
-                return obj
-            })   
-        });
+            }
+            return obj
+        }));
         translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el))
         // console.log(translatedResponse);
     };
