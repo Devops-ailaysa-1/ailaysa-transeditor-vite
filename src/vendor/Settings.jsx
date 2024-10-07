@@ -219,7 +219,7 @@ const Settings = (props) => {
         if(activeTab === "3"){
             glossaryToRemove.current = null
             setGlossaryList(glossaryListRef.current)
-            console.log(glossarySelectedListRef.current)
+            // console.log(glossarySelectedListRef.current)
             setGlossarySelectedList(glossarySelectedListRef.current)
             setCheckedGlossary(prevState => [])
             setIsGlossaryChanged(false)
@@ -236,7 +236,7 @@ const Settings = (props) => {
     // store the glossary which are removed
     useEffect(() => {
         let list = glossarySelectedList?.filter(o1 => !checkedGlossary.some(o2 => o1.glossary == o2))
-        console.log(list)
+        // console.log(list)
         glossaryToRemove.current = list
         if (glossaryToRemove.current?.length !== 0 || checkedGlossary?.filter(item => !glossarySelectedList?.some(each => each.glossary == item))?.length !== 0) {
             setIsGlossaryChanged(true)
@@ -255,14 +255,14 @@ const Settings = (props) => {
             a?.map(each => {
                 list.push(each.glossary_id)
             })
-            console.log(list)
+            // console.log(list)
             setCheckedGlossary(list)
         }
     }, [glossarySelectedList, glossaryList])
 
     
     const handleGlossaryCheckbox = (e, glossaryId) => {
-        console.log(checkedGlossary)
+        // console.log(checkedGlossary)
         if(checkedGlossary?.includes(glossaryId)){
             let newCheckedTerms = checkedGlossary?.filter(id => id !== glossaryId)
             glossaryToRemove.current = glossaryId
@@ -644,9 +644,13 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/glex/glossaries/${projectId}/?option=glossary`,
             auth: true,
             success: (response) => {
-                if(activeTabRef.current === "3"){
-                    setGlossaryList(response.data)
-                }
+                console.log("glossary")
+                console.log(response.data)
+                console.log(response.data.find(each => each.glossary_id == 1110))
+                console.log(response.data.find(each => each.glossary_id == 1113))
+                setGlossaryList(response.data)
+                // if(activeTabRef.current === "3"){
+                // }
                 glossaryListRef.current = response.data
                 setisGlossaryListLoading(false)
                 getSelectedGlossaries()
@@ -664,13 +668,15 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/glex/glossaries/${projectId}/?option=word_choices`,
             auth: true,
             success: (response) => {
+                // console.log("glossary")
+                // console.log(response.data)
+                setGlossaryList(response.data)
                 if(activeTabRef.current === "6"){
-                    console.log('inside wc')
-                    setGlossaryList(response.data)
+                    // console.log('inside wc')
                 }
                 wordChoiceListRef.current = response.data
                 setIsWordchoiceListLoading(false)
-                getSelectedWordChoice()
+                // getSelectedWordChoice()
             },
             error: (err) => {
                 setIsWordchoiceListLoading(false)
@@ -684,6 +690,8 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/glex/glossary_selected/?project=${projectId}&option=glossary`,
             auth: true,
             success: (response) => {
+                console.log("selected glossary")
+                console.log(response.data)
                 glossarySelectedListRef.current = response.data
                 if(activeTabRef.current === "3"){
                     setGlossarySelectedList(response.data)
@@ -807,6 +815,7 @@ const Settings = (props) => {
         let extension = fileName.substring(fileName.lastIndexOf(".") + 1);
         if (validExtensions.indexOf(extension) > -1) {
             //Check for file type i,e .tbx
+            // console.log(file)
             setUploadedTbxFile(file)
         } else Config.toast(t("upload_tbx_file"), "error");
     };
@@ -879,32 +888,30 @@ const Settings = (props) => {
             Config.toast(t("select_job_to_apply"), "error");
             return;
         }
+
         let formData = new FormData();
         formData.append("tbx_file", uploadedTbxFile);
         if (selectedTbxJob != 0) formData.append("job_id", selectedTbxJob);
         else formData.append("job_id", "");
         let token = Config.userState.token;
-        const headers = {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        };
+
+        
         let url = `${Config.BASE_URL}/workspace/tbx_list_create/${projectId}`;
-        axios
-            .post(url, formData, headers)
-            .then((response) => {
+        Config.axios({
+            url: url,
+            method: "POST",
+            auth: true,
+            data: formData,
+            success: (response) => {
                 Config.toast(t("successfully_uploaded"));
                 setUploadedTbxFile(null)
                 getTbxFiles();
-            })
-            .catch((error) => {
-                Config.toast(t("something_went_wrong"), "error");
-            })
-            .finally(
                 setError("")
-            );
+            },
+            error: (err) => {
+                Config.toast(t("something_went_wrong"), "error");
+            }
+        })
     };
 
     /* Update the tbx job */
@@ -921,17 +928,19 @@ const Settings = (props) => {
             },
         };
         let url = `${Config.BASE_URL}/workspace/tbx_detail/${jobId}`;
-        axios
-            .put(url, formData, headers)
-            .then((response) => {
+        Config.axios({
+            url: url,
+            method: "PUT",
+            auth: true,
+            data: formData,
+            success: (response) => {
                 getTbxFiles();
-            })
-            .catch((error) => {
-                Config.toast(t("something_went_wrong"), "error");
-            })
-            .finally(
                 setError("")
-            );
+            },
+            error: (err) => {
+                Config.toast(t("something_went_wrong"), "error");
+            }
+        })
     };
 
     const downloadFileFromApi = (url) => {
@@ -1012,6 +1021,7 @@ const Settings = (props) => {
         let extension = fileName.substring(fileName.lastIndexOf(".") + 1);
         if (validExtensions.indexOf(extension) > -1) {
             // Check for file type
+            // console.log(file)
             setUploadedTbxConvertFile(file)
             if (!tbxFileConvertShow) {
                 setTbxFileConvertShow(true)
@@ -1032,21 +1042,20 @@ const Settings = (props) => {
             return;
         }
         setIsConvertingButton(true)
+
         let formData = new FormData();
         formData.append("tbx_template_file", uploadedTbxConvertFile);
         formData.append("job_id", selectedTbxConvertJob);
         let token = Config.userState.token;
-        const headers = {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        };
+        
         let url = `${Config.BASE_URL}/workspace/tbx_template_upload/${projectId}`;
-        axios
-            .post(url, formData, headers)
-            .then((response) => {
+        
+        Config.axios({
+            url: url,
+            method: "POST",
+            auth: true,
+            data: formData,
+            success: (response) => {
                 Config.toast(t("successfully_uploaded"));
                 getTbxFiles();
                 // setSelectedTbxJob("")
@@ -1055,12 +1064,13 @@ const Settings = (props) => {
                 setUploadedTbxConvertFileName("")
                 setTbxFileConvertShow(false)
                 setIsConvertingButton(false)
-            })
-            .catch((error) => {
+                setError("")
+            },
+            error: (err) => {
                 Config.toast(error.response.data.msg, "error");
                 setIsConvertingButton(false)
-            })
-            .finally(setError(""));
+            }
+        })
     };
 
 
@@ -1084,15 +1094,20 @@ const Settings = (props) => {
                 },
             };
             let url = "http://167.71.235.214:8010/untranslatable_upload/";
-            axios
-                .post(url, formData, headers)
-                .then((response) => {
+            
+            Config.axios({
+                url: url,
+                method: "POST",
+                auth: true,
+                data: formData,
+                success: (response) => {
                     Config.toast(t("successfully_uploaded"));
-                })
-                .catch((error) => {
+                    setError("")
+                },
+                error: (err) => {
                     Config.toast(t("something_went_wrong"), "error");
-                })
-                .finally(setError(""));
+                }
+            })
         } else {
             Config.toast(t("supported_formats") + ": " + validExtensions.join(""), "error");
         }
@@ -1674,7 +1689,7 @@ const Settings = (props) => {
                                             t("translation_memories")
                                             :
                                             activeTab === "2" ?
-                                                t("translation_memories")
+                                                t("termbases")
                                                 :
                                                 activeTab === "3" ?
                                                     t("ailaysa_glossaries")
@@ -2367,7 +2382,7 @@ const Settings = (props) => {
                             </TabPane>
                             
                             {/* Wordchoice settings */}
-                            {/* <TabPane tabId="6">
+                            <TabPane tabId="6">
                                 <div className="asset-glossary-wrapper">
                                     <div className="asset-glossary-title-wrap">
                                         <h2 className="asset-gl-head">{t("wordchoice_list")}</h2>
@@ -2430,7 +2445,7 @@ const Settings = (props) => {
                                         )}
                                     </ul>
                                 </div>
-                            </TabPane> */}
+                            </TabPane>
 
                             <TabPane tabId="5">
                                 <TabContent activeTab={subQatab}>

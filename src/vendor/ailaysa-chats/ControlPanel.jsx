@@ -1,4 +1,8 @@
 import React from 'react';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+
 
 const ControlPanel = (props) => {
   const { file, pageNumber, numPages, setPageNumber, scale, setScale } = props;
@@ -103,6 +107,9 @@ const ControlPanel = (props) => {
           onClick={zoomIn}
         />
       </div>
+      <FormGroup>
+          <FormControlLabel control={<Switch checked={props.showScroll} onChange={() => props.setShowScroll(!props.showScroll)} />} label="Scrollbar" />
+      </FormGroup>
     </div>
   );
 };

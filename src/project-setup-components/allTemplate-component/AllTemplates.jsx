@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef, useRef } from "react";
-import { Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Config from "../../Config";
 import { useTranslation } from "react-i18next";
 import SearchIcon from '@mui/icons-material/Search';
@@ -41,13 +41,13 @@ const AllTemplate = (props) => {
     const [categoryListItem, setCategoryListItem] = useState(null);
     const [projectSearchTerm, setProjectSearchTerm] = useState("");
     const dispatch = useDispatch()
-    
+
     const searchTermRef = useRef(null)
     const DataItem = useRef(null)
     const DataFilterItem = useRef(null)
 
-    useEffect(() =>{
-        if(projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete){
+    useEffect(() => {
+        if (projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
             setIsSearchTermDelete(false)
         }
     }, [projectSearchTerm, isSearchTermDelete])
@@ -66,10 +66,10 @@ const AllTemplate = (props) => {
 
 
     const SearchTermFilterEnter = (e) => {
-        if(e.which === 13 && projectSearchTerm == ""){
+        if (e.which === 13 && projectSearchTerm == "") {
             setFileListSearchEnlarge(false)
             e.target.blur()
-        }else if(e.which === 13){
+        } else if (e.which === 13) {
             setFileListSearchEnlarge(false)
             handleSearchDropDownClick()
             searchTermRef.current = projectSearchTerm
@@ -78,19 +78,19 @@ const AllTemplate = (props) => {
     }
 
     const handleSearchDropDownClick = (e) => {
-        setDataItem(DataFilterItem.current?.filter(e=> {return e.attributes?.Title.toLowerCase().includes(projectSearchTerm.toLowerCase()) &&  e  }));
+        setDataItem(DataFilterItem.current?.filter(e => { return e.attributes?.Title.toLowerCase().includes(projectSearchTerm.toLowerCase()) && e }));
         setFileListSearchEnlarge(false)
-    } 
+    }
 
     useEffect(() => {
-        if(location?.state && DataFilterItem.current){
+        if (location?.state && DataFilterItem.current) {
             filterItem(location?.state?.aiCateg)
             // console.log(location?.state?.aiCateg, location?.state?.aiactivetabval)
         }
     }, [location?.state, DataFilterItem.current])
 
 
-    const getCardContent = async() => {
+    const getCardContent = async () => {
         setCardLoaders(true)
         var myHeaders = new Headers();
 
@@ -104,7 +104,7 @@ const AllTemplate = (props) => {
         if (data.status === 200) {
             let response = await data.json()
             let {
-                apps_template_cards 
+                apps_template_cards
             } = response?.data?.attributes
 
             let AppsCardsInfo = []
@@ -115,9 +115,9 @@ const AllTemplate = (props) => {
             DataItem.current = AppsCardsInfo?.flat(1)
             setCardLoaders(false)
         }
-    } 
+    }
 
-    const getFilterCardContent = async() => {
+    const getFilterCardContent = async () => {
         setCardLoaders(true)
         var myHeaders = new Headers();
 
@@ -148,9 +148,9 @@ const AllTemplate = (props) => {
         getCardContent();
         getFilterCardContent();
     }, [])
- 
+
     useEffect(() => {
-        if(dataFilterItem?.length !== 0){
+        if (dataFilterItem?.length !== 0) {
             let categoryArray = [...new Set(dataFilterItem?.map((item) => item.attributes?.category))]
             // const reorderCategoryArray = categoryArray[0];
             // categoryArray[0] = categoryArray[1];
@@ -162,21 +162,21 @@ const AllTemplate = (props) => {
     }, [dataFilterItem])
 
     useEffect(() => {
-        if(params?.menu === "translate"){
+        if (params?.menu === "translate") {
             filterItem("Translate");
-        }else if(params?.menu === "design"){
+        } else if (params?.menu === "design") {
             filterItem("Design");
-        } else if (params?.menu === "write"){
+        } else if (params?.menu === "write") {
             filterItem("Write");
-        } else if (params?.menu === "transcribe"){
+        } else if (params?.menu === "transcribe") {
             filterItem("Transcribe");
-        } else if (params?.menu === "voice"){
+        } else if (params?.menu === "voice") {
             filterItem("Voice");
-        } else if (params?.menu === "chatbooks"){
+        } else if (params?.menu === "chatbooks") {
             filterItem("Chatbooks");
-        } else if (params?.menu === "assets"){
+        } else if (params?.menu === "assets") {
             filterItem("Assets");
-        } else if (params?.menu === "toolkit"){
+        } else if (params?.menu === "toolkit") {
             filterItem("Toolkit");
         }
     }, [params?.menu, DataFilterItem.current])
@@ -202,13 +202,19 @@ const AllTemplate = (props) => {
     const handleCardClick = (item) => {
         dispatch(setShowGlobalTransition(false))
         setTimeout(() => {
-            if(item.attributes?.url.includes("https")){
+            if (item.attributes?.url.includes("https")) {
                 window.open(item.attributes?.url, "_blank")
-            }else{
-                history(item.attributes?.url, {state: {aiWritingCateg: item.attributes?.backend_id, prevPath: location.pathname}})
+            } else {
+                history(item.attributes?.url, { state: { aiWritingCateg: item.attributes?.backend_id, prevPath: location.pathname } })
             }
         }, 250);
     }
+
+    const handleOpenSpellCheck = (item) => {
+        history(`/spell-check`, { state: { aiWritingCateg: null, prevPath: location.pathname } })
+
+    }
+
 
     return (
         <React.Fragment>
@@ -220,19 +226,19 @@ const AllTemplate = (props) => {
                             <li className={activeTab === null ? "active" : ""} onClick={() => {
                                 setDataItem(DataItem.current);
                                 setHideSelectedCategory(false);
-                                setActiveTab(null); 
+                                setActiveTab(null);
                                 let categoryArray = [...new Set(dataFilterItem?.map((item) => item.attributes?.category))]
                                 // const reorderCategoryArray = categoryArray[0];
                                 // categoryArray[0] = categoryArray[1];
                                 // categoryArray[1] = reorderCategoryArray;
                                 setCategoryListItem(categoryArray);
                                 history(`/create/all-templates`)
-                                }}>{t("all")}</li>
+                            }}>{t("all")}</li>
                             {
                                 menuItems?.filter((curtCategory) => curtCategory !== "Popular tasks")?.map((item, index) => {
-                                    return(
-                                        <li 
-                                            key={index} 
+                                    return (
+                                        <li
+                                            key={index}
                                             className={item === activeTab ? "active" : ""}
                                             onClick={() => filterItem(item)}
                                         >
@@ -249,40 +255,39 @@ const AllTemplate = (props) => {
                         <div className="templates-box-list-wrapper">
                             <AnimatePresence mode="wait" initial={false}>
                                 {
-                                    !cardLoaders ? 
-                                    (   
-                                        (dataItem?.length > 0) ? 
-                                            (categoryListItem?.map((item, index) => {
-                                                // console.log(item)
-                                                return(
-                                                    <motion.div 
-                                                        key={activeTab ? activeTab : "All"} 
-                                                        animate={{ opacity: 1, x: 0 }}
-                                                        initial={{ opacity: 0, x: -20 }}
-                                                        exit={{ opacity: 0, x: 20 }}
-                                                        transition={{ duration: 0.3 }}
-                                                        className="tempalte-boxes-container-wrapper"
-                                                    >
-                                                        {/* { !hideSelectedCategory &&
+                                    !cardLoaders ?
+                                        (
+                                            (dataItem?.length > 0) ?
+                                                (categoryListItem?.map((item, index) => {
+                                                    return (
+                                                        <motion.div
+                                                            key={activeTab ? activeTab : "All"}
+                                                            animate={{ opacity: 1, x: 0 }}
+                                                            initial={{ opacity: 0, x: -20 }}
+                                                            exit={{ opacity: 0, x: 20 }}
+                                                            transition={{ duration: 0.3 }}
+                                                            className="tempalte-boxes-container-wrapper"
+                                                        >
+                                                            {/* { !hideSelectedCategory &&
                                                             <h2 className="category-title">{item}</h2>
                                                         } */}
-                                                        <div className="templates-box-row">
-                                                            { 
-                                                                dataItem.filter((curtCategory) => curtCategory.attributes?.category === item)?.map((item, index) => {
-                                                                    return(
-                                                                        <>
-                                                                            <div key={index} className="template-box-item-wrapper" onClick={() => handleCardClick(item)}>
-                                                                                <div className={"templates-box-item " + ((item.attributes?.category === "Popular tasks") ? 
-                                                                                    "write-bg-color": "")}>
-                                                                                    {
-                                                                                        item.attributes.newly_added &&
-                                                                                        <div className="newly-added-tag">
-                                                                                            {t("new")}
-                                                                                        </div>
-                                                                                    }
-                                                                                    <div className="content-area">
-                                                                                        <img src={Config.STRAPI_BASE_URL + item?.attributes?.icon?.data?.attributes?.url} />
-                                                                                        {/* {
+                                                            <div className="templates-box-row">
+                                                                {
+                                                                    dataItem.filter((curtCategory) => curtCategory.attributes?.category === item)?.map((item, index) => {
+                                                                        return (
+                                                                            <>
+                                                                                <div key={index} className="template-box-item-wrapper" onClick={() => handleCardClick(item)}>
+                                                                                    <div className={"templates-box-item " + ((item.attributes?.category === "Popular tasks") ?
+                                                                                        "write-bg-color" : "")}>
+                                                                                        {
+                                                                                            item.attributes.newly_added &&
+                                                                                            <div className="newly-added-tag">
+                                                                                                {t("new")}
+                                                                                            </div>
+                                                                                        }
+                                                                                        <div className="content-area">
+                                                                                            <img src={Config.STRAPI_BASE_URL + item?.attributes?.icon?.data?.attributes?.url} />
+                                                                                            {/* {
                                                                                             item.attributes?.category === "Text and Documents" ?
                                                                                                 <img src={Config.HOST_URL + "assets/images/new-create-hub/textandpost.svg"} />
                                                                                             : item.attributes?.category === "Files" ?
@@ -303,114 +308,140 @@ const AllTemplate = (props) => {
                                                                                                 <img src={Config.HOST_URL + "assets/images/new-create-hub/books.svg"} />
                                                                                             : null
                                                                                         } */}
-                                                                                        <h3>{item.attributes?.Title}</h3>
-                                                                                        <p>{item.attributes?.Description}</p>
-                                                                                    </div>
-                                                                                    <div className="bottom-area">
-                                                                                        <div className="methods-wrap">
-                                                                                            {
-                                                                                                item.attributes?.tags_lists?.data?.map((val, index) => {
-                                                                                                    return(
-                                                                                                        <span className="methods" key={index}>{val.attributes?.Tags}</span>
-                                                                                                    )
-                                                                                                })
-                                                                                            }
+                                                                                            <h3>{item.attributes?.Title}</h3>
+                                                                                            <p>{item.attributes?.Description}</p>
                                                                                         </div>
-                                                                                        <ButtonBase className="getstated-btn" onClick={() => handleCardClick(item)}>
-                                                                                            {t("get_started")}
-                                                                                            <KeyboardArrowRightOutlinedIcon className="icon" />
-                                                                                        </ButtonBase>
+                                                                                        <div className="bottom-area">
+                                                                                            <div className="methods-wrap">
+                                                                                                {
+                                                                                                    item.attributes?.tags_lists?.data?.map((val, index) => {
+                                                                                                        return (
+                                                                                                            <span className="methods" key={index}>{val.attributes?.Tags}</span>
+                                                                                                        )
+                                                                                                    })
+                                                                                                }
+                                                                                            </div>
+                                                                                            <ButtonBase className="getstated-btn" onClick={() => handleCardClick(item)}>
+                                                                                                {t("get_started")}
+                                                                                                <KeyboardArrowRightOutlinedIcon className="icon" />
+                                                                                            </ButtonBase>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div className={"template-box-item-overlay "
+                                                                                        // + ((item.attributes?.category === "Popular tasks") ? 
+                                                                                        //     (
+                                                                                        //         ((item.attributes?.backend_id === "writing")) ? 
+                                                                                        //             "write-bg-color" 
+                                                                                        //         : (item.attributes?.Title === "Translate") ? 
+                                                                                        //             "translate-bg-color" 
+                                                                                        //         : (item.attributes?.Title === "Design") ? 
+                                                                                        //             "design-bg-color" 
+                                                                                        //         : (item.attributes?.Title === "Transcribe") ? 
+                                                                                        //             "transcribe-bg-color" 
+                                                                                        //         : (item.attributes?.Title === "Voice") ? 
+                                                                                        //             "voice-bg-color"
+                                                                                        //         : "" 
+                                                                                        //     ) : "")
+                                                                                        + ((item.attributes?.category === "Popular tasks") ?
+                                                                                            "write-bg-color" : "")
+                                                                                    }>
+                                                                                        <div className="template-box-overlay-inner-wrapper">
+                                                                                            {
+                                                                                                item.attributes.newly_added &&
+                                                                                                <div className="newly-added-tag">
+                                                                                                    {t("new")}
+                                                                                                </div>
+                                                                                            }
+                                                                                            <img src={Config.STRAPI_BASE_URL + item?.attributes?.icon?.data?.attributes?.url} />
+                                                                                            <h3>{item.attributes?.Title}</h3>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div className={"template-box-item-overlay " 
-                                                                                // + ((item.attributes?.category === "Popular tasks") ? 
-                                                                                //     (
-                                                                                //         ((item.attributes?.backend_id === "writing")) ? 
-                                                                                //             "write-bg-color" 
-                                                                                //         : (item.attributes?.Title === "Translate") ? 
-                                                                                //             "translate-bg-color" 
-                                                                                //         : (item.attributes?.Title === "Design") ? 
-                                                                                //             "design-bg-color" 
-                                                                                //         : (item.attributes?.Title === "Transcribe") ? 
-                                                                                //             "transcribe-bg-color" 
-                                                                                //         : (item.attributes?.Title === "Voice") ? 
-                                                                                //             "voice-bg-color"
-                                                                                //         : "" 
-                                                                                //     ) : "")
-                                                                                + ((item.attributes?.category === "Popular tasks") ? 
-                                                                                    "write-bg-color": "")
-                                                                                    }>
-                                                                                    <div className="template-box-overlay-inner-wrapper">
-                                                                                        {
-                                                                                            item.attributes.newly_added &&
-                                                                                            <div className="newly-added-tag">
-                                                                                                {t("new")}
-                                                                                            </div>
-                                                                                        }
-                                                                                        <img src={Config.STRAPI_BASE_URL + item?.attributes?.icon?.data?.attributes?.url} />
-                                                                                        <h3>{item.attributes?.Title}</h3>
+
+                                                                            </>
+                                                                        )
+                                                                    })
+                                                                }   
+                                                                {/* {(item == 'Toolkit' && activeTab == 'Toolkit') &&
+                                                                    <div className="template-box-item-wrapper" onClick={() => handleOpenSpellCheck()}>
+                                                                        <div class="templates-box-item ">
+                                                                            <div class="content-area">
+                                                                                <img src="https://contentstaging.ailaysa.com/uploads/tool_kit_0943904c14.svg" />
+                                                                                <h3>Spell check</h3>
+                                                                            </div>
+                                                                            <div class="bottom-area">
+                                                                                <div class="methods-wrap">
+                                                                                </div>
+                                                                                
+                                                                                <ButtonBase className="getstated-btn" >
+                                                                                                {t("get_started")}
+                                                                                                <KeyboardArrowRightOutlinedIcon className="icon" />
+                                                                                </ButtonBase>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="template-box-item-overlay">
+                                                                            <div class="template-box-overlay-inner-wrapper">
+                                                                                <img src="https://contentstaging.ailaysa.com/uploads/tool_kit_0943904c14.svg" />
+                                                                                <h3>Spell check</h3>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                } */}
+                                                            </div>
+                                                        </motion.div>
+                                                    )
+                                                }))
+                                                :
+                                                <div className="tempalte-boxes-container-wrapper">
+                                                    <div className="templates-box-row">
+                                                        <div className="no-template-found">
+                                                            <img src={NoEditorsFoundTwo} alt="no-results" />
+                                                            <h1>{t("no_results")}</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        )
+                                        :
+                                        (
+                                            Array(2).fill(null).map((value, key) => {
+                                                return (
+                                                    <div key={key} className="tempalte-boxes-container-wrapper">
+                                                        {/* <Skeleton animation="wave" variant="text" width={"10%"} /> */}
+                                                        <div className="templates-box-row">
+                                                            {
+                                                                Array(4).fill(null).map((value, key) => {
+                                                                    return (
+                                                                        <div key={key} className="template-box-item-wrapper loader">
+                                                                            <div className="templates-box-item">
+                                                                                <div className="content-area">
+                                                                                    <Skeleton
+                                                                                        animation="wave"
+                                                                                        variant="circular"
+                                                                                        width={40}
+                                                                                        height={40}
+                                                                                        className="mb-3 ml-auto mr-auto"
+                                                                                    />
+                                                                                    <h3><Skeleton animation="wave" variant="text" width={"80%"} className="ml-auto mr-auto" /></h3>
+                                                                                    <p><Skeleton animation="wave" variant="text" width={"100%"} className="ml-auto mr-auto" /></p>
+                                                                                    <p><Skeleton animation="wave" variant="text" width={"100%"} className="ml-auto mr-auto" /></p>
+                                                                                    <p><Skeleton animation="wave" variant="text" width={110} className="ml-auto mr-auto" /></p>
+                                                                                </div>
+                                                                                <div className="bottom-area">
+                                                                                    <div className="methods-wrap d-flex">
+                                                                                        {/* <span className="mr-2"><Skeleton animation="wave" variant="text" width={65} /></span> */}
+                                                                                        <span><Skeleton animation="wave" variant="text" width={65} height={38} className="ml-auto mr-auto" /></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </>
+                                                                        </div>
                                                                     )
                                                                 })
                                                             }
                                                         </div>
-                                                    </motion.div>
-                                                )
-                                            })) 
-                                            : 
-                                            <div className="tempalte-boxes-container-wrapper">
-                                                <div className="templates-box-row">
-                                                    <div className="no-template-found">
-                                                        <img src={NoEditorsFoundTwo} alt="no-results"/>
-                                                        <h1>{t("no_results")}</h1>
-                                                    </div> 
-                                                </div>
-                                            </div>
-                                    )
-                                    :
-                                    (
-                                        Array(2).fill(null).map((value, key) => {
-                                            return(
-                                                <div key={key} className="tempalte-boxes-container-wrapper">
-                                                    {/* <Skeleton animation="wave" variant="text" width={"10%"} /> */}
-                                                    <div className="templates-box-row">
-                                                        {
-                                                            Array(4).fill(null).map((value, key) => {
-                                                                return(
-                                                                    <div key={key} className="template-box-item-wrapper loader">
-                                                                        <div className="templates-box-item">
-                                                                            <div className="content-area">
-                                                                                <Skeleton
-                                                                                    animation="wave"
-                                                                                    variant="circular"
-                                                                                    width={40}
-                                                                                    height={40}
-                                                                                    className="mb-3 ml-auto mr-auto"
-                                                                                />
-                                                                                <h3><Skeleton animation="wave" variant="text" width={"80%"} className="ml-auto mr-auto"/></h3>
-                                                                                <p><Skeleton animation="wave" variant="text" width={"100%"} className="ml-auto mr-auto"/></p>
-                                                                                <p><Skeleton animation="wave" variant="text" width={"100%"} className="ml-auto mr-auto"/></p>
-                                                                                <p><Skeleton animation="wave" variant="text" width={110} className="ml-auto mr-auto" /></p>
-                                                                            </div>
-                                                                            <div className="bottom-area">
-                                                                                <div className="methods-wrap d-flex">
-                                                                                    {/* <span className="mr-2"><Skeleton animation="wave" variant="text" width={65} /></span> */}
-                                                                                    <span><Skeleton animation="wave" variant="text" width={65} height={38} className="ml-auto mr-auto"/></span>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                )
-                                                            })
-                                                        }
                                                     </div>
-                                                </div>
-                                            )
-                                        })
-                                    )
+                                                )
+                                            })
+                                        )
                                 }
                             </AnimatePresence>
                         </div>

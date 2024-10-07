@@ -46,8 +46,9 @@ const AssetsModule = (props) => {
         }
     } 
     else if (params?.menu === "wordchoice") {
-        return <Navigate to="create/all-templates/" />;
-        // <CreateWordchoice />
+        return <CreateWordchoice />
+        // <Navigate to="create/all-templates/" />;
+        
     }
 };
 

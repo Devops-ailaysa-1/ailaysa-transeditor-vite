@@ -235,6 +235,9 @@ function TranslateFiles(props) {
     const [axiosFileTranslateAbortController, setAxiosFileTranslateAbortController] = useState(null);
     const [isDownloading, setIsDownloading] = useState(null);
     const [showFileErrorModal, setShowFileErrorModal] = useState(false);
+    
+    // adaptive translation state
+    const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
 
     const searchAreaRef = useRef(null);
     const mtEngineOptionRef = useRef(null)
@@ -892,9 +895,8 @@ function TranslateFiles(props) {
 
     /* Selected source language should not display on the target language options */
     const removeSelectedSourceFromTarget = () => {
-        setTargetLanguageOptions(
-            targetLanguageOptionsRef.current.filter(
-                (element) => element.id !== sourceLanguage
+        setTargetLanguageOptions(prevState => targetLanguageOptionsRef.current.filter(
+                (element) => element.id != sourceLanguage
             )
         );
     };
@@ -1135,7 +1137,9 @@ function TranslateFiles(props) {
 
         let deadlineUTC = Config.convertLocalToUTC(deadline);
         deadline && formData.append("project_deadline", deadlineUTC);
+
         formData.append("mt_enable", mtEnable);
+        formData.append("isAdaptiveTranslation", adaptiveTransEnable);
 
         formData.append("pre_translate", preTranslate);
         if(mtEnable) formData.append("get_mt_by_page", translationByPage);
@@ -1768,6 +1772,7 @@ function TranslateFiles(props) {
                 setTranslationByPage(data?.get_mt_by_page)
                 let deadlineLocal = Config.convertUTCToLocal(data?.project_deadline);
                 setDeadline(deadlineLocal);
+                setAdaptiveTransEnable(data?.isAdaptive)
 
                 let editTargetLanguages = [];
                 let editSubjectFields = [];
@@ -1873,6 +1878,7 @@ function TranslateFiles(props) {
             setTargetLanguageError(t("target_validation_note"));
             return;
         }
+        
         /* if (filesSizeExceed()) {
                 Config.toast(fileSizeErrMsg.current, 'error')
                 return
@@ -1943,6 +1949,8 @@ function TranslateFiles(props) {
 
         deadline && formData.append("project_deadline", deadlineUTC);
         formData.append("mt_enable", mtEnable);
+        
+        formData.append("isAdaptiveTranslation", adaptiveTransEnable);
 
         primaryGlossarySourceName &&
             formData.append(
@@ -2043,12 +2051,6 @@ function TranslateFiles(props) {
         deletedSubjectIds.current = [];
         deletedContentIds.current = [];
     };
-
-    useEffect(() => {
-        if (mtEnable === false) {
-            setPreTranslate(false)
-        }
-    }, [mtEnable])
 
 
     /* Delete files when editing */
@@ -2391,6 +2393,7 @@ function TranslateFiles(props) {
         let tar = clickedLang.value.split('->')[1]?.split(',')
         setSourceLabel(targetLanguageOptionsRef.current?.find((element) => element.id == src).language)
         setSourceLanguage(src)
+        // console.log(src)
         let selectedTar = []
         tar?.map(eachTar => {
             selectedTar.push(targetLanguageOptionsRef.current?.find((element) => element.id == eachTar))
@@ -3406,6 +3409,8 @@ function TranslateFiles(props) {
                                         mtpeEngineOptions={mtpeEngineOptions}
                                         handleMTEngineChange={handleMTEngineChange}
                                         projectDataFromApi={projectDataFromApi}
+                                        adaptiveTransEnable={adaptiveTransEnable}
+                                        setAdaptiveTransEnable={setAdaptiveTransEnable}
                                     />
                                 </div>
                             )}

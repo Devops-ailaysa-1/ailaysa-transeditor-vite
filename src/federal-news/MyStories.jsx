@@ -3667,11 +3667,14 @@ function MyStories(props) {
     // MT-Raw file download celery status check function
     const mtRawCeleryCheck = async (celeryId, documentId, task_id, uniqueKey) => {
         // setAnimateDownloding('MTRAW')
-        let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.VITE_APP_USER_COOKIE_KEY_NAME) : null
-        );
-        let token = userCacheData != null ? userCacheData?.token : "";
         try {
+            let userCacheData = JSON.parse(
+                typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
+            );
+            let token = userCacheData != null ? userCacheData?.token : "";
+            
+            console.log("token")
+            console.log(token)
             const response = await axios.get(
                 `${Config.BASE_URL}/workspace_okapi/download_mt_file/?celery_id=${celeryId}&document_id=${documentId}`,
                 {
