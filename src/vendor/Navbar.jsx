@@ -54,11 +54,15 @@ import MarketplaceIcon from "../assets/images/ai-marketplace.svg"
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TaskAssignActionButtons from "./workspace-components/TaskAssignActionButtons";
 import ReactRouterPrompt from 'react-router-prompt'
+import { GlossaryMenuDrpDown } from "./model-select/Ailaysa-Glossaries/glossary-menu/GlossaryMenuDrpDown";
+import { Badge } from "@mui/material";
+import { setShowAdaptiveMTIntroModal } from "../features/ShowAdaptiveTransIntroModalSlice";
 
 function Navbar(props) {
 
     const {
         showDocumentSubmitButton,
+        enableDocumentSubmitBtn,
         handleDocumentSubmitBtn,
         showReturnRequestBtn,
         isWorkspaceEditable,
@@ -172,6 +176,7 @@ function Navbar(props) {
     const [isEmailTextHovered, setIsEmailTextHovered] = useState(false);
     const [isFullnameTextHovered, setIsFullnameTextHovered] = useState(false);
 
+    const spellCheckData = useSelector((state) => state.spellCheckData.value)
 
     const handleEmailTextMouseEnter = () => {
         setIsEmailTextHovered(true);
@@ -996,6 +1001,52 @@ function Navbar(props) {
         setConfirmedNavigation(true)
     }
 
+    const convertNewlinesToBr = (text) => {
+        const htmlText = text?.split('\n')?.map(line => `<p>${line.trim()}</p>`)?.join('');
+        return htmlText;
+      }
+
+
+    const handleSpellCheckWordDownload = () => {
+        let formData = new FormData();
+        console.log(spellCheckData)
+        formData.append("html", convertNewlinesToBr(spellCheckData))
+        formData.append("name", "name")
+        let userCacheData = JSON.parse(
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
+        );
+        let token = userCacheData != null ? userCacheData?.token : "";
+
+        axios({
+            method: "POST",
+            url: "https://apinodestaging.ailaysa.com/docx-generator",
+            data: formData,
+            responseType: "blob",
+            headers: { Authorization: `Bearer ${token}` },
+            // headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then(function (response) {
+            //handle success
+            downloadHtmlToDocx(response.data)
+
+        })
+        .catch(function (response) {
+            //handle error
+            Config.toast("Failed to download file", 'error')
+      
+        });
+    }
+
+    const downloadHtmlToDocx = async (data) => {
+        var fileDownload = document.createElement("a");
+        document.body.appendChild(fileDownload);
+        fileDownload.href = URL.createObjectURL(data);
+        fileDownload.download = Config.unescape(`${data?.innerText?.split('.')[0] ? data?.innerText?.split('.')[0] : 'Untitled'}.docx`);
+        fileDownload?.click();
+        document.body.removeChild(fileDownload);
+        // update the list once download completed
+    }
+
     return (
         <React.Fragment>
             <div className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "navbar-stripe-wrapper sticky" : "navbar-stripe-wrapper"}>
@@ -1068,20 +1119,21 @@ function Navbar(props) {
                                             </div>
                                         </NavLink>
                                         
-                                        {!isDinamalar && (
-                                            <NavLink 
-                                                to="/file-upload?page=1&order_by=-id" 
-                                                // activeClassName="selected" 
-                                                className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}
-                                            >
-                                                <div className="nav-assign-manage-link">
-                                                    <span>{t("standard_project")}</span>
-                                                </div>
-                                            </NavLink>
-                                        )}
+                                        {/* {!is_internal_meber_editor && (
+                                        )} */}
+                                        <NavLink 
+                                            to="/file-upload?page=1&order_by=-id" 
+                                            // activeClassName="selected" 
+                                            className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}
+                                        >
+                                            <div className="nav-assign-manage-link">
+                                                <span>{t("standard_project")}</span>
+                                            </div>
+                                        </NavLink>
+
                                         {isDinamalar && (
                                             <ButtonBase       
-                                                className={props.isWhite && "d-none"}
+                                                className={props.isWhite ? "d-none" : "ml-3"}
                                                 onClick={() => history('/report')}
                                             >
                                                 <div className="btn-text">
@@ -1108,11 +1160,11 @@ function Navbar(props) {
                                     </NavLink>
                                 )}
 
-                                {(!isDinamalar && Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected) ? (
+                                {(Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected) ? (
                                     <ButtonBase       
                                         component={Link}
                                         to="/create/all-templates/" 
-                                        className={props.isWhite && "d-none"}
+                                        className={props.isWhite ? "d-none" : "ml-4"}
                                     >
                                         <div className="btn-text">
                                             <AddIcon
@@ -1217,10 +1269,37 @@ function Navbar(props) {
                                     />
                                 )}
 
-                                {showDocumentSubmitButton && (
+                                {/* {showDocumentSubmitButton && (
                                     <Tooltip title={t("submit_tooltip_note")} arrow placement="bottom">
-                                        <button className="workspace-files-nav-OpenProjectButton" style={{ marginRight: !showReturnRequestBtn ? '18px' : '8px' }} onClick={() => handleDocumentSubmitBtn(3)}>
+                                        <button 
+                                            className="workspace-files-nav-OpenProjectButton" 
+                                            style={{ marginRight: !showReturnRequestBtn ? '18px' : '8px' }} 
+                                            onClick={() => handleDocumentSubmitBtn(3)}
+                                        >
                                             <span className="fileopen-new-btn">{t("submit")}</span>
+                                        </button>
+                                    </Tooltip>
+                                )} */}
+                                {(showDocumentSubmitButton) && (
+                                    <Tooltip title={t("submit_tooltip_note")} arrow placement="bottom">
+                                        <button 
+                                            className="workspace-files-nav-OpenProjectButton" 
+                                            style={{ 
+                                                marginRight: !showReturnRequestBtn ? '18px' : '8px',
+                                                opacity: enableDocumentSubmitBtn ? 1 : 0.6,
+                                                pointerEvents: enableDocumentSubmitBtn ? 'all' : "none"
+                                             }} 
+                                            onClick={() => handleDocumentSubmitBtn(3)}
+                                        >
+                                            <span className="fileopen-new-btn">{t("submit")}</span>
+                                        </button>
+                                    </Tooltip>
+                                )}
+
+                                {window.location.pathname.includes('spell-check') && (
+                                    <Tooltip  arrow placement="bottom">
+                                        <button className="workspace-files-nav-OpenProjectButton" style={{ marginRight: !showReturnRequestBtn ? '18px' : '8px' }} onClick={() => handleSpellCheckWordDownload()}>
+                                            <span className="fileopen-new-btn">{t("download")}</span>
                                         </button>
                                     </Tooltip>
                                 )}
@@ -1270,6 +1349,12 @@ function Navbar(props) {
                                         <small className="ml-1">{t("downloading")}...</small>
                                     </li>
                                 }
+                                
+                                <li id="download-dropdown-wrapper" className={props.isWhite ? "nav-item nav-drp-down active mr-3" : "navbar-display-hide mr-3"}>
+                                    {(props.updatedFileDownload && !isEnterprise && !is_internal_meber_editor) && (
+                                        <GlossaryMenuDrpDown />
+                                    )}
+                                </li>
 
                                 <li id="download-dropdown-wrapper" className={props.isWhite ? "nav-item nav-drp-down active" : "navbar-display-hide"}>
                                     {props.updatedFileDownload && (
@@ -1284,7 +1369,6 @@ function Navbar(props) {
                                                         handleHelpDrpVisibility(false);
                                                     }}>
                                                         <FileDownloadOutlinedIcon className="workspace-dwnload" />
-                                                        {/* Download */}
                                                     </ButtonBase>
                                                 </Tooltip>
                                                 <span className="border-line"></span>
@@ -1376,30 +1460,44 @@ function Navbar(props) {
                                 {(isHelpVisible && props.isWhite) &&
                                     <li className="nav-item nav-drp-down-new active">
                                         <Tooltip title="Help" arrow placement="bottom">
-                                            <div
-                                                className="nav-icon-bg"
-                                                // onMouseEnter={() => hideAvailCredits()}
-                                                onClick={() => {
-                                                    handleLogoutDrpVisibility(false);
-                                                    handleAppsDrpVisibility(false);
-                                                    handleChatNotificationVisibility(false);
-                                                    handleHelpDrpVisibility(!helpDrpVisibility);
-                                                }}>
-                                                <img
-                                                    src={
-                                                        props.isWhite
-                                                            ? HelpOutlineGrey
-                                                            : HelpOutline
+                                            <Badge 
+                                                sx={{
+                                                    "& .MuiBadge-badge": {
+                                                        backgroundColor: "#E74C3C",
+                                                        right: "16px",
+                                                        top: "10px",
+                                                        padding: '4.5px',
+                                                        borderRadius: "50%"
                                                     }
-                                                    alt="help"
-                                                />
-                                            </div>
+                                                  }}
+                                                variant="dot"
+                                                invisible={isEnterprise ? true : false}
+                                            >
+                                                <div
+                                                    className="nav-icon-bg"
+                                                    // onMouseEnter={() => hideAvailCredits()}
+                                                    onClick={() => {
+                                                        handleLogoutDrpVisibility(false);
+                                                        handleAppsDrpVisibility(false);
+                                                        handleChatNotificationVisibility(false);
+                                                        handleHelpDrpVisibility(!helpDrpVisibility);
+                                                    }}>
+                                                    <img
+                                                        src={
+                                                            props.isWhite
+                                                                ? HelpOutlineGrey
+                                                                : HelpOutline
+                                                        }
+                                                        alt="help"
+                                                    />
+                                                </div>
+                                            </Badge>
                                         </Tooltip>
                                         {props.isWhite ? (
                                             <ul ref={HelpOutside} className={`submenu submenu-animated submenu_fadeIn ${helpDrpVisibility ? "show" : ""}`}>
-                                                {/* <li>
-                                                <a target="_blank" href="https://knowledgebase.ailaysa.com/article-categories/transeditor-pe/">Knowledge base</a>
-                                            </li> */}
+                                                <li style={{display: isEnterprise ? "none" : ""}}>
+                                                    <a onClick={() => {dispatch(setShowAdaptiveMTIntroModal(true)); setHelpDrpVisibility(false)}}>{t("adaptive_trans_help_text")}</a>
+                                                </li>
                                                 <li>
                                                     <a onClick={() => {props.showHowToTour(); setHelpDrpVisibility(false)}}>{t("how_to_edit_&_download")}</a>
                                                 </li>
@@ -1410,9 +1508,6 @@ function Navbar(props) {
                                         ) : (
                                             props.showTourOption && (
                                                 <ul className="submenu submenu-animated submenu_fadeIn">
-                                                    {/* <li>
-                                                <a target="_blank" href="https://knowledgebase.ailaysa.com/article-categories/transeditor-pm/">Knowledge base</a>
-                                            </li> */}
                                                     {props.showTourOption && (
                                                         <li>
                                                             <a onClick={props.showHowToTour}>{t("how_to_open_a_file")}</a>

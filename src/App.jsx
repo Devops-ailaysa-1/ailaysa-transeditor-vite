@@ -39,13 +39,16 @@ import { setIsDinamalarNews } from "./features/IsDinamalarNewsSlice";
 import { setIsFederalNews } from "./features/IsFederalNewsSlice";
 import { CookieChecker } from "cookie-validator-check";
 import { PromptLibraryModal } from "./ailaysa-writer/Prompt-library/PromptLibraryModal";
+import { AdaptiveTranslationIntroModal } from "./vendor/model-select/adaptive-mt-intro/AdaptiveTranslationIntroModal";
 
 
 function App() {
     const dispatch = useDispatch();
     const userDetails = useSelector((state) => state.userDetails.value)
     const showGlobalTransition = useSelector((state) => state.globalTransition.value)
-
+    const showAdaptiveTransIntroModal = useSelector(state => state.showAdaptiveTransIntroModal.value)
+    
+    let isEnterprise = userDetails?.is_enterprise 
 
     const [isCookieAccepted, setIsCookieAccepted] = useState(true); // To check the cookies is accepted or not
     const [cookieShowRoute, setCookieShowRoute] = useState(["/"]); // To show the cookie prompt in specific routes
@@ -353,8 +356,8 @@ function App() {
 
                         {/* validates the cookies when the document page get visibility - if validator fails redirect to login page */}
                         <CookieChecker 
-                            cookieName={import.meta.env.REACT_APP_USER_COOKIE_KEY_NAME}
-                            url={import.meta.env.REACT_APP_LOGIN_URL}
+                            cookieName={import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME}
+                            url={import.meta.env.VITE_APP_LOGIN_URL}
                             jsonKey="token"
                             guardClause={true}
                         />
@@ -375,6 +378,10 @@ function App() {
                         
                         <ToastContainer position="top-left" limit={1} icon={false} />
                         <UpdateProfileSettingAlertModal />
+
+                        {(showAdaptiveTransIntroModal && !isEnterprise) && (
+                            <AdaptiveTranslationIntroModal />
+                        )}
 
                         {/* {
                             isCookieAccepted === false && cookieShowRoute.indexOf(window?.location?.pathname) !== -1 && (

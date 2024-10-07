@@ -1624,7 +1624,29 @@ function Fileupload(props) {
                             }
                             return obj;
                         });
+                        
+                        // update the new task word count in the task list 
+                        if(openedProjectId){
+                            try{
+                                let projTaskWordData = response.data?.out?.find(each => each.proj == openedProjectId)?.task_words
+                                let newArr = selectedProjectFiles.map(obj => {
+                                    if(projTaskWordData.find(each => each[obj.id])){
+                                        return {
+                                            ...obj,
+                                            task_word_count: projTaskWordData.find(each => each[obj.id])[obj.id]
+                                        }
+                                    }
+                                    return obj
+                                })
+                                console.log(newArr)
+                                setSelectedProjectFiles(newArr)
+                            }catch(e) {
+                                console.log(e)
+                            }
+                        }
+
                         setCreatedProjects(newArr)
+
                     }
                 },
                 error: (err) => {
@@ -2052,10 +2074,14 @@ function Fileupload(props) {
             if (projectType === 3) {
                 setTimeout(() => {
                     // window.location.href = 'workspace/' + response.data.document_id
-                    history(`/glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`, {state: {
+                    history(`/glossary-workspace/${selectedProjectId}/${id}/`, {state: {
                         prevPageInfo: prevPageInfo,
                         prevPath: location.pathname + location.search
                     }});
+                    // history(`/glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`, {state: {
+                    //     prevPageInfo: prevPageInfo,
+                    //     prevPath: location.pathname + location.search
+                    // }});
                 });
             }
             // if url is null means its non transeditor/translation project [wordchoice porject type = 10]
@@ -3634,7 +3660,7 @@ function Fileupload(props) {
     const mtRawCeleryCheck = async (celeryId, documentId, task_id, uniqueKey) => {
         // setAnimateDownloding('MTRAW')
         let userCacheData = JSON.parse(
-            typeof Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) : null
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
         let token = userCacheData != null ? userCacheData?.token : "";
         try {
@@ -4833,12 +4859,12 @@ function Fileupload(props) {
                             onChange={handleSelectedOrderItem}
                         />
                         
-                        {activeProjTab === 6 && (
+                        {/* {activeProjTab === 6 && (
                             <div className="assets-type-filter-wrapper">
                                 <button className={"assets-type-filter-item " + (assetsSelectedTypeFilter === 'glossary' ? "active" : "")} onClick={() => handleAssetsTypeFilterClick('glossary')}>Glossary</button>
                                 <button className={"assets-type-filter-item " + (assetsSelectedTypeFilter === 'wordchoices' ? "active" : "")} onClick={() => handleAssetsTypeFilterClick('wordchoices')}>{t("wordchoice")}</button>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
                 <div className="upload-files-section">

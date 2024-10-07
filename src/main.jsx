@@ -45,7 +45,11 @@ import individualTemplateListReducer from './features/IndividualTemplateListSlic
 import { writerReducers } from './features/writer-reducers/writerReducers';
 import IsFederalNewsReducer from './features/IsFederalNewsSlice';
 import IsDinamalarNewsReducer from './features/IsDinamalarNewsSlice';
+import showAilaysaGlossaryModalReducer from './features/ShowAilaysaGlossaryModalSlice';
+import toggleGlossTermAddFormReducer from './features/ai-glossary/ToggleGlossTermAddFormSlice';
 import * as Sentry from "@sentry/react";
+import SpellCheckHtmlDataSlice from './features/SpellCheckHtmlDataSlice';
+import ShowAdaptiveTransIntroModalReducer from './features/ShowAdaptiveTransIntroModalSlice';
 
 const store = configureStore({
   reducer: {
@@ -68,6 +72,10 @@ const store = configureStore({
 	individualTemplateList: individualTemplateListReducer,
 	isFederalNews: IsFederalNewsReducer,
 	isDinamalarNews: IsDinamalarNewsReducer,
+	showAilaysaGlossaryModal: showAilaysaGlossaryModalReducer,
+	showGlossTermAddForm: toggleGlossTermAddFormReducer,
+	spellCheckData:SpellCheckHtmlDataSlice,
+	showAdaptiveTransIntroModal: ShowAdaptiveTransIntroModalReducer,
 	...writerReducers        
   }
 })

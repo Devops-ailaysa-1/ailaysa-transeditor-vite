@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavigateBeforeSharpIcon from '@mui/icons-material/NavigateBeforeSharp';
 import NavigateNextSharpIcon from '@mui/icons-material/NavigateNextSharp';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Config from "../Config";
-import { TextareaAutosize } from "@mui/material";
+import { IconButton, TextareaAutosize } from "@mui/material";
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from "../../vendor/styles-svg/DeleteIcon";
@@ -16,7 +16,7 @@ import sanitizeHtml from 'sanitize-html-react';
 import ContentCopyIcon from "../styles-svg/Content-copy-icon";
 import Skeleton from '@mui/material/Skeleton';
 import parse from "html-react-parser";
-
+import CopyIcon from "../../vendor/styles-svg/CopyIcon";
 
 const WorkspaceFeatures = (props) => {
     let {
@@ -30,6 +30,7 @@ const WorkspaceFeatures = (props) => {
         getSegmentDiff,
         commentsTabButton,
         tmTabButton,
+        segOptionsBtnRef,
         dictionaryTabButton,
         qaTabButton,
         concordanceTabButton,
@@ -73,14 +74,24 @@ const WorkspaceFeatures = (props) => {
         segmentDifference,
         paraphraseTrigger,
         selectedParaphrase,
-        paraPhraseResList,
         replaceWithNewPara,
         rightAlignLangs,
         targetLanguage,
         commentsLoader,
         segmentHistoryLoader,
-        showSegmentComments
+        showSegmentComments,
+        getTranslationMatch,
+        activeFooterTab,
+        setActiveFooterTab
     } = props
+
+
+    const handleFooterNavItemClick = (value) => {
+        setActiveFooterTab(value)
+        handleToggleVisibility(true)
+        if(value == 1) scrollLeft()
+        if(value == 6) scrollRight()
+    }
 
     return (
         <>
@@ -94,11 +105,38 @@ const WorkspaceFeatures = (props) => {
                             <div ref={scrl} className="workspace-tool-bar-links-wrap">
                                 <ul
                                     className="nav nav-pills"
-                                    id="pills-tab"
-                                    role="tablist"
+                                    // id="pills-tab"
+                                    // role="tablist"
                                 >
                                     <li className="nav-item" role="presentation">
-                                        <a
+                                        <span 
+                                            className={["nav-link", activeFooterTab == 1 && "active-tab"].join(' ')}
+                                            onClick={(e) => handleFooterNavItemClick(1)}
+                                        >
+                                            {t("tm_and_glossary")}
+                                        </span>
+                                        {/* <a
+                                            ref={tmTabButton}
+                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
+                                            className="nav-link"
+                                            id="pills-tm-tb-tab"
+                                            data-toggle="pill"
+                                            href="#pills-tm-tb"
+                                            role="tab"
+                                            aria-controls="pills-tm-tb"
+                                            aria-selected="true"
+                                        >
+                                            {t("tm_and_glossary")}
+                                        </a> */}
+                                    </li>
+                                    <li className="nav-item" role="presentation">
+                                        <span 
+                                            className={["nav-link", activeFooterTab == 2 && "active-tab"].join(' ')}
+                                            onClick={(e) => handleFooterNavItemClick(2)}
+                                        >
+                                            {t("history")}
+                                        </span>
+                                        {/* <a
                                             ref={segmentDiffButton}
                                             onClick={(e) => {
                                                 e.isTrusted && handleToggleVisibility(true)
@@ -113,10 +151,16 @@ const WorkspaceFeatures = (props) => {
                                             aria-selected="false"
                                         >
                                             {t("history")}
-                                        </a>
+                                        </a> */}
                                     </li>
                                     <li className="nav-item" role="presentation">
-                                        <a
+                                        <span 
+                                            className={["nav-link", activeFooterTab == 3 && "active-tab"].join(' ')}
+                                            onClick={(e) => handleFooterNavItemClick(3)}
+                                        >
+                                            {t("comments")}
+                                        </span>
+                                        {/* <a
                                             ref={commentsTabButton}
                                             onClick={(e) => {
                                                 e.isTrusted && handleToggleVisibility(true)
@@ -131,25 +175,16 @@ const WorkspaceFeatures = (props) => {
                                             aria-selected="false"
                                         >
                                             {t("comments")}
-                                        </a>
+                                        </a> */}
                                     </li>
                                     <li className="nav-item" role="presentation">
-                                        <a
-                                            ref={tmTabButton}
-                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
-                                            className="nav-link"
-                                            id="pills-tm-tb-tab"
-                                            data-toggle="pill"
-                                            href="#pills-tm-tb"
-                                            role="tab"
-                                            aria-controls="pills-tm-tb"
-                                            aria-selected="true"
+                                        <span 
+                                            className={["nav-link", activeFooterTab == 4 && "active-tab"].join(' ')}
+                                            onClick={(e) => handleFooterNavItemClick(4)}
                                         >
-                                            {t("tm_and_glossary")}
-                                        </a>
-                                    </li>
-                                    <li className="nav-item" role="presentation">
-                                        <a
+                                            {t("dictionary")}
+                                        </span>
+                                        {/* <a
                                             ref={dictionaryTabButton}
                                             onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
                                             className="nav-link"
@@ -161,10 +196,16 @@ const WorkspaceFeatures = (props) => {
                                             aria-selected="false"
                                         >
                                             {t("dictionary")}
-                                        </a>
+                                        </a> */}
                                     </li>
                                     <li className="nav-item" role="presentation">
-                                        <a
+                                        <span 
+                                            className={["nav-link", activeFooterTab == 5 && "active-tab"].join(' ')}
+                                            onClick={(e) => handleFooterNavItemClick(5)}
+                                        >
+                                            {t("qa")}
+                                        </span>
+                                        {/* <a
                                             ref={qaTabButton}
                                             onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
                                             className="nav-link"
@@ -176,10 +217,16 @@ const WorkspaceFeatures = (props) => {
                                             aria-selected="false"
                                         >
                                             QA
-                                        </a>
+                                        </a> */}
                                     </li>
                                     <li className="nav-item" role="presentation">
-                                        <a
+                                        <span 
+                                            className={["nav-link", activeFooterTab == 6 && "active-tab"].join(' ')}
+                                            onClick={(e) => handleFooterNavItemClick(6)}
+                                        >
+                                            {t("concordance_search")}
+                                        </span>
+                                        {/* <a
                                             ref={concordanceTabButton}
                                             onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
                                             className="nav-link"
@@ -191,7 +238,7 @@ const WorkspaceFeatures = (props) => {
                                             aria-selected="false"
                                         >
                                             {t("concordance_search")}
-                                        </a>
+                                        </a> */}
                                     </li>
                                 </ul>
                             </div>
@@ -239,16 +286,17 @@ const WorkspaceFeatures = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className={advancedOptionVisibility ? "workspace-working-area tab-content" : "workspace-working-area tab-content d-none"} id="pills-tabContent">
-                    <div className="tab-pane fade show active" id="pills-tm-tb" role="tabpanel" aria-labelledby="pills-tm-tb-tab">
-                        {showTmSection && (
+                <div className={advancedOptionVisibility ? "workspace-working-area " : "workspace-working-area tab-content d-none"} >
+                    {activeFooterTab === 1 ? (
+                        <div className="tab-pane" >
                             <section className="top-section-show">
                                 <div className="modal-top-body">
                                     <div className="tm-tb-main-row">
-                                        <div className={translationMatches?.length === 0 ? "tm-container-no-found tm-side-border" : (tbxData?.length === 0 && glossaryData?.length === 0) ? "tm-container-expand tm-container tm-side-border" : "tm-container tm-side-border"}>
+                                        <div className={translationMatches?.length === 0 ? "tm-container-no-found tm-side-border " : (tbxData?.length === 0 && glossaryData?.length === 0) ? "tm-container-expand tm-container tm-side-border" : "tm-container tm-side-border "}>
                                             {
                                                 translationMatches?.length === 0 ?
                                                     <div className="tm-container-no-matches-found">
+                                                        <small>{t("no_match_found_from_tm")}</small>
                                                     </div>
                                                     :
                                                     <>
@@ -321,6 +369,7 @@ const WorkspaceFeatures = (props) => {
                                             {
                                                 (tbxData?.length === 0 && glossaryData?.length === 0) ?
                                                     <div className="tm-container-no-matches-found">
+                                                        <small>{t("no_match_found_from_gloss_tbx")}</small>
                                                     </div>
                                                     :
                                                     <>
@@ -433,74 +482,97 @@ const WorkspaceFeatures = (props) => {
                                     </div>
                                 </div>
                             </section>
-                        )}
-                    </div>
-                    <div className="tab-pane fade" id="pills-concordance" role="tabpanel" aria-labelledby="pills-concordance-tab">
-                        {
-                            <section className="top-section-show">
-                                <div className="modal-top-body">
-                                    <div className="tm-tb-main-row">
-                                        <div className="tm-container tm-side-border">
-                                            <div className="top-section-title-align" style={{display: 'block'}}>
-                                                <div className="top-body-title-1">
-                                                    <p>
-                                                        <span>{t("source_language")}:</span> {sourceLanguage}
-                                                    </p>
-                                                </div>
-                                                <div className="translation_memories-1" style={{marginTop: '8px'}}>
-                                                    <ul>
-                                                        {concordanceData.map((value, key) => {
-                                                            return (
-                                                                <li key={key}>
-                                                                    <div className="tm-tb-sub-cont">
-                                                                        <div className="translation-list-value-src">
-                                                                            <div className="text-left">
-                                                                                <p className="tb-file-src-txt">{parse(value.source)}</p>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="translation-list-value-tar">
-                                                                            <div className="target-lang-align">
-                                                                                <div className="text-left">
-                                                                                    <p className="tb-file-tar-txt">{parse(value.target)}</p>
-                                                                                </div>
-                                                                                <div className="tmx-links-algin">
-                                                                                    <div className="translation-mem-percent-box">
-                                                                                        <span>{value.percentage}</span>
-                                                                                        <span>% {t("match")}</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className="translation-list-value-copy-btn">
-                                                                            <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top">
-                                                                                <button
-                                                                                    type="button"
-                                                                                    className="workspace-feature-btn-new"
-                                                                                    onClick={(e) => copyText(value.target)}
-                                                                                    onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 500)}
-                                                                                >
-                                                                                    <img
-                                                                                        src={NorCopyContent}
-                                                                                        className="content-copy" alt="copy text"
-                                                                                    />
-                                                                                </button>
-                                                                            </Tooltip>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            );
-                                                        })}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                    ) : activeFooterTab === 2 ? (
+                        <div className="tab-pane " >
+                            <section className="segment-section">
+                                <table className="table table-bordered" aria-label="TABLE">
+                                    <thead>
+                                        <tr>
+                                            <th role="columnheader" scope="col" tabIndex="0">{t("seg_history")}</th>
+                                            <th role="columnheader" scope="col" tabIndex="0">{t("user")}</th>
+                                            <th role="columnheader" scope="col" tabIndex="0">{t("action")}</th>
+                                            <th role="columnheader" scope="col" tabIndex="0">{t("type")}</th>
+                                            <th role="columnheader" scope="col" tabIndex="0">{t("status")}</th>
+                                            <th style={{ whiteSpace: 'nowrap' }} role="columnheader" scope="col" tabIndex="0">{t("date_and_time")}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {(segmentHistoryLoader && segmentDifference?.length === 0) ? (
+                                            Array(2).fill(null).map((value, key) => (
+                                                <>
+                                                    <tr key={key}>
+                                                        <td>
+                                                            <div className="segment-list">
+                                                                <Skeleton animation="wave" variant="text" width="100%" />
+                                                                <Skeleton animation="wave" variant="text" width="85%" />
+                                                            </div>
+                                                        </td>
+                                                        <td><div className="segment-avatar-lists d-flex"><Skeleton animation="wave" variant="circular" width={28} height={28} /><p className="name ml-2"><Skeleton animation="wave" variant="text" width={80} /></p></div></td>
+                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
+                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
+                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
+                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
+                                                    </tr>
+                                                </>
+                                            ))
+                                        ) : segmentDifference?.length !== 0 ? (
+                                            segmentDifference?.map((list, index) => {
+                                                return (
+                                                    <>
+                                                        {list?.isMtOnly && (
+                                                            <tr className="border-b-0 -mb-2 mt-1">
+                                                                <td className='flex-1'>
+                                                                    <div className="segment-text font-semibold">{t("original_mt")}</div>
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                        <tr key={index}>
+                                                            <td className="flex gap-2 items-center justify-between">
+                                                                <div className="segment-list flex-grow" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.sentense_diff_result }}></div>
+                                                                <Tooltip title={t("copy_to_segment")} placement="top" arrow>
+                                                                    <IconButton
+                                                                        className="p-[10px]"
+                                                                        onClick={(e) => replaceWithNewPara(e, list?.segment_difference[0]?.diff_corrected, list?.segment_difference[0]?.target_tags)}
+                                                                    >
+                                                                        <ContentCopyIcon />
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                            </td>
+                                                            <td>
+                                                                <div className="segment-avatar-list">
+                                                                    {list?.user_name !== "-" && (
+                                                                        <span dangerouslySetInnerHTML={{ __html: list?.user_name?.slice(0, 1)?.toUpperCase() }}></span>
+                                                                    )}
+                                                                    <p className="name" dangerouslySetInnerHTML={{ __html: list?.user_name }}></p>
+                                                                </div>
+                                                            </td>
+                                                            <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.save_type }}></div></td>
+                                                            <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.step_name }}></div></td>
+                                                            <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.status_id == 104 ? t('machine_translation') : list?.status_id == 103 ? t('machine_translation') : list?.status_id == 105 ? t("manual") : list?.status_id == 106 ? t("manual") : list?.status_id == 101 ? t("translation_mem") : t("translation_mem") }}></div></td>
+                                                            <td>
+                                                                {list?.created_at !== "" ? (
+                                                                    <div className="segment-text" dangerouslySetInnerHTML={{ __html: Config.getProjectCreatedDate(list?.created_at) }}></div>
+                                                                ) : (
+                                                                    "-"
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    </>
+                                                )
+
+                                            })
+                                        ) : (
+                                            <tr style={{display: 'block'}}>
+                                                <td colspan="6"><div className="segment-list">{t("no_records_yet")}</div></td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
                             </section>
-                        }
-                    </div>
-                    <div className="tab-pane fade" id="pills-comments" role="tabpanel" aria-labelledby="pills-comments-tab">
-                        {
+                        </div>
+                    ) : activeFooterTab === 3 ? (
+                        <div className="tab-pane " >
                             <section className="comments-part">
                                 <div className="comments-container">
                                     <div className="add-comments-section">
@@ -539,7 +611,13 @@ const WorkspaceFeatures = (props) => {
                                                             <li key={value.id}>
                                                                 <div className="comment-area-box">
                                                                     <div className="profile-row">
-                                                                        <span className="no-avatar-icon">{value?.commented_by_user?.charAt(0).toUpperCase()}</span>
+                                                                        <span className="no-avatar-icon">
+                                                                            {value?.avatar ? 
+                                                                                <img src={Config.BASE_URL + value?.avatar} className='w-full h-full object-fill' />
+                                                                            : value?.commented_by_user?.charAt(0).toUpperCase()
+                                                                            }
+
+                                                                        </span>
                                                                         <span className="text">{value?.commented_by_user}</span>
                                                                     </div>
                                                                     {value.isEdit ? (
@@ -605,21 +683,9 @@ const WorkspaceFeatures = (props) => {
                                     {/* <div className="gap-section"></div> */}
                                 </div>
                             </section>
-                        }
-                    </div>
-                    <div className="tab-pane fade" id="pills-qa" role="tabpanel" aria-labelledby="pills-qa-tab">
-                        {
-                            <section className="quest-section">
-                                <div className="quest-section">
-                                    <div className="quest-section-align">
-                                        <ul className="qa-list">{qaContent}</ul>
-                                    </div>
-                                </div>
-                            </section>
-                        }
-                    </div>
-                    <div className="tab-pane fade" id="pills-dictionary" role="tabpanel" aria-labelledby="pills-dictionary-tab">
-                        {
+                        </div>
+                    ) : activeFooterTab === 4 ? (
+                        <div className="tab-pane ">
                             <section className="dictionary-section">
                                 <div className="dictionary-wikipedia dictionary-border-right">
                                     <p className="dictionary-wikipedia-title">
@@ -718,110 +784,97 @@ const WorkspaceFeatures = (props) => {
                                     </div>
                                 </div>
                             </section>
-                        }
-                    </div>
-                    <div className="tab-pane fade" id="pills-segmentDiff" role="tabpanel" aria-labelledby="pills-segmentDiff-tab">
-                        {
-                            <section className="segment-section">
-                                <table className="table table-bordered" aria-label="TABLE">
-                                    <thead>
-                                        <tr>
-                                            <th role="columnheader" scope="col" tabIndex="0">{t("seg_history")}</th>
-                                            <th role="columnheader" scope="col" tabIndex="0">{t("user")}</th>
-                                            <th role="columnheader" scope="col" tabIndex="0">{t("action")}</th>
-                                            <th role="columnheader" scope="col" tabIndex="0">{t("type")}</th>
-                                            <th role="columnheader" scope="col" tabIndex="0">{t("status")}</th>
-                                            <th style={{ whiteSpace: 'nowrap' }} role="columnheader" scope="col" tabIndex="0">{t("date_and_time")}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {(segmentHistoryLoader && segmentDifference?.length === 0) ? (
-                                            Array(2).fill(null).map((value, key) => (
-                                                <>
-                                                    <tr key={key}>
-                                                        <td>
-                                                            <div className="segment-list">
-                                                                <Skeleton animation="wave" variant="text" width="100%" />
-                                                                <Skeleton animation="wave" variant="text" width="85%" />
-                                                            </div>
-                                                        </td>
-                                                        <td><div className="segment-avatar-lists d-flex"><Skeleton animation="wave" variant="circular" width={28} height={28} /><p className="name ml-2"><Skeleton animation="wave" variant="text" width={80} /></p></div></td>
-                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
-                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
-                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
-                                                        <td><div className="segment-text"><Skeleton animation="wave" variant="text" width={55} /></div></td>
-                                                    </tr>
-                                                </>
-                                            ))
-                                        ) : segmentDifference?.length !== 0 ? (
-                                            segmentDifference?.map((list, index) => {
-                                                return (
-                                                    <tr key={index}>
-                                                        <td><div className="segment-list" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.sentense_diff_result }}></div></td>
-                                                        <td><div className="segment-avatar-list"><span dangerouslySetInnerHTML={{ __html: list?.user_name?.slice(0, 1)?.toUpperCase() }}></span><p className="name" dangerouslySetInnerHTML={{ __html: list?.user_name }}></p></div></td>
-                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.segment_difference[0]?.save_type }}></div></td>
-                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.step_name }}></div></td>
-                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: list?.status_id == 104 ? t('machine_translation') : list?.status_id == 103 ? t('machine_translation') : list?.status_id == 105 ? t("manual") : list?.status_id == 106 ? t("manual") : list?.status_id == 101 ? t("translation_mem") : t("translation_mem") }}></div></td>
-                                                        <td><div className="segment-text" dangerouslySetInnerHTML={{ __html: Config.getProjectCreatedDate(list?.created_at) }}></div></td>
-                                                    </tr>
-                                                )
-    
-                                            })
-                                        ) : (
-                                            <tr style={{display: 'block'}}>
-                                                <td colspan="6"><div className="segment-list">{t("no_records_yet")}</div></td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
-                            </section>
-                        }
-                    </div>
-                    <div className="tab-pane fade" id="pills-paraphrase" role="tabpanel" aria-labelledby="pills-paraphrase-tab">
-                        <section className="paraphrase-section">
-                            {paraphraseTrigger ? (paraPhraseResList?.length !== 0 ?
-                                (
-                                    <>
-                                        <div className="paraphrase-header-wrap">
-                                            <p></p>
-                                            {/* <TrendingFlatIcon className="arrow-icon" /> */}
-                                            <p>{selectedParaphrase}</p>
-                                        </div>
-                                        <div className="paraphrase-div">
-                                            <div className="paraphrase-source-div">
-                                                {/* {paraphraseText} */}
-                                            </div>
-                                            <div className="paraphrase-result-div">
-                                                <ul className="list-unstyled">
-                                                    <li>
-                                                        <div className="capsule-wrapper" onClick={(e) => replaceWithNewPara(e, paraPhraseResList)}>
-                                                            <div className={"capsule " + (rightAlignLangs.current.indexOf(targetLanguage) != -1 ? 'align-right' : '')}>
-                                                                {paraPhraseResList}
-                                                            </div>
-                                                            <Tooltip title={t("copy_to_segment")} placement="top" arrow>
-                                                                <div className="content-copy" onClick={(e) => replaceWithNewPara(e, paraPhraseResList)}>
-                                                                    <ContentCopyIcon />
-                                                                </div>
-                                                            </Tooltip>
-                                                        </div>
-                                                    </li>
-                                                    {/* {
-                                                    paraPhraseResList?.map(each => {
-                                                        return (
-                                                        )
-                                                    })
-                                                }     */}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <div className="paraphrase-loader">
-                                        <MessageTypingAnimation />
+                        </div>
+                    ) : activeFooterTab === 5 ? (
+                        <div className="tab-pane ">
+                            <section className="quest-section">
+                                <div className="quest-section">
+                                    <div className="quest-section-align">
+                                        <ul className="qa-list">
+                                            {qaContent?.length === 0 ? (
+                                                <li className='error-code'>
+                                                    <span className="qa-text">
+                                                        {t("qa_no_errors")}
+                                                    </span>
+                                                </li>
+
+                                            ) : (qaContent)}
+                                        </ul>
                                     </div>
-                                )) : null}
-                        </section>
-                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    ) : activeFooterTab === 6 && (
+                        <div className="tab-pane ">
+                            <section className="top-section-show">
+                                <div className="modal-top-body">
+                                    <div className="tm-tb-main-row w-full">
+                                        <div className="tm-container tm-side-border w-full">
+                                            <div className="top-section-title-align" style={{display: 'block'}}>
+                                                {concordanceData?.length !== 0 && (
+                                                    <div className="top-body-title-1">
+                                                        <p>
+                                                            <span>{t("source_language")}:</span> {sourceLanguage}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                <div className="translation_memories-1" style={{marginTop: '8px'}}>
+                                                    <ul>
+                                                        {concordanceData?.length !== 0 ?
+                                                            concordanceData.map((value, key) => {
+                                                                return (
+                                                                    <li key={key}>
+                                                                        <div className="tm-tb-sub-cont">
+                                                                            <div className="translation-list-value-src">
+                                                                                <div className="text-left">
+                                                                                    <p className="tb-file-src-txt">{parse(value.source)}</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="translation-list-value-tar">
+                                                                                <div className="target-lang-align">
+                                                                                    <div className="text-left">
+                                                                                        <p className="tb-file-tar-txt">{parse(value.target)}</p>
+                                                                                    </div>
+                                                                                    <div className="tmx-links-algin">
+                                                                                        <div className="translation-mem-percent-box">
+                                                                                            <span>{value.percentage}</span>
+                                                                                            <span>% {t("match")}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="translation-list-value-copy-btn">
+                                                                                <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top">
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        className="workspace-feature-btn-new"
+                                                                                        onClick={(e) => copyText(value.target)}
+                                                                                        onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 500)}
+                                                                                    >
+                                                                                        <img
+                                                                                            src={NorCopyContent}
+                                                                                            className="content-copy" alt="copy text"
+                                                                                        />
+                                                                                    </button>
+                                                                                </Tooltip>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                );
+                                                            })
+                                                        : <div className="tm-container-no-matches-found">
+                                                            <small>{t("no_match_for_concordence")}</small>
+                                                        </div>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    )}
                 </div>
             </section>
         </>

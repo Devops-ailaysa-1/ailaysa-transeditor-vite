@@ -1823,7 +1823,7 @@ ul.comments-list li:hover .comment-close-btn {
 }
 
 .focused-row .source-div-icon {
-    display: block;
+    display: flex;
 }
 
 
@@ -2939,7 +2939,8 @@ ul#workspace li:hover .workspace-textarea {
     line-height: 1.3;
     color: #fff;
     vertical-align: middle;
-    word-break: break-all;
+    white-space: nowrap;
+    /* word-break: break-all; */
     cursor: -webkit-pointer;
     cursor: pointer;
     /* cursor:url(../images/double-tap-new.svg), auto; */
@@ -3992,7 +3993,7 @@ ul.submenu {
     -webkit-animation-delay: 0.1s;
     animation-delay: 0.1s; */
     animation: none;
-    width: 195px;
+    width: 229px;
     height: auto;
     padding: 8px 0px;
     border-radius: 4px;
@@ -5352,6 +5353,8 @@ ul#workspace {
     display: flex;
     align-items: center;
     position: relative;
+    flex: 1;
+    margin-right: 12px;
 }
 
 .segment-status span:first-child {
@@ -5508,6 +5511,9 @@ ul#workspace {
     transition: 0.3s ease;
     overflow: auto;
 }
+.workspace-working-area .tab-pane {
+    height: 100%;
+}
 
 .workspace-tools-bar ul {
     padding-left: 27px;
@@ -5573,6 +5579,9 @@ ul#workspace {
 } */
 
 .workspace-tools-bar .nav-link:hover {
+    border-bottom: 2.5px solid #0074d3;
+}
+.workspace-tools-bar .nav-link.active-tab {
     border-bottom: 2.5px solid #0074d3;
 }
 
@@ -13114,6 +13123,7 @@ ul.ai-source-langs-list::-webkit-scrollbar-thumb {
     content: attr(data-placeholder);
     color: grey;
     font-style: italic;
+    unicode-bidi: embed;
 }
 
 .ai-cookie-policy-section {
@@ -22959,7 +22969,7 @@ ul.share-row-list-outer>li.share-row-item span.share-icon-wrap:hover,
     border-radius: 4px !important;
     padding: 0 !important;
     width: 450px !important;
-    height: 300px;
+    height: 270px !important;
     /* max-width: 100%; */
 }
 
@@ -24301,6 +24311,7 @@ ul.share-row-list-outer>li.share-row-item span.share-icon-wrap:hover,
     box-shadow: 0px 20px 43px #0000004D !important;
     border-radius: 10px !important;
     width: 905px !important;
+    height: 60dvh;
 }
 
 
@@ -24733,9 +24744,16 @@ ul.share-row-list-outer>li.share-row-item span.share-icon-wrap:hover,
     cursor: pointer;
 }
 
+.glossary-clone-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .clone-body {
     padding: 40px 18px 10px 38px;
     display: flex;
+    height: calc(100% - 232px);
 }
 
 .clone-footer {
@@ -24743,6 +24761,7 @@ ul.share-row-list-outer>li.share-row-item span.share-icon-wrap:hover,
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    margin-top: auto;
 }
 
 .source-term-select__value-container {
@@ -24805,6 +24824,12 @@ ul.share-row-list-outer>li.share-row-item span.share-icon-wrap:hover,
 .src-term-options-list .src-term-options-list-checkbox .MuiSvgIcon-root {
     width: 15px;
     height: 15px;
+}
+
+.clone-multiple-list-wrapper{
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .clone-multiple-list-wrapper,
@@ -34639,7 +34664,7 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
     height: auto;
     top: -1px;
     right: -124px;
-    z-index: 1080;
+    z-index: 10;
     padding: 6px 0px;
 }
 
@@ -34652,7 +34677,7 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
     width: 194px;
     height: auto;
     left: -92px;
-    z-index: 1080;
+    z-index: 10;
     padding: 12px 0px;
 }
 
@@ -34675,7 +34700,7 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
 .more-options-wrap .download-sub-menu ul li,
 .more-options-wrap .menu-wrapper ul li {
     padding: 6px 14px 6px 20px;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
@@ -38909,13 +38934,13 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
 
 .segment-section .table-bordered tbody tr td:first-child,
 .segment-section .table-bordered thead tr th:first-child {
-    width: 45%;
+    width: 55%;
     max-width: 100%;
 }
 
 .segment-section .table-bordered tbody tr td:nth-child(2),
 .segment-section .table-bordered thead tr th:nth-child(2) {
-    width: 23%;
+    width: 13%;
     max-width: 100%;
 }
 
@@ -39179,9 +39204,13 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
 
 /* Choicelist workspace ui */
 
-.choicelist-main-header-wrapper {
+.wordchoice-workspace-container {
     width: min(90%, 1272px);
     margin: 22px auto 0px auto;
+}
+
+.choicelist-main-header-wrapper {
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
 }
@@ -39201,8 +39230,6 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
 }
 
 .choicelist-wrapper-container {
-    width: min(90%, 1272px);
-    margin: 11px auto 40px auto;
     border: 1px solid #EBEBEB;
     border-radius: 4px;
     background: #ffffff;
@@ -40778,7 +40805,7 @@ ul.dropdown-box__link__item__wrapper{
 }
 
 .chat-book-main-wrapper__upload-access-wrapper{
-    width: 450px;
+    min-width: 450px;
     border-right: 1px solid #EAEEF3;
     padding: 24px 0px;
     position: relative;
@@ -44373,4 +44400,55 @@ body{
 /* parallax scrolling for federal workspace story section */
 .target-lang-part .note-editing-area {
     overflow: auto !important;
+}
+
+.selected-file-row.collapse.show {
+    visibility: visible !important;
+}
+.collapse:not(td):not(tr):not(colgroup) {
+    visibility: visible !important;
+}
+
+.workspace-form.show-segment-tags .tag.tag-open,
+.workspace-form.show-segment-tags .tag.tag-close{
+    display: unset !important;
+}
+.workspace-form.hide-segment-tags .tag.tag-open,
+.workspace-form.hide-segment-tags .tag.tag-close{
+    display: none !important;
+}
+
+.prompt-library-modal .ai-mark-confirm-box .rodal-dialog {
+    width: 400px !important;
+    height: 240px !important;
+} 
+
+.suggested-mt-text {
+    font-size: 15px;
+    opacity: 1 !important;
+    color: #0074D3;
+    cursor: pointer;
+}
+.suggested-mt-text:hover {
+    text-decoration: underline;
+}
+
+.my-style-wrapper textarea {
+    border-radius: 4px;
+    border: 1px solid #E7E9EC;
+    resize: none;
+    padding: 16px;
+    width: 100%;
+}
+.my-style-wrapper textarea:focus {
+    border: 1px solid #0073DF;
+}
+.beta-tag {
+    background-color: #0074d3;
+    color: #FFF;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    font-size: 14px;
+    font-weight: 400;
 }

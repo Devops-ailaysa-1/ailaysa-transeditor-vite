@@ -97,6 +97,7 @@ const TermDataForm = (props) => {
 
     useEffect(() => {
         if (glossaryProjectCreationResponse && Object.keys(glossaryProjectCreationResponse)?.length) {
+            console.log(glossaryProjectCreationResponse)
             Config.axios({
                 url: `${Config.BASE_URL}/workspace/files_jobs/${glossaryProjectCreationResponse?.id}/`,
                 method: "GET",

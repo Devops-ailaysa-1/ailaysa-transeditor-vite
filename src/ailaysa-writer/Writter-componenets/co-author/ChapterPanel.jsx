@@ -1273,6 +1273,8 @@ const ChapterPanel = (props) => {
             formData.append("docx_files", each);
         })
         formData.append("book_name", bookCreationResponseRedux?.name);
+        // formData.append("book_id", bookCreationResponseRedux?.id);
+        // formData.append("format", "epub");
         
         axios({
             method: "POST",

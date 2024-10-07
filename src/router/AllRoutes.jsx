@@ -16,6 +16,7 @@ import FederalWorkspace from '../federal-news/FederalWorkspace';
 import BIReport from '../federal-news/BIReport';
 import NewsProjects from '../federal-news/NewsProject';
 import { ErrorBoundary } from 'react-error-boundary';
+// import SpellCheck from '../project-setup-components/spell-check/SpellCheck';
 
 // a function to retry loading a chunk to avoid chunk load error for out of date code
 const lazyRetry = function (componentImport) {
@@ -100,7 +101,9 @@ const AllRoutes = (props) => {
                     )
                 )}
 
-                <Route exact path="/chat-books" element={<Suspense fallback={<MainAILoader />}><AilaysaChat /></Suspense>} />
+                {!is_internal_meber_editor && (
+                    <Route exact path="/chat-books" element={<Suspense fallback={<MainAILoader />}><AilaysaChat /></Suspense>} />
+                )}
                 
                 <Route exact path="/file-upload" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
                 <Route exact path="/documents-list" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
@@ -126,8 +129,8 @@ const AllRoutes = (props) => {
                 
                 <Route exact path="/default-glossary-workspace" element={<Suspense fallback={<MainAILoader />}><DefaultGlossaryWorkspace /></Suspense>} />
                 
-                <Route exact path="/wordchoice-workspace/:projectId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
-                <Route exact path="/wordchoice-workspace/:projectId/:taskId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
+                <Route exact path="/glossary-workspace/:projectId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
+                <Route exact path="/glossary-workspace/:projectId/:taskId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
 
                 <Route exact path="/accept/:uid/:token" element={<Invitation />} />
                 <Route exact path="/confirm/:uid/:token" element={<Invitation />} />
@@ -137,10 +140,11 @@ const AllRoutes = (props) => {
                 <Route exact path="/news-workspace" element={<Suspense fallback={<MainAILoader />}><FederalWorkspace /></Suspense>} />
                 <Route exact path="/news-workspace/:documentId" element={<Suspense fallback={<MainAILoader />}><FederalWorkspace /></Suspense>} />
                 <Route exact path="/chat" element={<Suspense fallback={<MainAILoader />}><Chat /></Suspense>} />
-                <Route exact path="/glossary-workspace" element={<Suspense fallback={<MainAILoader />}><GlossaryWorkspace /></Suspense>} />
+                {/* <Route exact path="/glossary-workspace" element={<Suspense fallback={<MainAILoader />}><GlossaryWorkspace /></Suspense>} /> */}
                 <Route exact path="/writer-blog" element={<Suspense fallback={<MainAILoader />}><WriterBlog /></Suspense>} />
                 <Route exact path="/writer-blog/:steps" element={<Suspense fallback={<MainAILoader />}><WriterBlog /></Suspense>} />
                 {/* conditional routing for writer */}
+                {/* <Route path="/spell-check"  element={<SpellCheck />}/> */}
                 {
                     Config.userState?.internal_member_team_detail?.role !== 'Editor' ?
                         <Route path="/word-processor" element={<ErrorBoundary onError={(err) => console.log(err)} fallback={<p>Something went wrong. Try again later.</p>}><Suspense fallback={<MainAILoader />}><Writter /></Suspense></ErrorBoundary>} />

@@ -523,6 +523,20 @@ const Config = {
         var newSpecs = specs + ',top=' + top + ',left=' + left;
         window.open(link, '_blank', newSpecs);
         return false;
+    },
+
+    updateSpecificKeyInList: (list, id, key, value) => {
+        let newArr = list?.map(obj => {
+            if(obj?.id === id){
+                return {
+                    ...obj,
+                    [key]: value
+                }
+            }else{
+                return obj   
+            }
+        })
+        return newArr
     }
 };
 export default Config;

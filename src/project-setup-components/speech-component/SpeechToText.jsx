@@ -116,6 +116,9 @@ function SpeechToText(props) {
     const [isProjectDeleting, setIsProjectDeleting] = useState(false)
     const [navigationModalVisible, setNavigationModalVisible] = useState(false)
 
+    // adaptive translation state
+    const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
+
     const deletedEditFileIds = useRef([]);
     const deletedJobIds = useRef([]);
     const targetLanguageOptionsRef = useRef([]);
@@ -459,13 +462,6 @@ function SpeechToText(props) {
         }
     }, [sourceLanguage])
 
-    useEffect(() => {
-        if (mtEnable === false) {
-            setPreTranslate(false)
-        }
-    }, [mtEnable])
-
-
     const editSpeechToTextProject = (projectId) => {
         Config.axios({
             url: `${Config.BASE_URL}/workspace/files_jobs/${projectId}/`,
@@ -522,6 +518,7 @@ function SpeechToText(props) {
                 setSourceLanguage(editSourceLanguage?.id);
                 setSourceLabel(editSourceLanguage?.language);
                 setSourceLanguageDisable(true);
+                setAdaptiveTransEnable(data?.isAdaptive)
 
                 let deadlineLocal = Config.convertUTCToLocal(data?.project_deadline);
                 setDeadline(deadlineLocal);
@@ -900,7 +897,10 @@ function SpeechToText(props) {
         }
         formdata.append("project_type", "4"); // by default project type if 4 for voice project
         formdata.append("sub_category", "1"); // sub category is 1 for speech to text
+
         if(mtEnable) formdata.append("get_mt_by_page", translationByPage);
+
+        formdata.append("isAdaptiveTranslation", adaptiveTransEnable);
         
         let deadlineUTC = Config.convertLocalToUTC(deadline);
         deadline && formdata.append("project_deadline", deadlineUTC);
@@ -963,6 +963,8 @@ function SpeechToText(props) {
         formdata.append("team", hasTeam);
         formdata.append("mt_enable", mtEnable);
         
+        formdata.append("isAdaptiveTranslation", adaptiveTransEnable);
+
         if (projectDataFromApi.current?.pre_translate !== preTranslate) {
             formdata.append("pre_translate", preTranslate);
         }
@@ -1136,11 +1138,12 @@ function SpeechToText(props) {
                             ref={contentprojectNameRef}
                             // onInput={projectName}
                             suppressContentEditableWarning={true}
-                            contentEditable="true"
+                            contentEditable={URL_SEARCH_PARAMS.get('task') == null ?  "true" : "false"}
                             onClick={handleHideIcon}
                             // onBlur={() => {
                             //     setHasFocus(false);
                             // }}
+                            
                             onBlur={executeProposalScroll}
                             data-placeholder={t("untitled_project")}
                             onKeyUp={(e) => handleProjectNamechange(e)}
@@ -1390,6 +1393,8 @@ function SpeechToText(props) {
                                 translationByPage={translationByPage}
                                 setTranslationByPage={setTranslationByPage}
                                 projectDataFromApi={projectDataFromApi}
+                                adaptiveTransEnable={adaptiveTransEnable}
+                                setAdaptiveTransEnable={setAdaptiveTransEnable}
                             />
                             <div className="d-flex justify-between">
                                 {isEdit && (
@@ -1426,7 +1431,7 @@ function SpeechToText(props) {
                                             </span>
                                         </button>
                                     )}
-                                    {editProjectId && (
+                                    {URL_SEARCH_PARAMS.get('task') == null && editProjectId && (
                                         <div
                                             onClick={() => setShowDeleteConfirmationModal(true)}
                                             className="edit-delete-btn"
@@ -1444,7 +1449,7 @@ function SpeechToText(props) {
                             </div>
                         </div>)}
                     {
-                        speechTextSwitch === 1 &&
+                      URL_SEARCH_PARAMS.get('task') == null && speechTextSwitch === 1 &&
                         <div className="d-flex align-items-center justify-content-end mt-4">
                             <div className="content-two-info">
                                 <span className="max-word-note">

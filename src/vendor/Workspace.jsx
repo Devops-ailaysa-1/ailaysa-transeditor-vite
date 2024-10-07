@@ -81,67 +81,13 @@ import NorCopyContent from "../assets/images/new-ui-icons/nor-copy-content.svg"
 import WorkspaceFeatures from "./workspace-components/WorkspaceFeatures";
 import {ClickAwayListener} from '@mui/base/ClickAwayListener';
 import AddGlossaryTermModal from "./model-select/AddGlossaryTermModal";
-// import { getTransliterateSuggestions } from "react-transliterate";
-
-// const useStyles = makeStyles((theme) => ({
-//     selectBox: {
-//         height: 28,
-//         padding: "4px 2px",
-//         borderRadius: "2px",
-//         backgroundColor: "transparent",
-//         "&:hover, :focus": {
-//             backgroundColor: "#E8F0FE",
-//         },
-//         "& .MuiSelect-select.MuiSelect-select": {
-//             paddingRight: "20px !important",
-//             paddingLeft: 0,
-//             paddingTop: 0,
-//             paddingBottom: 0,
-//             "&:focus": {
-//                 backgroundColor: "transparent",
-//             }
-//         },
-//         "& .MuiOutlinedInput-notchedOutline": {
-//             border: "0px solid darkgrey",
-//             padding: 0,
-//         },
-//         "& .MuiSvgIcon-root": {
-//             color: "#5F6368",
-//             fontSize: 20,
-//         },
-//     },
-//     selectOptions: {
-//         "& .MuiMenu-list": {
-//             padding: "21px 0px"
-//         },
-//         "& .MuiListItem-root": {
-//             fontSize: 14,
-//             lineHeight: 1.3,
-//             color: "#3C4043",
-//         },
-//         "& .MuiListItem-root:hover": {
-//             backgroundColor: "#F1F3F4"
-//         },
-//         "& .MuiListItem-root.Mui-selected": {
-//             color: "#202124",
-//         },
-//         "& .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover": {
-//             backgroundColor: "#F1F3F4"
-//         },
-//         "& .MuiCheckbox-root": {
-//             color: "#5F6368",
-//             padding: "5px",
-//             "&:hover": {
-//                 backgroundColor: "#F1F3F4"
-//             }
-//         },
-//         "& .MuiCheckbox-colorSecondary": {
-//             "&.Mui-checked": {
-//                 color: "#0074D3"
-//             }
-//         }
-//     }
-// }));
+import { AilaysaGlossariesModal } from "./model-select/Ailaysa-Glossaries/AilaysaGlossariesModal";
+import { OnTheFlyGlossary } from "./model-select/Ailaysa-Glossaries/on-the-fly-modal/OnTheFlyGlossary";
+import { useDispatch } from "react-redux";
+import { setShowGlossTermAddForm } from "../features/ai-glossary/ToggleGlossTermAddFormSlice";
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import { setShowAdaptiveMTIntroModal } from "../features/ShowAdaptiveTransIntroModalSlice";
 
 const DropdownIndicator = (props) => {
     return (
@@ -221,10 +167,13 @@ function Workspace(props) {
     const location = useLocation();
     const history = useNavigate();
     const params = useParams();
+    const dispatch = useDispatch()
 
     // const classes = useStyles();
     const userDetails = useSelector((state) => state.userDetails.value)
     const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
+    let isEnterprise = userDetails?.is_enterprise
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
 
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -268,6 +217,7 @@ function Workspace(props) {
     const [showReplaceSection, setShowReplaceSection] = useState(false);
     const [showSpecialCharacters, setShowSpecialCharacters] = useState(false);
     const [showFormatSize, setShowFormatSize] = useState(false);
+    const [showTagView, setShowTagView] = useState(true);
     const [findTerm, setFindTerm] = useState("");
     const [findSelectedSegmentId, setFindSelectedSegmentId] = useState(null);
     const [replaceTerm, setReplaceTerm] = useState("");
@@ -392,7 +342,7 @@ function Workspace(props) {
 
     const [grammarPopoverOpen, setGrammarPopoverOpen] = useState(false)
     const [paraphrasePopoverOpen, setParaphrasePopoverOpen] = useState(false)
-    const [paraPhraseResList, setParaPhraseResList] = useState([])
+    const [paraPhraseResList, setParaPhraseResList] = useState(null)
     const [paraPhraseTag, setparaPhraseTag] = useState("")
     const [paraPhrasePopoverTarget, setparaPhrasePopoverTarget] = useState("")
     const [synonymsResList, setSynonymsResList] = useState([])
@@ -438,6 +388,7 @@ function Workspace(props) {
 
     const [isWorkspaceEditable, setIsWorkspaceEditable] = useState(true)
     const [showDocumentSubmitButton, setShowDocumentSubmitButton] = useState(false)
+    const [enableDocumentSubmitBtn, setEnableDocumentSubmitBtn] = useState(false)
     const [showVendorComplaintReasonModal, setShowVendorComplaintReasonModal] = useState(false)
     const [vendorReturnRequestReasonText, setVendorReturnRequestReasonText] = useState('')
     const [showReturnRequestBtn, setShowReturnRequestBtn] = useState(false)
@@ -482,8 +433,14 @@ function Workspace(props) {
     const [commentsLoader, setCommentsLoader] = useState(false)
     const [segmentHistoryLoader, setSegmentHistoryLoader] = useState(false)
     const [isSegmentDataLoading, setIsSegmentDataLoading] = useState(false)
+    
+    const [activeFooterTab, setActiveFooterTab] = useState(1)
+    
+    // store selection coordinates
+    const [selectedCoordinates, setSelectedCoordinates] = useState(null)
+    const [isAdaptiveTransEnabled, setIsAdaptiveTransEnabled] = useState(false)
+    
     const forcedLoaderRef = useRef(false)
-
     const glossarySrcFieldRef = useRef(null)
     const glossaryTarFieldRef = useRef(null)
 
@@ -592,32 +549,35 @@ function Workspace(props) {
     /*useRef() constants - end*/
 
     /* createRef() constants - start */
-    const toolbarsRef = createRef(null);
-    const specialCharSectionRef = createRef(null);
-    const addGlossarySectionRef = createRef(null);
-    const replaceTargetRef = createRef(null);
-    const findSourceRef = createRef(null);
-    const findTargetRef = createRef(null);
-    const caseMatchRef = createRef(null);
-    const wholeWordMatchRef = createRef(null);
-    const qaSection = createRef();
-    const commentTextArea = createRef();
-    const tmTabButton = createRef();
-    const concordanceTabButton = createRef();
-    const commentsTabButton = createRef();
-    const qaTabButton = createRef();
-    const dictionaryTabButton = createRef();
-    const paraphraseTabButton = createRef();
-    const dictionaryTermRef = createRef();
-    const deleteSegmentTranslationRef = createRef();
-    const showFormatSizeRef = createRef();
-    const showFindReplaceRef = createRef();
-    // const showConcoradanceRef = createRef();
-    const showSpecialCharactersRef = createRef();
-    const contentEditableParentRef = createRef();
+    const toolbarsRef = useRef(null);
+    const specialCharSectionRef = useRef(null);
+    const addGlossarySectionRef = useRef(null);
+    const replaceTargetRef = useRef(null);
+    const findSourceRef = useRef(null);
+    const findTargetRef = useRef(null);
+    const caseMatchRef = useRef(null);
+    const wholeWordMatchRef = useRef(null);
+    const qaSection = useRef();
+    const commentTextArea = useRef();
+    const tmTabButton = useRef();
+    const segOptionsBtnRef = useRef();
+    const concordanceTabButton = useRef();
+    const commentsTabButton = useRef();
+    const qaTabButton = useRef();
+    const dictionaryTabButton = useRef();
+    const paraphraseTabButton = useRef();
+    const dictionaryTermRef = useRef();
+    const deleteSegmentTranslationRef = useRef();
+    const showFormatSizeRef = useRef();
+    const showTagViewRef = useRef();
+    const showFindReplaceRef = useRef();
+    // const showConcoradanceRef = useRef();
+    const showSpecialCharactersRef = useRef();
+    const contentEditableParentRef = useRef();
     const selectionRangeRef = useRef();
     const lowCreditAlertCounter = useRef(1)
     const segmentDiffButton = useRef(null)
+    const rawMtResponseRef = useRef(null)
 
     const showConcoradanceRef = useRef(null)
     const prevPathRef = useRef(null)
@@ -652,6 +612,9 @@ function Workspace(props) {
     const documentDetailsRef = useRef(null)
     const termAddModalPositionRef = useRef({ x: '-50%', y: '-60%' })
     const wordChoiceListRef = useRef([])
+
+    const defaultGlossDetailsRef = useRef(null)
+
 
     const transphraseId = transphrasePopoverOpen ? "simple-popover" : undefined;
     let userSelectionCallTimer = null;
@@ -820,6 +783,11 @@ function Workspace(props) {
         /*Get cursor position in contenteditable - start*/
         const handleSelectionChange = (e) => {
             changeContenteditableSelection();
+
+            if(window.getSelection()?.toString()?.trim()?.length === 0) {
+                // dispatch(setShowGlossTermAddForm(false))
+                // setSelectedCoordinates(null)
+            }
         };
         /*Get cursor position in contenteditable - end*/
         document.addEventListener("selectionchange", handleSelectionChange, false);
@@ -940,33 +908,14 @@ function Workspace(props) {
     useEffect(() => {
         if (didMount) {
             if (targetLanguageCode != "") {
-                /*Google input tools suggestion functionality start*/
-                /* let workspaceTextArea = document.getElementsByClassName("workspace-textarea")
-                for (let i = 0; i < workspaceTextArea.length; i++) {
-                    if (enableIME) {
-                        workspaceTextArea[i].value = workspaceTextArea[i].innerText
-                        enableTransliteration(workspaceTextArea[i], targetLanguageCode)
-                    } else {
-                        disableTransliteration(workspaceTextArea[i])
-                    }
-                } */
+                
                 translatedResponse.map((value, key) => {
-                    //Loop all the target contenteditable
                     if (enableIME) {
                         // If enabled
                         targetContentEditable.current[value.segment_id].current.value = targetContentEditable.current[value.segment_id].current.innerText;
-                        // let instance = new TransliterationProvider(targetContentEditable.current[value.segment_id].current, targetLanguageCode);
-                        // instance.addEvents(); // Enable IME in each target contenteditable
-                        // enabledTransliteration.current.push(instance)
+                      
                     } else if (enableIME == false) {
-                        // If disabled
-                        // let instance = new TransliterationProvider(targetContentEditable.current[value.segment_id].current, targetLanguageCode)
-                        // instance.removeEvents(instance.elements)
-                        /* enabledTransliteration.current.map(value => {
-                            value.disableTransliteration()
-                        }) */
-                        // if (targetContentEditable.current[value.segment_id].current != null)
-                        // disableTransliteration(targetContentEditable.current[value.segment_id].current)
+                      
                     }
                 });
                 if (enableIME == false) {
@@ -974,17 +923,7 @@ function Workspace(props) {
                     if (targetContentEditable.current) {
                         targetContentEditable.current[focusedDivIdRef.current]?.current.blur(); // Make the currently focused contenteditable to save
                     }
-                    // if(document.querySelector('.ks-input-suggestions')){
-                    //     console.log(document.querySelectorAll('.ks-input-suggestions'))
-                    //     const suggestionsArray = document.querySelectorAll('.ks-input-suggestions')
-                    //     console.log(suggestionsArray)
-                    //     suggestionsArray.forEach((each) => {
-                    //         each.remove()
-                    //     })
-                    // }
-                    // removeListenersFromElement(targetContentEditable.current[focusedDivIdRef.current].current, )
-                    // targetContentEditable.current[focusedDivIdRef.current].current.replaceWith(targetContentEditable.current[focusedDivIdRef.current].current.clone()); // Make the currently focused contenteditable to save
-                    // recreateNode(document.querySelector('#workspace'), true)
+                  
                     setTimeout(() => {
                         window.location.reload(); // As of now just reload the page to disable
                         // history(window.location)
@@ -1001,54 +940,64 @@ function Workspace(props) {
         }, 200);
     }, [targetLanguageId]);
 
-    // useEffect(() => {
-    //     const insertInputSuggestionClick = (e) => {
-    //         // To insert the clicked text from IME suggestions
-    //         if (e.target.classList.contains("suggestion-div")) {
-    //             changeSavedCaretPosition();
-    //             let text = "" + e.target.innerText;
-    //             // console.log(text)
-    //             document.execCommand("insertText", false, text);
-    //         }
-    //     };
-    //     document.addEventListener("click", insertInputSuggestionClick, false); // Also can merge this with the previous click eventListener
-    //     return () => {
-    //         document.removeEventListener("click", insertInputSuggestionClick);
-    //     };
-    // });
 
     useEffect(() => {
-        if (isDocumentOpenerVendorRef.current) {
+        if (isDocumentOpenerVendorRef.current) {    // for the user to whom task is assigned (editor)
+            // console.log(" inside isDocumentOpenerVendorRef")
             if (isWorkspaceEditable) {
+                // show the button to editor if the user has permission to edit the document
+                setShowDocumentSubmitButton(true)
+
                 let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
-                // console.log(isUserIsReviwer)
-                // console.log(documentProgressRef.current)
+                // console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
                 if (!isUserIsReviwer ? (segments_confirmed_count === total_segment_count) : isEditorSubmittedDocument.current) {
-                    console.log("editor submnit: "+isEditorSubmittedDocument.current)
-                    if(isEditorSubmittedDocument.current){
-                        setShowDocumentSubmitButton(false)
+                    if(isEditorSubmittedDocument.current){  // if document submitted - don't show the button
+                        setShowDocumentSubmitButton(false)  // this is good
                     }else{
-                        setShowDocumentSubmitButton(true)
+                        setEnableDocumentSubmitBtn(true)    // enable the button if all segments are confirmed
+                        // setShowDocumentSubmitButton(true)
                     }
-                } else {
-                    setShowDocumentSubmitButton(false)
+                } else {    // if all segments are not confirmed (editor) || if document is not submitted (reviewer) 
+                    if(!isUserIsReviwer) {  // for editor - disable the button
+                        setEnableDocumentSubmitBtn(false)
+                        // setShowDocumentSubmitButton(false)
+                    }else {     // for reviwer enable the button - reviewer submittion not depends on the segment confirmation
+                        setEnableDocumentSubmitBtn(true)
+                    }
                 }
-            } else {
+            } else {    // this is good
                 setShowDocumentSubmitButton(false)
             }
-        } else if (taskDataRef.current) {
+        } else if (taskDataRef.current) {   // for the user who assigned the task (owner)
+            // console.log(" inside else ")
+
+            // console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
             // if post-editing (step-1) is not available but reviewing step is present then the project admin will act as editor the should submit the document 
             // check if step 1 is not preset and task_assign_info length is 1
             if (taskDataRef.current?.task_assign_info?.find(each => each.task_assign_detail.step !== 1) && taskDataRef.current?.task_assign_info?.length === 1) {
+                
+                if(!isEditorSubmittedDocument.current)  // check if document is already submitted - if not submitted show the button 
+                    setShowDocumentSubmitButton(true)
+
                 let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
                 if (segments_confirmed_count === total_segment_count) {
-                    setShowDocumentSubmitButton(true)
+                    // setShowDocumentSubmitButton(true)
+                    setEnableDocumentSubmitBtn(true)
                 } else {
-                    setShowDocumentSubmitButton(false)
+                    setEnableDocumentSubmitBtn(false)
                 }
             }
         }
     }, [isWorkspaceEditable, documentProgressRef.current, isDocumentOpenerVendorRef.current, isUserIsReviwer, isEditorSubmittedDocument.current, taskDataRef.current])
+
+    // useEffect(() => {
+    //     console.log("showDocumentSubmitButton: " + showDocumentSubmitButton)
+    // }, [showDocumentSubmitButton])
+    
+    // useEffect(() => {
+    //     console.log("isEditorSubmittedDocument: " + isEditorSubmittedDocument.current)
+    // }, [isEditorSubmittedDocument.current])
+    
 
     useEffect(() => {
         if (!isWorkspaceEditableRef.current) {
@@ -1229,7 +1178,7 @@ function Workspace(props) {
             // spellCheck();
             // reset the paraphrase states when segment focus is changed
             setparaphraseTrigger(false)
-            setParaPhraseResList([])
+            setParaPhraseResList(null)
             setQaData([])
             // setSegmentDifference([])
             setQaContent([])
@@ -1237,6 +1186,7 @@ function Workspace(props) {
             setTranslationMatches([])
             setTbxData([])
             setSelectedParaphrase(null)
+            setGlossaryData([])
 
             if(document.querySelector('.MuiTooltip-popper')){
                 let tooltips = document.querySelectorAll('.MuiTooltip-popper')
@@ -1256,9 +1206,10 @@ function Workspace(props) {
             }catch(e) {
                 console.log(e)
             }
+            setConcordanceData([])
             setIsSegmentDataLoading(true)
         }
-    }, [focusedDivId]);
+    }, [focusedDivId, URL_SEARCH_PARAMS.get("page"), URL_SEARCH_PARAMS.get("status")]);
 
     // wrap inside mark tag
     useEffect(() => {
@@ -1509,6 +1460,7 @@ function Workspace(props) {
             } else {
                 segmentStatusFilter()
             }
+
         }
     }, [URL_SEARCH_PARAMS.get("page"), documentId, pageSizeFromApi.current]);
 
@@ -1671,14 +1623,6 @@ function Workspace(props) {
             if (dictionaryTerm != null) showDictionaryTab();
         }
     }, [dictionaryTerm, dictionaryTermType]);
-
-    useEffect(() => {
-        if (didMount) {
-            concordanceTabButton.current?.click();
-            scrollLeft()
-        }
-    }, [concordanceData]);
-
 
     /* Whever the findStatus set, redirect it with the selected statuses as query params */
     useEffect(() => {
@@ -1918,12 +1862,27 @@ function Workspace(props) {
     // used to place the modal at the specified position
     useEffect(() => {
         const workspaceEditor = document.querySelector('.workspace-editor');
-        const handleScroll = () => {
+        const handleScroll = (e) => {
             if (workspaceEditor) {
                 const { scrollTop, scrollHeight, clientHeight } = workspaceEditor;
                 termAddModalPositionRef.current = {
                     ...termAddModalPositionRef.current,
                     y: (scrollTop - 268)
+                }
+
+                let selection = window.getSelection();
+                if(selection?.toString()?.trim()?.length === 0) {
+                    if(selectedCoordinates !== null) {
+                        dispatch(setShowGlossTermAddForm(false))
+                        setSelectedCoordinates(null)
+                    }
+                    return
+                }
+                
+                if(!isEnterprise && !is_internal_meber_editor){
+                    let range = selection.getRangeAt(0);
+                    let selectionRect = range.getBoundingClientRect();
+                    setSelectedCoordinates(selectionRect)
                 }
             }
         }
@@ -1960,13 +1919,13 @@ function Workspace(props) {
             // console.log(newArr)
             setTranslatedResponse(newArr)
         }
-    }, [mergeSelectedSegmentIds, translatedResponseRef.current])
+    }, [mergeSelectedSegmentIds])
 
 
     // get the list of wordchoices based on the task_id
     useEffect(() => {
         if(documentTaskIdRef.current !== null){
-            getWordChoiceListForDocument()
+            // getWordChoiceListForDocument()
         }
     }, [documentTaskIdRef.current])
     
@@ -1978,11 +1937,21 @@ function Workspace(props) {
     }, [sourceSelectionText])
 
     // reset the source if target text is selected
-    useEffect(() => {
+useEffect(() => {
         if(targetSelectionText !== "" && !showGlossaryAddition){
             setSourceSelectionText("")
         }
     }, [targetSelectionText])    
+
+    useEffect(() => {
+        if(Cookies.get("adaptive-mt-intro") !== "true") {
+            dispatch(setShowAdaptiveMTIntroModal(true))
+        }
+
+        return () => {
+            dispatch(setShowAdaptiveMTIntroModal(false))
+        }
+    }, [])
 
     // Handle footer pin
     const handlePushPinActive = (show = false) => {
@@ -2310,12 +2279,17 @@ function Workspace(props) {
                 setMtEnable(responseTemp?.mt_enable)
                 setTaskAssignUserDetails(responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id)
 
+                setIsAdaptiveTransEnabled(responseTemp?.isAdaptive)
+
+                if(!isEnterprise) getDefaultGlossDetails()
+
                 if(userDetails?.enterprise_name !== "Enterprise - DIN"){
                     // edit_allowed key will restrict the workspace editing access
                     setIsWorkspaceEditable(responseTemp.edit_allowed)
                     isWorkspaceEditableRef.current = responseTemp.edit_allowed
-                    if (responseTemp.edit_allowed) isEditorSubmittedDocument.current = false
-                    else isEditorSubmittedDocument.current = true
+                    // console.log("edit allow: "+responseTemp.edit_allowed)
+                    if (responseTemp.edit_allowed) { isEditorSubmittedDocument.current = false }
+                    else { isEditorSubmittedDocument.current = true }
                     
                 }
 
@@ -2350,7 +2324,7 @@ function Workspace(props) {
 
                 let is_from_reviewer = responseTemp?.assign_detail.filter(each => each.assign_to_id === Config?.userState.id && each.step_id === 2 && location.state?.open_as === 'reviewer')?.length !== 0 ? true : false
 
-                if (location.state?.open_as !== undefined) {
+                if (location.state?.open_as != undefined && location.state?.open_as != null) {
                     if (location.state?.open_as !== 'editor') {
                         setIsUserIsReviwer(is_from_reviewer)
                         is_user_reviewer = is_from_reviewer
@@ -2477,10 +2451,8 @@ function Workspace(props) {
                                 isDocumentOpenerVendorRef.current = true
 
                                 if (task_assign_assign_to_data?.task_assign_detail.task_status !== "Return Request" && task_assign_assign_to_data?.task_assign_detail.task_status !== "Completed" && task_data.task_reassign_info === null) {
-                                    console.log('return 3')
                                     setShowReturnRequestBtn(true)
                                 } else if (task_assign_assign_to_data?.task_assign_detail.task_status !== "Return Request" && task_assign_assign_to_data?.task_assign_detail.task_status !== "Completed" && assign_by_data?.task_assign_detail.task_status === "Return Request") {
-                                    console.log('return 4')
                                     setShowReturnRequestBtn(true)
                                 } else setShowReturnRequestBtn(false)
 
@@ -2547,7 +2519,6 @@ function Workspace(props) {
                                 isDocumentOpenerVendorRef.current = true
                                 // console.log('vendor view');
                                 if (assign_to_data?.task_assign_detail.task_status !== "Return Request" && assign_to_data?.task_assign_detail.task_status !== "Completed") {
-                                    console.log('return 5')
                                     setShowReturnRequestBtn(true)
                                 }
                                 else setShowReturnRequestBtn(false)
@@ -2668,10 +2639,14 @@ function Workspace(props) {
             data: formData,
             auth: true,
             success: (response) => {
+                // hide and disbale the submit button once docuemnt is submitted
+                setShowDocumentSubmitButton(false)
+                setEnableDocumentSubmitBtn(false)
+
                 if(!isDinamalar){
                     setIsWorkspaceEditable(false)
                 }
-                setShowDocumentSubmitButton(false)
+                
                 setShowReturnRequestBtn(false)
                 setShowVendorComplaintReasonModal(false)
                 setShowSubmitConfirmModal(false)
@@ -3082,14 +3057,19 @@ function Workspace(props) {
         }
     }
 
-    const replaceWithNewPara = (e, value) => {
-        updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", value + paraPhraseTag);
-        updateSegmentStatus(focusedDivIdRef.current, 103);
-        changeEditedStatus(focusedDivIdRef.current, "unsaved");
-        handleTransphrasePopoverClose()
-        setTimeout(() => {
-            updateTranslationById(null, focusedDivIdRef.current, true, { forceUpdate: true });
-        }, 200);
+    const replaceWithNewPara = (e, value, tag = "") => {
+        try {
+            console.log(value)
+            updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", value + tag);
+            handleTransphrasePopoverClose()
+            setTimeout(() => {
+                updateSegmentStatus(focusedDivIdRef.current, 103);
+                changeEditedStatus(focusedDivIdRef.current, "unsaved");
+                updateTranslationById(null, focusedDivIdRef.current, true, { forceUpdate: true });
+            }, 250);
+        }catch (e) {
+            console.log(e)
+        }
     }
 
     const repalceWithNewSynonym = (e, value) => {
@@ -3181,7 +3161,7 @@ function Workspace(props) {
     const getParaphrases = async (option) => {
 
         setIsParaphrasing(true)
-        setParaPhraseResList([]) // reset the paraphrase response list before getting the new list
+        setParaPhraseResList(null) // reset the paraphrase response list before getting the new list
         let text = ''
         if (targetLanguageId == 17) {
             text = replaceTagsWithText(unescape(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML), "")
@@ -3242,8 +3222,8 @@ function Workspace(props) {
                 // console.log(data)
                 let response = await data.json()
                 if (data.status === 200) {
-                    setParaPhraseResList(response?.result)
-                    setparaPhraseTag(response?.tag)
+                    setParaPhraseResList(response)
+                    // setparaPhraseTag(response?.tag)
                     setIsParaphrasing(false)
                     if (response?.msg === 'error') {
                         setIsParaphrasing(false)
@@ -3723,7 +3703,7 @@ function Workspace(props) {
                         }
                         updateSegmentStatus(id, response.data.status);
                         getDocumentProgressData();
-                        if (!isTemp) showSegmentQa(id)
+                        // if (!isTemp) showSegmentQa(id)
 
                         // if confirm button is clicked, this will move the focus to next unconfirmed segment otherwise focus the un-opned segment  
                         if (!isTemp) {
@@ -4059,11 +4039,14 @@ function Workspace(props) {
 
     /* Show / hide the TM section in the footer toolbar */
     const showTmSectionFunction = (show = true) => {
-        if (show) {
-            // if (localStorage.getItem('showTmSection') === 'true' || localStorage.getItem('showTmSection') == null)
-            setShowTmSection(true);
-            scrollLeft()
-        } else setShowTmSection(false);
+        setActiveFooterTab(1)
+        scrollLeft()
+        // if (show) {
+        //     // tmTabButton.current?.click();
+        //     // if (localStorage.getItem('showTmSection') === 'true' || localStorage.getItem('showTmSection') == null)
+        //     setShowTmSection(true);
+        //     scrollLeft()
+        // } else setShowTmSection(false);
     };
 
     const toggleListening = () => {
@@ -4086,20 +4069,17 @@ function Workspace(props) {
         if (e.target.className?.includes('source')) {
             if (sourceTextDiv.current[id].current !== null) {
                 let pos = getHTMLCaretPosition(sourceTextDiv.current[id].current)
-                // console.log(pos);
-                let firstSeg = replaceTagsWithText(unescape(sourceTextDiv.current[id].current.innerHTML).slice(0, pos))
-                let secondSeg = replaceTagsWithText(unescape(sourceTextDiv.current[id].current.innerHTML).slice(pos, unescape(sourceTextDiv.current[id].current.innerHTML).length))
-                // console.log(pos);
-                // console.log(firstSeg);
-                // console.log(secondSeg);
-                if ((pos !== null || pos !== undefined) && mergeSelectedSegmentIds?.length === 0) {
-                    if (e.target.getAttribute('data-id') && e.target.getAttribute('source-data-text-unit')) {
-                        segmentIdRef.current = e.target.getAttribute('data-id')
-                        sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit')
-                        setDisbaleSplitIcon(false)
+                try {
+                    if ((pos !== null || pos !== undefined) && mergeSelectedSegmentIds?.length === 0) {
+                        if (e.target.getAttribute('data-id') && e.target.getAttribute('source-data-text-unit')) {
+                            segmentIdRef.current = e.target.getAttribute('data-id')
+                            sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit')
+                            setDisbaleSplitIcon(false)
+                        }
                     }
+                }catch (e) {
+                    console.log(e)
                 }
-                // console.log(focusedDivIdRef.current)
             }
         }
 
@@ -4110,8 +4090,8 @@ function Workspace(props) {
         setGrammarPopoverOpen(false)
         setgrammarCheckPopoverTarget("")
         // setPopoverOpen(false)
-        showTmSectionFunction(false);
-
+        // showTmSectionFunction();
+        
         setFocusedDivId(id);
         ctrlAClicked.current = false;
         focusedDivIdRef.current = id;
@@ -4120,8 +4100,6 @@ function Workspace(props) {
         if(isDinamalar){
             getNerTerms(id)
         }
-
-        getSegmentDiff()
 
         changeEditedStatus(id);
 
@@ -4146,6 +4124,8 @@ function Workspace(props) {
 
         searchTbxForDoc(e)
         searchGlossaryForDoc(e)
+
+        showSegmentComments(segmentId, true)
         
         // if(segment_status) return
 
@@ -4154,8 +4134,17 @@ function Workspace(props) {
             auth: true,
             success: (response) => {
                 let mtTmResponse = response.data;
+               
+                getSegmentDiff()
+
                 let thisSegmentTags = "";
                 let segmentData = translatedResponse.find((element) => element.segment_id == id);
+
+                rawMtResponseRef.current = {
+                    mt: mtTmResponse?.mt_only,
+                    tags: segmentData.target_tags
+                }
+
                 let segmentStatus = allSegmentStatuses.current[id];
                 if (segmentStatus) {
                     if (segmentStatus == 101 || segmentStatus == 103 || segmentStatus == 105) changeEditedStatus(id, "unsaved");
@@ -4172,6 +4161,7 @@ function Workspace(props) {
                             );
                             updateSegmentStatus(id, 105);
                         } else {
+                            // console.log(mtTmResponse?.mt_raw)
                             updateTranslatedResponseSegment(
                                 id,
                                 "temp_target",
@@ -4229,7 +4219,7 @@ function Workspace(props) {
                         }
                         return obj
                     })
-                    // setTranslatedResponse(newArr)
+                    setTranslatedResponse(newArr)
                     translatedResponseDisableEditRef.current = newArr
                     // console.log(newArr)
                     
@@ -4287,9 +4277,10 @@ function Workspace(props) {
     }
 
     const searchGlossaryForDoc = (e) => {
+        setGlossaryData([])
         let glossaryFormdata = new FormData();
         let sourceText = e.target.getAttribute("data-source-text");
-        glossaryFormdata.append("user_input", sourceText);
+        glossaryFormdata.append("user_input", removeAllTags(sourceText));
         glossaryFormdata.append("doc_id", documentId);
         let glossaryUrl = Config.BASE_URL + "/glex/glossary_term_search/";
         Config.axios({
@@ -4300,8 +4291,8 @@ function Workspace(props) {
             success: (response) => {
                 if (response.data !== undefined) {
                     if (response.data.res !== null || response.data.res.length > 0) {
-                        setGlossaryData(response.data.res)
                         showTmSectionFunction();
+                        setGlossaryData(response.data.res)
                         handleToggleVisibility(true);
                         if (!advanceToolbarOpenedForTm) {
                             let segmentData = translatedResponse.find((element) => element.segment_id == id);
@@ -4513,7 +4504,7 @@ function Workspace(props) {
                 if (isShowTags.current) replacedText = replaceTextWithTags(translatedText); //Hide for not to show tags
                 else replacedText = replaceTextWithTagsTemp(translatedText); //Added for not to show tags
                 // console.log(translatedText);
-                console.log(replacedText);
+                // console.log(replacedText);
                 // console.log(targetFindTerm);
 
                 if (targetFindTerm != "") {
@@ -4660,17 +4651,18 @@ function Workspace(props) {
                 else if (showTagsRef.current.classList.contains("toolbar-list-icons-active")) showTagsRef.current.classList.remove("toolbar-list-icons-active");
                 break;
             }
+            case "toggleTagView": {
+                setShowTagView(!showTagView)
+                if(showTagView) showTagViewRef.current.classList.add("toolbar-list-icons-active");
+                else showTagViewRef.current.classList.remove("toolbar-list-icons-active");
+            }
             default: {
                 return;
             }
         }
     };
 
-
-    const toggleIME = () => {
-        setEnableIME(!enableIME);
-    };
-
+    
     // put curosr on the source segment but dont allow any kind of editing (keypress, pasting of content and drag and drop of contentx)
     const handleSourceSegmentClick = (e) => {
         // console.log(e);
@@ -4720,7 +4712,7 @@ function Workspace(props) {
         setEnableSpellCheck(false)
         resetSynonymStates()
         toggleSpellCheckBtn.current?.classList?.remove("toolbar-list-icons-active");
-        console.log(focusedDivIdRef.current)
+        // console.log(focusedDivIdRef.current)
 
         if(!focusedDivIdRef.current){
             targetContentEditable.current[translatedResponse[0]?.segment_id].current.focus();
@@ -5171,7 +5163,7 @@ function Workspace(props) {
 
     /* Show the dictionary data */
     const showDictionaryFunction = () => {
-        showDictionaryRef.current.classList.remove("toolbar-list-icons-active");
+        // showDictionaryRef.current.classList.remove("toolbar-list-icons-active");
         if (window.getSelection().anchorNode == null || window.getSelection().anchorNode.data == null) {
             Config.toast(t("select_text"), "error");
             return;
@@ -5181,7 +5173,7 @@ function Workspace(props) {
         // console.log(selectedText)
         if (selectedText != "") {
             setDictionaryTerm(selectedText);
-            showDictionaryRef.current.classList.add("toolbar-list-icons-active");
+            // showDictionaryRef.current.classList.add("toolbar-list-icons-active");
         } else {
             if (dictionaryTerm == "") {
                 Config.toast(t("select_text"), "error");
@@ -5252,6 +5244,7 @@ function Workspace(props) {
                             targetUrls: targetUrls,
                         }));
                     }, 100);
+                    setActiveFooterTab(4)
                 },
             });
             /*Wiktionary call - end*/
@@ -5276,6 +5269,7 @@ function Workspace(props) {
         }
     };
 
+
     /* Show the concordance data on the footer toolbar */
     const showConcoradance = () => {
         if (window.getSelection().anchorNode == null || window.getSelection().anchorNode.data == null) {
@@ -5296,16 +5290,16 @@ function Workspace(props) {
             auth: true,
             success: (response) => {
                 try{
-                    showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
-                    handleToggleVisibility(true);
-                    scrollLeft()
-                    
+                    // showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
+                    handleToggleVisibility(true);                    
                     response.data.map((value, index) => {
                         response.data[index].source = higlightText(value.source, selectedText);
                     });
                     setTimeout(() => {
                         setConcordanceData(response.data);
                     }, 100);
+                    setActiveFooterTab(6)
+                    scrollRight()
                 }catch(e){
                     console.log(e)
                 }
@@ -5420,7 +5414,7 @@ function Workspace(props) {
     /* Show the segment comment section on the footer toolbar */
     const showCommentSection = (e) => {
         commentsTabButton.current?.click();
-        scrollLeft()
+        // scrollLeft()
         let segmentId = e.target.getAttribute("data-id");
         // targetContentEditable.current[segmentId].current.focus()
         lastCalledArgs.current.functionName = "showCommentSection";
@@ -5428,17 +5422,14 @@ function Workspace(props) {
             // Outside click close the toolbar. Wait for the toolbar is to be closed
             handleToggleVisibility(true);
         }, 100);
-        showSegmentComments(segmentId, true);
+        showSegmentComments(segmentId, true, true);
     };
 
     /* Show QA section in the footer toolbar */
     const showQaSection = (e) => {
         qaTabButton.current?.click();
-        scrollLeft()
+        // scrollLeft()
         let segmentId = e.target.getAttribute("data-id");
-        // console.log(e.target);
-        // console.log(segmentId);
-        // targetContentEditable.current[segmentId].current.focus()
         lastCalledArgs.current.functionName = "showQaSection";
         handleToggleVisibility(true);
         showSegmentQa(segmentId);
@@ -5575,7 +5566,7 @@ function Workspace(props) {
     }
 
     /* Get and set all segment comments */
-    const showSegmentComments = (segmentId, showLoader = false) => {
+    const showSegmentComments = (segmentId, showLoader = false, activateTab = false) => {
         segmentId = segmentId ? segmentId : focusedDivId
         if(!segmentId) return 
 
@@ -5602,6 +5593,9 @@ function Workspace(props) {
                 setCommentsLoader(false)
                 if (response.data?.length > 0) updateTranslatedResponseSegment(segmentId, "has_comment", true);
                 else updateTranslatedResponseSegment(segmentId, "has_comment", false);
+                if(activateTab){
+                    setActiveFooterTab(3)
+                }
             },
             error: (err) => {
                 if(err?.message !== "canceled") 
@@ -5639,6 +5633,9 @@ function Workspace(props) {
 
     /* Show the segment QA data after getting the response */
     const showSegmentQa = (segmentId) => {
+
+        segmentId = segmentId ? segmentId : focusedDivIdRef.current
+
         setQaData([]);
         let formData = new FormData();
         formData.append("doc_id", documentId);
@@ -5684,6 +5681,7 @@ function Workspace(props) {
                         })
                     });
                     setQaData(response.data.data);
+                    setActiveFooterTab(5)
                 }
             },
         });
@@ -5698,10 +5696,18 @@ function Workspace(props) {
             targetContentEditable.current[segmentId].current.innerHTML = value
         else*/
         // console.log(translatedResponse);
-        setTranslatedResponse((prevTranslatedResponse) => prevTranslatedResponse?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el)));
+        console.log(value)
+        setTranslatedResponse(preveState => preveState?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el)));
         translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el))
-        // console.log(translatedResponse);
+        // console.log("ref")
+        // console.log(translatedResponseRef.current)
     };
+
+    // useEffect(() => {
+    //     console.log("state")
+    //     console.log(translatedResponse)
+    // }, [translatedResponse])
+    
 
     /* Toggling the footer toolbar show/hide */
     const handleToggleVisibility = (show = true) => {
@@ -5755,7 +5761,21 @@ function Workspace(props) {
             }
         })
         // console.log(newArr)
-        setTranslatedResponse(newArr)
+        setTranslatedResponse((prevState) => {
+            return prevState?.map(obj => {
+                if (obj.segment_id == segmentId) {
+                    return {
+                        ...obj,
+                        isFocused: true
+                    }
+                } else {
+                    return {
+                        ...obj,
+                        isFocused: false
+                    }
+                }
+            })
+        })
 
         // let workspaceRowDiv = "";
         // translatedResponse.map((value) => {
@@ -5936,32 +5956,49 @@ function Workspace(props) {
     }
 
     const getSegmentDiff = () => {
-        if (focusedDivId != '') {
 
-            if (axiosSegmentHistoryAbortControllerRef.current) {
-                axiosSegmentHistoryAbortControllerRef.current.abort()
-            }
-        
-            const controller = new AbortController();
-            axiosSegmentHistoryAbortControllerRef.current = controller
+        if(!focusedDivIdRef.current) return 
 
-            setSegmentDifference([])
-            setSegmentHistoryLoader(true)
-            Config.axios({
-                url: `${Config.BASE_URL}/workspace_okapi/segment_history/?segment=${focusedDivId}`,
-                method: "GET",
-                auth: true,
-                ...(controller !== undefined && {signal: controller.signal}),
-                success: (response) => {
-                    // console.log(response.data)
-                    setSegmentHistoryLoader(false)
-                    setSegmentDifference(response.data)
-                },
-                error: (err) => {
-                    setSegmentHistoryLoader(false)
-                }
-            });
+        if (axiosSegmentHistoryAbortControllerRef.current) {
+            axiosSegmentHistoryAbortControllerRef.current.abort()
         }
+    
+        const controller = new AbortController();
+        axiosSegmentHistoryAbortControllerRef.current = controller
+
+        setSegmentDifference([])
+        setSegmentHistoryLoader(true)
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace_okapi/segment_history/?segment=${focusedDivIdRef.current}`,
+            method: "GET",
+            auth: true,
+            ...(controller !== undefined && {signal: controller.signal}),
+            success: (response) => {
+                // console.log(response.data)
+                setSegmentHistoryLoader(false)
+                let mtOnlyObj = {
+                    "segment": focusedDivIdRef.current,
+                    "created_at": "",
+                    "user_name": "-",
+                    "status_id": 104,
+                    "isMtOnly": true, 
+                    "step_name": t("original_mt"),
+                    "segment_difference": [
+                        {
+                            "id": generateKey(),
+                            "sentense_diff_result": rawMtResponseRef.current.mt,
+                            "diff_corrected": rawMtResponseRef.current.mt,
+                            "target_tags": rawMtResponseRef.current.tags,
+                            "save_type": "-"
+                        }
+                    ]
+                }
+                setSegmentDifference([...response.data, mtOnlyObj])
+            },
+            error: (err) => {
+                setSegmentHistoryLoader(false)
+            }
+        });
 
     };
 
@@ -6865,8 +6902,19 @@ function Workspace(props) {
     const checkTargetTextSelection = () => {
         // let selTxt = window.getSelection()?.toString()
         let selection = window.getSelection();
-        if(selection?.toString()?.trim()?.length === 0) return 
+        if(selection?.toString()?.trim()?.length === 0) {
+            setSelectedCoordinates(null)
+            dispatch(setShowGlossTermAddForm(false))
+            return
+        } 
         let range = selection.getRangeAt(0);
+
+        if(!isEnterprise && !is_internal_meber_editor){
+            let selectionRect = range.getBoundingClientRect();
+            dispatch(setShowGlossTermAddForm(false))
+            setSelectedCoordinates(selectionRect)
+        }
+
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
         div.appendChild(clonedSelection);
@@ -6874,7 +6922,7 @@ function Workspace(props) {
         let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
         selTxt = removeSpecificTag(selTxt, 'mark')
 
-        setTargetSelectionText(selTxt)
+        setTargetSelectionText(Config.unescape(selTxt))
         if(window.getSelection().toString()?.trim() === '' || dictionaryTerm !== selTxt){
             showDictionaryRef.current?.classList.remove("toolbar-list-icons-active")
         }
@@ -6886,8 +6934,18 @@ function Workspace(props) {
         // console.log(window.getSelection())
         // console.log(selTxt)
         let selection = window.getSelection();
-        if(selection?.toString()?.trim()?.length === 0) return
+        if(selection?.toString()?.trim()?.length === 0) {
+            setSelectedCoordinates(null)
+            dispatch(setShowGlossTermAddForm(false))
+            return
+        }
         let range = selection.getRangeAt(0);
+        if(!isEnterprise && !is_internal_meber_editor){
+            let selectionRect = range.getBoundingClientRect();
+            dispatch(setShowGlossTermAddForm(false))
+            setSelectedCoordinates(selectionRect)
+        }
+
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
         div.appendChild(clonedSelection);
@@ -6895,8 +6953,8 @@ function Workspace(props) {
         let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
         selTxt = removeSpecificTag(selTxt, 'mark')
 
-        console.log(selTxt)
-        setSourceSelectionText(selTxt)
+        // console.log(selTxt)
+        setSourceSelectionText(Config.unescape(selTxt))
     }
 
     // ================================================================================================================
@@ -6942,7 +7000,7 @@ function Workspace(props) {
             showCurrentWordAsLastSuggestion: showCurrentWordAsLastSuggestion,
             lang: lang
         });
-        console.log(data)
+        // console.log(data)
         setOptions(data);
     };
 
@@ -7332,7 +7390,7 @@ function Workspace(props) {
             auth: true,
             data: formData,
             success: (response) => {
-                getWordChoiceListForDocument()
+                // getWordChoiceListForDocument()
                 setIsTermAdding(false)
                 Config.toast(t("term_added_success"))
                 showHideToolbarElement("showGlossaryAddition")
@@ -7439,10 +7497,23 @@ function Workspace(props) {
                     return
                 }
                 // set the first selected wordchoice by default
-                setSelectedWordChoiceItem(wordChoiceListRef.current?.find(each => each?.value === list[0]?.glossary) )
+                setSelectedWordChoiceItem(wordChoiceListRef.current?.find(each => parseInt(each?.value) === list[0]?.glossary) )
             },
         });
     };
+
+    const getDefaultGlossDetails = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
+            auth: true,
+            success: (response) => {
+                defaultGlossDetailsRef.current = response.data
+            },
+            error: (err) => {
+                // setisGlossaryListLoading(false)
+            }
+        });
+    } 
 
 
     // ================================================================================================================
@@ -7468,7 +7539,6 @@ function Workspace(props) {
         textUnit;
     let bgColor = "#0074D3";
         
-
     return (
         <React.Fragment>
             <Navbar
@@ -7503,6 +7573,7 @@ function Workspace(props) {
                 mtEnable={mtEnable}
                 docCreditCheckAlertRef={docCreditCheckAlertRef}
                 showDocumentSubmitButton={showDocumentSubmitButton}
+                enableDocumentSubmitBtn={enableDocumentSubmitBtn}
                 handleDocumentSubmitBtn={handleDocumentSubmitBtn}
                 showReturnRequestBtn={showReturnRequestBtn}
                 isWorkspaceEditable={isWorkspaceEditable}
@@ -7544,6 +7615,16 @@ function Workspace(props) {
                                             </div>
                                         </Tooltip>
                                     </li>
+
+                                    <li onClick={(e) => showHideToolbarElement("toggleTagView")}>
+                                        <Tooltip title={showTagView ? t("hide_tags") : t("show_tags")} placement="bottom" arrow>
+                                            <div ref={showTagViewRef} className="toolbar-list-icons-align">
+                                                <RemoveRedEyeOutlinedIcon style={{ fontSize: '24px', display: showTagView ? 'unset' : 'none' }} />
+                                                <VisibilityOffOutlinedIcon style={{ fontSize: '24px', display: showTagView ? 'none' : 'unset' }} />
+                                            </div>
+                                        </Tooltip>
+                                    </li>
+
                                 </ul>
                                 <ul>
                                     <li onClick={(e) => showHideToolbarElement("showFindReplace")}>
@@ -7570,15 +7651,15 @@ function Workspace(props) {
                                         </Tooltip>
                                     </li>
                                     
-                                    {/* {isDinamalar &&  */}
+                                    {isDinamalar && 
                                         <li onClick={(e) => handleAddGlossaryTermBtn()}>
-                                            <Tooltip title={isDinamalar ? t("add_glossary") : t("add_wordchoice")} placement="bottom" arrow>
+                                            <Tooltip title={t("add_glossary")} placement="bottom" arrow>
                                                 <div ref={showGlossaryRef} className="toolbar-list-icons-align">
                                                     <div className="toolbar-list-icon-bg glossary"></div>
                                                 </div>
                                             </Tooltip>
                                         </li>
-                                    {/* } */}
+                                    } 
                                     <li onClick={(e) => showHideToolbarElement("showSpecialCharacters")}>
                                         <Tooltip title={t("special_characters")} placement="bottom" arrow>
                                             <div ref={showSpecialCharactersRef} className="toolbar-list-icons-align">
@@ -7716,6 +7797,7 @@ function Workspace(props) {
                                         </Tooltip>
                                     </li>
                                 </ul>}
+
                                 {/* {webSpeechLang?.find(each => each.name?.toLowerCase() === targetLanguage?.toLowerCase()) && (
                                     <ul>
                                         <Tooltip title={isListening ? t("listening") : t("voice_typing")} placement="bottom" arrow>
@@ -8100,7 +8182,7 @@ function Workspace(props) {
                                     <p>{t("no_segments_has_been_found")}</p>
                                 </div>
                             ) : (
-                                <form className="workspace-form">
+                                <form className={["workspace-form", showTagView ? "show-segment-tags" : "hide-segment-tags"].join(' ')}>
                                     <ul id="workspace" className="display" ref={contentEditableParentRef}>
                                         {
                                             translatedResponse?.map((translation, key) => {
@@ -8237,7 +8319,7 @@ function Workspace(props) {
                                                                         id={"source-text-div-" + id}
                                                                         data-id={id}
                                                                         style={sourceLanguageFontSize != null ? { fontSize: sourceLanguageFontSize } : {}}
-                                                                        onFocus={(e) => contentEditableFocus(e, translatedResponse[key].status)}
+                                                                        onFocus={(e) => contentEditableFocus(e)}
                                                                         onClick={(e) => isWorkspaceEditable && handleSourceSegmentClick(e)}
                                                                         onBlur={(e) => isWorkspaceEditable && handleSourceSegmentBlur(e)}
                                                                         onKeyDown={(e) => e.preventDefault()}
@@ -8249,6 +8331,7 @@ function Workspace(props) {
                                                                         onSelect={() => debounceApiCall(checkSourceTextSelection)}
                                                                         source-data-text-unit={textUnit}
                                                                         suppressContentEditableWarning={true}
+                                                                        data-source-text={sourceOriginal}
                                                                         spellCheck="false"
                                                                     >
                                                                         {parse(sourceText)}
@@ -8355,49 +8438,32 @@ function Workspace(props) {
                                                                     </div>
                                                                     <div data-id={id} className="target-lang-row-align trigger-focus">
                                                                         <div data-id={id} className="segment-status trigger-focus">
-                                                                            {/* <span
-                                                                                    className={
-                                                                                        allSegmentStatusState[id] == 101 || allSegmentStatusState[id] == 103 || allSegmentStatusState[id] == 105 || allSegmentStatusState[id] == 109
-                                                                                            ? "segment-flag status-danger"
-                                                                                            :(allSegmentStatusState[id] == 102 || allSegmentStatusState[id] == 104 || allSegmentStatusState[id] == 106 || allSegmentStatusState[id] == 110) ?
-                                                                                            "segment-flag status-confirmed"
-                                                                                            :
-                                                                                            "segment-flag"
-                                                                                    }
-                                                                                >
-                                                                                    {segmentStatuses[allSegmentStatusState[id]]}
-                                                                                </span>
-                                                                                <span
-                                                                                    ref={notSavedStatus.current[id]}
-                                                                                    id={"not-saved-status-" + id}
-                                                                                    data-id={id}
-                                                                                    style={{ display: "none" }}
-                                                                                    className="text-changes-danger"
-                                                                                >
-                                                                                    Changes not yet saved
-                                                                                </span>
-                                                                                <span
-                                                                                    ref={savedStatus.current[id]}
-                                                                                    id={"saved-status-" + id}
-                                                                                    data-id={id}
-                                                                                    style={{ display: "none" }}
-                                                                                    className="text-changes-success"
-                                                                                >
-                                                                                    Changes Saved!
-                                                                                </span> */}
+                                                                            {/* old seg rewrite */}
                                                                             {(isWorkspaceEditable && (sourceLanguageId == 17 || targetLanguageId == 17)) ? (
                                                                                 targetContentEditable.current[id]?.current !== null && targetContentEditable.current[id]?.current?.innerText != "" ? (
                                                                                     <>
                                                                                         <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Rewrite' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Rewrite')}><span>{t("rewrite")}</span></span>
-                                                                                        <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Simplify' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Simplify')}><span>{t("simplified")}</span></span>
-                                                                                        {/* <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Shorten' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Shorten')}><span>{t("shortened")}</span></span> */}
+                                                                                        {/* <span aria-describedby={transphraseId} className={"word-count-capsule paraphrase-tag " + (selectedParaphrase === 'Simplify' ? "active" : "")} onClick={(e) => handleTransphrase(e, 'Simplify')}><span>{t("simplified")}</span></span> */}
                                                                                     </>
                                                                                 ) : null
                                                                             ) : null}
+
+                                                                            
+                                                                            {/* <AdaptiveMTTabs 
+                                                                                segmentId={id}
+                                                                                updateTranslatedResponseSegment={updateTranslatedResponseSegment}
+                                                                                updateSegmentStatus={updateSegmentStatus}
+                                                                                changeEditedStatus={changeEditedStatus}
+                                                                                updateTranslationById={updateTranslationById}
+                                                                                focusedDivIdRef={focusedDivIdRef}
+                                                                                setIsSegmentDataLoading={setIsSegmentDataLoading}
+                                                                                forcedLoaderRef={forcedLoaderRef}
+                                                                            /> */}
+
                                                                         </div>
 
                                                                         <div data-id={id} className="workspace-btn-algin trigger-focus">
-                                                                            <span
+                                                                            {/* <span
                                                                                 ref={notSavedStatus.current[id]}
                                                                                 id={"not-saved-status-" + id}
                                                                                 data-id={id}
@@ -8414,7 +8480,7 @@ function Workspace(props) {
                                                                                 className="text-changes-success"
                                                                             >
                                                                                 Changes Saved!
-                                                                            </span>
+                                                                            </span> */}
 
                                                                             <Tooltip
                                                                                 title={`${segmentStatuses[allSegmentStatusState[id]]}`}
@@ -8459,46 +8525,6 @@ function Workspace(props) {
                                                                                     </div>
                                                                                 </a>
                                                                             </Tooltip>
-
-                                                                            {/* {(targetContentEditable.current[id]?.current?.innerText == "" && mtEnable) ? (
-                                                                                    <a
-                                                                                        type="button"
-                                                                                        className={
-                                                                                            "workspace-feature-btn"
-                                                                                        }
-                                                                                        data-id={id}
-                                                                                        onClick={(e) => { getMachineTranslation(e); restoreMTTranslation() }}
-                                                                                    >
-                                                                                        <Tooltip title="This will replace the content with the MT content" placement="top" arrow>
-                                                                                            <div data-id={id} className="translate"></div>
-                                                                                        </Tooltip>
-                                                                                    </a>
-                                            
-                                                                                ) : (
-                                            
-                                                                                    <a type="button" data-id={id} className={
-                                                                                        "workspace-feature-btn"
-                                                                                    } onClick={(e) => deleteSegmentTranslation(e)}>
-                                                                                        <Tooltip title="Clear target segment" placement="top" arrow>
-                                                                                            <div ref={deleteSegmentTranslationRef}>
-                                                                                                <div data-id={id} className="toolbar-list-icon-bg eraser"></div>
-                                                                                            </div>
-                                                                                        </Tooltip>
-                                                                                    </a>
-                                            
-                                                                                )} */}
-                                                                            {/*                                                                         
-                                                                                {(sourceLanguageId == 17 || targetLanguageId == 17) ? (
-                                                                                    showParaphraseBtn ? (
-                                                                                        <Tooltip
-                                                                                        title="Paraphrase" placement="top" arrow>
-                                                                                            <a type="button" className="workspace-feature-btn" data-id={id} onClick={(e) => getParaphrases()}>
-                                                                                                <div data-id={id} className="paraphrase"></div>
-                                                                                            </a>
-                                                                                        </Tooltip>
-                                                                                    ) : null
-                                                                                ) : null} */}
-
 
                                                                             <Tooltip title={t("add_view_comments")} placement="top" arrow>
                                                                                 <a
@@ -8702,6 +8728,7 @@ function Workspace(props) {
                 getSegmentDiff={getSegmentDiff}
                 commentsTabButton={commentsTabButton}
                 tmTabButton={tmTabButton}
+                segOptionsBtnRef={segOptionsBtnRef}
                 dictionaryTabButton={dictionaryTabButton}
                 qaTabButton={qaTabButton}
                 concordanceTabButton={concordanceTabButton}
@@ -8745,13 +8772,15 @@ function Workspace(props) {
                 segmentDifference={segmentDifference}
                 paraphraseTrigger={paraphraseTrigger}
                 selectedParaphrase={selectedParaphrase}
-                paraPhraseResList={paraPhraseResList}
                 replaceWithNewPara={replaceWithNewPara}
                 rightAlignLangs={rightAlignLangs}
                 targetLanguage={targetLanguage}
                 commentsLoader={commentsLoader}
                 segmentHistoryLoader={segmentHistoryLoader}
                 showSegmentComments={showSegmentComments}
+                getTranslationMatch={getTranslationMatch}
+                activeFooterTab={activeFooterTab}
+                setActiveFooterTab={setActiveFooterTab}
             />
 
             {popoverTarget != null && (
@@ -8819,7 +8848,7 @@ function Workspace(props) {
                         <div className="header-wrapper">
                             <span className="header-text d-flex">
                                 {selectedParaphrase}
-                                {paraPhraseResList?.length !== 0 && (
+                                {paraPhraseResList !== null && (
                                     <span className="transphrase-reload-icon" onClick={() => getParaphrases(selectedParaphrase)}>
                                         <ReplayIcon style={{ fontSize: '18px' }} />
                                     </span>
@@ -8833,16 +8862,16 @@ function Workspace(props) {
                             </span>
 
                         </div>
-                        {(paraphraseTrigger && paraPhraseResList?.length !== 0) ? (
+                        {(paraphraseTrigger && paraPhraseResList !== null) ? (
                             <div className="paraphrase-result-div">
                                 <ul className="list-unstyled">
-                                    <li onClick={(e) => replaceWithNewPara(e, paraPhraseResList)}>
+                                    <li onClick={(e) => replaceWithNewPara(e, paraPhraseResList?.result, paraPhraseResList?.tag)}>
                                         <div className="capsule-wrapper">
                                             <div className={"capsule " + (rightAlignLangs.current.indexOf(targetLanguage) != -1 ? 'align-right' : '')}>
-                                                {paraPhraseResList}
+                                                {paraPhraseResList?.result}
                                             </div>
-                                            <Tooltip title="Copy to segment" placement="top" arrow>
-                                                <div className="content-copy" onClick={(e) => replaceWithNewPara(e, paraPhraseResList)}>
+                                            <Tooltip title={t("copy_to_segment")} placement="top" arrow>
+                                                <div className="content-copy" onClick={(e) => replaceWithNewPara(e, paraPhraseResList?.result, paraPhraseResList?.tag)}>
                                                     <ContentCopyIcon />
                                                 </div>
                                             </Tooltip>
@@ -9044,11 +9073,27 @@ function Workspace(props) {
                                     <button onClick={(e) => { handlePasteSelection(e)}} className={activeResult == index ?   `active-transliterate-result results-options-button` : 'results-options-button'} key={each}>{each}</button>
                                     </div>
                             ))}
-                            </span>                            
+                            </span>                 
                         </div>
                     </div>
                 </div >
             </ClickAwayListener>
+            <AilaysaGlossariesModal 
+                documentDetails={documentDetailsRef.current}
+                defaultGlossDetailsRef={defaultGlossDetailsRef}
+                getDefaultGlossDetails={getDefaultGlossDetails}
+            />
+            {selectedCoordinates && (
+                <OnTheFlyGlossary 
+                    selectedCoordinates={selectedCoordinates}
+                    setSelectedCoordinates={setSelectedCoordinates} 
+                    sourceSelectionText={sourceSelectionText}
+                    targetSelectionText={targetSelectionText}
+                    defaultGlossDetailsRef={defaultGlossDetailsRef}
+                    taskId={defaultGlossDetailsRef.current ? defaultGlossDetailsRef.current?.gloss_task_id : documentDetailsRef.current.task_id}
+                    focusedDivIdRef={focusedDivIdRef}
+                />
+            )}
         </React.Fragment>
     );
 }
