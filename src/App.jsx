@@ -47,7 +47,8 @@ function App() {
     const userDetails = useSelector((state) => state.userDetails.value)
     const showGlobalTransition = useSelector((state) => state.globalTransition.value)
     const showAdaptiveTransIntroModal = useSelector(state => state.showAdaptiveTransIntroModal.value)
-
+    
+    let isEnterprise = userDetails?.is_enterprise 
 
     const [isCookieAccepted, setIsCookieAccepted] = useState(true); // To check the cookies is accepted or not
     const [cookieShowRoute, setCookieShowRoute] = useState(["/"]); // To show the cookie prompt in specific routes
@@ -378,7 +379,7 @@ function App() {
                         <ToastContainer position="top-left" limit={1} icon={false} />
                         <UpdateProfileSettingAlertModal />
 
-                        {showAdaptiveTransIntroModal && (
+                        {(showAdaptiveTransIntroModal && !isEnterprise) && (
                             <AdaptiveTranslationIntroModal />
                         )}
 
