@@ -1471,6 +1471,7 @@ function Navbar(props) {
                                                     }
                                                   }}
                                                 variant="dot"
+                                                invisible={isEnterprise ? true : false}
                                             >
                                                 <div
                                                     className="nav-icon-bg"
@@ -1494,7 +1495,7 @@ function Navbar(props) {
                                         </Tooltip>
                                         {props.isWhite ? (
                                             <ul ref={HelpOutside} className={`submenu submenu-animated submenu_fadeIn ${helpDrpVisibility ? "show" : ""}`}>
-                                                <li>
+                                                <li style={{display: isEnterprise ? "none" : ""}}>
                                                     <a onClick={() => {dispatch(setShowAdaptiveMTIntroModal(true)); setHelpDrpVisibility(false)}}>{t("adaptive_trans_help_text")}</a>
                                                 </li>
                                                 <li>

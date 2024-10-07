@@ -16,6 +16,7 @@ import { CustomTimePicker } from "../custom-component/CustomTimePicker";
 import { t } from "i18next";
 import { Radio } from "@mui/material";
 import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
+import { useSelector } from "react-redux";
 // const CustomCellCheckbox = withStyles({
 //     root: {
 //         color: "#5F6368",
@@ -60,6 +61,8 @@ function AdvancedProjectType(props) {
         setAdaptiveTransEnable
     } = props;
 
+    const userDetails = useSelector((state) => state.userDetails.value)
+    let isEnterprise = userDetails?.is_enterprise 
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -434,7 +437,7 @@ function AdvancedProjectType(props) {
                                                 </div>
                                             }
                                             {/* adaptive translation enable/disable */}
-                                            {(isTranslationTaskAvailable || tempWriterFile !== null) && (
+                                            {((isTranslationTaskAvailable || tempWriterFile !== null) && !isEnterprise) && (
                                                 <div className="flex items-center" style={!props.mtEnable ? {opacity: 0.5} : {}}>
                                                     <Checkbox
                                                         id="adapative_tans"
