@@ -76,11 +76,11 @@ export const AdaptiveTranslationIntroModal = () => {
             </IconButton>
             <div className='modal-wrapper w-full h-full flex overflow-hidden rounded-[10px]'>
                 {showVideo ? (
-                    <iframe
+                    <iframe 
                         width="560" 
                         height="315" 
                         className='flex-1 w-full h-full'
-                        src="https://www.youtube.com/embed/1XTmHH1xi90?si=H8SHbzOI3k-ieuJY&autoplay=1" 
+                        src="https://www.youtube.com/embed/zLOvWmSwhwE?si=fnXE53WItHT0vii0&autoplay=1" 
                         title="YouTube video player" 
                         frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                         referrerPolicy="strict-origin-when-cross-origin"
@@ -89,8 +89,6 @@ export const AdaptiveTranslationIntroModal = () => {
                 ) : (
                     <>
                         <div className="left-container w-[40%] h-full">
-                            {/* {imageData.filter(each => each.id == (Math.floor(Math.random() * 3) + 1)).map(each => (
-                            ))} */}
                             <img 
                                 src={randomImage}
                                 onError={(e) => {e.target.src = Image3}}
@@ -108,7 +106,7 @@ export const AdaptiveTranslationIntroModal = () => {
                             <img 
                                 src={Thumbnail} 
                                 alt="thumbnail"
-                                className="mt-4 mb-3 hover:contrast-75 cursor-pointer" 
+                                className="mt-4 mb-3 hover:contrast-75 cursor-pointer outline outline-solid outline-[#E5E8EC] rounded-lg" 
                                 onClick={() => setShowVideo(true)}
                             />
                             
