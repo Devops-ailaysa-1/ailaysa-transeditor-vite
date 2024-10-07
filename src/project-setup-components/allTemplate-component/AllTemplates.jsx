@@ -212,7 +212,6 @@ const AllTemplate = (props) => {
 
     const handleOpenSpellCheck = (item) => {
         history(`/spell-check`, { state: { aiWritingCateg: null, prevPath: location.pathname } })
-
     }
 
 
@@ -262,9 +261,9 @@ const AllTemplate = (props) => {
                                                     return (
                                                         <motion.div
                                                             key={activeTab ? activeTab : "All"}
-                                                            animate={{ opacity: 1, x: 0 }}
-                                                            initial={{ opacity: 0, x: -20 }}
-                                                            exit={{ opacity: 0, x: 20 }}
+                                                            animate={{ display: "block", x: 0 }}
+                                                            initial={{ display: "none", x: -20 }}
+                                                            exit={{ display: "none", x: 20 }}
                                                             transition={{ duration: 0.3 }}
                                                             className="tempalte-boxes-container-wrapper"
                                                         >
