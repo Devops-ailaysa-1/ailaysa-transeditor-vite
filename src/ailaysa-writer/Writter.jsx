@@ -806,6 +806,19 @@ const Writter = (props) => {
         if (appendResult !== defaultSettings?.append) {
             formdata.append('append', appendResult)
         }
+        
+        let formdataLength = Array.from(formdata.values())?.length
+        if(formdataLength === 0) {
+            Config.toast(t("settings_saved"))
+            dispatch(setDefaultSettings({
+                ...defaultSettings,
+                result_in_modal: showResultInModal !== defaultSettings?.result_in_modal ? showResultInModal : defaultSettings?.result_in_modal
+            }))
+            dispatch(setShowCustomSettingsModal(false))
+            return
+        }
+        
+
         setIsDefaultSettingSaving(true)
         Config.axios({
             url: `${Config.BASE_URL}/openai/custom_settings/${defaultSettings?.id ? `${defaultSettings?.id}/` : ''}`,
