@@ -44,6 +44,7 @@ import UploadFolder from "../../../assets/images/new-ui-icons/upload-folder.svg"
 import LinkPin from "../../../assets/images/new-ui-icons/link-pin.svg"
 import sanitizeHtml from 'sanitize-html-react';
 import ReactRouterPrompt from 'react-router-prompt'
+import { Checkbox, Radio } from "@mui/material";
 
 function TranslateFiles(props) {
     const {
@@ -3376,6 +3377,71 @@ function TranslateFiles(props) {
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 w-2/3">
+                                        <div className="flex items-center">
+                                            <Checkbox
+                                                id="machine-type"
+                                                checked={mtEnable}
+                                                onChange={(e) => setMtEnable(e.target.checked)}
+                                                size="small"
+                                            />
+                                            <label 
+                                                htmlFor="machine-type" 
+                                                className={mtEnable ? "add-active mr-3 mb-0" : "mr-3 mb-0"}
+                                            >
+                                                {t("apply_mt")}
+                                            </label>
+                                        </div>
+                                        <div 
+                                            className={[
+                                                "flex items-center gap-4 mt-3 ml-4",
+                                                !mtEnable ? "disable opacity-60" : ""
+                                            ].join(' ')}
+                                        >
+                                            <div className="flex items-start">
+                                                <Radio
+                                                    checked={adaptiveTransEnable}
+                                                    id="adaptive_trans"
+                                                    className="radio-btn -mt-2"
+                                                    size="small"
+                                                    onChange={() => setAdaptiveTransEnable(true)}
+                                                /> 
+                                                <label 
+                                                    htmlFor="adaptive_trans" 
+                                                    className="assign-manage-radio mb-0"
+                                                >
+                                                    {t("adaptive_trans")}
+                                                    <span className="beta-tag">{t("beta")}</span>
+                                                    <br />
+                                                    <span className="help_text">
+                                                        {t("adaptive_help_txt")}
+                                                    </span>
+                                                </label>
+
+                                            </div>
+                                            <div className="flex items-start">
+                                                <Radio
+                                                    checked={!adaptiveTransEnable}
+                                                    id="standard_trans"
+                                                    onChange={() => setAdaptiveTransEnable(false)}
+                                                    size="small"
+                                                    className="radio-btn -mt-2"
+                                                /> 
+                                                <label 
+                                                    htmlFor="standard_trans" 
+                                                    className="assign-manage-radio mb-0"
+                                                >
+                                                    {t("standard_mt")}
+                                                    <br />
+                                                    <span className="help_text">
+                                                        {t("standard_mt_help_txt")}
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <AdvancedProjectType
                                         isLoading={isLoading}
                                         projectType={projectType}

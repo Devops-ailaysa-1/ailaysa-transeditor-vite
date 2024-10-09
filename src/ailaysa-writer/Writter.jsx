@@ -612,7 +612,7 @@ const Writter = (props) => {
         getGenreOptions()
         getBookFrontMatterOptions()
         getBookBackMatterOptions()
-        getMyStyle()
+        // getMyStyle()
         // set browser tab title as "Writer"
         document.title = '';
         setTimeout(() => {
@@ -4781,12 +4781,12 @@ const Writter = (props) => {
                         </div>
                     </div>
 
-                    <AITab
+                    {/* <AITab
                         onChange={handleCustomizationTabChange} 
                         activeTab={activeCustomizationTab}
                         dataList={customizationTabList}
                         customClass="w-1/2 mt-4 ml-4"
-                    />
+                    /> */}
                     {activeCustomizationTab === 1 ? (
                         <div className="general-settings-wrapper">
                             <div className="term-edit-form">
