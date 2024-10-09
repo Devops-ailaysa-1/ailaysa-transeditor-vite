@@ -5316,7 +5316,8 @@ useEffect(() => {
         let specialCharacter = e.target.innerHTML;
         // to prevent the symbol insertion in source div
         if (document.activeElement !== sourceTextDiv.current[focusedDivIdRef.current].current) {  // it will check if source div is focused or not
-            document.execCommand("insertText", false /*no UI*/, specialCharacter);
+            console.log(specialCharacter)
+            document.execCommand("insertHTML", false /*no UI*/, specialCharacter);
         }
     };
 
