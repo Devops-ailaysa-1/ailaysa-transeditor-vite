@@ -44452,3 +44452,10 @@ body{
     font-size: 14px;
     font-weight: 400;
 }
+.mt-options-wrapper .help_text {
+    color: #7F7F7F;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+}

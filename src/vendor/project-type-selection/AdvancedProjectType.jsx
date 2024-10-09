@@ -58,7 +58,8 @@ function AdvancedProjectType(props) {
         setTranslationByPage,
         projectDataFromApi,
         adaptiveTransEnable,
-        setAdaptiveTransEnable
+        setAdaptiveTransEnable,
+        flowSwitch
     } = props;
 
     const userDetails = useSelector((state) => state.userDetails.value)
@@ -407,85 +408,57 @@ function AdvancedProjectType(props) {
                                     </div>
                                 </div>
                                 <div className={"form-wrapper pt-0 "}>
-                                    <div className="d-flex gap-3 files-space-align">
-                                        <div className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3">
-                                            <>
+                                    {console.log(isTranslationTaskAvailable)}
+                                    {console.log(tempWriterFile)}
+                                    {(isTranslationTaskAvailable || (tempWriterFile !== null && tempWriterFile !== undefined) || flowSwitch == 2) &&
+                                        <>
+                                            <div className="flex items-center" style={!props.mtEnable ? {opacity: 0.5} : {}}>
                                                 <Checkbox
-                                                    id="machine-type"
-                                                    checked={props.mtEnable}
-                                                    onChange={(e) => props.setMtEnable(e.target.checked)}
+                                                    id="pre-translate"
+                                                    // className="ml-3"
+                                                    checked={preTranslate}
+                                                    disabled={!props.mtEnable || disablePreTranslate}
+                                                    onChange={(e) => setPreTranslate(e.target.checked)}
                                                     size="small"
                                                 />
-                                                <label htmlFor="machine-type" className={props.mtEnable ? "add-active mr-3" : "mr-3"}>
-                                                    {t("apply_mt")}
-                                                </label>
-                                            </>
-                                            {(isTranslationTaskAvailable || tempWriterFile !== null) &&
-                                                <div className="flex items-center" style={!props.mtEnable ? {opacity: 0.5} : {}}>
-                                                    <Checkbox
-                                                        id="pre-translate"
-                                                        // className="ml-3"
-                                                        checked={preTranslate}
-                                                        disabled={!props.mtEnable || disablePreTranslate}
-                                                        onChange={(e) => setPreTranslate(e.target.checked)}
-                                                        size="small"
-                                                    />
-                                                    <label htmlFor="pre-translate" className={preTranslate ? "add-active" : ""}>
-                                                        {t("pre_translate_files")}
-                                                    </label>{disablePreTranslate && <small style={{marginLeft: '5px'}}>({t("pre_translation_on_going")})</small>}
-                                                
-                                                </div>
-                                            }
-                                            {/* adaptive translation enable/disable */}
-                                            {((isTranslationTaskAvailable || tempWriterFile !== null) && !isEnterprise) && (
-                                                <div className="flex items-center" style={!props.mtEnable ? {opacity: 0.5} : {}}>
-                                                    <Checkbox
-                                                        id="adapative_tans"
-                                                        checked={adaptiveTransEnable}
-                                                        disabled={!props.mtEnable}
-                                                        onChange={(e) => setAdaptiveTransEnable(e.target.checked)}
-                                                        size="small"
-                                                        className="ml-3"
-                                                    />
-                                                    <label 
-                                                        htmlFor="adapative_tans" 
-                                                        className={adaptiveTransEnable ? "add-active mr-3" : "mr-3"}
-                                                    >
-                                                        {t("adaptive_translation")}
-                                                        <span className="beta-tag">{t("beta")}</span>
-                                                    </label>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    {!preTranslate && (
-                                        <div className="d-flex gap-3 files-space-align">
-                                            <div 
-                                                className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3 mt-2"
-                                                style={!props.mtEnable ? {pointerEvents: 'none', opacity: '0.5', paddingLeft: '10px'} : {paddingLeft: '10px'}}
-                                            >
-                                                    <>
-                                                        <label>{t("get_translation_by")}</label> &nbsp;
-                                                        <Radio
-                                                            checked={translationByPage}
-                                                            id="translate-by-page"
-                                                            className="radio-btn"
-                                                            size="small"
-                                                            onChange={handlePageWiseTransOption}
-                                                        /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
-                                                        &nbsp;&nbsp;
-                                                        <Radio
-                                                            checked={!translationByPage}
-                                                            id="translate-by-segment"
-                                                            onChange={() => setTranslationByPage(false)}
-                                                            size="small"
-                                                            className="radio-btn"
-                                                        /> <label htmlFor="translate-by-segment" className="assign-manage-radio">{t("sentence_one_by_one")}</label>
-
-                                                    </>
+                                                <label htmlFor="pre-translate" className={preTranslate ? "add-active mb-0" : "mb-0"}>
+                                                    {t("pre_translate_files")}
+                                                </label>{disablePreTranslate && <small style={{marginLeft: '5px'}}>({t("pre_translation_on_going")})</small>}
+                                            
                                             </div>
-                                        </div>
-                                    )}
+                                            <div 
+                                                className={[
+                                                    "d-flex gap-3 files-space-align",
+                                                    preTranslate ? "disable opacity-60" : ""
+                                                ].join(' ')}
+                                            >
+                                                <div 
+                                                    className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3 mt-2"
+                                                    style={!props.mtEnable ? {pointerEvents: 'none', opacity: '0.5', paddingLeft: '10px'} : {paddingLeft: '10px'}}
+                                                >
+                                                        <>
+                                                            <label>{t("get_translation_by")}</label> &nbsp;
+                                                            <Radio
+                                                                checked={translationByPage}
+                                                                id="translate-by-page"
+                                                                className="radio-btn"
+                                                                size="small"
+                                                                onChange={handlePageWiseTransOption}
+                                                            /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
+                                                            &nbsp;&nbsp;
+                                                            <Radio
+                                                                checked={!translationByPage}
+                                                                id="translate-by-segment"
+                                                                onChange={() => setTranslationByPage(false)}
+                                                                size="small"
+                                                                className="radio-btn"
+                                                            /> <label htmlFor="translate-by-segment" className="assign-manage-radio">{t("sentence_one_by_one")}</label>
+
+                                                        </>
+                                                </div>
+                                            </div>
+                                        </>
+                                    }
                                 </div>
                         </div>
                     </div>
