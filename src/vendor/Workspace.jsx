@@ -4146,7 +4146,9 @@ useEffect(() => {
                 }
 
                 let segmentStatus = allSegmentStatuses.current[id];
-                if (segmentStatus) {
+                // console.log(segmentStatus)
+                // console.log(segmentData)
+                if (segmentStatus && !is_merged) {
                     if (segmentStatus == 101 || segmentStatus == 103 || segmentStatus == 105) changeEditedStatus(id, "unsaved");
                     else changeEditedStatus(id);
                 } else {
@@ -4161,14 +4163,13 @@ useEffect(() => {
                             );
                             updateSegmentStatus(id, 105);
                         } else {
-                            // console.log(mtTmResponse?.mt_raw)
+                            console.log(mtTmResponse)
+                            console.log(segmentData)
                             updateTranslatedResponseSegment(
                                 id,
                                 "temp_target",
                                 (mtTmResponse?.mt_raw != "" && mtTmResponse?.mt_raw != undefined) ?
-                                    mtTmResponse.mt_raw + segmentData.target_tags
-                                    :
-                                    mtTmResponse?.tm[0]?.target + segmentData.target_tags
+                                    mtTmResponse.mt_raw + segmentData.target_tags : mtTmResponse?.tm[0]?.target + segmentData.target_tags
                             );
 
                             updateSegmentStatus(

@@ -3477,6 +3477,7 @@ function TranslateFiles(props) {
                                         projectDataFromApi={projectDataFromApi}
                                         adaptiveTransEnable={adaptiveTransEnable}
                                         setAdaptiveTransEnable={setAdaptiveTransEnable}
+                                        flowSwitch={2}
                                     />
                                 </div>
                             )}
