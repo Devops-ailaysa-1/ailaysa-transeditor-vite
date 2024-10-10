@@ -612,7 +612,7 @@ const Writter = (props) => {
         getGenreOptions()
         getBookFrontMatterOptions()
         getBookBackMatterOptions()
-        getMyStyle()
+        // getMyStyle()
         // set browser tab title as "Writer"
         document.title = '';
         setTimeout(() => {
@@ -806,6 +806,19 @@ const Writter = (props) => {
         if (appendResult !== defaultSettings?.append) {
             formdata.append('append', appendResult)
         }
+        
+        let formdataLength = Array.from(formdata.values())?.length
+        if(formdataLength === 0) {
+            Config.toast(t("settings_saved"))
+            dispatch(setDefaultSettings({
+                ...defaultSettings,
+                result_in_modal: showResultInModal !== defaultSettings?.result_in_modal ? showResultInModal : defaultSettings?.result_in_modal
+            }))
+            dispatch(setShowCustomSettingsModal(false))
+            return
+        }
+        
+
         setIsDefaultSettingSaving(true)
         Config.axios({
             url: `${Config.BASE_URL}/openai/custom_settings/${defaultSettings?.id ? `${defaultSettings?.id}/` : ''}`,
@@ -4768,12 +4781,12 @@ const Writter = (props) => {
                         </div>
                     </div>
 
-                    <AITab
+                    {/* <AITab
                         onChange={handleCustomizationTabChange} 
                         activeTab={activeCustomizationTab}
                         dataList={customizationTabList}
                         customClass="w-1/2 mt-4 ml-4"
-                    />
+                    /> */}
                     {activeCustomizationTab === 1 ? (
                         <div className="general-settings-wrapper">
                             <div className="term-edit-form">
