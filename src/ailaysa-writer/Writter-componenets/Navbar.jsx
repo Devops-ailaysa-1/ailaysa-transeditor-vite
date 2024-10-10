@@ -449,7 +449,7 @@ function Navbar(props) {
 
     return (
         <React.Fragment>
-            <div className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "navbar-writer-stripe-wrapper sticky" : "navbar-writer-stripe-wrapper"}>
+            <div className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "navbar-writer-stripe-wrapper stick-top" : "navbar-writer-stripe-wrapper"}>
                 {/* {(userDetails?.is_campaign && showCampaignCouponStrip) && (
                     <StartUpTNCampaignOffer />
                 )} */}

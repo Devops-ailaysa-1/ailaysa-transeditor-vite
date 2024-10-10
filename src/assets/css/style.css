@@ -39649,14 +39649,14 @@ ul.suggestion-capsule-wrapper li:not(:last-child) {
     top: 88px;
 }
 
-.navbar-writer-stripe-wrapper.sticky {
+.navbar-writer-stripe-wrapper.stick-top {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 100;
 }
 
-.navbar-stripe-wrapper.sticky {
+.navbar-stripe-wrapper.stick-top {
     position: fixed;
     top: 0;
     width: 100%;
