@@ -315,7 +315,7 @@ const CoAuthorPanel = (props, ref) => {
         
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/`,
             method: "POST",
             data: formdata,
             auth: true,
@@ -355,7 +355,7 @@ const CoAuthorPanel = (props, ref) => {
         }
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${createdBookIdRef.current}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${createdBookIdRef.current}/`,
             method: "PUT",
             data: formdata,
             auth: true,
@@ -390,7 +390,7 @@ const CoAuthorPanel = (props, ref) => {
         let formdata = new FormData();
         formdata.append("book_creation", createdBookIdRef.current);
         Config.axios({
-            url: `${Config.BASE_URL}/openai/booktitle/`,
+            url: `${Config.BASE_URL}/writer/booktitle/`,
             method: "POST",
             data: formdata,
             auth: true,
@@ -443,7 +443,7 @@ const CoAuthorPanel = (props, ref) => {
         setIsGenerateLoadingFreestyle(true)
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookbodymatter/`,
+            url: `${Config.BASE_URL}/writer/bookbodymatter/`,
             method: "POST",
             data: formdata,
             auth: true,

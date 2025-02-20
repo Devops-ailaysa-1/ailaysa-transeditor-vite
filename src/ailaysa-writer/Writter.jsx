@@ -821,7 +821,7 @@ const Writter = (props) => {
 
         setIsDefaultSettingSaving(true)
         Config.axios({
-            url: `${Config.BASE_URL}/openai/custom_settings/${defaultSettings?.id ? `${defaultSettings?.id}/` : ''}`,
+            url: `${Config.BASE_URL}/writer/custom_settings/${defaultSettings?.id ? `${defaultSettings?.id}/` : ''}`,
             method: defaultSettings?.id !== null ? "PUT" : "POST",
             data: formdata,
             auth: true,
@@ -850,7 +850,7 @@ const Writter = (props) => {
         formData.append("document", doc_id); // submit: 3, in-progress: 2
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogarticle/${blog_id}/`,
+            url: `${Config.BASE_URL}/writer/blogarticle/${blog_id}/`,
             method: 'PUT',
             data: formData,
             auth: true,
@@ -1034,10 +1034,10 @@ const Writter = (props) => {
         let token = userCacheData != null ? userCacheData?.token : "";
 
 
-        await fetchEventSource(`${Config.AI_GEN_URL}/openai/stream_article/?outline_section_list=${order_list}&blog_creation=${blog_id}`, {
-            // await fetchEventSource(`https://aicanvas.ailaysa.com/openai/stream_article/?outline_section_list=${order_list}&blog_creation=${blog_id}`, {
+        await fetchEventSource(`${Config.AI_GEN_URL}/writer/stream_article/?outline_section_list=${order_list}&blog_creation=${blog_id}`, {
+            // await fetchEventSource(`https://aicanvas.ailaysa.com/writer/stream_article/?outline_section_list=${order_list}&blog_creation=${blog_id}`, {
 
-            // await fetchEventSource(`https://aicanvas.ailaysa.com/openai/article/`, {
+            // await fetchEventSource(`https://aicanvas.ailaysa.com/writer/article/`, {
             openWhenHidden: true,
             method: "GET",
             headers: {
@@ -2682,7 +2682,7 @@ const Writter = (props) => {
             }
 
             Config.axios({
-                url: `${Config.BASE_URL}/openai/customize_text_generate`,
+                url: `${Config.BASE_URL}/writer/customize_text_generate`,
                 method: "POST",
                 data: formdata,
                 auth: true,
@@ -2989,7 +2989,7 @@ const Writter = (props) => {
 
             // console.log('ran')
             Config.axios({
-                url: `${Config.BASE_URL}/openai/ai_image_gen/`,
+                url: `${Config.BASE_URL}/writer/ai_image_gen/`,
                 method: "POST",
                 data: formdata,
                 auth: true,
@@ -3331,7 +3331,7 @@ const Writter = (props) => {
 
     const getBookDetails = (book_id) => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${book_id}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${book_id}/`,
             method: "GET",
             auth: true,
             success: (response) => {
@@ -3368,9 +3368,9 @@ const Writter = (props) => {
 
 
         let url = ''
-        if(matter === 'front') url = `${Config.BASE_URL}/openai/bookfrontmatter/${item_id}/`
-        else if (matter === 'body') url = `${Config.BASE_URL}/openai/bookbodymatter/${item_id}/`
-        else if (matter === 'back') url = `${Config.BASE_URL}/openai/bookbackmatter/${item_id}/`
+        if(matter === 'front') url = `${Config.BASE_URL}/writer/bookfrontmatter/${item_id}/`
+        else if (matter === 'body') url = `${Config.BASE_URL}/writer/bookbodymatter/${item_id}/`
+        else if (matter === 'back') url = `${Config.BASE_URL}/writer/bookbackmatter/${item_id}/`
 
         Config.axios({
             url: url,
@@ -4163,7 +4163,7 @@ const Writter = (props) => {
     // My styles
     const getMyStyle = () => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/my-style/`,
+            url: `${Config.BASE_URL}/writer/my-style/`,
             auth: true,
             success: (response) => {
                 setMyStyleData(response.data)

@@ -610,9 +610,9 @@ const ChapterPanel = (props) => {
         formdata.append("book_creation", createdBookIdRef.current);
 
         let url = ''
-        if(matter === 'front') url = `${Config.BASE_URL}/openai/bookfrontmatter/`
-        else if (matter === 'body') url = `${Config.BASE_URL}/openai/bookbodymatter/`
-        else if (matter === 'back') url = `${Config.BASE_URL}/openai/bookbackmatter/`
+        if(matter === 'front') url = `${Config.BASE_URL}/writer/bookfrontmatter/`
+        else if (matter === 'body') url = `${Config.BASE_URL}/writer/bookbodymatter/`
+        else if (matter === 'back') url = `${Config.BASE_URL}/writer/bookbackmatter/`
         
         if(matter !== 'body'){
             document.querySelector('.note-editable').classList.add('note-editable-loader')
@@ -689,7 +689,7 @@ const ChapterPanel = (props) => {
         document.querySelector('.note-editable').classList.add('note-editable-loader')
         document.querySelector('.note-editable').classList.add('cursor-hide')
         try{
-            await fetchEventSource(`${Config.AI_GEN_URL}/openai/book_chapter_generate/?bookbody_id=${id}`, {
+            await fetchEventSource(`${Config.AI_GEN_URL}/writer/book_chapter_generate/?bookbody_id=${id}`, {
                 openWhenHidden: true,
                 method: "GET",
                 headers: {
@@ -832,7 +832,7 @@ const ChapterPanel = (props) => {
         formdata.append("html_data", isLast ? htmlaData : spaceRemovedHtml);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookbodymatter/${id}/`,
+            url: `${Config.BASE_URL}/writer/bookbodymatter/${id}/`,
             body:formdata,
             method: "PUT",
             data: formdata,
@@ -910,8 +910,8 @@ const ChapterPanel = (props) => {
         formdata.append("book_creation", createdBookIdRef.current);
         
         let url = ''
-        if(matter === 'front') url = `${Config.BASE_URL}/openai/bookfrontmatter/`
-        else if (matter === 'back') url = `${Config.BASE_URL}/openai/bookbackmatter/`
+        if(matter === 'front') url = `${Config.BASE_URL}/writer/bookfrontmatter/`
+        else if (matter === 'back') url = `${Config.BASE_URL}/writer/bookbackmatter/`
 
         Config.axios({
             url: url,
@@ -967,9 +967,9 @@ const ChapterPanel = (props) => {
         }
 
         let url = ''
-        if(matter === 'front') url = `${Config.BASE_URL}/openai/bookfrontmatter/${item?.id}/`
-        else if (matter === 'body') url = `${Config.BASE_URL}/openai/bookbodymatter/${item?.id}/`
-        else if (matter === 'back') url = `${Config.BASE_URL}/openai/bookbackmatter/${item?.id}/`
+        if(matter === 'front') url = `${Config.BASE_URL}/writer/bookfrontmatter/${item?.id}/`
+        else if (matter === 'body') url = `${Config.BASE_URL}/writer/bookbodymatter/${item?.id}/`
+        else if (matter === 'back') url = `${Config.BASE_URL}/writer/bookbackmatter/${item?.id}/`
 
         Config.axios({
             url: url,
@@ -1000,7 +1000,7 @@ const ChapterPanel = (props) => {
         formdata.append("order_list", reorder_list);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookfrontmatter/${frontMatterList[0]?.id}/`,
+            url: `${Config.BASE_URL}/writer/bookfrontmatter/${frontMatterList[0]?.id}/`,
             body:formdata,
             method: "PUT",
             data: formdata,
@@ -1030,7 +1030,7 @@ const ChapterPanel = (props) => {
         formdata.append("order_list", reorder_list);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookbodymatter/${bodyMatterList[0]?.id}/`,
+            url: `${Config.BASE_URL}/writer/bookbodymatter/${bodyMatterList[0]?.id}/`,
             body:formdata,
             method: "PUT",
             data: formdata,
@@ -1058,7 +1058,7 @@ const ChapterPanel = (props) => {
         formdata.append("order_list", reorder_list);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookbackmatter/${backMatterList[0]?.id}/`,
+            url: `${Config.BASE_URL}/writer/bookbackmatter/${backMatterList[0]?.id}/`,
             body:formdata,
             method: "PUT",
             data: formdata,
@@ -1118,7 +1118,7 @@ const ChapterPanel = (props) => {
         formdata.append("title", book_title);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${createdBookIdRef.current}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${createdBookIdRef.current}/`,
             method: "PUT",
             data: formdata,
             auth: true,
@@ -1278,7 +1278,7 @@ const ChapterPanel = (props) => {
         
         axios({
             method: "POST",
-            url: `${Config.BASE_URL}/openai/docx_merger/`,
+            url: `${Config.BASE_URL}/writer/docx_merger/`,
             data: formData,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },

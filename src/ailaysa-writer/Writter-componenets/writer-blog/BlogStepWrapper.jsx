@@ -106,7 +106,7 @@ const BlogStepWrapper = (props) => {
         if(!blogId) return 
          
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogcreation/${blogId}`,
+            url: `${Config.BASE_URL}/writer/blogcreation/${blogId}`,
             method: "GET",
             auth: true,
             success: (response) => {
@@ -142,7 +142,7 @@ const BlogStepWrapper = (props) => {
         formdata.append("steps", step);  
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogcreation/${blogId}/`, 
+            url: `${Config.BASE_URL}/writer/blogcreation/${blogId}/`, 
             method: "PUT",
             data: formdata,
             auth: true,

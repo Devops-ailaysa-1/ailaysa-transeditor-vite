@@ -32,7 +32,7 @@ export const MyStyleBox = (props) => {
         formdata.append('brand_voice_result_prompt', myStylePrompt)
         setIsSaving(true)
         Config.axios({
-            url: `${Config.BASE_URL}/openai/my-style/${myStyleData?.length ? `${data?.id}/` : ''}`,
+            url: `${Config.BASE_URL}/writer/my-style/${myStyleData?.length ? `${data?.id}/` : ''}`,
             method: myStyleData?.length ? "PUT" : "POST",
             data: formdata,
             auth: true,

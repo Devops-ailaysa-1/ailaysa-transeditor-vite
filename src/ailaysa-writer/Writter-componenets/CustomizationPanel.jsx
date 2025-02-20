@@ -301,7 +301,7 @@ const CustomizationPanel = (props) => {
 
     const getSavedCustomSettings = () => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/custom_settings/`,
+            url: `${Config.BASE_URL}/writer/custom_settings/`,
             method: "GET",
             auth: true,
             success: (response) => {

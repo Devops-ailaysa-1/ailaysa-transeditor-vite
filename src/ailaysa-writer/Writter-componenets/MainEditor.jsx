@@ -2037,7 +2037,7 @@ const MainEditor = (props) => {
         formdata.append('append', action === 'Accept' ? true : false)
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/custom_settings/${defaultSettings?.id ? `${defaultSettings?.id}/` : ''}`,
+            url: `${Config.BASE_URL}/writer/custom_settings/${defaultSettings?.id ? `${defaultSettings?.id}/` : ''}`,
             method: defaultSettings?.id !== null ? "PUT" : "POST",
             data: formdata,
             auth: true,

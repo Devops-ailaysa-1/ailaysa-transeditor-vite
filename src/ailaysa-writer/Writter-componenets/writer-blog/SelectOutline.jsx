@@ -245,7 +245,7 @@ const SelectOutline = (props) => {
 
         formdata.append("blog_outline", blogOutline);   
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogoutlinesession/${itemId}/`, 
+            url: `${Config.BASE_URL}/writer/blogoutlinesession/${itemId}/`, 
             method: "PUT",
             data: formdata,
             auth: true,
@@ -323,7 +323,7 @@ const SelectOutline = (props) => {
         }
         
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogoutlinesession/${selectIndividual ? checkedOutlineList[0] : blogOutlineList[0]?.id}/`, 
+            url: `${Config.BASE_URL}/writer/blogoutlinesession/${selectIndividual ? checkedOutlineList[0] : blogOutlineList[0]?.id}/`, 
             method: "PUT",
             data: formdata,
             auth: true,
@@ -346,7 +346,7 @@ const SelectOutline = (props) => {
         formdata.append("blog_title", blogOutlineGenResponseRef.current?.blog_title_gen ? blogOutlineGenResponseRef.current?.blog_title_gen : selected_title_obj?.blogoutline_title[0]?.blog_title_gen);  
         
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogoutlinesession/`, 
+            url: `${Config.BASE_URL}/writer/blogoutlinesession/`, 
             method: "POST",
             data: formdata,
             auth: true,
@@ -409,7 +409,7 @@ const SelectOutline = (props) => {
         }
         let selected_title_obj =  totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field)
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogoutlinesession/?blog_title=${blogOutlineGenResponseRef.current?.blog_title_gen ? blogOutlineGenResponseRef.current?.blog_title_gen : selected_title_obj?.blogoutline_title[0]?.blog_title_gen}&group=${groupId}`,
+            url: `${Config.BASE_URL}/writer/blogoutlinesession/?blog_title=${blogOutlineGenResponseRef.current?.blog_title_gen ? blogOutlineGenResponseRef.current?.blog_title_gen : selected_title_obj?.blogoutline_title[0]?.blog_title_gen}&group=${groupId}`,
             method: "DELETE",
             auth: true,
             success: (response) => {
@@ -441,7 +441,7 @@ const SelectOutline = (props) => {
         }
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogoutlinesession/${outlineId}/`,
+            url: `${Config.BASE_URL}/writer/blogoutlinesession/${outlineId}/`,
             method: "DELETE",
             auth: true,
             success: (response) => {
@@ -495,7 +495,7 @@ const SelectOutline = (props) => {
         formdata.append("group", reorderedGroupIdRef.current);
         
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogoutlinesession/${selectIndividual ? checkedOutlineList[0] : blogOutlineList[0]?.id}/`, 
+            url: `${Config.BASE_URL}/writer/blogoutlinesession/${selectIndividual ? checkedOutlineList[0] : blogOutlineList[0]?.id}/`, 
             method: "PUT",
             data: formdata,
             auth: true,

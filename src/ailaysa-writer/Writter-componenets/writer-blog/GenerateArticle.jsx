@@ -336,7 +336,7 @@ const GenerateArticle = (props) => {
         formdata.append("blog_title", blogOutlineGenResponseRef.current?.blog_title_gen ? blogOutlineGenResponseRef.current?.blog_title_gen : selected_title_obj?.blogoutline_title[0]?.blog_title_gen);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogoutlinesession/`,
+            url: `${Config.BASE_URL}/writer/blogoutlinesession/`,
             method: "POST",
             data: formdata,
             auth: true,
@@ -386,7 +386,7 @@ const GenerateArticle = (props) => {
 
         formdata.append("blog_outline", blogOutline);
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogoutlinesession/${itemId}/`,
+            url: `${Config.BASE_URL}/writer/blogoutlinesession/${itemId}/`,
             method: "PUT",
             data: formdata,
             auth: true,
@@ -417,7 +417,7 @@ const GenerateArticle = (props) => {
             return;
         }
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogoutlinesession/${outlineId}/`,
+            url: `${Config.BASE_URL}/writer/blogoutlinesession/${outlineId}/`,
             method: "DELETE",
             auth: true,
             success: (response) => {
@@ -465,7 +465,7 @@ const GenerateArticle = (props) => {
 
         // number of keywords by default is 10, for now its given 5 but later this can be get from user
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogcreation/${blogCreationResponseRef.current?.id}/`,
+            url: `${Config.BASE_URL}/writer/blogcreation/${blogCreationResponseRef.current?.id}/`,
             method: "PUT",
             data: formdata,
             auth: true,
@@ -512,7 +512,7 @@ const GenerateArticle = (props) => {
         //   );
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/credit_blog_check/?blog_id=${blogCreationResponseRef.current?.id}`,
+            url: `${Config.BASE_URL}/writer/credit_blog_check/?blog_id=${blogCreationResponseRef.current?.id}`,
             method: "GET",
             auth: true,
             success: (response) => {

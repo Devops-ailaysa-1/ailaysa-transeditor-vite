@@ -472,9 +472,9 @@ function MyDocuments(props) {
         if (deleteFromDocOrBlog.current === 'doc') {
             url = `${Config.BASE_URL}/workspace/mydocuments/${documentId}`
         } else if(deleteFromDocOrBlog.current === 'book') {
-            url = `${Config.BASE_URL}/openai/bookcreation/${documentId}`
+            url = `${Config.BASE_URL}/writer/bookcreation/${documentId}`
         }else {
-            url = `${Config.BASE_URL}/openai/blogcreation/${documentId}`
+            url = `${Config.BASE_URL}/writer/blogcreation/${documentId}`
         }
         setIsDocumentDeleting(true)
         Config.axios({
@@ -564,7 +564,7 @@ function MyDocuments(props) {
     const getBookDetails = (book_id) => {
         if(book_id === undefined || book_id === null) return
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${book_id}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${book_id}/`,
             method: "GET",
             auth: true,
             success: (response) => {
@@ -698,7 +698,7 @@ function MyDocuments(props) {
         
         axios({
             method: "POST",
-            url: `${Config.BASE_URL}/openai/docx_merger/`,
+            url: `${Config.BASE_URL}/writer/docx_merger/`,
             data: formData,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },

@@ -52,7 +52,7 @@ const SpellCheckRichTextNormalEditor = (props) => {
 
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/ocr-proof-reading/${URL_SEARCH_PARAMS.get('id')}/`,
+            url: `${Config.BASE_URL}/writer/ocr-proof-reading/${URL_SEARCH_PARAMS.get('id')}/`,
             method: "PUT",
             auth: true,
             data: formData,
@@ -80,7 +80,7 @@ const SpellCheckRichTextNormalEditor = (props) => {
 
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/ocr-proof-reading/`,
+            url: `${Config.BASE_URL}/writer/ocr-proof-reading/`,
             method: "POST",
             auth: true,
             data: formData,
@@ -104,7 +104,7 @@ const SpellCheckRichTextNormalEditor = (props) => {
 
 
         setIsLoading(true)
-        let url = `${Config.BASE_URL}/openai/ocr-proof-reading/${id}`;
+        let url = `${Config.BASE_URL}/writer/ocr-proof-reading/${id}`;
         Config.axios({
             url: url,
             method: "GET",
@@ -278,7 +278,7 @@ const SpellCheckRichTextNormalEditor = (props) => {
             formData.append("lang_code", 'ta');
 
             Config.axios({
-                url: `${Config.BASE_URL}/openai/spelling_correction_tamil`,
+                url: `${Config.BASE_URL}/writer/spelling_correction_tamil`,
                 method: "POST",
                 auth: true,
                 data: formData,

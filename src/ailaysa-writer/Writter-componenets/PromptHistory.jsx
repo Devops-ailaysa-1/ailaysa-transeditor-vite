@@ -94,7 +94,7 @@ export const PromptHistory = (props) => {
     // get total prompt history list
     const getPromptHistory = (target, promptId) => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/prompt_result/${(searchPromptTextRef.current?.value !== '' && searchPromptTextRef.current?.value !== undefined) ? `?search=${searchPromptTextRef.current?.value}` : ''}`,
+            url: `${Config.BASE_URL}/writer/prompt_result/${(searchPromptTextRef.current?.value !== '' && searchPromptTextRef.current?.value !== undefined) ? `?search=${searchPromptTextRef.current?.value}` : ''}`,
             auth: true,
             success: (response) => {
                 setPromptHistoryList(response.data)
@@ -108,7 +108,7 @@ export const PromptHistory = (props) => {
 
     const getCustomizationHistory = (target) => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/customize_history/${(searchCustomizeTextRef.current?.value !== '' && searchCustomizeTextRef.current?.value !== undefined) ? `?search=${searchCustomizeTextRef.current?.value}` : ''}`,
+            url: `${Config.BASE_URL}/writer/customize_history/${(searchCustomizeTextRef.current?.value !== '' && searchCustomizeTextRef.current?.value !== undefined) ? `?search=${searchCustomizeTextRef.current?.value}` : ''}`,
             auth: true,
             success: (response) => {
                 setCustomizationHistoryList(response.data)
@@ -123,7 +123,7 @@ export const PromptHistory = (props) => {
 
     const getAIImageHistory = () => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/image_history/`,
+            url: `${Config.BASE_URL}/writer/image_history/`,
             auth: true,
             success: (response) => {
                 setAiImageHistoryList(response.data)
@@ -134,7 +134,7 @@ export const PromptHistory = (props) => {
     // delete function for both deleting total prompt result and deleting individual prompt result
     const deleteAiWrittingPrompt = (target, id, promptId, from) => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/history/?${target}=${id}`,
+            url: `${Config.BASE_URL}/writer/history/?${target}=${id}`,
             auth: true,
             method: 'DELETE',
             success: (response) => {

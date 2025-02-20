@@ -60,7 +60,7 @@ const SpellCheck = (props) => {
         formData.append("main_document", pdf);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/ocr-proof-reading/${URL_SEARCH_PARAMS.get('id')}/`,
+            url: `${Config.BASE_URL}/writer/ocr-proof-reading/${URL_SEARCH_PARAMS.get('id')}/`,
             method: "PUT",
             auth: true,
             data: formData,

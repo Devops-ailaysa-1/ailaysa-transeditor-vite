@@ -165,7 +165,7 @@ const CoAuthorWriterFooter = (props) => {
         setPromptText("")
         setIsGenerating(true)
         Config.axios({
-            url: `${Config.BASE_URL}/openai/aiprompt/`,
+            url: `${Config.BASE_URL}/writer/aiprompt/`,
             method: "POST",
             data: formdata,
             auth: true,
@@ -194,7 +194,7 @@ const CoAuthorWriterFooter = (props) => {
     // get the ai prompt results with prompt ID
     const getAiPromptResult = (promptId) => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/prompt_result/?prompt_id=${promptId}`,
+            url: `${Config.BASE_URL}/writer/prompt_result/?prompt_id=${promptId}`,
             auth: true,
             success: (response) => {
                 // setFreeStylePromptResultsList(response.data)

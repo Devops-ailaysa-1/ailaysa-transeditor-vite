@@ -565,7 +565,7 @@ const WritterPromptForm = (props) => {
         })
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/aiprompt/`,
+            url: `${Config.BASE_URL}/writer/aiprompt/`,
             method: "POST",
             data: formdata,
             auth: true,
@@ -600,7 +600,7 @@ const WritterPromptForm = (props) => {
     // get the ai prompt results with prompt ID
     const getAiPromptResult = (promptId) => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/prompt_result/?prompt_id=${promptId}`,
+            url: `${Config.BASE_URL}/writer/prompt_result/?prompt_id=${promptId}`,
             auth: true,
             success: (response) => {
                 if (toggleState === 1) {
@@ -822,7 +822,7 @@ const WritterPromptForm = (props) => {
     const getBookDetails = (book_id, from) => {
         if(book_id === undefined || book_id === null) return
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${book_id}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${book_id}/`,
             method: "GET",
             auth: true,
             success: (response) => {

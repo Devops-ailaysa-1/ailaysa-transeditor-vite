@@ -4273,7 +4273,7 @@ function DashboardQuickAccess(props){
         if (deleteFromDocOrBlog.current === 'doc') {
             url = `${Config.BASE_URL}/workspace/mydocuments/${documentId}`
         } else {
-            url = `${Config.BASE_URL}/openai/blogcreation/${documentId}`
+            url = `${Config.BASE_URL}/writer/blogcreation/${documentId}`
         }
 
         setIsDocumentDeleting(true)

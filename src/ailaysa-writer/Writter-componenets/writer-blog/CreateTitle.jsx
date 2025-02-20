@@ -384,7 +384,7 @@ const CreateTitle = (props) => {
         formdata.append("response_copies_keyword", 5);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogcreation/`,
+            url: `${Config.BASE_URL}/writer/blogcreation/`,
             method: "POST",
             data: formdata,
             auth: true,
@@ -440,7 +440,7 @@ const CreateTitle = (props) => {
         // formdata.append("response_copies_keyword", 5);  
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogcreation/${createdBlogIdRef.current}/`,
+            url: `${Config.BASE_URL}/writer/blogcreation/${createdBlogIdRef.current}/`,
             method: "PUT",
             data: formdata,
             auth: true,
@@ -486,7 +486,7 @@ const CreateTitle = (props) => {
         let formdata = new FormData();
         formdata.append("blog_creation", createdBlogIdRef.current);
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogkeyword/`,
+            url: `${Config.BASE_URL}/writer/blogkeyword/`,
             method: "POST",
             data: formdata,
             auth: true,
@@ -578,7 +578,7 @@ const CreateTitle = (props) => {
         let formdata = new FormData();
         formdata.append("blog_creation_gen", createdBlogIdRef.current);
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogtitle/`,
+            url: `${Config.BASE_URL}/writer/blogtitle/`,
             method: "POST",
             data: formdata,
             auth: true,
@@ -641,7 +641,7 @@ const CreateTitle = (props) => {
         let formdata = new FormData();
         formdata.append("blog_title", blogTitle);
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogtitle/${itemId}/`,
+            url: `${Config.BASE_URL}/writer/blogtitle/${itemId}/`,
             method: "PUT",
             data: formdata,
             auth: true,
@@ -675,14 +675,14 @@ const CreateTitle = (props) => {
 
         formData.append("user_title", selectedTitleText);
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogcreation/${createdBlogIdRef.current}/`,
+            url: `${Config.BASE_URL}/writer/blogcreation/${createdBlogIdRef.current}/`,
             method: "PUT",
             data: formData,
             auth: true,
             success: (response) => {
                 formdata.append("blog_title_gen", selectedTitle);
                 Config.axios({
-                    url: `${Config.BASE_URL}/openai/blogoutline/`,
+                    url: `${Config.BASE_URL}/writer/blogoutline/`,
                     method: "POST",
                     data: formdata,
                     auth: true,
@@ -723,7 +723,7 @@ const CreateTitle = (props) => {
 
     const deleteTitleObj = (titleId) => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/blogtitle/${titleId}/`,
+            url: `${Config.BASE_URL}/writer/blogtitle/${titleId}/`,
             method: "DELETE",
             auth: true,
             success: (response) => {

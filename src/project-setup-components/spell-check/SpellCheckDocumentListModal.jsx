@@ -117,7 +117,7 @@ const SpellCheckDocumentListModal = (props) => {
         setOpenFileLoader(true)
         setDocumentsList([])
         let list = []
-        let url = `${Config.BASE_URL}/openai/ocr-proof-reading/?pagination=False`;
+        let url = `${Config.BASE_URL}/writer/ocr-proof-reading/?pagination=False`;
         if (searchTerm) {
             url += `&doc_name=${searchTerm}`;
             isDocNameSearchedRef.current = true
@@ -167,7 +167,7 @@ const SpellCheckDocumentListModal = (props) => {
 
     const deleteDoc = (id) => {
         setIsDeleting(true)
-        let url = `${Config.BASE_URL}/openai/ocr-proof-reading/${id}`;
+        let url = `${Config.BASE_URL}/writer/ocr-proof-reading/${id}`;
   
         Config.axios({
             url: url,

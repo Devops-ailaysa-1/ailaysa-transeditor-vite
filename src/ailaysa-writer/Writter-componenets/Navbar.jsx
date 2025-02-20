@@ -335,7 +335,7 @@ function Navbar(props) {
         formdata.append("project_name", bookName);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${bookCreationResponseRedux?.id}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${bookCreationResponseRedux?.id}/`,
             method: "PUT",
             data: formdata,
             auth: true,
