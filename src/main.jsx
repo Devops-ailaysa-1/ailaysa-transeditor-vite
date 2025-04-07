@@ -50,6 +50,7 @@ import toggleGlossTermAddFormReducer from './features/ai-glossary/ToggleGlossTer
 import * as Sentry from "@sentry/react";
 import SpellCheckHtmlDataSlice from './features/SpellCheckHtmlDataSlice';
 import ShowAdaptiveTransIntroModalReducer from './features/ShowAdaptiveTransIntroModalSlice';
+import showTranslateDocumentModalReducer from './features/ShowTranslateDocumentModalSlice';
 
 const store = configureStore({
   reducer: {
@@ -76,7 +77,8 @@ const store = configureStore({
 	showGlossTermAddForm: toggleGlossTermAddFormReducer,
 	spellCheckData:SpellCheckHtmlDataSlice,
 	showAdaptiveTransIntroModal: ShowAdaptiveTransIntroModalReducer,
-	...writerReducers        
+	showTranslateDocumentModal: showTranslateDocumentModalReducer,
+	...writerReducers   
   }
 })
 

@@ -17,6 +17,8 @@ import { setShowGlobalTransition } from "../../features/GlobalTransitionSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg"
 import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
+import { setShowTranslateDocumentModal } from "../../features/ShowTranslateDocumentModalSlice";
+import { TranslateDocumentModal } from "./TranslateDocumentModal";
 
 const AllTemplate = (props) => {
     const { category, categoryTab } = props
@@ -41,6 +43,8 @@ const AllTemplate = (props) => {
     const [categoryListItem, setCategoryListItem] = useState(null);
     const [projectSearchTerm, setProjectSearchTerm] = useState("");
     const dispatch = useDispatch()
+
+    const [openTranslateDocument, setOpenTranslateDocument] = useState(false);
 
     const searchTermRef = useRef(null)
     const DataItem = useRef(null)
@@ -196,10 +200,13 @@ const AllTemplate = (props) => {
         setActiveTab(curcat);
         setHideSelectedCategory(true)
         history(`/create/all-templates/${curcat?.toLowerCase() === "voice" ? "voice" : curcat?.toLowerCase()}`)
-        // console.log('done')
     };
 
     const handleCardClick = (item) => {
+        if (item.id == 2){
+            translateDocumentHandler(item);
+            return;
+        }
         dispatch(setShowGlobalTransition(false))
         setTimeout(() => {
             if (item.attributes?.url.includes("https")) {
@@ -210,6 +217,11 @@ const AllTemplate = (props) => {
         }, 250);
     }
 
+    const translateDocumentHandler = (item) => {
+        dispatch(setShowTranslateDocumentModal(true));
+        setOpenTranslateDocument(true);
+    }
+
     const handleOpenSpellCheck = (item) => {
         history(`/spell-check`, { state: { aiWritingCateg: null, prevPath: location.pathname } })
     }
@@ -217,6 +229,7 @@ const AllTemplate = (props) => {
 
     return (
         <React.Fragment>
+            {openTranslateDocument && <TranslateDocumentModal />}
             <section className="all-template-glb-wrapper">
                 <div className="all-template-header">
                     <div className="all-templates-container">

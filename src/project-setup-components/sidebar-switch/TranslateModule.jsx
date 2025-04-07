@@ -1,9 +1,8 @@
 import React, { useEffect ,useRef} from "react";
 import { useParams, Navigate } from "react-router-dom";
-import Fileupload from "../../vendor/Fileupload";
 import TranslateFiles from "../translate-component/files/TranslateFiles";
+import ProjectCreation from "../allTemplate-component/projectCreation";
 import InstantTextTranslate from "../translate-component/text/InstantTextTranslate";
-import StandardTextTranslate from "../translate-component/text/StandardTextTranslate";
 
 const TranslateModule = (props) => {
     const {
@@ -31,7 +30,14 @@ const TranslateModule = (props) => {
                 setSidebarActiveTab={setSidebarActiveTab} />;
                 
         }
-    } 
+    } else if (params?.menu === "translate-files") {
+        // switch (params?.action) {
+        //     case "translate-files":
+                return <ProjectCreation 
+                setSidebarActiveTab={setSidebarActiveTab} />;
+                
+        // }
+    }
 };
 
 export default TranslateModule;

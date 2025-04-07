@@ -2,63 +2,56 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, createRef, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import Config from "../../../vendor/Config";
+import Config from "../../vendor/Config";
 import Skeleton from '@mui/material/Skeleton';
-// import Navbar from "../../../vendor/Navbar";
-import GitHubBox from "../../../vendor/github-integration/GithubBox";
+import GitHubBox from "../../vendor/github-integration/GithubBox";
 import classnames from "classnames";
 import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
-import Select, { components } from "react-select";
+import { components } from "react-select";
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
-// import Tooltip from '@mui/material/Tooltip';
-
 import Button from '@mui/material/Button';
-import Joyride, { ACTIONS, EVENTS, STATUS } from "react-joyride";
-// import TourTooltip from "../../../tour/TourTooltip";
-import DragandDrop from "../../../vendor/DragandDrop";
-import Sourcelanguage from "../../../vendor/lang-modal/Sourcelanguage";
-import Targetlanguage from "../../../vendor/lang-modal/Targetlanguage";
-import AdvancedProjectType from "../../../vendor/project-type-selection/AdvancedProjectType";
-import Breadcrumbs from "../../Breadcrumbs";
+import { ACTIONS, EVENTS, STATUS } from "react-joyride";
+import DragandDrop from "../../vendor/DragandDrop";
+import Sourcelanguage from "../../vendor/lang-modal/Sourcelanguage";
+import Targetlanguage from "../../vendor/lang-modal/Targetlanguage";
 import ButtonBase from '@mui/material/ButtonBase';
-// import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { SaveButtonLoader } from "../../../loader/CommonSaveBtnLoader";
+import { SaveButtonLoader } from "../../loader/CommonSaveBtnLoader";
 import CloseIcon from '@mui/icons-material/Close';
 import Tooltip from '@mui/material/Tooltip';
 import { useTranslation } from 'react-i18next';
-import { ButtonLoader } from "../../../loader/CommonBtnLoader";
+import { ButtonLoader } from "../../loader/CommonBtnLoader";
 import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
-import ProgressAnimateButton from "../../../vendor/button-loader/ProgressAnimateButton";
-import { AnalysisLoader } from "../../../loader/AnalysisLoader";
-import ArrowRightAltColor from "../../../assets/images/new-ui-icons/arrow_right_alt_color.svg"
-import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
-import InsuffientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg"
-import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg"
-import FileError from "../../../assets/images/new-ui-icons/file-error.png"
-import ImpFileIcon from "../../../assets/images/new-ui-icons/imp-icon-file.svg"
-import GroupsColor from "../../../assets/images/new-ui-icons/groups_color.svg"
-import ArrowRightGreyColor from "../../../assets/images/new-create-hub/arrow_right_grey_color.svg"
-import UploadFolder from "../../../assets/images/new-ui-icons/upload-folder.svg"
-import LinkPin from "../../../assets/images/new-ui-icons/link-pin.svg"
-import sanitizeHtml from 'sanitize-html-react';
-import ReactRouterPrompt from 'react-router-prompt'
-import { Checkbox, Radio } from "@mui/material";
+import ProgressAnimateButton from "../../vendor/button-loader/ProgressAnimateButton";
+import { AnalysisLoader } from "../../loader/AnalysisLoader";
+import ArrowRightAltColor from "../../assets/images/new-ui-icons/arrow_right_alt_color.svg";
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
+import InsuffientIcon from "../../assets/images/new-ui-icons/insuffient-icon.svg";
+import RemoveCircleRed from "../../assets/images/new-ui-icons/remove_circle_red.svg";
+import GroupsColor from "../../assets/images/new-ui-icons/groups_color.svg";
+import ArrowRightGreyColor from "../../assets/images/new-create-hub/arrow_right_grey_color.svg";
+import UploadFolder from "../../assets/images/new-ui-icons/upload-folder.svg";
+import LinkPin from "../../assets/images/new-ui-icons/link-pin.svg";
+import ReactRouterPrompt from 'react-router-prompt';
+import ProgressBar from "./ProgressBar";
+import { useDispatch } from "react-redux";
+import { setShowAilaysaGlossaryModal } from "../../features/ShowAilaysaGlossaryModalSlice";
+import { AilaysaGlossariesModal } from "../../vendor/model-select/Ailaysa-Glossaries/AilaysaGlossariesModal";
+import { useSelector } from "react-redux";
 
-function TranslateFiles(props) {
+
+function ProjectCreation(props) {
     const {
         setSidebarActiveTab
     } = props
+
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
 
     /* State constants - start */
     const params = useParams();
     const history = useNavigate();
     const location = useLocation();
-
     const { t } = useTranslation();
-
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const [didMount, setDidMount] = useState(false);
     const [isLoading, setLoading] = useState(false);
@@ -83,18 +76,13 @@ function TranslateFiles(props) {
     const [mtEnable, setMtEnable] = useState(true);
     const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
         useState(false);
-    // const [preTranslate, setPreTranslate] = useState(false)
     const [createdProjects, setCreatedProjects] = useState([]);
-    const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
     const [fileUrlError, setFileUrlError] = useState("");
     const [projectNameError, setProjectNameError] = useState("");
     const [sourceLanguageError, setSourceLanguageError] = useState("");
     const [targetLanguageError, setTargetLanguageError] = useState("");
     const [showFileUpload, setShowFileUpload] = useState(false);
-    const [selectedProjectId, setSelectedProjectId] = useState(null);
-    const [openedProjectId, setOpenedProjectId] = useState(null);
-    const [createdTasks, setCreatedTasks] = useState({ files: [], jobs: [] });
     const [supportFileExtensions, setSupportFileExtensions] = useState([]);
     const [supportedTMXFileExtensions, setSupportedTMXFileExtensions] = useState([
         ".tmx",
@@ -102,19 +90,11 @@ function TranslateFiles(props) {
     const [supportedTBXFileExtensions, setSupportedTBXFileExtensions] = useState([
         ".tbx",
     ]);
-    const [paginationContent, setPaginationContent] = useState("");
-    const [totalPages, setTotalPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [clickedOpenButton, setClickedOpenButton] = useState(null);
     const [showSettings, setshowSettings] = useState(false);
     const [showWordCount, setshowWordCount] = useState(false);
     const [showAssignManageModal, setShowAssignManageModal] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
     const [fileUploadTabActive, setFileUploadTabActive] = useState(1);
-    const [selectedProjectFilesCount, setSelectedProjectFilesCount] = useState(1);
-    const [selectedProjectFiles, setSelectedProjectFiles] = useState([]);
-    const [machineLangTranslationChange, setmachineLangTranslationChange] =
-        useState(null);
     const [editProjectId, setEditProjectId] = useState(null);
     const [sourceLanguageDisable, setSourceLanguageDisable] = useState(false);
     const [editFiles, setEditFiles] = useState([]);
@@ -122,53 +102,34 @@ function TranslateFiles(props) {
     const [editJobs, setEditJobs] = useState([]);
     const [editSubjects, setEditSubjects] = useState([]);
     const [editContents, setEditContents] = useState([]);
-    // const [selectedSteps, setSelectedSteps] = useState([]);
-    const [showEmptyProjects, setEmptyProjects] = useState(false);
     const [creditsAvailable, setCreditsAvailable] = useState(null);
     const [showSrcLangModal, setshowSrcLangModal] = useState(false);
     const [showTarLangModal, setshowTarLangModal] = useState(false);
     const [sourceLabel, setSourceLabel] = useState("");
-    const [targetLabel, setTargetLabel] = useState("");
     const [projectWordCount, setProjectWordCount] = useState(0);
     const [projectCharCount, setProjectCharCount] = useState(0);
     const [projectSegmentCount, setProjectSegmentCount] = useState(0);
-    const [selectedProjectAnalysis, setSelectedProjectAnalysis] = useState(null);
-    const [showListingLoader, setShowListingLoader] = useState(false);
     const [showCreateLoader, setShowCreateLoader] = useState(false);
     const [showUpdateLoader, setShowUpdateLoader] = useState(false);
     const [showWordCountLoader, setShowWordCountLoader] = useState(false);
     const [addonCredit, setAddonCredit] = useState(0);
     const [subscriptionCredit, setSubscriptionCredit] = useState(0);
-    const [selectedProjectName, setSelectedProjectName] = useState("");
     const [teamSelect, setTeamSelect] = useState("");
     const [trojectSelect, setProjectSelect] = useState("");
-    const [jobSelect, setJobSelect] = useState("");
-    const [vendorSelect, setVendorSelect] = useState("");
-    const [draweractiveTab, setDrawerActiveTab] = useState(1);
-    const [CurrencySelect, setCurrencySelect] = useState("");
-    const [UnitTypeSelect, setUnitTypeSelect] = useState("");
-    const [orderField, setOrderField] = useState(null);
     const [teamOptions, setTeamOptions] = useState();
     const [teamSelectError, setTeamSelectError] = useState("");
     const [assignedTaskId, setAssignedTaskId] = useState(null);
     const [assignProjectId, setAssignProjectId] = useState(null);
     const [projectAvailalbility, setProjectAvailalbility] = useState(null);
-    const [fileListSearchEnlarge, setFileListSearchEnlarge] = useState(false);
-    const [projectSearchTerm, setProjectSearchTerm] = useState("");
     const [userSubscriptionPlan, setUserSubscriptionPlan] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [showTeamEdit, setShowTeamEdit] = useState(false);
-    const [instructionText, setInstructionText] = useState(null);
-    const [instructionFile, setInstructionFile] = useState(null);
-    const [taskAssignInfoId, setTaskAssignInfoId] = useState(null);
     const [showVersionControlModal, setShowVersionControlModal] = useState(false);
     const [modalImage, setModalImage] = useState("");
     const [integrationPlatform, setIntegrationPlatform] = useState(null);
     const [integrationFiles, setIntegrationFiles] = useState([]);
     const [tourStepIndex, setTourStepIndex] = useState(0);
     const [isProductTourSeen, setIsProductTourSeen] = useState(true);
-    const [postEditStep, setPostEditStep] = useState(true);
-    const [proofReadStep, setProofReadStep] = useState(false);
     const [allLangDetailsList, setAllLangDetailsList] = useState(null);
     const [sourceTargetValidation, setSourceTargetValidation] = useState({
         source: false,
@@ -214,8 +175,6 @@ function TranslateFiles(props) {
     const [selectedMTFromAPI, setSelectedMTFromAPI] = useState({})
     const [pdfIdFromToolkit, setPdfIdFromToolkit] = useState(null)
     const [recentlyUsedLangs, setRecentlyUsedLangs] = useState([])
-
-    const [showmodelwarning, setShowmodelwarning] = useState(false)
     const [lastLocation, setLastLocation] = useState(null)
     const [confirmedNavigation, setConfirmedNavigation] = useState(false)
     const { pathname } = useLocation()
@@ -239,29 +198,26 @@ function TranslateFiles(props) {
     
     // adaptive translation state
     const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
+    const [projectId, setProjectId] = useState("");
+    const progressMap = [
+        { min: 0, max: 5, message: "Reading source content" },
+        { min: 5, max: 15, message: "Deciding on style" },
+        { min: 15, max: 30, message: "Preprocessing" },
+        { min: 30, max: 50, message: "Translating" },
+        { min: 50, max: 60, message: "Checking Translation" },
+        { min: 60, max: 70, message: "Enhancing Translation" },
+        { min: 70, max: 80, message: "Almost Finished" },
+        { min: 80, max: 99, message: "Finishing" },
+        { min: 99, max: 100, message: "Translation Complete"}
+    ];
+    const [downloadTaskFile, setDownloadTaskTargetFile] = useState();
 
     const searchAreaRef = useRef(null);
     const mtEngineOptionRef = useRef(null)
-
-    /* State constants - end */
-
-    /* Ref constants - start */
-    const fileUploadTop = createRef();
-    const sourceLanguageLabel = createRef();
-    const targetLanguageLabel = createRef();
-
-    const projectNameRef = useRef("");
-    const sourceLanguageModal = useRef();
-    const projectsPerPage = useRef(20);
     const deletedEditFileIds = useRef([]);
     const deletedJobIds = useRef([]);
     const deletedSubjectIds = useRef([]);
     const deletedContentIds = useRef([]);
-    // const allowedFileLength = useRef(10)
-    // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`)
-    // const allowedTargetLanguageLength = useRef(20)
-    // const allowedFileSize = useRef(100) //In MB
-    // const fileSizeErrMsg = useRef(`Exceeds the file(s) size limit of ${allowedFileSize.current} MB`)
     const allowedSingleFileSize = useRef(100); // in MB
     const singleFileSizeError = useRef(t("file_size_exceeds"));
     const projectIdToSelect = useRef(null);
@@ -277,12 +233,22 @@ function TranslateFiles(props) {
     const prevPageInfo = useRef(null)
     const sourceLangRef = useRef(null)
     const projectDataFromApi = useRef(null)
-    const translateDownloadCeleryTaskListRef = useRef([])
     const createdProjectIdRef = useRef(null)
     const projectTaskListRef = useRef(null)
     const inputFileUploadRef = useRef(null)
     const fileTranslatingTaskListRef = useRef([])
     /* Ref constants - end */
+    
+    const [translateData, setTranslateData] = useState({});
+    const [documetId, setDocumentId] = useState(null);
+    const documentDetailsRef = useRef(null)
+    const defaultGlossDetailsRef = useRef(null)
+    const [glossaryOpen, setGlossaryOpen] = useState(false);
+    const [openGlossariesModal, setOpenGlossariesModal] = useState(false);
+    const dispatch = useDispatch()
+    const userDetails = useSelector((state) => state.userDetails.value)
+    let isEnterprise = userDetails?.is_enterprise
+    const isFromView = location?.state?.isFromView;
 
     const open = Boolean(anchorEl); //Assigned task open
 
@@ -817,17 +783,6 @@ function TranslateFiles(props) {
         return true;
     };
 
-    /* const filesSizeExceed = () => {
-          let allFilesSize = 0
-          Object.keys(files).map(eachKey => {
-              allFilesSize += parseInt(files[eachKey].size)
-          })
-          allFilesSize = allFilesSize/1024/1024 //Convert to MB
-          if (allFilesSize <= allowedFileSize.current)
-              return false
-          return true
-      } */
-
     /* Switch to file upload view */
     const switchFileUpload = (e, value) => {
         setShowFileUpload(value);
@@ -844,8 +799,6 @@ function TranslateFiles(props) {
 
     /* Handling all the project creation form */
     const handleChange = (e) => {
-        // e.target.files[0].name.length
-        // console.log(e.target.files);
         for (let i = 0; i < (e.target.files).length; i++) {
             if ((e.target.files[i]?.name).length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
@@ -855,24 +808,18 @@ function TranslateFiles(props) {
         switch (e.target.name) {
             case "files": {
                 let thisFiles = e.target.files;
-                // let fileList = JSON.parse(JSON.stringify(files))
                 let fileList = [...files];
                 Object.keys(thisFiles).map((eachKey) => {
                     if (isSupportedFile(thisFiles[eachKey])) {
-                        // Check for supprted file types
-                        // if (editFiles.length + fileList.length < allowedFileLength.current)
                         if (
                             thisFiles[eachKey].size / 1024 / 1024 <=
                             allowedSingleFileSize.current
                         )
                             fileList.push(thisFiles[eachKey]);
                         else Config.toast(singleFileSizeError.current, "error");
-                        // else
-                        // Config.toast(fileLengthErrMsg.current, 'error')
                     }
                 });
                 setFiles(fileList);
-                // setFiles(prevState => [...prevState, e.target.files])
                 break;
             }
             case "projectName": {
@@ -956,57 +903,17 @@ function TranslateFiles(props) {
             }
         } else {
             e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected")
-            targetLanguageTemp.push(value);
+            // targetLanguageTemp.push(value);
+            targetLanguageTemp = [value];
         }
         setTargetLanguage([...new Set(targetLanguageTemp)]);
         setSourceTargetValidation({
             ...sourceTargetValidation,
             target: false,
         });
+        setshowTarLangModal(false);
         setSearchInput('')
         setOnFocusWrap(false)
-    };
-
-
-    /* Handling subject field selection */
-    const handleSubjectFieldClick = (value, e) => {
-        let subjectFieldTemp = subjectField;
-        if (e.target.classList.contains("selected")) {
-            e.target.classList.remove("selected");
-            subjectFieldTemp = Config.removeItemFromArray(subjectFieldTemp, value);
-
-            if (editProjectId != null) {
-                let thisSubject = editSubjects.find(
-                    (element) => element.subject == value?.id
-                );
-                if (thisSubject?.id != null)
-                    deletedSubjectIds.current.push(thisSubject?.id);
-            }
-        } else {
-            e.target.classList.add("selected");
-            subjectFieldTemp.push(value);
-        }
-        setSubjectField([...new Set(subjectFieldTemp)]);
-    };
-
-    /* Handling content type selection */
-    const handleContentTypeClick = (value, e) => {
-        let contentTypeTemp = contentType;
-        if (e.target.classList.contains("selected")) {
-            e.target.classList.remove("selected");
-            contentTypeTemp = Config.removeItemFromArray(contentTypeTemp, value);
-            if (editProjectId != null) {
-                let thisContent = editContents.find(
-                    (element) => element.content_type == value?.id
-                );
-                if (thisContent?.id != null)
-                    deletedContentIds.current.push(thisContent?.id);
-            }
-        } else {
-            e.target.classList.add("selected");
-            contentTypeTemp.push(value);
-        }
-        setContentType([...new Set(contentTypeTemp)]);
     };
 
     useEffect(() => {
@@ -1032,202 +939,6 @@ function TranslateFiles(props) {
             setTargetLanguageListTooltip(list)
         }
     }, [targetLanguage, targetLanguageOptionsRef.current])
-
-
-    /* Adding new project */
-    const handleSubmit = (e, action) => {
-
-        // console.log(projectName);
-        //Also check the handleUpdate
-        e.preventDefault();
-        let formData = new FormData();
-        /* Validation - start */
-        if (sourceLanguage == "" && targetLanguage.length < 1 && ((files.length == 0 && pdfIdFromToolkit == null) && fileUrl == "") && params?.menu === "files") {
-            // console.log('first if');  
-            setSourceTargetValidation({
-                source: true,
-                target: true,
-            });
-            setFileError(t("required"));
-            setProjectNameError(t("enter_proj_name"));
-            contentprojectNameRef.current.scrollIntoView()
-            contentprojectNameRef.current.focus();
-            setHasFocus(true);
-            return;
-        }
-
-        if (
-            files.length == 0 &&
-            fileUrl == "" &&
-            pdfIdFromToolkit == null
-        ) {
-            setFileError(t("upload_files"));
-            return;
-        }
-
-        if (files?.length === 0 && editFiles?.length === 0) {
-            setFileError(t("upload_files"));
-            return;
-        }
-
-
-        if (fileError != "") setFileError("");
-
-        for (let x = 0; x < files.length; x++) {
-            if (typeof files[x] != "undefined") formData.append("files", files[x]);
-        }
-
-        if (pdfIdFromToolkit !== null) {
-            formData.append("pdf_obj_id", pdfIdFromToolkit)
-        }
-
-        if (sourceLanguage == "") {
-            setSourceTargetValidation({
-                ...sourceTargetValidation,
-                source: true,
-            });
-            return;
-        }
-        if (sourceLanguageError != "") setSourceTargetValidation({
-            ...sourceTargetValidation,
-            source: false,
-        });
-        if (targetLanguage == null || targetLanguage?.length == 0) {
-            setSourceTargetValidation({
-                ...sourceTargetValidation,
-                target: true,
-            });
-            return;
-        }
-
-        if (targetLanguage?.length > 0) setSourceTargetValidation({
-            ...sourceTargetValidation,
-            target: false,
-        });
-        if (fileUrl != "") {
-            var regExp =
-                /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
-            var match = fileUrl.match(regExp);
-            if (match && match[2].length == 11) setFileUrlError("");
-            else {
-                setFileUrlError(t("enter_valid_youtube_url"));
-                return;
-            }
-        }
-        /* Validation - end */
-
-        // formData.append("project_type", 2);
-        formData.append(
-            "mt_engine",
-            selectedMTEngine?.value ? selectedMTEngine?.value : 1
-        );
-        formData.append("source_language", sourceLanguage);
-
-        targetLanguage.map((eachTargetLanguage) => {
-            formData.append("target_languages", eachTargetLanguage?.id);
-        });
-
-        subjectField?.length > 0 &&
-            subjectField?.map((eachSubjectField) => {
-                formData.append("subjects", eachSubjectField?.id);
-            });
-        contentType?.length > 0 &&
-            contentType?.map((eachContentType) => {
-                formData.append("contents", eachContentType?.id);
-            });
-
-        let deadlineUTC = Config.convertLocalToUTC(deadline);
-        deadline && formData.append("project_deadline", deadlineUTC);
-
-        formData.append("mt_enable", mtEnable);
-        formData.append("isAdaptiveTranslation", adaptiveTransEnable);
-        formData.append("adaptive_file_translate", adaptiveTransEnable);
-        formData.append("pre_translate", preTranslate);
-        if(mtEnable) formData.append("get_mt_by_page", translationByPage);
-
-        selectedSteps?.map(eachStep => {
-            formData.append("steps", eachStep?.value);
-        })  
-
-        if (projectName !== null && projectName?.trim() !== "") {
-            formData.append("project_name", projectName);
-        }
-
-        if(action === 'trans-download') formData.append("file_translate", true); 
-
-        if (fileUrl != "") formData.append("url", fileUrl);
-        let url = "";
-        if (integrationFiles.length) {
-            if (!integrationFiles[0].branchId) {
-                // For version control files upload the branch has to be selected
-                Config.toast(t("branch_not_selected"), "error");
-                return;
-            }
-            url =
-                Config.BASE_URL +
-                "/integerations/" +
-                integrationPlatform +
-                "/repository/branch/contentfile/" +
-                integrationFiles[0].branchId;
-            integrationFiles.forEach((value) => {
-                formData.append("localizable_ids", value.id);
-            });
-        } else if (fileUrl == "")
-            url = Config.BASE_URL + "/workspace/project/quick/setup/";
-        else url = Config.BASE_URL + "/srt/fileUpload";
-
-        // button loaders
-        if(action === 'trans-download') setTranslateDownloadBtnLoader(true)
-        else setShowCreateLoader(true);
-        
-        Config.axios({
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                Accept: "application/json",
-                "Content-Type":
-                    "multipart/form-data; boundary=---------------------------735323031399963166993862150",
-            },
-            url: url,
-            method: "POST",
-            data: formData,
-            auth: true,
-            success: (response) => {
-                createdProjectIdRef.current = response.data.id
-
-                if(action === 'trans-download'){
-                    setProjectName(response.data.project_name);
-                    contentprojectNameRef.current.innerText = response.data.project_name;
-                    getProjectTaskData(response.data.id, action)
-                    return;
-                }
-
-                // if(response.data.tasks_count === 1 && !preTranslate){
-                    
-                //     // first get project analysis status
-                //     if(response.data?.project_analysis?.hasOwnProperty('celery_id')){
-                //         getProjectAnalysisStatus(response.data.id)
-                //         setshowDocumentOpeingModal(true)
-                //     }else{
-                //         getProjectTaskData(response.data.id)
-                //     }
-                    
-                // }else{
-                // }
-                Config.toast("Project created successfully");
-                // console.log('redirect')
-                history(`/translations?page=1&open-project=${response.data.id}`)
-
-            },
-            error: (err) => {
-                if (err?.response?.data?.files) {
-                    Config.toast(t("submitted_file_empty"), 'warning')
-                }
-                setShowCreateLoader(false);
-                setTranslateDownloadBtnLoader(false)
-            }
-        });
-    };
-
 
     const getProjectAnalysisStatus = (proj_id) => {
         Config.axios({
@@ -1262,15 +973,12 @@ function TranslateFiles(props) {
                             isProcessing: true
                         }
                     })
-                    // console.log(newArr)
                     projectTaskListRef.current = newArr 
                     setProjectTaskList(newArr)
-
-                    getProjectTransDownloadStatus()
+                    setProjectId(proj_id);
+                    // getProjectTransDownloadStatus()
                     return;
                 }
-                // open file/document
-                openDocumentFile(dashboardResponse.data[0].document_url, proj_id)
             },
             error: (err) => { }
         });
@@ -1291,11 +999,7 @@ function TranslateFiles(props) {
                 }
                 if(err?.response?.status === 400){
                     if(err?.response?.data?.msg?.toLowerCase()?.includes('analysis')){
-                        // console.log(err?.response?.data)
                         history(`/translations?page=1&open-project=${proj_id}`)
-                        // setTimeout(() => {
-                        //     openDocumentFile(url, proj_id)
-                        // }, 4000);
                     }
                 }
             },
@@ -1316,7 +1020,6 @@ function TranslateFiles(props) {
         setTargetLanguage("");
         setAlreadySelecetedTarLangID([])
         setSubjectField([]);
-        // setIsOpen(false)
         setContentType([]);
         setDeadline(null);
         setMtEnable(true);
@@ -1353,267 +1056,6 @@ function TranslateFiles(props) {
             )
         );
     };
-
-    const DropdownIndicator = (props) => {
-        return (
-            <components.DropdownIndicator {...props}>
-                <span id="triangle-down"></span>
-            </components.DropdownIndicator>
-        );
-    };
-
-    const customStepSelectStyles = {
-        placeholder: (provided, state) => ({
-            ...provided,
-            color: "#7E7E7E",
-            fontFamily: "Roboto",
-            fontSize: "15px",
-            fontWeight: "400",
-            lineHeight: "24px",
-        }),
-        menu: (provided, state) => ({
-            ...provided,
-            padding: "6px 0px 0px 0px",
-            boxShadow: "0px 3px 6px #00000029",
-            border: "1px solid #DADADA",
-            borderRadius: "4px",
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            borderBottom: "0px solid #CED4DA",
-            borderLeft: "2px solid transparent",
-            color: state.isSelected ? "#ffffff" : state.isDisabled ? "#cccccc" : "#7E7E7E",
-            background: state.isSelected || state.isDisabled ? "#ededed" : "#ffffff",
-            opacity: state.isDisabled ? 0.5 : 1,
-            cursor: state.isDisabled ? "context-menu" : "pointer",
-            display: "flex",
-            marginBottom: "0.5rem",
-            padding: "5px 8px",
-            color: "#3C4043",
-            fontFamily: "Roboto",
-            fontSize: "14px",
-            fontWeight: "400",
-            lineHeight: "24px",
-            "&:hover": {
-                background: "#F4F5F7",
-                borderLeft: "2px solid #0074D3",
-                cursor: state.isDisabled ? "context-menu" : "pointer",
-            },
-        }),
-        control: (base, state) => ({
-            ...base,
-            border: state.isFocused ? "1px solid #DBDBDB" : "1px solid #DBDBDB",
-            borderRadius: 4,
-            transtion: 0.3,
-            color: state.isFocused ? "#3C4043" : "#3C4043",
-            fontFamily: "Roboto",
-            fontSize: "15px",
-            fontWeight: "400",
-            lineHeight: "24px",
-            boxShadow: 0,
-            padding: "0px 11px 0px 13px",
-            height: 46,
-            "&:hover": {
-                cursor: "pointer",
-            },
-        }),
-    };
-
-    const customTeamSelectStyles = {
-        valueContainer: (base) => ({
-            ...base,
-            padding: "0 0 0 24px",
-        }),
-        menu: (provided, state) => ({
-            ...provided,
-            padding: "12px 0px",
-            boxShadow: "0px 3px 6px #00000029",
-            border: "1px solid #DADADA",
-            borderRadius: "4px",
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            borderBottom: "0px solid #CED4DA",
-            borderLeft: "2px solid transparent",
-            color: state.isSelected
-                ? "#ffffff"
-                : state.isDisabled
-                    ? "#cccccc"
-                    : "#7E7E7E",
-            background: state.isSelected ? "#F4F5F7" : "#ffffff",
-            padding: "11px 8px",
-            "&:hover": {
-                background: "#F4F5F7",
-                borderLeft: "2px solid #0074D3",
-                cursor: "pointer",
-            },
-        }),
-        control: (base, state) => ({
-            ...base,
-            border: "0px solid #CED4DA",
-            padding: "0",
-            transtion: 0.3,
-            fontSize: 13,
-            boxShadow: state.isFocused ? 0 : 0,
-            border: state.isFocused ? "0px solid #0078D4" : "0px solid #CED4DA",
-            height: state.isFocused ? 36 : 36,
-            "&:hover": {
-                cursor: "pointer",
-                color: "#0078D4",
-            },
-        }),
-    };
-
-    const customStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            borderBottom: "0px solid #CED4DA",
-            color: state.isSelected
-                ? "#ffffff"
-                : state.isDisabled
-                    ? "#cccccc"
-                    : "#7E7E7E",
-            //   background: state.isSelected ? '#0078D4' : '#E8F0FE',
-            padding: 5,
-            fontSize: 14,
-            "&:hover": {
-                background: "#E8F0FE",
-                color: "#0078D4",
-                cursor: "pointer",
-            },
-        }),
-        control: (base, state) => ({
-            ...base,
-            border: "1px solid #CED4DA",
-            borderRadius: state.isSelected ? 3 : 3,
-            padding: "0px 11px 0px 13px",
-            transtion: 0.3,
-            fontSize: 14,
-            boxShadow: state.isFocused ? 0 : 0,
-            border: state.isFocused ? "2px solid #0078D4" : "1px solid #CED4DA",
-            height: state.isFocused ? 46 : 46,
-            "&:hover": {
-                cursor: "pointer",
-            },
-        }),
-    };
-
-    const customTargetStyles = {
-        option: (provided, state) => ({
-            ...provided,
-            borderBottom: "0px solid #CED4DA",
-            //   color: state.isSelected ? '#ffffff' : '#7E7E7E',
-            //   background: state.isSelected ? '#0078D4' : '#ffffff',
-            padding: 5,
-            fontSize: 13,
-            "&:hover": {
-                background: "#E8F0FE",
-                color: "#0078D4",
-                cursor: "pointer",
-            },
-        }),
-        control: (base, state) => ({
-            ...base,
-            // width: '65%',
-            // maxWidth: '100%',
-            border: "1px solid #CED4DA",
-            borderRadius: state.isSelected ? 3 : 3,
-            transtion: 0.3,
-            boxShadow: state.isFocused ? 0 : 0,
-            border: state.isFocused ? "2px solid #0078D4" : "1px solid #CED4DA",
-            minHeight: state.isFocused ? 36 : "auto",
-            "&:hover": {
-                cursor: "pointer",
-            },
-        }),
-    };
-
-    // const Tooltip = withStyles({
-    //   tooltip: {
-    //     color: "#ffffff !important",
-    //     backgroundColor: "#2A2A2A !important",
-    //     padding: "7px 12px !important",
-    //     fontFamily: "Roboto !important",
-    //     fontSize: "12px !important",
-    //     lineHeight: 1.4,
-    //     fontWeight: "400 !important",
-    //     width: "auto !important",
-    //     maxWidth: "100%",
-    //   },
-    //   arrow: {
-    //     color: "#2A2A2A",
-    //   },
-    // })(Tooltip);
-
-    // const AddProjectButton = withStyles((theme) => ({
-    //   root: {
-    //     backgroundColor: "#0078D4",
-    //     borderRadius: "3px",
-    //     boxShadow: "none",
-    //     textTransform: "none",
-    //     padding: "6px 12px",
-    //     "&:hover": {
-    //       backgroundColor: "#0078D4",
-    //       boxShadow: "none",
-    //     },
-    //   },
-    // }))(Button);
-
-    // const AddNewProjectButton = withStyles((theme) => ({
-    //   root: {
-    //     backgroundColor: "#0078D4",
-    //     borderRadius: "3px",
-    //     boxShadow: "none",
-    //     textTransform: "none",
-    //     padding: "10px 30px",
-    //     "&:hover": {
-    //       backgroundColor: "#0078D4",
-    //       boxShadow: "none",
-    //     },
-    //   },
-    // }))(Button);
-
-    // const UploadProjectButton = withStyles((theme) => ({
-    //   root: {
-    //     backgroundColor: "#0078D4",
-    //     boxShadow: "none",
-    //     borderRadius: "3px",
-    //     textTransform: "none",
-    //     padding: "12.5px 21px",
-    //     "&:hover": {
-    //       backgroundColor: "#0078D4",
-    //       boxShadow: "none",
-    //     },
-    //   },
-    // }))(Button);
-
-    // const OpenProjectButton = withStyles((theme) => ({
-    //   root: {
-    //     backgroundColor: "#0078D4",
-    //     boxShadow: "none",
-    //     borderRadius: "3px",
-    //     textTransform: "none",
-    //     padding: "7px 26.625px",
-    //     "&:hover": {
-    //       backgroundColor: "#0078D4",
-    //       boxShadow: "none",
-    //     },
-    //   },
-    // }))(Button);
-
-    // const OpeningProjectButton = withStyles((theme) => ({
-    //   root: {
-    //     backgroundColor: "#0078D4",
-    //     boxShadow: "none",
-    //     borderRadius: "3px",
-    //     textTransform: "none",
-    //     padding: "7px 13.5px",
-    //     "&:hover": {
-    //       backgroundColor: "#0078D4",
-    //       boxShadow: "none",
-    //     },
-    //   },
-    // }))(Button);
 
     /* File upload drag and drop handling */
     const handleDrop = (filesTemp, request = null) => {
@@ -1675,40 +1117,11 @@ function TranslateFiles(props) {
         inputFileUploadRef.current.value = ''
     };
 
-    /* Remove all the droped files */
-    const removeAllFiles = () => {
-        setFiles([]);
-    };
-
-    /* Add file url */
-    const addUrl = () => {
-        let fileUrl = document.getElementById("file-url").value;
-        setFileUrl(fileUrl);
-    };
-
-    /* Remove the file url */
-    const removeUrl = () => {
-        setFileUrl("");
-    };
-
     const modaloption = {
         closeMaskOnClick: false,
         width: 784,
         onClose: hideSettingsModal,
     };
-
-    const assignmanagemodaloption = {
-        closeMaskOnClick: false,
-        width: 560,
-        onClose: hideAssignManageModal,
-    };
-
-    const versioncontrolmodaloption = {
-        closeMaskOnClick: false,
-        width: 784,
-        onClose: hideVersionControlModal,
-    };
-
 
     /* Get all the details of a project by id and load into the form */
     const editProject = (projectId, projectType, e = null) => {
@@ -1787,7 +1200,6 @@ function TranslateFiles(props) {
                         );
                     }
                 });
-
                 data.subjects?.map((subject) => {
                     editSubjectFields.push(
                         subjectFieldOptionsRef.current?.find(
@@ -1802,7 +1214,6 @@ function TranslateFiles(props) {
                         )
                     );
                 });
-                // console.log(editTargetLanguages)
                 setTimeout(() => {
                     setProjectName(data.project_name);
                     setRevisionStepEdit(data?.revision_step_edit);
@@ -1824,27 +1235,169 @@ function TranslateFiles(props) {
         });
     };
 
+    /* Adding new project */
+    const handleSubmit = (e, action = 'trans-download') => {
+        //Also check the handleUpdate
+        e.preventDefault();
+        let formData = new FormData();
+        /* Validation - start */
+        if (sourceLanguage == "" && targetLanguage.length < 1 && ((files.length == 0 && pdfIdFromToolkit == null) && fileUrl == "") && params?.menu === "translate-files") {
+            setSourceTargetValidation({
+                source: true,
+                target: true,
+            });
+            setFileError(t("required"));
+            setProjectNameError(t("enter_proj_name"));
+            contentprojectNameRef.current.scrollIntoView()
+            contentprojectNameRef.current.focus();
+            setHasFocus(true);
+            return;
+        }
+        if (
+            files.length == 0 &&
+            fileUrl == "" &&
+            pdfIdFromToolkit == null
+        ) {
+            setFileError(t("upload_files"));
+            return;
+        }
 
-    // const handleStepSelection = (selectedStepOptions) => {
-    //   if (selectedStepOptions?.length === 0) {
-    //     setPostEditStep(false);
-    //     setProofReadStep(false);
-    //   }
-    //   if (selectedStepOptions?.length === 1) {
-    //     if (selectedStepOptions[0].value === 1) {
-    //       setPostEditStep(true);
-    //       setProofReadStep(false);
-    //     }
-    //   }
-    //   if (selectedStepOptions?.length === 2) {
-    //     if (selectedStepOptions[1].value === 2) setProofReadStep(true);
-    //   }
-    // };
+        if (files?.length === 0 && editFiles?.length === 0) {
+            setFileError(t("upload_files"));
+            return;
+        }
+        if (fileError != "") setFileError("");
+        for (let x = 0; x < files.length; x++) {
+            if (typeof files[x] != "undefined") formData.append("files", files[x]);
+        }
+        if (pdfIdFromToolkit !== null) {
+            formData.append("pdf_obj_id", pdfIdFromToolkit)
+        }
+        if (sourceLanguage == "") {
+            setSourceTargetValidation({
+                ...sourceTargetValidation,
+                source: true,
+            });
+            return;
+        }
+        if (sourceLanguageError != "") setSourceTargetValidation({
+            ...sourceTargetValidation,
+            source: false,
+        });
+        if (targetLanguage == null || targetLanguage?.length == 0) {
+            setSourceTargetValidation({
+                ...sourceTargetValidation,
+                target: true,
+            });
+            return;
+        }
+        if (targetLanguage?.length > 0) setSourceTargetValidation({
+            ...sourceTargetValidation,
+            target: false,
+        });
+        if (fileUrl != "") {
+            var regExp =
+                /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+            var match = fileUrl.match(regExp);
+            if (match && match[2].length == 11) setFileUrlError("");
+            else {
+                setFileUrlError(t("enter_valid_youtube_url"));
+                return;
+            }
+        }
+        /* Validation - end */
+        formData.append(
+            "mt_engine",
+            selectedMTEngine?.value ? selectedMTEngine?.value : 1
+        );
+        formData.append("source_language", sourceLanguage);
 
-    // useEffect(() => {
-    //   console.log(targetLanguage)
-    // }, [targetLanguage])
+        targetLanguage.map((eachTargetLanguage) => {
+            formData.append("target_languages", eachTargetLanguage?.id);
+        });
 
+        subjectField?.length > 0 &&
+            subjectField?.map((eachSubjectField) => {
+                formData.append("subjects", eachSubjectField?.id);
+            });
+        contentType?.length > 0 &&
+            contentType?.map((eachContentType) => {
+                formData.append("contents", eachContentType?.id);
+            });
+
+        let deadlineUTC = Config.convertLocalToUTC(deadline);
+        deadline && formData.append("project_deadline", deadlineUTC);
+
+        formData.append("mt_enable", mtEnable);
+        formData.append("isAdaptiveTranslation", adaptiveTransEnable);
+
+        formData.append("pre_translate", preTranslate);
+        if(mtEnable) formData.append("get_mt_by_page", translationByPage);
+
+        selectedSteps?.map(eachStep => {
+            formData.append("steps", eachStep?.value);
+        })
+
+        if (projectName !== null && projectName?.trim() !== "") {
+            formData.append("project_name", projectName);
+        }
+
+        if(action === 'trans-download') formData.append("file_translate", true); 
+
+        if (fileUrl != "") formData.append("url", fileUrl);
+        formData.append("adaptive_file_translate", true);
+        let url = "";
+        if (integrationFiles.length) {
+            if (!integrationFiles[0].branchId) {
+                // For version control files upload the branch has to be selected
+                Config.toast(t("branch_not_selected"), "error");
+                return;
+            }
+            url =
+                Config.BASE_URL +
+                "/integerations/" +
+                integrationPlatform +
+                "/repository/branch/contentfile/" +
+                integrationFiles[0].branchId;
+            integrationFiles.forEach((value) => {
+                formData.append("localizable_ids", value.id);
+            });
+        } else if (fileUrl == "")
+            url = Config.BASE_URL + "/workspace/project/quick/setup/";
+        else url = Config.BASE_URL + "/srt/fileUpload";
+
+        // button loaders
+        if(action === 'trans-download') setTranslateDownloadBtnLoader(true)
+        else setShowCreateLoader(true);
+        
+        Config.axios({
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                Accept: "application/json",
+                "Content-Type":
+                    "multipart/form-data; boundary=---------------------------735323031399963166993862150",
+            },
+            url: url,
+            method: "POST",
+            data: formData,
+            auth: true,
+            success: (response) => {
+                createdProjectIdRef.current = response.data.id
+                setProjectName(response.data.project_name);
+                contentprojectNameRef.current.innerText = response.data.project_name;
+                getProjectTaskData(response.data.id, action);
+                Config.toast("Project created successfully");
+                return;
+            },
+            error: (err) => {
+                if (err?.response?.data?.files) {
+                    Config.toast(t("submitted_file_empty"), 'warning')
+                }
+                setShowCreateLoader(false);
+                setTranslateDownloadBtnLoader(false)
+            }
+        });
+    };
 
     /* Update the edited values */
     const handleUpdate = (e, submission) => {
@@ -1879,17 +1432,6 @@ function TranslateFiles(props) {
             setTargetLanguageError(t("target_validation_note"));
             return;
         }
-        
-        /* if (filesSizeExceed()) {
-                Config.toast(fileSizeErrMsg.current, 'error')
-                return
-            } */
-        // if (targetLanguage?.map((e) => e.id)?.indexOf(sourceLanguage) != -1) {
-        //   setTargetLanguageError(
-        //     "Source language and target language can't be same"
-        //   );
-        //   return;
-        // }
         if (targetLanguage?.length > 0) setTargetLanguageError("");
         if (fileUrl != "") {
             var regExp =
@@ -1915,10 +1457,7 @@ function TranslateFiles(props) {
                 formData.append("pdf_obj_id", pdfIdFromToolkit)
             }
         }
-
-
         let targetLanguageArr = [];
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
@@ -1936,7 +1475,6 @@ function TranslateFiles(props) {
             )
                 formData.append("subjects", eachSubjectField.id);
         });
-
         contentType.map((eachContentType) => {
             if (
                 editContents.find(
@@ -1945,14 +1483,10 @@ function TranslateFiles(props) {
             )
                 formData.append("contents", eachContentType.id);
         });
-
         let deadlineUTC = Config.convertLocalToUTC(deadline);
-
         deadline && formData.append("project_deadline", deadlineUTC);
         formData.append("mt_enable", mtEnable);
-        
         formData.append("isAdaptiveTranslation", adaptiveTransEnable);
-
         primaryGlossarySourceName &&
             formData.append(
                 "primary_glossary_source_name",
@@ -1966,19 +1500,13 @@ function TranslateFiles(props) {
         selectedUsagePermission?.label &&
             formData.append("usage_permission", selectedUsagePermission?.label);
         glossaryLicense && formData.append("public_license", glossaryLicense);
-
-
         if (projectDataFromApi.current?.pre_translate !== preTranslate) {
             formData.append("pre_translate", preTranslate);
         }
-
         if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
             formData.append("get_mt_by_page", translationByPage);
         }
-
-
         let stepsToRemoveList = stepOptions?.filter(stepOpt => selectedSteps?.some(each => stepOpt.value !== each.value))
-
         let deleteIdList = ""
         if (stepsFromApi.length > selectedSteps?.length) {
             stepsToRemoveList?.map((each, index) => {
@@ -1989,29 +1517,19 @@ function TranslateFiles(props) {
                 formData.append("steps", each.value);
             })
         }
-
-
         let list = "";
         targetLangListToRemove?.map((each, index) => {
             list += `${each.id}${index !== targetLangListToRemove.length - 1 ? "," : ""
                 }`;
         });
-
-        // if (projectAvailalbility === "team") formData.append("team", true);
-        // else 
         formData.append("team", hasTeam);
-
+        formData.append("adaptive_file_translate", true);
         if (fileUrl != "") formData.append("url", fileUrl);
         let url = "";
         if (fileUrl == "")
             url = `${Config.BASE_URL
                 }/workspace/project/quick/setup/${editProjectId}/?step_delete_ids=${deleteIdList}&file_delete_ids=${deletedEditFileIds.current.join()}&job_delete_ids=${list}&subject_delete_ids=${deletedSubjectIds.current.join()}&content_delete_ids=${deletedContentIds.current.join()}`;
-        // url = `${
-        // Config.BASE_URL
-        // }/workspace/project/quick/setup/${editProjectId}/?file_delete_ids=${deletedEditFileIds.current.join()}&job_delete_ids=${deletedJobIds.current.join()}&subject_delete_ids=${deletedSubjectIds.current.join()}&content_delete_ids=${deletedContentIds.current.join()}0&step_delete_ids=${
-        //     !proofReadStep ? 2 : ""
-        // }`;
-        else url = Config.BASE_URL + "/srt/fileUpload";
+       Config.BASE_URL + "/srt/fileUpload";
         setShowUpdateLoader(true);
         Config.axios({
             headers: {
@@ -2031,16 +1549,7 @@ function TranslateFiles(props) {
                     setGlossaryProjectCreationResponse(response?.data);
                 } else {
                     setShowUpdateLoader(false);
-                    /* listProjects()
-                          listFiles(editProjectId)
-                          editProject(null, editProjectId) */
-                    /* List files - start */
-                    // if (currentPage == 1) listProjects();
-                    // else setCurrentPage(1);
-                    // activeToggle(1);
-                    /* List files - end */
                     projectIdToSelect.current = response.data.id;
-                    // history("/file-upload?page=1&order_by=-id");
                 }
             },
             error: (error) => {
@@ -2057,11 +1566,6 @@ function TranslateFiles(props) {
     /* Delete files when editing */
     const deleteEditFile = (e, canDelete = false, editFileId) => {
         if (canDelete) {
-            /* Config.axios({
-                       url: `${Config.BASE_URL}/workspace/project/quick/setup/${editProjectId}/?file_delete_ids=${editFileId}`,
-                       method: 'PUT',
-                       auth: true,
-                       success: (response) => {*/
             let editFilesTemp = editFiles;
             let deleteValue = editFiles.find((element) => element.id == editFileId);
             setEditFiles(Config.removeItemFromArray(editFilesTemp, deleteValue));
@@ -2075,8 +1579,6 @@ function TranslateFiles(props) {
 
     /* Delete a project by id */
     const deleteProject = (projectId, isConfirmed = false) => {
-        // if (isConfirmed)
-        // If confirmed
         setIsProjectDeleting(true)
         Config.axios({
             url: `${Config.BASE_URL}/workspace/project/quick/setup/${projectId}`,
@@ -2096,7 +1598,6 @@ function TranslateFiles(props) {
                 setIsProjectDeleting(false)
             }
         });
-        // else Config.confirm(deleteProject, [projectId, true], "Delete project permanently?", ["Delete", "Cancel"]); //Ask user confirmation
     };
 
     /* Get teams dropdown options */
@@ -2130,70 +1631,6 @@ function TranslateFiles(props) {
                 }, 200);
             },
         });
-    };
-
-    // const AssignedMemberTooltip = withStyles({
-    //   tooltip: {
-    //     backgroundColor: "#172B4D",
-    //   },
-    // })(Tooltip);
-
-    /* Handle MT Engine change */
-    const handleMTEngineChange = (selectedOption) => {
-        setSelectedMTEngine(selectedOption);
-    };
-
-    /* Handle Usage permission option change */
-    const handleUsagePermissionChange = (selectedOption) => {
-        setSelectedUsagePermission(selectedOption);
-    };
-
-    /* Handling the instruction popup */
-    const handleInstructionModal = (taskId) => {
-        let selectedTask = selectedProjectFiles.find(
-            (element) => element.id === taskId
-        );
-        setInstructionText(selectedTask?.task_assign_info?.instruction);
-        setInstructionFile(selectedTask?.task_assign_info?.filename);
-        setTaskAssignInfoId(selectedTask?.task_assign_info?.id);
-        setShowAssignManageModal(true);
-        setAnchorEl(null);
-    };
-
-    /* Edit task by id */
-    const editTask = (e, projectId, taskId) => {
-        setAssignedTaskId(taskId);
-        history(`/collaborate?project=${projectId}&task=${taskId}`);
-        // setAnchorEl(null);
-        // activeToggle(3);
-    };
-
-    /* Assinged details if assigned */
-    const assignToProject = (e, projectId) => {
-        setAssignProjectId(projectId);
-        history(`/collaborate?project=${projectId}`);
-        // activeToggle(3);
-    };
-
-    /* Reset assign and manage */
-    const resetAssignManageAndActive = () => {
-        setAssignedTaskId(null);
-        setAssignProjectId(null);
-        activeToggle(3);
-    };
-
-    /* Search by keyword */
-    // useEffect(() => {
-    //     debounce(listProjects);
-    // }, [projectSearchTerm]);
-
-    /* Starts when user stops typing */
-    const debounce = (callback) => {
-        if (typingTimeout.current) clearTimeout(typingTimeout.current);
-        typing.current = false;
-        typingTimeout.current = setTimeout(() => {
-            projectSearchTerm?.length && callback();
-        }, 1000);
     };
 
     /* Version control file upload, file select handling */
@@ -2442,8 +1879,6 @@ function TranslateFiles(props) {
                 }
                 return obj
             })
-            // console.log('modified list with isProcessing key')
-            // console.log(newArr)
             projectTaskListRef.current = newArr 
             setProjectTaskList(newArr)
         }
@@ -2465,20 +1900,13 @@ function TranslateFiles(props) {
                         }
                         return obj
                     })
-                    // console.log('modified list with isProcessing key')
-                    // console.log(newArr)
                     projectTaskListRef.current = newArr 
                     setProjectTaskList(newArr)
-
-                    // console.log('isAnyTaskIsProcessing')
-                    // console.log(projectTaskListRef.current?.find(each => each.isProcessing === true))
-                    
                     let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false
                     let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false
                     let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false
                     
                     if(isPageNumNotFound){
-                        // Config.toast(`File couldn't process!`, 'error')
                         setShowFileErrorModal(true)
                         let newArr = projectTaskListRef.current?.map(obj => {
                                 if(obj.status === 404){
@@ -2502,7 +1930,6 @@ function TranslateFiles(props) {
                             getProjectTransDownloadStatus()
                         }, 5000);
                     }
-                    // translateDownloadCeleryTaskListRef.current = []
                 }else if(task_id === undefined){
                     let newArr = projectTaskListRef.current?.map(obj => {
                         return {
@@ -2510,7 +1937,6 @@ function TranslateFiles(props) {
                             isProcessing: false
                         }
                     })
-                    // console.log(newArr)
                     projectTaskListRef.current = newArr 
                     setProjectTaskList(newArr)
                 }
@@ -2524,7 +1950,6 @@ function TranslateFiles(props) {
                             status: 402
                         }
                     })
-                    // console.log(newArr)
                     projectTaskListRef.current = newArr 
                     setProjectTaskList(newArr)
                 }
@@ -2535,44 +1960,32 @@ function TranslateFiles(props) {
     // this api will initiate the file translate process and provide the status of each task
     const getTaskTransDownloadStatus = (task_id) => {
         if(createdProjectIdRef.current === null) return;
-
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
             axiosFileTranslateAbortController.abort()
         }
-    
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-
         let task_list_arr = []
-
-        let alreadyProcessingTask = projectTaskListRef.current?.filter(each => each.isProcessing)
+        let alreadyProcessingTask = projectTaskListRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED")
         let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
-        // console.log(alreadyProcessingTaskIds)
         if(alreadyProcessingTask?.length !== 0){
             task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
         }else{
             task_list_arr = [task_id]
         }
-        // console.log("taskList: "+task_list_arr?.toString())
-
         fileTranslatingTaskListRef.current = task_list_arr
-
         // create task list to process
         let list = ""
         fileTranslatingTaskListRef.current?.map((each, index) => {
-            list += `task=${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
+            list += `${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
-
-        // console.log(list)
-
         // display the button loader as soon as the user clicks the TRANSLATE button
         if(task_id !== undefined){
             let newArr = projectTaskListRef.current?.map(obj => {
                 if(obj.id === task_id){
                     return {
-                        ...obj,
-                        isProcessing: true,
+                        ...obj
                     }
                 }
                 return obj
@@ -2580,62 +1993,62 @@ function TranslateFiles(props) {
             projectTaskListRef.current = newArr 
             setProjectTaskList(newArr)
         }
-
+        let formData = new FormData();
+        formData.append("task", task_id);
         Config.axios({
-            url: `${Config.BASE_URL}/workspace/translate_file/?${list}`,
+            url: `${Config.BASE_URL}/workspace/adaptive_file_translate/`,
+            method: "POST",
+            data: formData,
             auth: true,
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
-                // if called with project_id, returns list if task_data
-                if(response.data?.results !== undefined){
-                    let dataList = response.data?.results
-                    let newArr = projectTaskListRef.current?.map(obj => {
-                        if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
-                            let status = dataList?.find(each => each.task === obj.id)?.status
-                            return {
-                                ...obj,
-                                isProcessing: status == 400 ? true : false,
-                                status: status,
-                            }
-                        }
-                        return obj
-                    })
-                    // console.log('modified list with isProcessing key')
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
-
-                    // console.log('isAnyTaskIsProcessing')
-                    
-                    let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false
-                    
-                    if(isPageNumNotFound){
-                        // Config.toast(`File couldn't process!`, 'error')
-                        setShowFileErrorModal(true)
-                        let newArr = projectTaskListRef.current?.map(obj => {
-                            if(obj.status === 404){
-                                return {
-                                    ...obj,
-                                    isProcessing: false,
-                                }
-                            }
-                            return obj
-                        })
-                        projectTaskListRef.current = newArr 
-                        setProjectTaskList(newArr)
-                        return
-                    }
-
-                    if(insuffientCredit) setShowCreditAlertModal(true)
-
-                    if(isAnyTaskIsProcessing){
-                        setTimeout(() => {
-                            getTaskTransDownloadStatus(task_id)
-                        }, 5000);
-                    }
+                console.log(response);
+                if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
+                    getTaskTranslationProgress(response.data.endpoint, task_id);
                 }
+                // if called with project_id, returns list if task_data
+                // if(response.data?.results !== undefined){
+                //     let dataList = response.data?.results
+                //     let newArr = projectTaskListRef.current?.map(obj => {
+                //         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
+                //             let status = dataList?.find(each => each.task === obj.id)?.status
+                //             return {
+                //                 ...obj,
+                //                 isProcessing: status == 400 ? true : false,
+                //                 status: status,
+                //             }
+                //         }
+                //         return obj
+                //     })
+                //     projectTaskListRef.current = newArr 
+                //     setProjectTaskList(newArr)
+                //     let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false;
+                //     let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false;
+                //     let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false;
+                //     if(isPageNumNotFound){
+                //         setShowFileErrorModal(true)
+                //         let newArr = projectTaskListRef.current?.map(obj => {
+                //             if(obj.status === 404){
+                //                 return {
+                //                     ...obj,
+                //                     isProcessing: false,
+                //                 }
+                //             }
+                //             return obj
+                //         })
+                //         projectTaskListRef.current = newArr 
+                //         setProjectTaskList(newArr)
+                //         return
+                //     }
+
+                //     if(insuffientCredit) setShowCreditAlertModal(true)
+
+                //     if(isAnyTaskIsProcessing){
+                //         setTimeout(() => {
+                //             getTaskTransDownloadStatus(task_id)
+                //         }, 5000);
+                //     }
+                // }
             },
             error: (err) => {
                 if(err?.response?.status === 500){
@@ -2657,38 +2070,138 @@ function TranslateFiles(props) {
         });
     }
 
+    const getBatchByTaskId = (batchList, key, taskId) => {
+        return batchList.find(batch => batch[key] === taskId);
+    };
+
+    const getProgressData = (endpoint, taskId) => {
+        setTimeout(() => {
+            getTaskTranslationProgress(endpoint, taskId);
+        }, 10000);
+    }
+
+    const updateProjectTaskList = (taskId, percentage, status) => {
+        const updatedTasks = projectTaskList.map(task => {
+            if (task.id === taskId) {
+                const match = progressMap.find(item =>
+                    percentage >= item.min && (
+                      percentage < item.max || (percentage === 100 && item.max === 100)
+                    ));
+                return {
+                    ...task,
+                    percentage,
+                    status,
+                    progressLoading: percentage !== 100,
+                    progressLabel: match ? match.message : ""
+                };
+            }
+            return task;
+        });
+        setProjectTaskList([...updatedTasks]);
+    }
+
+    const getTaskTranslationProgress = (endpoint, taskId) => {
+       const taskIdValue = taskId;
+       Config.axios({
+            url: `https://api.staging.ailaysa.com/workspace/adaptive_file_translate/${projectId}`,
+            method: "GET",
+            auth: true,
+            success: (response) => {
+                const resultData = response?.data;
+                setTranslateData(resultData);
+                if (resultData && resultData?.batch_status && resultData?.batch_status.length > 0) {
+                    const batchList = resultData?.batch_status;
+                    const batch = getBatchByTaskId(batchList, taskIdValue);
+                    if (!documetId) {
+                        setDocumentId(batch.document_id);
+                    }
+                    if (batch) {
+                        updateProjectTaskList(taskIdValue, batch?.completed_percentage, batch?.status);
+                        if (batch?.status !== 'completed') {
+                            getProgressData(endpoint, taskIdValue);
+                        }
+                    } else {
+                        getProgressData(endpoint, taskIdValue);
+                    }
+                } else {
+                    getProgressData(endpoint, taskIdValue);
+                }
+                if(resultData && resultData?.batch_status === 'completed' && resultData.download_file) {
+                    setDownloadTaskTargetFile(resultData.download_file);
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            }
+       });
+    }
 
 
     const downloadTaskTargetFile = async(task_id) => {
-        setIsDownloading(task_id)
-        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${task_id}`
+        setIsDownloading(task_id);
+        // output_type = 'ORIGINAL';
+        // let url = `downloadTaskFile`;
+        let url = `https://api.staging.ailaysa.com/workspace_okapi/document/to/file/64?output_type=ORIGINAL`
         const response = await Config.downloadFileFromApi(url);
-        // console.log(response)
         Config.downloadFileInBrowser(response)
         setIsDownloading(null)
+    }
+
+    const handleGlossaryBtnEvent = () => {
+        getDocumentDetailsById();
+        dispatch(setShowAilaysaGlossaryModal(true))
+    };
+
+    const getDocumentId = () => {
+        const batch = translateData?.batch_status[0];
+        return batch.document_id;
+    }
+
+    /* Get the docuement details by document id */
+    const getDocumentDetailsById = () => {
+        // documentIdTemp = 47;
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace_okapi/document_by_doc_id/${documetId}${(userDetails?.agency && location.state?.open_as !== undefined) ? `?step_id=${location.state?.open_as === 'editor' ? 1 : 2}` : ''}`,
+            auth: true,
+            success: (docResponse) => {
+                documentDetailsRef.current = docResponse.data;
+                setOpenGlossariesModal(true)
+                if(!isEnterprise) getDefaultGlossDetails()
+            },
+            error: (err) => {
+                if (err.response?.data?.detail) {
+                    // history("/file-upload");
+                }
+            }
+        });
+    };
+
+    const getDefaultGlossDetails = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
+            auth: true,
+            success: (response) => {
+                defaultGlossDetailsRef.current = response.data
+            },
+            error: (err) => {
+                // setisGlossaryListLoading(false)
+            }
+        });
     } 
-
-    const downloadAllFiles = async() => {
-
-        let url = `${Config.BASE_URL}/workspace/download/${createdProjectIdRef.current}/`
-
-        const response = await Config.downloadFileFromApi(url);
-
-        Config.downloadFileInBrowser(response)
-
-    } 
-
 
     return (
         <React.Fragment>
             <div className="ai-working-area-glb-wrapper">
-                {/* <div className="ai-proj-set-width">
-                    <div ref={projectNameRef} contentEditable={true} data-placeholder="Project name" className="header-title editable"></div>
-                </div>
-                {projectNameError?.length ? <span className="text-danger d-block  error-bottom">Required</span> : null} */}
                 <div className="file-trans-breadcrumbs-section">
-                    <Breadcrumbs />
-                    <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
+                    {/* Project title area */}
+                     {/* Workspace button */}
+                     <div className="workspace-button-container">
+                       <button className="go-to-workspace-btn" onClick={() => { history(`/create/all-templates`)}}>
+                       Go to workspace
+                       </button>
+                    </div>
+                    <div className="project-header-container">
+                     <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
                         <div
                             ref={contentprojectNameRef}
                             suppressContentEditableWarning={true}
@@ -2699,71 +2212,38 @@ function TranslateFiles(props) {
                             onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
                             onKeyDown={() => projectTaskList?.length === 0 && handleProjectEnter}
                             className="project-box"
-                            tabIndex={0}
-                        ></div>
-                        {/* {editBtnReveal && (
-              <span className="edit-icon">
-                <CreateOutlinedIcon
-                  onClick={handleHideIcon}
-                  style={{
-                    fontSize: 20,
-                    color: "#636363",
-                  }}
-                />
-              </span>
-            )} */}
-                    </div>
-                    {/* {projectNameError != "" ? (
-            <span className="text-danger">{projectNameError}</span>
-          ) : null} */}
-                    {/* <div className="project-setup-forms">
-                        <div className="input-form-field">
-                            <div className="form-group">
-                                <label htmlFor="exampleFormControlFile1">Project Name</label>
-                                <input
-                                    className="input-select-width"
-                                    id="project-name"
-                                    name="projectName"
-                                    value={projectName}
-                                    onChange={(e) => handleChange(e)}
-                                    placeholder="Enter project name..."
-                                />
-                                {projectNameError != "" ? <span className="text-danger">{projectNameError}</span> : null}
-                            </div>
+                            tabIndex={0}>
                         </div>
-                    </div> */}
+                     </div>
+                  </div>
+                  {/* Glossary & Style buttons below the project title */}
+                  {/* <div className="translation-actions">
+                      <button className="glossary-btn" onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
+                  </div>
+
+                    { openGlossariesModal && 
+                        <AilaysaGlossariesModal 
+                            documentDetails={documentDetailsRef.current}
+                            defaultGlossDetailsRef={defaultGlossDetailsRef}
+                            getDefaultGlossDetails={getDefaultGlossDetails}
+                        />
+                    } */}
+
                 </div>
-                <div className={"ai-translate-file-wrapper " + (projectTaskList?.length !== 0 ? "behind-overlay" : "")} style={(showCreateLoader || translateDownloadBtnLoader) ? {pointerEvents: 'none'} : {}}>
+                <div className={`${isFromView !== 'DOCUMENT_MODAL' ? 'project-create-container' : ''}`}>
+                    {isFromView !== 'DOCUMENT_MODAL' && 
+                        <div className="project-create-title">
+                        <span className="project-create-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6.15385 12.3077C6.15385 10.5921 6.75058 9.13753 7.94406 7.94406C9.13753 6.75058 10.5921 6.15385 12.3077 6.15385C10.5921 6.15385 9.13753 5.55711 7.94406 4.36364C6.75058 3.17016 6.15385 1.71562 6.15385 0C6.15385 1.71562 5.55711 3.17016 4.36364 4.36364C3.17016 5.55711 1.71562 6.15385 0 6.15385C1.71562 6.15385 3.17016 6.75058 4.36364 7.94406C5.55711 9.13753 6.15385 10.5921 6.15385 12.3077Z" fill="white"/>
+                        <path d="M12.3095 15.9998C12.3095 14.9705 12.6675 14.0978 13.3836 13.3817C14.0997 12.6656 14.9724 12.3075 16.0018 12.3075C14.9724 12.3075 14.0997 11.9495 13.3836 11.2334C12.6675 10.5173 12.3095 9.6446 12.3095 8.61523C12.3095 9.6446 11.9515 10.5173 11.2354 11.2334C10.5193 11.9495 9.64656 12.3075 8.61719 12.3075C9.64656 12.3075 10.5193 12.6656 11.2354 13.3817C11.9515 14.0978 12.3095 14.9705 12.3095 15.9998Z" fill="white"/>
+                        </svg>
+                        </span>
+                        New: Adaptiove Translation
+                    </div>
+                    }
+                    <div className={"ai-translate-file-wrapper project-create-inner-container"} style={(showCreateLoader || translateDownloadBtnLoader) ? {pointerEvents: 'none'} : {}}>
                     <div>
-                    {/* <div className="project-setup-heading-new">
-                        {isLoading ? (
-                            <div className="d-flex">
-                                <Skeleton animation="wave" variant="circle" width={20} height={20} />
-                                <Skeleton className="ml-2" animation="wave" width={140} height={18} />
-                            </div>
-                        ) : (
-                            <div>
-                                <img src={Config.HOST_URL + "assets/images/new-ui-icons/file_upload.svg"} alt="file_upload" />
-                                <span>File Translation</span>
-                            </div>
-                        )}
-                        <div className="project-setup-forms">
-                            <div className="input-form-field">
-                                <div className="form-group">
-                                    <label htmlFor="exampleFormControlFile1">Project Name</label>
-                                    <input
-                                        className="input-select-width"
-                                        id="project-name"
-                                        name="projectName"
-                                        value={projectName}
-                                        onChange={(e) => handleChange(e)}
-                                        placeholder="Enter project name..."
-                                    />
-                                    {projectNameError != "" ? <span className="text-danger">{projectNameError}</span> : null}
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
                     {isLoading ? (
                         <React.Fragment>
                             <div className="col-xs-12 mt-4">
@@ -2830,395 +2310,6 @@ function TranslateFiles(props) {
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            <div className="fileupload-global-tab-wrapper">
-                                <p className="upload-area-title">{t("upload_files")}<span className="asterik-symbol">*</span></p>
-                                {projectType === 2 && (
-                                    <Nav tabs className="fileupload-tab-row">
-                                        <NavItem
-                                            className={
-                                                "fileupload-tab-list " +
-                                                classnames({ active: fileUploadTabActive == 1 })
-                                            }
-                                            onClick={() => {
-                                                fileUploadTabToggle(1);
-                                            }}
-                                        >
-                                            <NavLink className="fileupload-tab-link">{t("files")}</NavLink>
-                                        </NavItem>
-                                        <NavItem
-                                            className={
-                                                "fileupload-tab-list " +
-                                                classnames({ active: fileUploadTabActive == 2 })
-                                            }
-                                            onClick={() => {
-                                                fileUploadTabToggle(2);
-                                            }}
-                                        >
-                                            <NavLink className="fileupload-tab-link">
-                                                {t("integrations")}
-                                            </NavLink>
-                                        </NavItem>
-                                    </Nav>
-                                )}
-                                <TabContent activeTab={fileUploadTabActive}>
-                                    <TabPane tabId={1}>
-                                        {fileError != "" && (
-                                            <span className="text-danger mb-2">{fileError}</span>
-                                        )}
-                                        {
-                                            <>
-                                                <div
-                                                    className={
-                                                        integrationFiles.length ||
-                                                            editProjectId != null ||
-                                                            (!showFileUpload && files.length > 0) || pdfIdFromToolkit !== null
-                                                            ? "dropfile-area"
-                                                            : "col-xs-12 mt-3"
-                                                    }
-                                                >
-                                                    <DragandDrop handleDrop={handleDrop}>
-                                                        <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
-                                                            <div className="draganddrop-align">
-                                                                <img className={(files.length > 0 || editFiles.length > 0 || editProjectId != null) ? 'img' : ''}
-                                                                    src={UploadFolder}
-                                                                    alt="folder"
-                                                                />
-
-                                                                {Object.keys(files).map((eachKey) => {
-                                                                    return (
-                                                                        <div
-                                                                            key={eachKey + files[eachKey].name}
-                                                                            className="file-name-list"
-                                                                        >
-                                                                            <div className="filename">
-                                                                                {
-                                                                                    <img
-                                                                                        src={
-                                                                                            import.meta.env.PUBLIC_URL +
-                                                                                            "/assets/images/document.svg"
-                                                                                        }
-                                                                                        alt="document"
-                                                                                    />
-                                                                                }{" "}
-                                                                                {files[eachKey].name}
-                                                                            </div>
-                                                                            <span
-                                                                                data-file-index={eachKey}
-                                                                                onClick={(e) => removeFile(e, eachKey)}
-                                                                            >
-                                                                                <i className="far fa-trash-alt"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                    );
-                                                                })}
-                                                                <div className="file-upload-align">
-                                                                    <p className="upload-text">
-                                                                        {t("drop_your_files_here_or")}{" "}
-                                                                    </p>
-                                                                    <div className="upload-link-wrapper">
-                                                                        <label htmlFor="files">{t("browse")}</label>
-                                                                        <input
-                                                                            ref={inputFileUploadRef}
-                                                                            type="file"
-                                                                            name="files"
-                                                                            className="form-control-file"
-                                                                            id="files"
-                                                                            accept={supportFileExtensions.join(",")}
-                                                                            onChange={handleChange}
-                                                                            multiple
-                                                                            hidden
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </DragandDrop>
-                                                </div>
-
-                                                <div
-                                                    className={
-                                                        integrationFiles.length ||
-                                                            (editProjectId == null &&
-                                                                !showFileUpload &&
-                                                                files.length == 0 && pdfIdFromToolkit == null)
-                                                            ? "d-none"
-                                                            : "col-xs-12"
-                                                    }
-                                                >
-                                                    {/* {console.log(editFiles)} */}
-                                                    {/* <DragandDrop handleDrop={handleDrop}> */}
-                                                    <div className="button-wrap-file-list">
-                                                        <div className="file-list-align">
-                                                            <div className="file-list">
-                                                                {editFiles?.map((editFile) => (
-                                                                    <div
-                                                                        key={editFile.id}
-                                                                        className="file-name-list"
-                                                                    >
-                                                                        <div className="filename" style={{ width: '100%' }}>
-                                                                            {
-                                                                                <img
-                                                                                    src={
-                                                                                        `${Config.BASE_URL}/app/extension-image/` +
-                                                                                        editFile.filename.split(".").pop()
-                                                                                    }
-                                                                                    alt="document"
-                                                                                />
-                                                                            }
-                                                                            <span className="filename-length">
-                                                                                {editFile.filename
-                                                                                    .split(".")
-                                                                                    .slice(0, -1)
-                                                                                    .join(".")}
-                                                                            </span>
-                                                                            <span className="extension">
-                                                                                {"." +
-                                                                                    editFile.filename.split(".").pop()}
-                                                                            </span>
-                                                                        </div>
-                                                                        <span
-                                                                            className="upload-file-delete"
-                                                                            onClick={(e) =>
-                                                                                deleteEditFile(
-                                                                                    e,
-                                                                                    editFile?.can_delete,
-                                                                                    editFile.id
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            <img
-                                                                                src={CloseBlack}
-                                                                                alt="delete"
-                                                                            />
-                                                                        </span>
-                                                                    </div>
-                                                                ))}
-
-                                                                {Object.keys(files).map((eachKey) => {
-                                                                    return (
-                                                                        <div
-                                                                            key={eachKey + files[eachKey].name}
-                                                                            className="file-name-list"
-                                                                        >
-                                                                            <div className="filename" style={{ width: '90%' }}>
-                                                                                {
-                                                                                    <img
-                                                                                        src={
-                                                                                            `${Config.BASE_URL}/app/extension-image/` +
-                                                                                            files[eachKey].name
-                                                                                                .split(".")
-                                                                                                .pop()
-                                                                                        }
-                                                                                        alt="document"
-                                                                                    />
-                                                                                }
-                                                                                <span className="filename-length">
-                                                                                    {files[eachKey].name
-                                                                                        .split(".")
-                                                                                        .slice(0, -1)
-                                                                                        .join(".")}
-                                                                                </span>
-                                                                                <span className="extension">
-                                                                                    {"." +
-                                                                                        files[eachKey].name
-                                                                                            .split(".")
-                                                                                            .pop()}
-                                                                                </span>
-                                                                            </div>
-                                                                            <span
-                                                                                className="upload-file-delete"
-                                                                                data-file-index={eachKey}
-                                                                                onClick={(e) =>
-                                                                                    removeFile(e, eachKey)
-                                                                                }
-                                                                            >
-                                                                                <img
-                                                                                    src={CloseBlack}
-                                                                                    alt="delete"
-                                                                                />
-                                                                            </span>
-                                                                        </div>
-                                                                    );
-                                                                })}
-                                                            </div>
-                                                            <div
-                                                                className={
-                                                                    "d-none " +
-                                                                    (integrationFiles.length ? " d-none" : "d-none")
-                                                                }
-                                                            >
-                                                                <input
-                                                                    type="file"
-                                                                    name="files"
-                                                                    id="files-drag"
-                                                                    onChange={(e) => handleChange(e)}
-                                                                    multiple
-                                                                    hidden
-                                                                />
-                                                                <label
-                                                                    className="form-control-file"
-                                                                    htmlFor="files-drag"
-                                                                >
-                                                                    <span>
-                                                                        <img
-                                                                            src={LinkPin}
-                                                                            alt="link-pin"
-                                                                        />
-                                                                    </span>{" "}
-                                                                    {t("add_more")}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {/* </DragandDrop> */}
-                                                </div>
-                                                <div
-                                                    className={
-                                                        integrationFiles.length === 0
-                                                            ? "d-none"
-                                                            : "col-xs-12 mt-3"
-                                                    }
-                                                >
-                                                    <DragandDrop handleDrop={handleDrop}>
-                                                        <div className="button-wrap-file-list">
-                                                            <div className="file-list-align">
-                                                                <div className="file-list">
-                                                                    {integrationFiles.map((integrationFile) => {
-                                                                        return (
-                                                                            <div
-                                                                                key={integrationFile.id}
-                                                                                className="file-name-list"
-                                                                            >
-                                                                                <div className="filename" style={{ width: '90%' }}>
-                                                                                    {
-                                                                                        <img
-                                                                                            src={
-                                                                                                `${Config.BASE_URL}/app/extension-image/` +
-                                                                                                integrationFile.filename
-                                                                                                    .split(".")
-                                                                                                    .pop()
-                                                                                            }
-                                                                                            alt="document"
-                                                                                        />
-                                                                                    }
-                                                                                    <span className="filename-length">
-                                                                                        {integrationFile.filename
-                                                                                            .split(".")
-                                                                                            .slice(0, -1)
-                                                                                            .join(".")}
-                                                                                    </span>
-                                                                                    <span className="extension">
-                                                                                        {"." +
-                                                                                            integrationFile.filename
-                                                                                                .split(".")
-                                                                                                .pop()}
-                                                                                    </span>
-                                                                                </div>
-                                                                                <span
-                                                                                    className="upload-file-delete"
-                                                                                    onClick={(e) =>
-                                                                                        selectIntegrationFile(
-                                                                                            false,
-                                                                                            integrationFile.id,
-                                                                                            integrationFile.filename
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    <img
-                                                                                        src={CloseBlack}
-                                                                                        alt="delete"
-                                                                                    />
-                                                                                </span>
-                                                                            </div>
-                                                                        );
-                                                                    })}
-
-                                                                    {Object.keys(files).map((eachKey) => {
-                                                                        return (
-                                                                            <div
-                                                                                key={eachKey + files[eachKey].name}
-                                                                                className="file-name-list"
-                                                                            >
-                                                                                <div className="filename" style={{ width: '90%' }}>
-                                                                                    {
-                                                                                        <img
-                                                                                            src={
-                                                                                                `${Config.BASE_URL}/app/extension-image/` +
-                                                                                                files[eachKey].name
-                                                                                                    .split(".")
-                                                                                                    .pop()
-                                                                                            }
-                                                                                            alt="document"
-                                                                                        />
-                                                                                    }
-                                                                                    <span className="filename-length">
-                                                                                        {files[eachKey].name
-                                                                                            .split(".")
-                                                                                            .slice(0, -1)
-                                                                                            .join(".")}
-                                                                                    </span>
-                                                                                    <span className="extension">
-                                                                                        {"." +
-                                                                                            files[eachKey].name
-                                                                                                .split(".")
-                                                                                                .pop()}
-                                                                                    </span>
-                                                                                </div>
-                                                                                <span
-                                                                                    className="upload-file-delete"
-                                                                                    data-file-index={eachKey}
-                                                                                    onClick={(e) =>
-                                                                                        removeFile(e, eachKey)
-                                                                                    }
-                                                                                >
-                                                                                    <img
-                                                                                        src={CloseBlack}
-                                                                                        alt="delete"
-                                                                                    />
-                                                                                </span>
-                                                                            </div>
-                                                                        );
-                                                                    })}
-                                                                </div>
-                                                                <div
-                                                                    className={
-                                                                        "file-upload-align new-drag-n-drp-align" +
-                                                                        (integrationFiles.length ? " d-none" : "")
-                                                                    }
-                                                                >
-                                                                    <input
-                                                                        type="file"
-                                                                        name="files"
-                                                                        id="files-drag"
-                                                                        onChange={(e) => handleChange(e)}
-                                                                        multiple
-                                                                        hidden
-                                                                    />
-                                                                    <label
-                                                                        className="form-control-file"
-                                                                        htmlFor="files-drag"
-                                                                    >
-                                                                        <span>
-                                                                            <img
-                                                                                src={LinkPin}
-                                                                                alt="link-pin"
-                                                                            />
-                                                                        </span>{" "}
-                                                                        {t("add_more")}
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </DragandDrop>
-                                                </div>
-                                            </>
-                                        }
-                                    </TabPane>
-                                    <TabPane tabId={2}>
-                                        <GitHubBox onClick={handleShowVersionControlModal} />
-                                    </TabPane>
-                                </TabContent>
-                            </div>
                             {isLoading ? (
                                 <React.Fragment>
                                     {Array(4)
@@ -3242,6 +2333,7 @@ function TranslateFiles(props) {
                                                 </div>
                                             </div>
                                         ))}
+                                        
                                 </React.Fragment>
                             ) : (
                                 <div className="project-setup-forms new-file-proj-setup-wrapper file-upload-form">
@@ -3313,21 +2405,6 @@ function TranslateFiles(props) {
                                                         className="fas fa-caret-down"
                                                     />
                                                 </div>
-                                                {(location.search === "" && recentlyUsedLangs?.length !== 0) &&
-                                                    <Select
-                                                        // menuIsOpen={true}
-                                                        className='recently-used-pair'
-                                                        options={recentlyUsedLangs}
-                                                        isSearchable={false}
-                                                        classNamePrefix="mt-select"
-                                                        value={null}
-                                                        formatOptionLabel={formatOptionLabel}
-                                                        styles={customMtSelectStyles}
-                                                        onChange={handleRecentLangClick}
-                                                        placeholder={t("recently_used_pairs")}
-                                                        components={{ DropdownIndicator, IndicatorSeparator: () => null }}
-                                                    />
-                                                }
                                                 {sourceTargetValidation.source && <small className="text-danger">{t("select_source_language")}</small>}
                                             </div>
                                         </div>
@@ -3361,10 +2438,7 @@ function TranslateFiles(props) {
                                                             </span>
                                                         ) : (
                                                             <span>
-                                                                {targetLanguage.length +
-                                                                    " " +
-                                                                    (targetLanguage.length > 1 ? t("languages") : t("language")) +
-                                                                    " " + t("selected")}
+                                                                {targetLanguage[0].language}
                                                             </span>
                                                         )}
                                                         <i
@@ -3377,341 +2451,531 @@ function TranslateFiles(props) {
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 w-2/3">
-                                        <div className="flex items-center">
-                                            <Checkbox
-                                                id="machine-type"
-                                                checked={mtEnable}
-                                                onChange={(e) => setMtEnable(e.target.checked)}
-                                                size="small"
-                                            />
-                                            <label 
-                                                htmlFor="machine-type" 
-                                                className={mtEnable ? "add-active mr-3 mb-0" : "mr-3 mb-0"}
-                                            >
-                                                {t("apply_mt")}
-                                            </label>
-                                        </div>
-                                        <div 
-                                            className={[
-                                                "flex items-center gap-4 mt-3 ml-4",
-                                                !mtEnable ? "disable opacity-60" : ""
-                                            ].join(' ')}
-                                        >
-                                            <div className="flex items-start">
-                                                <Radio
-                                                    checked={adaptiveTransEnable}
-                                                    id="adaptive_trans"
-                                                    className="radio-btn -mt-2"
-                                                    size="small"
-                                                    onChange={() => setAdaptiveTransEnable(true)}
-                                                /> 
-                                                <label 
-                                                    htmlFor="adaptive_trans" 
-                                                    className="assign-manage-radio mb-0"
-                                                >
-                                                    {t("adaptive_trans")}
-                                                    <span className="beta-tag">{t("beta")}</span>
-                                                    <br />
-                                                    <span className="help_text">
-                                                        {t("adaptive_help_txt")}
-                                                    </span>
-                                                </label>
-
-                                            </div>
-                                            <div className="flex items-start">
-                                                <Radio
-                                                    checked={!adaptiveTransEnable}
-                                                    id="standard_trans"
-                                                    onChange={() => setAdaptiveTransEnable(false)}
-                                                    size="small"
-                                                    className="radio-btn -mt-2"
-                                                /> 
-                                                <label 
-                                                    htmlFor="standard_trans" 
-                                                    className="assign-manage-radio mb-0"
-                                                >
-                                                    {t("standard_mt")}
-                                                    <br />
-                                                    <span className="help_text">
-                                                        {t("standard_mt_help_txt")}
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <AdvancedProjectType
-                                        isLoading={isLoading}
-                                        projectType={projectType}
-                                        subjectField={subjectField}
-                                        contentType={contentType}
-                                        deadline={deadline}
-                                        setDeadline={setDeadline}
-                                        mtEnable={mtEnable}
-                                        setMtEnable={setMtEnable}
-                                        postEditStep={postEditStep}
-                                        setPostEditStep={setPostEditStep}
-                                        proofReadStep={proofReadStep}
-                                        setProofReadStep={setProofReadStep}
-                                        subjectFieldOptions={subjectFieldOptions}
-                                        contentTypeOptions={contentTypeOptions}
-                                        isEditable={projectEditable.current}
-                                        handleSubjectFieldClick={handleSubjectFieldClick}
-                                        handleContentTypeClick={handleContentTypeClick}
-                                        // handleStepSelection={handleStepSelection}
-                                        revisionStepEdit={revisionStepEdit}
-                                        steps={steps}
-                                        selectedSteps={selectedSteps}
-                                        setSelectedSteps={setSelectedSteps}
-                                        stepOptions={stepOptions}
-                                        handleSelectedSteps={handleSelectedSteps}
-                                        preTranslate={preTranslate}
-                                        setPreTranslate={setPreTranslate}
-                                        translationByPage={translationByPage}
-                                        setTranslationByPage={setTranslationByPage}
-                                        selectedMTEngine={selectedMTEngine}
-                                        mtpeEngineOptions={mtpeEngineOptions}
-                                        handleMTEngineChange={handleMTEngineChange}
-                                        projectDataFromApi={projectDataFromApi}
-                                        adaptiveTransEnable={adaptiveTransEnable}
-                                        setAdaptiveTransEnable={setAdaptiveTransEnable}
-                                        flowSwitch={2}
-                                    />
                                 </div>
                             )}
-                            <div className="col-xs-12">
-                                <div className="d-flex justify-between">
-                                    {editProjectId != null && (
-                                        <button
-                                            className="glossaryglobalform-StepCancelButton"
-                                            onClick={() => history(-1)}
+                            <div className="fileupload-global-tab-wrapper">
+                                <p className="upload-area-title">{t("upload_files")}<span className="asterik-symbol">*</span></p>
+                                {projectType === 2 && (
+                                    <Nav tabs className="fileupload-tab-row">
+                                        <NavItem
+                                            className={
+                                                "fileupload-tab-list " +
+                                                classnames({ active: fileUploadTabActive == 1 })
+                                            }
+                                            onClick={() => {
+                                                fileUploadTabToggle(1);
+                                            }}
                                         >
-                                            <span className="prev-btn">
-                                                {t("cancel")}
-                                            </span>
-                                        </button>
-                                    )}
-                                    <div className="new-btn-grp">
-                                        {editProjectId != null ? (
-                                            showUpdateLoader ? (
-                                                <React.Fragment>
-                                                    <button className="convert-pdf-list-UploadProjectButton" type="submit">
-                                                        <span className="fileupload-new-btn">
-                                                            <SaveButtonLoader />
-                                                            {t("updating")}
-                                                        </span>
-                                                    </button>
-                                                </React.Fragment>
-                                            ) : (
-                                                <React.Fragment>
-                                                    <button className="convert-pdf-list-UploadProjectButton"
-                                                        type="submit"
-                                                        onMouseUp={(e) => handleUpdate(e)}
-                                                    >
-                                                        <span className="fileupload-new-btn">{t("update")}</span>
-                                                    </button>
-                                                    {editProjectId && (
+                                            <NavLink className="fileupload-tab-link">{t("files")}</NavLink>
+                                        </NavItem>
+                                        <NavItem
+                                            className={
+                                                "fileupload-tab-list " +
+                                                classnames({ active: fileUploadTabActive == 2 })
+                                            }
+                                            onClick={() => {
+                                                fileUploadTabToggle(2);
+                                            }}
+                                        >
+                                            <NavLink className="fileupload-tab-link">
+                                                {t("integrations")}
+                                            </NavLink>
+                                        </NavItem>
+                                    </Nav>
+                                )}
+                                <TabContent activeTab={fileUploadTabActive}>
+                                    <TabPane tabId={1}>
+                                        {
+                                            <>
+                                                <div
+                                                    className={
+                                                        integrationFiles.length ||
+                                                            editProjectId != null ||
+                                                            (!showFileUpload && files.length > 0) || pdfIdFromToolkit !== null
+                                                            ? "dropfile-area"
+                                                            : "col-xs-12 mt-3"
+                                                    }
+                                                >
+                                                    <DragandDrop handleDrop={handleDrop}>
+                                                        <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
+                                                            <div className="draganddrop-align">
+                                                                <img className={(files.length > 0 || editFiles.length > 0 || editProjectId != null) ? 'img' : ''}
+                                                                    src={UploadFolder}
+                                                                    alt="folder"
+                                                                />
+
+                                                                {Object.keys(files).map((eachKey) => {
+                                                                    return (
+                                                                        <div
+                                                                            key={eachKey + files[eachKey].name}
+                                                                            className="file-name-list"
+                                                                        >
+                                                                            <div className="filename">
+                                                                                {
+                                                                                    <img
+                                                                                        src={
+                                                                                            import.meta.env.PUBLIC_URL +
+                                                                                            "/assets/images/document.svg"
+                                                                                        }
+                                                                                        alt="document"
+                                                                                    />
+                                                                                }{" "}
+                                                                                {files[eachKey].name}
+                                                                            </div>
+                                                                            <span
+                                                                                data-file-index={eachKey}
+                                                                                onClick={(e) => removeFile(e, eachKey)}
+                                                                            >
+                                                                                <i className="far fa-trash-alt"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                                <div className="file-upload-align">
+                                                                    <p className="upload-text">
+                                                                        {t("drop_your_files_here_or")}{" "}
+                                                                    </p>
+                                                                    <div className="upload-link-wrapper">
+                                                                        <label htmlFor="files">{t("browse")}</label>
+                                                                        <input
+                                                                            ref={inputFileUploadRef}
+                                                                            type="file"
+                                                                            name="files"
+                                                                            className="form-control-file"
+                                                                            id="files"
+                                                                            accept={supportFileExtensions.join(",")}
+                                                                            onChange={handleChange}
+                                                                            multiple
+                                                                            hidden
+                                                                        />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </DragandDrop>
+                                                    <div className="file-upload-instruction">
+                                                      <div className="supp-file-format">
+                                                       <div>
+                                                          <span className="supported-file-tooltip">
+                                                             {t(("supported_file_formats"))}:
+                                                         </span>
+                                                         <span className="supported-file-tooltip"> TXT,DOCX</span>
+                                                       </div>
+                                                     </div>
+                                                     <div className="file-upload_instruct-row">
+                                                      <span className="max-word-note">
+                                                        {t("file_upload_condition_note_1")}: <span>50,000</span>
+                                                     </span>
+                                                     <span className="max-file-note">
+                                                     {t("file_upload_condition_note_2")}: <span>100 MB</span>
+                                                     </span>
+                                                    </div>
+                                                  </div>
+                                                </div>
+
+                                                { projectTaskList.length ==  0 &&
+                                                    <>
                                                         <div
-                                                            onClick={() => setShowDeleteConfirmationModal(true)}
                                                             className={
-                                                                projectType === 3
-                                                                    ? "edit-delete-btn glossary-btn-wrap"
-                                                                    : "edit-delete-btn "
+                                                                integrationFiles.length ||
+                                                                    (editProjectId == null &&
+                                                                        !showFileUpload &&
+                                                                        files.length == 0 && pdfIdFromToolkit == null)
+                                                                    ? "d-none"
+                                                                    : "col-xs-12"
                                                             }
                                                         >
-                                                            <ButtonBase>
-                                                                <div className="edit-delete-btn-cont">
-                                                                    <div className="delete-icon"></div>
-                                                                    {t("delete_project")}
+                                                            <div className="button-wrap-file-list">
+                                                                <div className="file-list-align">
+                                                                    <div className="file-list">
+                                                                        {editFiles?.map((editFile) => (
+                                                                            <div
+                                                                                key={editFile.id}
+                                                                                className="file-name-list"
+                                                                            >
+                                                                                <div className="filename" style={{ width: '100%' }}>
+                                                                                    {
+                                                                                        <img
+                                                                                            src={
+                                                                                                `${Config.BASE_URL}/app/extension-image/` +
+                                                                                                editFile.filename.split(".").pop()
+                                                                                            }
+                                                                                            alt="document"
+                                                                                        />
+                                                                                    }
+                                                                                    <span className="filename-length">
+                                                                                        {editFile.filename
+                                                                                            .split(".")
+                                                                                            .slice(0, -1)
+                                                                                            .join(".")}
+                                                                                    </span>
+                                                                                    <span className="extension">
+                                                                                        {"." +
+                                                                                            editFile.filename.split(".").pop()}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <span
+                                                                                    className="upload-file-delete"
+                                                                                    onClick={(e) =>
+                                                                                        deleteEditFile(
+                                                                                            e,
+                                                                                            editFile?.can_delete,
+                                                                                            editFile.id
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    <img
+                                                                                        src={CloseBlack}
+                                                                                        alt="delete"
+                                                                                    />
+                                                                                </span>
+                                                                            </div>
+                                                                        ))}
+
+                                                                        {Object.keys(files).map((eachKey) => {
+                                                                            return (
+                                                                                <div
+                                                                                    key={eachKey + files[eachKey].name}
+                                                                                    className="file-name-list"
+                                                                                >
+                                                                                    <div className="filename" style={{ width: '90%' }}>
+                                                                                        {
+                                                                                            <img
+                                                                                                src={
+                                                                                                    `${Config.BASE_URL}/app/extension-image/` +
+                                                                                                    files[eachKey].name
+                                                                                                        .split(".")
+                                                                                                        .pop()
+                                                                                                }
+                                                                                                alt="document"
+                                                                                            />
+                                                                                        }
+                                                                                        <span className="filename-length">
+                                                                                            {files[eachKey].name
+                                                                                                .split(".")
+                                                                                                .slice(0, -1)
+                                                                                                .join(".")}
+                                                                                        </span>
+                                                                                        <span className="extension">
+                                                                                            {"." +
+                                                                                                files[eachKey].name
+                                                                                                    .split(".")
+                                                                                                    .pop()}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <span
+                                                                                        className="upload-file-delete"
+                                                                                        data-file-index={eachKey}
+                                                                                        onClick={(e) =>
+                                                                                            removeFile(e, eachKey)
+                                                                                        }
+                                                                                    >
+                                                                                        <img
+                                                                                            src={CloseBlack}
+                                                                                            alt="delete"
+                                                                                        />
+                                                                                    </span>
+                                                                                </div>
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                    <div
+                                                                        className={
+                                                                            "d-none " +
+                                                                            (integrationFiles.length ? " d-none" : "d-none")
+                                                                        }
+                                                                    >
+                                                                        <input
+                                                                            type="file"
+                                                                            name="files"
+                                                                            id="files-drag"
+                                                                            onChange={(e) => handleChange(e)}
+                                                                            multiple
+                                                                            hidden
+                                                                        />
+                                                                        <label
+                                                                            className="form-control-file"
+                                                                            htmlFor="files-drag"
+                                                                        >
+                                                                            <span>
+                                                                                <img
+                                                                                    src={LinkPin}
+                                                                                    alt="link-pin"
+                                                                                />
+                                                                            </span>{" "}
+                                                                            {t("add_more")}
+                                                                        </label>
+                                                                    </div>
                                                                 </div>
-                                                            </ButtonBase>
+                                                            </div>
                                                         </div>
-                                                    )}
-                                                </React.Fragment>
-                                            )
-                                        ) : showCreateLoader ? (
-                                            <React.Fragment>
-                                                <button className="convert-pdf-list-UploadProjectButton" type="submit">
-                                                    <span className="fileupload-new-btn">
-                                                        <SaveButtonLoader />
-                                                        {t("creating")}
-                                                    </span>
-                                                </button>
-                                            </React.Fragment>
-                                        ) : (
-                                            <React.Fragment>
-                                                <button className="convert-pdf-list-UploadProjectButton"
-                                                    type="submit"
-                                                    onMouseUp={(e) => handleSubmit(e)}
-                                                >
-                                                    <span className="fileupload-new-btn">
-                                                        {t("translate_edit_download")}
-                                                        <ArrowForwardIcon
-                                                            style={{
-                                                                fontSize: 15,
-                                                                color: "#FFFFFF",
-                                                            }}
-                                                        />
-                                                    </span>
-                                                </button>
-                                            </React.Fragment>
-                                        )}
-                                        {(editProjectId == null && showTranslateAndDownloadBtn) && (
-                                            <button className="convert-pdf-list-UploadProjectButton"
-                                                type="submit"
-                                                onMouseUp={(e) => !translateDownloadBtnLoader && handleSubmit(e, 'trans-download')}
-                                            >
-                                                <span className="fileupload-new-btn">
-                                                    {translateDownloadBtnLoader && (
-                                                        <SaveButtonLoader />
-                                                    )}
-                                                    {t("translate_and_download")}
-                                                </span>
-                                            </button>
-                                        )}
+                                                        <div
+                                                            className={
+                                                                integrationFiles.length === 0
+                                                                    ? "d-none"
+                                                                    : "col-xs-12 mt-3"
+                                                            }
+                                                        >
+                                                            <DragandDrop handleDrop={handleDrop}>
+                                                                <div className="button-wrap-file-list">
+                                                                    <div className="file-list-align">
+                                                                        <div className="file-list">
+                                                                            {integrationFiles.map((integrationFile) => {
+                                                                                return (
+                                                                                    <div
+                                                                                        key={integrationFile.id}
+                                                                                        className="file-name-list"
+                                                                                    >
+                                                                                        <div className="filename" style={{ width: '90%' }}>
+                                                                                            {
+                                                                                                <img
+                                                                                                    src={
+                                                                                                        `${Config.BASE_URL}/app/extension-image/` +
+                                                                                                        integrationFile.filename
+                                                                                                            .split(".")
+                                                                                                            .pop()
+                                                                                                    }
+                                                                                                    alt="document"
+                                                                                                />
+                                                                                            }
+                                                                                            <span className="filename-length">
+                                                                                                {integrationFile.filename
+                                                                                                    .split(".")
+                                                                                                    .slice(0, -1)
+                                                                                                    .join(".")}
+                                                                                            </span>
+                                                                                            <span className="extension">
+                                                                                                {"." +
+                                                                                                    integrationFile.filename
+                                                                                                        .split(".")
+                                                                                                        .pop()}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <span
+                                                                                            className="upload-file-delete"
+                                                                                            onClick={(e) =>
+                                                                                                selectIntegrationFile(
+                                                                                                    false,
+                                                                                                    integrationFile.id,
+                                                                                                    integrationFile.filename
+                                                                                                )
+                                                                                            }
+                                                                                        >
+                                                                                            <img
+                                                                                                src={CloseBlack}
+                                                                                                alt="delete"
+                                                                                            />
+                                                                                        </span>
+                                                                                    </div>
+                                                                                );
+                                                                            })}
+
+                                                                            {Object.keys(files).map((eachKey) => {
+                                                                                return (
+                                                                                    <div
+                                                                                        key={eachKey + files[eachKey].name}
+                                                                                        className="file-name-list"
+                                                                                    >
+                                                                                        <div className="filename" style={{ width: '90%' }}>
+                                                                                            {
+                                                                                                <img
+                                                                                                    src={
+                                                                                                        `${Config.BASE_URL}/app/extension-image/` +
+                                                                                                        files[eachKey].name
+                                                                                                            .split(".")
+                                                                                                            .pop()
+                                                                                                    }
+                                                                                                    alt="document"
+                                                                                                />
+                                                                                            }
+                                                                                            <span className="filename-length">
+                                                                                                {files[eachKey].name
+                                                                                                    .split(".")
+                                                                                                    .slice(0, -1)
+                                                                                                    .join(".")}
+                                                                                            </span>
+                                                                                            <span className="extension">
+                                                                                                {"." +
+                                                                                                    files[eachKey].name
+                                                                                                        .split(".")
+                                                                                                        .pop()}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <span
+                                                                                            className="upload-file-delete"
+                                                                                            data-file-index={eachKey}
+                                                                                            onClick={(e) =>
+                                                                                                removeFile(e, eachKey)
+                                                                                            }
+                                                                                        >
+                                                                                            <img
+                                                                                                src={CloseBlack}
+                                                                                                alt="delete"
+                                                                                            />
+                                                                                        </span>
+                                                                                    </div>
+                                                                                );
+                                                                            })}
+                                                                        </div>
+                                                                        <div
+                                                                            className={
+                                                                                "file-upload-align new-drag-n-drp-align" +
+                                                                                (integrationFiles.length ? " d-none" : "")
+                                                                            }
+                                                                        >
+                                                                            <input
+                                                                                type="file"
+                                                                                name="files"
+                                                                                id="files-drag"
+                                                                                onChange={(e) => handleChange(e)}
+                                                                                multiple
+                                                                                hidden
+                                                                            />
+                                                                            <label
+                                                                                className="form-control-file"
+                                                                                htmlFor="files-drag"
+                                                                            >
+                                                                                <span>
+                                                                                    <img
+                                                                                        src={LinkPin}
+                                                                                        alt="link-pin"
+                                                                                    />
+                                                                                </span>{" "}
+                                                                                {t("add_more")}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </DragandDrop>             
+                                                        </div>
+                                                    </>
+                                                }
+                                                {projectTaskList.length !==  0 &&
+                                                    <div className="translate-task-list" style={{ marginTop: 20}}>
+                                                        <div className="file-name-list">
+                                                            <span className="lang-pair">
+                                                                <span>
+                                                                    {sourceLabel}
+                                                                </span>
+                                                                <img src={ArrowRightAltColor}/>
+                                                                <span>
+                                                                    {targetLanguage[0].language}
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                        <div className="project-task-list">
+                                                            <div className="button-wrap-file-list">
+                                                                <div className="file-list-align">
+                                                                    <div className="file-list">
+                                                                        {projectTaskList?.map((task) => (
+                                                                            <div
+                                                                                key={task.id}
+                                                                                className="file-name-list"
+                                                                            >
+                                                                                <div className="filename" style={{ alignItems: 'center' }}>
+                                                                                    {
+                                                                                        <img
+                                                                                            src={
+                                                                                                `${Config.BASE_URL}/app/extension-image/` +
+                                                                                                task.filename.split(".").pop()
+                                                                                            }
+                                                                                            alt="document"
+                                                                                        />
+                                                                                    }
+                                                                                    <div className="file-name-info-wrapper">
+                                                                                        <div className="file-name-row">
+                                                                                            <span className="filename-length">
+                                                                                                {task.filename
+                                                                                                    .split(".")
+                                                                                                    .slice(0, -1)
+                                                                                                    .join(".")}
+                                                                                            </span>
+                                                                                            <span className="extension">
+                                                                                                {"." +
+                                                                                                    task.filename.split(".").pop()}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                {task?.progressLoading ? (
+                                                                                     <ProgressBar
+                                                                                         progressValue={task.percentage || 0}
+                                                                                         progressBarLabel={task.progressLabel || ''}
+                                                                                         progressBarWidth={'50%'}
+                                                                                         progressBarStyle={{ width: "50%", pr: "30px" }}
+                                                                                    />
+                                                                                ) : (
+                                                                                 task.percentage === 100 && (
+                                                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
+                                                                                    <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
+                                                                                   <span style={{ color: 'green', fontWeight: 'bold' }}>Translation Completed</span>
+                                                                                </div>
+                                                                                 )
+                                                                               )}
+                                                                                {task.percentage >= 0 ? (
+                                                                                    <button
+                                                                                     className="translate-download-btn"
+                                                                                     type="submit"
+                                                                                     disabled={task.percentage !== 100 || task?.id === isDownloading} // disable until 100%
+                                                                                     onMouseUp={() => {
+                                                                                     if (task.percentage === 100 && task?.id !== isDownloading) {
+                                                                                     downloadTaskTargetFile(task?.id);
+                                                                                     }
+                                                                                   }}
+                                                                                 >
+                                                                                 <span className="fileupload-new-btn">
+                                                                                     {task?.id === isDownloading && <SaveButtonLoader />}
+                                                                                     {t("download")}
+                                                                                 </span>
+                                                                                   </button>
+                                                                                ) : (
+                                                                                   <button
+                                                                                    className="convert-pdf-list-UploadProjectButton"
+                                                                                    type="submit"
+                                                                                    disabled={task?.progressLoading}
+                                                                                    onMouseUp={() => getTaskTransDownloadStatus(task?.id)}
+                                                                                 >
+                                                                               <span className="fileupload-new-btn">{t("translate")}</span>
+                                                                              </button>
+                                                                              )}
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </>
+                                        }
+                                    </TabPane>
+                                    <TabPane tabId={2}>
+                                        <GitHubBox onClick={handleShowVersionControlModal} />
+                                    </TabPane>
+                                </TabContent>
+                                {files.length > 0 && projectTaskList.length ==  0 && (
+                                    <div className="continue-button-container">
+                                        <button className="continue-btn"  onMouseUp={(e) => handleSubmit(e)}>Start Translation</button>
                                     </div>
-                                </div>
+                                )}
+                                {projectTaskList?.find(each => !each.isProcessing) && (
+                                    <div className="new-btn-grp">
+                                        <Tooltip title="Creates a new project. Your current project will be saved in 'My projects'." arrow>
+                                          <button 
+                                            className="convert-pdf-list-UploadProjectButton" 
+                                            type="submit"
+                                            onClick={() => resetForm()}>
+                                            <span className="fileupload-new-btn">
+                                                {t("reset")}
+                                            </span>
+                                          </button>
+                                        </Tooltip>
+                                    </div>
+                                )}
                             </div>
                         </React.Fragment>
                     )}
                     </div>
-                </div>
-                {
-                    projectTaskList.length !== 0 &&
-                    <div className="ai-translate-file-wrapper translate-task-list" style={{ marginTop: 20}}>
-                        <p className="upload-area-title">{t("transalted_files")}</p>
-                        <div className="project-task-list">
-                            <div className="button-wrap-file-list">
-                                <div className="file-list-align">
-                                    <div className="file-list">
-                                        {projectTaskList?.map((task) => (
-                                            <div
-                                                key={task.id}
-                                                className="file-name-list"
-                                            >
-                                                
-                                                <div className="filename" style={{ width: '100%' }}>
-                                                    {
-                                                        <img
-                                                            src={
-                                                                `${Config.BASE_URL}/app/extension-image/` +
-                                                                task.filename.split(".").pop()
-                                                            }
-                                                            alt="document"
-                                                        />
-                                                    }
-                                                    <div className="file-name-info-wrapper">
-                                                        <div className="file-name-row">
-                                                            <span className="filename-length">
-                                                                {task.filename
-                                                                    .split(".")
-                                                                    .slice(0, -1)
-                                                                    .join(".")}
-                                                            </span>
-                                                            <span className="extension">
-                                                                {"." +
-                                                                    task.filename.split(".").pop()}
-                                                            </span>
-                                                        </div>
-                                                        <span className="lang-pair">
-                                                            <span>
-                                                                {sourceLanguageOptions?.find(each => each?.id == task?.source_language)?.language}
-                                                            </span>
-                                                            <img src={ArrowRightAltColor}/>
-                                                            <span>
-                                                                {sourceLanguageOptions?.find(each => each?.id == task?.target_language)?.language}
-                                                            </span>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                
-                                                {task?.isProcessing ? (
-                                                    <ProgressAnimateButton />
-                                                ) : (
-                                                    (task?.status === 402 || task?.status === 404) ? (
-                                                        <button className="convert-pdf-list-UploadProjectButton"
-                                                            type="submit"
-                                                            onMouseUp={(e) => getTaskTransDownloadStatus(task?.id)}
-                                                        >
-                                                            <span className="fileupload-new-btn">
-                                                                {t("translate")}
-                                                            </span>
-                                                        </button>
-                                                    ) : (
-                                                        <button className="convert-pdf-list-UploadProjectButton"
-                                                            type="submit"
-                                                            onMouseUp={(e) => {task?.id !== isDownloading && downloadTaskTargetFile(task?.id)}}
-                                                        >
-                                                            <span className="fileupload-new-btn">
-                                                                {task?.id === isDownloading && (
-                                                                    <SaveButtonLoader />
-                                                                )}
-                                                                {t("download")}
-                                                            </span>
-                                                        </button>
-                                                    )
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xs-12" style={{ marginTop: 25}}>
-                            {projectTaskList?.find(each => !each.isProcessing) && (
-                                <div className="new-btn-grp">
-                                    <button 
-                                        className="convert-pdf-list-UploadProjectButton" 
-                                        type="submit"
-                                        onClick={() => resetForm()}
-                                    >
-                                        <span className="fileupload-new-btn">
-                                            {t("reset")}
-                                        </span>
-                                    </button>
-                                    {/* <button 
-                                        className="convert-pdf-list-UploadProjectButton" 
-                                        type="submit"
-                                        onClick={downloadAllFiles}
-                                    >
-                                        <span className="fileupload-new-btn">
-                                            {t("download_all")}
-                                        </span>
-                                    </button> */}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                }
-                <div className="file-upload-instruction">
-                    <div className="supp-file-format">
-                        <div>
-                            <div className="supp-file-format-list">
-                                <p>{supportFileExtensions.join(" ")}</p>
-                            </div>
-                            <span className="imp-icon-img">
-                                <img
-                                    src={ImpFileIcon}
-                                    alt="imp-icon-file"
-                                />
-                            </span>
-                            <span className="supported-file-tooltip">
-                                {t(("supported_file_formats"))}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="file-upload_instruct-row">
-                        <span className="max-word-note">
-                            {t("file_upload_condition_note_1")}: <span>50,000</span>
-                        </span>
-                        {/* <span className="add-padd-left max-word-note">
-              Bigger files may lead to a slow process initially
-            </span> */}
-                        <span className="max-file-note">
-                            {t("file_upload_condition_note_2")}: <span>100 MB</span>
-                        </span>
                     </div>
                 </div>
             </div>
@@ -3722,7 +2986,6 @@ function TranslateFiles(props) {
                 className="ai-lang-select-modal"
             >
                 <div className="lang-modal-wrapper">
-                    {/* <h1>Select a source language</h1> */}
                     <span
                         className="modal-close-btn lang-close"
                         onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false) }}
@@ -3757,7 +3020,6 @@ function TranslateFiles(props) {
                     className="ai-tar-lang-select-modal"
                 >
                     <div className="lang-modal-wrapper">
-                        {/* <h1>Select one or more target language(s)</h1> */}
                         <span
                             className="modal-close-btn lang-close"
                             onClick={(e) => { setshowTarLangModal(false); setSearchInput(''); setOnFocusWrap(false) }}
@@ -3785,34 +3047,11 @@ function TranslateFiles(props) {
                             onFocusWrap={onFocusWrap}
                             setOnFocusWrap={setOnFocusWrap}
                             searchAreaRef={searchAreaRef}
+                            hideAddOrUpdateBtn={true}
                         />
                     </div>
                 </Rodal>
             )}
-            {/* <Rodal
-        visible={showDeleteConfirmationModal}
-        {...modaloption}
-        showCloseButton={false}
-        className="ai-mark-confirm-box"
-      >
-        <div className="confirmation-wrapper">
-          <img
-            src={
-              Config.HOST_URL + "assets/images/new-ui-icons/confirm-icon.svg"
-            }
-            alt="confirm-icon"
-          />
-          <h2>Do you want to delete this project?</h2>
-          <div className="button-row">
-            <button className="mydocument-AiMarkCancel" onClick={() => setShowDeleteConfirmationModal(false)}>
-              <span className="cancel-txt">Cancel</span>
-            </button>
-            <button className="mydocument-AiMarkSubmit" onClick={() => deleteProject(editProjectId)}>
-              <span className="submit-txt">Delete</span>
-            </button>
-          </div>
-        </div>
-      </Rodal> */}
             {showDeleteConfirmationModal && (<Rodal
                 visible={showDeleteConfirmationModal}
                 {...modaloption}
@@ -3866,12 +3105,6 @@ function TranslateFiles(props) {
                     </div>
                 </div>
             </Rodal>)}
-
-            {/* change nav to display model */}
-            {/* <Prompt
-                when={checkchangenav}
-                message={handleBlockedNavigation}
-            /> */}
             <ReactRouterPrompt when={handleBlockedNavigation}>
             {({ isActive, onConfirm, onCancel }) => {
                 return (
@@ -3899,8 +3132,6 @@ function TranslateFiles(props) {
                 )
             }}
             </ReactRouterPrompt>
-
-            {/* direct file opening wait modal */}
             {showDocumentOpeingModal && (
                 <div className="credit-alert-box">
                     <div className="credit-alert-bg"></div>
@@ -3917,7 +3148,6 @@ function TranslateFiles(props) {
                         </div>
                         <div className="credits-text-cont">
                             <React.Fragment>
-                                {/* <img src={Config.HOST_URL + "assets/images/new-ui-icons/insuffient-icon.svg"} alt="insuffient-icon" /> */}
                                 <AnalysisLoader />
                                 <div className="insuffient-txt-align">
                                     <span>
@@ -3973,7 +3203,7 @@ function TranslateFiles(props) {
                 </Rodal>
             )}
 
-            {showFileErrorModal && (
+            {/* {showFileErrorModal && (
                 <Rodal 
                     className="ts-rodal-mask" 
                     visible={showFileErrorModal} 
@@ -4002,10 +3232,10 @@ function TranslateFiles(props) {
                         </React.Fragment>
                     </div>
                 </Rodal>
-            )}
+            )} */}
 
         </React.Fragment>
     );
 }
 
-export default TranslateFiles;
+export default ProjectCreation;

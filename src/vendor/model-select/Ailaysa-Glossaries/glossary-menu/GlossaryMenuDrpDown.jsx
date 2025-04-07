@@ -26,7 +26,7 @@ export const GlossaryMenuDrpDown = (props) => {
         setGlossaryOpen(false);
     };
 
-    const handleMenuItemClick = (menuItemId) => {
+    const   handleMenuItemClick = (menuItemId) => {
         if(menuItemId === 1){
             if(window.getSelection().toString()?.trim() === ""){
                 Config.toast(t("select_word_to_add"), "warning")

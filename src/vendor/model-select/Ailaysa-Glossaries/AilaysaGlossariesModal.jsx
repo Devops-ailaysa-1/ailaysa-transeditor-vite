@@ -36,12 +36,12 @@ export const AilaysaGlossariesModal = (props) => {
 
     useEffect(() => {
         if(showAilaysaGlossaryModal){
-            setDefaultGlossDetails(defaultGlossDetailsRef.current)
+            setDefaultGlossDetails(defaultGlossDetailsRef?.current)
             getGlossaryList()
             getSelectedGlossaries()
             getProjectFiles()
         }
-    }, [defaultGlossDetailsRef.current, showAilaysaGlossaryModal])
+    }, [defaultGlossDetailsRef?.current, showAilaysaGlossaryModal])
     
     useEffect(() => {
         if(showAilaysaGlossaryModal){
@@ -61,7 +61,7 @@ export const AilaysaGlossariesModal = (props) => {
             url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary&task=${documentDetails.task_id}`,
             auth: true,
             success: (response) => {
-                let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef.current.gloss_id)
+                let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef?.current?.gloss_id)
                 setGlossaryList(res)
             },
             error: (err) => {
@@ -78,8 +78,8 @@ export const AilaysaGlossariesModal = (props) => {
                 console.log("selected gloss")
                 console.log(response.data)
                 console.log("default gloss")
-                console.log(defaultGlossDetailsRef.current)
-                let res = response.data?.filter(each => each.glossary != defaultGlossDetailsRef.current.gloss_id)
+                console.log(defaultGlossDetailsRef?.current)
+                let res = response.data?.filter(each => each.glossary != defaultGlossDetailsRef?.current?.gloss_id)
                 console.log("default gloss removed")
                 console.log(res)
                 setSelectedGlossaryList(res)

@@ -20,7 +20,8 @@ function TargetLanguage(props) {
         alreadySelectedTarLang,
         showTarLangModal,
         setshowTarLangModal,
-        handleTargetLangClick
+        handleTargetLangClick,
+        hideAddOrUpdateBtn
     } = props;
     
     const [modalTarOpened, setModalTarOpened] = useState(showTarLangModal ? true : false);
@@ -183,11 +184,13 @@ function TargetLanguage(props) {
                             }
                         </div> */}
                     </div>
-                    <div className={"text-end mt-4 "+(props?.alreadySelectedTarLang?.length !== 0  ? "selected-lang-wrap" : "")} style={{display:alreadySelectedTarLang == 'hide' ? 'none' : null }}>
-                        <button className="addAndUpdatebutton" onMouseUp={() => {props.handleTargetModalCloseBtn !== undefined ? props.handleTargetModalCloseBtn() : props.setshowTarLangModal(false); setSearchInput(''); setOnFocusWrap(false);}}>
-                            <span className="login-btn new-padd-style">{t("add_or_update")}</span>
-                        </button>
-                    </div>
+                    {!props.hideAddOrUpdateBtn && 
+                        <div className={"text-end mt-4 "+(props?.alreadySelectedTarLang?.length !== 0  ? "selected-lang-wrap" : "")} style={{display:alreadySelectedTarLang == 'hide' ? 'none' : null }}>
+                            <button className="addAndUpdatebutton" onMouseUp={() => {props.handleTargetModalCloseBtn !== undefined ? props.handleTargetModalCloseBtn() : props.setshowTarLangModal(false); setSearchInput(''); setOnFocusWrap(false);}}>
+                                <span className="login-btn new-padd-style">{t("add_or_update")}</span>
+                            </button>
+                        </div>
+                    }
                 </div>
             </React.Fragment>
         );
