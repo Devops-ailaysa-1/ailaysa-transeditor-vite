@@ -2103,7 +2103,7 @@ function ProjectCreation(props) {
     const getTaskTranslationProgress = (endpoint, taskId) => {
        const taskIdValue = taskId;
        Config.axios({
-            url: `https://api.staging.ailaysa.com/workspace/adaptive_file_translate/${projectId}`,
+            url: `${Config.BASE_URL}/workspace/adaptive_file_translate/${projectId}`,
             method: "GET",
             auth: true,
             success: (response) => {
@@ -2139,9 +2139,8 @@ function ProjectCreation(props) {
 
     const downloadTaskTargetFile = async(task_id) => {
         setIsDownloading(task_id);
-        // output_type = 'ORIGINAL';
-        // let url = `downloadTaskFile`;
-        let url = `https://api.staging.ailaysa.com/workspace_okapi/document/to/file/64?output_type=ORIGINAL`
+        type === 'ORIGINAL' ;
+        let url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_id}?output_type=${type}`; 
         const response = await Config.downloadFileFromApi(url);
         Config.downloadFileInBrowser(response)
         setIsDownloading(null)
@@ -2239,7 +2238,7 @@ function ProjectCreation(props) {
                         <path d="M12.3095 15.9998C12.3095 14.9705 12.6675 14.0978 13.3836 13.3817C14.0997 12.6656 14.9724 12.3075 16.0018 12.3075C14.9724 12.3075 14.0997 11.9495 13.3836 11.2334C12.6675 10.5173 12.3095 9.6446 12.3095 8.61523C12.3095 9.6446 11.9515 10.5173 11.2354 11.2334C10.5193 11.9495 9.64656 12.3075 8.61719 12.3075C9.64656 12.3075 10.5193 12.6656 11.2354 13.3817C11.9515 14.0978 12.3095 14.9705 12.3095 15.9998Z" fill="white"/>
                         </svg>
                         </span>
-                        New: Adaptiove Translation
+                        New: Adaptive Translation
                     </div>
                     }
                     <div className={"ai-translate-file-wrapper project-create-inner-container"} style={(showCreateLoader || translateDownloadBtnLoader) ? {pointerEvents: 'none'} : {}}>
