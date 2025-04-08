@@ -154,11 +154,11 @@ function AdvancedProjectType(props) {
         }
     }, [props?.mtEnable])
 
-    useEffect(() => {
-        if(adaptiveTransEnable) {
-            setTranslationByPage(false)
-        }
-    }, [adaptiveTransEnable])
+    // useEffect(() => {
+    //     if(adaptiveTransEnable) {
+    //         setTranslationByPage(false)
+    //     }
+    // }, [adaptiveTransEnable])
     
 
     const handlePageWiseTransOption = () => {
@@ -432,30 +432,31 @@ function AdvancedProjectType(props) {
                                                     preTranslate ? "disable opacity-60" : ""
                                                 ].join(' ')}
                                             >
+                                                {!adaptiveTransEnable &&
                                                 <div 
-                                                    className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3 mt-2"
-                                                    style={!props.mtEnable ? {pointerEvents: 'none', opacity: '0.5', paddingLeft: '10px'} : {paddingLeft: '10px'}}
-                                                >
-                                                        <>
-                                                            <label>{t("get_translation_by")}</label> &nbsp;
-                                                            <Radio
-                                                                checked={translationByPage}
-                                                                id="translate-by-page"
-                                                                className="radio-btn"
-                                                                size="small"
-                                                                onChange={handlePageWiseTransOption}
-                                                            /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
-                                                            &nbsp;&nbsp;
-                                                            <Radio
-                                                                checked={!translationByPage}
-                                                                id="translate-by-segment"
-                                                                onChange={() => setTranslationByPage(false)}
-                                                                size="small"
-                                                                className="radio-btn"
-                                                            /> <label htmlFor="translate-by-segment" className="assign-manage-radio">{t("sentence_one_by_one")}</label>
+                                                className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3 mt-2"
+                                                style={!props.mtEnable ? {pointerEvents: 'none', opacity: '0.5', paddingLeft: '10px'} : {paddingLeft: '10px'}} >
+                                                    <>
+                                                        <label>{t("get_translation_by")}</label> &nbsp;
+                                                        <Radio
+                                                            checked={translationByPage}
+                                                            id="translate-by-page"
+                                                            className="radio-btn"
+                                                            size="small"
+                                                            onChange={handlePageWiseTransOption}
+                                                        /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
+                                                        &nbsp;&nbsp;
+                                                        <Radio
+                                                            checked={!translationByPage}
+                                                            id="translate-by-segment"
+                                                            onChange={() => setTranslationByPage(false)}
+                                                            size="small"
+                                                            className="radio-btn"
+                                                        /> <label htmlFor="translate-by-segment" className="assign-manage-radio">{t("sentence_one_by_one")}</label>
 
-                                                        </>
+                                                    </>
                                                 </div>
+                                                }
                                             </div>
                                         </>
                                     }

@@ -1036,8 +1036,6 @@ function TranslateFiles(props) {
 
     /* Adding new project */
     const handleSubmit = (e, action) => {
-
-        // console.log(projectName);
         //Also check the handleUpdate
         e.preventDefault();
         let formData = new FormData();
@@ -1952,6 +1950,7 @@ function TranslateFiles(props) {
         formData.append("mt_enable", mtEnable);
         
         formData.append("isAdaptiveTranslation", adaptiveTransEnable);
+        formData.append("adaptive_file_translate", adaptiveTransEnable);
 
         primaryGlossarySourceName &&
             formData.append(

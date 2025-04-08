@@ -2186,19 +2186,18 @@ function ProjectCreation(props) {
                   <div className="translation-actions">
                         <div></div>
                         <div>
-                            {isFromView !== 'DOCUMENT_MODAL' &&
-                                <div style={{justifyItems: 'center'}}>
-                                    <div className="badge-title">
-                                    <span class="project-create-icon">
+                           <div style={{justifyItems: 'center'}}>
+                               <div className="badge-title">
+                                  <span class="project-create-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                             <path d="M6.15385 12.3077C6.15385 10.5921 6.75058 9.13753 7.94406 7.94406C9.13753 6.75058 10.5921 6.15385 12.3077 6.15385C10.5921 6.15385 9.13753 5.55711 7.94406 4.36364C6.75058 3.17016 6.15385 1.71562 6.15385 0C6.15385 1.71562 5.55711 3.17016 4.36364 4.36364C3.17016 5.55711 1.71562 6.15385 0 6.15385C1.71562 6.15385 3.17016 6.75058 4.36364 7.94406C5.55711 9.13753 6.15385 10.5921 6.15385 12.3077Z" fill="white"></path>
                                             <path d="M12.3095 15.9998C12.3095 14.9705 12.6675 14.0978 13.3836 13.3817C14.0997 12.6656 14.9724 12.3075 16.0018 12.3075C14.9724 12.3075 14.0997 11.9495 13.3836 11.2334C12.6675 10.5173 12.3095 9.6446 12.3095 8.61523C12.3095 9.6446 11.9515 10.5173 11.2354 11.2334C10.5193 11.9495 9.64656 12.3075 8.61719 12.3075C9.64656 12.3075 10.5193 12.6656 11.2354 13.3817C11.9515 14.0978 12.3095 14.9705 12.3095 15.9998Z" fill="white"></path>
                                         </svg>
-                                    </span>
-                                        New: Introducing Contextual Translator</div>
-                                    <div className="header-line">Start Translating Your Document Instantly and Effortlessly</div>
+                                  </span>
+                                  New: Introducing Contextual Translator
                                 </div>
-                            }
+                                <div className="header-line">Start Translating Your Document Instantly and Effortlessly</div>
+                             </div>
                         </div>
                         <div style={{alignContent: 'end'}}>
                             <button className="glossary-btn" onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
@@ -2969,16 +2968,14 @@ function ProjectCreation(props) {
                     )}
                     </div>
                     </div>
-                    {isFromView !== 'DOCUMENT_MODAL' && 
-                        <div class="tips-container">
-                            <div class="tips-header">Tips for Better Translation Results</div>
-                            <ul class="tips-list">
+                    <div class="tips-container">
+                        <div class="tips-header">Tips for Better Translation Results</div>
+                          <ul class="tips-list">
                             <li>Clear and well-structured sentences help our system deliver more accurate results.</li>
                             <li>Ensure the document is written in a single language to avoid confusion.</li>
                             <li>Include a glossary of key terms (like brand names, technical words, or phrases) before translation to ensure accurate and consistent results across your document.</li>
-                            </ul>
-                        </div>
-                    }
+                          </ul>
+                    </div>
                 </div>
             </div>
             {showSrcLangModal && (<Rodal
