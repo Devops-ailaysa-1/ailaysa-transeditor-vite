@@ -2095,15 +2095,16 @@ function ProjectCreation(props) {
        });
     }
 
-    const downloadTaskTargetFile = async () => {
+    const downloadTaskTargetFile = async (task_id) => {
         try {
-            setIsDownloading(true); 
-            const response = await Config.downloadFileFromApi(downloadTaskFile);
+            let url = `${Config.BASE_URL}/${downloadTaskFile}`
+            setIsDownloading(task_id); 
+            const response = await Config.downloadFileFromApi(url);
             Config.downloadFileInBrowser(response);
         } catch (error) {
             console.error("Download failed:", error);
         } finally {
-            setIsDownloading(false); 
+            setIsDownloading(null); 
         }
     };
 
@@ -2161,7 +2162,7 @@ function ProjectCreation(props) {
                      {isFromView !== 'DOCUMENT_MODAL' && 
                      <div className="workspace-button-container">
                        <button className="go-to-workspace-btn" onClick={() => { history(`/create/all-templates`)}}>
-                       Go to workspace
+                       Go to workflows
                        </button>
                     </div>
                     }
@@ -2431,7 +2432,7 @@ function ProjectCreation(props) {
                                                         />
                                                     </div>
                                                 </Tooltip>
-                                                {sourceTargetValidation.target && <small className="text-danger">{t("target_validation_note")}</small>}
+                                                {sourceTargetValidation.target && <small className="text-danger">{t("select_target_language-1")}</small>}
                                             </div>
                                         </div>
                                     </div>
@@ -2469,6 +2470,9 @@ function ProjectCreation(props) {
                                 )}
                                 <TabContent activeTab={fileUploadTabActive}>
                                     <TabPane tabId={1}>
+                                        {fileError != "" && (
+                                            <span className="text-danger mb-2">{fileError}</span>
+                                        )}
                                         {
                                             <>
                                                 <div
@@ -2902,7 +2906,7 @@ function ProjectCreation(props) {
                                                                                      disabled={task.percentage !== 100 || task?.id === isDownloading} // disable until 100%
                                                                                      onMouseUp={() => {
                                                                                      if (task.percentage === 100 && task?.id !== isDownloading) {
-                                                                                     downloadTaskTargetFile();
+                                                                                     downloadTaskTargetFile(task?.id);
                                                                                      }
                                                                                    }}
                                                                                  >
@@ -2939,9 +2943,11 @@ function ProjectCreation(props) {
                                         <GitHubBox onClick={handleShowVersionControlModal} />
                                     </TabPane>
                                 </TabContent>
-                                {files.length > 0 && projectTaskList.length ==  0 && (
-                                    <div className="continue-button-container">
-                                        <button className="continue-btn"  onMouseUp={(e) => handleSubmit(e)}>Start translation</button>
+                                {(!projectTaskList || projectTaskList.length === 0) && (
+                                   <div className="continue-button-container">
+                                     <button className="continue-btn" onMouseUp={(e) => handleSubmit(e)}>
+                                        Start translation
+                                      </button>
                                     </div>
                                 )}
                                 {projectTaskList?.find(each => !each.isProcessing) && (
