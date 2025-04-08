@@ -2097,8 +2097,9 @@ function ProjectCreation(props) {
 
     const downloadTaskTargetFile = async () => {
         try {
+            let url = `${Config.BASE_URL}/${downloadTaskFile}`
             setIsDownloading(true); 
-            const response = await Config.downloadFileFromApi(downloadTaskFile);
+            const response = await Config.downloadFileFromApi(url);
             Config.downloadFileInBrowser(response);
         } catch (error) {
             console.error("Download failed:", error);
@@ -2942,9 +2943,13 @@ function ProjectCreation(props) {
                                         <GitHubBox onClick={handleShowVersionControlModal} />
                                     </TabPane>
                                 </TabContent>
-                                <div className="continue-button-container">
-                                        <button className="continue-btn"  onMouseUp={(e) => handleSubmit(e)}>Start Translation</button>
-                                </div>
+                                {(!projectTaskList || projectTaskList.length === 0) && (
+                                   <div className="continue-button-container">
+                                     <button className="continue-btn" onMouseUp={(e) => handleSubmit(e)}>
+                                        Start Translation
+                                      </button>
+                                    </div>
+                                )}
                                 {projectTaskList?.find(each => !each.isProcessing) && (
                                     <div className="new-btn-grp">
                                         <Tooltip title="Creates a new project. Your current project will be saved in 'My projects'." arrow>
