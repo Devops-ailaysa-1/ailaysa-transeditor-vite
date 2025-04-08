@@ -2161,7 +2161,7 @@ function ProjectCreation(props) {
                      {isFromView !== 'DOCUMENT_MODAL' && 
                      <div className="workspace-button-container">
                        <button className="go-to-workspace-btn" onClick={() => { history(`/create/all-templates`)}}>
-                       Go to workspace
+                       Go to workflows
                        </button>
                     </div>
                     }
@@ -2431,7 +2431,7 @@ function ProjectCreation(props) {
                                                         />
                                                     </div>
                                                 </Tooltip>
-                                                {sourceTargetValidation.target && <small className="text-danger">{t("target_validation_note")}</small>}
+                                                {sourceTargetValidation.target && <small className="text-danger">{t("select_target_language-1")}</small>}
                                             </div>
                                         </div>
                                     </div>
@@ -2469,6 +2469,9 @@ function ProjectCreation(props) {
                                 )}
                                 <TabContent activeTab={fileUploadTabActive}>
                                     <TabPane tabId={1}>
+                                        {fileError != "" && (
+                                            <span className="text-danger mb-2">{fileError}</span>
+                                        )}
                                         {
                                             <>
                                                 <div
@@ -2939,11 +2942,9 @@ function ProjectCreation(props) {
                                         <GitHubBox onClick={handleShowVersionControlModal} />
                                     </TabPane>
                                 </TabContent>
-                                {files.length > 0 && projectTaskList.length ==  0 && (
-                                    <div className="continue-button-container">
+                                <div className="continue-button-container">
                                         <button className="continue-btn"  onMouseUp={(e) => handleSubmit(e)}>Start Translation</button>
-                                    </div>
-                                )}
+                                </div>
                                 {projectTaskList?.find(each => !each.isProcessing) && (
                                     <div className="new-btn-grp">
                                         <Tooltip title="Creates a new project. Your current project will be saved in 'My projects'." arrow>
