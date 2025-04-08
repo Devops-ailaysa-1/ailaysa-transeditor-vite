@@ -2941,7 +2941,7 @@ function ProjectCreation(props) {
                                 </TabContent>
                                 {files.length > 0 && projectTaskList.length ==  0 && (
                                     <div className="continue-button-container">
-                                        <button className="continue-btn"  onMouseUp={(e) => handleSubmit(e)}>Start Translation</button>
+                                        <button className="continue-btn"  onMouseUp={(e) => handleSubmit(e)}>Start translation</button>
                                     </div>
                                 )}
                                 {projectTaskList?.find(each => !each.isProcessing) && (

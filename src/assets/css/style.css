@@ -2122,7 +2122,7 @@ input[type="number"] {
     display: flex;
     flex-direction: row-reverse;
     gap: 12px;
-    padding-top: 5px;
+    padding-top: 28px;
 }
 
 .new-btn-grp .action-btns {
@@ -8231,6 +8231,8 @@ mark.highlight-selected {
     display: flex;
     align-items: center;
     gap: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 .translate-task-list .file-name-list span:hover{
@@ -20976,7 +20978,7 @@ ul.asset-list-wrapper li.asset-list-tile:hover .glossary-add-btn-wrap {
     width: auto;
     font-style: normal;
     font-weight: 500;
-    font-size: 16px;           
+    font-size: 22px;           
     color: #3C4043;
     line-height: 1.5;
     height: 34px;              
@@ -22589,7 +22591,8 @@ ul.share-row-list-outer>li.share-row-item span.share-icon-wrap:hover,
     flex-direction: column;
     gap: 0px;
     width: 100%;
-    margin: 45px auto auto auto;
+    margin-top: 0px
+    /* margin: 45px auto auto auto; */
 }
 
 .new-file-proj-setup-wrapper .input-form-field,
@@ -30499,10 +30502,11 @@ h4.history-seconday-wrap-header {
     text-transform: none !important;
     border: none !important;
     padding: 7px 15px !important;
+    min-width: 100px;
 }
 
 .file-name-list .convert-pdf-list-UploadProjectButton:hover {
-    background-color: #0074d3 !important;
+    background-color: #0265b1 !important;
     box-shadow: none !important;
 }
 
@@ -44521,10 +44525,12 @@ body{
 }
 
 .continue-btn {
-    padding: 6px 15px;
-    border: 1px solid #e0e0e0;
+    padding: 12px 24px;
+    border: none;
     border-radius: 4px;
     font-size: 14px;
+    font-weight: 500;
+    line-height: 14px; 
     cursor: pointer;
     background-color: #0074D3;
     color: white;
@@ -44536,7 +44542,7 @@ body{
 
 .continue-button-container {
     display: flex;
-    padding-top: 5px;
+    padding-top: 28px;
     justify-content: end;
 }
 
@@ -44549,7 +44555,7 @@ body{
 
 .project-create-inner-container {
     background: white;
-    padding: 20px;
+    padding: 28px;
     border-radius: 10px;
     position: relative;
 }
@@ -44629,12 +44635,12 @@ body{
  }
 
 .badge-title {
-    padding: 6px 30px;
+    padding: 6px 28px;
     margin: 5px;
-    background: linear-gradient(90deg, #0074d3, #5592ec);
+    background: linear-gradient(90deg, #0074d3, #2796FF);
     color: white;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
@@ -44644,8 +44650,8 @@ body{
 .header-line {
     margin-top: 16px;
     font-size: 22px;
-    font-weight: 550;
-    color: #333;
+    font-weight: 500;
+    color: #3C4043;
     text-align: center;
 }
 
@@ -44658,11 +44664,11 @@ body{
 
   .tips-header {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 13px;
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-    color: #222;
+    margin-bottom: 8px;
+    color: #3c4043;
   }
 
   .tips-header::before {
