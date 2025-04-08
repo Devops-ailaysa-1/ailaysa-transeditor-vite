@@ -135,6 +135,8 @@ const Breadcrumbs = () => {
                         params?.action === "my-list" ? `${t("my_list")}` 
                         : 
                         params?.menu === "wordchoice" ? `${t("wordchoice")}`
+                        :
+                        params?.menu === "translate-files" ? `Translate Files` 
                         : ""
                     }
                 </span>

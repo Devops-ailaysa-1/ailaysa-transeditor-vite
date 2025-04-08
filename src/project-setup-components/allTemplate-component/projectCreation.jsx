@@ -38,6 +38,7 @@ import { useDispatch } from "react-redux";
 import { setShowAilaysaGlossaryModal } from "../../features/ShowAilaysaGlossaryModalSlice";
 import { AilaysaGlossariesModal } from "../../vendor/model-select/Ailaysa-Glossaries/AilaysaGlossariesModal";
 import { useSelector } from "react-redux";
+import Breadcrumbs from "../Breadcrumbs";
 
 
 function ProjectCreation(props) {
@@ -210,7 +211,7 @@ function ProjectCreation(props) {
         { min: 80, max: 99, message: "Finishing" },
         { min: 99, max: 100, message: "Translation Complete"}
     ];
-    const [downloadTaskFile, setDownloadTaskTargetFile] = useState();
+    const [downloadTaskFile, setDownloadTaskTargetFile] = useState('');
 
     const searchAreaRef = useRef(null);
     const mtEngineOptionRef = useRef(null)
@@ -970,7 +971,7 @@ function ProjectCreation(props) {
                     let newArr = dashboardResponse.data?.map(obj => {
                         return {
                             ...obj,
-                            isProcessing: true
+                            isProcessing: false
                         }
                     })
                     projectTaskListRef.current = newArr 
@@ -1874,7 +1875,7 @@ function ProjectCreation(props) {
                 if(obj.id === task_id){
                     return {
                         ...obj,
-                        isProcessing: true,
+                        isProcessing: false,
                     }
                 }
                 return obj
@@ -1985,7 +1986,8 @@ function ProjectCreation(props) {
             let newArr = projectTaskListRef.current?.map(obj => {
                 if(obj.id === task_id){
                     return {
-                        ...obj
+                        ...obj,
+                        isProcessing: true
                     }
                 }
                 return obj
@@ -2006,49 +2008,6 @@ function ProjectCreation(props) {
                 if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
                     getTaskTranslationProgress(response.data.endpoint, task_id);
                 }
-                // if called with project_id, returns list if task_data
-                // if(response.data?.results !== undefined){
-                //     let dataList = response.data?.results
-                //     let newArr = projectTaskListRef.current?.map(obj => {
-                //         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
-                //             let status = dataList?.find(each => each.task === obj.id)?.status
-                //             return {
-                //                 ...obj,
-                //                 isProcessing: status == 400 ? true : false,
-                //                 status: status,
-                //             }
-                //         }
-                //         return obj
-                //     })
-                //     projectTaskListRef.current = newArr 
-                //     setProjectTaskList(newArr)
-                //     let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false;
-                //     let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false;
-                //     let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false;
-                //     if(isPageNumNotFound){
-                //         setShowFileErrorModal(true)
-                //         let newArr = projectTaskListRef.current?.map(obj => {
-                //             if(obj.status === 404){
-                //                 return {
-                //                     ...obj,
-                //                     isProcessing: false,
-                //                 }
-                //             }
-                //             return obj
-                //         })
-                //         projectTaskListRef.current = newArr 
-                //         setProjectTaskList(newArr)
-                //         return
-                //     }
-
-                //     if(insuffientCredit) setShowCreditAlertModal(true)
-
-                //     if(isAnyTaskIsProcessing){
-                //         setTimeout(() => {
-                //             getTaskTransDownloadStatus(task_id)
-                //         }, 5000);
-                //     }
-                // }
             },
             error: (err) => {
                 if(err?.response?.status === 500){
@@ -2077,7 +2036,7 @@ function ProjectCreation(props) {
     const getProgressData = (endpoint, taskId) => {
         setTimeout(() => {
             getTaskTranslationProgress(endpoint, taskId);
-        }, 10000);
+        }, 6000);
     }
 
     const updateProjectTaskList = (taskId, percentage, status) => {
@@ -2091,8 +2050,9 @@ function ProjectCreation(props) {
                     ...task,
                     percentage,
                     status,
-                    progressLoading: percentage !== 100,
-                    progressLabel: match ? match.message : ""
+                    progressLoading: percentage !== 100, 
+                    progressLabel: match ? match.message : "",
+                    isProcessing: false
                 };
             }
             return task;
@@ -2117,7 +2077,9 @@ function ProjectCreation(props) {
                     }
                     if (batch) {
                         updateProjectTaskList(taskIdValue, batch?.completed_percentage, batch?.status);
-                        if (batch?.status !== 'completed') {
+                        if (batch?.status === 'completed') {
+                            setDownloadTaskTargetFile(batch.download_file);
+                        } else {
                             getProgressData(endpoint, taskIdValue);
                         }
                     } else {
@@ -2126,9 +2088,6 @@ function ProjectCreation(props) {
                 } else {
                     getProgressData(endpoint, taskIdValue);
                 }
-                if(resultData && resultData?.batch_status === 'completed' && resultData.download_file) {
-                    setDownloadTaskTargetFile(resultData.download_file);
-                }
             },
             error: (err) => {
                 console.log(err);
@@ -2136,15 +2095,17 @@ function ProjectCreation(props) {
        });
     }
 
-
-    const downloadTaskTargetFile = async(task_id) => {
-        setIsDownloading(task_id);
-        type === 'ORIGINAL' ;
-        let url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_id}?output_type=${type}`; 
-        const response = await Config.downloadFileFromApi(url);
-        Config.downloadFileInBrowser(response)
-        setIsDownloading(null)
-    }
+    const downloadTaskTargetFile = async () => {
+        try {
+            setIsDownloading(true); 
+            const response = await Config.downloadFileFromApi(downloadTaskFile);
+            Config.downloadFileInBrowser(response);
+        } catch (error) {
+            console.error("Download failed:", error);
+        } finally {
+            setIsDownloading(false); 
+        }
+    };
 
     const handleGlossaryBtnEvent = () => {
         getDocumentDetailsById();
@@ -2160,7 +2121,7 @@ function ProjectCreation(props) {
     const getDocumentDetailsById = () => {
         // documentIdTemp = 47;
         Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/document_by_doc_id/${documetId}${(userDetails?.agency && location.state?.open_as !== undefined) ? `?step_id=${location.state?.open_as === 'editor' ? 1 : 2}` : ''}`,
+            url: `${Config.BASE_URL}/workspace_okapi/document_by_doc_id/${47}${(userDetails?.agency && location.state?.open_as !== undefined) ? `?step_id=${location.state?.open_as === 'editor' ? 1 : 2}` : ''}`,
             auth: true,
             success: (docResponse) => {
                 documentDetailsRef.current = docResponse.data;
@@ -2192,13 +2153,18 @@ function ProjectCreation(props) {
         <React.Fragment>
             <div className="ai-working-area-glb-wrapper">
                 <div className="file-trans-breadcrumbs-section">
+                {isFromView === 'DOCUMENT_MODAL' &&
+                  <Breadcrumbs />
+                }
                     {/* Project title area */}
                      {/* Workspace button */}
+                     {isFromView !== 'DOCUMENT_MODAL' && 
                      <div className="workspace-button-container">
                        <button className="go-to-workspace-btn" onClick={() => { history(`/create/all-templates`)}}>
                        Go to workspace
                        </button>
                     </div>
+                    }
                     <div className="project-header-container">
                      <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
                         <div
@@ -2216,8 +2182,27 @@ function ProjectCreation(props) {
                      </div>
                   </div>
                   {/* Glossary & Style buttons below the project title */}
-                  {/* <div className="translation-actions">
-                      <button className="glossary-btn" onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
+                  <div className="translation-actions">
+                        <div></div>
+                        <div>
+                            {isFromView !== 'DOCUMENT_MODAL' &&
+                                <div style={{justifyItems: 'center'}}>
+                                    <div className="badge-title">
+                                    <span class="project-create-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            <path d="M6.15385 12.3077C6.15385 10.5921 6.75058 9.13753 7.94406 7.94406C9.13753 6.75058 10.5921 6.15385 12.3077 6.15385C10.5921 6.15385 9.13753 5.55711 7.94406 4.36364C6.75058 3.17016 6.15385 1.71562 6.15385 0C6.15385 1.71562 5.55711 3.17016 4.36364 4.36364C3.17016 5.55711 1.71562 6.15385 0 6.15385C1.71562 6.15385 3.17016 6.75058 4.36364 7.94406C5.55711 9.13753 6.15385 10.5921 6.15385 12.3077Z" fill="white"></path>
+                                            <path d="M12.3095 15.9998C12.3095 14.9705 12.6675 14.0978 13.3836 13.3817C14.0997 12.6656 14.9724 12.3075 16.0018 12.3075C14.9724 12.3075 14.0997 11.9495 13.3836 11.2334C12.6675 10.5173 12.3095 9.6446 12.3095 8.61523C12.3095 9.6446 11.9515 10.5173 11.2354 11.2334C10.5193 11.9495 9.64656 12.3075 8.61719 12.3075C9.64656 12.3075 10.5193 12.6656 11.2354 13.3817C11.9515 14.0978 12.3095 14.9705 12.3095 15.9998Z" fill="white"></path>
+                                        </svg>
+                                    </span>
+                                        New: Introducing Contextual Translator</div>
+                                    <div className="header-line">Start Translating Your Document Instantly and Effortlessly</div>
+                                </div>
+                            }
+                        </div>
+                        <div style={{alignContent: 'end'}}>
+                            <button className="glossary-btn" onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
+                        </div>
+
                   </div>
 
                     { openGlossariesModal && 
@@ -2226,10 +2211,10 @@ function ProjectCreation(props) {
                             defaultGlossDetailsRef={defaultGlossDetailsRef}
                             getDefaultGlossDetails={getDefaultGlossDetails}
                         />
-                    } */}
+                    } 
 
                 </div>
-                <div className={`${isFromView !== 'DOCUMENT_MODAL' ? 'project-create-container' : ''}`}>
+                <div className={`${isFromView !== 'DOCUMENT_MODAL' && false ? 'project-create-container' : ''}`}>
                     {isFromView !== 'DOCUMENT_MODAL' && 
                         <div className="project-create-title">
                         <span className="project-create-icon">
@@ -2410,7 +2395,7 @@ function ProjectCreation(props) {
                                         <div className="form-fields">
                                             <div className="form-group">
                                                 <label htmlFor="exampleFormControlFile1">
-                                                    {t("target_languages")}<span className="asterik-symbol">*</span>
+                                                    {t("target_language")}<span className="asterik-symbol">*</span>
                                                 </label>
                                                 <Tooltip
                                                     arrow
@@ -2850,8 +2835,8 @@ function ProjectCreation(props) {
                                                     </>
                                                 }
                                                 {projectTaskList.length !==  0 &&
-                                                    <div className="translate-task-list" style={{ marginTop: 20}}>
-                                                        <div className="file-name-list">
+                                                    <div className="translate-task-list-file" style={{ marginTop: 20}}>
+                                                        <div className="file-name-list border-none">
                                                             <span className="lang-pair">
                                                                 <span>
                                                                     {sourceLabel}
@@ -2869,7 +2854,7 @@ function ProjectCreation(props) {
                                                                         {projectTaskList?.map((task) => (
                                                                             <div
                                                                                 key={task.id}
-                                                                                className="file-name-list"
+                                                                                className="file-name-list progress-cust"
                                                                             >
                                                                                 <div className="filename" style={{ alignItems: 'center' }}>
                                                                                     {
@@ -2900,8 +2885,7 @@ function ProjectCreation(props) {
                                                                                      <ProgressBar
                                                                                          progressValue={task.percentage || 0}
                                                                                          progressBarLabel={task.progressLabel || ''}
-                                                                                         progressBarWidth={'50%'}
-                                                                                         progressBarStyle={{ width: "50%", pr: "30px" }}
+                                                                                         progressBarStyle={{ width: "270px", pr: "30px" }}
                                                                                     />
                                                                                 ) : (
                                                                                  task.percentage === 100 && (
@@ -2918,7 +2902,7 @@ function ProjectCreation(props) {
                                                                                      disabled={task.percentage !== 100 || task?.id === isDownloading} // disable until 100%
                                                                                      onMouseUp={() => {
                                                                                      if (task.percentage === 100 && task?.id !== isDownloading) {
-                                                                                     downloadTaskTargetFile(task?.id);
+                                                                                     downloadTaskTargetFile();
                                                                                      }
                                                                                    }}
                                                                                  >
@@ -2927,16 +2911,19 @@ function ProjectCreation(props) {
                                                                                      {t("download")}
                                                                                  </span>
                                                                                    </button>
+                                                                                ) : task?.isProcessing ? (
+                                                                                    <ProgressAnimateButton />
                                                                                 ) : (
-                                                                                   <button
-                                                                                    className="convert-pdf-list-UploadProjectButton"
-                                                                                    type="submit"
-                                                                                    disabled={task?.progressLoading}
-                                                                                    onMouseUp={() => getTaskTransDownloadStatus(task?.id)}
-                                                                                 >
-                                                                               <span className="fileupload-new-btn">{t("translate")}</span>
-                                                                              </button>
-                                                                              )}
+                                                                                    <button
+                                                                                        className="convert-pdf-list-UploadProjectButton"
+                                                                                        type="submit"
+                                                                                        disabled={task?.progressLoading}
+                                                                                        onMouseUp={() => getTaskTransDownloadStatus(task?.id)}
+                                                                                    >
+                                                                                    <span className="fileupload-new-btn">{t("translate")}</span>
+                                                                                    </button>
+                                                                                )
+                                                                              }
                                                                             </div>
                                                                         ))}
                                                                     </div>
@@ -2976,6 +2963,16 @@ function ProjectCreation(props) {
                     )}
                     </div>
                     </div>
+                    {isFromView !== 'DOCUMENT_MODAL' && 
+                        <div class="tips-container">
+                            <div class="tips-header">Tips for Better Translation Results</div>
+                            <ul class="tips-list">
+                            <li>Clear and well-structured sentences help our system deliver more accurate results.</li>
+                            <li>Ensure the document is written in a single language to avoid confusion.</li>
+                            <li>Include a glossary of key terms (like brand names, technical words, or phrases) before translation to ensure accurate and consistent results across your document.</li>
+                            </ul>
+                        </div>
+                    }
                 </div>
             </div>
             {showSrcLangModal && (<Rodal
