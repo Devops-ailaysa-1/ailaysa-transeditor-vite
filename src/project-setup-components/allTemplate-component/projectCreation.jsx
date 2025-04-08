@@ -2095,16 +2095,16 @@ function ProjectCreation(props) {
        });
     }
 
-    const downloadTaskTargetFile = async () => {
+    const downloadTaskTargetFile = async (task_id) => {
         try {
             let url = `${Config.BASE_URL}/${downloadTaskFile}`
-            setIsDownloading(true); 
+            setIsDownloading(task_id); 
             const response = await Config.downloadFileFromApi(url);
             Config.downloadFileInBrowser(response);
         } catch (error) {
             console.error("Download failed:", error);
         } finally {
-            setIsDownloading(false); 
+            setIsDownloading(null); 
         }
     };
 
@@ -2906,7 +2906,7 @@ function ProjectCreation(props) {
                                                                                      disabled={task.percentage !== 100 || task?.id === isDownloading} // disable until 100%
                                                                                      onMouseUp={() => {
                                                                                      if (task.percentage === 100 && task?.id !== isDownloading) {
-                                                                                     downloadTaskTargetFile();
+                                                                                     downloadTaskTargetFile(task?.id);
                                                                                      }
                                                                                    }}
                                                                                  >
