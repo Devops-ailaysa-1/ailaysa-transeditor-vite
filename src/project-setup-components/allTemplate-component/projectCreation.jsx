@@ -2946,7 +2946,7 @@ function ProjectCreation(props) {
                                 {(!projectTaskList || projectTaskList.length === 0) && (
                                    <div className="continue-button-container">
                                      <button className="continue-btn" onMouseUp={(e) => handleSubmit(e)}>
-                                        Start Translation
+                                        Start translation
                                       </button>
                                     </div>
                                 )}
