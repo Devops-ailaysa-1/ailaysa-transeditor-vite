@@ -2547,7 +2547,7 @@ function ProjectCreation(props) {
                                                           <span className="supported-file-tooltip">
                                                              {t(("supported_file_formats"))}:
                                                          </span>
-                                                         <span className="supported-file-tooltip"> TXT,DOCX</span>
+                                                         <span className="supported-file-tooltip"> TXT, DOCX</span>
                                                        </div>
                                                      </div>
                                                      <div className="file-upload_instruct-row">
@@ -2895,7 +2895,7 @@ function ProjectCreation(props) {
                                                                                  task.percentage === 100 && (
                                                                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
                                                                                     <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
-                                                                                   <span style={{ color: 'green', fontWeight: 'bold' }}>Translation Completed</span>
+                                                                                   <span style={{ color: '#3c4043', fontWeight: '500' }}>Translation completed</span>
                                                                                 </div>
                                                                                  )
                                                                                )}
@@ -2954,7 +2954,7 @@ function ProjectCreation(props) {
                                     <div className="new-btn-grp">
                                         <Tooltip title="Creates a new project. Your current project will be saved in 'My projects'." arrow>
                                           <button 
-                                            className="convert-pdf-list-UploadProjectButton" 
+                                            className="reset-button" 
                                             type="submit"
                                             onClick={() => resetForm()}>
                                             <span className="fileupload-new-btn">

@@ -8215,7 +8215,7 @@ mark.highlight-selected {
     font-weight: 500;
     font-size: 14px;
     line-height: 14px;
-    color: #ffffff;
+    color: #3c4043;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -30520,6 +30520,21 @@ h4.history-seconday-wrap-header {
     border: none !important;
 }
 
+.reset-button{
+    background-color: #F0F0F0;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 3px;
+}
+
+.reset-button:hover{
+    background-color: #E7E7E7;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 3px;
+}
+
+
 .convert-pdf-list-UploadProjectButton:hover {
     background-color: #0074d3 !important;
     box-shadow: none !important;
@@ -44611,6 +44626,12 @@ body{
     border-radius: 3px !important;
     text-transform: none !important;
     padding: 7px 15px !important;
+    border: none !important;
+    min-width: 100px;
+}
+
+.translate-download-btn:hover {
+    background-color: #008435 !important;
     border: none !important;
 }
 
