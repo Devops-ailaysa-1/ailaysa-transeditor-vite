@@ -37,6 +37,8 @@ import ProgressBar from "./ProgressBar";
 import { useDispatch } from "react-redux";
 import { setShowAilaysaGlossaryModal } from "../../features/ShowAilaysaGlossaryModalSlice";
 import { AilaysaGlossariesModal } from "../../vendor/model-select/Ailaysa-Glossaries/AilaysaGlossariesModal";
+import { SimpleTranslateGlossaryModal } from "../../vendor/model-select/Ailaysa-Glossaries/simple-translate-glossary";
+import { setSimpleTranslateGlossaryModal } from "../../features/SimpleTranslateGlossaryModalSlice";
 import { useSelector } from "react-redux";
 import Breadcrumbs from "../Breadcrumbs";
 
@@ -71,6 +73,9 @@ function ProjectCreation(props) {
     const [selectedMTEngine, setSelectedMTEngine] = useState({});
     const [sourceLanguage, setSourceLanguage] = useState("");
     const [targetLanguage, setTargetLanguage] = useState("");
+    const [backupSourceLanguage, setBackupSourceLanguage] = useState("");
+    const [backupTargetLanguage, setBackupTargetLanguage] = useState("");
+    const [isLanguageChanges, setIsLanguageChanges] = useState(false);
     const [subjectField, setSubjectField] = useState([]);
     const [contentType, setContentType] = useState([]);
     const [deadline, setDeadline] = useState("");
@@ -212,6 +217,9 @@ function ProjectCreation(props) {
         { min: 99, max: 100, message: "Translation Complete"}
     ];
     const [downloadTaskFile, setDownloadTaskTargetFile] = useState('');
+    const [glossaryProjectId, setGlossaryProjectId] = useState(null);
+    const [glossaryTaskId, setGlossaryTaskId] = useState(null);
+    const [defaultGlossaryProjectId, setDefaultGlossaryProjectId] = useState(null);
 
     const searchAreaRef = useRef(null);
     const mtEngineOptionRef = useRef(null)
@@ -979,6 +987,17 @@ function ProjectCreation(props) {
                     setProjectId(proj_id);
                     // getProjectTransDownloadStatus()
                     return;
+                } else if (action === 'GLOSSARY') {
+                    console.log(dashboardResponse);
+                    const glossaryData = dashboardResponse.data[0];
+                    setGlossaryTaskId(glossaryData.id);
+                    const defaultGlossary = {
+                        // gloss_id: glossaryProjectId,
+                        gloss_job_id: glossaryData.job,
+                        gloss_task_id: glossaryData.id,
+                        gloss_project_id: glossaryProjectId
+                    };
+                    defaultGlossDetailsRef.current = defaultGlossary;
                 }
             },
             error: (err) => { }
@@ -1331,6 +1350,7 @@ function ProjectCreation(props) {
 
         formData.append("mt_enable", mtEnable);
         formData.append("isAdaptiveTranslation", adaptiveTransEnable);
+        formData.append("default_gloss_project_id", defaultGlossaryProjectId)
 
         formData.append("pre_translate", preTranslate);
         if(mtEnable) formData.append("get_mt_by_page", translationByPage);
@@ -1388,6 +1408,60 @@ function ProjectCreation(props) {
                 contentprojectNameRef.current.innerText = response.data.project_name;
                 getProjectTaskData(response.data.id, action);
                 Config.toast("Project created successfully");
+                return;
+            },
+            error: (err) => {
+                if (err?.response?.data?.files) {
+                    Config.toast(t("submitted_file_empty"), 'warning')
+                }
+                setShowCreateLoader(false);
+                setTranslateDownloadBtnLoader(false)
+            }
+        });
+    };
+
+    const handleGlossarySubmit = (isLanguageChanges) => {
+        // e.preventDefault();
+        let formData = new FormData();
+        formData.append("project_type", 3);
+        formData.append("source_language", sourceLanguage);
+        targetLanguage.map((eachTargetLanguage) => {
+            formData.append("target_languages", eachTargetLanguage?.id);
+        });
+        formData.append("mt_enable", mtEnable);
+        formData.append("primary_glossary_source_name", "");
+        formData.append("source_Copyright_owner", "");
+        formData.append("details_of_PGS", "");
+        formData.append("notes", "");
+        formData.append("usage_permission", "Private");
+        formData.append("public_license", "");
+        formData.append("steps", 1);
+
+        let url = Config.BASE_URL + "/workspace/project/quick/setup/";
+        if (isLanguageChanges) {
+            formData.append("glossary_job_update", true);
+            url += `${glossaryProjectId}/?step_delete_ids=&file_delete_ids=&job_delete_ids=&subject_delete_ids=&project_type_id=3`;
+        }
+
+        Config.axios({
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                Accept: "application/json",
+                "Content-Type":
+                    "multipart/form-data; boundary=---------------------------735323031399963166993862150",
+            },
+            url: url,
+            method: isLanguageChanges ? "PUT" : "POST",
+            data: formData,
+            auth: true,
+            success: (response) => {
+                setGlossaryProjectId(response.data.id);
+                setDefaultGlossaryProjectId(response.data.glossary_proj_id);
+                getProjectTaskData(response.data.id, "GLOSSARY");
+                Config.toast("Glossary Project created successfully");
+
+                setBackupSourceLanguage(formData.get("source_language"));
+                setBackupTargetLanguage(formData.get("target_languages"));
                 return;
             },
             error: (err) => {
@@ -1525,6 +1599,7 @@ function ProjectCreation(props) {
         });
         formData.append("team", hasTeam);
         formData.append("adaptive_file_translate", true);
+        formData.append("default_gloss_project_id", )
         if (fileUrl != "") formData.append("url", fileUrl);
         let url = "";
         if (fileUrl == "")
@@ -2109,45 +2184,72 @@ function ProjectCreation(props) {
     };
 
     const handleGlossaryBtnEvent = () => {
-        getDocumentDetailsById();
-        dispatch(setShowAilaysaGlossaryModal(true))
+        // getDocumentDetailsById();
+        if (sourceLanguage == "") {
+            setSourceTargetValidation({
+                ...sourceTargetValidation,
+                source: true,
+            });
+            return;
+        }
+        if (targetLanguage == "") {
+            setSourceTargetValidation({
+                ...sourceTargetValidation,
+                target: true
+            });
+            return;
+        }
+
+        let isLanguageChanges = false;
+        if (glossaryProjectId) {
+            isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage != "" ? targetLanguage[0] : "");
+        }
+        if (!glossaryProjectId || isLanguageChanges) handleGlossarySubmit(isLanguageChanges);
+        setOpenGlossariesModal(true);
+        dispatch(setSimpleTranslateGlossaryModal(true));
     };
 
-    const getDocumentId = () => {
-        const batch = translateData?.batch_status[0];
-        return batch.document_id;
+    const checkIsLanguageChanges = (sourceLanguageValue, targetLanguageValue) => {
+        if ((Number(backupSourceLanguage) != Number(sourceLanguageValue)) || (Number(backupTargetLanguage) != Number(targetLanguageValue.id)))
+            return true;
+        else return false;
     }
 
-    /* Get the docuement details by document id */
-    const getDocumentDetailsById = () => {
-        // documentIdTemp = 47;
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace_okapi/document_by_doc_id/${47}${(userDetails?.agency && location.state?.open_as !== undefined) ? `?step_id=${location.state?.open_as === 'editor' ? 1 : 2}` : ''}`,
-            auth: true,
-            success: (docResponse) => {
-                documentDetailsRef.current = docResponse.data;
-                setOpenGlossariesModal(true)
-                if(!isEnterprise) getDefaultGlossDetails()
-            },
-            error: (err) => {
-                if (err.response?.data?.detail) {
-                    // history("/file-upload");
-                }
-            }
-        });
-    };
+    // const getDocumentId = () => {
+    //     const batch = translateData?.batch_status[0];
+    //     return batch.document_id;
+    // }
+
+   /* Get the docuement details by document id */
+//     const getDocumentDetailsById = () => {
+//         // documentIdTemp = 47;
+//         Config.axios({
+//             url: `${Config.BASE_URL}/workspace_okapi/document_by_doc_id/${47}${(userDetails?.agency && location.state?.open_as !== undefined) ? `?step_id=${location.state?.open_as === 'editor' ? 1 : 2}` : ''}`,
+//             auth: true,
+//             success: (docResponse) => {
+//                 documentDetailsRef.current = docResponse.data;
+//                 setOpenGlossariesModal(true)
+//                 if(!isEnterprise) getDefaultGlossDetails()
+//             },
+//             error: (err) => {
+//                 if (err.response?.data?.detail) {
+//                     // history("/file-upload");
+//                 }
+//             }
+//         });
+//     };
 
     const getDefaultGlossDetails = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
-            auth: true,
-            success: (response) => {
-                defaultGlossDetailsRef.current = response.data
-            },
-            error: (err) => {
-                // setisGlossaryListLoading(false)
-            }
-        });
+        // Config.axios({
+        //     url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
+        //     auth: true,
+        //     success: (response) => {
+        //         defaultGlossDetailsRef.current = response.data
+        //     },
+        //     error: (err) => {
+        //         // setisGlossaryListLoading(false)
+        //     }
+        // });
     } 
 
     return (
@@ -2188,7 +2290,7 @@ function ProjectCreation(props) {
                         <div>
                            <div style={{justifyItems: 'center'}}>
                                <div className="badge-title">
-                                  <span class="project-create-icon">
+                                  <span className="project-create-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                             <path d="M6.15385 12.3077C6.15385 10.5921 6.75058 9.13753 7.94406 7.94406C9.13753 6.75058 10.5921 6.15385 12.3077 6.15385C10.5921 6.15385 9.13753 5.55711 7.94406 4.36364C6.75058 3.17016 6.15385 1.71562 6.15385 0C6.15385 1.71562 5.55711 3.17016 4.36364 4.36364C3.17016 5.55711 1.71562 6.15385 0 6.15385C1.71562 6.15385 3.17016 6.75058 4.36364 7.94406C5.55711 9.13753 6.15385 10.5921 6.15385 12.3077Z" fill="white"></path>
                                             <path d="M12.3095 15.9998C12.3095 14.9705 12.6675 14.0978 13.3836 13.3817C14.0997 12.6656 14.9724 12.3075 16.0018 12.3075C14.9724 12.3075 14.0997 11.9495 13.3836 11.2334C12.6675 10.5173 12.3095 9.6446 12.3095 8.61523C12.3095 9.6446 11.9515 10.5173 11.2354 11.2334C10.5193 11.9495 9.64656 12.3075 8.61719 12.3075C9.64656 12.3075 10.5193 12.6656 11.2354 13.3817C11.9515 14.0978 12.3095 14.9705 12.3095 15.9998Z" fill="white"></path>
@@ -2206,10 +2308,11 @@ function ProjectCreation(props) {
                   </div>
 
                     { openGlossariesModal && 
-                        <AilaysaGlossariesModal 
-                            documentDetails={documentDetailsRef.current}
+                        <SimpleTranslateGlossaryModal 
+                            documentDetails={{}}//documentDetailsRef.current}
                             defaultGlossDetailsRef={defaultGlossDetailsRef}
                             getDefaultGlossDetails={getDefaultGlossDetails}
+                            glossTaskId={glossaryTaskId}
                         />
                     } 
 

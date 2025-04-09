@@ -51,6 +51,7 @@ import * as Sentry from "@sentry/react";
 import SpellCheckHtmlDataSlice from './features/SpellCheckHtmlDataSlice';
 import ShowAdaptiveTransIntroModalReducer from './features/ShowAdaptiveTransIntroModalSlice';
 import showTranslateDocumentModalReducer from './features/ShowTranslateDocumentModalSlice';
+import SimpleTranslateGlossaryModalReducer from './features/SimpleTranslateGlossaryModalSlice'
 
 const store = configureStore({
   reducer: {
@@ -78,6 +79,7 @@ const store = configureStore({
 	spellCheckData:SpellCheckHtmlDataSlice,
 	showAdaptiveTransIntroModal: ShowAdaptiveTransIntroModalReducer,
 	showTranslateDocumentModal: showTranslateDocumentModalReducer,
+	showSimpleTranslateGlossaryModal: SimpleTranslateGlossaryModalReducer,
 	...writerReducers   
   }
 })

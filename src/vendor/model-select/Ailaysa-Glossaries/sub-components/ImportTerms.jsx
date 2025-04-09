@@ -21,12 +21,15 @@ export const ImportTerms = (props) => {
         getSelectedGlossaries,
         setActiveScreen,
         showExtractTermsOption,
-        defaultGlossDetailsRef
+        defaultGlossDetailsRef,
+        excludedTermsOption,
+        defaultActiveImportTab,
+        isFrom
     } = props
 
     const {t} = useTranslation()
 
-    const [activeImportTab, setActiveImportTab] = useState(1)
+    const [activeImportTab, setActiveImportTab] = useState(defaultActiveImportTab ? defaultActiveImportTab : 1)
     const [isGlossaryListLoading, setIsGlossaryListLoading] = useState(false)
     const [checkedGlossary, setCheckedGlossary] = useState([])
     const [isGlossaryChanged, setIsGlossaryChanged] = useState(false)
@@ -189,8 +192,11 @@ export const ImportTerms = (props) => {
         for (let x = 0; x < filesList.length; x++) {
             if (typeof filesList[x] != "undefined") formData.append("glossary_file", filesList[x]);
         }
-       
-        formData.append("task_id", taskId);
+        if (isFrom === "simpleGlossary") {
+            formData.append("job", taskId);
+        } else {
+            formData.append("task_id", taskId);
+        }
         setIsUploading(true)
 
         Config.axios({
@@ -371,7 +377,7 @@ export const ImportTerms = (props) => {
             <AITab
                 onChange={handleOnTabChange} 
                 activeTab={activeImportTab}
-                dataList={importTermsTabList?.filter(item => showExtractTermsOption ? true : item.value !== 2)}
+                dataList={importTermsTabList?.filter(item => !excludedTermsOption?.includes(item.value))}
                 customClass="mb-4 w-2/5"
             />
             <div className="asset-glossary-list-wrapper">
@@ -543,7 +549,7 @@ export const ImportTerms = (props) => {
                                                     <span className='file-status-tag error ml-auto'>{t("failed")}</span>
                                                 )}
                                                 {file?.status === "PENDING" && (
-                                                    <ProgressAnimateButton name={t("uploading")} customclass="ml-auto cursor-default" />
+                                                    <ProgressAnimateButton name={t("extracting")} customclass="ml-auto cursor-default" />
                                                 )}
                                             </div>
                                         </li>
@@ -569,7 +575,7 @@ export const ImportTerms = (props) => {
                         {
                             activeImportTab === 1 ? t("save") : 
                             activeImportTab === 2 ? t("extract_term") : 
-                            activeImportTab === 3 && (isUploading ? t("uploading") : t("upload")) 
+                            activeImportTab === 3 && (isUploading ? t("extracting ") : t("extract")) 
                         }
                         
                     </span>

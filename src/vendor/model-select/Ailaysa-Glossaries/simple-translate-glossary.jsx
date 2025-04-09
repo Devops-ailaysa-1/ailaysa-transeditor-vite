@@ -10,65 +10,43 @@ import { ImportTerms } from './sub-components/ImportTerms';
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import { useSelector, useDispatch } from 'react-redux';
-import { setShowAilaysaGlossaryModal } from '../../../features/ShowAilaysaGlossaryModalSlice';
+import { setSimpleTranslateGlossaryModal } from '../../../features/SimpleTranslateGlossaryModalSlice';
 import Config from '../../Config';
 
-export const AilaysaGlossariesModal = (props) => {
+export const SimpleTranslateGlossaryModal = (props) => {
 
-    let { documentDetails, defaultGlossDetailsRef, getDefaultGlossDetails } = props
+    let { documentDetails, defaultGlossDetailsRef, getDefaultGlossDetails, glossTaskId } = props
 
     const {t} = useTranslation()
     const dispatch = useDispatch()
     
-    const showAilaysaGlossaryModal = useSelector(state => state.showAilaysaGlossaryModal.value)
+    const showSimpleTranslateGlossaryModal = useSelector(state => state.showSimpleTranslateGlossaryModal.value)
 
     const [activeScreen, setActiveScreen] = useState(1);
-    const [defaultGlossDetails, setDefaultGlossDetails] = useState(null);
     const [glossaryList, setGlossaryList] = useState([])
     const [selectedGlossaryList, setSelectedGlossaryList] = useState([])
     const projectFilesListRef = useRef([])
 
     useEffect(() => {
-        if(showAilaysaGlossaryModal && documentDetails){
+        if(showSimpleTranslateGlossaryModal && documentDetails){
             setActiveScreen(1)
         }
-    }, [showAilaysaGlossaryModal, documentDetails])
+    }, [showSimpleTranslateGlossaryModal, documentDetails])
 
     useEffect(() => {
-        if(showAilaysaGlossaryModal){
-            setDefaultGlossDetails(defaultGlossDetailsRef?.current)
-            getGlossaryList()
-            getSelectedGlossaries()
-            getProjectFiles()
-        }
-    }, [defaultGlossDetailsRef?.current, showAilaysaGlossaryModal])
-    
-    useEffect(() => {
-        if(showAilaysaGlossaryModal){
+        if(showSimpleTranslateGlossaryModal){
             setTimeout(() => {
                 getDefaultGlossDetails()
             }, 1000);
         }
-    }, [showAilaysaGlossaryModal])
+    }, [showSimpleTranslateGlossaryModal])
     
-
+    /**
+     * This method used to close the glossary modal popup update the state value.
+     */
     const closeGlossaryModal = () => {
-        dispatch(setShowAilaysaGlossaryModal(false))
+        dispatch(setSimpleTranslateGlossaryModal(false))
     } 
-
-    const getGlossaryList = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary&task=${documentDetails.task_id}`,
-            auth: true,
-            success: (response) => {
-                let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef?.current?.gloss_id)
-                setGlossaryList(res)
-            },
-            error: (err) => {
-                // setisGlossaryListLoading(false)
-            }
-        });
-    };
 
     const getSelectedGlossaries = () => {
         Config.axios({
@@ -87,28 +65,13 @@ export const AilaysaGlossariesModal = (props) => {
         });
     };
 
-    const getProjectFiles = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace/files_jobs/${documentDetails.project}/?task=${documentDetails.task_id}`,
-            auth: true,
-            success: (response) => {
-                try {
-                    // exclude the pdf files from the list - pdf files can't be used for term extraction
-                    let list = response.data.files.filter(each => each.filename.split('.')[1].toLowerCase() !== 'pdf')
-                    projectFilesListRef.current = list
-                } catch(e) {
-                    console.log(e)
-                }
-            },
-        });
-    }
 
     return (
         <>
-            {showAilaysaGlossaryModal && (
+            {showSimpleTranslateGlossaryModal && (
                 <Rodal
                     className="prompt-library-modal" 
-                    visible={showAilaysaGlossaryModal} 
+                    visible={showSimpleTranslateGlossaryModal} 
                     onClose={closeGlossaryModal}
                     showCloseButton={false}
                 >
@@ -147,7 +110,7 @@ export const AilaysaGlossariesModal = (props) => {
                             {activeScreen === 1 ? (
                                 <AilaysaNewGlossEditingArea 
                                     setActiveScreen={setActiveScreen}
-                                    glossTaskId={defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails.task_id}
+                                    glossTaskId={glossTaskId} //{defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails.task_id}
                                 />
                             ) : (
                                 <ImportTerms 
@@ -155,12 +118,14 @@ export const AilaysaGlossariesModal = (props) => {
                                     selectedGlossaryList={selectedGlossaryList}
                                     projectFilesListRef={projectFilesListRef}
                                     projectId={documentDetails.project}
-                                    taskId={documentDetails.task_id}
+                                    taskId={defaultGlossDetailsRef?.current?.gloss_job_id} //{documentDetails.task_id}
                                     showExtractTermsOption={[17]?.includes(documentDetails.source_language_id )  ? true : false}
                                     getSelectedGlossaries={getSelectedGlossaries}
                                     setActiveScreen={setActiveScreen}
                                     defaultGlossDetailsRef={defaultGlossDetailsRef}
-                                    excludedTermsOption={[[17]?.includes(documentDetails.source_language_id )  ? 0 : 2]}
+                                    excludedTermsOption={[1,2]}
+                                    defaultActiveImportTab={3}
+                                    isFrom = {"simpleGlossary"}
                                 />
                             )}
                         </div>
