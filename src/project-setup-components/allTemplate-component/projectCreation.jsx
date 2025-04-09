@@ -1350,8 +1350,8 @@ function ProjectCreation(props) {
 
         formData.append("mt_enable", mtEnable);
         formData.append("isAdaptiveTranslation", adaptiveTransEnable);
-        formData.append("default_gloss_project_id", defaultGlossaryProjectId)
-
+        if(defaultGlossaryProjectId) formData.append("default_gloss_project_id", defaultGlossaryProjectId)
+        
         formData.append("pre_translate", preTranslate);
         if(mtEnable) formData.append("get_mt_by_page", translationByPage);
 
@@ -1599,7 +1599,6 @@ function ProjectCreation(props) {
         });
         formData.append("team", hasTeam);
         formData.append("adaptive_file_translate", true);
-        formData.append("default_gloss_project_id", )
         if (fileUrl != "") formData.append("url", fileUrl);
         let url = "";
         if (fileUrl == "")
