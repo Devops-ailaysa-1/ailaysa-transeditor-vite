@@ -220,6 +220,12 @@ const AilaysaNewGlossEditingArea = (props) => {
         border: '1px solid #cccccc'
     }
 
+    useEffect(() => {
+        if(glossTaskId){
+            setselectedTaskItem({value: glossTaskId})
+        }
+    }, [glossTaskId])
+
     useImperativeHandle(newGlossEditingImperativeRef, () => {
         return {
             getSelectedTaskItem: () => {
@@ -227,13 +233,6 @@ const AilaysaNewGlossEditingArea = (props) => {
             }
         }
     })
-
-    useEffect(() => {
-        if(glossTaskId){
-            setselectedTaskItem({value: glossTaskId})
-        }
-    }, [glossTaskId])
-    
 
     useEffect(() => {
         if(languageOptionsList?.length){

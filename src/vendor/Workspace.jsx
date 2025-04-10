@@ -909,7 +909,7 @@ function Workspace(props) {
         if (didMount) {
             if (targetLanguageCode != "") {
                 
-                translatedResponse.map((value, key) => {
+                translatedResponse?.map((value, key) => {
                     if (enableIME) {
                         // If enabled
                         targetContentEditable.current[value.segment_id].current.value = targetContentEditable.current[value.segment_id].current.innerText;
@@ -1118,16 +1118,16 @@ function Workspace(props) {
                 setTimeout(() => {
                     //targetContentEditable Ref's assigned
                     // console.log(targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current);
-                    if (targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current !== null) {
+                    if (targetContentEditable?.current[translatedResponse?.[0]?.segment_id]?.current !== null) {
                         
                         // focus the first segment if moved by confirming the last segment manually  
                         if(isMovedFromLastSegmentConfirmRef.current){
-                            targetContentEditable.current[translatedResponse[0]?.segment_id]?.current?.focus();
+                            targetContentEditable.current[translatedResponse?.[0]?.segment_id]?.current?.focus();
                             isMovedFromLastSegmentConfirmRef.current = false
                         }
                         if (Cookies.get('isProductTourSeen') == undefined) {
                             if (isWorkspaceEditable) {
-                                targetContentEditable.current[translatedResponse[0]?.segment_id]?.current?.focus();
+                                targetContentEditable.current[translatedResponse?.[0]?.segment_id]?.current?.focus();
                             }
                         }
                         // didMountRef.current = false
@@ -2114,8 +2114,8 @@ useEffect(() => {
 
     /* Get the next segment's data by current segment id */
     const getNextSegmentData = (currentDivId = null) => {
-        let index = translatedResponse.findIndex((element) => element.segment_id == currentDivId);
-        if (index != -1) return translatedResponse[index + 1];
+        let index = translatedResponse?.findIndex((element) => element.segment_id == currentDivId);
+        if (index != -1) return translatedResponse?.[index + 1];
         return null;
     };
 
@@ -2671,15 +2671,13 @@ useEffect(() => {
 
     /* Create refs for each target contenteditable */
     const createTargetContentEditableRefs = () => {
-        for (let i = 0; i < translatedResponse.length; i++) {
-            // if (typeof targetContentEditable?.current[translatedResponse[i].segment_id] == 'undefined') {
+        for (let i = 0; i < translatedResponse?.length; i++) {
             sourceTextDiv.current[translatedResponse[i].segment_id] = createRef();
             targetContentEditable.current[translatedResponse[i].segment_id] = createRef();
             savedStatus.current[translatedResponse[i].segment_id] = createRef();
             notSavedStatus.current[translatedResponse[i].segment_id] = createRef();
             workspaceRow.current[translatedResponse[i].segment_id] = createRef();
             saveBtn.current[translatedResponse[i].segment_id] = createRef();
-            // }
         }
     };
 
@@ -3639,8 +3637,8 @@ useEffect(() => {
             if (!isShowTags.current)
                 translatedText =
                     translatedText +
-                    (translatedResponse.find((element) => element.segment_id == id)?.target_tags
-                        ? translatedResponse.find((element) => element.segment_id == id)?.target_tags
+                    (translatedResponse?.find((element) => element.segment_id == id)?.target_tags
+                        ? translatedResponse?.find((element) => element.segment_id == id)?.target_tags
                         : ""); //Added for not to show tags
             // console.log(translatedText)
             formData.append(formDataKey, translatedText == 'undefined' ? "" : unescape(translatedText));
@@ -3799,6 +3797,13 @@ useEffect(() => {
             method: "GET",
             auth: true,
             success: (response) => {
+                if(response?.data?.response === 'Adaptive translation is already in progress. Please wait.'){
+                    setIsSegmentPageLoading(true);
+                    setTimeout(() => {
+                        listSegments();
+                    }, 5000);
+                    return;
+                }
                 setTimeout(() => {
                     setIsSegmentLoading(false);
                 }, 200);
@@ -3833,6 +3838,7 @@ useEffect(() => {
                 if (from === 'confirm-all') {
                     confirmAllsegments('list-segments')
                 }
+           
             },
             error: (err) => {
                 if (err?.response?.data?.detail?.includes('page')) {
@@ -4118,7 +4124,7 @@ useEffect(() => {
         }
         /* Remove NER if it's active - end */
         let segmentId = e.target.getAttribute("data-id");
-        let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
+        let segmentData = translatedResponse?.find((element) => element.segment_id == segmentId);
         let thisSegmentTag = segmentData?.target_tags;
         let textTag = "" + thisSegmentTag
 
@@ -4138,7 +4144,7 @@ useEffect(() => {
                 getSegmentDiff()
 
                 let thisSegmentTags = "";
-                let segmentData = translatedResponse.find((element) => element.segment_id == id);
+                let segmentData = translatedResponse?.find((element) => element.segment_id == id);
 
                 rawMtResponseRef.current = {
                     mt: mtTmResponse?.mt_only,
@@ -4263,7 +4269,7 @@ useEffect(() => {
                         showTmSectionFunction();
 
                         if (!advanceToolbarOpenedForTm) {
-                            let segmentData = translatedResponse.find((element) => element.segment_id == id);
+                            let segmentData = translatedResponse?.find((element) => element.segment_id == id);
                             let segmentStatus = allSegmentStatuses.current[id];
                             if (segmentStatus == null || segmentStatus == 101) {
                                 advanceToolbarOpenedForTm = true;
@@ -4296,7 +4302,7 @@ useEffect(() => {
                         setGlossaryData(response.data.res)
                         handleToggleVisibility(true);
                         if (!advanceToolbarOpenedForTm) {
-                            let segmentData = translatedResponse.find((element) => element.segment_id == id);
+                            let segmentData = translatedResponse?.find((element) => element.segment_id == id);
                             let segmentStatus = allSegmentStatuses.current[id];
                             if (segmentStatus == null || segmentStatus == 101) {
                                 advanceToolbarOpenedForTm = true;
@@ -4448,7 +4454,7 @@ useEffect(() => {
         let matchPercentage = e.target.getAttribute("data-match-percentage");
         let selectedTranslationMatch = translationMatches[key];
         let id = focusedDivIdRef.current;
-        let thisSegmentTags = translatedResponse.find((element) => element.segment_id == id)?.target_tags;
+        let thisSegmentTags = translatedResponse?.find((element) => element.segment_id == id)?.target_tags;
         let replacedText = selectedTranslationMatch.target + thisSegmentTags;
         /*replacedText = replaceTextWithTags(replacedText)
         if (targetContentEditable.current[id]?.current != null)
@@ -4474,7 +4480,7 @@ useEffect(() => {
         showTmSectionFunction(false);
         let token = Config.userState.token;
         let segmentId = e.target.getAttribute("data-id");
-        let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
+        let segmentData = translatedResponse?.find((element) => element.segment_id == segmentId);
         let thisSegmentTags = segmentData.target_tags;
 
         if (axiosMTRawTMAbortControllerRef.current) {
@@ -4765,7 +4771,7 @@ useEffect(() => {
                         })
                     }
                 }) */
-                let thisSourceText = translatedResponse.find((element) => element.segment_id == focusedDivIdRef.current)?.source;
+                let thisSourceText = translatedResponse?.find((element) => element.segment_id == focusedDivIdRef.current)?.source;
                 let wordsArray = ["Chidambaram", "Pillai"];
                 let highlightedSourceText = thisSourceText;
                 wordsArray.map((value) => {
@@ -4780,7 +4786,7 @@ useEffect(() => {
             }
         } else {
             /* Remove all the ner highlighted mark tags - start*/
-            translatedResponse.map((value) => {
+            translatedResponse?.map((value) => {
                 updateTranslatedResponseSegment(
                     value.segment_id,
                     "tagged_source",
@@ -4960,7 +4966,7 @@ useEffect(() => {
 
     /* Find on the previous page */
     const findTermPreviousPage = () => {
-        let minSegmentId = Math.min(...translatedResponse.map((element) => element.segment_id));
+        let minSegmentId = Math.min(...translatedResponse?.map((element) => element.segment_id));
         if (occurrenceData.current?.results == null) return;
         let previousCurrentSegmentIds = Array.from(occurrenceData.current?.results, (element) => {
             if (element.segment_id < minSegmentId) return element.segment_id;
@@ -5017,7 +5023,7 @@ useEffect(() => {
 
     /* Find on the next page */
     const findTermNextPage = () => {
-        let maxSegmentId = Math.max(...translatedResponse.map((element) => element.segment_id));
+        let maxSegmentId = Math.max(...translatedResponse?.map((element) => element.segment_id));
         if (occurrenceData.current?.results == null) return;
         let previousCurrentSegmentIds = Array.from(occurrenceData.current?.results, (element) => {
             if (element.segment_id > maxSegmentId) return element.segment_id;
@@ -5153,7 +5159,7 @@ useEffect(() => {
             }));
             translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, status: status } : el))
         } else if (segmentId == null && status == null) {
-            translatedResponse.map((value) => {
+            translatedResponse?.map((value) => {
                 allSegmentStatuses.current[value.segment_id] = value?.status;
             });
             setTimeout(() => {
@@ -5323,9 +5329,9 @@ useEffect(() => {
 
     /* Highlight the TM mismatch text with mark tag */
     const highlightTmMismatch = (segmentId, tmSource = "") => {
-        let segmentData = translatedResponse.find((response) => response.segment_id == segmentId);
+        let segmentData = translatedResponse?.find((response) => response.segment_id == segmentId);
         let sourceText = segmentData.tagged_source;
-        let thisIndex = translatedResponse.findIndex((response) => response.segment_id == segmentId);
+        let thisIndex = translatedResponse?.findIndex((response) => response.segment_id == segmentId);
         let formData = new FormData();
         formData.append("src", sourceText);
         formData.append("tm", tmSource);
@@ -5641,7 +5647,7 @@ useEffect(() => {
         setQaData([]);
         let formData = new FormData();
         formData.append("doc_id", documentId);
-        let segmentData = translatedResponse.find((response) => response.segment_id == segmentId);
+        let segmentData = translatedResponse?.find((response) => response.segment_id == segmentId);
         if (segmentData == null) return;
         let sourceText = segmentData.tagged_source;
         let translatedText = "";
@@ -5799,7 +5805,7 @@ useEffect(() => {
             // console.log(segmentId);
             let targetTextContent = removeAllTags(replaceTagsWithText(targetContentEditable.current[focusedDivId].current.innerHTML))
             // console.log(targetTextContent);
-            let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
+            let segmentData = translatedResponse?.find((element) => element.segment_id == segmentId);
             let thisSegmentTags = segmentData?.target_tags;
             // console.log(thisSegmentTags);
             let txt = `${targetTextContent}${(thisSegmentTags !== undefined || thisSegmentTags !== '') ? thisSegmentTags : ''}`
@@ -5828,7 +5834,7 @@ useEffect(() => {
         if (targetContentEditable.current[focusedDivIdRef.current]?.current != null) {
             targetContentEditable.current[focusedDivId].current.innerHTML = ''
             let segmentId = e.target.getAttribute("data-id");
-            let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
+            let segmentData = translatedResponse?.find((element) => element.segment_id == segmentId);
             let thisSegmentTags = segmentData.target_tags;
             let txt = '' + (thisSegmentTags !== undefined || thisSegmentTags !== '') ? thisSegmentTags : ''
             let replacedText = replaceTextWithTags(txt);
@@ -6272,7 +6278,7 @@ useEffect(() => {
         let isAlreadyMerged = false;
         let thisSegment = null;
         segmentIds.map((eachSegmentId) => {
-            thisSegment = translatedResponse.find((element) => element.segment_id === eachSegmentId);
+            thisSegment = translatedResponse?.find((element) => element.segment_id === eachSegmentId);
             Config.log(thisSegment);
             if (thisSegment.is_merged) isAlreadyMerged = true;
         });
@@ -6288,7 +6294,7 @@ useEffect(() => {
         /* Enabling restrore icon - start */
         setIsShowRestoreSegmentIcon(false);
         if (segmentIds.length === 1) {
-            let selectedSegment = translatedResponse.find((element) => element.segment_id === segmentIds[0]);
+            let selectedSegment = translatedResponse?.find((element) => element.segment_id === segmentIds[0]);
             if (selectedSegment.is_merged) setIsShowRestoreSegmentIcon(true);
         }
         /* Enabling restrore icon - end */
@@ -6507,7 +6513,7 @@ useEffect(() => {
 
         // console.log(getHTMLCaretPosition(sourceTextDiv.current[focusedDivIdRef.current].current));
         isSplitRef.current = false
-        let thisSegment = translatedResponse.find((element) => element.segment_id == segmentIdRef.current);
+        let thisSegment = translatedResponse?.find((element) => element.segment_id == segmentIdRef.current);
 
         if (thisSegment?.is_split) {
             Config.toast(t("segment_split_err_1"), 'warning')
@@ -7439,7 +7445,7 @@ useEffect(() => {
         previousSegmentIdRef.current = id
 
         let formData = new FormData();
-        let sourceText = translatedResponse.find(element => element.segment_id == id)?.source
+        let sourceText = translatedResponse?.find(element => element.segment_id == id)?.source
         
         formData.append("text", sourceText);
 

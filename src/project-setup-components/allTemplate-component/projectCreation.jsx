@@ -969,6 +969,7 @@ function ProjectCreation(props) {
 
     const getProjectTaskData = (proj_id, action) => {
         // vendor dashboard
+        setGlossaryTaskId(null);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/vendor/dashboard/${proj_id}`,
             auth: true,
@@ -981,7 +982,7 @@ function ProjectCreation(props) {
                             ...obj,
                             isProcessing: false
                         }
-                    })
+                    })//projectTaskList
                     projectTaskListRef.current = newArr 
                     setProjectTaskList(newArr)
                     setProjectId(proj_id);
@@ -998,6 +999,11 @@ function ProjectCreation(props) {
                         gloss_project_id: glossaryProjectId
                     };
                     defaultGlossDetailsRef.current = defaultGlossary;
+
+                    setOpenGlossariesModal(true);
+                    setTimeout(() => {
+                        dispatch(setSimpleTranslateGlossaryModal(true));
+                    }, 500);
                 }
             },
             error: (err) => { }
@@ -1438,9 +1444,11 @@ function ProjectCreation(props) {
         formData.append("steps", 1);
 
         let url = Config.BASE_URL + "/workspace/project/quick/setup/";
+        let glossaryToast = "Glossary Project created successfully";
         if (isLanguageChanges) {
             formData.append("glossary_job_update", true);
             url += `${glossaryProjectId}/?step_delete_ids=&file_delete_ids=&job_delete_ids=&subject_delete_ids=&project_type_id=3`;
+            glossaryToast = "Glossary Project updated successfully";
         }
 
         Config.axios({
@@ -1458,10 +1466,11 @@ function ProjectCreation(props) {
                 setGlossaryProjectId(response.data.id);
                 setDefaultGlossaryProjectId(response.data.glossary_proj_id);
                 getProjectTaskData(response.data.id, "GLOSSARY");
-                Config.toast("Glossary Project created successfully");
+                Config.toast(glossaryToast);
 
                 setBackupSourceLanguage(formData.get("source_language"));
                 setBackupTargetLanguage(formData.get("target_languages"));
+
                 return;
             },
             error: (err) => {
@@ -2184,17 +2193,11 @@ function ProjectCreation(props) {
 
     const handleGlossaryBtnEvent = () => {
         // getDocumentDetailsById();
-        if (sourceLanguage == "") {
+        if (sourceLanguage == "" || targetLanguage == "") {
             setSourceTargetValidation({
                 ...sourceTargetValidation,
-                source: true,
-            });
-            return;
-        }
-        if (targetLanguage == "") {
-            setSourceTargetValidation({
-                ...sourceTargetValidation,
-                target: true
+                source: sourceLanguage == "",
+                target: targetLanguage == ""
             });
             return;
         }
@@ -2203,9 +2206,14 @@ function ProjectCreation(props) {
         if (glossaryProjectId) {
             isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage != "" ? targetLanguage[0] : "");
         }
-        if (!glossaryProjectId || isLanguageChanges) handleGlossarySubmit(isLanguageChanges);
-        setOpenGlossariesModal(true);
-        dispatch(setSimpleTranslateGlossaryModal(true));
+        if (!glossaryProjectId || isLanguageChanges) {
+            handleGlossarySubmit(isLanguageChanges);
+        } else {
+            setOpenGlossariesModal(true);
+            // setTimeout(() => {
+                dispatch(setSimpleTranslateGlossaryModal(true));
+            // }, 500);
+        }
     };
 
     const checkIsLanguageChanges = (sourceLanguageValue, targetLanguageValue) => {
@@ -2301,7 +2309,7 @@ function ProjectCreation(props) {
                              </div>
                         </div>
                         <div style={{alignContent: 'end'}}>
-                            <button className="glossary-btn" onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
+                            <button className={"glossary-btn" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")} onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
                         </div>
 
                   </div>
@@ -2422,7 +2430,7 @@ function ProjectCreation(props) {
                                         
                                 </React.Fragment>
                             ) : (
-                                <div className="project-setup-forms new-file-proj-setup-wrapper file-upload-form">
+                                <div className={"project-setup-forms new-file-proj-setup-wrapper file-upload-form" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")} >
                                     {editProjectId &&
                                         projectAvailalbility &&
                                         !Config.userState?.is_internal_member &&
@@ -2540,7 +2548,7 @@ function ProjectCreation(props) {
                                 </div>
                             )}
                             <div className="fileupload-global-tab-wrapper">
-                                <p className="upload-area-title">{t("upload_files")}<span className="asterik-symbol">*</span></p>
+                                <p className={"upload-area-title" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")}>{t("upload_files")}<span className="asterik-symbol">*</span></p>
                                 {projectType === 2 && (
                                     <Nav tabs className="fileupload-tab-row">
                                         <NavItem
@@ -2578,11 +2586,12 @@ function ProjectCreation(props) {
                                             <>
                                                 <div
                                                     className={
-                                                        integrationFiles.length ||
+                                                        (integrationFiles.length ||
                                                             editProjectId != null ||
                                                             (!showFileUpload && files.length > 0) || pdfIdFromToolkit !== null
                                                             ? "dropfile-area"
-                                                            : "col-xs-12 mt-3"
+                                                            : "col-xs-12 mt-3")
+                                                        + (projectTaskList?.length !== 0 ? " behind-overlay" : "")
                                                     }
                                                 >
                                                     <DragandDrop handleDrop={handleDrop}>

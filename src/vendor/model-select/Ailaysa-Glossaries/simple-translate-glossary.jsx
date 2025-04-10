@@ -26,12 +26,19 @@ export const SimpleTranslateGlossaryModal = (props) => {
     const [glossaryList, setGlossaryList] = useState([])
     const [selectedGlossaryList, setSelectedGlossaryList] = useState([])
     const projectFilesListRef = useRef([])
+    const [selectedTaskId, setSelectedTaskId] = useState(null)
 
     useEffect(() => {
         if(showSimpleTranslateGlossaryModal && documentDetails){
             setActiveScreen(1)
         }
     }, [showSimpleTranslateGlossaryModal, documentDetails])
+
+    useEffect(() => {
+        if(glossTaskId){
+            setSelectedTaskId(glossTaskId)
+        }
+    }, [glossTaskId])
 
     useEffect(() => {
         if(showSimpleTranslateGlossaryModal){
@@ -110,7 +117,7 @@ export const SimpleTranslateGlossaryModal = (props) => {
                             {activeScreen === 1 ? (
                                 <AilaysaNewGlossEditingArea 
                                     setActiveScreen={setActiveScreen}
-                                    glossTaskId={glossTaskId} //{defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails.task_id}
+                                    glossTaskId={selectedTaskId} //{defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails.task_id}
                                 />
                             ) : (
                                 <ImportTerms 
