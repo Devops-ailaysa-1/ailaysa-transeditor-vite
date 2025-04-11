@@ -1275,8 +1275,8 @@ function ProjectCreation(props) {
             });
             setFileError(t("required"));
             setProjectNameError(t("enter_proj_name"));
-            contentprojectNameRef.current.scrollIntoView()
-            contentprojectNameRef.current.focus();
+            contentprojectNameRef?.current?.scrollIntoView()
+            contentprojectNameRef?.current?.focus();
             setHasFocus(true);
             return;
         }
@@ -1787,13 +1787,13 @@ function ProjectCreation(props) {
     let isAssignedProject = null;
 
     useEffect(() => {
-        contentprojectNameRef.current.focus();
+        contentprojectNameRef?.current?.focus();
         setHasFocus(true);
     }, [contentprojectNameRef]);
 
 
     const handleHideIcon = () => {
-        contentprojectNameRef.current.focus();
+        contentprojectNameRef?.current?.focus();
         setHasFocus(true);
     };
 
@@ -1837,7 +1837,7 @@ function ProjectCreation(props) {
 
 
     const executeProposalScroll = () => {
-        contentprojectNameRef.current.scrollTo(0, 0);
+        contentprojectNameRef?.current?.scrollTo(0, 0);
     }
 
     const handleBlockedNavigation = ({nextLocation}) => {
@@ -2312,7 +2312,7 @@ function ProjectCreation(props) {
                     <div className="project-header-container">
                      <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
                         <div contentEditable
-                            ref={divRef}
+                            ref={contentprojectNameRef}
                             data-placeholder="Untitled project"
                             className="project-box"
                             tabIndex={0}
