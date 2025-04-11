@@ -374,12 +374,14 @@ export const ImportTerms = (props) => {
 
     return (
         <>
-            <AITab
-                onChange={handleOnTabChange} 
-                activeTab={activeImportTab}
-                dataList={importTermsTabList?.filter(item => !excludedTermsOption?.includes(item.value))}
-                customClass="mb-4 w-2/5"
-            />
+            {isFrom !== 'simpleGlossary' &&
+             <AITab
+              onChange={handleOnTabChange} 
+              activeTab={activeImportTab}
+              dataList={importTermsTabList?.filter(item => !excludedTermsOption?.includes(item.value))}
+              customClass="mb-4 w-2/5"
+             />
+            }
             <div className="asset-glossary-list-wrapper">
                 {activeImportTab === 1 ? (
                     <ul className="asset-glossary-projects-wrap-list">

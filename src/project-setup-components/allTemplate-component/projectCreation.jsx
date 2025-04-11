@@ -248,8 +248,6 @@ function ProjectCreation(props) {
     const fileTranslatingTaskListRef = useRef([])
     /* Ref constants - end */
     
-    const [translateData, setTranslateData] = useState({});
-    const [documetId, setDocumentId] = useState(null);
     const documentDetailsRef = useRef(null)
     const defaultGlossDetailsRef = useRef(null)
     const [glossaryOpen, setGlossaryOpen] = useState(false);
@@ -786,6 +784,9 @@ function ProjectCreation(props) {
             request === "tbx" &&
             supportedTBXFileExtensions.indexOf(ext) == -1
         ) {
+            Config.toast(t("file_format_not_support"), 'warning');
+            return false;
+        } else if (!request && ext?.toLowerCase() === ".pdf") {
             Config.toast(t("file_format_not_support"), 'warning');
             return false;
         }
@@ -2076,7 +2077,7 @@ function ProjectCreation(props) {
                 return obj
             })
             projectTaskListRef.current = newArr 
-            setProjectTaskList(newArr)
+            setProjectTaskList([...newArr]);
         }
         let formData = new FormData();
         formData.append("task", task_id);
@@ -2105,8 +2106,8 @@ function ProjectCreation(props) {
                         return obj
                     })
                     // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
+                    projectTaskListRef.current = newArr;
+                    setProjectTaskList([...newArr]);
                 }
             }
         });
@@ -2123,7 +2124,7 @@ function ProjectCreation(props) {
     }
 
     const updateProjectTaskList = (taskId, percentage, status) => {
-        const updatedTasks = projectTaskList.map(task => {
+        const updatedTasks = projectTaskListRef.current?.map(task => {
             if (task.id === taskId) {
                 const match = progressMap.find(item =>
                     percentage >= item.min && (
@@ -2140,36 +2141,34 @@ function ProjectCreation(props) {
             }
             return task;
         });
+        projectTaskListRef.current = updatedTasks;
         setProjectTaskList([...updatedTasks]);
     }
 
     const getTaskTranslationProgress = (endpoint, taskId) => {
-       const taskIdValue = taskId;
        Config.axios({
             url: `${Config.BASE_URL}/workspace/adaptive_file_translate/${projectId}`,
             method: "GET",
             auth: true,
             success: (response) => {
                 const resultData = response?.data;
-                setTranslateData(resultData);
                 if (resultData && resultData?.batch_status && resultData?.batch_status.length > 0) {
                     const batchList = resultData?.batch_status;
-                    const batch = getBatchByTaskId(batchList, taskIdValue);
-                    if (!documetId) {
-                        setDocumentId(batch.document_id);
-                    }
-                    if (batch) {
-                        updateProjectTaskList(taskIdValue, batch?.completed_percentage, batch?.status);
-                        if (batch?.status === 'completed') {
-                            setDownloadTaskTargetFile(batch.download_file);
-                        } else {
-                            getProgressData(endpoint, taskIdValue);
-                        }
+                    const batch = getBatchByTaskId(batchList, taskId);
+                    if (batchList != null && batchList.length > 0) {
+                        batchList.map(batch => {
+                            updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status);
+                            if (batch?.status === 'completed') {
+                                setDownloadTaskTargetFile(batch.download_file);
+                            } else {
+                                getProgressData(endpoint, taskId);
+                            }
+                        })
                     } else {
-                        getProgressData(endpoint, taskIdValue);
+                        getProgressData(endpoint, taskId);
                     }
                 } else {
-                    getProgressData(endpoint, taskIdValue);
+                    getProgressData(endpoint, taskId);
                 }
             },
             error: (err) => {
@@ -2258,6 +2257,41 @@ function ProjectCreation(props) {
         //     }
         // });
     } 
+    const divRef = useRef(null);
+
+    const handleInput = (e) => {
+        const div = divRef.current;
+
+        // Remove new lines
+        let text = div.innerText.replace(/\n/g, '');
+
+        // Enforce 255 character limit
+        if (text.length > 255) {
+        text = text.slice(0, 255);
+        }
+
+        div.innerText = text;
+
+        // Move caret to the end
+        placeCaretAtEnd(div);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent new lines
+        }
+    };
+
+    // Helper function to place caret at the end
+    const placeCaretAtEnd = (el) => {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    };
+
 
     return (
         <React.Fragment>
@@ -2277,7 +2311,19 @@ function ProjectCreation(props) {
                     }
                     <div className="project-header-container">
                      <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
-                        <div
+                        <div contentEditable
+                            ref={divRef}
+                            data-placeholder="Untitled project"
+                            className="project-box"
+                            tabIndex={0}
+                            onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
+                            onInput={() => projectTaskList?.length === 0 && handleInput()}
+                            onKeyDown={() => projectTaskList?.length === 0 && handleKeyDown()}
+                            onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
+                            onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
+                            >
+                        </div>
+                        {/* <div
                             ref={contentprojectNameRef}
                             suppressContentEditableWarning={true}
                             contentEditable={projectTaskList?.length === 0 ? true : false}
@@ -2288,7 +2334,7 @@ function ProjectCreation(props) {
                             onKeyDown={() => projectTaskList?.length === 0 && handleProjectEnter}
                             className="project-box"
                             tabIndex={0}>
-                        </div>
+                        </div> */}
                      </div>
                   </div>
                   {/* Glossary & Style buttons below the project title */}
@@ -2966,7 +3012,7 @@ function ProjectCreation(props) {
                                                                 <div className="file-list-align">
                                                                     <div className="file-list">
                                                                         {projectTaskList?.map((task) => (
-                                                                            <div
+                                                                            <div id={task.id}
                                                                                 key={task.id}
                                                                                 className="file-name-list progress-cust"
                                                                             >
@@ -3013,12 +3059,9 @@ function ProjectCreation(props) {
                                                                                     <button
                                                                                      className="translate-download-btn"
                                                                                      type="submit"
-                                                                                     disabled={task.percentage !== 100 || task?.id === isDownloading} // disable until 100%
-                                                                                     onMouseUp={() => {
-                                                                                     if (task.percentage === 100 && task?.id !== isDownloading) {
-                                                                                     downloadTaskTargetFile(task?.id);
-                                                                                     }
-                                                                                   }}
+                                                                                     id={task.id}
+                                                                                     disabled={task.percentage !== 100}
+                                                                                     onMouseUp={() => { downloadTaskTargetFile(task?.id); }}
                                                                                  >
                                                                                  <span className="fileupload-new-btn">
                                                                                      {task?.id === isDownloading && <SaveButtonLoader />}
@@ -3031,6 +3074,7 @@ function ProjectCreation(props) {
                                                                                     <button
                                                                                         className="convert-pdf-list-UploadProjectButton"
                                                                                         type="submit"
+                                                                                        id={task.id}
                                                                                         disabled={task?.progressLoading}
                                                                                         onMouseUp={() => getTaskTransDownloadStatus(task?.id)}
                                                                                     >

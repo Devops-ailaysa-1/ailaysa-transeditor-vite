@@ -390,6 +390,9 @@ function AllProjectList(props) {
     const [showFileErrorModal, setShowFileErrorModal] = useState(false);
     const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false)
 
+    // Start
+    const [downloadTaskFile, setDownloadTaskTargetFile] = useState('');
+
 
     const downloadAnchorRef = useRef(null);
     const projectIdForPOModal = useRef(null)
@@ -5107,6 +5110,70 @@ function AllProjectList(props) {
         });
     }
 
+
+    const getBatchByTaskId = (batchList, key, taskId) => {
+        return batchList.find(batch => batch[key] === taskId);
+    };
+
+    const getProgressData = (endpoint, taskId) => {
+        setTimeout(() => {
+            getTaskTranslationProgress(endpoint, taskId);
+        }, 6000);
+    }
+
+    const updateProjectTaskList = (taskId, percentage, status) => {
+        const updatedTasks = selectedProjectFiles.map(task => {
+            if (task.id === taskId) {
+                const match = progressMap.find(item =>
+                    percentage >= item.min && (
+                        percentage < item.max || (percentage === 100 && item.max === 100)
+                    ));
+                return {
+                    ...task,
+                    percentage,
+                    status,
+                    progressLoading: percentage !== 100,
+                    file_translate_done: percentage == 100,
+                    progressLabel: match ? match.message : "",
+                    isProcessing: false
+                };
+            }
+            return task;
+        });
+        setSelectedProjectFiles([...updatedTasks]);
+    }
+
+    const getTaskTranslationProgress = (endpoint, taskId) => {
+        const taskIdValue = taskId;
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace/adaptive_file_translate/${projectId}`,
+            method: "GET",
+            auth: true,
+            success: (response) => {
+                const resultData = response?.data;
+                if (resultData && resultData?.batch_status && resultData?.batch_status.length > 0) {
+                    const batchList = resultData?.batch_status;
+                    const batch = getBatchByTaskId(batchList, taskIdValue);
+                    if (batch) {
+                        updateProjectTaskList(taskIdValue, batch?.completed_percentage, batch?.status);
+                        if (batch?.status === 'completed') {
+                            setDownloadTaskTargetFile(batch.download_file);
+                        } else {
+                            getProgressData(endpoint, taskIdValue);
+                        }
+                    } else {
+                        getProgressData(endpoint, taskIdValue);
+                    }
+                } else {
+                    getProgressData(endpoint, taskIdValue);
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
+    }
+
    
     /**
      * This mehtod is used to initiate the file translation process and provide the endpoint for check the translation progress.
@@ -5148,7 +5215,7 @@ function AllProjectList(props) {
                     return obj
                 })
                 projectTaskListRef.current = newArr 
-                setProjectTaskList(newArr)
+                setSelectedProjectFiles(newArr)
             }
             let formData = new FormData();
             formData.append("task", task_id);
@@ -5159,7 +5226,6 @@ function AllProjectList(props) {
                 auth: true,
                 ...(controller !== undefined && {signal: controller.signal}),
                 success: (response) => {
-                    console.log(response);
                     if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
                         getTaskTranslationProgress(response.data.endpoint, task_id);
                     }
@@ -8502,7 +8568,7 @@ function AllProjectList(props) {
                                                                                                                                                 paddingLeft: "16px",
                                                                                                                                                 paddingRight: "16px"
                                                                                                                                             }}
-                                                                                                                                            onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)}
+                                                                                                                                            onMouseUp={(e) => getTaskTransDownloadStatus(selectedProjectFile?.id)}
                                                                                                                                         >
                                                                                                                                             <span className="fileopen-new-btn">{'New ' + t("translate")}</span>
                                                                                                                                         </button>
