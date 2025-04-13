@@ -118,6 +118,7 @@ import EmptyProjectsFolder from "../../assets/images/empty-projects-folder.svg"
 import HowToRegister from "../../assets/images/new-ui-icons/how_to_register.svg"
 import ReactRouterPrompt from 'react-router-prompt'
 import WordchoiceIcon from "../../assets/images/choicelist.svg"
+import ProgressBar from "../../project-setup-components/allTemplate-component/ProgressBar";
 
 function AllProjectList(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -392,6 +393,19 @@ function AllProjectList(props) {
 
     // Start
     const [downloadTaskFile, setDownloadTaskTargetFile] = useState('');
+    const progressMap = [
+        { min: 0, max: 5, message: "Reading source content" },
+        { min: 5, max: 15, message: "Deciding on style" },
+        { min: 15, max: 30, message: "Preprocessing" },
+        { min: 30, max: 50, message: "Translating" },
+        { min: 50, max: 60, message: "Checking Translation" },
+        { min: 60, max: 70, message: "Enhancing Translation" },
+        { min: 70, max: 80, message: "Almost Finished" },
+        { min: 80, max: 99, message: "Finishing" },
+        { min: 99, max: 100, message: "Translation Complete"}
+    ];
+
+    //End
 
 
     const downloadAnchorRef = useRef(null);
@@ -1859,6 +1873,12 @@ function AllProjectList(props) {
                 else {
                     setSelectedProjectFiles(response.data);
                     setSelectedProjectAnalysis(createdProjects.find((element) => element.id == projectId)?.project_analysis);
+                    if (response.data != null && response.data.length > 0) {
+                        response.data.map(task => {
+                            if (task.adaptive_file_translate_status === 'ONGOING')
+                                getTaskTranslationProgress('', task.id, projectId);
+                        })
+                    }
                 }
             },
         });
@@ -5115,14 +5135,14 @@ function AllProjectList(props) {
         return batchList.find(batch => batch[key] === taskId);
     };
 
-    const getProgressData = (endpoint, taskId) => {
+    const getProgressData = (endpoint, taskId, projectId) => {
         setTimeout(() => {
-            getTaskTranslationProgress(endpoint, taskId);
+            getTaskTranslationProgress(endpoint, taskId, projectId);
         }, 6000);
     }
 
     const updateProjectTaskList = (taskId, percentage, status) => {
-        const updatedTasks = selectedProjectFiles.map(task => {
+        const updatedTasks = selectedProjectFilesRef.current.map(task => {
             if (task.id === taskId) {
                 const match = progressMap.find(item =>
                     percentage >= item.min && (
@@ -5140,32 +5160,38 @@ function AllProjectList(props) {
             }
             return task;
         });
+        selectedProjectFilesRef.current = updatedTasks
         setSelectedProjectFiles([...updatedTasks]);
     }
 
-    const getTaskTranslationProgress = (endpoint, taskId) => {
-        const taskIdValue = taskId;
+    const getTaskTranslationProgress = (endpoint, taskId, projectId) => {
+        if (endpoint == null || endpoint == '')
+            endpoint = `workspace/adaptive_file_translate/${projectId}`;
+        if (projectId == null || projectId == '')
+            projectId = openedProjectId;
         Config.axios({
-            url: `${Config.BASE_URL}/workspace/adaptive_file_translate/${projectId}`,
+            url: `${Config.BASE_URL}/${endpoint}`,
             method: "GET",
             auth: true,
             success: (response) => {
                 const resultData = response?.data;
                 if (resultData && resultData?.batch_status && resultData?.batch_status.length > 0) {
                     const batchList = resultData?.batch_status;
-                    const batch = getBatchByTaskId(batchList, taskIdValue);
-                    if (batch) {
-                        updateProjectTaskList(taskIdValue, batch?.completed_percentage, batch?.status);
-                        if (batch?.status === 'completed') {
-                            setDownloadTaskTargetFile(batch.download_file);
-                        } else {
-                            getProgressData(endpoint, taskIdValue);
-                        }
+                    const batch = getBatchByTaskId(batchList, 'task_id', taskId);
+                    if (batch != null && batchList != null && batchList.length > 0) {
+                        batchList.map(batch => {
+                            updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status);
+                            if (batch?.status === 'completed') {
+                                setDownloadTaskTargetFile(batch.download_file);
+                            } else {
+                                getProgressData(endpoint, batch?.task_id, projectId);
+                            }
+                        })
                     } else {
-                        getProgressData(endpoint, taskIdValue);
+                        getProgressData(endpoint, taskId, projectId);
                     }
                 } else {
-                    getProgressData(endpoint, taskIdValue);
+                    getProgressData(endpoint, taskId, projectId);
                 }
             },
             error: (err) => {
@@ -5190,7 +5216,7 @@ function AllProjectList(props) {
             const controller = new AbortController();
             setAxiosFileTranslateAbortController(controller);
             let task_list_arr = []
-            let alreadyProcessingTask = projectTaskListRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED")
+            let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED")
             let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
             if(alreadyProcessingTask?.length !== 0){
                 task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
@@ -5205,7 +5231,7 @@ function AllProjectList(props) {
             });
             // display the button loader as soon as the user clicks the TRANSLATE button
             if(task_id !== undefined){
-                let newArr = projectTaskListRef.current?.map(obj => {
+                let newArr = selectedProjectFilesRef.current?.map(obj => {
                     if(obj.id === task_id){
                         return {
                             ...obj,
@@ -5214,7 +5240,7 @@ function AllProjectList(props) {
                     }
                     return obj
                 })
-                projectTaskListRef.current = newArr 
+                selectedProjectFilesRef.current = newArr 
                 setSelectedProjectFiles(newArr)
             }
             let formData = new FormData();
@@ -5233,7 +5259,7 @@ function AllProjectList(props) {
                 error: (err) => {
                     if(err?.response?.status === 500){
                         let newArr = projectTaskListRef.current?.map(obj => {
-                            if(fileTranslatingTaskListRef.current?.find(each => each === obj.id)){
+                            if(selectedProjectFilesRef.current?.find(each => each === obj.id)){
                                 return {
                                     ...obj,
                                     isProcessing: false,
@@ -5242,8 +5268,14 @@ function AllProjectList(props) {
                             }
                             return obj
                         })
-                        projectTaskListRef.current = newArr 
+                        selectedProjectFilesRef.current = newArr 
                         setSelectedProjectFiles(newArr)
+                    }
+                    if(err?.response?.status === 400){
+                        if(err?.response?.data.msg === 'Insufficient Credits'){
+                            setShowCreditAlertModal(true);
+                            return;
+                        }
                     }
                 }
             });
@@ -6111,6 +6143,20 @@ function AllProjectList(props) {
                                                                                                         )}
                                                                                                     </div> */}
                                                                                                         <div className="file-edit-list-inner-table-cell circular-progress">
+                                                                                                            {selectedProjectFile?.progressLoading ? (
+                                                                                                                <ProgressBar
+                                                                                                                    progressValue={selectedProjectFile.percentage || 0}
+                                                                                                                    progressBarLabel={selectedProjectFile.progressLabel || ''}
+                                                                                                                    progressBarStyle={{ width: "270px", pr: "30px" }}
+                                                                                                                />
+                                                                                                            ) : (
+                                                                                                                selectedProjectFile?.percentage === 100 && (
+                                                                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
+                                                                                                                        <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
+                                                                                                                        <span style={{ color: 'green', fontWeight: 'bold' }}>Translation Completed</span>
+                                                                                                                    </div>
+                                                                                                                )
+                                                                                                            )}
                                                                                                             {/* {(selectedProjectFile?.filename !== undefined && project?.get_project_type !== 5 && selectedProjectFile?.open_in !== "Download") && 
                                                                                                         <div className="workspace-progress-bar-part-setup">
                                                                                                             {
@@ -8546,7 +8592,7 @@ function AllProjectList(props) {
                                                                                                                         )
                                                                                                                     ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (   // for translate batch file/files project
                                                                                                                         <>
-                                                                                                                            {selectedProjectFile?.file_translate_done ? (   // if file is translated show download btn
+                                                                                                                            {selectedProjectFile?.file_translate_done || selectedProjectFile.adaptive_file_translate_status == "COMPLETED" ? (   // if file is translated show download btn
                                                                                                                                 <button className="workspace-files-OpenProjectButton"
                                                                                                                                     type="button"
                                                                                                                                     style={{
@@ -8570,7 +8616,7 @@ function AllProjectList(props) {
                                                                                                                                             }}
                                                                                                                                             onMouseUp={(e) => getTaskTransDownloadStatus(selectedProjectFile?.id)}
                                                                                                                                         >
-                                                                                                                                            <span className="fileopen-new-btn">{'New ' + t("translate")}</span>
+                                                                                                                                            <span className="fileopen-new-btn">{t("translate")}</span>
                                                                                                                                         </button>
                                                                                                                                     </>
                                                                                                                                 ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'ONGOING' ? (
@@ -8579,11 +8625,15 @@ function AllProjectList(props) {
                                                                                                                                             type="button"
                                                                                                                                             style={{
                                                                                                                                                 paddingLeft: "16px",
-                                                                                                                                                paddingRight: "16px"
+                                                                                                                                                paddingRight: "16px",
+                                                                                                                                                display: "flex",
+                                                                                                                                                alignItems: "center"
                                                                                                                                             }}
-                                                                                                                                            onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)}
-                                                                                                                                        >
-                                                                                                                                            <span className="fileopen-new-btn">{'Processing'}</span>
+                                                                                                                                            onMouseUp={(e) => getTaskTranslationProgress('', selectedProjectFile?.id)}
+                                                                                                                                        >   <ButtonLoader />
+                                                                                                                                            <span className="fileopen-new-btn" style={{
+                                                                                                                                                paddingLeft: "5px"
+                                                                                                                                            }}>{'Processing'}</span>
                                                                                                                                         </button>
                                                                                                                                     </>
                                                                                                                                 ) : (

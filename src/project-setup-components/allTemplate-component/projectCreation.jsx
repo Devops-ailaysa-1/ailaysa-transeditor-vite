@@ -2109,6 +2109,12 @@ function ProjectCreation(props) {
                     projectTaskListRef.current = newArr;
                     setProjectTaskList([...newArr]);
                 }
+                if(err?.response?.status === 400){
+                    if(err?.response?.data.msg === 'Insufficient Credits'){
+                        setShowCreditAlertModal(true);
+                        return;
+                    }
+                }
             }
         });
     }
@@ -2154,7 +2160,7 @@ function ProjectCreation(props) {
                 const resultData = response?.data;
                 if (resultData && resultData?.batch_status && resultData?.batch_status.length > 0) {
                     const batchList = resultData?.batch_status;
-                    const batch = getBatchByTaskId(batchList, taskId);
+                    const batch = getBatchByTaskId(batchList, 'task_id', taskId);
                     if (batchList != null && batchList.length > 0) {
                         batchList.map(batch => {
                             updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status);
