@@ -2105,13 +2105,18 @@ function ProjectCreation(props) {
                         }
                         return obj
                     })
-                    // console.log(newArr)
                     projectTaskListRef.current = newArr;
                     setProjectTaskList([...newArr]);
                 }
                 if(err?.response?.status === 400){
-                    if(err?.response?.data.msg === 'Insufficient Credits'){
+                    if(err?.response?.data?.msg === 'Insufficient Credits'){
                         setShowCreditAlertModal(true);
+                        resetForm();
+                        return;
+                    }
+                    if(err?.response?.data?.msg === 'File is Empty'){
+                        Config.toast(err?.response?.data?.msg);
+                        resetForm();
                         return;
                     }
                 }
@@ -2263,28 +2268,21 @@ function ProjectCreation(props) {
         //     }
         // });
     } 
-    const divRef = useRef(null);
 
     const handleInput = (e) => {
-        const div = divRef.current;
-
-        // Remove new lines
+        const div = contentprojectNameRef.current;
         let text = div.innerText.replace(/\n/g, '');
-
-        // Enforce 255 character limit
         if (text.length > 255) {
-        text = text.slice(0, 255);
+            text = text.slice(0, 255);
+            div.innerText = text;
+            placeCaretAtEnd(div);
         }
-
-        div.innerText = text;
-
-        // Move caret to the end
-        placeCaretAtEnd(div);
     };
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-        e.preventDefault(); // Prevent new lines
+            // e.stopProgation();
+            e.preventDefault();
         }
     };
 
@@ -2322,9 +2320,10 @@ function ProjectCreation(props) {
                             data-placeholder="Untitled project"
                             className="project-box"
                             tabIndex={0}
+                            style={{padding: "0px 4px"}}
                             onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
-                            onInput={() => projectTaskList?.length === 0 && handleInput()}
-                            onKeyDown={() => projectTaskList?.length === 0 && handleKeyDown()}
+                            onInput={(e) => projectTaskList?.length === 0 && handleInput(e)}
+                            onKeyDown={(e) => projectTaskList?.length === 0 && handleKeyDown(e)}
                             onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
                             onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
                             >
