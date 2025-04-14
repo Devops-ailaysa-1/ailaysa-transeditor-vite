@@ -216,6 +216,7 @@ function ProjectCreation(props) {
         { min: 80, max: 99, message: "Finishing" },
         { min: 99, max: 100, message: "Translation Complete"}
     ];
+    const taskControllersRef = useRef({});
     const [downloadTaskFile, setDownloadTaskTargetFile] = useState('');
     const [glossaryProjectId, setGlossaryProjectId] = useState(null);
     const [glossaryTaskId, setGlossaryTaskId] = useState(null);
@@ -2045,12 +2046,12 @@ function ProjectCreation(props) {
     // this api will initiate the file translate process and provide the status of each task
     const getTaskTransDownloadStatus = (task_id) => {
         if(createdProjectIdRef.current === null) return;
-        // it will abort/cancel the ongoing api request
-        if (axiosFileTranslateAbortController) {
-            axiosFileTranslateAbortController.abort()
+       // Abort only if this task already has a pending request
+        if (taskControllersRef.current[task_id]) {
+          taskControllersRef.current[task_id].abort(); // cancel previous request for this task
         }
         const controller = new AbortController();
-        setAxiosFileTranslateAbortController(controller);
+        taskControllersRef.current[task_id] = controller; // store controller by task ID
         let task_list_arr = []
         let alreadyProcessingTask = projectTaskListRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED")
         let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
@@ -2086,9 +2087,8 @@ function ProjectCreation(props) {
             method: "POST",
             data: formData,
             auth: true,
-            ...(controller !== undefined && {signal: controller.signal}),
+            signal: controller.signal,
             success: (response) => {
-                console.log(response);
                 if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
                     getTaskTranslationProgress(response.data.endpoint, task_id);
                 }
