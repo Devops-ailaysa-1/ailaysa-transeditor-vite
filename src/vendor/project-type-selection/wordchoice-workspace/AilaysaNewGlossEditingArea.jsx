@@ -28,8 +28,10 @@ import NoEditorsFoundTwo from "../../../assets/images/no-editors-found-2.svg"
 import NoTermFound from '../../../assets/images/no-terms-found.svg'
 import WarningIcon from '../../../assets/images/new-ui-icons/confirm-icon.svg'
 import { Checkbox } from '@mui/material';
-import ConfirmIcon from "../../../assets/images/new-ui-icons/confirm-icon.svg"
-
+import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg";
+import InsuffientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg";
+import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg";
+import ButtonBase from '@mui/material/ButtonBase';
 
 const customProjectTypeSelectStyles = {
     placeholder: (provided, state) => ({
@@ -175,6 +177,7 @@ const AilaysaNewGlossEditingArea = (props) => {
     const [prevPage, setPrevPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0)
     const [totalTerms, setTotalTerms] = useState(0)
+    const [showCreditAlert, setShowCreditAlert] = useState(false);
 
     const termIdToDeleteRef = useRef(null)
     const searchTermRef = useRef("");
@@ -864,7 +867,11 @@ const AilaysaNewGlossEditingArea = (props) => {
                     setMtTermLoader(false)
                 }
             },
-            error: (error) => {},
+            error: (error) => {
+                if(error?.response?.status === 400){
+                  setShowCreditAlert(true);
+                }
+            },
         });
     } 
 
@@ -1270,6 +1277,74 @@ const AilaysaNewGlossEditingArea = (props) => {
                     setFilesList={setFilesList}
                 />
             )}
+            {showCreditAlert && (
+                            <div className="credit-alert-box">
+                                <div className="credit-alert-bg"></div>
+                                <div className="credit-alert-content-container-with-redirection">
+                                    <div className="credits-head">
+                                        <span
+                                            onClick={() => {
+                                                setShowCreditAlert(false);
+                                            }}
+                                            className="credits-close-btn"
+                                        >
+                                            <img src={CloseBlack} alt="close_black" />
+                                        </span>
+                                    </div>
+                                    <div className="credits-text-cont">
+                                        {true ? (
+                                            <React.Fragment>
+                                                <img src={InsuffientIcon} alt="insuffient-icon" />
+                                                <div className="insuffient-txt-align">
+                                                    <span>
+                                                        <img src={RemoveCircleRed} alt="remove_circle" />
+                                                    </span>
+                                                    <p>{t("insufficient_credits")}</p>
+                                                </div>
+                                                <p className="insuffient-desc">{t("pre-translation_modal_text")}</p>
+                                                {(!Config.userState?.is_internal_member) && (
+                                                    <div className="credits-button-align mt-3">
+                                                        <ButtonBase>
+                                                            <a className="ai-alert-btn" target="_blank" href={Config.USER_PORTAL_HOST + "/add-ons"}>
+                                                                {t("buy_credits")}
+                                                            </a>
+                                                        </ButtonBase>
+                                                        <ButtonBase className="ml-2">
+                                                            <div className="ai-alert-btn-grey" onClick={() => { setShowCreditAlert(false);}}>
+                                                                {t("buy_credits_note")}
+                                                            </div>
+                                                        </ButtonBase>
+                                                    </div>
+                                                )}
+                                            </React.Fragment>
+                                        ) : (
+                                            <React.Fragment>
+                                                <img 
+                                                    className="credits-alert-warn-icon"
+                                                    src={ErrorBlackWarn}
+                                                    alt="error_yellow_warn"
+                                                />
+                                                <p className="credits-text-cont-txt text-center" dangerouslySetInnerHTML={{ __html: creditAlertTxt }}></p>
+                                                {(!Config.userState?.is_internal_member) && (
+                                                    <div className="credits-button-align">
+                                                        <ButtonBase>
+                                                            <a className="ai-alert-btn" target="_blank" href={Config.USER_PORTAL_HOST + "/add-ons"}>
+                                                                {t("buy_credits")}
+                                                            </a>
+                                                        </ButtonBase>
+                                                        <ButtonBase className="ml-2">
+                                                            <div className="ai-alert-btn-grey" onClick={() => { setShowCreditAlert(false);}}>
+                                                                {t("buy_credits_note")}
+                                                            </div>
+                                                        </ButtonBase>
+                                                    </div>
+                                                )}
+                                            </React.Fragment>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
         </>
     )
 }

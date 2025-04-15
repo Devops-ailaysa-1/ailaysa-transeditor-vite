@@ -5297,10 +5297,25 @@ function AllProjectList(props) {
                         setSelectedProjectFiles(newArr)
                     }
                     if(err?.response?.status === 400){
-                        if(err?.response?.data.msg === 'Insufficient Credits'){
+                        if(err?.response?.data?.msg === 'Insufficient Credits'){
                             setShowCreditAlertModal(true);
-                            return;
+                            let newArr = projectTaskListRef.current?.map(obj => {
+                                if(fileTranslatingTaskListRef.current?.find(each => each === obj.id)){
+                                    return {
+                                        ...obj,
+                                        isProcessing: false,
+                                    }
+                                }
+                                return obj
+                            }) 
+                            selectedProjectFilesRef.current = newArr;
+                            setSelectedProjectFiles([...newArr]);
                         }
+                    }
+                    if(err?.response?.data?.msg === 'File is Empty'){
+                         Config.toast(err?.response?.data?.msg);
+                         resetForm();
+                         return;
                     }
                 }
             });
