@@ -4979,8 +4979,8 @@ function Fileupload(props) {
             },
             error: (err) => {
                 if(err?.response?.status === 500){
-                    let newArr = projectTaskListRef.current?.map(obj => {
-                        if(selectedProjectFilesRef.current?.find(each => each === obj.id)){
+                    let newArr = selectedProjectFilesRef.current?.map(obj => {
+                        if(obj.id === task_id){
                             return {
                                 ...obj,
                                 isProcessing: false,
@@ -4995,11 +4995,11 @@ function Fileupload(props) {
                 if(err?.response?.status === 400){
                     if(err?.response?.data?.msg === 'Insufficient Credits'){
                         setShowCreditAlertModal(true);
-                        let newArr = projectTaskListRef.current?.map(obj => {
-                            if(fileTranslatingTaskListRef.current?.find(each => each === obj.id)){
+                        let newArr = selectedProjectFilesRef.current?.map(obj => {
+                            if(obj.id === task_id){
                                 return {
-                                   ...obj,
-                                   isProcessing: false,
+                                    ...obj,
+                                   isProcessing: false
                                 }
                             }
                             return obj
