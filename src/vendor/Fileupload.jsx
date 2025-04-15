@@ -127,6 +127,7 @@ import EmptyProjectsFolder from "../assets/images/empty-projects-folder.svg"
 import WordchoiceIcon from "../assets/images/choicelist.svg"
 import HowToRegister from "../assets/images/new-ui-icons/how_to_register.svg"
 import ReactRouterPrompt from 'react-router-prompt'
+import ProgressBar from "../project-setup-components/allTemplate-component/ProgressBar";
 
 
 function Fileupload(props) {
@@ -1731,6 +1732,7 @@ function Fileupload(props) {
         // console.log(openedProjectId)
         if (projectId == openedProjectId) {
             setOpenedProjectId(null);
+            selectedProjectIdRef.current = null;
         } else {
             setSelectFileRow(true)
             selectProjectById(projectId, shouldListFiles);
@@ -1834,6 +1836,14 @@ function Fileupload(props) {
                 else {
                     setSelectedProjectFiles(response.data);
                     setSelectedProjectAnalysis(createdProjects.find((element) => element.id == projectId)?.project_analysis);
+                    if (response.data != null && response.data.length > 0) {
+                        response.data.map(task => {
+                            if (task.adaptive_file_translate_status === 'ONGOING')
+                                setTimeout(() => {
+                                    getTaskTranslationProgress('', task.id, projectId);
+                                }, 500);
+                        })
+                    }
                 }
             },
         });
@@ -4801,6 +4811,176 @@ function Fileupload(props) {
         });
     }
 
+    const [downloadTaskFile, setDownloadTaskTargetFile] = useState('');
+    const progressMap = [
+        { min: 0, max: 5, message: "Reading source content" },
+        { min: 5, max: 15, message: "Deciding on style" },
+        { min: 15, max: 30, message: "Preprocessing" },
+        { min: 30, max: 50, message: "Translating" },
+        { min: 50, max: 60, message: "Checking Translation" },
+        { min: 60, max: 70, message: "Enhancing Translation" },
+        { min: 70, max: 80, message: "Almost Finished" },
+        { min: 80, max: 99, message: "Finishing" },
+        { min: 99, max: 100, message: "Translation Complete"}
+    ];
+
+    const getBatchByTaskId = (batchList, key, taskId) => {
+        return batchList.find(batch => batch[key] === taskId);
+    };
+
+    const getProgressData = (endpoint, taskId, projectId) => {
+        setTimeout(() => {
+            getTaskTranslationProgress(endpoint, taskId, projectId);
+        }, 6000);
+    }
+
+    const updateProjectTaskList = (taskId, percentage, status) => {
+        const updatedTasks = selectedProjectFilesRef.current.map(task => {
+            if (task.id === taskId) {
+                const match = progressMap.find(item =>
+                    percentage >= item.min && (
+                        percentage < item.max || (percentage === 100 && item.max === 100)
+                    ));
+                return {
+                    ...task,
+                    percentage,
+                    status,
+                    progressLoading: percentage !== 100,
+                    file_translate_done: percentage == 100,
+                    progressLabel: match ? match.message : "",
+                    isProcessing: false
+                };
+            }
+            return task;
+        });
+        selectedProjectFilesRef.current = updatedTasks
+        setSelectedProjectFiles([...updatedTasks]);
+    }
+
+    useEffect(() => {
+        openedProjectId;
+    }, [openedProjectId]);
+
+    const getTaskTranslationProgress = (endpoint, taskId, projectId) => {
+        if (endpoint == null || endpoint == '')
+            endpoint = `workspace/adaptive_file_translate/${projectId}`;
+        if (projectId == null || projectId == '')
+            projectId = openedProjectId;
+        // Only proceed if this project is still the selected one
+        if (projectId !== selectedProjectIdRef.current) {
+           return; // Skip outdated task
+        }
+        Config.axios({
+            url: `${Config.BASE_URL}/${endpoint}`,
+            method: "GET",
+            auth: true,
+            success: (response) => {
+                const resultData = response?.data;
+                if (resultData && resultData?.batch_status && resultData?.batch_status.length > 0) {
+                    const batchList = resultData?.batch_status;
+                    const batch = getBatchByTaskId(batchList, 'task_id', taskId);
+                    if (batch != null && batchList != null && batchList.length > 0) {
+                        batchList.map(batch => {
+                            updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status);
+                            if (batch?.status === 'completed') {
+                                setDownloadTaskTargetFile(batch.download_file);
+                            } else {
+                                getProgressData(endpoint, batch?.task_id, projectId);
+                            }
+                        })
+                    } else {
+                        getProgressData(endpoint, taskId, projectId);
+                    }
+                } else {
+                    getProgressData(endpoint, taskId, projectId);
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
+    }
+
+    
+    /**
+     * This mehtod is used to initiate the file translation process and provide the endpoint for check the translation progress.
+     * @param {*} task_id 
+     * @returns task
+     * @author Padmabharathi Subiramanian 
+     * @since 10 Apr 2025
+     */
+    const getTaskTransDownloadStatus = (task_id) => {
+        if(projectObject.current?.id === undefined) return;
+        if (axiosFileTranslateAbortController) {
+            axiosFileTranslateAbortController.abort()
+        }
+        const controller = new AbortController();
+        setAxiosFileTranslateAbortController(controller);
+        let task_list_arr = []
+        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED")
+        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
+        if(alreadyProcessingTask?.length !== 0){
+            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+        }else{
+            task_list_arr = [task_id]
+        }
+        fileTranslatingTaskListRef.current = task_list_arr
+        // create task list to process
+        let list = ""
+        fileTranslatingTaskListRef.current?.map((each, index) => {
+            list += `${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
+        });
+        // display the button loader as soon as the user clicks the TRANSLATE button
+        if(task_id !== undefined){
+            let newArr = selectedProjectFilesRef.current?.map(obj => {
+                if(obj.id === task_id){
+                    return {
+                        ...obj,
+                        isProcessing: true
+                    }
+                }
+                return obj
+            })
+            selectedProjectFilesRef.current = newArr 
+            setSelectedProjectFiles(newArr)
+        }
+        let formData = new FormData();
+        formData.append("task", task_id);
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace/adaptive_file_translate/`,
+            method: "POST",
+            data: formData,
+            auth: true,
+            ...(controller !== undefined && {signal: controller.signal}),
+            success: (response) => {
+                if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
+                    getTaskTranslationProgress(response.data.endpoint, task_id);
+                }
+            },
+            error: (err) => {
+                if(err?.response?.status === 500){
+                    let newArr = projectTaskListRef.current?.map(obj => {
+                        if(selectedProjectFilesRef.current?.find(each => each === obj.id)){
+                            return {
+                                ...obj,
+                                isProcessing: false,
+                                status: 402
+                            }
+                        }
+                        return obj
+                    })
+                    selectedProjectFilesRef.current = newArr 
+                    setSelectedProjectFiles(newArr)
+                }
+                if(err?.response?.status === 400){
+                    if(err?.response?.data.msg === 'Insufficient Credits'){
+                        setShowCreditAlertModal(true);
+                        return;
+                    }
+                }
+            }
+        });
+    }
 
     return (
         <React.Fragment>
@@ -5423,7 +5603,20 @@ function Fileupload(props) {
                                                                                                         )}
                                                                                                     </div> */}
                                                                                                         <div className="file-edit-list-inner-table-cell circular-progress">
-                                                                                                            { }
+                                                                                                            {selectedProjectFile?.progressLoading ? (
+                                                                                                                <ProgressBar
+                                                                                                                    progressValue={selectedProjectFile.percentage || 0}
+                                                                                                                    progressBarLabel={selectedProjectFile.progressLabel || ''}
+                                                                                                                    progressBarStyle={{ width: "270px", pr: "30px" }}
+                                                                                                                />
+                                                                                                            ) : (
+                                                                                                                selectedProjectFile?.percentage === 100 && (
+                                                                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
+                                                                                                                        <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
+                                                                                                                        <span style={{ color: 'green', fontWeight: 'bold' }}>Translation Completed</span>
+                                                                                                                    </div>
+                                                                                                                )
+                                                                                                            )}
                                                                                                             {/* {(selectedProjectFile?.filename !== undefined && project?.get_project_type !== 5 && selectedProjectFile?.open_in !== "Download") && 
                                                                                                         <div className="workspace-progress-bar-part-setup">
                                                                                                             {
@@ -7890,7 +8083,7 @@ function Fileupload(props) {
                                                                                                                         )
                                                                                                                     ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (
                                                                                                                         <>
-                                                                                                                            {selectedProjectFile?.file_translate_done ? (   // if file is translated show download btn
+                                                                                                                            {selectedProjectFile?.file_translate_done || selectedProjectFile.adaptive_file_translate_status == "COMPLETED" ? (   // if file is translated show download btn
                                                                                                                                 <button className="workspace-files-OpenProjectButton"
                                                                                                                                     type="button"
                                                                                                                                     style={{
@@ -7904,6 +8097,36 @@ function Fileupload(props) {
                                                                                                                             ) : (   // not translated then show translate btn
                                                                                                                                 selectedProjectFile?.isProcessing ? (
                                                                                                                                     <ProgressAnimateButton />
+                                                                                                                                ) : selectedProjectFile?.adaptive_file_translate_status == 'NOT_INITIATED' ? (
+                                                                                                                                    <>
+                                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                                            type="button"
+                                                                                                                                            style={{
+                                                                                                                                                paddingLeft: "16px",
+                                                                                                                                                paddingRight: "16px"
+                                                                                                                                            }}
+                                                                                                                                            onMouseUp={(e) => getTaskTransDownloadStatus(selectedProjectFile?.id)}
+                                                                                                                                        >
+                                                                                                                                            <span className="fileopen-new-btn">{t("translate")}</span>
+                                                                                                                                        </button>
+                                                                                                                                    </>
+                                                                                                                                ) : selectedProjectFile?.adaptive_file_translate_status == 'ONGOING' ? (
+                                                                                                                                    <>
+                                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                                            type="button"
+                                                                                                                                            style={{
+                                                                                                                                                paddingLeft: "16px",
+                                                                                                                                                paddingRight: "16px",
+                                                                                                                                                display: "flex",
+                                                                                                                                                alignItems: "center"
+                                                                                                                                            }}
+                                                                                                                                            onMouseUp={(e) => getTaskTranslationProgress('', selectedProjectFile?.id)}
+                                                                                                                                        >   <ButtonLoader />
+                                                                                                                                            <span className="fileopen-new-btn" style={{
+                                                                                                                                                paddingLeft: "5px"
+                                                                                                                                            }}>{'Processing'}</span>
+                                                                                                                                        </button>
+                                                                                                                                    </>
                                                                                                                                 ) : (
                                                                                                                                     <button className="workspace-files-OpenProjectButton"
                                                                                                                                         type="button"
@@ -7913,7 +8136,7 @@ function Fileupload(props) {
                                                                                                                                         }}
                                                                                                                                         onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)}
                                                                                                                                     >
-                                                                                                                                        <span className="fileopen-new-btn">{t("translate")}</span>
+                                                                                                                                        <span className="fileopen-new-btn">{"Old " + t("translate")}</span>
                                                                                                                                     </button>
                                                                                                                                 )
                                                                                                                             )}

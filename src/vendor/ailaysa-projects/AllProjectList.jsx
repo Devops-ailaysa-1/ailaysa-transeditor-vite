@@ -1769,6 +1769,7 @@ function AllProjectList(props) {
         // console.log(openedProjectId)
         if (projectId == openedProjectId) {
             setOpenedProjectId(null);
+            selectedProjectIdRef.current = null;
         } else {
             setSelectFileRow(true)
             selectProjectById(projectId, shouldListFiles);
@@ -4986,7 +4987,27 @@ function AllProjectList(props) {
             dispatch(deleteDownloadingFile({ id: id }))
         }, 8000);
 
-    } 
+    }
+    
+    /**
+     * This method used to download the adaptive file translate target file
+     * @param {*} task_data
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 15 Apr 2025
+     */
+    const downloadAdaptiveTaskTargetFile = async(task_data) => {
+         try {
+             let url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=ORIGINAL`
+             const response = await Config.downloadFileFromApi(url);
+             Config.downloadFileInBrowser(response);
+             } catch (error) {
+               console.error("Download failed:", error);
+            } finally {
+               setIsDownloading(null); 
+            }
+    }
 
 
     // this api will initiate the file translate process and provide the status of each task
@@ -5169,6 +5190,10 @@ function AllProjectList(props) {
             endpoint = `workspace/adaptive_file_translate/${projectId}`;
         if (projectId == null || projectId == '')
             projectId = openedProjectId;
+        // Only proceed if this project is still the selected one
+        if (projectId !== selectedProjectIdRef.current) {
+           return; // Skip outdated task
+        }
         Config.axios({
             url: `${Config.BASE_URL}/${endpoint}`,
             method: "GET",
@@ -8592,18 +8617,26 @@ function AllProjectList(props) {
                                                                                                                         )
                                                                                                                     ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (   // for translate batch file/files project
                                                                                                                         <>
-                                                                                                                            {selectedProjectFile?.file_translate_done || selectedProjectFile.adaptive_file_translate_status == "COMPLETED" ? (   // if file is translated show download btn
-                                                                                                                                <button className="workspace-files-OpenProjectButton"
+                                                                                                                               {selectedProjectFile?.file_translate_done ? (
+                                                                                                                                    <button
+                                                                                                                                    className="workspace-files-OpenProjectButton"
                                                                                                                                     type="button"
-                                                                                                                                    style={{
-                                                                                                                                        paddingLeft: "16px",
-                                                                                                                                        paddingRight: "16px"
-                                                                                                                                    }}
-                                                                                                                                    onMouseUp={(e) => downloadTaskTargetFile(selectedProjectFile)}
-                                                                                                                                >
+                                                                                                                                    style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                    onMouseUp={() => downloadTaskTargetFile(selectedProjectFile)}
+                                                                                                                                    >
                                                                                                                                     <span className="fileopen-new-btn">{t("download")}</span>
-                                                                                                                                </button>
-                                                                                                                            ) : (   // not translated then show translate btn
+                                                                                                                                    </button>
+                                                                                                                                ) : 
+                                                                                                                                project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED" ? (
+                                                                                                                                    <button
+                                                                                                                                    className="workspace-files-OpenProjectButton"
+                                                                                                                                    type="button"
+                                                                                                                                    style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                    onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)} 
+                                                                                                                                    >
+                                                                                                                                    <span className="fileopen-new-btn">{t("download")}</span>
+                                                                                                                                    </button>
+                                                                                                                                )  : (   // not translated then show translate btn
                                                                                                                                 selectedProjectFile?.isProcessing ? (
                                                                                                                                     <ProgressAnimateButton />
                                                                                                                                 ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'NOT_INITIATED' ? (
