@@ -40,6 +40,7 @@ export const ImportTerms = (props) => {
     const [isUploading, setIsUploading] = useState(false)
     
     const [selectedFileIds, setSelectedFileIds] = useState([])
+    const [fileError, setFileError] = useState("");
 
     const glossaryToRemove = useRef([])
     const fileExtractionTimeOutRef = useRef(null)
@@ -184,6 +185,7 @@ export const ImportTerms = (props) => {
     const handleBulkUploadTerms = (e) => {
 
         if(filesList?.length === 0) {
+            setFileError("Required");
             Config.toast("No files uploaded", 'warning')
             return 
         }
@@ -207,7 +209,7 @@ export const ImportTerms = (props) => {
             success: (response) => {
                 // Config.toast(t("added_success"))
                 // setActiveScreen(1)
-                checkBulkUploadStatus()
+                checkBulkUploadStatus('EXTRACT')
                 setIsUploading(false)
             },
             error: (err) => {
@@ -221,7 +223,7 @@ export const ImportTerms = (props) => {
         });
     }
 
-    const checkBulkUploadStatus = () => {
+    const checkBulkUploadStatus = (isFromView) => {
         Config.axios({
             url: Config.BASE_URL + `/glex/glossary_file_upload?job=${defaultGlossDetailsRef.current.gloss_job_id}`,
             auth: true,
@@ -235,8 +237,13 @@ export const ImportTerms = (props) => {
 
                 if(response.data?.find(file => file.status === "PENDING")){
                     fileExtractionTimeOutRef.current = setTimeout(() => {
-                        checkBulkUploadStatus()
+                        checkBulkUploadStatus(isFromView)
                     }, 5000);
+                }
+                if(isFromView === 'EXTRACT' && response.data?.find(file => file.status === "FINISHED")) {
+                    fileExtractionTimeOutRef.current = setTimeout(() => {
+                        setActiveScreen(1);
+                    }, 300);
                 }
             },
             error: (err) => {
@@ -515,6 +522,7 @@ export const ImportTerms = (props) => {
                             filesList={filesList}
                             setFilesList={setFilesList}
                             nonModal={true}
+                            fileError={fileError}
                         />
                         <ul className="asset-glossary-projects-wrap-list mt-6">
                             {

@@ -2,43 +2,56 @@ import React, { useState, useEffect } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { keyframes } from "@emotion/react";
+
+// Fade animation for the label
+const fade = keyframes`
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+`;
 
 const ProgressBar = ({ progressValue = 0, progressBarLabel = "", progressBarStyle = {} }) => {
-  const [animatedProgress, setAnimatedProgress] = useState(progressValue);
+  const [progress, setProgress] = useState(progressValue);
   const [progressLabel, setProgressLabel] = useState(progressBarLabel);
+  const [dots, setDots] = useState("");
 
   useEffect(() => {
-    if (progressValue > 0) {
-      const animation = setInterval(() => {
-        setAnimatedProgress((prev) => {
-          const next = prev + (progressValue - prev) * 0.1;
-          if (Math.abs(next - progressValue) < 0.5) {
-            clearInterval(animation);
-            return progressValue;
-          }
-          return next;
-        });
-      }, 30);
-
-      return () => clearInterval(animation);
-    } else {
-      setAnimatedProgress(0);
-    }
+    setProgress(progressValue);
   }, [progressValue]);
 
   useEffect(() => {
     setProgressLabel(progressBarLabel);
   }, [progressBarLabel]);
 
+  useEffect(() => {
+    let dotInterval;
+    if (progressValue === 0) {
+      dotInterval = setInterval(() => {
+        setDots((prev) => (prev.length < 3 ? prev + "." : ""));
+      }, 500);
+    } else {
+      setDots("");
+    }
+
+    return () => clearInterval(dotInterval);
+  }, [progressValue]);
+
   return (
     <Box sx={progressBarStyle}>
-      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-        {progressLabel}
+      <Typography
+        variant="body1"
+        sx={{
+          fontWeight: "bold",
+          animation: progressValue === 0 ? `${fade} 1.5s ease-in-out infinite` : "none",
+        }}
+      >
+        {progressValue === 0 ? `Reading source content${dots}` : progressLabel}
       </Typography>
       <Box display="flex" alignItems="center">
         <LinearProgress
-          variant={progressValue === 0 ? "indeterminate" : "determinate"}
-          value={animatedProgress}
+          variant={'determinate'}
+          value={progress}
           sx={{
             width: "90%",
             height: 8,
@@ -48,7 +61,7 @@ const ProgressBar = ({ progressValue = 0, progressBarLabel = "", progressBarStyl
           }}
         />
         <Typography variant="body2" sx={{ ml: 1, fontWeight: "bold" }}>
-          {progressValue === 0 ? "" : `${Math.round(animatedProgress)}%`}
+          {progressValue === 0 ? "" : `${progress}%`}
         </Typography>
       </Box>
     </Box>

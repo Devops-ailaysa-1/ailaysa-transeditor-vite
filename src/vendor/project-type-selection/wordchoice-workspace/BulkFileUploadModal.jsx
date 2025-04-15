@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import Rodal from "rodal";
-import "rodal/lib/rodal.css";
+import "rodal/lib/rodal.css"    ;
 import { ButtonLoader } from '../../../loader/CommonBtnLoader';
 import Config from '../../Config';
 import { useTranslation } from "react-i18next";
@@ -20,6 +20,7 @@ export const BulkFileUploadModal = (props) => {
         filesList,
         setFilesList,
         nonModal,
+        fileError
     } = props
 
     const { t } = useTranslation();
@@ -128,7 +129,7 @@ export const BulkFileUploadModal = (props) => {
                 <div className="body-wrapper">
                     <div className="language-details">
                         <div className='d-flex justify-between toast-align'>
-                            <h2>{t("upload_file")}</h2>
+                            <h2>{t("upload_file")}<span className="asterik-symbol">*</span></h2>
                             <button className="termDataForm-GlossaryDownBtn" onClick={downloadTemplate}>
                                 <span className="glossary-btn-txt">
                                     <span>
@@ -138,6 +139,7 @@ export const BulkFileUploadModal = (props) => {
                                 </span>
                             </button>
                         </div>
+                        {fileError && <p class="text-danger mb-2">{fileError}</p>}
                         <div className={filesList?.length !== 0 ? "dropfile-area mt-3" : "col-xs-12 mt-3"}>
                             <DragandDrop handleDrop={handleDrop}>
                                 <div className={filesList.length > 0 ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
