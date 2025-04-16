@@ -6191,7 +6191,7 @@ function AllProjectList(props) {
                                                                                                                 />
                                                                                                             ) : (
                                                                                                                 selectedProjectFile?.percentage === 100 && (
-                                                                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
+                                                                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0'}}>
                                                                                                                         <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
                                                                                                                         <span style={{ color: 'green', fontWeight: 'bold' }}>Translation Completed</span>
                                                                                                                     </div>
