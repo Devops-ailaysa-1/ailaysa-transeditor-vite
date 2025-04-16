@@ -119,6 +119,7 @@ import HowToRegister from "../../assets/images/new-ui-icons/how_to_register.svg"
 import ReactRouterPrompt from 'react-router-prompt'
 import WordchoiceIcon from "../../assets/images/choicelist.svg"
 import ProgressBar from "../../project-setup-components/allTemplate-component/ProgressBar";
+import { SaveButtonLoader } from "../../loader/CommonSaveBtnLoader";
 
 function AllProjectList(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -392,7 +393,7 @@ function AllProjectList(props) {
     const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false)
 
     // Start
-    const [downloadTaskFile, setDownloadTaskTargetFile] = useState('');
+    const [downloadTaskFile, setDownloadTaskTargetFile] =  useState({});
     const progressMap = [
         { min: 0, max: 5, message: "Reading source content" },
         { min: 5, max: 15, message: "Deciding on style" },
@@ -4998,8 +4999,11 @@ function AllProjectList(props) {
      * @since 15 Apr 2025
      */
     const downloadAdaptiveTaskTargetFile = async(task_data) => {
+        let url = "";
          try {
-             let url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=ORIGINAL`
+            const fallbackPath = `workspace_okapi/document/to/file/${task_data.document}?output_type=ORIGINAL`;
+            const url = `${Config.BASE_URL}/${downloadTaskFile || fallbackPath}`;
+             setIsDownloading(task_data.id); 
              const response = await Config.downloadFileFromApi(url);
              Config.downloadFileInBrowser(response);
              } catch (error) {
@@ -8632,7 +8636,7 @@ function AllProjectList(props) {
                                                                                                                         )
                                                                                                                     ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (   // for translate batch file/files project
                                                                                                                         <>
-                                                                                                                               {selectedProjectFile?.file_translate_done ? (
+                                                                                                                               {(!project.adaptive_file_translate && selectedProjectFile?.file_translate_done) ? (
                                                                                                                                     <button
                                                                                                                                     className="workspace-files-OpenProjectButton"
                                                                                                                                     type="button"
@@ -8642,15 +8646,19 @@ function AllProjectList(props) {
                                                                                                                                     <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                                     </button>
                                                                                                                                 ) : 
-                                                                                                                                project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED" ? (
+                                                                                                                                (project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED" ||
+                                                                                                                                    selectedProjectFile.percentage == 100) ? (
                                                                                                                                     <button
                                                                                                                                     className="workspace-files-OpenProjectButton"
                                                                                                                                     type="button"
                                                                                                                                     style={{ paddingLeft: "16px", paddingRight: "16px" }}
                                                                                                                                     onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)} 
                                                                                                                                     >
-                                                                                                                                    <span className="fileopen-new-btn">{t("download")}</span>
-                                                                                                                                    </button>
+                                                                                                                                    <span className="fileopen-new-btn">
+                                                                                                                                        {selectedProjectFile?.id === isDownloading && <SaveButtonLoader />}
+                                                                                                                                        {t("download")}
+                                                                                                                                    </span>
+                                                                                                                                    </button> 
                                                                                                                                 )  : (   // not translated then show translate btn
                                                                                                                                 selectedProjectFile?.isProcessing ? (
                                                                                                                                     <ProgressAnimateButton />
