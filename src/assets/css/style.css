@@ -8384,6 +8384,7 @@ mark.highlight-selected {
     padding: 7px 11px 7px 0px;
     text-align: right;
     border-radius: 0px 0px 4px 0px;
+    max-width: 25%;
 }
 
 .file-edit-list-table-cell:last-child {
@@ -8844,7 +8845,7 @@ ul.asset-glossary-projects-wrap-list li .asset-project-info-wrap .assets-icon .g
 
 .file-edit-list-inner-table-cell:first-child {
     width: 100%;
-    max-width: 35%;
+    max-width: 25%;
 }
 
 .file-edit-list-inner-table-cell:nth-child(2) {
@@ -8854,7 +8855,7 @@ ul.asset-glossary-projects-wrap-list li .asset-project-info-wrap .assets-icon .g
 
 .file-edit-list-inner-table-cell:nth-child(3) {
     width: 100%;
-    max-width: 18%;
+    max-width: 25%;
 }
 
 .file-edit-list-inner-table-cell:nth-child(4) {
@@ -30502,7 +30503,7 @@ h4.history-seconday-wrap-header {
     text-transform: none !important;
     border: none !important;
     padding: 7px 15px !important;
-    min-width: 100px;
+    min-width: 15%;
 }
 
 .file-name-list .convert-pdf-list-UploadProjectButton:hover {
@@ -44502,6 +44503,7 @@ body{
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.2s;
+    margin-top: 90px;
 }
 
 .go-to-workspace-btn:hover {
@@ -44584,12 +44586,12 @@ body{
 
 .translate-container {
     background-color: #fff;
-    padding: 25px !important;
+    padding: 24px !important;
     border-radius: 8px !important;
     border: 2px solid #dee2e6 !important;
     cursor: pointer !important;
     width: 50% !important;
-    margin-top: 40px !important;
+    margin-top: 20px !important;
 }
 
 .translate-container-active {
@@ -44598,10 +44600,17 @@ body{
 
 .translate-container-custom-rodal .rodal-dialog {
     padding: 24px !important;
-    height: 60dvh !important;
-    width: 50dvw !important;
+    width: 50% !important;
+    height: 463px !important;
     max-width: 1300px;
     max-height: 750px;
+}
+.overall_container_button{
+    
+    display: flex;
+    justify-content:end ;
+    align-items: end;
+    height: 28%;
 }
 
 .translate-download-btn {
@@ -44612,6 +44621,7 @@ body{
     text-transform: none !important;
     padding: 7px 15px !important;
     border: none !important;
+    width: 15%
 }
 
 .translate-download-btn:disabled {
@@ -44626,6 +44636,7 @@ body{
 
  .progress-cust .css-3x6jxi {
     position: relative !important;
+    width: 30%;
  }
 
  .progress-cust .css-5isyam-MuiTypography-root {
@@ -44695,3 +44706,13 @@ body{
     width: 100%;
     max-width: 25%;
   }
+  @media screen and (max-width: 1450px) {
+    .overall_container_button {
+        height: 20%;
+    }
+}
+@media screen and (max-width: 1400px) {
+    .overall_container_button {
+        height: 17%;
+    }
+}

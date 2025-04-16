@@ -8,6 +8,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useSelector, useDispatch } from 'react-redux';
 import { setShowTranslateDocumentModal } from '../../features/ShowTranslateDocumentModalSlice';
 import { WidthFull } from '@mui/icons-material';
+import Config from '../../Config';
+import new_translate from '../../assets/images/translateicon.svg'
 
 export const TranslateDocumentModal = (props) => {
 
@@ -73,8 +75,8 @@ export const TranslateDocumentModal = (props) => {
                                             item.id === activeTab.id ? 'translate-container-active' : ''}`}
                                             onClick={() => onSelectList(item)}
                                         >
-                                            <div className="flex items-center mb-2">
-                                                <i className="fas fa-language text-blue-500"></i>
+                                            <div className="flex items-start mb-3">
+                                            <img  src={new_translate} alt="img"/>
                                                 <input
                                                     type="radio"
                                                     name="translator"
@@ -90,8 +92,8 @@ export const TranslateDocumentModal = (props) => {
                                 );
                             })}
                         </div>
-                        <div className="">
-                            <button className="go-to-workspace-btn translate-popup-btn" onClick={handleTranslateBtn}>
+                        <div className="overall_container_button">
+                            <button className="go-to-workspace-btn " onClick={handleTranslateBtn}>
                                     Translate now
                             </button>
                        </div>

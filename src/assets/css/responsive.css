@@ -1648,9 +1648,9 @@ max-width: 27%;
   max-width: 22%;
 }
 
-.file-edit-list-inner-table-cell:last-child{
+/* .file-edit-list-inner-table-cell:last-child{
   max-width: 30%;
-}
+} */
 
 /* .file-edit-list-inner-table-cell:nth-child(3) {
 max-width: 14%;
