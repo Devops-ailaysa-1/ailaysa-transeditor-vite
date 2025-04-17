@@ -5189,7 +5189,7 @@ function AllProjectList(props) {
                     progressLoading: percentage !== 100,
                     file_translate_done: percentage == 100,
                     progressLabel: match ? match.message : "",
-                    isProcessing: false
+                isProcessing: percentage !== 100
                 };
             }
             return task;
@@ -8660,8 +8660,7 @@ function AllProjectList(props) {
                                                                                                                                     >
                                                                                                                                     <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                                     </button>
-                                                                                                                                ) : 
-                                                                                                                                ((project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED") ||
+                                                                                                                                ) : ((project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED") ||
                                                                                                                                     selectedProjectFile.percentage == 100) ? (
                                                                                                                                     <button
                                                                                                                                     className="workspace-files-OpenProjectButton"

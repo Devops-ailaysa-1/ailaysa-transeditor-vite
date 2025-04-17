@@ -4878,7 +4878,7 @@ function Fileupload(props) {
                     progressLoading: percentage !== 100,
                     file_translate_done: percentage == 100,
                     progressLabel: match ? match.message : "",
-                    isProcessing: false
+                    isProcessing: percentage !== 100
                 };
             }
             return task;
