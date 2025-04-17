@@ -1301,7 +1301,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                                                     </span>
                                                     <p>{t("insufficient_credits")}</p>
                                                 </div>
-                                                <p className="insuffient-desc">{t("pre-translation_modal_text")}</p>
+                                                <p className="insuffient-desc">{t("insufficient_credits_note")}.</p>
                                                 {(!Config.userState?.is_internal_member) && (
                                                     <div className="credits-button-align mt-3">
                                                         <ButtonBase>
