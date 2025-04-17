@@ -176,6 +176,7 @@ function AllProjectList(props) {
 
     // const [preTranslate, setPreTranslate] = useState(false)
     const [createdProjects, setCreatedProjects] = useState([]);
+    console.log(createdProjects,"createdProjects")
     const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
     const [fileUrlError, setFileUrlError] = useState("");
@@ -1985,7 +1986,11 @@ function AllProjectList(props) {
         }
     }, [preTranslateAllTask])
 
-
+    const filter_isadaptive = createdProjectsList?.find(
+        (dat) => String(dat?.id) === String(openedProjectId)
+      );
+      
+    console.log(openedProjectId,filter_isadaptive,createdProjectsList,"downloadingFilesList")
     const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as,selectedProjectFile,project) => {
         let prevPageInfo = {
             pageNo: URL_SEARCH_PARAMS.get("page"),
@@ -2032,7 +2037,8 @@ function AllProjectList(props) {
                                     } else {
                                         history(`/workspace/${response.data?.document_id}?page=1`, {state: {
                                             prevPath: location.pathname + location.search,
-                                            open_as
+                                            open_as,
+                                            is_adaptive:filter_isadaptive
                                         }});
                                     }
                                 });
@@ -5505,7 +5511,6 @@ function AllProjectList(props) {
         })
     } 
 
-
     return (
         <React.Fragment>
             <>
@@ -8705,6 +8710,7 @@ function AllProjectList(props) {
                                                                                                                             <ProgressAnimateButton />
                                                                                                                         ) : (
                                                                                                                             <>
+                                                                                                                            {/* new changes */}
                                                                                                                                 {
                                                                                                                                     clickedOpenButton == key ? (
                                                                                                                                         <button className="workspace-files-OpeningProjectButton" type="button">

@@ -285,6 +285,9 @@ function AdvancedProjectType(props) {
                             {/* <Collapse className={"collapsed-body " + (isOpen ? "collapsed-body-open" : "")} isOpen={isOpen}> */}
                                 <div className={"form-wrapper " + (projectType === 4 && "single-advance-project")}>
                                     <div className={projectType !== 4 && "d-flex gap-3 files-space-align"}>
+
+{!adaptiveTransEnable &&
+<>
                                         {projectType !== 4 && 
                                         <div className="form-group mr-3">
                                             <label htmlFor="exampleFormControlFile1" className="adv-form-label">
@@ -313,7 +316,12 @@ function AdvancedProjectType(props) {
                                                     IndicatorSeparator: () => null,
                                                 }}
                                             />
-                                        </div>}
+                                        </div>
+                                        }
+
+</>
+}
+
                                         <div className="form-group">
                                             <label className="adv-form-label">{t("set_deadline")}</label>
                                             <div className="date-time-pickers">
@@ -411,7 +419,10 @@ function AdvancedProjectType(props) {
                                     {console.log(isTranslationTaskAvailable)}
                                     {console.log(tempWriterFile)}
                                     {(isTranslationTaskAvailable || (tempWriterFile !== null && tempWriterFile !== undefined) || flowSwitch == 2) &&
+
+                                    
                                         <>
+                                        {!adaptiveTransEnable &&
                                             <div className="flex items-center" style={!props.mtEnable ? {opacity: 0.5} : {}}>
                                                 <Checkbox
                                                     id="pre-translate"
@@ -426,6 +437,7 @@ function AdvancedProjectType(props) {
                                                 </label>{disablePreTranslate && <small style={{marginLeft: '5px'}}>({t("pre_translation_on_going")})</small>}
                                             
                                             </div>
+}
                                             <div 
                                                 className={[
                                                     "d-flex gap-3 files-space-align",
