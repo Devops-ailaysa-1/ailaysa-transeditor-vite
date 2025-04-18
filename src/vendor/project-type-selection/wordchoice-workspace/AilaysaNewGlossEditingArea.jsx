@@ -1285,6 +1285,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                                         <span
                                             onClick={() => {
                                                 setShowCreditAlert(false);
+                                                setMtTermLoader(false);
                                             }}
                                             className="credits-close-btn"
                                         >
