@@ -2677,7 +2677,6 @@ function TranslateFiles(props) {
         Config.downloadFileInBrowser(response)
 
     } 
-console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExtensions")
 
     return (
         <React.Fragment>
