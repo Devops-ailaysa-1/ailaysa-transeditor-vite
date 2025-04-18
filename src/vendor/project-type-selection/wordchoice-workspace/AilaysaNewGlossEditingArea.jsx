@@ -1311,7 +1311,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                                                             </a>
                                                         </ButtonBase>
                                                         <ButtonBase className="ml-2">
-                                                            <div className="ai-alert-btn-grey" onClick={() => { setShowCreditAlert(false);}}>
+                                                            <div className="ai-alert-btn-grey" onClick={() => { setShowCreditAlert(false); setMtTermLoader(false);}}>
                                                                 {t("buy_credits_note")}
                                                             </div>
                                                         </ButtonBase>
@@ -1334,7 +1334,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                                                             </a>
                                                         </ButtonBase>
                                                         <ButtonBase className="ml-2">
-                                                            <div className="ai-alert-btn-grey" onClick={() => { setShowCreditAlert(false);}}>
+                                                            <div className="ai-alert-btn-grey" onClick={() => { setShowCreditAlert(false); setMtTermLoader(false);}}>
                                                                 {t("buy_credits_note")}
                                                             </div>
                                                         </ButtonBase>
