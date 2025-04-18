@@ -1991,6 +1991,18 @@ ul.comments-list li:hover .comment-close-btn {
     height: 171px;
     /* background-color: #f5faff; */
 }
+.button-wrap-new{
+    width: 100%;
+    border-width: thin;
+    border: 2px dashed #d3d4d5;
+    border-radius: 8px;
+    padding: 21px;
+    display: flex;
+    justify-content: center;
+    /* margin-top: 17px; */
+    height: 171px;
+    align-items: flex-start;
+}
 
 .button-wrap-file-list {
     width: 100%;
@@ -11847,6 +11859,38 @@ ul.qa-file-list-wrapper .selected-job-value {
     margin-bottom: 30px;
     justify-content: space-between;
 }
+.file-upload-instruction-new{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+.overall_mt_engine_active{
+    border-radius: 4px;
+border: 1px solid #0073DF;
+padding: 18px;
+flex-direction: row-reverse;
+background: linear-gradient(0deg, #F0F8FF 0%, #F0F8FF 100%), #FFF;
+}
+.overall_mt_engine{
+    border-radius: 4px;
+    border: 1px solid #C0C8CE;
+    background: #FFF;
+    padding: 18px;
+    flex-direction: row-reverse;
+}
+.supp-file-format {
+    margin-bottom: 10px;
+}
+.overall-draganddrop{
+    display: flex
+    ;
+        justify-content: space-between;
+        flex-direction: column;
+       
+        height: 100%;
+}
 
 .max-word-note,
 .max-file-note {
@@ -11890,7 +11934,14 @@ ul.qa-file-list-wrapper .selected-job-value {
     line-height: 24px;
     color: #7f7f7f;
 }
+.supported-file-tooltip-new{
+    color: #0073DF;
 
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
 .supp-file-format {
     display: flex;
     justify-content: space-between;
@@ -22603,7 +22654,17 @@ ul.share-row-list-outer>li.share-row-item span.share-icon-wrap:hover,
 }
 
 .new-file-proj-setup-wrapper .form-fields .form-group {
-    margin-bottom: 33px;
+    margin-bottom: 0px;
+}
+.translation_text_container{
+    color: #3C4043;
+
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+margin-bottom: 10px;
+margin-top: 20px
 }
 
 .no-found-area-box {

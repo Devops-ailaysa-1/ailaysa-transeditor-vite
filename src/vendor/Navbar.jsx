@@ -73,9 +73,10 @@ function Navbar(props) {
         aiChatMobileTab,
         handlePreviousPage,
         showTaskAssignActionBtn,
-        showViewOnlyTag
+        showViewOnlyTag,
+        check_is_adaptive
     } = props
-
+console.log(check_is_adaptive,"check_is_adaptive")
     const { t } = useTranslation();
     const queryParams = new URLSearchParams(window.location)
     const history = useNavigate()
@@ -1399,6 +1400,9 @@ function Navbar(props) {
                                                         {...TransitionProps}
                                                         style={{ transformOrigin: placement === 'bottom' ? 'right top' : 'right bottom', }}
                                                     >
+
+
+                                                        {/* new changes */}
                                                         <Paper>
                                                             <ClickAwayListener onClickAway={handleDrpDownClose}>
                                                                 <MenuList
@@ -1425,6 +1429,9 @@ function Navbar(props) {
                                                                         {t("bilingual_excel")}
                                                                         {animateDownloding === 'BILINGUAL' && <DownloadAnimation />}
                                                                     </MenuItem>
+
+                                                                    {!check_is_adaptive &&
+                                                                    <>
                                                                     {
                                                                         props.mtEnable && (
                                                                             <MenuItem className={"menu-list-item " + (animateDownloding === 'MTRAW' ? "download-option-disable" : "")} onClick={(e) => props.docCreditCheckAlertRef.current ? setShowDocCreditCheckAlert(true) : handleDownloadCheck(e, "MTRAW")}>
@@ -1433,6 +1440,8 @@ function Navbar(props) {
                                                                             </MenuItem>
                                                                         )
                                                                     }
+                                                                    </>
+                                                                }
                                                                     {!props?.prevPathRef?.current?.includes('my-stories') && (
                                                                         <>
                                                                             <MenuItem className={"menu-list-item " + (animateDownloding === 'SOURCE' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "SOURCE")}>
@@ -1496,9 +1505,9 @@ function Navbar(props) {
                                         </Tooltip>
                                         {props.isWhite ? (
                                             <ul ref={HelpOutside} className={`submenu submenu-animated submenu_fadeIn ${helpDrpVisibility ? "show" : ""}`}>
-                                                <li style={{display: isEnterprise ? "none" : ""}}>
+                                                {/* <li style={{display: isEnterprise ? "none" : ""}}>
                                                     <a onClick={() => {dispatch(setShowAdaptiveMTIntroModal(true)); setHelpDrpVisibility(false)}}>{t("adaptive_trans_help_text")}</a>
-                                                </li>
+                                                </li> */}
                                                 <li>
                                                     <a onClick={() => {props.showHowToTour(); setHelpDrpVisibility(false)}}>{t("how_to_edit_&_download")}</a>
                                                 </li>
