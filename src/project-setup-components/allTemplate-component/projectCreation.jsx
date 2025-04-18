@@ -2597,7 +2597,7 @@ function ProjectCreation(props) {
                                     </div>
                                 </div>
                             )}
-                            <div className="fileupload-global-tab-wrapper">
+                            <div className="fileupload-global-tab-wrapper mt-3">
                                 <p className={"upload-area-title" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")}>{t("upload_files")}<span className="asterik-symbol">*</span></p>
                                 {projectType === 2 && (
                                     <Nav tabs className="fileupload-tab-row">
@@ -2651,6 +2651,8 @@ function ProjectCreation(props) {
                                                                 <img className={(files.length > 0 || editFiles.length > 0 || editProjectId != null) ? 'img' : ''}
                                                                     src={UploadFolder}
                                                                     alt="folder"
+                                                                     height="38px"
+                                                                    width="46px"
                                                                 />
 
                                                                 {Object.keys(files).map((eachKey) => {

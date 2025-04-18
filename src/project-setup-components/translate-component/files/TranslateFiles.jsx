@@ -3372,6 +3372,9 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                                                         className="fas fa-caret-down"
                                                     />
                                                 </div>
+                                               
+                                                {sourceTargetValidation.source && <small className="text-danger">{t("select_source_language")}</small>}
+
                                                 {(location.search === "" && recentlyUsedLangs?.length !== 0) &&
                                                     <Select
                                                         // menuIsOpen={true}
@@ -3387,7 +3390,8 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                                                         components={{ DropdownIndicator, IndicatorSeparator: () => null }}
                                                     />
                                                 }
-                                                {sourceTargetValidation.source && <small className="text-danger">{t("select_source_language")}</small>}
+
+
                                             </div>
                                         </div>
                                         <div className="form-fields">
