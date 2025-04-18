@@ -5025,9 +5025,18 @@ function Fileupload(props) {
                     }
                 }
                 if(err?.response?.data?.msg === 'File is Empty'){
-                    Config.toast(err?.response?.data?.msg);
-                    resetForm();
-                    return;
+                    Config.toast(t("oops_file_empty"), 'error');
+                    let newArr = projectTaskListRef.current?.map(obj => {
+                      if(fileTranslatingTaskListRef.current?.find(each => each === obj.id)){
+                        return {
+                            ...obj,
+                            isProcessing: false,
+                        }
+                    }
+                    return obj
+                    }) 
+                    projectTaskListRef.current = newArr;
+                    setProjectTaskList([...newArr]);
                 }
             }
         });

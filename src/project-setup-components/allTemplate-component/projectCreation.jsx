@@ -2070,20 +2070,64 @@ function ProjectCreation(props) {
                     percentage >= item.min && (
                       percentage < item.max || (percentage === 100 && item.max === 100)
                     ));
-                return {
+    
+                const updatedTask = {
                     ...task,
                     percentage,
                     status,
-                    progressLoading: percentage !== 100, 
                     progressLabel: match ? match.message : "",
                     isProcessing: false
                 };
+    
+                // Set progressLoading based on percentage
+                if (percentage === 100) {
+                    // Temporarily set to true, will be set to false after timeout
+                    updatedTask.progressLoading = true;
+    
+                    // Delay clearing the loader
+                    setTimeout(() => {
+                        const finalTasks = projectTaskListRef.current.map(t => {
+                            if (t.id === taskId) {
+                                return { ...t, progressLoading: false };
+                            }
+                            return t;
+                        });
+                        projectTaskListRef.current = finalTasks;
+                        setProjectTaskList([...finalTasks]);
+                    }, 500); // 500ms delay or whatever fits your use case
+                } else {
+                    updatedTask.progressLoading = true;
+                }
+    
+                return updatedTask;
             }
             return task;
         });
+    
         projectTaskListRef.current = updatedTasks;
         setProjectTaskList([...updatedTasks]);
-    }
+    };
+    // const updateProjectTaskList = (taskId, percentage, status) => {
+    //     const updatedTasks = projectTaskListRef.current?.map(task => {
+    //         if (task.id === taskId) {
+    //             const match = progressMap.find(item =>
+    //                 percentage >= item.min && (
+    //                   percentage < item.max || (percentage === 100 && item.max === 100)
+    //                 ));
+    //             return {
+    //                 ...task,
+    //                 percentage,
+    //                 status,
+    //                 progressLoading: percentage !== 100, 
+    //                 progressLabel: match ? match.message : "",
+    //                 isProcessing: false
+    //             };
+    //         }
+    //         return task;
+    //     });
+    //     projectTaskListRef.current = updatedTasks;
+    //     setProjectTaskList([...updatedTasks]);
+    // }
 
     /**
      * 
@@ -2222,6 +2266,11 @@ function ProjectCreation(props) {
             div.innerText = text;
             placeCaretAtEnd(div);
         }
+        const el = e.currentTarget;
+
+        if (el.innerText.trim() === '') {
+            el.innerHTML = '';
+        }
     };
 
     const handleKeyDown = (e) => {
@@ -2244,28 +2293,33 @@ function ProjectCreation(props) {
 
     return (
         <React.Fragment>
+            {/* Project title area */}
+            {isFromView !== 'DOCUMENT_MODAL' && 
+                <div class="workspace-nav fixed-top">
+                    <div class=""></div>
+                    <div class="">
+                        <div class="nav-transeditor-wrapper"></div>
+                        <div class="">
+                            <button class="go-to-workspace-btn" style={{marginTop: '0px'}}  onClick={() => {history(`/create/all-templates`)}}>
+                                Go to workflows
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
             <div className="ai-working-area-glb-wrapper">
                 <div className="file-trans-breadcrumbs-section">
                 {isFromView === 'DOCUMENT_MODAL' &&
                   <Breadcrumbs />
                 }
-                    {/* Project title area */}
-                     {/* Workspace button */}
-                     {isFromView !== 'DOCUMENT_MODAL' && 
-                     <div className="workspace-button-container">
-                       <button className="go-to-workspace-btn" onClick={() => { history(`/create/all-templates`)}}>
-                       Go to workflows
-                       </button>
-                    </div>
-                    }
                     <div className="project-header-container">
-                     <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
+                     <div className={"project-input-wrap"} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
                         <div contentEditable
                             ref={contentprojectNameRef}
                             data-placeholder="Untitled project"
                             className="project-box"
                             tabIndex={0}
-                            style={{padding: "0px 4px"}}
+                            style={{padding: "0px 4px", minWidth: '160px'}}
                             onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
                             onInput={(e) => projectTaskList?.length === 0 && handleInput(e)}
                             onKeyDown={(e) => projectTaskList?.length === 0 && handleKeyDown(e)}

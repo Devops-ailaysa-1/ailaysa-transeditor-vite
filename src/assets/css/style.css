@@ -44736,3 +44736,17 @@ body{
         height: 17%;
     }
 }
+.workspace-nav {
+    z-index: 10 !important;
+    top: 60px !important;
+    justify-content: space-between !important;
+    background-color: transparent !important;
+    display: flex !important;
+    align-items: center !important;
+    margin-right: 80px !important;
+}
+.project-box:empty:before {
+    content: attr(data-placeholder);
+    color: #aaa;
+    pointer-events: none;
+}
