@@ -2294,13 +2294,13 @@ function ProjectCreation(props) {
     return (
         <React.Fragment>
             {/* Project title area */}
-            {isFromView !== 'DOCUMENT_MODAL' && 
+            {isFromView !== 'SIMPLE_FILE_TRANSLATOR' && 
                 <div class="workspace-nav fixed-top ai-working-area-glb-wrapper">
                     <div class=""></div>
                     <div class="">
                         <div class="nav-transeditor-wrapper"></div>
                         <div class="">
-                            <button class="go-to-workspace-btn" style={{marginTop: '24px', marginBottom: '20px'}}  onClick={() => {history(`/create/all-templates`)}}>
+                            <button class="go-to-workspace-btn" style={{marginTop: '24px'}}  onClick={() => {history(`/create/all-templates`)}}>
                                 Go to workflows
                             </button>
                         </div>
@@ -2309,7 +2309,7 @@ function ProjectCreation(props) {
             }
             <div className="ai-working-area-glb-wrapper">
                 <div className="file-trans-breadcrumbs-section">
-                {isFromView === 'DOCUMENT_MODAL' &&
+                {isFromView === 'SIMPLE_FILE_TRANSLATOR' &&
                   <Breadcrumbs />
                 }
                     <div className="project-header-container">
@@ -2374,8 +2374,8 @@ function ProjectCreation(props) {
                     } 
 
                 </div>
-                <div className={`${isFromView !== 'DOCUMENT_MODAL' && false ? 'project-create-container' : ''}`}>
-                    {isFromView !== 'DOCUMENT_MODAL' && 
+                <div className={`${isFromView !== 'SIMPLE_FILE_TRANSLATOR' && false ? 'project-create-container' : ''}`}>
+                    {isFromView !== 'SIMPLE_FILE_TRANSLATOR' && 
                         <div className="project-create-title">
                         <span className="project-create-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
