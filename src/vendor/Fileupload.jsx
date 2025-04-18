@@ -4679,7 +4679,17 @@ function Fileupload(props) {
      */
     const downloadAdaptiveTaskTargetFile = async(task_data) => {
          try {
-           let url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=ORIGINAL`
+            let url = '';
+            if(Array.isArray(downloadTaskFile) && downloadTaskFile.length > 0) {
+              const downloadEntry = downloadTaskFile.find(item => item.taskId === task_data.id);
+              if (!downloadEntry) {
+                 console.error("Download URL not found for task:", task_id);
+                 return;
+              }
+             url = `${Config.BASE_URL}/${downloadEntry.url}`   
+            } else {
+                url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=ORIGINAL`;
+            }
            const response = await Config.downloadFileFromApi(url);
            Config.downloadFileInBrowser(response);
            } catch (error) {
@@ -4868,7 +4878,7 @@ function Fileupload(props) {
                     progressLoading: percentage !== 100,
                     file_translate_done: percentage == 100,
                     progressLabel: match ? match.message : "",
-                    isProcessing: false
+                    isProcessing: percentage !== 100
                 };
             }
             return task;
@@ -4896,6 +4906,7 @@ function Fileupload(props) {
             auth: true,
             success: (response) => {
                 const resultData = response?.data;
+                let downloadTargetFile = [];
                 if (resultData && resultData?.batch_status && resultData?.batch_status.length > 0) {
                     const batchList = resultData?.batch_status;
                     const batch = getBatchByTaskId(batchList, 'task_id', taskId);
@@ -4903,11 +4914,16 @@ function Fileupload(props) {
                         batchList.map(batch => {
                             updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status);
                             if (batch?.status === 'completed') {
-                                setDownloadTaskTargetFile(batch.download_file);
+                                const newDownloadItem = {
+                                    taskId: batch.task_id,
+                                    url: batch.download_file
+                                  };
+                                downloadTargetFile.push(newDownloadItem);
                             } else {
                                 getProgressData(endpoint, batch?.task_id, projectId);
                             }
                         })
+                    setDownloadTaskTargetFile([...new Set(downloadTargetFile)]);
                     } else {
                         getProgressData(endpoint, taskId, projectId);
                     }
@@ -5004,14 +5020,23 @@ function Fileupload(props) {
                             }
                             return obj
                             }) 
-                            selectedProjectFilesRef.current = newArr;
-                            setSelectedProjectFiles([...newArr]);
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles([...newArr]);
                     }
                 }
                 if(err?.response?.data?.msg === 'File is Empty'){
-                    Config.toast(err?.response?.data?.msg);
-                    resetForm();
-                    return;
+                    Config.toast(t("oops_file_empty"), 'error');
+                    let newArr = selectedProjectFilesRef.current?.map(obj => {
+                        if(obj.id === task_id){
+                            return {
+                                ...obj,
+                               isProcessing: false
+                            }
+                        }
+                        return obj
+                        }) 
+                    selectedProjectFilesRef.current = newArr;
+                    setSelectedProjectFiles([...newArr]);
                 }
             }
         });
@@ -8118,7 +8143,7 @@ function Fileupload(props) {
                                                                                                                         )
                                                                                                                     ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (
                                                                                                                         <>
-                                                                                                                            {selectedProjectFile?.file_translate_done ? (
+                                                                                                                            {(!project.adaptive_file_translate && selectedProjectFile?.file_translate_done) ? (
                                                                                                                                     <button
                                                                                                                                     className="workspace-files-OpenProjectButton"
                                                                                                                                     type="button"
@@ -8128,7 +8153,8 @@ function Fileupload(props) {
                                                                                                                                     <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                                     </button>
                                                                                                                                 ) : 
-                                                                                                                                project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED" ? (
+                                                                                                                                ((project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED") ||
+                                                                                                                                  selectedProjectFile.percentage == 100) ? (
                                                                                                                                     <button
                                                                                                                                     className="workspace-files-OpenProjectButton"
                                                                                                                                     type="button"

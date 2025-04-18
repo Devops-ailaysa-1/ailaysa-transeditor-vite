@@ -2903,9 +2903,7 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                                                 >
                                                     <DragandDrop handleDrop={handleDrop}>
                                                         <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap-new"} >
-                                                         
                                                          <div className="overall-draganddrop">
-                                                         
                                                             <div className="draganddrop-align">
                                                                 <img className={(files.length > 0 || editFiles.length > 0 || editProjectId != null) ? 'img' : ''}
                                                                     src={UploadFolder}
@@ -2959,9 +2957,7 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                                                                             hidden
                                                                         />
                                                                     </div>
-                                                                    
                                                                 </div>
-                                                                
                                                             </div>
                                                             <div className="file-upload-instruction-new" style={{flexDirection:'column'}}>
                     <div className="supp-file-format">
@@ -2991,10 +2987,8 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                             {t("file_upload_condition_note_2")}: <span>100 MB</span>
                         </span>
                     </div>
-                </div>
-                                                            
+                                                           </div>
                                                             </div>
-
                                                         </div>
                                                       
                                                     </DragandDrop>
