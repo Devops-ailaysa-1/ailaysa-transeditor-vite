@@ -2678,6 +2678,29 @@ function TranslateFiles(props) {
 
     } 
 console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExtensions")
+    const handleInput = (e) => {
+        const div = contentprojectNameRef.current;
+        let text = div.innerText.replace(/\n/g, '');
+        if (text.length > 255) {
+            text = text.slice(0, 255);
+            div.innerText = text;
+            placeCaretAtEnd(div);
+        }
+        const el = e.currentTarget;
+
+        if (el.innerText.trim() === '') {
+            el.innerHTML = '';
+        }
+    };
+     // Helper function to place caret at the end
+     const placeCaretAtEnd = (el) => {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    };
 
     return (
         <React.Fragment>
@@ -2696,10 +2719,12 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                             onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
                             onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
                             data-placeholder={t("untitled_project")}
+                            style={{padding: "0px 4px", minWidth: '160px'}}
                             onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
                             onKeyDown={() => projectTaskList?.length === 0 && handleProjectEnter}
                             className="project-box"
                             tabIndex={0}
+                            onInput={(e) => projectTaskList?.length === 0 && handleInput(e)}
                         ></div>
                         {/* {editBtnReveal && (
               <span className="edit-icon">
