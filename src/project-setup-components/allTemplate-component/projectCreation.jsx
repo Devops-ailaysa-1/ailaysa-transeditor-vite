@@ -2295,12 +2295,12 @@ function ProjectCreation(props) {
         <React.Fragment>
             {/* Project title area */}
             {isFromView !== 'DOCUMENT_MODAL' && 
-                <div class="workspace-nav fixed-top">
+                <div class="workspace-nav fixed-top ai-working-area-glb-wrapper">
                     <div class=""></div>
                     <div class="">
                         <div class="nav-transeditor-wrapper"></div>
                         <div class="">
-                            <button class="go-to-workspace-btn" style={{marginTop: '0px'}}  onClick={() => {history(`/create/all-templates`)}}>
+                            <button class="go-to-workspace-btn" style={{marginTop: '24px', marginBottom: '20px'}}  onClick={() => {history(`/create/all-templates`)}}>
                                 Go to workflows
                             </button>
                         </div>
@@ -2646,6 +2646,7 @@ function ProjectCreation(props) {
                                                 >
                                                     <DragandDrop handleDrop={handleDrop}>
                                                         <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
+                                                          <div className="overall-draganddrop">
                                                             <div className="draganddrop-align">
                                                                 <img className={(files.length > 0 || editFiles.length > 0 || editProjectId != null) ? 'img' : ''}
                                                                     src={UploadFolder}
@@ -2699,9 +2700,7 @@ function ProjectCreation(props) {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </DragandDrop>
-                                                    <div className="file-upload-instruction">
+                                                            <div className="file-upload-instruction" style={{flexDirection:'column'}}>
                                                       <div className="supp-file-format">
                                                        <div>
                                                           <span className="supported-file-tooltip">
@@ -2719,6 +2718,9 @@ function ProjectCreation(props) {
                                                      </span>
                                                     </div>
                                                   </div>
+                                                  </div>
+                                                        </div>
+                                                    </DragandDrop>
                                                 </div>
 
                                                 { projectTaskList.length ==  0 &&
