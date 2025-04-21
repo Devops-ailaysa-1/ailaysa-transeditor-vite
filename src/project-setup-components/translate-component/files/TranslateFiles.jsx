@@ -2013,6 +2013,7 @@ function TranslateFiles(props) {
         // }`;
         else url = Config.BASE_URL + "/srt/fileUpload";
         setShowUpdateLoader(true);
+        
         Config.axios({
             headers: {
                 "Access-Control-Allow-Origin": "*",

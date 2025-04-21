@@ -185,6 +185,7 @@ function Fileupload(props) {
 
     // const [preTranslate, setPreTranslate] = useState(false)
     const [createdProjects, setCreatedProjects] = useState([]);
+    console.log(createdProjects,"translatecreatedProjects")
     const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
     const [fileUrlError, setFileUrlError] = useState("");
@@ -721,6 +722,8 @@ function Fileupload(props) {
         },
 
     ]
+
+    // new changes
 
     const subDownloadOptions = [
         {
@@ -1948,7 +1951,11 @@ function Fileupload(props) {
         }
     }, [preTranslateAllTask])
 
-
+    const filter_isadaptive = createdProjectsList?.find(
+        (dat) => String(dat?.id) === String(openedProjectId)
+      );
+      
+    console.log(openedProjectId,filter_isadaptive,createdProjectsList,"downloadingFilesList2")
     const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as,selectedProjectFile, project) => {
         let prevPageInfo = {
             pageNo: URL_SEARCH_PARAMS.get("page"),
@@ -1995,7 +2002,8 @@ function Fileupload(props) {
                                     } else {
                                         history(`/workspace/${response.data?.document_id}?page=1`, {state: {
                                             prevPath: location.pathname + location.search,
-                                            open_as
+                                            open_as,
+                                            is_adaptive:filter_isadaptive
                                         }});
                                     }
                                 });
@@ -8304,6 +8312,11 @@ function Fileupload(props) {
                                                                                                                                                                 <ul>
                                                                                                                                                                     {
                                                                                                                                                                         subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
+                                                                                                                                                                            console.log(project.adaptive_file_translate,"checkedclick2")
+                                                                                                                                                                            if (project.adaptive_file_translate && item.label === t("mt_only")) {
+                                                                                                                                                                                return null;
+                                                                                                                                                                              }
+
                                                                                                                                                                             return (
                                                                                                                                                                                 <li
                                                                                                                                                                                     key={item.id}
