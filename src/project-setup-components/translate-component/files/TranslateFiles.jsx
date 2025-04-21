@@ -38,6 +38,7 @@ import InsuffientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.
 import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg"
 import FileError from "../../../assets/images/new-ui-icons/file-error.png"
 import ImpFileIcon from "../../../assets/images/new-ui-icons/imp-icon-file.svg"
+import new_info_mark from "../../../assets/images/new-ui-icons/new_info_mark.svg"
 import GroupsColor from "../../../assets/images/new-ui-icons/groups_color.svg"
 import ArrowRightGreyColor from "../../../assets/images/new-create-hub/arrow_right_grey_color.svg"
 import UploadFolder from "../../../assets/images/new-ui-icons/upload-folder.svg"
@@ -2676,7 +2677,30 @@ function TranslateFiles(props) {
         Config.downloadFileInBrowser(response)
 
     } 
+console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExtensions")
+    const handleInput = (e) => {
+        const div = contentprojectNameRef.current;
+        let text = div.innerText.replace(/\n/g, '');
+        if (text.length > 255) {
+            text = text.slice(0, 255);
+            div.innerText = text;
+            placeCaretAtEnd(div);
+        }
+        const el = e.currentTarget;
 
+        if (el.innerText.trim() === '') {
+            el.innerHTML = '';
+        }
+    };
+     // Helper function to place caret at the end
+     const placeCaretAtEnd = (el) => {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    };
 
     return (
         <React.Fragment>
@@ -2695,10 +2719,12 @@ function TranslateFiles(props) {
                             onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
                             onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
                             data-placeholder={t("untitled_project")}
+                            style={{padding: "0px 4px", minWidth: '160px'}}
                             onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
                             onKeyDown={() => projectTaskList?.length === 0 && handleProjectEnter}
                             className="project-box"
                             tabIndex={0}
+                            onInput={(e) => projectTaskList?.length === 0 && handleInput(e)}
                         ></div>
                         {/* {editBtnReveal && (
               <span className="edit-icon">
@@ -2876,11 +2902,14 @@ function TranslateFiles(props) {
                                                     }
                                                 >
                                                     <DragandDrop handleDrop={handleDrop}>
-                                                        <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
+                                                        <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap-new"} >
+                                                         <div className="overall-draganddrop">
                                                             <div className="draganddrop-align">
                                                                 <img className={(files.length > 0 || editFiles.length > 0 || editProjectId != null) ? 'img' : ''}
                                                                     src={UploadFolder}
                                                                     alt="folder"
+                                                                    height="38px"
+                                                                    width="46px"
                                                                 />
 
                                                                 {Object.keys(files).map((eachKey) => {
@@ -2930,7 +2959,38 @@ function TranslateFiles(props) {
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div className="file-upload-instruction-new" style={{flexDirection:'column'}}>
+                    <div className="supp-file-format">
+                        <div>
+                            <div className="supp-file-format-list">
+                                <p>{supportFileExtensions.map((dat)=>dat.toUpperCase()).join(" ")}</p>
+                            </div>
+                            <span className="imp-icon-img">
+                                <img
+                                    src={ImpFileIcon}
+                                    alt="imp-icon-file"
+                                />
+                            </span>
+                            <span className="supported-file-tooltip">
+                                {t(("supported_file_formats"))}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="file-upload_instruct-row">
+                        <span className="max-word-note">
+                            {t("file_upload_condition_note_1")}: <span>50,000</span>
+                        </span>
+                        {/* <span className="add-padd-left max-word-note">
+              Bigger files may lead to a slow process initially
+            </span> */}
+                        <span className="max-file-note">
+                            {t("file_upload_condition_note_2")}: <span>100 MB</span>
+                        </span>
+                    </div>
+                                                           </div>
+                                                            </div>
                                                         </div>
+                                                      
                                                     </DragandDrop>
                                                 </div>
 
@@ -3287,7 +3347,7 @@ function TranslateFiles(props) {
                                             </div>
                                         )}
 
-                                    <div className="d-flex gap-3 files-space-align ">
+                                    <div className="d-flex gap-3 files-space-align mt-4">
                                         <div className="form-fields">
                                             <div className="form-group">
                                                 <label htmlFor="exampleFormControlFile1">
@@ -3312,6 +3372,9 @@ function TranslateFiles(props) {
                                                         className="fas fa-caret-down"
                                                     />
                                                 </div>
+                                               
+                                                {sourceTargetValidation.source && <small className="text-danger">{t("select_source_language")}</small>}
+
                                                 {(location.search === "" && recentlyUsedLangs?.length !== 0) &&
                                                     <Select
                                                         // menuIsOpen={true}
@@ -3327,7 +3390,8 @@ function TranslateFiles(props) {
                                                         components={{ DropdownIndicator, IndicatorSeparator: () => null }}
                                                     />
                                                 }
-                                                {sourceTargetValidation.source && <small className="text-danger">{t("select_source_language")}</small>}
+
+
                                             </div>
                                         </div>
                                         <div className="form-fields">
@@ -3376,9 +3440,9 @@ function TranslateFiles(props) {
                                             </div>
                                         </div>
                                     </div>
-
+<div className="translation_text_container">Translation Preferences</div>
                                     <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 w-2/3">
-                                        <div className="flex items-center">
+                                        {/* <div className="flex items-center">
                                             <Checkbox
                                                 id="machine-type"
                                                 checked={mtEnable}
@@ -3391,14 +3455,15 @@ function TranslateFiles(props) {
                                             >
                                                 {t("apply_mt")}
                                             </label>
-                                        </div>
+                                        </div> */}
                                         <div 
                                             className={[
                                                 "flex items-center gap-4 mt-3 ml-4",
                                                 !mtEnable ? "disable opacity-60" : ""
                                             ].join(' ')}
                                         >
-                                            <div className="flex items-start">
+                                            <div  onClick={() => setAdaptiveTransEnable(true)} className={`flex items-start ${adaptiveTransEnable ? "overall_mt_engine_active" : "overall_mt_engine"}`}
+                                            >
                                                 <Radio
                                                     checked={adaptiveTransEnable}
                                                     id="adaptive_trans"
@@ -3416,10 +3481,33 @@ function TranslateFiles(props) {
                                                     <span className="help_text">
                                                         {t("adaptive_help_txt")}
                                                     </span>
+
+
+                                                    <div className="supp-file-format">
+                        <div>
+                            {/* <div className="supp-file-format-list">
+                                <p>{supportFileExtensions.join(" ")}</p>
+                            </div> */}
+                            <span >
+                                <img
+                                    src={new_info_mark}
+                                    alt="imp-icon-file"
+                                    height={"20px"}
+                                    width={"20px"}
+                                />
+                            </span>
+                            <span className="supported-file-tooltip-new">
+                            Currently supports only TXT, DOCX
+                            </span>
+                        </div>
+                    </div>
+
+
                                                 </label>
 
                                             </div>
-                                            <div className="flex items-start">
+                                            <div onClick={() => setAdaptiveTransEnable(false)} className={`flex items-start ${!adaptiveTransEnable ? "overall_mt_engine_active" : "overall_mt_engine"}`}
+                                            >
                                                 <Radio
                                                     checked={!adaptiveTransEnable}
                                                     id="standard_trans"
@@ -3436,6 +3524,25 @@ function TranslateFiles(props) {
                                                     <span className="help_text">
                                                         {t("standard_mt_help_txt")}
                                                     </span>
+                                                    <div className="supp-file-format">
+                        <div>
+                           
+                            <span className="imp-icon-img">
+                                {/* <img
+                                    src={ImpFileIcon}
+                                    alt="imp-icon-file"
+                                    height={"20px"}
+                                    width={"20px"}
+                                /> */}
+                            </span>
+                            <span className="supported-file-tooltip">
+                            {/* Currently supports only TXT, DOCX */}
+                            </span>
+                        </div>
+                    </div>
+
+
+
                                                 </label>
                                             </div>
                                         </div>
@@ -3557,7 +3664,7 @@ function TranslateFiles(props) {
                                                 </button>
                                             </React.Fragment>
                                         )}
-                                        {(editProjectId == null && showTranslateAndDownloadBtn) && (
+                                        {/* {(editProjectId == null && showTranslateAndDownloadBtn) && (
                                             <button className="convert-pdf-list-UploadProjectButton"
                                                 type="submit"
                                                 onMouseUp={(e) => !translateDownloadBtnLoader && handleSubmit(e, 'trans-download')}
@@ -3569,7 +3676,7 @@ function TranslateFiles(props) {
                                                     {t("translate_and_download")}
                                                 </span>
                                             </button>
-                                        )}
+                                        )} */}
                                     </div>
                                 </div>
                             </div>
@@ -3684,35 +3791,8 @@ function TranslateFiles(props) {
                         </div>
                     </div>
                 }
-                <div className="file-upload-instruction">
-                    <div className="supp-file-format">
-                        <div>
-                            <div className="supp-file-format-list">
-                                <p>{supportFileExtensions.join(" ")}</p>
-                            </div>
-                            <span className="imp-icon-img">
-                                <img
-                                    src={ImpFileIcon}
-                                    alt="imp-icon-file"
-                                />
-                            </span>
-                            <span className="supported-file-tooltip">
-                                {t(("supported_file_formats"))}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="file-upload_instruct-row">
-                        <span className="max-word-note">
-                            {t("file_upload_condition_note_1")}: <span>50,000</span>
-                        </span>
-                        {/* <span className="add-padd-left max-word-note">
-              Bigger files may lead to a slow process initially
-            </span> */}
-                        <span className="max-file-note">
-                            {t("file_upload_condition_note_2")}: <span>100 MB</span>
-                        </span>
-                    </div>
-                </div>
+
+              
             </div>
             {showSrcLangModal && (<Rodal
                 visible={showSrcLangModal}

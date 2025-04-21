@@ -35,8 +35,6 @@ import LinkPin from "../../assets/images/new-ui-icons/link-pin.svg";
 import ReactRouterPrompt from 'react-router-prompt';
 import ProgressBar from "./ProgressBar";
 import { useDispatch } from "react-redux";
-import { setShowAilaysaGlossaryModal } from "../../features/ShowAilaysaGlossaryModalSlice";
-import { AilaysaGlossariesModal } from "../../vendor/model-select/Ailaysa-Glossaries/AilaysaGlossariesModal";
 import { SimpleTranslateGlossaryModal } from "../../vendor/model-select/Ailaysa-Glossaries/simple-translate-glossary";
 import { setSimpleTranslateGlossaryModal } from "../../features/SimpleTranslateGlossaryModalSlice";
 import { useSelector } from "react-redux";
@@ -260,62 +258,6 @@ function ProjectCreation(props) {
 
     const open = Boolean(anchorEl); //Assigned task open
 
-    const customMtSelectStyles = {
-        placeholder: (provided, state) => ({
-            ...provided,
-            color: !state.isDisabled ? "#3C4043" : "#b7b8ba",
-            fontFamily: "Roboto",
-            fontSize: "14px",
-            fontWeight: "500",
-            lineHeight: "24px",
-        }),
-        menu: (provided, state) => ({
-            ...provided,
-            padding: "6px 0px",
-            boxShadow: "0px 3px 6px #00000029",
-            border: "1px solid #DADADA",
-            borderRadius: "4px",
-            width: "100%",
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            borderBottom: "0px solid #CED4DA",
-            borderLeft: "2px solid transparent",
-            color: state.isSelected ? "#ffffff" : state.isDisabled ? "#cccccc" : "#7E7E7E",
-            background: state.isSelected ? "#F4F5F7" : "#ffffff",
-            padding: "5px 8px",
-            color: "#3C4043",
-            fontFamily: "Roboto",
-            fontSize: "13px",
-            fontWeight: "400",
-            lineHeight: "24px",
-            "&:hover": {
-                background: "#F4F5F7",
-                // borderLeft: "2px solid #0074D3",
-                cursor: "pointer",
-            },
-        }),
-        control: (base, state) => ({
-            ...base,
-            border: state.isFocused ? "0px solid #CED4DA" : "0px solid #CED4DA",
-            borderRadius: 4,
-            transtion: 0.3,
-            background: "transparent",
-            color: state.isFocused ? "#3C4043" : "#3C4043",
-            fontFamily: "Roboto",
-            fontSize: "14px",
-            fontWeight: "500",
-            lineHeight: "24px",
-            marginTop: '8px',
-            width: "100%",
-            boxShadow: 0,
-            height: 39,
-            "&:hover": {
-                background: "#EBEBEB"
-            },
-        }),
-    };
-
     useEffect(() => {
         setDidMount(true); //Component mounted
         getSourceLanguages();
@@ -345,8 +287,6 @@ function ProjectCreation(props) {
         }
     }, [targetLanguageOptionsRef.current, location.search])
 
-
-
     useEffect(() => {
         if (files.length > 0) {
             setCheckchangenav(true)
@@ -358,8 +298,6 @@ function ProjectCreation(props) {
         }
     }, [files])
 
-
-
     useEffect(() => {
         if (
             URL_SEARCH_PARAMS.get("get-project-info") &&
@@ -370,9 +308,6 @@ function ProjectCreation(props) {
             let projectId = URL_SEARCH_PARAMS.get("get-project-info");
             let projectType = URL_SEARCH_PARAMS.get("type");
             editProject(projectId, projectType);
-            // console.log('from param');
-            // console.log(targetLanguageOptionsRef.current);
-            // console.log(mtEngineOptionRef.current);
         
         }
     }, [targetLanguageOptionsRef.current, mtEngineOptionRef.current, URL_SEARCH_PARAMS.get("get-project-info")]);
@@ -380,8 +315,7 @@ function ProjectCreation(props) {
     useEffect(() => {
         let pdfId = URL_SEARCH_PARAMS.get("pdf")
         if (pdfId && location.state?.filename) {
-            setPdfIdFromToolkit(parseInt(pdfId))
-            // console.log(didMount);
+            setPdfIdFromToolkit(parseInt(pdfId));
             let arr = []
             arr.push({
                 id: parseInt(pdfId),
@@ -401,7 +335,6 @@ function ProjectCreation(props) {
         }
     }, [URL_SEARCH_PARAMS.get("doc"), location.state])
 
-
     useEffect(() => {
         if (URL_SEARCH_PARAMS.get("get-project-info")) {
             setLoading(true);
@@ -414,7 +347,6 @@ function ProjectCreation(props) {
         }
     }, [location.state])
 
-
     useEffect(() => {
         let translateFilesDiv = document.querySelector('.translate-task-list')
         if(translateFilesDiv){
@@ -422,7 +354,6 @@ function ProjectCreation(props) {
         }
     }, [document.querySelector('.translate-task-list')])
     
-
     /* Show / Hide the Github, Gitlab file upload */
     const handleShowVersionControlModal = (image, platform) => {
         setShowVersionControlModal(true);
@@ -494,42 +425,23 @@ function ProjectCreation(props) {
         setSelectedSteps(stepOptionsRef.current?.filter(each => each.value === 1))
     }, [stepOptions])
 
-
-    // handler for steps selection
-    const handleSelectedSteps = (selected) => {
-        setSelectedSteps(selected);
-    };
-
-
-
     useEffect(() => {
-
         let sourceFilter = allLangDetailsList?.filter(each => each?.language == sourceLanguage)
-
         let srcTranslateFilterRes = sourceFilter?.filter((each) => each?.translate === true);
-
         let sortedSrcMtpe = srcTranslateFilterRes?.map((each) => {
             return each?.mtpe_engines;
         });
-
-        // console.log(sortedSrcMtpe)
-
         setCommonSrcValue(sortedSrcMtpe);
-
         // remove the source language from the target language list
         setTargetLanguageOptions(targetLanguageOptions?.filter(each => each.id !== sourceLanguage))
         if (targetLanguage !== '') {
             setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage))
         }
-
-        //   console.log(allLangDetailsList.find(function(each){each.language === sourceLanguage})
     }, [sourceLanguage]);
 
     useEffect(() => {
-        // console.log(targetLanguage)
         let targetArr = [];
         for (let i = 0; i < targetLanguage?.length; i++) {
-            // console.log(targetLanguage[i].id)
             targetArr?.push(
                 allLangDetailsList?.filter(
                     (each2) => each2?.language === targetLanguage[i]?.id
@@ -539,8 +451,6 @@ function ProjectCreation(props) {
         const tarTranslateFilter = targetArr?.map((each) => {
             return each?.filter((eachTargetArr) => eachTargetArr?.translate === true);
         });
-
-        // console.log(tarTranslateFilter)
         let sortedTarMtpe = tarTranslateFilter?.map((each) => {
             return each?.map((each2) => {
                 return each2?.mtpe_engines;
@@ -551,17 +461,13 @@ function ProjectCreation(props) {
                 return a?.indexOf(v) !== -1;
             });
         });
-        // console.log(commonTarMtpeEngine)
         setCommonTarValue(commonTarMtpeEngine);
     }, [targetLanguage]);
 
     useEffect(() => {
-
-        // console.log(commonSrcValue)
         const common = commonSrcValue?.filter((value) =>
             commonTarValue?.includes(value)
         );
-        // console.log(common)
         setCommonMtpeEngine(common);
     }, [commonSrcValue, commonTarValue]);
 
@@ -602,11 +508,8 @@ function ProjectCreation(props) {
             );
 
             if (engines?.filter((each) => each.value === selectedMTEngine?.value)?.length ? false : true) {
-                setSelectedMTEngine(mtpeEngineOptions?.find((each) => each?.value === 1))
-                // console.log(mtpeEngineOptions?.find((each) => each?.value === 1));
-                // console.log('inside if');
+                setSelectedMTEngine(mtpeEngineOptions?.find((each) => each?.value === 1));
             } else if (engines?.length > 1) {
-                // console.log('inside else');
                 setTimeout(() => {
                     setSelectedMTEngine(selectedMTFromAPI)
                 }, 100);
@@ -622,49 +525,9 @@ function ProjectCreation(props) {
     };
 
     const showSettingsModal = () => setshowSettings(true);
-
     const hideSettingsModal = () => setshowSettings(false);
-
     const hideAssignManageModal = () => setShowAssignManageModal(false);
-
     const hideVersionControlModal = () => setShowVersionControlModal(false);
-
-    /* 
-          - Get the analysis data if it's not counted already
-      */
-    const showWordCountModal = (
-        e = null,
-        projectId = 0,
-        isProjectAnalyzed = true
-    ) => {
-        if (projectId && !isProjectAnalyzed) {
-            setShowWordCountLoader(true);
-            Config.axios({
-                url: `${Config.BASE_URL}/workspace/project_analysis/${projectId}`,
-                auth: true,
-                success: (response) => {
-                    let projectAnalysis = response.data;
-                    setCreatedProjects((prevState) =>
-                        prevState.map((element) =>
-                            element.id == projectId
-                                ? {
-                                    ...element,
-                                    project_analysis: projectAnalysis,
-                                    is_proj_analysed: true,
-                                }
-                                : element
-                        )
-                    );
-                    setProjectWordCount(projectAnalysis.proj_word_count);
-                    setProjectCharCount(projectAnalysis.proj_char_count);
-                    setProjectSegmentCount(projectAnalysis.proj_seg_count);
-                    setShowWordCountLoader(false);
-                },
-            });
-        }
-        setshowWordCount(true);
-    };
-
     const hideWordCountModal = () => setshowWordCount(false);
 
     useEffect(() => {
@@ -881,11 +744,6 @@ function ProjectCreation(props) {
 
     /* Handling source language selection */
     const handleSourceLangClick = (value, name, e) => {
-        /* let elements = document.getElementsByClassName('list selected')
-            for (let i = 0; i < elements.length; i++) {
-                elements[i].classList.remove('selected')
-            }
-            e.target.classList.add("selected") */
         setSourceLanguage(value);
         setshowSrcLangModal(false);
         setSourceLabel(name);
@@ -914,7 +772,6 @@ function ProjectCreation(props) {
             }
         } else {
             e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected")
-            // targetLanguageTemp.push(value);
             targetLanguageTemp = [value];
         }
         setTargetLanguage([...new Set(targetLanguageTemp)]);
@@ -969,6 +826,14 @@ function ProjectCreation(props) {
         });
     } 
 
+    /**
+     * This method used to retrieve the task data based on the project id
+     * @param {*} proj_id //project - id
+     * @param {*} action  //differentiate based on action
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr  08 2025
+     */
     const getProjectTaskData = (proj_id, action) => {
         // vendor dashboard
         setGlossaryTaskId(null);
@@ -988,7 +853,6 @@ function ProjectCreation(props) {
                     projectTaskListRef.current = newArr 
                     setProjectTaskList(newArr)
                     setProjectId(proj_id);
-                    // getProjectTransDownloadStatus()
                     return;
                 } else if (action === 'GLOSSARY') {
                     console.log(dashboardResponse);
@@ -1263,7 +1127,14 @@ function ProjectCreation(props) {
         });
     };
 
-    /* Adding new project */
+    /**
+     * This method used to create a new project while click the start translation
+     * @param {*} e 
+     * @param {*} action 
+     * @returns 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const handleSubmit = (e, action = 'trans-download') => {
         //Also check the handleUpdate
         e.preventDefault();
@@ -1428,8 +1299,14 @@ function ProjectCreation(props) {
         });
     };
 
+    /**
+     * This method used to create a glossary project based on
+     * the Soruce and target languaage while click the Glossary button
+     * @param {*} isLanguageChanges 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const handleGlossarySubmit = (isLanguageChanges) => {
-        // e.preventDefault();
         let formData = new FormData();
         formData.append("project_type", 3);
         formData.append("source_language", sourceLanguage);
@@ -2043,7 +1920,14 @@ function ProjectCreation(props) {
         });
     }
 
-    // this api will initiate the file translate process and provide the status of each task
+    /**
+     * This mehtod used to intiate the file translate process and provide the status of each task uploaded
+     * @param {*} task_id 
+     * @returns
+     *  
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const getTaskTransDownloadStatus = (task_id) => {
         if(createdProjectIdRef.current === null) return;
        // Abort only if this task already has a pending request
@@ -2125,24 +2009,60 @@ function ProjectCreation(props) {
                     }
                 }
                 if(err?.response?.data?.msg === 'File is Empty'){
-                    Config.toast(err?.response?.data?.msg);
-                    resetForm();
-                    return;
+                    Config.toast(t("oops_file_empty"), 'error');
+                    let newArr = projectTaskListRef.current?.map(obj => {
+                        if(fileTranslatingTaskListRef.current?.find(each => each === obj.id)){
+                            return {
+                                ...obj,
+                                isProcessing: false,
+                            }
+                        }
+                        return obj
+                    }) 
+                    projectTaskListRef.current = newArr;
+                    setProjectTaskList([...newArr]);
                 }
             }
         });
     }
 
+    /**
+     * This method used to get the batch by the task id
+     * @param {*} batchList 
+     * @param {*} key 
+     * @param {*} taskId 
+     * @returns batch
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const getBatchByTaskId = (batchList, key, taskId) => {
         return batchList.find(batch => batch[key] === taskId);
     };
 
+    /**
+     * This method used to trigger the polling API to know the file translation progress data.
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const getProgressData = (endpoint, taskId) => {
         setTimeout(() => {
             getTaskTranslationProgress(endpoint, taskId);
         }, 6000);
     }
 
+    /**
+     * This method used to update whole project list fields
+     * @param {*} taskId 
+     * @param {*} percentage 
+     * @param {*} status 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const updateProjectTaskList = (taskId, percentage, status) => {
         const updatedTasks = projectTaskListRef.current?.map(task => {
             if (task.id === taskId) {
@@ -2150,21 +2070,70 @@ function ProjectCreation(props) {
                     percentage >= item.min && (
                       percentage < item.max || (percentage === 100 && item.max === 100)
                     ));
-                return {
+    
+                const updatedTask = {
                     ...task,
                     percentage,
                     status,
-                    progressLoading: percentage !== 100, 
                     progressLabel: match ? match.message : "",
                     isProcessing: false
                 };
+    
+                // Set progressLoading based on percentage
+                if (percentage === 100) {
+                    // Temporarily set to true, will be set to false after timeout
+                    updatedTask.progressLoading = true;
+    
+                    // Delay clearing the loader
+                    setTimeout(() => {
+                        const finalTasks = projectTaskListRef.current.map(t => {
+                            if (t.id === taskId) {
+                                return { ...t, progressLoading: false };
+                            }
+                            return t;
+                        });
+                        projectTaskListRef.current = finalTasks;
+                        setProjectTaskList([...finalTasks]);
+                    }, 500); // 500ms delay or whatever fits your use case
+                } else {
+                    updatedTask.progressLoading = true;
+                }
+    
+                return updatedTask;
             }
             return task;
         });
+    
         projectTaskListRef.current = updatedTasks;
         setProjectTaskList([...updatedTasks]);
-    }
+    };
+    // const updateProjectTaskList = (taskId, percentage, status) => {
+    //     const updatedTasks = projectTaskListRef.current?.map(task => {
+    //         if (task.id === taskId) {
+    //             const match = progressMap.find(item =>
+    //                 percentage >= item.min && (
+    //                   percentage < item.max || (percentage === 100 && item.max === 100)
+    //                 ));
+    //             return {
+    //                 ...task,
+    //                 percentage,
+    //                 status,
+    //                 progressLoading: percentage !== 100, 
+    //                 progressLabel: match ? match.message : "",
+    //                 isProcessing: false
+    //             };
+    //         }
+    //         return task;
+    //     });
+    //     projectTaskListRef.current = updatedTasks;
+    //     setProjectTaskList([...updatedTasks]);
+    // }
 
+    /**
+     * 
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     */
     const getTaskTranslationProgress = (endpoint, taskId) => {
        Config.axios({
             url: `${Config.BASE_URL}/workspace/adaptive_file_translate/${projectId}`,
@@ -2172,6 +2141,7 @@ function ProjectCreation(props) {
             auth: true,
             success: (response) => {
                 const resultData = response?.data;
+                let downloadTargetFile = [];
                 if (resultData && resultData?.batch_status && resultData?.batch_status.length > 0) {
                     const batchList = resultData?.batch_status;
                     const batch = getBatchByTaskId(batchList, 'task_id', taskId);
@@ -2179,11 +2149,16 @@ function ProjectCreation(props) {
                         batchList.map(batch => {
                             updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status);
                             if (batch?.status === 'completed') {
-                                setDownloadTaskTargetFile(batch.download_file);
+                                const newDownloadItem = {
+                                    taskId: batch.task_id,
+                                    url: batch.download_file
+                                  };
+                                downloadTargetFile.push(newDownloadItem);
                             } else {
                                 getProgressData(endpoint, taskId);
                             }
                         })
+                    setDownloadTaskTargetFile([...new Set(downloadTargetFile)]);
                     } else {
                         getProgressData(endpoint, taskId);
                     }
@@ -2199,7 +2174,12 @@ function ProjectCreation(props) {
 
     const downloadTaskTargetFile = async (task_id) => {
         try {
-            let url = `${Config.BASE_URL}/${downloadTaskFile}`
+            const downloadEntry = downloadTaskFile.find(item => item.taskId === task_id);
+            if (!downloadEntry) {
+                console.error("Download URL not found for task:", task_id);
+                return;
+            }
+            let url = `${Config.BASE_URL}/${downloadEntry.url}`
             setIsDownloading(task_id); 
             const response = await Config.downloadFileFromApi(url);
             Config.downloadFileInBrowser(response);
@@ -2286,6 +2266,11 @@ function ProjectCreation(props) {
             div.innerText = text;
             placeCaretAtEnd(div);
         }
+        const el = e.currentTarget;
+
+        if (el.innerText.trim() === '') {
+            el.innerHTML = '';
+        }
     };
 
     const handleKeyDown = (e) => {
@@ -2308,28 +2293,33 @@ function ProjectCreation(props) {
 
     return (
         <React.Fragment>
+            {/* Project title area */}
+            {isFromView !== 'SIMPLE_FILE_TRANSLATOR' && 
+                <div class="workspace-nav fixed-top ai-working-area-glb-wrapper">
+                    <div class=""></div>
+                    <div class="">
+                        <div class="nav-transeditor-wrapper"></div>
+                        <div class="">
+                            <button class="go-to-workspace-btn" style={{marginTop: '24px'}}  onClick={() => {history(`/create/all-templates`)}}>
+                                Go to workflows
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
             <div className="ai-working-area-glb-wrapper">
                 <div className="file-trans-breadcrumbs-section">
-                {isFromView === 'DOCUMENT_MODAL' &&
+                {isFromView === 'SIMPLE_FILE_TRANSLATOR' &&
                   <Breadcrumbs />
                 }
-                    {/* Project title area */}
-                     {/* Workspace button */}
-                     {isFromView !== 'DOCUMENT_MODAL' && 
-                     <div className="workspace-button-container">
-                       <button className="go-to-workspace-btn" onClick={() => { history(`/create/all-templates`)}}>
-                       Go to workflows
-                       </button>
-                    </div>
-                    }
                     <div className="project-header-container">
-                     <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
+                     <div className={"project-input-wrap"} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
                         <div contentEditable
                             ref={contentprojectNameRef}
                             data-placeholder="Untitled project"
                             className="project-box"
                             tabIndex={0}
-                            style={{padding: "0px 4px"}}
+                            style={{padding: "0px 4px", minWidth: '160px'}}
                             onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
                             onInput={(e) => projectTaskList?.length === 0 && handleInput(e)}
                             onKeyDown={(e) => projectTaskList?.length === 0 && handleKeyDown(e)}
@@ -2384,8 +2374,8 @@ function ProjectCreation(props) {
                     } 
 
                 </div>
-                <div className={`${isFromView !== 'DOCUMENT_MODAL' && false ? 'project-create-container' : ''}`}>
-                    {isFromView !== 'DOCUMENT_MODAL' && 
+                <div className={`${isFromView !== 'SIMPLE_FILE_TRANSLATOR' && false ? 'project-create-container' : ''}`}>
+                    {isFromView !== 'SIMPLE_FILE_TRANSLATOR' && 
                         <div className="project-create-title">
                         <span className="project-create-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -2607,7 +2597,7 @@ function ProjectCreation(props) {
                                     </div>
                                 </div>
                             )}
-                            <div className="fileupload-global-tab-wrapper">
+                            <div className="fileupload-global-tab-wrapper mt-3">
                                 <p className={"upload-area-title" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")}>{t("upload_files")}<span className="asterik-symbol">*</span></p>
                                 {projectType === 2 && (
                                     <Nav tabs className="fileupload-tab-row">
@@ -2656,10 +2646,13 @@ function ProjectCreation(props) {
                                                 >
                                                     <DragandDrop handleDrop={handleDrop}>
                                                         <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
+                                                          <div className="overall-draganddrop">
                                                             <div className="draganddrop-align">
                                                                 <img className={(files.length > 0 || editFiles.length > 0 || editProjectId != null) ? 'img' : ''}
                                                                     src={UploadFolder}
                                                                     alt="folder"
+                                                                     height="38px"
+                                                                    width="46px"
                                                                 />
 
                                                                 {Object.keys(files).map((eachKey) => {
@@ -2709,15 +2702,13 @@ function ProjectCreation(props) {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </DragandDrop>
-                                                    <div className="file-upload-instruction">
+                                                            <div className="file-upload-instruction" style={{flexDirection:'column'}}>
                                                       <div className="supp-file-format">
                                                        <div>
                                                           <span className="supported-file-tooltip">
                                                              {t(("supported_file_formats"))}:
                                                          </span>
-                                                         <span className="supported-file-tooltip"> TXT,DOCX</span>
+                                                         <span className="supported-file-tooltip"> TXT, DOCX</span>
                                                        </div>
                                                      </div>
                                                      <div className="file-upload_instruct-row">
@@ -2729,6 +2720,9 @@ function ProjectCreation(props) {
                                                      </span>
                                                     </div>
                                                   </div>
+                                                  </div>
+                                                        </div>
+                                                    </DragandDrop>
                                                 </div>
 
                                                 { projectTaskList.length ==  0 &&
@@ -3063,9 +3057,9 @@ function ProjectCreation(props) {
                                                                                     />
                                                                                 ) : (
                                                                                  task.percentage === 100 && (
-                                                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
+                                                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0',width:'30%' }}>
                                                                                     <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
-                                                                                   <span style={{ color: 'green', fontWeight: 'bold' }}>Translation Completed</span>
+                                                                                   <span style={{ color: '#3c4043', fontWeight: '500' }}>Translation completed</span>
                                                                                 </div>
                                                                                  )
                                                                                )}
@@ -3122,7 +3116,7 @@ function ProjectCreation(props) {
                                     <div className="new-btn-grp">
                                         <Tooltip title="Creates a new project. Your current project will be saved in 'My projects'." arrow>
                                           <button 
-                                            className="convert-pdf-list-UploadProjectButton" 
+                                            className="reset-button"  
                                             type="submit"
                                             onClick={() => resetForm()}>
                                             <span className="fileupload-new-btn">

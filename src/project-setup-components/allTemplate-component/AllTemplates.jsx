@@ -203,24 +203,34 @@ const AllTemplate = (props) => {
     };
 
     const handleCardClick = (item) => {
-        if (item.id == 2){
-            translateDocumentHandler(item);
-            return;
-        }
         dispatch(setShowGlobalTransition(false))
         setTimeout(() => {
             if (item.attributes?.url.includes("https")) {
                 window.open(item.attributes?.url, "_blank")
             } else {
-                history(item.attributes?.url, { state: { aiWritingCateg: item.attributes?.backend_id, prevPath: location.pathname } })
+                const state = {
+                    aiWritingCateg: item.attributes?.backend_id,
+                    prevPath: location.pathname,
+                };
+                if (item.id === 2) {
+                    state.isFromView = 'SIMPLE_FILE_TRANSLATOR';
+                }
+                history(item.attributes?.url, { state });
             }
         }, 250);
     }
 
-    const translateDocumentHandler = (item) => {
-        dispatch(setShowTranslateDocumentModal(true));
-        setOpenTranslateDocument(true);
-    }
+    /**
+     * This method used to open the translate document popup modal
+     * @param {*} item 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 08 Apr 2025
+     */
+    // const translateDocumentHandler = (item) => {
+    //     dispatch(setShowTranslateDocumentModal(true));
+    //     setOpenTranslateDocument(true);
+    // }
 
     const handleOpenSpellCheck = (item) => {
         history(`/spell-check`, { state: { aiWritingCateg: null, prevPath: location.pathname } })
@@ -229,7 +239,7 @@ const AllTemplate = (props) => {
 
     return (
         <React.Fragment>
-            {openTranslateDocument && <TranslateDocumentModal />}
+            {/* {openTranslateDocument && <TranslateDocumentModal />} */}
             <section className="all-template-glb-wrapper">
                 <div className="all-template-header">
                     <div className="all-templates-container">

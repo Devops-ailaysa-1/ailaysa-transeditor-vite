@@ -42,8 +42,9 @@ const ProgressBar = ({ progressValue = 0, progressBarLabel = "", progressBarStyl
       <Typography
         variant="body1"
         sx={{
-          fontWeight: "bold",
+          fontWeight: "500",
           animation: progressValue === 0 ? `${fade} 1.5s ease-in-out infinite` : "none",
+          fontSize:'14px'
         }}
       >
         {progressValue === 0 ? `Reading source content${dots}` : progressLabel}

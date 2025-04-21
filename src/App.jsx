@@ -379,9 +379,9 @@ function App() {
                         <ToastContainer position="top-left" limit={1} icon={false} />
                         <UpdateProfileSettingAlertModal />
 
-                        {(showAdaptiveTransIntroModal && !isEnterprise) && (
+                        {/* {(showAdaptiveTransIntroModal && !isEnterprise) && (
                             <AdaptiveTranslationIntroModal />
-                        )}
+                        )} */}
 
                         {/* {
                             isCookieAccepted === false && cookieShowRoute.indexOf(window?.location?.pathname) !== -1 && (

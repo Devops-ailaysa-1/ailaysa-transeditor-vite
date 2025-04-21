@@ -168,7 +168,8 @@ function Workspace(props) {
     const history = useNavigate();
     const params = useParams();
     const dispatch = useDispatch()
-
+console.log(location,"checklocation")
+const check_is_adaptive=location?.state?.is_adaptive?.adaptive_file_translate
     // const classes = useStyles();
     const userDetails = useSelector((state) => state.userDetails.value)
     const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
@@ -7588,6 +7589,7 @@ useEffect(() => {
                 clientResponseDataRef={clientResponseDataRef}
                 showTaskAssignActionBtn={showTaskAssignActionBtn}
                 setShowTaskAssignActionBtn={setShowTaskAssignActionBtn}
+                check_is_adaptive={check_is_adaptive}
             />
             {
                 showAiLoader && <MainAILoader background={"#ffffffba"} />
@@ -7772,6 +7774,10 @@ useEffect(() => {
                                             </Tooltip>
                                         </li>
                                     </ul> */}
+
+                                    {/* //New changes */}
+
+                                    {!check_is_adaptive &&
                                 <ul>
                                     <Tooltip title={t("merge")} placement="bottom" arrow>
                                         <li className={!isShowMergeIcon ? "onclickdisable" : ""} onClick={mergeSegments}>
@@ -7796,6 +7802,7 @@ useEffect(() => {
                                         </li>
                                     </Tooltip>
                                 </ul>
+}
                                 {supportedImeLanguage?.includes(targetLanguageCode) &&  <ul className="last-row-tools-1" onClick={handleIme}>
                                     <li>
                                         <Tooltip title="Transliteration typing" placement="bottom" arrow>
