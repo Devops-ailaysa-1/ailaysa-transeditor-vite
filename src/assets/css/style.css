@@ -2134,7 +2134,7 @@ input[type="number"] {
     display: flex;
     flex-direction: row-reverse;
     gap: 12px;
-    padding-top: 28px;
+    /* padding-top: 28px; */
 }
 
 .new-btn-grp .action-btns {
@@ -2184,6 +2184,7 @@ input[type="number"] {
     line-height: 1.5;
     color: #222222;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .file-upload-form label.adv-form-label {
@@ -11879,6 +11880,7 @@ background: linear-gradient(0deg, #F0F8FF 0%, #F0F8FF 100%), #FFF;
     background: #FFF;
     padding: 18px;
     flex-direction: row-reverse;
+    cursor: pointer;
 }
 .supp-file-format {
     margin-bottom: 10px;

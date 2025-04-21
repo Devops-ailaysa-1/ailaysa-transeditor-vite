@@ -3462,7 +3462,7 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                                                 !mtEnable ? "disable opacity-60" : ""
                                             ].join(' ')}
                                         >
-                                            <div className={`flex items-start ${adaptiveTransEnable ? "overall_mt_engine_active" : "overall_mt_engine"}`}
+                                            <div  onClick={() => setAdaptiveTransEnable(true)} className={`flex items-start ${adaptiveTransEnable ? "overall_mt_engine_active" : "overall_mt_engine"}`}
                                             >
                                                 <Radio
                                                     checked={adaptiveTransEnable}
@@ -3506,7 +3506,7 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                                                 </label>
 
                                             </div>
-                                            <div className={`flex items-start ${!adaptiveTransEnable ? "overall_mt_engine_active" : "overall_mt_engine"}`}
+                                            <div onClick={() => setAdaptiveTransEnable(false)} className={`flex items-start ${!adaptiveTransEnable ? "overall_mt_engine_active" : "overall_mt_engine"}`}
                                             >
                                                 <Radio
                                                     checked={!adaptiveTransEnable}
