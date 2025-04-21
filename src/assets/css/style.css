@@ -44802,12 +44802,14 @@ body{
 
 .workspace-nav {
     z-index: 10 !important;
-    top: 60px !important;
+    top: 52px !important;
     justify-content: space-between !important;
-    background-color: transparent !important;
+    background-color: #f8fafc !important;
     display: flex !important;
     align-items: center !important;
     margin: auto;
+    height: 45px !important;
+    width: 1300px;
 }
 
 .project-box:empty:before {
