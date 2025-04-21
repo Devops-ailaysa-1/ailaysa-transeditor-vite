@@ -3526,9 +3526,7 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                                                     </span>
                                                     <div className="supp-file-format">
                         <div>
-                            <div className="supp-file-format-list">
-                                <p>{supportFileExtensions.join(" ")}</p>
-                            </div>
+                           
                             <span className="imp-icon-img">
                                 {/* <img
                                     src={ImpFileIcon}
