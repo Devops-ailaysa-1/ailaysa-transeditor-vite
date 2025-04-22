@@ -46,6 +46,9 @@ import LinkPin from "../../../assets/images/new-ui-icons/link-pin.svg"
 import sanitizeHtml from 'sanitize-html-react';
 import ReactRouterPrompt from 'react-router-prompt'
 import { Checkbox, Radio } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setAdvanceTranslateGlossaryModal } from "../../../features/AdvanceTranslateGlossaryModalSlice";
+import { AdvanceTranslateGlossaryModal } from "../../../vendor/model-select/Ailaysa-Glossaries/AdvanceTranslateGlossaryModal";
 
 function TranslateFiles(props) {
     const {
@@ -241,6 +244,14 @@ function TranslateFiles(props) {
     // adaptive translation state
     const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
 
+    // advance glossary state
+    const [glossaryProjectId, setGlossaryProjectId] = useState(null);
+    const [glossaryTaskId, setGlossaryTaskId] = useState(null);
+    const [defaultGlossaryProjectId, setDefaultGlossaryProjectId] = useState(null);
+    const [openGlossariesModal, setOpenGlossariesModal] = useState(false);
+    const [backupSourceLanguage, setBackupSourceLanguage] = useState("");
+    const [backupTargetLanguage, setBackupTargetLanguage] = useState("");
+
     const searchAreaRef = useRef(null);
     const mtEngineOptionRef = useRef(null)
 
@@ -283,7 +294,10 @@ function TranslateFiles(props) {
     const projectTaskListRef = useRef(null)
     const inputFileUploadRef = useRef(null)
     const fileTranslatingTaskListRef = useRef([])
+    const defaultGlossDetailsRef = useRef(null)
     /* Ref constants - end */
+
+    const dispatch = useDispatch()
 
     const open = Boolean(anchorEl); //Assigned task open
 
@@ -1246,6 +1260,14 @@ function TranslateFiles(props) {
         });
     } 
 
+    /**
+     * This method used to retrieve the task created under the project id.
+     * @param {*} proj_id 
+     * @param {*} action 
+     * 
+     * For Glossary Project @author - Padmabharathi Subiramanian 
+     * @since APR 22 2025
+     */
     const getProjectTaskData = (proj_id, action) => {
         // vendor dashboard
         Config.axios({
@@ -1261,12 +1283,24 @@ function TranslateFiles(props) {
                             isProcessing: true
                         }
                     })
-                    // console.log(newArr)
                     projectTaskListRef.current = newArr 
                     setProjectTaskList(newArr)
-
                     getProjectTransDownloadStatus()
                     return;
+                } else if (action === 'GLOSSARY') {
+                    const glossaryData = dashboardResponse.data[0];
+                    setGlossaryTaskId(glossaryData.id);
+                    const defaultGlossary = {
+                        // gloss_id: glossaryProjectId,
+                        gloss_job_id: glossaryData.job,
+                        gloss_task_id: glossaryData.id,
+                        gloss_project_id: glossaryProjectId
+                    };
+                    defaultGlossDetailsRef.current = defaultGlossary;
+                    setOpenGlossariesModal(true);
+                    setTimeout(() => {
+                        dispatch(setAdvanceTranslateGlossaryModal(true));
+                    }, 500);
                 }
                 // open file/document
                 openDocumentFile(dashboardResponse.data[0].document_url, proj_id)
@@ -2013,6 +2047,7 @@ function TranslateFiles(props) {
         // }`;
         else url = Config.BASE_URL + "/srt/fileUpload";
         setShowUpdateLoader(true);
+        
         Config.axios({
             headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -2277,6 +2312,14 @@ function TranslateFiles(props) {
 
     const handleProjectEnter = (e) => {
         e.which === 13 ? e.target.blur() : e.target.focus();
+        
+    };
+    const handleKeyDown = (e) => {
+       console.log(e,"checkrd")
+        if (e.key === 'Enter') {
+            // e.stopProgation();
+            e.preventDefault();
+        }
     };
 
 
@@ -2315,7 +2358,7 @@ function TranslateFiles(props) {
 
 
     const executeProposalScroll = () => {
-        contentprojectNameRef.current.scrollTo(0, 0);
+        contentprojectNameRef?.current?.scrollTo(0, 0);
     }
 
     const handleBlockedNavigation = ({nextLocation}) => {
@@ -2677,7 +2720,6 @@ function TranslateFiles(props) {
         Config.downloadFileInBrowser(response)
 
     } 
-console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExtensions")
     const handleInput = (e) => {
         const div = contentprojectNameRef.current;
         let text = div.innerText.replace(/\n/g, '');
@@ -2702,6 +2744,124 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
         sel.addRange(range);
     };
 
+    /**
+     * This method used to validate the source and target languages value while click the glossary button
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 22 2025
+     */
+    const handleGlossaryBtnEvent = () => {
+        if (sourceLanguage == "" || targetLanguage == "") {
+            setSourceTargetValidation({
+            ...sourceTargetValidation,
+            source: sourceLanguage == "",
+            target: targetLanguage == ""
+            });
+            return;
+        }
+        let isLanguageChanges = false;
+        if (glossaryProjectId) {
+            isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage != "" ? targetLanguage[0] : "");
+        }
+        if (!glossaryProjectId || isLanguageChanges) {
+            handleGlossarySubmit(isLanguageChanges);
+        } else {
+            setOpenGlossariesModal(true);
+            dispatch(setAdvanceTranslateGlossaryModal(true));
+        }
+    };
+    
+    /**
+     * This method used to if the source and target languages changes with the existing one.
+     * @param {*} sourceLanguageValue 
+     * @param {*} targetLanguageValue 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 22 2025
+     */
+    const checkIsLanguageChanges = (sourceLanguageValue, targetLanguageValue) => {
+        if ((Number(backupSourceLanguage) != Number(sourceLanguageValue)) || (Number(backupTargetLanguage) != Number(targetLanguageValue.id)))
+            return true;
+        else return false;
+    }
+    
+    /**
+     * This method used to create a glossary project based on
+     * the Soruce and target languaage while click the Glossary button
+     * @param {*} isLanguageChanges 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 22 2025
+    */
+    const handleGlossarySubmit = (isLanguageChanges) => {
+        let formData = new FormData();
+        formData.append("project_type", 3);
+        formData.append("source_language", sourceLanguage);
+        targetLanguage.map((eachTargetLanguage) => {
+        formData.append("target_languages", eachTargetLanguage?.id);
+        });
+        formData.append("mt_enable", mtEnable);
+        formData.append("primary_glossary_source_name", "");
+        formData.append("source_Copyright_owner", "");
+        formData.append("details_of_PGS", "");
+        formData.append("notes", "");
+        formData.append("usage_permission", "Private");
+        formData.append("public_license", "");
+        formData.append("steps", 1);
+    
+        let url = Config.BASE_URL + "/workspace/project/quick/setup/";
+        let glossaryToast = "Glossary Project created successfully";
+        if (isLanguageChanges) {
+            formData.append("glossary_job_update", true);
+            url += `${glossaryProjectId}/?step_delete_ids=&file_delete_ids=&job_delete_ids=&subject_delete_ids=&project_type_id=3`;
+            glossaryToast = "Glossary Project updated successfully";
+        }
+    
+        Config.axios({
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                Accept: "application/json",
+                "Content-Type":
+                "multipart/form-data; boundary=---------------------------735323031399963166993862150",
+            },
+            url: url,
+            method: isLanguageChanges ? "PUT" : "POST",
+            data: formData,
+            auth: true,
+            success: (response) => {
+                setGlossaryProjectId(response.data.id);
+                setDefaultGlossaryProjectId(response.data.glossary_proj_id);
+                getProjectTaskData(response.data.id, "GLOSSARY");
+                Config.toast(glossaryToast);
+                setBackupSourceLanguage(formData.get("source_language"));
+                setBackupTargetLanguage(formData.get("target_languages"));
+                return;
+            },
+            error: (err) => {
+                if (err?.response?.data?.files) {
+                  Config.toast(t("submitted_file_empty"), 'warning')
+                }
+                setShowCreateLoader(false);
+                setTranslateDownloadBtnLoader(false)
+                }
+            });
+    };
+
+    const getDefaultGlossDetails = () => {
+        // Config.axios({
+        //     url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
+        //     auth: true,
+        //     success: (response) => {
+        //         defaultGlossDetailsRef.current = response.data
+        //     },
+        //     error: (err) => {
+        //         // setisGlossaryListLoading(false)
+        //     }
+        // });
+    } 
+
     return (
         <React.Fragment>
             <div className="ai-working-area-glb-wrapper">
@@ -2711,20 +2871,21 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                 {projectNameError?.length ? <span className="text-danger d-block  error-bottom">Required</span> : null} */}
                 <div className="file-trans-breadcrumbs-section">
                     <Breadcrumbs />
+                    
                     <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
-                        <div
+                        <div 
                             ref={contentprojectNameRef}
                             suppressContentEditableWarning={true}
                             contentEditable={projectTaskList?.length === 0 ? true : false}
-                            onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
-                            onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
                             data-placeholder={t("untitled_project")}
                             style={{padding: "0px 4px", minWidth: '160px'}}
-                            onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
-                            onKeyDown={() => projectTaskList?.length === 0 && handleProjectEnter}
-                            className="project-box"
+                             className="project-box"
                             tabIndex={0}
+                            onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
                             onInput={(e) => projectTaskList?.length === 0 && handleInput(e)}
+                            onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
+                            onKeyDown={(e) => projectTaskList?.length === 0 && handleKeyDown(e)}
+                            onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
                         ></div>
                         {/* {editBtnReveal && (
               <span className="edit-icon">
@@ -2757,7 +2918,21 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                             </div>
                         </div>
                     </div> */}
+                    {/* <div className="translation-actions">
+                        <div></div>
+                        <div style={{alignContent: 'end'}}>
+                            <button className={"glossary-btn" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")} onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
+                        </div>
+                    </div> */}
                 </div>
+                { openGlossariesModal && 
+                    <AdvanceTranslateGlossaryModal 
+                        documentDetails={{}}//documentDetailsRef.current}
+                        defaultGlossDetailsRef={defaultGlossDetailsRef}
+                        getDefaultGlossDetails={getDefaultGlossDetails}
+                        glossTaskId={glossaryTaskId}
+                    />
+                }
                 <div className={"ai-translate-file-wrapper " + (projectTaskList?.length !== 0 ? "behind-overlay" : "")} style={(showCreateLoader || translateDownloadBtnLoader) ? {pointerEvents: 'none'} : {}}>
                     <div>
                     {/* <div className="project-setup-heading-new">
@@ -3441,7 +3616,7 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                                         </div>
                                     </div>
 <div className="translation_text_container">Translation Preferences</div>
-                                    <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 w-2/3">
+                                    <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 ">
                                         {/* <div className="flex items-center">
                                             <Checkbox
                                                 id="machine-type"
@@ -3588,7 +3763,7 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                                 </div>
                             )}
                             <div className="col-xs-12">
-                                <div className="d-flex justify-between">
+                                <div className="d-flex justify-between align-items-end">
                                     {editProjectId != null && (
                                         <button
                                             className="glossaryglobalform-StepCancelButton"

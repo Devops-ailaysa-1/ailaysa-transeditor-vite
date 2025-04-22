@@ -52,7 +52,7 @@ const ProjectSetup = () => {
                 </>
                 :
                 <>
-                    <Navbar />
+                    <Navbar istranslator={true}/>
                     <div className="ai-new-project-setup-wrapper">
                         <div className="ai-working-col-wrapper">
                             {/* {isIncompleteEditorSettings && (

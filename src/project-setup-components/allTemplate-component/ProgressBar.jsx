@@ -26,13 +26,14 @@ const ProgressBar = ({ progressValue = 0, progressBarLabel = "", progressBarStyl
 
   useEffect(() => {
     let dotInterval;
-    if (progressValue === 0) {
+    // if (progressValue === 0) {
       dotInterval = setInterval(() => {
         setDots((prev) => (prev.length < 3 ? prev + "." : ""));
       }, 500);
-    } else {
-      setDots("");
-    }
+    // }
+    //  else {
+    //   setDots("");
+    // }
 
     return () => clearInterval(dotInterval);
   }, [progressValue]);
@@ -43,11 +44,15 @@ const ProgressBar = ({ progressValue = 0, progressBarLabel = "", progressBarStyl
         variant="body1"
         sx={{
           fontWeight: "500",
-          animation: progressValue === 0 ? `${fade} 1.5s ease-in-out infinite` : "none",
+          // animation: progressValue === 0 ? `${fade} 1.5s ease-in-out infinite` : "none",
+          animation:  `${fade} 1.5s ease-in-out infinite`,
           fontSize:'14px'
         }}
       >
-        {progressValue === 0 ? `Reading source content${dots}` : progressLabel}
+        {/* {progressValue === 0 ? `Reading source content${dots}` : progressLabel} */}
+
+        {progressLabel === "Finishing" || progressLabel === "Almost Finished" ? `${progressLabel}${dots}!`: `${progressLabel}${dots}`}
+        
       </Typography>
       <Box display="flex" alignItems="center">
         <LinearProgress

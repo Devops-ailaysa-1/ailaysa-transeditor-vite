@@ -37,6 +37,7 @@ import AppsIcon from "./styles-svg/AppsIcon";
 import StartUpTNCampaignOffer from "./model-select/StartUpTNCampaignOffer";
 import WorkspaceLogo from "../assets/images/new-ui-icons/new-ailyasa-wrkspace-logo.svg"
 import ChatBookLogo from "../assets/images/ailaysa-chat-books.svg"
+import AiTranslatorimg from '../assets/images/AiTranslatorimg.svg'
 import ProjectsLogo from "../assets/images/new_projects_logo_new.svg"
 import ChevronLeftBlack from "../assets/images/new-ui-icons/chevron_left_black.svg"
 import ArrowRightAltColor from "../assets/images/new-ui-icons/arrow_right_alt_color.svg"
@@ -76,7 +77,6 @@ function Navbar(props) {
         showViewOnlyTag,
         check_is_adaptive
     } = props
-console.log(check_is_adaptive,"check_is_adaptive")
     const { t } = useTranslation();
     const queryParams = new URLSearchParams(window.location)
     const history = useNavigate()
@@ -1087,7 +1087,8 @@ console.log(check_is_adaptive,"check_is_adaptive")
                                         WorkspaceLogo
                                     : isAiChatBook ?
                                         ChatBookLogo
-                                    :
+                                    : props.istranslator ?
+                                    AiTranslatorimg :
                                         ProjectsLogo
                                 }
                                 alt="logo"
