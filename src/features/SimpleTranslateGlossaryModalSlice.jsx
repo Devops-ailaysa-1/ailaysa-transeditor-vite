@@ -1,3 +1,10 @@
+/**
+ * Redux slice to manage the visiblity state of the Simple Translate Glossary Modal.
+ * This modal is used in the translation UI to show glossary-related information.
+ * 
+ * @author Padmabharathi Subiramanian 
+ * @since  APR 09 2025
+ */
 import { createSlice } from '@reduxjs/toolkit'
 
 export const SimpleTranslateGlossaryModalSlice = createSlice({
@@ -5,7 +12,6 @@ export const SimpleTranslateGlossaryModalSlice = createSlice({
     initialState: {value: false},
     reducers: {
         setSimpleTranslateGlossaryModal: (state, action) => {
-            // console.log(state)
             state.value = action.payload
         }
     }

@@ -2702,6 +2702,112 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
         sel.addRange(range);
     };
 
+    /**
+     * This method used to validate the source and target languages value while click the glossary button
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 22 2025
+     */
+    const handleGlossaryBtnEvent = () => {
+        if (sourceLanguage == "" || targetLanguage == "") {
+            setSourceTargetValidation({
+            ...sourceTargetValidation,
+            source: sourceLanguage == "",
+            target: targetLanguage == ""
+            });
+            return;
+        }
+        let isLanguageChanges = false;
+        if (glossaryProjectId) {
+            isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage != "" ? targetLanguage[0] : "");
+        }
+        if (!glossaryProjectId || isLanguageChanges) {
+            handleGlossarySubmit(isLanguageChanges);
+        } else {
+            setOpenGlossariesModal(true);
+            dispatch(setAdvanceTranslateGlossaryModal(true));
+        }
+    };
+    
+    /**
+     * This method used to if the source and target languages changes with the existing one.
+     * @param {*} sourceLanguageValue 
+     * @param {*} targetLanguageValue 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 22 2025
+     */
+    const checkIsLanguageChanges = (sourceLanguageValue, targetLanguageValue) => {
+        if ((Number(backupSourceLanguage) != Number(sourceLanguageValue)) || (Number(backupTargetLanguage) != Number(targetLanguageValue.id)))
+            return true;
+        else return false;
+    }
+
+     /**
+      * This method used to create a glossary project based on
+      * the Soruce and target languaage while click the Glossary button
+      * @param {*} isLanguageChanges 
+      * @author Padmabharathi Subiramanian 
+      * @since Apr 08 2025
+     */
+        const handleGlossarySubmit = (isLanguageChanges) => {
+            let formData = new FormData();
+            formData.append("project_type", 3);
+            formData.append("source_language", sourceLanguage);
+            targetLanguage.map((eachTargetLanguage) => {
+                formData.append("target_languages", eachTargetLanguage?.id);
+            });
+            formData.append("mt_enable", mtEnable);
+            formData.append("primary_glossary_source_name", "");
+            formData.append("source_Copyright_owner", "");
+            formData.append("details_of_PGS", "");
+            formData.append("notes", "");
+            formData.append("usage_permission", "Private");
+            formData.append("public_license", "");
+            formData.append("steps", 1);
+    
+            let url = Config.BASE_URL + "/workspace/project/quick/setup/";
+            let glossaryToast = "Glossary Project created successfully";
+            if (isLanguageChanges) {
+                formData.append("glossary_job_update", true);
+                url += `${glossaryProjectId}/?step_delete_ids=&file_delete_ids=&job_delete_ids=&subject_delete_ids=&project_type_id=3`;
+                glossaryToast = "Glossary Project updated successfully";
+            }
+    
+            Config.axios({
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    Accept: "application/json",
+                    "Content-Type":
+                        "multipart/form-data; boundary=---------------------------735323031399963166993862150",
+                },
+                url: url,
+                method: isLanguageChanges ? "PUT" : "POST",
+                data: formData,
+                auth: true,
+                success: (response) => {
+                    setGlossaryProjectId(response.data.id);
+                    setDefaultGlossaryProjectId(response.data.glossary_proj_id);
+                    getProjectTaskData(response.data.id, "GLOSSARY");
+                    Config.toast(glossaryToast);
+    
+                    setBackupSourceLanguage(formData.get("source_language"));
+                    setBackupTargetLanguage(formData.get("target_languages"));
+    
+                    return;
+                },
+                error: (err) => {
+                    if (err?.response?.data?.files) {
+                        Config.toast(t("submitted_file_empty"), 'warning')
+                    }
+                    setShowCreateLoader(false);
+                    setTranslateDownloadBtnLoader(false)
+                }
+            });
+        };
+
     return (
         <React.Fragment>
             <div className="ai-working-area-glb-wrapper">
@@ -2757,6 +2863,12 @@ console.log(supportFileExtensions.map((dat)=>dat.toUpperCase()),"supportFileExte
                             </div>
                         </div>
                     </div> */}
+                    <div className="translation-actions">
+                        <div></div>
+                        <div style={{alignContent: 'end'}}>
+                            <button className={"glossary-btn" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")} onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
+                        </div>
+                    </div>
                 </div>
                 <div className={"ai-translate-file-wrapper " + (projectTaskList?.length !== 0 ? "behind-overlay" : "")} style={(showCreateLoader || translateDownloadBtnLoader) ? {pointerEvents: 'none'} : {}}>
                     <div>
