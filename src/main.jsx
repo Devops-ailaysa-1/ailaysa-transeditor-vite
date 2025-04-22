@@ -81,7 +81,7 @@ const store = configureStore({
 	showAdaptiveTransIntroModal: ShowAdaptiveTransIntroModalReducer,
 	showTranslateDocumentModal: showTranslateDocumentModalReducer,
 	showSimpleTranslateGlossaryModal: SimpleTranslateGlossaryModalReducer,
-	showAdvanceTranslateFlossaryModal: AdvanceTranslateGlossaryModalReducer,
+	showAdvanceTranslateGlossaryModal: AdvanceTranslateGlossaryModalReducer,
 	...writerReducers   
   }
 })

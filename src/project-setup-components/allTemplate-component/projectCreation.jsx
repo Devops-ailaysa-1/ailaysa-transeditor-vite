@@ -855,7 +855,6 @@ function ProjectCreation(props) {
                     setProjectId(proj_id);
                     return;
                 } else if (action === 'GLOSSARY') {
-                    console.log(dashboardResponse);
                     const glossaryData = dashboardResponse.data[0];
                     setGlossaryTaskId(glossaryData.id);
                     const defaultGlossary = {
@@ -865,7 +864,6 @@ function ProjectCreation(props) {
                         gloss_project_id: glossaryProjectId
                     };
                     defaultGlossDetailsRef.current = defaultGlossary;
-
                     setOpenGlossariesModal(true);
                     setTimeout(() => {
                         dispatch(setSimpleTranslateGlossaryModal(true));
