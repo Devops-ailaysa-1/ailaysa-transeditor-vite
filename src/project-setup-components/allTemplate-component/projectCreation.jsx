@@ -855,7 +855,6 @@ function ProjectCreation(props) {
                     setProjectId(proj_id);
                     return;
                 } else if (action === 'GLOSSARY') {
-                    console.log(dashboardResponse);
                     const glossaryData = dashboardResponse.data[0];
                     setGlossaryTaskId(glossaryData.id);
                     const defaultGlossary = {
@@ -865,7 +864,6 @@ function ProjectCreation(props) {
                         gloss_project_id: glossaryProjectId
                     };
                     defaultGlossDetailsRef.current = defaultGlossary;
-
                     setOpenGlossariesModal(true);
                     setTimeout(() => {
                         dispatch(setSimpleTranslateGlossaryModal(true));
@@ -2190,31 +2188,47 @@ function ProjectCreation(props) {
         }
     };
 
-    const handleGlossaryBtnEvent = () => {
-        // getDocumentDetailsById();
-        if (sourceLanguage == "" || targetLanguage == "") {
-            setSourceTargetValidation({
-                ...sourceTargetValidation,
-                source: sourceLanguage == "",
-                target: targetLanguage == ""
-            });
-            return;
-        }
+        /**
+         * This method used to validate the source and target languages value while click the glossary button
+         * @returns 
+         * 
+         * @author Padmabharathi Subiramanian 
+         * @since APR 10 2025
+         */
+        const handleGlossaryBtnEvent = () => {
+            // getDocumentDetailsById();
+            if (sourceLanguage == "" || targetLanguage == "") {
+                setSourceTargetValidation({
+                    ...sourceTargetValidation,
+                    source: sourceLanguage == "",
+                    target: targetLanguage == ""
+                });
+                return;
+            }
 
-        let isLanguageChanges = false;
-        if (glossaryProjectId) {
-            isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage != "" ? targetLanguage[0] : "");
-        }
-        if (!glossaryProjectId || isLanguageChanges) {
-            handleGlossarySubmit(isLanguageChanges);
-        } else {
-            setOpenGlossariesModal(true);
-            // setTimeout(() => {
-                dispatch(setSimpleTranslateGlossaryModal(true));
-            // }, 500);
-        }
-    };
+            let isLanguageChanges = false;
+            if (glossaryProjectId) {
+                isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage != "" ? targetLanguage[0] : "");
+            }
+            if (!glossaryProjectId || isLanguageChanges) {
+                handleGlossarySubmit(isLanguageChanges);
+            } else {
+                setOpenGlossariesModal(true);
+                // setTimeout(() => {
+                    dispatch(setSimpleTranslateGlossaryModal(true));
+                // }, 500);
+            }
+        };
 
+    /**
+     * This method used to if the source and target languages changes with the existing one.
+     * @param {*} sourceLanguageValue 
+     * @param {*} targetLanguageValue 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 10 2025
+     */
     const checkIsLanguageChanges = (sourceLanguageValue, targetLanguageValue) => {
         if ((Number(backupSourceLanguage) != Number(sourceLanguageValue)) || (Number(backupTargetLanguage) != Number(targetLanguageValue.id)))
             return true;

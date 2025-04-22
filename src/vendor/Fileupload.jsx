@@ -4897,7 +4897,7 @@ function Fileupload(props) {
         if (projectId == null || projectId == '')
             projectId = openedProjectId;
         // Only proceed if this project is still the selected one
-        if (projectId !== selectedProjectIdRef.current) {
+        if ((projectId !== selectedProjectIdRef.current) || (window.location.pathname !== '/translations')) {
            return; // Skip outdated task
         }
         Config.axios({
