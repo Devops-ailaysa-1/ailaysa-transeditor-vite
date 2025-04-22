@@ -76,7 +76,6 @@ function Navbar(props) {
         showViewOnlyTag,
         check_is_adaptive
     } = props
-console.log(check_is_adaptive,"check_is_adaptive")
     const { t } = useTranslation();
     const queryParams = new URLSearchParams(window.location)
     const history = useNavigate()
