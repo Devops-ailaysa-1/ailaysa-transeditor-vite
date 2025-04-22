@@ -855,7 +855,6 @@ function ProjectCreation(props) {
                     setProjectId(proj_id);
                     return;
                 } else if (action === 'GLOSSARY') {
-                    console.log(dashboardResponse);
                     const glossaryData = dashboardResponse.data[0];
                     setGlossaryTaskId(glossaryData.id);
                     const defaultGlossary = {
@@ -865,7 +864,6 @@ function ProjectCreation(props) {
                         gloss_project_id: glossaryProjectId
                     };
                     defaultGlossDetailsRef.current = defaultGlossary;
-
                     setOpenGlossariesModal(true);
                     setTimeout(() => {
                         dispatch(setSimpleTranslateGlossaryModal(true));
@@ -903,6 +901,7 @@ function ProjectCreation(props) {
     const resetForm = () => {
         contentprojectNameRef.current.innerText = ''
         setEditProjectId(null);
+        setIsShowNote(false)
         setProjectName("");
         setTeamSelect("");
         setSourceLanguage('');
@@ -1135,7 +1134,11 @@ function ProjectCreation(props) {
      * @author Padmabharathi Subiramanian 
      * @since Apr 08 2025
      */
+
+    const [shownote,setIsShowNote] = useState(false)
     const handleSubmit = (e, action = 'trans-download') => {
+
+        
         //Also check the handleUpdate
         e.preventDefault();
         let formData = new FormData();
@@ -1287,6 +1290,7 @@ function ProjectCreation(props) {
                 contentprojectNameRef.current.innerText = response.data.project_name;
                 getProjectTaskData(response.data.id, action);
                 Config.toast("Project created successfully");
+                setIsShowNote(true)
                 return;
             },
             error: (err) => {
@@ -2190,31 +2194,47 @@ function ProjectCreation(props) {
         }
     };
 
-    const handleGlossaryBtnEvent = () => {
-        // getDocumentDetailsById();
-        if (sourceLanguage == "" || targetLanguage == "") {
-            setSourceTargetValidation({
-                ...sourceTargetValidation,
-                source: sourceLanguage == "",
-                target: targetLanguage == ""
-            });
-            return;
-        }
+        /**
+         * This method used to validate the source and target languages value while click the glossary button
+         * @returns 
+         * 
+         * @author Padmabharathi Subiramanian 
+         * @since APR 10 2025
+         */
+        const handleGlossaryBtnEvent = () => {
+            // getDocumentDetailsById();
+            if (sourceLanguage == "" || targetLanguage == "") {
+                setSourceTargetValidation({
+                    ...sourceTargetValidation,
+                    source: sourceLanguage == "",
+                    target: targetLanguage == ""
+                });
+                return;
+            }
 
-        let isLanguageChanges = false;
-        if (glossaryProjectId) {
-            isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage != "" ? targetLanguage[0] : "");
-        }
-        if (!glossaryProjectId || isLanguageChanges) {
-            handleGlossarySubmit(isLanguageChanges);
-        } else {
-            setOpenGlossariesModal(true);
-            // setTimeout(() => {
-                dispatch(setSimpleTranslateGlossaryModal(true));
-            // }, 500);
-        }
-    };
+            let isLanguageChanges = false;
+            if (glossaryProjectId) {
+                isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage != "" ? targetLanguage[0] : "");
+            }
+            if (!glossaryProjectId || isLanguageChanges) {
+                handleGlossarySubmit(isLanguageChanges);
+            } else {
+                setOpenGlossariesModal(true);
+                // setTimeout(() => {
+                    dispatch(setSimpleTranslateGlossaryModal(true));
+                // }, 500);
+            }
+        };
 
+    /**
+     * This method used to if the source and target languages changes with the existing one.
+     * @param {*} sourceLanguageValue 
+     * @param {*} targetLanguageValue 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 10 2025
+     */
     const checkIsLanguageChanges = (sourceLanguageValue, targetLanguageValue) => {
         if ((Number(backupSourceLanguage) != Number(sourceLanguageValue)) || (Number(backupTargetLanguage) != Number(targetLanguageValue.id)))
             return true;
@@ -2301,7 +2321,7 @@ function ProjectCreation(props) {
                         <div class="nav-transeditor-wrapper"></div>
                         <div class="">
                             <button class="go-to-workspace-btn" style={{marginTop: '24px'}}  onClick={() => {history(`/create/all-templates`)}}>
-                                Go to workflows
+                            View all apps
                             </button>
                         </div>
                     </div>
@@ -2353,9 +2373,9 @@ function ProjectCreation(props) {
                                             <path d="M12.3095 15.9998C12.3095 14.9705 12.6675 14.0978 13.3836 13.3817C14.0997 12.6656 14.9724 12.3075 16.0018 12.3075C14.9724 12.3075 14.0997 11.9495 13.3836 11.2334C12.6675 10.5173 12.3095 9.6446 12.3095 8.61523C12.3095 9.6446 11.9515 10.5173 11.2354 11.2334C10.5193 11.9495 9.64656 12.3075 8.61719 12.3075C9.64656 12.3075 10.5193 12.6656 11.2354 13.3817C11.9515 14.0978 12.3095 14.9705 12.3095 15.9998Z" fill="white"></path>
                                         </svg>
                                   </span>
-                                  New: Introducing Contextual Translator
+                                  Now! Introducing Adaptive Translation
                                 </div>
-                                <div className="header-line">Start Translating Your Document Instantly and Effortlessly</div>
+                                <div className="header-line">Get translated, all within context!</div>
                              </div>
                         </div>
                         <div style={{alignContent: 'end'}}>
@@ -2598,7 +2618,7 @@ function ProjectCreation(props) {
                                 </div>
                             )}
                             <div className="fileupload-global-tab-wrapper mt-3">
-                                <p className={"upload-area-title" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")}>{t("upload_files")}<span className="asterik-symbol">*</span></p>
+                                <p className={"upload-area-title" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")}>Upload file<span className="asterik-symbol">*</span></p>
                                 {projectType === 2 && (
                                     <Nav tabs className="fileupload-tab-row">
                                         <NavItem
@@ -3108,7 +3128,7 @@ function ProjectCreation(props) {
                                 {(!projectTaskList || projectTaskList.length === 0) && (
                                    <div className="continue-button-container">
                                      <button className="continue-btn" onMouseUp={(e) => handleSubmit(e)}>
-                                        Start translation
+                                     Next
                                       </button>
                                     </div>
                                 )}
@@ -3131,14 +3151,18 @@ function ProjectCreation(props) {
                     )}
                     </div>
                     </div>
+
+{!shownote &&
+
                     <div class="tips-container">
-                        <div class="tips-header">Tips for Better Translation Results</div>
+                        <div class="tips-header">Note</div>
                           <ul class="tips-list">
-                            <li>Clear and well-structured sentences help our system deliver more accurate results.</li>
-                            <li>Ensure the document is written in a single language to avoid confusion.</li>
-                            <li>Include a glossary of key terms (like brand names, technical words, or phrases) before translation to ensure accurate and consistent results across your document.</li>
+                            <li>Ailaysa Translate delivers better quality through multiple steps. Process takes a few minutes—please be patient.</li>
+                            <li>Ailaysa Translate uses adaptive AI to automatically improve translation accuracy and fluency. For multiple files, formats, languages and CAT tools, use Ailaysa Transeditor.</li>
+                            {/* <li>Include a glossary of key terms (like brand names, technical words, or phrases) before translation to ensure accurate and consistent results across your document.</li> */}
                           </ul>
                     </div>
+}
                 </div>
             </div>
             {showSrcLangModal && (<Rodal

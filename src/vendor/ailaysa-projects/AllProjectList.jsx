@@ -5030,41 +5030,29 @@ console.log(formdata,"formdata1")
             }
     }
 
-
     // this api will initiate the file translate process and provide the status of each task
     const getProjectTransDownloadStatus = (task_id) => {
         if(projectObject.current?.id === undefined) return;
-
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
             axiosFileTranslateAbortController.abort()
         }
-    
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-
         let task_list_arr = []
-
         let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing)
         let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
-        // console.log(alreadyProcessingTaskIds)
         if(alreadyProcessingTask?.length !== 0){
             task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
         }else{
             task_list_arr = [task_id]
         }
-        // console.log("taskList: "+task_list_arr?.toString())
-
         fileTranslatingTaskListRef.current = task_list_arr
-
         // create task list to process
         let list = ""
         fileTranslatingTaskListRef.current?.map((each, index) => {
             list += `task=${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
-
-        // console.log(list)
-
         // display the button loader as soon as the user clicks the TRANSLATE button
         if(task_id !== undefined){
             let newArr = selectedProjectFilesRef.current?.map(obj => {
@@ -5100,12 +5088,8 @@ console.log(formdata,"formdata1")
                         }
                         return obj
                     })
-                    // console.log('modified list with isProcessing key')
-                    // console.log(newArr)
                     selectedProjectFilesRef.current = newArr 
                     setSelectedProjectFiles(newArr)
-                    // console.log('isAnyTaskIsProcessing')
-                    
                     let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false
                     let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false
                     let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false
@@ -5212,7 +5196,7 @@ console.log(formdata,"formdata1")
         if (projectId == null || projectId == '')
             projectId = openedProjectId;
         // Only proceed if this project is still the selected one
-        if (projectId !== selectedProjectIdRef.current) {
+        if ((projectId !== selectedProjectIdRef.current) || (window.location.pathname !== '/file-upload')) {
            return; // Skip outdated task
         }
         Config.axios({
@@ -5297,6 +5281,7 @@ console.log(formdata,"formdata1")
             }
             let formData = new FormData();
             formData.append("task", task_id);
+            
             Config.axios({
                 url: `${Config.BASE_URL}/workspace/adaptive_file_translate/`,
                 method: "POST",
@@ -5304,6 +5289,9 @@ console.log(formdata,"formdata1")
                 auth: true,
                 ...(controller !== undefined && {signal: controller.signal}),
                 success: (response) => {
+
+
+
                     if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
                         getTaskTranslationProgress(response.data.endpoint, task_id);
                     }
@@ -5397,10 +5385,6 @@ console.log(formdata,"formdata1")
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    // console.log(attribs)
-
-                    // console.log(attribs.style)
-                    // console.log(attribs.style)
                     let c = attribs?.color ? attribs?.color : ''
                     let s = attribs?.style ? attribs.style : ''
 
@@ -5447,7 +5431,6 @@ console.log(formdata,"formdata1")
                 let response = await data.blob()
     
                 let fileObj = new File([response], `${(item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-                // console.log(fileObj);
                 return fileObj;
             }else {
                 console.error('Failed to download file');
@@ -5473,7 +5456,6 @@ console.log(formdata,"formdata1")
         dispatch(addDownloadingFiles({ id: bookCreationRef.current?.id, file_name: bookCreationRef.current?.name, ext: '.docx', status: 1 }))
 
         downloadFilesInOrder(arr).then(() => {
-            // console.log(allDownloadedFilesArrRef.current)
             mergeFile()
         })
     } 
@@ -5495,11 +5477,7 @@ console.log(formdata,"formdata1")
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
-        
-        // console.log(allDownloadedFilesArrRef.current)
-
         allDownloadedFilesArrRef.current?.forEach(each => {
             formData.append("docx_files", each);
         })
@@ -5513,7 +5491,6 @@ console.log(formdata,"formdata1")
             headers: { Authorization: `Bearer ${token}` },
         }).then(function (response) {
             //handle success
-            // console.log(response.data)
             const filename = response.headers['content-disposition']?.split('filename*=')[1];
             let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''))
             const url = URL.createObjectURL(new Blob([response.data]));
