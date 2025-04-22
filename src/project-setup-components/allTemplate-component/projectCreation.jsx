@@ -3139,7 +3139,7 @@ function ProjectCreation(props) {
                                             className="reset-button"  
                                             type="submit"
                                             onClick={() => resetForm()}>
-                                            <span className="fileupload-new-btn">
+                                            <span className="fileupload-new-btn" style={{color:"#3c4043"}}>
                                                 {t("reset")}
                                             </span>
                                           </button>
