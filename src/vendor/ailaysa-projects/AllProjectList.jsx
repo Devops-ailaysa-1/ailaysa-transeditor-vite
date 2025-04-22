@@ -846,7 +846,7 @@ function AllProjectList(props) {
     ]
 
  
- 
+  // new changes
 
     const subDownloadOptions = [
         {
@@ -1991,7 +1991,7 @@ function AllProjectList(props) {
         (dat) => String(dat?.id) === String(openedProjectId)
       );
       
-    console.log(openedProjectId,filter_isadaptive,createdProjectsList,"downloadingFilesList")
+    console.log(openedProjectId,filter_isadaptive?.adaptive_file_translate,createdProjectsList,"downloadingFilesList")
     const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as,selectedProjectFile,project) => {
         let prevPageInfo = {
             pageNo: URL_SEARCH_PARAMS.get("page"),
@@ -2001,6 +2001,7 @@ function AllProjectList(props) {
             projectId: project_id,
             fromProjectList: true
         }
+        console.log(openIn,"openInopenIn")
         if(openIn === "Designer"){
             // writer the designer open logic here
             // console.log('open designer')
@@ -2504,7 +2505,7 @@ function AllProjectList(props) {
                 formdata.append("target_languages", eachTargetLanguage?.id);
         });
 
-
+        console.log(formdata,"formdata2")
 
         let list = "";
         targetLangListToRemove?.map((each, index) => {
@@ -3658,7 +3659,7 @@ function AllProjectList(props) {
         let formdata = new FormData();
 
         formdata.append("pdf_task_id", taskId);
-
+console.log(formdata,"formdata1")
         Config.axios({
             headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -4235,6 +4236,7 @@ function AllProjectList(props) {
                                         <ul>
                                             {
                                                 subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
+                                                    console.log(item.label,"checklable")
                                                     return (
                                                         <li
                                                             key={item.id}
@@ -5279,6 +5281,7 @@ function AllProjectList(props) {
             }
             let formData = new FormData();
             formData.append("task", task_id);
+            
             Config.axios({
                 url: `${Config.BASE_URL}/workspace/adaptive_file_translate/`,
                 method: "POST",
@@ -5286,6 +5289,9 @@ function AllProjectList(props) {
                 auth: true,
                 ...(controller !== undefined && {signal: controller.signal}),
                 success: (response) => {
+
+
+
                     if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
                         getTaskTranslationProgress(response.data.endpoint, task_id);
                     }
@@ -8802,6 +8808,11 @@ function AllProjectList(props) {
                                                                                                                                                                     <ul>
                                                                                                                                                                         {
                                                                                                                                                                             subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
+                                                                                                                                                                                console.log(project.adaptive_file_translate,"checkedclick2")
+                                                                                                                                                                                // console.log(project.adaptive_file_translate ? item.label !== 'MT only' ? item.label : "" :  item.label,"checkedclick")
+                                                                                                                                                                                if (project.adaptive_file_translate && item.label === t("mt_only")) {
+                                                                                                                                                                                    return null;
+                                                                                                                                                                                  }
                                                                                                                                                                                 return (
                                                                                                                                                                                     <li
                                                                                                                                                                                         key={item.id}

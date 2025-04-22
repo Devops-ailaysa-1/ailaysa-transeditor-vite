@@ -2047,6 +2047,7 @@ function TranslateFiles(props) {
         // }`;
         else url = Config.BASE_URL + "/srt/fileUpload";
         setShowUpdateLoader(true);
+        
         Config.axios({
             headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -2311,6 +2312,14 @@ function TranslateFiles(props) {
 
     const handleProjectEnter = (e) => {
         e.which === 13 ? e.target.blur() : e.target.focus();
+        
+    };
+    const handleKeyDown = (e) => {
+       console.log(e,"checkrd")
+        if (e.key === 'Enter') {
+            // e.stopProgation();
+            e.preventDefault();
+        }
     };
 
 
@@ -2349,7 +2358,7 @@ function TranslateFiles(props) {
 
 
     const executeProposalScroll = () => {
-        contentprojectNameRef.current.scrollTo(0, 0);
+        contentprojectNameRef?.current?.scrollTo(0, 0);
     }
 
     const handleBlockedNavigation = ({nextLocation}) => {
@@ -2862,20 +2871,21 @@ function TranslateFiles(props) {
                 {projectNameError?.length ? <span className="text-danger d-block  error-bottom">Required</span> : null} */}
                 <div className="file-trans-breadcrumbs-section">
                     <Breadcrumbs />
+                    
                     <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
-                        <div
+                        <div 
                             ref={contentprojectNameRef}
                             suppressContentEditableWarning={true}
                             contentEditable={projectTaskList?.length === 0 ? true : false}
-                            onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
-                            onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
                             data-placeholder={t("untitled_project")}
                             style={{padding: "0px 4px", minWidth: '160px'}}
-                            onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
-                            onKeyDown={() => projectTaskList?.length === 0 && handleProjectEnter}
-                            className="project-box"
+                             className="project-box"
                             tabIndex={0}
+                            onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
                             onInput={(e) => projectTaskList?.length === 0 && handleInput(e)}
+                            onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
+                            onKeyDown={(e) => projectTaskList?.length === 0 && handleKeyDown(e)}
+                            onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
                         ></div>
                         {/* {editBtnReveal && (
               <span className="edit-icon">
@@ -3606,7 +3616,7 @@ function TranslateFiles(props) {
                                         </div>
                                     </div>
 <div className="translation_text_container">Translation Preferences</div>
-                                    <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 w-2/3">
+                                    <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 ">
                                         {/* <div className="flex items-center">
                                             <Checkbox
                                                 id="machine-type"
@@ -3753,7 +3763,7 @@ function TranslateFiles(props) {
                                 </div>
                             )}
                             <div className="col-xs-12">
-                                <div className="d-flex justify-between">
+                                <div className="d-flex justify-between align-items-end">
                                     {editProjectId != null && (
                                         <button
                                             className="glossaryglobalform-StepCancelButton"
