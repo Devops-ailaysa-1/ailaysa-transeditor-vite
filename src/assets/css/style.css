@@ -30567,7 +30567,16 @@ h4.history-seconday-wrap-header {
     text-transform: none !important;
     border: none !important;
     padding: 7px 15px !important;
+    
+}
+.tooltip_overlay{
+    /* background-color: red; */
+    max-width:220px ;
+}
+.overll_convert-pdf-list-UploadProjectButton{
     min-width: 15%;
+    /* background-color: red; */
+    text-align-last: right;
 }
 
 .file-name-list .convert-pdf-list-UploadProjectButton:hover {
@@ -44704,7 +44713,7 @@ body{
     text-transform: none !important;
     padding: 7px 15px !important;
     border: none !important;
-    width: 15%;
+    /* width: 15%; */
 }
 
 .translate-download-btn:hover {
