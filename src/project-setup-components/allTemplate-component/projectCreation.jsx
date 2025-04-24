@@ -1134,7 +1134,6 @@ function ProjectCreation(props) {
      * @author Padmabharathi Subiramanian 
      * @since Apr 08 2025
      */
-
     const [shownote,setIsShowNote] = useState(false)
     const handleSubmit = (e, action = 'trans-download') => {
 
@@ -1249,6 +1248,7 @@ function ProjectCreation(props) {
 
         if (fileUrl != "") formData.append("url", fileUrl);
         formData.append("adaptive_file_translate", true);
+        formData.append("adaptive_simple", true);
         let url = "";
         if (integrationFiles.length) {
             if (!integrationFiles[0].branchId) {
