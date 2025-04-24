@@ -1772,7 +1772,9 @@ function TranslateFiles(props) {
                         filename: location.state?.filename,
                     })
                 }
+                
                 projectDataFromApi.current = response.data
+              
                 setEditFiles(data.files);
                 setGlossaryEditFiles(data.glossary_files);
                 setEditJobs(data.jobs);
@@ -2010,6 +2012,9 @@ function TranslateFiles(props) {
         if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
             formData.append("get_mt_by_page", translationByPage);
         }
+        if(adaptiveTransEnable){
+            formData.append("get_mt_by_page", true);
+        }
 
 
         let stepsToRemoveList = stepOptions?.filter(stepOpt => selectedSteps?.some(each => stepOpt.value !== each.value))
@@ -2048,6 +2053,7 @@ function TranslateFiles(props) {
         // }`;
         else url = Config.BASE_URL + "/srt/fileUpload";
         setShowUpdateLoader(true);
+        
         
         Config.axios({
             headers: {
