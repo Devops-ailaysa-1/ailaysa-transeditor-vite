@@ -115,7 +115,7 @@ const Config = {
                 return toast.warn(<AlertContent />, {
                     transition: Slide,
                     position: "top-center",
-                    autoClose: 3000,
+                    autoClose: 8000,
                     hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: true,

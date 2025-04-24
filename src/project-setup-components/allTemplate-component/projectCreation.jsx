@@ -694,7 +694,12 @@ function ProjectCreation(props) {
                         else Config.toast(singleFileSizeError.current, "error");
                     }
                 });
-                setFiles(fileList);
+                if(fileList.length > 1) {
+                    Config.toast(t("upload_only_one_file"), "warning");
+                    return;
+                }else {
+                    setFiles(fileList);
+                }
                 break;
             }
             case "projectName": {
@@ -2717,7 +2722,7 @@ function ProjectCreation(props) {
                                                                 })}
                                                                 <div className="file-upload-align">
                                                                     <p className="upload-text">
-                                                                        {t("drop_your_files_here_or")}{" "}
+                                                                        {t("drop_your_file_here_or")}{" "}
                                                                     </p>
                                                                     <div className="upload-link-wrapper">
                                                                         <label htmlFor="files">{t("browse")}</label>
@@ -2745,6 +2750,9 @@ function ProjectCreation(props) {
                                                        </div>
                                                      </div>
                                                      <div className="file-upload_instruct-row">
+                                                     <span className="max-word-note mr-2">
+                                                        {t("limit_for_file_upload")}: <span>1 file upload</span>
+                                                     </span>
                                                       <span className="max-word-note">
                                                         {t("file_upload_condition_note_1")}: <span>50,000</span>
                                                      </span>

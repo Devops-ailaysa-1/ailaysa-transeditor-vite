@@ -152,8 +152,9 @@ const AilaysaNewGlossEditingArea = (props) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [termsList, setTermsList] = useState([])
     const [isEditMode, setIsEditMode] = useState(false)
-    const [termsListCopy, setTermsListCopy] = useState([])
-    const [showTermDeletModal, setShowTermDeletModal] = useState(false)
+    const [termsListCopy, setTermsListCopy] = useState([]);
+    const [deleteHandler, setDeleteHandler] = useState(() => () => {});
+    const [showTermDeletModal, setShowTermDeletModal] = useState(false);
     const [taskOptionList, setTaskOptionList] = useState([])
     const [selectedTaskItem, setselectedTaskItem] = useState(null)
     const [newTerm, setNewTerm] = useState({
@@ -885,19 +886,7 @@ const AilaysaNewGlossEditingArea = (props) => {
     } 
 
     const handleBulkTermDelete = () => {
-
-        if(selectedTermIds.length === 0) {
-            Config.toast(t("select_term_to_delete"), 'warning')
-            return
-        }
-
-        if(!showTermDeletModal) {
-            setShowTermDeletModal(true)
-            return
-        }
-
         let deleteUrl = `${Config.BASE_URL}/glex/term_upload/0/?term_delete_ids=${selectedTermIds.join(',')}`
-        
         Config.axios({
             url: deleteUrl, 
             method: "DELETE",
@@ -913,6 +902,34 @@ const AilaysaNewGlossEditingArea = (props) => {
                 setSelectedTermIds([])
             },
         });
+    };
+
+    /**
+     * This method used for delete handle for bulk term delete option.
+     * If no seleced terms means return other wise show the modal
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 24 APR 2025
+     */
+    const onBulkDeleteClick = () => {
+        if(selectedTermIds.length === 0) {
+            Config.toast(t("select_term_to_delete"), 'warning')
+            return;
+        }
+        setDeleteHandler(() => handleBulkTermDelete);
+        setShowTermDeletModal(true);
+    };
+
+    /**
+     * This method used for delete handle for individual term delete option show the delete modal.
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 24 APR 2025
+     */
+    const onSingleTermDeleteClick = (id) => {
+        setDeleteHandler(() => () => handleTermDelete(id));
+        setShowTermDeletModal(true);
     };
 
     return (
@@ -997,7 +1014,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                             )}
                         </>
                     )}
-                    <button className="mydocument-AiMarkCancel ml-2" onClick={handleBulkTermDelete}>
+                    <button className="mydocument-AiMarkCancel ml-2" onClick={onBulkDeleteClick}>
                         <span className="fileupload-new-btn bulk-upload-span text-black px-3">
                             {t("delete_terms")}
                         </span>
@@ -1142,7 +1159,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                                             </div>                                                
                                             
                                             <div className="choicelist-action-wrapper">
-                                                <span className="action-list-item" onClick={() => handleTermDelete(term.id)}>
+                                                <span className="action-list-item" onClick={() => onSingleTermDeleteClick(term.id)}>
                                                     {term?.isDeleting ? (
                                                         <CircularProgress sx={{ color: '#222' }} style={{height: '16px', width: '16px'}} />
                                                     ) : (
@@ -1267,7 +1284,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                             <button className="mydocument-AiMarkCancel" onClick={() => setShowTermDeletModal(false)}>
                                 <span className="cancel-txt">{t("cancel")}</span>
                             </button>
-                            <button className="mydocument-AiMarkSubmit" onClick={handleBulkTermDelete}>
+                            <button className="mydocument-AiMarkSubmit" onClick={() => {deleteHandler(); setShowTermDeletModal(false); }}>
                                 <span className="submit-txt">{t("delete")}</span>
                             </button>
                         </div>
