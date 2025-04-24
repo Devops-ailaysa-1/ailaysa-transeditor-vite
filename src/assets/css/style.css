@@ -5428,6 +5428,7 @@ ul#workspace {
     max-height: 380px;
     display: flex;
     flex-direction: column;
+    z-index: 10;
 }
 
 .wokspace-features-collapse {

@@ -6943,6 +6943,8 @@ useEffect(() => {
         // console.log(window.getSelection())
         // console.log(selTxt)
         let selection = window.getSelection();
+    //   text selection
+        const restrectedtext=selection?.toString()?.trim().split(/\s+/).filter(Boolean)
         if(selection?.toString()?.trim()?.length === 0) {
             setSelectedCoordinates(null)
             dispatch(setShowGlossTermAddForm(false))
@@ -6952,7 +6954,9 @@ useEffect(() => {
         if(!isEnterprise && !is_internal_meber_editor){
             let selectionRect = range.getBoundingClientRect();
             dispatch(setShowGlossTermAddForm(false))
+            // if(restrectedtext.length <= 2){
             setSelectedCoordinates(selectionRect)
+            // }
         }
 
         let clonedSelection = range.cloneContents();

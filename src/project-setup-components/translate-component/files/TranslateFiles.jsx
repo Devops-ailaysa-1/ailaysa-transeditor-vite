@@ -1074,7 +1074,7 @@ function TranslateFiles(props) {
             fileUrl == "" &&
             pdfIdFromToolkit == null
         ) {
-            setFileError(t("upload_files"));
+            // setFileError(t("upload_files"));
             return;
         }
 
