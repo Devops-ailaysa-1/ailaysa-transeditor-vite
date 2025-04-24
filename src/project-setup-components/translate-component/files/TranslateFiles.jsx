@@ -1157,6 +1157,7 @@ function TranslateFiles(props) {
         formData.append("adaptive_file_translate", adaptiveTransEnable);
         formData.append("pre_translate", preTranslate);
         if(mtEnable) formData.append("get_mt_by_page", translationByPage);
+        if(defaultGlossaryProjectId) formData.append("default_gloss_project_id", defaultGlossaryProjectId)
 
         selectedSteps?.map(eachStep => {
             formData.append("steps", eachStep?.value);
@@ -1771,7 +1772,9 @@ function TranslateFiles(props) {
                         filename: location.state?.filename,
                     })
                 }
+                
                 projectDataFromApi.current = response.data
+              
                 setEditFiles(data.files);
                 setGlossaryEditFiles(data.glossary_files);
                 setEditJobs(data.jobs);
@@ -2009,6 +2012,9 @@ function TranslateFiles(props) {
         if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
             formData.append("get_mt_by_page", translationByPage);
         }
+        if(adaptiveTransEnable){
+            formData.append("get_mt_by_page", true);
+        }
 
 
         let stepsToRemoveList = stepOptions?.filter(stepOpt => selectedSteps?.some(each => stepOpt.value !== each.value))
@@ -2047,6 +2053,7 @@ function TranslateFiles(props) {
         // }`;
         else url = Config.BASE_URL + "/srt/fileUpload";
         setShowUpdateLoader(true);
+        
         
         Config.axios({
             headers: {
@@ -2762,7 +2769,7 @@ function TranslateFiles(props) {
         }
         let isLanguageChanges = false;
         if (glossaryProjectId) {
-            isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage != "" ? targetLanguage[0] : "");
+            isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage);
         }
         if (!glossaryProjectId || isLanguageChanges) {
             handleGlossarySubmit(isLanguageChanges);
@@ -2771,7 +2778,7 @@ function TranslateFiles(props) {
             dispatch(setAdvanceTranslateGlossaryModal(true));
         }
     };
-    
+
     /**
      * This method used to if the source and target languages changes with the existing one.
      * @param {*} sourceLanguageValue 
@@ -2781,10 +2788,30 @@ function TranslateFiles(props) {
      * @author Padmabharathi Subiramanian 
      * @since APR 22 2025
      */
-    const checkIsLanguageChanges = (sourceLanguageValue, targetLanguageValue) => {
-        if ((Number(backupSourceLanguage) != Number(sourceLanguageValue)) || (Number(backupTargetLanguage) != Number(targetLanguageValue.id)))
+    const checkIsLanguageChanges = (sourceLanguageValue, targetLanguage) => {
+        if ((Number(backupSourceLanguage) != Number(sourceLanguageValue)) || !areTargetLangIdsEqual(backupTargetLanguage, targetLanguage))
             return true;
         else return false;
+    }
+
+    /**
+     * This method is used to check if the backup target language Id's are changed or not.
+     * @param {*} backupIds 
+     * @param {*} languages 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 24 2025
+     */
+    const areTargetLangIdsEqual = (backupIds, languages) => {
+        const languageIds = languages.map(lang => lang.id);
+        // Sort both arrays to ignore order
+        const sortedBackup = [...backupIds].sort((a, b) => a - b);
+        const sortedLanguage = [...languageIds].sort((a, b) => a - b);
+        // Compare lengths first
+        if (sortedBackup.length !== sortedLanguage.length) return false;
+        // Compare elements
+        return sortedBackup.every((id, index) => id === sortedLanguage[index]);
     }
     
     /**
@@ -2799,8 +2826,11 @@ function TranslateFiles(props) {
         let formData = new FormData();
         formData.append("project_type", 3);
         formData.append("source_language", sourceLanguage);
+        const targetLangIds = [];
         targetLanguage.map((eachTargetLanguage) => {
-        formData.append("target_languages", eachTargetLanguage?.id);
+            const tLangId = eachTargetLanguage?.id;
+            formData.append("target_languages", eachTargetLanguage?.id);
+            targetLangIds.push(tLangId);
         });
         formData.append("mt_enable", mtEnable);
         formData.append("primary_glossary_source_name", "");
@@ -2836,7 +2866,7 @@ function TranslateFiles(props) {
                 getProjectTaskData(response.data.id, "GLOSSARY");
                 Config.toast(glossaryToast);
                 setBackupSourceLanguage(formData.get("source_language"));
-                setBackupTargetLanguage(formData.get("target_languages"));
+                setBackupTargetLanguage(targetLangIds);
                 return;
             },
             error: (err) => {
@@ -2918,12 +2948,12 @@ function TranslateFiles(props) {
                             </div>
                         </div>
                     </div> */}
-                    {/* <div className="translation-actions">
+                    <div className="translation-actions">
                         <div></div>
                         <div style={{alignContent: 'end'}}>
                             <button className={"glossary-btn" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")} onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
                         </div>
-                    </div> */}
+                    </div>
                 </div>
                 { openGlossariesModal && 
                     <AdvanceTranslateGlossaryModal 
@@ -2931,6 +2961,7 @@ function TranslateFiles(props) {
                         defaultGlossDetailsRef={defaultGlossDetailsRef}
                         getDefaultGlossDetails={getDefaultGlossDetails}
                         glossTaskId={glossaryTaskId}
+                        glossaryProjecId= {glossaryProjectId}
                     />
                 }
                 <div className={"ai-translate-file-wrapper " + (projectTaskList?.length !== 0 ? "behind-overlay" : "")} style={(showCreateLoader || translateDownloadBtnLoader) ? {pointerEvents: 'none'} : {}}>

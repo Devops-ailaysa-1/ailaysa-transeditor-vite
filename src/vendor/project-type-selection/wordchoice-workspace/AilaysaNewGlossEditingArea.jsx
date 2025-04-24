@@ -134,7 +134,9 @@ const AilaysaNewGlossEditingArea = (props) => {
         setLanguagePairObject, 
         newGlossEditingImperativeRef,
         setActiveScreen,
-        glossTaskId
+        glossTaskId,
+        isFrom,
+        gloosaryProjectId
     } = props
     
     const { t } = useTranslation();
@@ -239,7 +241,7 @@ const AilaysaNewGlossEditingArea = (props) => {
 
     useEffect(() => {
         if(languageOptionsList?.length){
-            if(projectId !== undefined && !isNaN(parseInt(projectId))){
+            if((projectId !== undefined && !isNaN(parseInt(projectId))) || (isFrom === 'Advance_Glossary')){
                 getVendorDashboard()
             }else {
                 // history('/file-upload?page=1')
@@ -354,8 +356,9 @@ const AilaysaNewGlossEditingArea = (props) => {
     // This will get all the language pairs of that project and adds [All pairs] option to the language drop-down
     const getVendorDashboard = () => {
         // console.log(selectedFileRow.current)
+        const targetProjectId = isFrom === 'Advance_Glossary' ? gloosaryProjectId : projectId;
         Config.axios({
-            url: `${Config.BASE_URL}/workspace/vendor/dashboard/${projectId}`,
+            url: `${Config.BASE_URL}/workspace/vendor/dashboard/${targetProjectId}`,
             auth: true,
             success: (response) => {
                 taskListRef.current = response.data
@@ -493,24 +496,19 @@ const AilaysaNewGlossEditingArea = (props) => {
 
     const handleTermDelete = (term_id) => {
         termIdToDeleteRef.current = term_id
-
         if(termsList.find(each => each?.isDeleting)) return
-
         // if (!showTermDeletModal) {
         //     setShowTermDeletModal(true)
         //     return;
         // }
-
         setTermsList(
             Config.updateSpecificKeyInList(termsList, term_id, 'isDeleting', true)
         )
-
         Config.axios({
             url: `${Config.BASE_URL}/glex/term_upload/0/?term_delete_ids=${termIdToDeleteRef.current}`,
             method: "DELETE",
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 let listAfterDeletion = termsList?.filter(each => each.id !== term_id)
                 termsListRef.current = listAfterDeletion
                 termsListCopyRef.current = listAfterDeletion
@@ -980,12 +978,24 @@ const AilaysaNewGlossEditingArea = (props) => {
                                 components={{ DropdownIndicator, IndicatorSeparator: () => null }}
                             />
                         </>
-                    ) : (
-                        <button className="convert-pdf-list-UploadProjectButton mr-2" onClick={() => setActiveScreen(2)}>
-                            <span className="fileupload-new-btn bulk-upload-span">
-                                {t("import_terms")}
-                            </span>
-                        </button>
+                    ) :  (
+                        <>
+                            <button className="convert-pdf-list-UploadProjectButton mr-2" onClick={() => setActiveScreen(2)}>
+                                <span className="fileupload-new-btn bulk-upload-span">
+                                    {t("import_terms")}
+                                </span>
+                            </button>
+                            {isFrom === 'Advance_Glossary' && (
+                                <Select
+                                    options={taskOptionList}
+                                    menuPlacement="auto"
+                                    value={selectedTaskItem}
+                                    styles={customProjectTypeSelectStyles}
+                                    onChange={handleTaskChange}
+                                    components={{ DropdownIndicator, IndicatorSeparator: () => null }}
+                                />
+                            )}
+                        </>
                     )}
                     <button className="mydocument-AiMarkCancel ml-2" onClick={handleBulkTermDelete}>
                         <span className="fileupload-new-btn bulk-upload-span text-black px-3">
@@ -1237,7 +1247,6 @@ const AilaysaNewGlossEditingArea = (props) => {
                     </div>
                 </div>
             </div>
-            
             {/* Term delete confirmation modal */}
             {showTermDeletModal && (
                 <Rodal
@@ -1265,8 +1274,6 @@ const AilaysaNewGlossEditingArea = (props) => {
                     </div>
                 </Rodal>
             )}
-
-            
             {openBulkUploadModal && (
                 <BulkFileUploadModal 
                     openModal={openBulkUploadModal}

@@ -15,7 +15,7 @@ import { setAdvanceTranslateGlossaryModal } from '../../../features/AdvanceTrans
 
 export const AdvanceTranslateGlossaryModal = (props) => {
 
-    let { documentDetails, defaultGlossDetailsRef, getDefaultGlossDetails, glossTaskId } = props
+    let { documentDetails, defaultGlossDetailsRef, getDefaultGlossDetails, glossTaskId, glossaryProjecId } = props
 
     const {t} = useTranslation()
     const dispatch = useDispatch()
@@ -118,6 +118,8 @@ export const AdvanceTranslateGlossaryModal = (props) => {
                                 <AilaysaNewGlossEditingArea 
                                     setActiveScreen={setActiveScreen}
                                     glossTaskId={selectedTaskId} //{defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails.task_id}
+                                    isFrom = 'Advance_Glossary'
+                                    gloosaryProjectId={glossaryProjecId}
                                 />
                             ) : (
                                 <ImportTerms 

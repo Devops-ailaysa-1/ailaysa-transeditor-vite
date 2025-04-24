@@ -18,7 +18,8 @@ import Targetlanguage from "../../vendor/lang-modal/Targetlanguage";
 import ButtonBase from '@mui/material/ButtonBase';
 import { SaveButtonLoader } from "../../loader/CommonSaveBtnLoader";
 import CloseIcon from '@mui/icons-material/Close';
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { ButtonLoader } from "../../loader/CommonBtnLoader";
 import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
@@ -1134,7 +1135,6 @@ function ProjectCreation(props) {
      * @author Padmabharathi Subiramanian 
      * @since Apr 08 2025
      */
-
     const [shownote,setIsShowNote] = useState(false)
     const handleSubmit = (e, action = 'trans-download') => {
 
@@ -1249,6 +1249,7 @@ function ProjectCreation(props) {
 
         if (fileUrl != "") formData.append("url", fileUrl);
         formData.append("adaptive_file_translate", true);
+        formData.append("adaptive_simple", true);
         let url = "";
         if (integrationFiles.length) {
             if (!integrationFiles[0].branchId) {
@@ -2311,6 +2312,18 @@ function ProjectCreation(props) {
     };
 
 
+    const HtmlTooltip = styled(({ className, ...props }) => (
+        <Tooltip {...props} classes={{ popper: className }} placement="top" />
+      ))(({ theme }) => ({
+        [`& .${tooltipClasses.tooltip}`]: {
+          Width: 20,
+          fontSize: '12px',
+          backgroundColor: '#f5f5f9',
+          color: 'rgba(0, 0, 0, 0.87)',
+        },
+      }));
+
+
     return (
         <React.Fragment>
             {/* Project title area */}
@@ -3084,6 +3097,7 @@ function ProjectCreation(props) {
                                                                                  )
                                                                                )}
                                                                                 {task.percentage >= 0 ? (
+                                                                                    <div className="overll_convert-pdf-list-UploadProjectButton">
                                                                                     <button
                                                                                      className="translate-download-btn"
                                                                                      type="submit"
@@ -3096,9 +3110,11 @@ function ProjectCreation(props) {
                                                                                      {t("download")}
                                                                                  </span>
                                                                                    </button>
+                                                                                   </div>
                                                                                 ) : task?.isProcessing ? (
                                                                                     <ProgressAnimateButton />
                                                                                 ) : (
+                                                                                    <div className="overll_convert-pdf-list-UploadProjectButton">
                                                                                     <button
                                                                                         className="convert-pdf-list-UploadProjectButton"
                                                                                         type="submit"
@@ -3108,6 +3124,7 @@ function ProjectCreation(props) {
                                                                                     >
                                                                                     <span className="fileupload-new-btn">{t("translate")}</span>
                                                                                     </button>
+                                                                                    </div>
                                                                                 )
                                                                               }
                                                                             </div>
@@ -3134,7 +3151,16 @@ function ProjectCreation(props) {
                                 )}
                                 {projectTaskList?.find(each => !each.isProcessing) && (
                                     <div className="new-btn-grp">
-                                        <Tooltip title="Creates a new project. Your current project will be saved in 'My projects'." arrow>
+                                        
+                                             <HtmlTooltip
+                                             className="tooltip_overlay"
+        title={
+          <React.Fragment>
+            Creates a new project. Your current project will be saved in 'My
+            projects'
+          </React.Fragment>
+        }
+      >
                                           <button 
                                             className="reset-button"  
                                             type="submit"
@@ -3143,7 +3169,7 @@ function ProjectCreation(props) {
                                                 {t("reset")}
                                             </span>
                                           </button>
-                                        </Tooltip>
+                                          </HtmlTooltip>
                                     </div>
                                 )}
                             </div>
