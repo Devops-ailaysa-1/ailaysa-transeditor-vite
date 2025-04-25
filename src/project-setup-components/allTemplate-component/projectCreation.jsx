@@ -216,6 +216,12 @@ function ProjectCreation(props) {
         { min: 80, max: 99, message: "Finishing" },
         { min: 99, max: 100, message: "Translation Complete"}
     ];
+    const projectCreationErrorMsgMap = {
+        'File is Empty' : 'empty_file_detect',
+        'Word count is more than 10000' : 'file_exceed_size'
+    }
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [shownote,setIsShowNote] = useState(false);
     const taskControllersRef = useRef({});
     const [downloadTaskFile, setDownloadTaskTargetFile] = useState('');
     const [glossaryProjectId, setGlossaryProjectId] = useState(null);
@@ -923,7 +929,7 @@ function ProjectCreation(props) {
         setMtEnable(true);
         setPreTranslate(false);
         setFiles([]);
-        setProjectTaskList([])
+        setProjectTaskList([]);
         setSourceTargetValidation({
             source: false,
             target: false,
@@ -935,6 +941,7 @@ function ProjectCreation(props) {
             setTargetLanguageError("");
             setFileError("");
         }, 100);
+        setIsSubmitted(false);
     };
 
     const ValueContainer = ({ children, ...props }) => {
@@ -1129,6 +1136,7 @@ function ProjectCreation(props) {
                     setLoading(false);
                 }, 50);
                 setFileError("");
+                // getProjectTaskData(data.id, "GLOSSARY");
             },
         });
     };
@@ -1141,13 +1149,12 @@ function ProjectCreation(props) {
      * @author Padmabharathi Subiramanian 
      * @since Apr 08 2025
      */
-    const [shownote,setIsShowNote] = useState(false)
     const handleSubmit = (e, action = 'trans-download') => {
-
-        
         //Also check the handleUpdate
         e.preventDefault();
         let formData = new FormData();
+        if (isSubmitted) return;
+        setIsSubmitted(true);
         /* Validation - start */
         if (sourceLanguage == "" && targetLanguage.length < 1 && ((files.length == 0 && pdfIdFromToolkit == null) && fileUrl == "") && params?.menu === "translate-files") {
             setSourceTargetValidation({
@@ -1166,7 +1173,7 @@ function ProjectCreation(props) {
             fileUrl == "" &&
             pdfIdFromToolkit == null
         ) {
-            // setFileError(t("upload_files"));
+            setFileError(t("required"));
             return;
         }
 
@@ -1304,6 +1311,13 @@ function ProjectCreation(props) {
                 if (err?.response?.data?.files) {
                     Config.toast(t("submitted_file_empty"), 'warning')
                 }
+                const msg = err?.response?.data?.msg || err?.response?.data?.error;
+                const translationKey = projectCreationErrorMsgMap[msg];
+                if (translationKey) {
+                  Config.toast(t(translationKey), 'error');
+                  setFiles([]);
+                }
+                setIsSubmitted(false);
                 setShowCreateLoader(false);
                 setTranslateDownloadBtnLoader(false)
             }
@@ -2755,7 +2769,7 @@ function ProjectCreation(props) {
                                                         {t("limit_for_file_upload")}: <span>1 file upload</span>
                                                      </span>
                                                       <span className="max-word-note">
-                                                        {t("file_upload_condition_note_1")}: <span>50,000</span>
+                                                        {t("file_upload_conditon_note_3")}: <span>10,000</span>
                                                      </span>
                                                      <span className="max-file-note">
                                                      {t("file_upload_condition_note_2")}: <span>100 MB</span>
@@ -3154,22 +3168,20 @@ function ProjectCreation(props) {
                                 {(!projectTaskList || projectTaskList.length === 0) && (
                                    <div className="continue-button-container">
                                      <button className="continue-btn" onMouseUp={(e) => handleSubmit(e)}>
-                                     Next
-                                      </button>
+                                       {isSubmitted && <SaveButtonLoader />}
+                                       Next
+                                     </button>
                                     </div>
                                 )}
                                 {projectTaskList?.find(each => !each.isProcessing) && (
                                     <div className="new-btn-grp">
-                                        
-                                             <HtmlTooltip
-                                             className="tooltip_overlay"
-        title={
-          <React.Fragment>
-            Creates a new project. Your current project will be saved in 'My
-            projects'
-          </React.Fragment>
-        }
-      >
+                                       <HtmlTooltip  className="tooltip_overlay"
+                                         title={
+                                        <React.Fragment>
+                                         Creates a new project. Your current project will be saved in 'My projects'
+                                        </React.Fragment>
+                                        }
+                                       >
                                           <button 
                                             className="reset-button"  
                                             type="submit"

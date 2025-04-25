@@ -178,6 +178,7 @@ function TranslateFiles(props) {
         source: false,
         target: false,
     })
+    console.log(sourceTargetValidation,"sourceTargetValidation")
     const [preTranslate, setPreTranslate] = useState(false)
     const [translationByPage, setTranslationByPage] = useState(true)
     // steps related states
@@ -1074,7 +1075,7 @@ function TranslateFiles(props) {
             fileUrl == "" &&
             pdfIdFromToolkit == null
         ) {
-            // setFileError(t("upload_files"));
+            setFileError(t("required"));
             return;
         }
 
@@ -1269,7 +1270,7 @@ function TranslateFiles(props) {
      * For Glossary Project @author - Padmabharathi Subiramanian 
      * @since APR 22 2025
      */
-    const getProjectTaskData = (proj_id, action) => {
+    const getProjectTaskData = (proj_id, action, isFrom) => {
         // vendor dashboard
         Config.axios({
             url: `${Config.BASE_URL}/workspace/vendor/dashboard/${proj_id}`,
@@ -1298,13 +1299,15 @@ function TranslateFiles(props) {
                         gloss_project_id: glossaryProjectId
                     };
                     defaultGlossDetailsRef.current = defaultGlossary;
-                    setOpenGlossariesModal(true);
-                    setTimeout(() => {
-                        dispatch(setAdvanceTranslateGlossaryModal(true));
-                    }, 500);
+                    // if (isFrom !== 'INIT') {
+                    //     setOpenGlossariesModal(true);
+                    //     setTimeout(() => {
+                    //         dispatch(setAdvanceTranslateGlossaryModal(true));
+                    //     }, 500);
+                    // }
                 }
                 // open file/document
-                openDocumentFile(dashboardResponse.data[0].document_url, proj_id)
+                // openDocumentFile(dashboardResponse.data[0].document_url, proj_id)
             },
             error: (err) => { }
         });
@@ -1856,6 +1859,8 @@ function TranslateFiles(props) {
                     setLoading(false);
                 }, 50);
                 setFileError("");
+                // setGlossaryProjectId(data.id);
+                // getProjectTaskData(data.id, "GLOSSARY", 'INIT');
             },
         });
     };
@@ -2450,6 +2455,12 @@ function TranslateFiles(props) {
             selectedTar.push(targetLanguageOptionsRef.current?.find((element) => element.id == eachTar))
         })
         setTargetLanguage([...new Set(selectedTar)]);
+
+        //set error null
+        setSourceTargetValidation({
+            source: false,
+            target: false,
+        });
     }
 
     const focusSourceLangDiv = () => {
