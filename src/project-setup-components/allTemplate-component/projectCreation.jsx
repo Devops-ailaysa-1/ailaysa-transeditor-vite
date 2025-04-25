@@ -1166,7 +1166,7 @@ function ProjectCreation(props) {
             fileUrl == "" &&
             pdfIdFromToolkit == null
         ) {
-            // setFileError(t("upload_files"));
+            setFileError(t("required"));
             return;
         }
 
