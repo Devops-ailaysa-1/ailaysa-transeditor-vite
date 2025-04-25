@@ -44635,6 +44635,11 @@ body{
     background-color: #0265b1;
 }
 
+.continue-btn:disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+}
+
 .continue-button-container {
     display: flex;
     padding-top: 28px;

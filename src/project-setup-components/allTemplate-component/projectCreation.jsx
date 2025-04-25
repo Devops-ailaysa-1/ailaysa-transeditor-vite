@@ -997,10 +997,18 @@ function ProjectCreation(props) {
                 }
             }
         });
-        if (request === "tmx") setTMXFiles(fileList);
-        else if (request === "tbx") setTBXFiles(fileList);
-        else setFiles(fileList);
-
+        if (request === "tmx") {
+            setTMXFiles(fileList);
+        } else if (request === "tbx") {
+            setTBXFiles(fileList);
+        } else {
+            if(fileList.length > 1) {
+                Config.toast(t("upload_only_one_file"), "warning");
+                return;
+            } else {
+                setFiles(fileList);
+            }
+        }
         setShowFileUpload(false);
         // setFiles(prevState => [...prevState, fileList])
     };
@@ -3169,7 +3177,11 @@ function ProjectCreation(props) {
                                 </TabContent>
                                 {(!projectTaskList || projectTaskList.length === 0) && (
                                    <div className="continue-button-container">
-                                     <button className="continue-btn" onMouseUp={(e) => handleSubmit(e)}>
+                                     <button 
+                                        type="submit"
+                                        className="continue-btn"
+                                        onMouseUp={(e) => handleSubmit(e)}
+                                        disabled={isSubmitted}>
                                        {isSubmitted && <SaveButtonLoader />}
                                        Next
                                      </button>
