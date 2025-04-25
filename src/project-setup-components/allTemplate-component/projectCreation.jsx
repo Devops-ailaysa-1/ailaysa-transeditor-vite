@@ -1154,7 +1154,6 @@ function ProjectCreation(props) {
         e.preventDefault();
         let formData = new FormData();
         if (isSubmitted) return;
-        setIsSubmitted(true);
         /* Validation - start */
         if (sourceLanguage == "" && targetLanguage.length < 1 && ((files.length == 0 && pdfIdFromToolkit == null) && fileUrl == "") && params?.menu === "translate-files") {
             setSourceTargetValidation({
@@ -1219,6 +1218,9 @@ function ProjectCreation(props) {
                 setFileUrlError(t("enter_valid_youtube_url"));
                 return;
             }
+        }
+        if(sourceLanguage && targetLanguage && files.length >= 1){
+            setIsSubmitted(true);
         }
         /* Validation - end */
         formData.append(
@@ -1316,8 +1318,8 @@ function ProjectCreation(props) {
                 if (translationKey) {
                   Config.toast(t(translationKey), 'error');
                   setFiles([]);
+                  setIsSubmitted(false);
                 }
-                setIsSubmitted(false);
                 setShowCreateLoader(false);
                 setTranslateDownloadBtnLoader(false)
             }
