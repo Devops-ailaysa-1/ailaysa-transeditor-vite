@@ -997,10 +997,18 @@ function ProjectCreation(props) {
                 }
             }
         });
-        if (request === "tmx") setTMXFiles(fileList);
-        else if (request === "tbx") setTBXFiles(fileList);
-        else setFiles(fileList);
-
+        if (request === "tmx") {
+            setTMXFiles(fileList);
+        } else if (request === "tbx") {
+            setTBXFiles(fileList);
+        } else {
+            if(fileList.length > 1) {
+                Config.toast(t("upload_only_one_file"), "warning");
+                return;
+            } else {
+                setFiles(fileList);
+            }
+        }
         setShowFileUpload(false);
         // setFiles(prevState => [...prevState, fileList])
     };
@@ -1154,7 +1162,6 @@ function ProjectCreation(props) {
         e.preventDefault();
         let formData = new FormData();
         if (isSubmitted) return;
-        setIsSubmitted(true);
         /* Validation - start */
         if (sourceLanguage == "" && targetLanguage.length < 1 && ((files.length == 0 && pdfIdFromToolkit == null) && fileUrl == "") && params?.menu === "translate-files") {
             setSourceTargetValidation({
@@ -1219,6 +1226,9 @@ function ProjectCreation(props) {
                 setFileUrlError(t("enter_valid_youtube_url"));
                 return;
             }
+        }
+        if(sourceLanguage && targetLanguage && files.length >= 1){
+            setIsSubmitted(true);
         }
         /* Validation - end */
         formData.append(
@@ -1316,8 +1326,8 @@ function ProjectCreation(props) {
                 if (translationKey) {
                   Config.toast(t(translationKey), 'error');
                   setFiles([]);
+                  setIsSubmitted(false);
                 }
-                setIsSubmitted(false);
                 setShowCreateLoader(false);
                 setTranslateDownloadBtnLoader(false)
             }
@@ -3167,7 +3177,11 @@ function ProjectCreation(props) {
                                 </TabContent>
                                 {(!projectTaskList || projectTaskList.length === 0) && (
                                    <div className="continue-button-container">
-                                     <button className="continue-btn" onMouseUp={(e) => handleSubmit(e)}>
+                                     <button 
+                                        type="submit"
+                                        className="continue-btn"
+                                        onMouseUp={(e) => handleSubmit(e)}
+                                        disabled={isSubmitted}>
                                        {isSubmitted && <SaveButtonLoader />}
                                        Next
                                      </button>
