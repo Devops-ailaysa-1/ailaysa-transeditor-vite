@@ -178,6 +178,7 @@ function TranslateFiles(props) {
         source: false,
         target: false,
     })
+    console.log(sourceTargetValidation,"sourceTargetValidation")
     const [preTranslate, setPreTranslate] = useState(false)
     const [translationByPage, setTranslationByPage] = useState(true)
     // steps related states
@@ -1074,7 +1075,7 @@ function TranslateFiles(props) {
             fileUrl == "" &&
             pdfIdFromToolkit == null
         ) {
-            setFileError(t("upload_files"));
+            setFileError(t("required"));
             return;
         }
 
@@ -2454,6 +2455,12 @@ function TranslateFiles(props) {
             selectedTar.push(targetLanguageOptionsRef.current?.find((element) => element.id == eachTar))
         })
         setTargetLanguage([...new Set(selectedTar)]);
+
+        //set error null
+        setSourceTargetValidation({
+            source: false,
+            target: false,
+        });
     }
 
     const focusSourceLangDiv = () => {

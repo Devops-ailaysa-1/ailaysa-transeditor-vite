@@ -83,6 +83,7 @@ function ProjectCreation(props) {
         useState(false);
     const [createdProjects, setCreatedProjects] = useState([]);
     const [fileError, setFileError] = useState("");
+   
     const [fileUrlError, setFileUrlError] = useState("");
     const [projectNameError, setProjectNameError] = useState("");
     const [sourceLanguageError, setSourceLanguageError] = useState("");
@@ -1172,7 +1173,7 @@ function ProjectCreation(props) {
             fileUrl == "" &&
             pdfIdFromToolkit == null
         ) {
-            setFileError(t("upload_files"));
+            setFileError(t("required"));
             return;
         }
 
