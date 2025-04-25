@@ -1,8 +1,5 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import Config from '../../Config';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DoneIcon from '@mui/icons-material/Done';
-import CloseIcon from '@mui/icons-material/Close';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
@@ -141,69 +138,66 @@ const AilaysaNewGlossEditingArea = (props) => {
     
     const { t } = useTranslation();
     const params = useParams();
-
     const { projectId, taskId } = params
 
     const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
-    const history = useNavigate()
+    const history = useNavigate();
 
     const [searchBox, setSearchBox] = useState(false);
     const [isSearchTermDelete, setIsSearchTermDelete] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
-    const [termsList, setTermsList] = useState([])
-    const [isEditMode, setIsEditMode] = useState(false)
+    const [termsList, setTermsList] = useState([]);
+    const [isEditMode, setIsEditMode] = useState(false);
     const [termsListCopy, setTermsListCopy] = useState([]);
     const [deleteHandler, setDeleteHandler] = useState(() => () => {});
     const [showTermDeletModal, setShowTermDeletModal] = useState(false);
-    const [taskOptionList, setTaskOptionList] = useState([])
-    const [selectedTaskItem, setselectedTaskItem] = useState(null)
+    const [taskOptionList, setTaskOptionList] = useState([]);
+    const [selectedTaskItem, setselectedTaskItem] = useState(null);
     const [newTerm, setNewTerm] = useState({
         sl_term: "",
         tl_term: "",
         pos: ""
     })
-    const [isTermAdding, setIsTermAdding] = useState(false)
-    const [showTermsLoading, setShowTermsLoading] = useState(true)
-    const [openBulkUploadModal, setOpenBulkUploadModal] = useState(false)
-    const [isUploading, setIsUploading] = useState(false)
-    const [filesList, setFilesList] = useState([])
-    const [isListLoading, setIsListLoading] = useState(false)
-    const [mtTermLoader, setMtTermLoader] = useState(false)
-    const [selectedTermIds, setSelectedTermIds] = useState([])
-    const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false)
+    const [isTermAdding, setIsTermAdding] = useState(false);
+    const [showTermsLoading, setShowTermsLoading] = useState(true);
+    const [openBulkUploadModal, setOpenBulkUploadModal] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const [filesList, setFilesList] = useState([]);
+    const [isListLoading, setIsListLoading] = useState(false);
+    const [mtTermLoader, setMtTermLoader] = useState(false);
+    const [selectedTermIds, setSelectedTermIds] = useState([]);
+    const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
     // states for term ordering
-    const [orderBySrcToggle, setOrderBySrcToggle] = useState(null)
-    const [orderByTarToggle, setOrderByTarToggle] = useState(null)
+    const [orderBySrcToggle, setOrderBySrcToggle] = useState(null);
+    const [orderByTarToggle, setOrderByTarToggle] = useState(null);
 
     // states for term pagination
     const [currPage, setCurrPage] = useState(1);
     const [prevPage, setPrevPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(0)
-    const [totalTerms, setTotalTerms] = useState(0)
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalTerms, setTotalTerms] = useState(0);
     const [showCreditAlert, setShowCreditAlert] = useState(false);
 
-    const termIdToDeleteRef = useRef(null)
+    const termIdToDeleteRef = useRef(null);
     const searchTermRef = useRef("");
     const searchTermCloseOutside = useRef();
-    
-    const termsListRef = useRef([])
-    const termsListCopyRef = useRef([])
-    
-    const newSourceTermRef = useRef(null)
-    const newReplaceTermRef = useRef(null)
-    const editSourceTermRef = useRef([])
-    const editReplaceTermRef = useRef(null)
-    const scrollingDivRef = useRef(null)    // scrolling pagination div 
-    const lastPageRef = useRef(null)
-    const axiosTermListAbortControllerRef = useRef(null)
-    const axiosTermListPaginationAbortControllerRef = useRef(null)
-    const srcSortUp = useRef(null)
-    const srcSortDown = useRef(null)
-    const tarSortUp = useRef(null)
-    const tarSortDown = useRef(null)
-    const orderByRef = useRef(null)
-    const selectedTaskDataRef = useRef(null)
-    const taskListRef = useRef(null)
+    const termsListRef = useRef([]);
+    const termsListCopyRef = useRef([]);
+    const newSourceTermRef = useRef(null);
+    const newReplaceTermRef = useRef(null);
+    const editSourceTermRef = useRef([]);
+    const editReplaceTermRef = useRef(null);
+    const scrollingDivRef = useRef(null) ;   // scrolling pagination div 
+    const lastPageRef = useRef(null);
+    const axiosTermListAbortControllerRef = useRef(null);
+    const axiosTermListPaginationAbortControllerRef = useRef(null);
+    const srcSortUp = useRef(null);
+    const srcSortDown = useRef(null);
+    const tarSortUp = useRef(null);
+    const tarSortDown = useRef(null);
+    const orderByRef = useRef(null);
+    const selectedTaskDataRef = useRef(null);
+    const taskListRef = useRef(null);
     const rightAlignLangsRef = useRef(["Arabic", "Urdu", "Hebrew", "Pashto", "Sindhi", "Yiddish", "Persian"]);
 
     const partOfSpeechOptions = [
@@ -212,13 +206,11 @@ const AilaysaNewGlossEditingArea = (props) => {
         { value: 3, label: t("partsSpeech_adjective") },
         { value: 4, label: t("partsSpeech_adverb") },
     ];
-
     const flexStyle = {
         display: 'flex',
         justifyContent: 'space-between',
         borderBottom: '1px solid grey'
     }
-
     const errorFieldStyle = {
         border: '1px solid #e74c3c'
     }
@@ -269,25 +261,18 @@ const AilaysaNewGlossEditingArea = (props) => {
         const fetchData = async () => {
             // don't fetch the data for page 1 - otherwise multiple page 1 result will append  
             if(currPage === 1) return
-
             let userCacheData = JSON.parse(
                 typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
             );
-
             if (axiosTermListPaginationAbortControllerRef.current) {
                 axiosTermListPaginationAbortControllerRef.current.abort()
             }
-        
             const controller = new AbortController();
             axiosTermListPaginationAbortControllerRef.current = controller
-
             let token = userCacheData != null ? userCacheData?.token : "";
-
             let url = `${Config.BASE_URL}/glex/term_upload/?task=${selectedTaskItem?.value}&page=${currPage}${searchTerm !== '' ? `&search=${searchTerm}` : ''}`
             if(orderBySrcToggle !== null || orderByTarToggle !== null) url += `&ordering=${(orderBySrcToggle !== null ? orderBySrcToggle : orderByTarToggle) ? `${orderByRef.current}` : `-${orderByRef.current}`}`
-            
             if(currPage !== 1) setIsListLoading(true)
-            
             const response = await axios.get(
                 url,
                 {
@@ -307,9 +292,6 @@ const AilaysaNewGlossEditingArea = (props) => {
             setTermsListCopy([...termsList, ...response?.data?.results])
             setIsListLoading(false)
         };
-        // console.log("totalPages: "+totalPages)
-        // console.log("prevPage: "+prevPage)
-        // console.log("lastPageRef.current: "+lastPageRef.current)
         if (currPage <= totalPages && prevPage !== currPage && lastPageRef.current !== currPage) {
             fetchData();
         }
@@ -352,11 +334,9 @@ const AilaysaNewGlossEditingArea = (props) => {
             selectedTaskDataRef.current = taskListRef.current?.find(each => each.id === selectedTaskItem?.value)
         }
     }, [selectedTaskItem])
-    
 
     // This will get all the language pairs of that project and adds [All pairs] option to the language drop-down
     const getVendorDashboard = () => {
-        // console.log(selectedFileRow.current)
         const targetProjectId = isFrom === 'Advance_Glossary' ? gloosaryProjectId : projectId;
         Config.axios({
             url: `${Config.BASE_URL}/workspace/vendor/dashboard/${targetProjectId}`,
@@ -370,8 +350,7 @@ const AilaysaNewGlossEditingArea = (props) => {
                         value: each.id
                     }
                 })
-                setTaskOptionList(list)
-                
+                setTaskOptionList(list);
                 if(taskId !== undefined && !isNaN(parseInt(taskId))) setselectedTaskItem(list?.find(each => each.value == taskId))
                 else setselectedTaskItem(list[0])
             },
@@ -384,24 +363,17 @@ const AilaysaNewGlossEditingArea = (props) => {
         if (axiosTermListAbortControllerRef.current) {
             axiosTermListAbortControllerRef.current.abort()
         }
-
         if(isLoad){
             setShowTermsLoading(true)
             setTermsList([])
         }
-        
         const controller = new AbortController();
-        axiosTermListAbortControllerRef.current = controller
-
+        axiosTermListAbortControllerRef.current = controller;
         if(orderType) orderByRef.current = orderType
-
         let url = `${Config.BASE_URL}/glex/term_upload/?task=${selectedTaskItem?.value}&page=1${searchTerm !== '' ? `&search=${searchTerm}` : ''}`
         if(orderType) url += `&ordering=${(orderBySrcToggle !== null ? orderBySrcToggle : orderByTarToggle) 
             ? `${orderType}` : `-${orderType}`}`
-
-
-        scrollingDivRef.current.scrollTop = 0
-        
+        scrollingDivRef.current.scrollTop = 0;
         Config.axios({
             url: url,
             method: "GET",
@@ -490,18 +462,13 @@ const AilaysaNewGlossEditingArea = (props) => {
 
         if (name === "sl_term" && value?.trim() !== '') editSourceTermRef.current[term_id].style.border = defaultFieldStyle.border
         // if (name === "tl_term" && value?.trim() !== '') editReplaceTermRef.current[term_id].style.border = defaultFieldStyle.border
-        // console.log(newArr);
         termsListCopyRef.current = newArr
         setTermsListCopy(newArr)
     }
 
     const handleTermDelete = (term_id) => {
         termIdToDeleteRef.current = term_id
-        if(termsList.find(each => each?.isDeleting)) return
-        // if (!showTermDeletModal) {
-        //     setShowTermDeletModal(true)
-        //     return;
-        // }
+        if(termsList.find(each => each?.isDeleting)) return;
         setTermsList(
             Config.updateSpecificKeyInList(termsList, term_id, 'isDeleting', true)
         )
@@ -524,7 +491,6 @@ const AilaysaNewGlossEditingArea = (props) => {
         });
     }
 
-
     const handleTermUpdate = (term_id) => {
         let formData = new FormData();
         let term = termsList?.find(each => each.id === term_id)
@@ -535,19 +501,11 @@ const AilaysaNewGlossEditingArea = (props) => {
             // if (termCopy?.tl_term?.trim() === '') editReplaceTermRef.current.style.border = errorFieldStyle.border
             return
         }
-
-        console.log(termsListRef.current)
-        console.log(termsListCopyRef.current)
-
-        console.log(term?.pos)
-        console.log(termCopy?.pos)
-
         if(
             term?.sl_term === termCopy?.sl_term?.trim() &&
             term?.tl_term === termCopy?.tl_term?.trim() &&
             term?.pos === termCopy?.pos?.trim()
         ) return
-
 
         if (term?.sl_term !== termCopy?.sl_term?.trim()) {
             formData.append('sl_term', termCopy?.sl_term?.trim() ? termCopy?.sl_term?.trim() : "");
@@ -559,14 +517,12 @@ const AilaysaNewGlossEditingArea = (props) => {
             formData.append('pos', termCopy?.pos?.trim() ? termCopy?.pos?.trim() : "");
         }
 
-
         Config.axios({
             url: `${Config.BASE_URL}/glex/term_upload/${term_id}/`,
             method: "PUT",
             data: formData,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 showSavedChangeText(term_id)
                 // toggleEditMode(term.id, 'close', true)
             },
@@ -583,7 +539,6 @@ const AilaysaNewGlossEditingArea = (props) => {
     }
 
     const showSavedChangeText = (term_id) => {
-        
         let newArr = termsListRef.current.map(obj => {
             if (obj.id === term_id) {
                 return {
@@ -713,14 +668,6 @@ const AilaysaNewGlossEditingArea = (props) => {
     const handleOnScroll = () => {
         if (scrollingDivRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = scrollingDivRef.current;
-            // console.log("scrollTop: "+Math.round(scrollTop))
-            // console.log("clientHeight: "+Math.round(clientHeight))
-            // console.log("scrollHeight: "+Math.round(scrollHeight))
-            // console.log("=====addition:=========")
-            // console.log(Math.round(scrollTop) + Math.round(clientHeight))
-            // console.log(Math.round(scrollTop) + Math.round(clientHeight) === Math.round(scrollHeight))
-            // console.log("====abs=====")
-            // console.log(Math.abs((Math.round(scrollTop) + Math.round(clientHeight)) - Math.round(scrollHeight)) <= 4)
             if (Math.abs((Math.round(scrollTop) + Math.round(clientHeight)) - Math.round(scrollHeight)) <= 4) {
                 // This will be triggered after hitting the last element.
                 // API call should be made here while implementing pagination.
@@ -747,14 +694,11 @@ const AilaysaNewGlossEditingArea = (props) => {
             }
             return obj
         })
-        // console.log(newArr)
         termsListCopyRef.current = newArr
         setTermsListCopy(newArr)
     } 
 
     const handleBlur = (e, term_id) => {
-        // console.log(e.target)
-        // console.log(term_id)
         handleTermUpdate(term_id)
     } 
 
