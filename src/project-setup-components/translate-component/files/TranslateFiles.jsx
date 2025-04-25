@@ -1269,7 +1269,7 @@ function TranslateFiles(props) {
      * For Glossary Project @author - Padmabharathi Subiramanian 
      * @since APR 22 2025
      */
-    const getProjectTaskData = (proj_id, action) => {
+    const getProjectTaskData = (proj_id, action, isFrom) => {
         // vendor dashboard
         Config.axios({
             url: `${Config.BASE_URL}/workspace/vendor/dashboard/${proj_id}`,
@@ -1298,13 +1298,15 @@ function TranslateFiles(props) {
                         gloss_project_id: glossaryProjectId
                     };
                     defaultGlossDetailsRef.current = defaultGlossary;
-                    setOpenGlossariesModal(true);
-                    setTimeout(() => {
-                        dispatch(setAdvanceTranslateGlossaryModal(true));
-                    }, 500);
+                    // if (isFrom !== 'INIT') {
+                    //     setOpenGlossariesModal(true);
+                    //     setTimeout(() => {
+                    //         dispatch(setAdvanceTranslateGlossaryModal(true));
+                    //     }, 500);
+                    // }
                 }
                 // open file/document
-                openDocumentFile(dashboardResponse.data[0].document_url, proj_id)
+                // openDocumentFile(dashboardResponse.data[0].document_url, proj_id)
             },
             error: (err) => { }
         });
@@ -1856,6 +1858,8 @@ function TranslateFiles(props) {
                     setLoading(false);
                 }, 50);
                 setFileError("");
+                // setGlossaryProjectId(data.id);
+                // getProjectTaskData(data.id, "GLOSSARY", 'INIT');
             },
         });
     };
