@@ -5170,19 +5170,34 @@ console.log(formdata,"formdata1")
     const updateProjectTaskList = (taskId, percentage, status) => {
         const updatedTasks = selectedProjectFilesRef.current.map(task => {
             if (task.id === taskId) {
-                const match = progressMap.find(item =>
-                    percentage >= item.min && (
-                        percentage < item.max || (percentage === 100 && item.max === 100)
-                    ));
-                return {
+                const updatedTask = {
                     ...task,
                     percentage,
                     status,
-                    progressLoading: percentage !== 100,
                     file_translate_done: percentage == 100,
-                    progressLabel: match ? match.message : "",
-                isProcessing: percentage !== 100
+                    isProcessing: percentage !== 100
                 };
+                
+                // Set progressLoading based on percentage
+                if (percentage === 100) {
+                    // Temporarily set to true, will be set to false after timeout
+                    updatedTask.progressLoading = true;
+    
+                    // Delay clearing the loader
+                    setTimeout(() => {
+                        const finalTasks = selectedProjectFilesRef.current.map(t => {
+                            if (t.id === taskId) {
+                                return { ...t, progressLoading: false };
+                            }
+                            return t;
+                        });
+                        selectedProjectFilesRef.current = finalTasks;
+                        setSelectedProjectFiles([...finalTasks]);
+                    }, 3000); // 500ms delay or whatever fits your use case
+                } else {
+                    updatedTask.progressLoading = true;
+                }
+                return updatedTask;
             }
             return task;
         });
@@ -6198,7 +6213,7 @@ console.log(formdata,"formdata1")
                                                                                                             {selectedProjectFile?.progressLoading ? (
                                                                                                                 <ProgressBar
                                                                                                                     progressValue={selectedProjectFile.percentage || 0}
-                                                                                                                    progressBarLabel={selectedProjectFile.progressLabel || ''}
+                                                                                                                    progressMap={progressMap}
                                                                                                                     progressBarStyle={{ width: "270px", pr: "30px" }}
                                                                                                                 />
                                                                                                             ) : (

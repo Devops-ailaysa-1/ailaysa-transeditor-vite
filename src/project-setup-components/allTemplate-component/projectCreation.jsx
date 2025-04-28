@@ -1,3 +1,14 @@
+/**
+ * Component: ProjectCreation
+ * Description: 
+ *    This component is responsible for creating a simple file translation project.
+ *    It allows users to input project details such as project name, select source and target languages,
+ *    and upload translation files for processing.
+ * 
+ * Author: Padmabharathi
+ * Since: April 2025
+ */
+
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, createRef, useRef } from "react";
@@ -2101,19 +2112,12 @@ function ProjectCreation(props) {
     const updateProjectTaskList = (taskId, percentage, status) => {
         const updatedTasks = projectTaskListRef.current?.map(task => {
             if (task.id === taskId) {
-                const match = progressMap.find(item =>
-                    percentage >= item.min && (
-                      percentage < item.max || (percentage === 100 && item.max === 100)
-                    ));
-    
                 const updatedTask = {
                     ...task,
                     percentage,
                     status,
-                    progressLabel: match ? match.message : "",
                     isProcessing: false
                 };
-    
                 // Set progressLoading based on percentage
                 if (percentage === 100) {
                     // Temporarily set to true, will be set to false after timeout
@@ -2129,11 +2133,10 @@ function ProjectCreation(props) {
                         });
                         projectTaskListRef.current = finalTasks;
                         setProjectTaskList([...finalTasks]);
-                    }, 500); // 500ms delay or whatever fits your use case
+                    }, 3000); // 500ms delay or whatever fits your use case
                 } else {
                     updatedTask.progressLoading = true;
                 }
-    
                 return updatedTask;
             }
             return task;
@@ -2142,27 +2145,6 @@ function ProjectCreation(props) {
         projectTaskListRef.current = updatedTasks;
         setProjectTaskList([...updatedTasks]);
     };
-    // const updateProjectTaskList = (taskId, percentage, status) => {
-    //     const updatedTasks = projectTaskListRef.current?.map(task => {
-    //         if (task.id === taskId) {
-    //             const match = progressMap.find(item =>
-    //                 percentage >= item.min && (
-    //                   percentage < item.max || (percentage === 100 && item.max === 100)
-    //                 ));
-    //             return {
-    //                 ...task,
-    //                 percentage,
-    //                 status,
-    //                 progressLoading: percentage !== 100, 
-    //                 progressLabel: match ? match.message : "",
-    //                 isProcessing: false
-    //             };
-    //         }
-    //         return task;
-    //     });
-    //     projectTaskListRef.current = updatedTasks;
-    //     setProjectTaskList([...updatedTasks]);
-    // }
 
     /**
      * 
@@ -3118,7 +3100,7 @@ function ProjectCreation(props) {
                                                                                 {task?.progressLoading ? (
                                                                                      <ProgressBar
                                                                                          progressValue={task.percentage || 0}
-                                                                                         progressBarLabel={task.progressLabel || ''}
+                                                                                         progressMap={progressMap}
                                                                                          progressBarStyle={{ width: "270px", pr: "30px" }}
                                                                                     />
                                                                                 ) : (
