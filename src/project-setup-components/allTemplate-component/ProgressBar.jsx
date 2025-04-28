@@ -4,38 +4,53 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { keyframes } from "@emotion/react";
 
-// Fade animation for the label
+// Fade animation
 const fade = keyframes`
   0% { opacity: 1; }
   50% { opacity: 0.4; }
   100% { opacity: 1; }
 `;
 
-const ProgressBar = ({ progressValue = 0, progressBarLabel = "", progressBarStyle = {} }) => {
+const ProgressBar = ({ progressValue = 0, progressMap, progressBarStyle = {} }) => {
   const [progress, setProgress] = useState(progressValue);
-  const [progressLabel, setProgressLabel] = useState(progressBarLabel);
+  const [progressLabel, setProgressLabel] = useState("Reading source content");
   const [dots, setDots] = useState("");
 
+  // Interval for dots animation
   useEffect(() => {
-    setProgress(progressValue);
-  }, [progressValue]);
-
-  useEffect(() => {
-    setProgressLabel(progressBarLabel);
-  }, [progressBarLabel]);
-
-  useEffect(() => {
-    let dotInterval;
-    // if (progressValue === 0) {
-      dotInterval = setInterval(() => {
-        setDots((prev) => (prev.length < 3 ? prev + "." : ""));
-      }, 500);
-    // }
-    //  else {
-    //   setDots("");
-    // }
-
+    const dotInterval = setInterval(() => {
+      setDots((prev) => (prev.length < 3 ? prev + "." : ""));
+    }, 500);
     return () => clearInterval(dotInterval);
+  }, []);
+
+  // Smoothly increment/decrement progress
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prevProgress) => {
+        if (prevProgress === progressValue) {
+          clearInterval(interval);
+          return prevProgress;
+        }
+        const defaultInterval = 2;
+        let nextProgress = prevProgress;
+
+        if (prevProgress < progressValue) {
+          nextProgress = Math.min(prevProgress + defaultInterval, progressValue);
+        } else if (prevProgress > progressValue) {
+          nextProgress = Math.max(prevProgress - defaultInterval, progressValue);
+        }
+
+        const match = progressMap.find(item =>
+          nextProgress >= item.min && (
+            nextProgress < item.max || (nextProgress === 100 && item.max === 100)
+          ));
+        setProgressLabel(match ? match.message : "");
+        return nextProgress;
+      });
+    }, 50); // Adjust timing here for faster or slower animation
+
+    return () => clearInterval(interval);
   }, [progressValue]);
 
   return (
@@ -44,19 +59,17 @@ const ProgressBar = ({ progressValue = 0, progressBarLabel = "", progressBarStyl
         variant="body1"
         sx={{
           fontWeight: "500",
-          // animation: progressValue === 0 ? `${fade} 1.5s ease-in-out infinite` : "none",
-          animation:  `${fade} 1.5s ease-in-out infinite`,
-          fontSize:'14px'
+          animation: `${fade} 1.5s ease-in-out infinite`,
+          fontSize: '14px',
         }}
       >
-        {/* {progressValue === 0 ? `Reading source content${dots}` : progressLabel} */}
-
-        {progressLabel === "Finishing" || progressLabel === "Almost Finished" ? `${progressLabel}${dots}!`: `${progressLabel}${dots}`}
-        
+        {progressLabel === "Finishing" || progressLabel === "Almost Finished"
+          ? `${progressLabel}${dots}!`
+          : `${progressLabel}${dots}`}
       </Typography>
       <Box display="flex" alignItems="center">
         <LinearProgress
-          variant={'determinate'}
+          variant="determinate"
           value={progress}
           sx={{
             width: "90%",
@@ -67,7 +80,7 @@ const ProgressBar = ({ progressValue = 0, progressBarLabel = "", progressBarStyl
           }}
         />
         <Typography variant="body2" sx={{ ml: 1, fontWeight: "bold" }}>
-          {progressValue === 0 ? "" : `${progress}%`}
+          {progress === 0 ? "" : `${progress}%`}
         </Typography>
       </Box>
     </Box>
