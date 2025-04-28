@@ -2147,9 +2147,12 @@ function ProjectCreation(props) {
     };
 
     /**
-     * 
+     * This method used to get the pooling API to find a task progress data.
      * @param {*} endpoint 
      * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since  08 APR 2025
      */
     const getTaskTranslationProgress = (endpoint, taskId) => {
        Config.axios({

@@ -1299,12 +1299,12 @@ function TranslateFiles(props) {
                         gloss_project_id: glossaryProjectId
                     };
                     defaultGlossDetailsRef.current = defaultGlossary;
-                    // if (isFrom !== 'INIT') {
-                    //     setOpenGlossariesModal(true);
-                    //     setTimeout(() => {
-                    //         dispatch(setAdvanceTranslateGlossaryModal(true));
-                    //     }, 500);
-                    // }
+                    if (isFrom !== 'INIT') {
+                        setOpenGlossariesModal(true);
+                        setTimeout(() => {
+                            dispatch(setAdvanceTranslateGlossaryModal(true));
+                        }, 500);
+                    }
                 }
                 // open file/document
                 // openDocumentFile(dashboardResponse.data[0].document_url, proj_id)
@@ -1778,6 +1778,8 @@ function TranslateFiles(props) {
                 
                 projectDataFromApi.current = response.data
               
+                setBackupSourceLanguage(data.jobs[0].source_language);
+                setBackupTargetLanguage(data.jobs[0].target_language);
                 setEditFiles(data.files);
                 setGlossaryEditFiles(data.glossary_files);
                 setEditJobs(data.jobs);
@@ -1859,8 +1861,8 @@ function TranslateFiles(props) {
                     setLoading(false);
                 }, 50);
                 setFileError("");
-                // setGlossaryProjectId(data.id);
-                // getProjectTaskData(data.id, "GLOSSARY", 'INIT');
+                setGlossaryProjectId(data.individual_gloss_project_id);               
+                getProjectTaskData(data.individual_gloss_project_id, "GLOSSARY", 'INIT');
             },
         });
     };
@@ -2817,7 +2819,7 @@ function TranslateFiles(props) {
     const areTargetLangIdsEqual = (backupIds, languages) => {
         const languageIds = languages.map(lang => lang.id);
         // Sort both arrays to ignore order
-        const sortedBackup = [...backupIds].sort((a, b) => a - b);
+        const sortedBackup = Array.isArray(backupIds) ? [...backupIds].sort((a, b) => a - b): [backupIds];
         const sortedLanguage = [...languageIds].sort((a, b) => a - b);
         // Compare lengths first
         if (sortedBackup.length !== sortedLanguage.length) return false;
