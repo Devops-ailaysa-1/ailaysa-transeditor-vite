@@ -156,6 +156,8 @@
     "total_sentences": "Total sentences",
     "select_source_language": "Select source language",
     "select_target_language-1": "Select target language",
+    "select_a_source_language": "Select a source language",
+    "select_a_target_language": "Select a target language",
     "select_language": "Select language",
     "search_source_language": "Search source language",
     "search_target_language": "Search target language",
@@ -833,7 +835,7 @@
     "view_docx_writer": "View the docx file in writer",
     "oops_file_empty": "Oops ! The file is empty",
     "empty_file_detect": "Empty file detected. Please upload a file with text.",
-    "file_exceed_size": "The uploaded file exceeds the maximum limit of 10,000 words. Please upload a shorter file.",
+    "file_exceed_size": "The uploaded file exceeds our 10,000-word maximum limit. Please upload a shorter file or split your content into multiple files.",
     "open_in_blog": "Open in Blog",
     "cv_error_link_txt": "Add service provider info",
     "cv_error_txt": "so that people find you in the Ailaysa Marketplace. Win jobs too!",
@@ -919,6 +921,7 @@
     "partsSpeech_other": "Other",
     "partsSpeech_none": "None",
     "term_delete_success": "Term deleted successfully.",
+    "terms_delete_success": "Term(s) are deleted successfully",
     "src_of_sl_err_note": "Source of SL term should not exceed 200 characters",
     "src_of_tl_err_note": "Source of TL term should not exceed 200 characters",
     "new_term_err_note_1": "Note should not exceed 1000 characters",
@@ -1190,6 +1193,6 @@
     "adaptive_translation": "Adaptive Translation",
     "beta": "Beta",
     "standard_mt": "Standard MT",
-    "adaptive_help_txt": "Add your glossaries before translation or during post-editing. The machine learns and applies your preferences.",
+    "adaptive_help_txt": "Add your glossaries before translation or during post-editing. Transeditor learns and applies your preferences.",
     "standard_mt_help_txt": "Translates using your selected machine translation engines. To change settings, click 'Advanced Settings' below."
 }

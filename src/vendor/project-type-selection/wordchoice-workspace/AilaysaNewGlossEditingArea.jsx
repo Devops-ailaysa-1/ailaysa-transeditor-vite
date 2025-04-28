@@ -837,7 +837,7 @@ const AilaysaNewGlossEditingArea = (props) => {
             auth: true,
             success: (response) => {
                 
-                Config.toast(`${t("term_delete_success")}`);
+                Config.toast(`${t("terms_delete_success")}`);
                 setShowTermDeletModal(false)
 
                 setTimeout(() => {
