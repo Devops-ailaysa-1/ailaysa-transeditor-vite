@@ -1324,7 +1324,7 @@ function ProjectCreation(props) {
                 setProjectName(response.data.project_name);
                 contentprojectNameRef.current.innerText = response.data.project_name;
                 getProjectTaskData(response.data.id, action);
-                Config.toast("Project created successfully");
+                Config.toast("Project is created successfully");
                 setIsShowNote(true)
                 return;
             },
@@ -1369,7 +1369,7 @@ function ProjectCreation(props) {
         formData.append("steps", 1);
 
         let url = Config.BASE_URL + "/workspace/project/quick/setup/";
-        let glossaryToast = "Glossary Project created successfully";
+        let glossaryToast = "Your glossary is created.";
         if (isLanguageChanges) {
             formData.append("glossary_job_update", true);
             url += `${glossaryProjectId}/?step_delete_ids=&file_delete_ids=&job_delete_ids=&subject_delete_ids=&project_type_id=3`;
@@ -2597,7 +2597,7 @@ function ProjectCreation(props) {
                                                         className="fas fa-caret-down"
                                                     />
                                                 </div>
-                                                {sourceTargetValidation.source && <small className="text-danger">{t("select_source_language")}</small>}
+                                                {sourceTargetValidation.source && <small className="text-danger">{t("select_a_source_language")}</small>}
                                             </div>
                                         </div>
                                         <div className="form-fields">
@@ -2639,7 +2639,7 @@ function ProjectCreation(props) {
                                                         />
                                                     </div>
                                                 </Tooltip>
-                                                {sourceTargetValidation.target && <small className="text-danger">{t("select_target_language-1")}</small>}
+                                                {sourceTargetValidation.target && <small className="text-danger">{t("select_a_target_language")}</small>}
                                             </div>
                                         </div>
                                     </div>
@@ -3177,7 +3177,7 @@ function ProjectCreation(props) {
                                        <HtmlTooltip  className="tooltip_overlay"
                                          title={
                                         <React.Fragment>
-                                         Creates a new project. Your current project will be saved in 'My projects'
+                                         A new project is created. Your current and previous projects are saved in ‘My Projects’.
                                         </React.Fragment>
                                         }
                                        >
