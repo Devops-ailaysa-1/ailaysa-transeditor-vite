@@ -97,8 +97,8 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import { data } from "jquery";
 import ArrowRightGreyColor from "../assets/images/new-create-hub/arrow_right_grey_color.svg"
 import ArrowRightAltColor from "../assets/images/new-ui-icons/arrow_right_alt_color.svg"
-import PaginationLeft  from "../assets/images/new-ui-icons/pagination-left.svg";
-import PaginationRight  from "../assets/images/new-ui-icons/pagination-right.svg";
+import PaginationLeft from "../assets/images/new-ui-icons/pagination-left.svg";
+import PaginationRight from "../assets/images/new-ui-icons/pagination-right.svg";
 import ChangeRequest from "../assets/images/change-request.svg"
 import PlusIcon from "../assets/images/new-ui-icons/plus.svg"
 import TranscriptionIcon from "../assets/images/new-project-setup/transcription.svg"
@@ -185,7 +185,7 @@ function Fileupload(props) {
 
     // const [preTranslate, setPreTranslate] = useState(false)
     const [createdProjects, setCreatedProjects] = useState([]);
-    console.log(createdProjects,"translatecreatedProjects")
+    console.log(createdProjects, "translatecreatedProjects")
     const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
     const [fileUrlError, setFileUrlError] = useState("");
@@ -211,6 +211,14 @@ function Fileupload(props) {
     const [fileUploadTabActive, setFileUploadTabActive] = useState(1);
     const [selectedProjectFilesCount, setSelectedProjectFilesCount] = useState(1);
     const [selectedProjectFiles, setSelectedProjectFiles] = useState([]);
+
+    console.log("Selected File:", selectedProjectFiles[0]?.source_language);
+    console.log("Selected File:2",
+        targetLanguageOptionsRef.current?.find(
+            each => each.id === 37
+        )
+    );
+
     const [machineLangTranslationChange, setmachineLangTranslationChange] = useState(null);
     const [editProjectId, setEditProjectId] = useState(null);
     const [sourceLanguageDisable, setSourceLanguageDisable] = useState(false);
@@ -384,7 +392,7 @@ function Fileupload(props) {
 
     const [isTaskDeleting, setIsTaskDeleting] = useState(false)
     const [isExpressProjectDeleting, setIsExpressProjectDeleting] = useState(false)
-    
+
     const [isDesignDeleting, setIsDesignDeleting] = useState(false);
     const [axiosVendorDashboardAbortController, setAxiosVendorDashboardAbortController] = useState(null);
     const [axiosFileTranslateAbortController, setAxiosFileTranslateAbortController] = useState(null);
@@ -1245,7 +1253,7 @@ function Fileupload(props) {
     useEffect(() => {
         if (projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
             projectSearchFunctionality('clear-search')
-        }else if(projectSearchTerm == "" && searchTermRef.current !== "" && searchTermRef.current !== null){
+        } else if (projectSearchTerm == "" && searchTermRef.current !== "" && searchTermRef.current !== null) {
             projectSearchFunctionality('clear-search')
         }
     }, [projectSearchTerm])
@@ -1261,9 +1269,9 @@ function Fileupload(props) {
     /* Show the pagination content a the bottom */
     useEffect(() => {
         if (didMount) paginationContentFunction(currentPage);
-        
+
         return () => {
-            if(paginationTimeOut) clearTimeout(paginationTimeOut);
+            if (paginationTimeOut) clearTimeout(paginationTimeOut);
         }
     }, [totalPages, currentPage]);
 
@@ -1298,7 +1306,7 @@ function Fileupload(props) {
             url = `/assets?page=1`;
         } else if (activeProjTab === 9) {
             url = `/designs?page=1`;
-        } 
+        }
 
         if (orderby != null) url += `&order_by=${orderby}`;
         if (filter != null) url += `&filter=${filter}`;
@@ -1306,7 +1314,7 @@ function Fileupload(props) {
         if (typeParam != null) url += `&type=${typeParam}`;
         if (param !== 'clear-search') {
             if (projectSearchTerm != null) url += `&search=${projectSearchTerm}`;
-        }else if(param === 'clear-search'){
+        } else if (param === 'clear-search') {
             setIsSearchTermDelete(true)
         }
         history(url);
@@ -1394,7 +1402,7 @@ function Fileupload(props) {
     useEffect(() => {
         let id = URL_SEARCH_PARAMS.get("open-project")
         if (id !== null && createdProjectsList?.length !== 0) {
-            if(!createdProjectsList?.find(each => each?.id == id)) return;
+            if (!createdProjectsList?.find(each => each?.id == id)) return;
             let selectedRow = document.querySelector(`div[data-key='${id}']`)
             selectedRow?.scrollIntoView({
                 behavior: 'smooth',
@@ -1433,7 +1441,7 @@ function Fileupload(props) {
             url = `/assets?page=${page}`;
         } else if (activeProjTab === 9) {
             url = `/designs?page=${page}`;
-        } 
+        }
 
         let queryParam = new URLSearchParams(window.location.search)
         let orderParam = queryParam.get("order_by");
@@ -1464,7 +1472,7 @@ function Fileupload(props) {
             url = `/assets?page=${page}`;
         } else if (activeProjTab === 9) {
             url = `/designs?page=${page}`;
-        } 
+        }
         if (orderFieldTemp != null) url += `&order_by=${orderFieldTemp}`;
 
         let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
@@ -1541,14 +1549,14 @@ function Fileupload(props) {
         if (projectListAbortControllerRef.current) {
             projectListAbortControllerRef.current.abort()
         }
-    
+
         const controller = new AbortController();
         projectListAbortControllerRef.current = controller
 
         let params = {
             url: url,
             auth: true,
-            ...(controller !== undefined && {signal: controller.signal}),
+            ...(controller !== undefined && { signal: controller.signal }),
             timeout: 1000 * 15, // Wait for 15 seconds
             success: (response) => {
                 // setOrderField(orderFieldTemp);
@@ -1628,13 +1636,13 @@ function Fileupload(props) {
                             }
                             return obj;
                         });
-                        
+
                         // update the new task word count in the task list 
-                        if(openedProjectId){
-                            try{
+                        if (openedProjectId) {
+                            try {
                                 let projTaskWordData = response.data?.out?.find(each => each.proj == openedProjectId)?.task_words
                                 let newArr = selectedProjectFiles.map(obj => {
-                                    if(projTaskWordData.find(each => each[obj.id])){
+                                    if (projTaskWordData.find(each => each[obj.id])) {
                                         return {
                                             ...obj,
                                             task_word_count: projTaskWordData.find(each => each[obj.id])[obj.id]
@@ -1644,7 +1652,7 @@ function Fileupload(props) {
                                 })
                                 console.log(newArr)
                                 setSelectedProjectFiles(newArr)
-                            }catch(e) {
+                            } catch (e) {
                                 console.log(e)
                             }
                         }
@@ -1748,14 +1756,14 @@ function Fileupload(props) {
         if (axiosVendorDashboardAbortController) {
             axiosVendorDashboardAbortController.abort()
         }
-    
+
         const controller = new AbortController();
         setAxiosVendorDashboardAbortController(controller);
 
         Config.axios({
             url: Config.BASE_URL + "/workspace/vendor/dashboard/" + projectId,
             auth: true,
-            ...(controller !== undefined && {signal: controller.signal}),
+            ...(controller !== undefined && { signal: controller.signal }),
             success: (response) => {
                 // let responseTemp = response.data;
                 setPreTranslateAllTask([])
@@ -1953,10 +1961,10 @@ function Fileupload(props) {
 
     const filter_isadaptive = createdProjectsList?.find(
         (dat) => String(dat?.id) === String(openedProjectId)
-      );
-      
-    console.log(openedProjectId,filter_isadaptive,createdProjectsList,"downloadingFilesList2")
-    const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as,selectedProjectFile, project) => {
+    );
+
+    console.log(openedProjectId, filter_isadaptive, createdProjectsList, "downloadingFilesList2")
+    const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as, selectedProjectFile, project) => {
         let prevPageInfo = {
             pageNo: URL_SEARCH_PARAMS.get("page"),
             orderBy: URL_SEARCH_PARAMS.get("order_by"),
@@ -1965,17 +1973,17 @@ function Fileupload(props) {
             projectId: project_id,
             fromProjectList: true
         }
-        if(openIn === "Designer"){
+        if (openIn === "Designer") {
             // writer the designer open logic here
             console.log('open designer')
             const index = selectedProjectFilesRef.current.findIndex(obj => obj?.design_project?.desg_job === selectedProjectFile?.design_project?.desg_job);
             let subUrl = project?.designer_project_detail?.type == 'image_design' ? `&view=2` : `&code=${selectedProjectFile?.target_language}&view=2`
             let url = `/workspace/${project?.designer_project_detail?.type == 'image_design' ? 'design' : 'image-translate'}/?project=${selectedProjectFile?.design_project?.desg_project}&page=${1}&lang=${index}`
-            window.open(Config. DESIGNER_HOST+ url + subUrl)
+            window.open(Config.DESIGNER_HOST + url + subUrl)
 
 
-        }else if (openIn === "ExpressEditor") {
-            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, {state: { filename: fileName }})
+        } else if (openIn === "ExpressEditor") {
+            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, { state: { filename: fileName } })
         } else {
             if (from !== 'task-download') {
                 setClickedOpenButton(key);
@@ -1995,16 +2003,20 @@ function Fileupload(props) {
                                     // window.location.href = 'workspace/' + response.data.document_id
                                     let lastPageAvailable = localStorage.getItem(response.data.document_id)
                                     if (lastPageAvailable) {
-                                        history(lastPageAvailable, {state: {
-                                            prevPath: location.pathname + location.search,
-                                            open_as
-                                        }});
+                                        history(lastPageAvailable, {
+                                            state: {
+                                                prevPath: location.pathname + location.search,
+                                                open_as
+                                            }
+                                        });
                                     } else {
-                                        history(`/workspace/${response.data?.document_id}?page=1`, {state: {
-                                            prevPath: location.pathname + location.search,
-                                            open_as,
-                                            is_adaptive:filter_isadaptive
-                                        }});
+                                        history(`/workspace/${response.data?.document_id}?page=1`, {
+                                            state: {
+                                                prevPath: location.pathname + location.search,
+                                                open_as,
+                                                is_adaptive: filter_isadaptive
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -2016,16 +2028,20 @@ function Fileupload(props) {
                                     // window.location.href = 'workspace/' + response.data.document_id
                                     let lastPageAvailable = localStorage.getItem(response.data?.doc_data?.document_id)
                                     if (lastPageAvailable) {
-                                        history(lastPageAvailable, {state: {
-                                            prevPath: location.pathname + location.search,
-                                            open_as
-                                        }});
+                                        history(lastPageAvailable, {
+                                            state: {
+                                                prevPath: location.pathname + location.search,
+                                                open_as
+                                            }
+                                        });
                                     } else {
-                                        history(`/workspace/${response.data?.doc_data?.document_id}?page=1`, {state: {
-                                            partial: true,
-                                            prevPath: location.pathname + location.search,
-                                            open_as
-                                        }});
+                                        history(`/workspace/${response.data?.doc_data?.document_id}?page=1`, {
+                                            state: {
+                                                partial: true,
+                                                prevPath: location.pathname + location.search,
+                                                open_as
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -2092,10 +2108,12 @@ function Fileupload(props) {
             if (projectType === 3) {
                 setTimeout(() => {
                     // window.location.href = 'workspace/' + response.data.document_id
-                    history(`/glossary-workspace/${selectedProjectId}/${id}/`, {state: {
-                        prevPageInfo: prevPageInfo,
-                        prevPath: location.pathname + location.search
-                    }});
+                    history(`/glossary-workspace/${selectedProjectId}/${id}/`, {
+                        state: {
+                            prevPageInfo: prevPageInfo,
+                            prevPath: location.pathname + location.search
+                        }
+                    });
                     // history(`/glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`, {state: {
                     //     prevPageInfo: prevPageInfo,
                     //     prevPath: location.pathname + location.search
@@ -2106,10 +2124,12 @@ function Fileupload(props) {
             if (projectType === 10) {
                 setTimeout(() => {
                     // window.location.href = 'workspace/' + response.data.document_id
-                    history(`/wordchoice-workspace/${selectedProjectId}/${id}/`, {state: {
-                        prevPageInfo: prevPageInfo,
-                        prevPath: location.pathname + location.search
-                    }});
+                    history(`/wordchoice-workspace/${selectedProjectId}/${id}/`, {
+                        state: {
+                            prevPageInfo: prevPageInfo,
+                            prevPath: location.pathname + location.search
+                        }
+                    });
                 });
             }
         }
@@ -2298,16 +2318,16 @@ function Fileupload(props) {
             fromProjectList: true
         }
         if (projectType === 1 || projectType === 2) {
-            history("/create/translate/files/translate-files?get-project-info=" + projectId + "&type=" + projectType, {state: prevPageInfo });
+            history("/create/translate/files/translate-files?get-project-info=" + projectId + "&type=" + projectType, { state: prevPageInfo });
         } else if (projectType === 3) {
-            history("/create/assets/glossaries/create?page=1&get-project-info=" + projectId + "&type=" + projectType, {state: prevPageInfo });
+            history("/create/assets/glossaries/create?page=1&get-project-info=" + projectId + "&type=" + projectType, { state: prevPageInfo });
         } else if (projectType === 4) {
             if (project?.voice_proj_detail?.project_type_sub_category === 1) {
                 // speech to text
-                history("/create/speech/speech-to-text?get-project-info=" + projectId + "&type=" + projectType, {state: prevPageInfo });
+                history("/create/speech/speech-to-text?get-project-info=" + projectId + "&type=" + projectType, { state: prevPageInfo });
             } else if (project?.voice_proj_detail?.project_type_sub_category === 2) {
                 // text to speech
-                history("/create/speech/text-to-speech?get-project-info=" + projectId + "&type=" + projectType, {state: prevPageInfo });
+                history("/create/speech/text-to-speech?get-project-info=" + projectId + "&type=" + projectType, { state: prevPageInfo });
             }
         } else if (projectType === 5) {
             setEditInstantProjectModal(true)
@@ -2317,7 +2337,7 @@ function Fileupload(props) {
         } else if (projectType === 6) {
             setEditInstantProjectModal(true)
             // deisgner project edit code here'
-            handleRetriveDesignProject(e,project)
+            handleRetriveDesignProject(e, project)
             console.log('designer project edit')
         } else if (projectType === 10) {
             history(`/create/assets/wordchoice?project=${projectId}`, { state: prevPageInfo });
@@ -2934,45 +2954,47 @@ function Fileupload(props) {
         )
     }
 
-     // download source audo file 
-     const downloadSourceAudioFile = async (taskData) => {
-        let {id, filename} = taskData
-        try{
+    // download source audo file 
+    const downloadSourceAudioFile = async (taskData) => {
+        let { id, filename } = taskData
+        try {
             // add in download list
             dispatch(addDownloadingFiles({ id: id, file_name: filename?.split('.')[0], ext: '.mp3', status: 1 }))
-            
+
             let url = `${Config.BASE_URL}/workspace/download_text_to_speech_source/?task=${id}`
             const response = await Config.downloadFileFromApi(url);
-            
+
             // update the list once download completed
             dispatch(updateDownloadingFile({ id: id, status: 2 }))
 
             Config.downloadFileInBrowser(response)
-            
+
 
             setTimeout(() => {
                 // remove the downloaded file from list
                 dispatch(deleteDownloadingFile({ id: id }))
             }, 8000);
-            
-        }catch(e) {
+
+        } catch (e) {
             console.log(e)
         }
     }
 
     const openAilaysaWriter = (projectID, taskID, assignToMe = false) => {
-        history(`/word-processor/?project=${projectID}&transcription-task=${taskID}`, {state: {
-            assignToMe,
-            prevPageInfo: {
-                pageNo: URL_SEARCH_PARAMS.get("page"),
-                orderBy: URL_SEARCH_PARAMS.get("order_by"),
-                projectTypeFilter: URL_SEARCH_PARAMS.get("filter"),
-                search: URL_SEARCH_PARAMS.get("search"),
-                projectId: projectID,
-                fromProjectList: true
-            },
-            prevPath: location.pathname + location.search
-        }});
+        history(`/word-processor/?project=${projectID}&transcription-task=${taskID}`, {
+            state: {
+                assignToMe,
+                prevPageInfo: {
+                    pageNo: URL_SEARCH_PARAMS.get("page"),
+                    orderBy: URL_SEARCH_PARAMS.get("order_by"),
+                    projectTypeFilter: URL_SEARCH_PARAMS.get("filter"),
+                    search: URL_SEARCH_PARAMS.get("search"),
+                    projectId: projectID,
+                    fromProjectList: true
+                },
+                prevPath: location.pathname + location.search
+            }
+        });
     }
 
     const handleDocumentSubmit = (taskID, step) => {
@@ -3127,26 +3149,26 @@ function Fileupload(props) {
     const handleBulkDownload = async (e, project) => {
         e?.stopPropagation();
 
-        let {id, project_name, get_project_type} = project
+        let { id, project_name, get_project_type } = project
         let url
         let designDownloadUrl
-        if(get_project_type === 6) {
+        if (get_project_type === 6) {
             // writer designer project zip download code here 
             // remove the below return statement after done coding
             console.log('designer project zip download')
-            console.log(project) 
-            if(project.designer_project_detail.type == "image_translate"){
-                designDownloadUrl =  Config.BASE_URL + `/ai-image-translation/image-download?image_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1`
-            }else{
+            console.log(project)
+            if (project.designer_project_detail.type == "image_translate") {
+                designDownloadUrl = Config.BASE_URL + `/ai-image-translation/image-download?image_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1`
+            } else {
                 const startNumber = 1;
                 const endNumber = project.designer_project_detail.pages;
                 const formattedString = Array.from({ length: endNumber - startNumber + 1 }, (_, index) => {
-                  const numberToMap = index + startNumber;
-                  return `page_number_list=${numberToMap}`;
+                    const numberToMap = index + startNumber;
+                    return `page_number_list=${numberToMap}`;
                 }).join('&');
-                
+
                 console.log(formattedString);
-                 designDownloadUrl =  Config.BASE_URL + `/canvas/design-download?canvas_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1&`+formattedString
+                designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1&` + formattedString
                 console.log(url)
             }
 
@@ -3154,9 +3176,9 @@ function Fileupload(props) {
 
         // add in download list
         dispatch(addDownloadingFiles({ id: id, file_name: project_name, ext: '.zip', status: 1 }))
-        if(get_project_type === 6) {
+        if (get_project_type === 6) {
             url = designDownloadUrl
-        }else{
+        } else {
             url = `${Config.BASE_URL}/workspace/download/${id}/`
 
         }
@@ -3222,7 +3244,7 @@ function Fileupload(props) {
         if (lastPageAvailable) {
             history(lastPageAvailable);
         } else {
-            history("workspace/" + openFileId.current, {state: { partial: true }});
+            history("workspace/" + openFileId.current, { state: { partial: true } });
         }
     }
 
@@ -3370,33 +3392,33 @@ function Fileupload(props) {
     }
 
 
-   // download convert docx file 
-   const downloadConvertDocxFile = async (taskData) => {
-        let {id, filename} = taskData
-        try{
+    // download convert docx file 
+    const downloadConvertDocxFile = async (taskData) => {
+        let { id, filename } = taskData
+        try {
             // add in download list
             dispatch(addDownloadingFiles({ id: id, file_name: filename?.split('.')[0], ext: '.docx', status: 1 }))
-            
+
             let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?task_id=${id}`
             const response = await Config.downloadFileFromApi(url);
-            
+
             // update the list once download completed
             dispatch(updateDownloadingFile({ id: id, status: 2 }))
 
             Config.downloadFileInBrowser(response)
-            
+
 
             setTimeout(() => {
                 // remove the downloaded file from list
                 dispatch(deleteDownloadingFile({ id: id }))
             }, 8000);
-            
-        }catch(e) {
+
+        } catch (e) {
             console.log(e)
         }
     }
 
-   
+
     const convertPdfToDocxFromTask = (taskId, projectId) => {
         setClickedOpenButton(taskId)
         Config.axios({
@@ -3447,8 +3469,8 @@ function Fileupload(props) {
                 // console.log(newArr)
                 setSelectedProjectFiles(newArr)
                 setClickedOpenButton(null)
-                
-                if(isFrist){
+
+                if (isFrist) {
                     if (response.data?.status === '') {
                         convertPdfToDocxFromTask(taskId, projectId)
                     }
@@ -3490,8 +3512,8 @@ function Fileupload(props) {
                         const newArr = selectedProjectFiles?.map(obj => {
                             if (obj.id === taskId) {
                                 return {
-                                    ...obj, 
-                                    open_in: response.data?.pdf_api_use, 
+                                    ...obj,
+                                    open_in: response.data?.pdf_api_use,
                                     converted: true,
                                     isPDFConverting: false
                                 };
@@ -3502,7 +3524,7 @@ function Fileupload(props) {
                         setSelectedProjectFiles(newArr)
                         setClickedOpenButton(null)
                     }
-                }else{
+                } else {
                     if (response.data?.status === 'YET TO START') {
                         setTimeout(() => {
                             checkPdfConversionStatus(taskId)
@@ -3529,8 +3551,8 @@ function Fileupload(props) {
                         const newArr = selectedProjectFiles?.map(obj => {
                             if (obj.id === taskId) {
                                 return {
-                                    ...obj, 
-                                    open_in: response.data?.pdf_api_use, 
+                                    ...obj,
+                                    open_in: response.data?.pdf_api_use,
                                     converted: true,
                                     isPDFConverting: false
                                 };
@@ -3555,12 +3577,14 @@ function Fileupload(props) {
             projectId: projectId,
             fromProjectList: true
         }
-        history(`/word-processor?task=${id}`, {state: {
-            docName: name,
-            projectId,
-            prevPageInfo,
-            prevPath: location.pathname + location.search
-        }})
+        history(`/word-processor?task=${id}`, {
+            state: {
+                docName: name,
+                projectId,
+                prevPageInfo,
+                prevPath: location.pathname + location.search
+            }
+        })
     }
 
     const translateFromPdfTask = (taskId, projectId) => {
@@ -4102,7 +4126,7 @@ function Fileupload(props) {
         });
     }
 
- 
+
     const MoreOptionsIcon = (props) => {
         let { selectedProjectFile, project, key, onlyDelete, disabled } = props
         return (
@@ -4229,16 +4253,16 @@ function Fileupload(props) {
             </div>
         )
     }
-   
+
     const MoreOptionsIconDesigner = (props) => {
         let { project, removeDelete, removeEdit, selectedProjectFile, deleteOnly, assigned } = props
         console.log(assigned)
         return (
             <div className="more-options-wrap">
-                 <ButtonBase onMouseUp={(e) => handleMoreVertOption(e, selectedProjectFile?.id !== undefined ? selectedProjectFile?.id : project.id)} className="sorting-icon">
+                <ButtonBase onMouseUp={(e) => handleMoreVertOption(e, selectedProjectFile?.id !== undefined ? selectedProjectFile?.id : project.id)} className="sorting-icon">
                     <MoreVertIcon className="more-icon" />
                 </ButtonBase>
-                {(moreEl && (openedMoreOption == (selectedProjectFile?.id !== undefined ? selectedProjectFile?.id : project.id))) && 
+                {(moreEl && (openedMoreOption == (selectedProjectFile?.id !== undefined ? selectedProjectFile?.id : project.id))) &&
                     <>
                         <div className="menu-wrapper" ref={moreOptionOutside}>
                             <ul>
@@ -4249,9 +4273,9 @@ function Fileupload(props) {
                                                 key={item.id}
                                                 className="list-item"
                                                 onClick={(e) => {
-                                                    item?.label === 'Edit' ? handleEditDesignerProj(e,project) :
-                                                    item?.label === 'Download' ? handleDownloadDesignerProj(project,selectedProjectFile) :
-                                                    item?.label === 'Delete' && handleDeleteDesignerProjectHandle(project,selectedProjectFile)
+                                                    item?.label === 'Edit' ? handleEditDesignerProj(e, project) :
+                                                        item?.label === 'Download' ? handleDownloadDesignerProj(project, selectedProjectFile) :
+                                                            item?.label === 'Delete' && handleDeleteDesignerProjectHandle(project, selectedProjectFile)
                                                     item?.label === 'View PO' && getPODetailsForTask(selectedProjectFile.id)
                                                 }}
                                             >
@@ -4288,20 +4312,20 @@ function Fileupload(props) {
 
     const handleCreateNewProjectBtnClick = () => {
         const search_param = new URLSearchParams(window.location.search);
-        if(activeProjTab === 9){    // redirect to designer
+        if (activeProjTab === 9) {    // redirect to designer
             window.open(Config.DESIGNER_HOST)
-        }else{
+        } else {
             history(
                 activeProjTab === 3 ? "/create/translate/files/translate-files" :
                     activeProjTab === 4 ? "/create/speech/speech-to-text" :
                         activeProjTab === 5 ? "/create/speech/text-to-speech" :
-                            activeProjTab === 6 && "/create/assets/glossaries/create" 
+                            activeProjTab === 6 && "/create/assets/glossaries/create"
             );
         }
     }
 
 
-    const handleRetriveDesignProject = (e,proj) => {
+    const handleRetriveDesignProject = (e, proj) => {
         e.stopPropagation()
         let url = ''
         if (proj.designer_project_detail.type === "image_design") {
@@ -4317,13 +4341,13 @@ function Fileupload(props) {
             success: (response) => {
                 let { data } = response;
                 console.log(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name)
-                setExpressProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name )
+                setExpressProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name)
                 // setHasTeam(data.team)
                 let editTargetLanguages = [];
                 let tar = [];
                 let tarID = [];
-                if(proj.designer_project_detail.type === "image_design"){
-               setEditJobs(data.canvas_translation);
+                if (proj.designer_project_detail.type === "image_design") {
+                    setEditJobs(data.canvas_translation);
                     response.data?.canvas_translation?.map((each) => {
 
                         tar.push({ language: each?.target_language, id: each?.target_language });
@@ -4341,16 +4365,16 @@ function Fileupload(props) {
                         }
                     });
                     let editSourceLanguage = targetLanguageOptionsRef.current?.find(
-                        (element) => element.id ==  data?.canvas_translation[0]?.source_language
+                        (element) => element.id == data?.canvas_translation[0]?.source_language
                     );
-    
+
                     setTimeout(() => {
                         setSourceLabel(editSourceLanguage?.language);
                         setSourceLanguage(data?.canvas_translation[0]?.source_language)
                         setTargetLanguage(editTargetLanguages);
                         setSkeletonLoader(false)
                     }, 80);
-                }else{
+                } else {
                     setEditJobs(data?.image_inpaint_creation);
                     response.data?.image_inpaint_creation?.map((each) => {
 
@@ -4369,9 +4393,9 @@ function Fileupload(props) {
                         }
                     });
                     let editSourceLanguage = targetLanguageOptionsRef.current?.find(
-                        (element) => element.id ==  data?.source_language
+                        (element) => element.id == data?.source_language
                     );
-    
+
                     setTimeout(() => {
                         setSourceLabel(editSourceLanguage?.language);
                         setSourceLanguage(data?.source_language)
@@ -4379,21 +4403,21 @@ function Fileupload(props) {
                         setSkeletonLoader(false)
                     }, 80);
                 }
-               
+
             },
         });
     }
 
 
     // for designer project edit
-    const handleEditDesignerProj = (e,proj) => {
+    const handleEditDesignerProj = (e, proj) => {
         console.log('designer edit')
-        handleRetriveDesignProject(e,proj)
-    } 
-    
-     // for designer project delete
-     const handleDownloadDesignerProj = async(proj,selectedProjectFile) => {
-       
+        handleRetriveDesignProject(e, proj)
+    }
+
+    // for designer project delete
+    const handleDownloadDesignerProj = async (proj, selectedProjectFile) => {
+
         let url
         let designDownloadUrl
         let nameofDownload
@@ -4402,7 +4426,7 @@ function Fileupload(props) {
         if (proj?.designer_project_detail?.type == "image_translate") {
             designDownloadUrl = Config.BASE_URL + `/ai-image-translation/image-download?image_id=${proj.designer_project_detail.des_proj_id}&file_format=png&language=${selectedProjectFile.target_language}&export_size=1`
             console.log(designDownloadUrl)
-            
+
             nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`
         } else {
             const startNumber = 1;
@@ -4411,22 +4435,22 @@ function Fileupload(props) {
                 const numberToMap = index + startNumber;
                 return `page_number_list=${numberToMap}`;
             }).join('&');
-           
+
             console.log(formattedString);
-            if(selectedProjectFile == null){
+            if (selectedProjectFile == null) {
                 designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${proj?.designer_project_detail?.des_proj_id}&file_format=png&export_size=1&` + formattedString
                 nameofDownload = `${proj?.project_name}`
-                if(proj?.designer_project_detail?.pages == 1){
+                if (proj?.designer_project_detail?.pages == 1) {
                     extention = '.png'
-                }else{
+                } else {
                     extention = '.zip'
                 }
-            }else{
+            } else {
                 designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${proj?.designer_project_detail?.des_proj_id}&file_format=png&language=${selectedProjectFile?.target_language}&export_size=1&` + formattedString
                 nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`
-                if(proj?.designer_project_detail?.pages == 1){
+                if (proj?.designer_project_detail?.pages == 1) {
                     extention = '.png'
-                }else{
+                } else {
                     extention = '.zip'
                 }
             }
@@ -4447,59 +4471,59 @@ function Fileupload(props) {
             // remove the downloaded file from list
             dispatch(deleteDownloadingFile({ id: id }))
         }, 8000);
-    } 
+    }
 
     // for designer project delete
-       // for designer project delete
+    // for designer project delete
 
-       const handleDeleteDesignerProjectHandle = (proj,selectedProj) => {
+    const handleDeleteDesignerProjectHandle = (proj, selectedProj) => {
         selectedDesignerProject.current = selectedProj
         projectObject.current = proj
-        if(selectedProj == null){
+        if (selectedProj == null) {
             setShowExpressDeleteModal(true)
-        }else{
+        } else {
             console.log(selectedProj)
             console.log(selectedProjectFilesRef.current)
 
-            if(selectedProj.task_assign_info != null){
+            if (selectedProj.task_assign_info != null) {
                 SetShowAssignedProjectDeleteAlert(true)
-            }else{
+            } else {
                 setShowTaskDesignIndividualDeleteAlert(true)
 
             }
         }
-    } 
+    }
 
     // for designer project delete
-    const handleDeleteDesignerProj = (proj,selectedProjectFile) => {
+    const handleDeleteDesignerProj = (proj, selectedProjectFile) => {
 
         console.log(proj)
         let url = ''
         if (proj?.designer_project_detail?.type === "image_design") {
             url = `${Config.BASE_URL}/canvas/canvas-designs/${proj?.designer_project_detail?.des_proj_id}/`
-            if(selectedProjectFile == null){
-                handleDeleteDesignWholeProject(proj,url)
-            }else{
-                handleDeleteDesignTaskOfProject(proj,url,selectedProjectFile?.design_project?.desg_job)
+            if (selectedProjectFile == null) {
+                handleDeleteDesignWholeProject(proj, url)
+            } else {
+                handleDeleteDesignTaskOfProject(proj, url, selectedProjectFile?.design_project?.desg_job)
 
             }
         } else {
             url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj?.designer_project_detail?.des_proj_id}/`
-             if(selectedProjectFile == null){
-                handleDeleteDesignWholeProject(proj,url)
-            }else{
-                handleDeleteDesignTaskOfProject(proj,url,selectedProjectFile?.design_project?.desg_job)
+            if (selectedProjectFile == null) {
+                handleDeleteDesignWholeProject(proj, url)
+            } else {
+                handleDeleteDesignTaskOfProject(proj, url, selectedProjectFile?.design_project?.desg_job)
             }
         }
 
         setIsDesignDeleting(true)
 
-       
-    } 
+
+    }
 
 
 
-    const handleDeleteDesignWholeProject = (proj,url) => {
+    const handleDeleteDesignWholeProject = (proj, url) => {
         setIsTaskDeleting(true)
         setIsExpressProjectDeleting(true)
 
@@ -4524,18 +4548,18 @@ function Fileupload(props) {
                 setEditInstantProjectModal(false)
                 if (newArr?.length == 0) setEmptyProjects(true)
             },
-            error: (err) => { 
+            error: (err) => {
                 setIsTaskDeleting(false)
                 setIsExpressProjectDeleting(false)
                 setIsDesignDeleting(false)
-             }
+            }
         });
     }
-    const handleDeleteDesignTaskOfProject = (proj,url,id) => {
+    const handleDeleteDesignTaskOfProject = (proj, url, id) => {
         setIsTaskDeleting(true)
 
         let formdata = new FormData();
-        formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target',id)
+        formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target', id)
 
         Config.axios({
             url: url,
@@ -4555,13 +4579,13 @@ function Fileupload(props) {
                 }
                 setSelectedProjectFiles(selectedProjectFiles?.filter(each => each?.design_project?.desg_job !== id))
                 setShowTaskDesignIndividualDeleteAlert(false)
-               
+
             },
-            error: (err) => { 
+            error: (err) => {
                 setShowTaskDesignIndividualDeleteAlert(true)
                 setIsTaskDeleting(false)
                 setIsDesignDeleting(false)
-             }
+            }
         });
     }
 
@@ -4574,7 +4598,7 @@ function Fileupload(props) {
         let url = `/editor/${project.designer_project_detail.type == 'image_design' ? 'design' : 'image-translate'}/?project=${project.designer_project_detail.des_proj_id}`
         console.log(project.designer_project_detail)
         // window.open(Config. DESIGNER_HOST+ url)
-        window.open(Config.DESIGNER_HOST+ url+subUrl)
+        window.open(Config.DESIGNER_HOST + url + subUrl)
 
     }
 
@@ -4582,7 +4606,7 @@ function Fileupload(props) {
         console.log(proj)
         let formdata = new FormData();
         setIsExpressUpdating(true)
-        if(sourceLanguage != ''){
+        if (sourceLanguage != '') {
             formdata.append("source_language", sourceLanguage);
         }
 
@@ -4591,7 +4615,7 @@ function Fileupload(props) {
             return;
         }
 
-        formdata.append(proj?.designer_project_detail?.type === "image_design" ? "file_name" : "project_name" , expressProjectName?.trim());
+        formdata.append(proj?.designer_project_detail?.type === "image_design" ? "file_name" : "project_name", expressProjectName?.trim());
 
         targetLanguage.map((eachTargetLanguage) => {
             if (
@@ -4605,20 +4629,20 @@ function Fileupload(props) {
         editJobs.map((eachTargetLanguage) => {
             console.log(eachTargetLanguage?.target_language)
             console.log(targetLangListToRemove)
-            console.log( targetLangListToRemove.find(
+            console.log(targetLangListToRemove.find(
                 (element) => element.target_language != eachTargetLanguage?.target_language
             ))
-            console.log( targetLangListToRemove.find(
+            console.log(targetLangListToRemove.find(
                 (element) => element.target_language == eachTargetLanguage?.target_language
             ))
             if (
                 targetLangListToRemove.find(
                     (element) => element.target_language == eachTargetLanguage?.target_language
-                ) 
+                )
             )
-            formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target', eachTargetLanguage?.id);
+                formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target', eachTargetLanguage?.id);
         });
-      
+
 
         let url = ''
         if (proj.designer_project_detail.type === "image_design") {
@@ -4626,9 +4650,9 @@ function Fileupload(props) {
         } else {
             url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj.designer_project_detail.des_proj_id}/`
         }
-    
+
         Config.axios({
-            url:url,
+            url: url,
             method: 'PUT',
             formData: formdata,
             auth: true,
@@ -4650,16 +4674,16 @@ function Fileupload(props) {
                 listFiles(proj.id)
 
             },
-            error: (err) => { 
-              
-             }
+            error: (err) => {
+
+            }
         });
     }
 
-    const downloadTaskTargetFile = async(task_data) => {
-        let {id, filename} = task_data
-        let {name, extension} = Config.getNameAndExtension(filename)
-        
+    const downloadTaskTargetFile = async (task_data) => {
+        let { id, filename } = task_data
+        let { name, extension } = Config.getNameAndExtension(filename)
+
         // add in download list
         dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }))
 
@@ -4675,7 +4699,7 @@ function Fileupload(props) {
             // remove the downloaded file from list
             dispatch(deleteDownloadingFile({ id: id }))
         }, 8000);
-    } 
+    }
 
     /**
      * This method used to download the adaptive file translate target file
@@ -4685,37 +4709,37 @@ function Fileupload(props) {
      * @author Padmabharathi Subiramanian 
      * @since 15 Apr 2025
      */
-    const downloadAdaptiveTaskTargetFile = async(task_data) => {
-         try {
+    const downloadAdaptiveTaskTargetFile = async (task_data) => {
+        try {
             let url = '';
-            if(Array.isArray(downloadTaskFile) && downloadTaskFile.length > 0) {
-              const downloadEntry = downloadTaskFile.find(item => item.taskId === task_data.id);
-              if (!downloadEntry) {
-                 console.error("Download URL not found for task:", task_id);
-                 return;
-              }
-             url = `${Config.BASE_URL}/${downloadEntry.url}`   
+            if (Array.isArray(downloadTaskFile) && downloadTaskFile.length > 0) {
+                const downloadEntry = downloadTaskFile.find(item => item.taskId === task_data.id);
+                if (!downloadEntry) {
+                    console.error("Download URL not found for task:", task_id);
+                    return;
+                }
+                url = `${Config.BASE_URL}/${downloadEntry.url}`
             } else {
                 url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=ORIGINAL`;
             }
-           const response = await Config.downloadFileFromApi(url);
-           Config.downloadFileInBrowser(response);
-           } catch (error) {
+            const response = await Config.downloadFileFromApi(url);
+            Config.downloadFileInBrowser(response);
+        } catch (error) {
             console.error("Download failed:", error);
-           } finally {
-            setIsDownloading(null); 
-           }
+        } finally {
+            setIsDownloading(null);
         }
+    }
 
     // this api will initiate the file translate process and provide the status of each task
     const getProjectTransDownloadStatus = (task_id) => {
-        if(projectObject.current?.id === undefined) return;
+        if (projectObject.current?.id === undefined) return;
 
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
             axiosFileTranslateAbortController.abort()
         }
-    
+
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
 
@@ -4724,12 +4748,12 @@ function Fileupload(props) {
         let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing)
         let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
         console.log(alreadyProcessingTaskIds)
-        if(alreadyProcessingTask?.length !== 0){
+        if (alreadyProcessingTask?.length !== 0) {
             task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
-        }else{
+        } else {
             task_list_arr = [task_id]
         }
-        console.log("taskList: "+task_list_arr?.toString())
+        console.log("taskList: " + task_list_arr?.toString())
 
         fileTranslatingTaskListRef.current = task_list_arr
 
@@ -4742,9 +4766,9 @@ function Fileupload(props) {
         console.log(list)
 
         // display the button loader as soon as the user clicks the TRANSLATE button
-        if(task_id !== undefined){
+        if (task_id !== undefined) {
             let newArr = selectedProjectFilesRef.current?.map(obj => {
-                if(obj.id === task_id){
+                if (obj.id === task_id) {
                     return {
                         ...obj,
                         isProcessing: true,
@@ -4752,20 +4776,20 @@ function Fileupload(props) {
                 }
                 return obj
             })
-            selectedProjectFilesRef.current = newArr 
+            selectedProjectFilesRef.current = newArr
             setSelectedProjectFiles(newArr)
         }
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/translate_file/?${list}`,
             auth: true,
-            ...(controller !== undefined && {signal: controller.signal}),
+            ...(controller !== undefined && { signal: controller.signal }),
             success: (response) => {
                 // if called with project_id, returns list if task_data
-                if(response.data?.results !== undefined){
+                if (response.data?.results !== undefined) {
                     let dataList = response.data?.results
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
-                        if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
+                        if (obj.id === dataList?.find(each => each.task === obj.id)?.task) {
                             let status = dataList?.find(each => each.task === obj.id)?.status
                             return {
                                 ...obj,
@@ -4778,20 +4802,20 @@ function Fileupload(props) {
                     })
                     console.log('modified list with isProcessing key')
                     console.log(newArr)
-                    selectedProjectFilesRef.current = newArr 
+                    selectedProjectFilesRef.current = newArr
                     setSelectedProjectFiles(newArr)
 
                     console.log('isAnyTaskIsProcessing')
-                    
+
                     let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false
                     let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false
                     let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false
-                    
-                    if(isPageNumNotFound){
+
+                    if (isPageNumNotFound) {
                         // Config.toast(`File couldn't process!`, 'error')
                         setShowFileErrorModal(true)
                         let newArr = selectedProjectFilesRef.current?.map(obj => {
-                            if(obj.status === 404){
+                            if (obj.status === 404) {
                                 return {
                                     ...obj,
                                     isProcessing: false,
@@ -4799,23 +4823,23 @@ function Fileupload(props) {
                             }
                             return obj
                         })
-                        selectedProjectFilesRef.current = newArr 
+                        selectedProjectFilesRef.current = newArr
                         setSelectedProjectFiles(newArr)
                         return
                     }
 
-                    if(insuffientCredit) setShowCreditAlertModal(true)
+                    if (insuffientCredit) setShowCreditAlertModal(true)
 
-                    if(isAnyTaskIsProcessing){
+                    if (isAnyTaskIsProcessing) {
                         setTimeout(() => {
                             getProjectTransDownloadStatus(task_id)
                         }, 5000);
                     }
                 }
                 // if called with task_id, returns that particular task status 
-                else if(task_id){  
+                else if (task_id) {
                     // task - insufficient scenario
-                    if(response.data?.status === 402){
+                    if (response.data?.status === 402) {
                         let newArr = selectedProjectFilesRef.current?.map(obj => {
                             return {
                                 ...obj,
@@ -4823,16 +4847,16 @@ function Fileupload(props) {
                             }
                         })
                         console.log(newArr)
-                        selectedProjectFilesRef.current = newArr 
+                        selectedProjectFilesRef.current = newArr
                         setSelectedProjectFiles(newArr)
                         setShowCreditAlertModal(true)
                     }
                 }
             },
             error: (err) => {
-                if(err?.response?.status === 500){
+                if (err?.response?.status === 500) {
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
-                        if(fileTranslatingTaskListRef.current?.find(each => each === obj.id)){
+                        if (fileTranslatingTaskListRef.current?.find(each => each === obj.id)) {
                             return {
                                 ...obj,
                                 isProcessing: false,
@@ -4842,7 +4866,7 @@ function Fileupload(props) {
                         return obj
                     })
                     console.log(newArr)
-                    selectedProjectFilesRef.current = newArr 
+                    selectedProjectFilesRef.current = newArr
                     setSelectedProjectFiles(newArr)
                 }
             }
@@ -4859,7 +4883,7 @@ function Fileupload(props) {
         { min: 60, max: 70, message: "Enhancing Translation" },
         { min: 70, max: 80, message: "Almost Finished" },
         { min: 80, max: 99, message: "Finishing" },
-        { min: 99, max: 100, message: "Translation Complete"}
+        { min: 99, max: 100, message: "Translation Complete" }
     ];
 
     const getBatchByTaskId = (batchList, key, taskId) => {
@@ -4921,7 +4945,7 @@ function Fileupload(props) {
             projectId = openedProjectId;
         // Only proceed if this project is still the selected one
         if ((projectId !== selectedProjectIdRef.current) || (window.location.pathname !== '/translations')) {
-           return; // Skip outdated task
+            return; // Skip outdated task
         }
         Config.axios({
             url: `${Config.BASE_URL}/${endpoint}`,
@@ -4940,13 +4964,13 @@ function Fileupload(props) {
                                 const newDownloadItem = {
                                     taskId: batch.task_id,
                                     url: batch.download_file
-                                  };
+                                };
                                 downloadTargetFile.push(newDownloadItem);
                             } else {
                                 getProgressData(endpoint, batch?.task_id, projectId);
                             }
                         })
-                    setDownloadTaskTargetFile([...new Set(downloadTargetFile)]);
+                        setDownloadTaskTargetFile([...new Set(downloadTargetFile)]);
                     } else {
                         getProgressData(endpoint, taskId, projectId);
                     }
@@ -4960,7 +4984,7 @@ function Fileupload(props) {
         });
     }
 
-    
+
     /**
      * This mehtod is used to initiate the file translation process and provide the endpoint for check the translation progress.
      * @param {*} task_id 
@@ -4969,7 +4993,7 @@ function Fileupload(props) {
      * @since 10 Apr 2025
      */
     const getTaskTransDownloadStatus = (task_id) => {
-        if(projectObject.current?.id === undefined) return;
+        if (projectObject.current?.id === undefined) return;
         if (axiosFileTranslateAbortController) {
             axiosFileTranslateAbortController.abort()
         }
@@ -4978,9 +5002,9 @@ function Fileupload(props) {
         let task_list_arr = []
         let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED")
         let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
-        if(alreadyProcessingTask?.length !== 0){
+        if (alreadyProcessingTask?.length !== 0) {
             task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
-        }else{
+        } else {
             task_list_arr = [task_id]
         }
         fileTranslatingTaskListRef.current = task_list_arr
@@ -4990,9 +5014,9 @@ function Fileupload(props) {
             list += `${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
         // display the button loader as soon as the user clicks the TRANSLATE button
-        if(task_id !== undefined){
+        if (task_id !== undefined) {
             let newArr = selectedProjectFilesRef.current?.map(obj => {
-                if(obj.id === task_id){
+                if (obj.id === task_id) {
                     return {
                         ...obj,
                         isProcessing: true
@@ -5000,7 +5024,7 @@ function Fileupload(props) {
                 }
                 return obj
             })
-            selectedProjectFilesRef.current = newArr 
+            selectedProjectFilesRef.current = newArr
             setSelectedProjectFiles(newArr)
         }
         let formData = new FormData();
@@ -5010,16 +5034,16 @@ function Fileupload(props) {
             method: "POST",
             data: formData,
             auth: true,
-            ...(controller !== undefined && {signal: controller.signal}),
+            ...(controller !== undefined && { signal: controller.signal }),
             success: (response) => {
-                if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
+                if (response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint) {
                     getTaskTranslationProgress(response.data.endpoint, task_id);
                 }
             },
             error: (err) => {
-                if(err?.response?.status === 500){
+                if (err?.response?.status === 500) {
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
-                        if(obj.id === task_id){
+                        if (obj.id === task_id) {
                             return {
                                 ...obj,
                                 isProcessing: false,
@@ -5028,36 +5052,36 @@ function Fileupload(props) {
                         }
                         return obj
                     })
-                    selectedProjectFilesRef.current = newArr 
+                    selectedProjectFilesRef.current = newArr
                     setSelectedProjectFiles(newArr)
                 }
-                if(err?.response?.status === 400){
-                    if(err?.response?.data?.msg === 'Insufficient Credits'){
+                if (err?.response?.status === 400) {
+                    if (err?.response?.data?.msg === 'Insufficient Credits') {
                         setShowCreditAlertModal(true);
                         let newArr = selectedProjectFilesRef.current?.map(obj => {
-                            if(obj.id === task_id){
+                            if (obj.id === task_id) {
                                 return {
                                     ...obj,
-                                   isProcessing: false
+                                    isProcessing: false
                                 }
                             }
                             return obj
-                            }) 
+                        })
                         selectedProjectFilesRef.current = newArr;
                         setSelectedProjectFiles([...newArr]);
                     }
                 }
-                if(err?.response?.data?.msg === 'File is Empty'){
+                if (err?.response?.data?.msg === 'File is Empty') {
                     Config.toast(t("oops_file_empty"), 'error');
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
-                        if(obj.id === task_id){
+                        if (obj.id === task_id) {
                             return {
                                 ...obj,
-                               isProcessing: false
+                                isProcessing: false
                             }
                         }
                         return obj
-                        }) 
+                    })
                     selectedProjectFilesRef.current = newArr;
                     setSelectedProjectFiles([...newArr]);
                 }
@@ -5121,7 +5145,7 @@ function Fileupload(props) {
                             components={{ DropdownIndicator, IndicatorSeparator: () => null }}
                             onChange={handleSelectedOrderItem}
                         />
-                        
+
                         {/* {activeProjTab === 6 && (
                             <div className="assets-type-filter-wrapper">
                                 <button className={"assets-type-filter-item " + (assetsSelectedTypeFilter === 'glossary' ? "active" : "")} onClick={() => handleAssetsTypeFilterClick('glossary')}>Glossary</button>
@@ -5237,8 +5261,8 @@ function Fileupload(props) {
                                                             // activeProjTab === 6 && project?.get_project_type === 3
                                                             if (activeProjTab !== 6 ? true : (project?.get_project_type === 10 || project?.get_project_type === 3)) {
                                                                 // this is for designer project list - without tasks 
-                                                                if(project?.get_project_type == 6 && project?.tasks_count == 0){
-                                                                    return(
+                                                                if (project?.get_project_type == 6 && project?.tasks_count == 0) {
+                                                                    return (
                                                                         <div
                                                                             className="file-edit-list-table-row"
                                                                             key={project.id}
@@ -5249,7 +5273,7 @@ function Fileupload(props) {
                                                                                     <div className="proj-title-list-container">
                                                                                         <div className="blog-category-icon designer-bg">
                                                                                             {/* change the icon with new designer project icon */}
-                                                                                            <img src={DesignerIcon} alt="designer-project-icon" /> 
+                                                                                            <img src={DesignerIcon} alt="designer-project-icon" />
                                                                                         </div>
                                                                                         <div className="proj-list-info">
                                                                                             <div className="proj-information">
@@ -5277,7 +5301,7 @@ function Fileupload(props) {
                                                                                                     paddingLeft: "30px",
                                                                                                     paddingRight: "30px"
                                                                                                 }}
-                                                                                                className="workspace-files-OpenProjectButton" type="button" onMouseUp={() => {handleOpenNonTranslatedDesignProject(project)}}>
+                                                                                                className="workspace-files-OpenProjectButton" type="button" onMouseUp={() => { handleOpenNonTranslatedDesignProject(project) }}>
                                                                                                 <span className="fileopen-new-btn">{t("open")}</span>
                                                                                             </button>
                                                                                         </Tooltip>
@@ -5285,9 +5309,9 @@ function Fileupload(props) {
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>   
+                                                                        </div>
                                                                     )
-                                                                } 
+                                                                }
                                                                 // this is for the all the other project which have task_count >= 1
                                                                 else {
                                                                     return (
@@ -5311,10 +5335,11 @@ function Fileupload(props) {
                                                                                                 :
                                                                                                 <KeyboardArrowDownIcon className="proj-list-arrow-down" />
                                                                                         }
-    
+
                                                                                     </span>
                                                                                     <div className={"proj-title-list-container " + (project?.get_project_type === 4 ? "speech-proj" : "")}>
-                                                                                        <div className="proj-type-icon-wrap">
+                                                                                        <div className={openedProjectId === project.id && project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ?"proj-type-icon-wrap" : ""}>
                                                                                             <span className={"proj-type-icon " + (project?.get_project_type == 6 ? "designer-bg" : (project?.get_project_type === 1 || project?.get_project_type === 2) ? "translate-bg" : (project?.get_project_type === 3 || project?.get_project_type === 10) ? "assets-bg" : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 2) ? "voice-bg" : "")}>
                                                                                                 {
                                                                                                     (project?.get_project_type === 1 || project?.get_project_type === 2) ?
@@ -5325,17 +5350,17 @@ function Fileupload(props) {
                                                                                                                 <img src={TranscriptionIcon} alt="transcription" />
                                                                                                                 : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 2) ?
                                                                                                                     <img src={SpeechWhiteIcon} alt="sidebar-speech" />
-                                                                                                                : project?.get_project_type === 5 ?
-                                                                                                                    <img src={ InstantTranslateIcon} alt="instant-project-icon" />
-                                                                                                                : project?.get_project_type === 6 ?
-                                                                                                                        <img src={DesignerIcon} alt="designer-project-icon" /> 
-                                                                                                                        : project?.get_project_type === 10 ?
-                                                                                                                        <img src={WordchoiceIcon} alt="Wordchoice-icon" />
-                                                                                                                        : ""
+                                                                                                                    : project?.get_project_type === 5 ?
+                                                                                                                        <img src={InstantTranslateIcon} alt="instant-project-icon" />
+                                                                                                                        : project?.get_project_type === 6 ?
+                                                                                                                            <img src={DesignerIcon} alt="designer-project-icon" />
+                                                                                                                            : project?.get_project_type === 10 ?
+                                                                                                                                <img src={WordchoiceIcon} alt="Wordchoice-icon" />
+                                                                                                                                : ""
                                                                                                 }
-    
+
                                                                                             </span>
-    
+
                                                                                         </div>
                                                                                         <div className="proj-list-info">
                                                                                             <div className="proj-information">
@@ -5348,7 +5373,7 @@ function Fileupload(props) {
                                                                                                             </span>}
                                                                                                     </span>
                                                                                                 </Tooltip>
-    
+
                                                                                                 {/* project.is_proj_analysed is removed from the below condition */}
                                                                                                 {project?.project_analysis?.proj_word_count != null && project?.project_analysis.proj_word_count != 0 ? (
                                                                                                     <div className="position-relative">
@@ -5374,7 +5399,7 @@ function Fileupload(props) {
                                                                                                         </span>
                                                                                                     </div>
                                                                                                 )}
-    
+
                                                                                                 {project.assigned && (
                                                                                                     <span className="pl-2 pr-2">
                                                                                                         {/* <img
@@ -5392,10 +5417,37 @@ function Fileupload(props) {
                                                                                             <div className="proj-file-type">
                                                                                                 <span className={project?.get_project_type === 3 ? "glossary-text-name" : ''}>{project?.get_project_type === 3 ? t("glossary") :
                                                                                                     project?.file_create_type == "From insta text" ? t("text") :
-                                                                                                    (project?.get_project_type === 1 || project?.get_project_type === 2) ? t("files") : 
-                                                                                                    (project?.get_project_type === 5) ? t("instant") : (project?.get_project_type === 6) && t("proj_list_cate_design")}
+                                                                                                        (project?.get_project_type === 1 || project?.get_project_type === 2) ? t("files") :
+                                                                                                            (project?.get_project_type === 5) ? t("instant") : (project?.get_project_type === 6) && t("proj_list_cate_design")}
                                                                                                 </span>
                                                                                             </div>
+
+                                                                                            {/* new updates */}
+                                                                                            {openedProjectId === project.id &&
+                                                                                                project?.adaptive_simple &&
+                                                                                                project?.adaptive_file_translate && selectedProjectFiles.map((selectedProjectFile) => (
+                                                                                                    <div className="file-edit-translation-txt">
+                                                                                                        {/* <img
+                                                                                                            className="translation-pair-L"
+                                                                                                            src={TranslationPair}
+                                                                                                        /> */}
+                                                                                                        <span>{targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}</span>
+                                                                                                        <img
+                                                                                                            src={ArrowRightAltColor}
+                                                                                                        />
+                                                                                                        <span>
+                                                                                                            {
+                                                                                                                (targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) !== undefined &&
+                                                                                                                    targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) != null) ?
+                                                                                                                    targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language :
+                                                                                                                    targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language
+                                                                                                            }
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                ))}
+
+
+
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -5415,7 +5467,7 @@ function Fileupload(props) {
                                                                                 <span>{Config.getProjectCreatedDate(project.created_at)}</span>
                                                                             </div> */}
                                                                                     {/* (selectedProjectFile?.task_assign_info?.find(each => (userDetails.pk === each?.assign_to_details.id && each.task_assign_detail.step === 2)) && eachRole?.task_ven_status === 'task_accepted') */}
-                                                                                    {((!project?.file_translate ) && (
+                                                                                    {((!project?.file_translate) && (
                                                                                         (project?.get_assignable_tasks_exists && project?.assign_enable) ||
                                                                                         (userDetails?.agency && selectedProjectFiles?.find(task => task?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details?.managers?.find(user => user === userDetails.pk)) && each?.task_ven_status === 'task_accepted'))))
                                                                                     )) && (
@@ -5517,7 +5569,7 @@ function Fileupload(props) {
                                                                                     openedProjectId == project.id &&
                                                                                     ((selectedProjectFiles?.length > 0) ? (
                                                                                         selectedProjectFiles.map((selectedProjectFile, key) => {
-                                                                                            // console.log(selectedProjectFile)
+                                                                                            console.log(selectedProjectFile, "selectedProjectFile")
                                                                                             isAssignedProject = createdProjects.find(
                                                                                                 (element) => element.id === openedProjectId
                                                                                             )?.assign_enable;
@@ -5543,74 +5595,84 @@ function Fileupload(props) {
                                                                                                     Config.userState?.id
                                                                                                     ? "Assigner" : "Editor"
                                                                                             }
-    
+
                                                                                             // New logic
                                                                                             if (selectedProjectFile?.task_assign_info?.length === 2) {
-    
+
                                                                                             }
-    
+
                                                                                             if (selectedProjectFile?.task_assign_info?.length === 2) {
                                                                                                 editorAssignmentDetails =
                                                                                                     selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
                                                                                                         Config.userState?.id
                                                                                                         ? selectedProjectFile?.task_assign_info[0]?.assigned_by_details
                                                                                                         : selectedProjectFile?.task_assign_info[0]?.assign_to_details;
-    
+
                                                                                                 reviewerAssignDetails =
                                                                                                     selectedProjectFile?.task_assign_info[1]?.assign_to_details?.id ===
                                                                                                         Config.userState?.id
                                                                                                         ? selectedProjectFile?.task_assign_info[1]?.assigned_by_details
                                                                                                         : selectedProjectFile?.task_assign_info[1]?.assign_to_details;
                                                                                             }
-    
+
                                                                                             let taskAssignStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.task_status
                                                                                             let taskClientStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.client_response
 
                                                                                             selectedFilesData = (
-                                                                                                <div 
+                                                                                                <div
                                                                                                     className={
-                                                                                                        "file-edit-inner-table " + ( 
+                                                                                                        "file-edit-inner-table " + (
                                                                                                             isDinamalar ? (
                                                                                                                 selectedProjectFile?.task_assign_info === null ? (
-                                                                                                                    (selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? "task-completed-bg" : 
-                                                                                                                    selectedProjectFile?.progress?.total_segments !== 0 ? "task-in-progress-bg" : 
-                                                                                                                    selectedProjectFile?.progress?.total_segments === 0 ? "" : ""
+                                                                                                                    (selectedProjectFile?.progress?.total_segments !== 0 && selectedProjectFile?.progress?.total_segments === selectedProjectFile?.progress?.confirmed_segments) ? "task-completed-bg" :
+                                                                                                                        selectedProjectFile?.progress?.total_segments !== 0 ? "task-in-progress-bg" :
+                                                                                                                            selectedProjectFile?.progress?.total_segments === 0 ? "" : ""
                                                                                                                 ) : (
                                                                                                                     taskClientStatus === "Approved" ? "task-approved-bg" :
-                                                                                                                    taskClientStatus === "Rework" ? "task-rework-bg" :
-                                                                                                                    taskAssignStatus === "Yet to start" ? "" :
-                                                                                                                    taskAssignStatus === "In Progress" ? "task-in-progress-bg" :
-                                                                                                                    taskAssignStatus === "Completed" ? "task-completed-bg" :
-                                                                                                                    taskAssignStatus === "Return Request" ? "task-declined-bg" : ""
+                                                                                                                        taskClientStatus === "Rework" ? "task-rework-bg" :
+                                                                                                                            taskAssignStatus === "Yet to start" ? "" :
+                                                                                                                                taskAssignStatus === "In Progress" ? "task-in-progress-bg" :
+                                                                                                                                    taskAssignStatus === "Completed" ? "task-completed-bg" :
+                                                                                                                                        taskAssignStatus === "Return Request" ? "task-declined-bg" : ""
 
                                                                                                                 )
                                                                                                             ) : ""
-                                                                                                        ) 
-                                                                                                    } 
+                                                                                                        )
+                                                                                                    }
                                                                                                     key={selectedProjectFile?.id}
                                                                                                 >
-                                                                                                    <div className="file-edit-list-inner-table-row">
-                                                                                                        <div className="file-edit-list-inner-table-cell">
-                                                                                                            <div className="file-edit-translation-txt">
-                                                                                                                <img
-                                                                                                                    className="translation-pair-L"
-                                                                                                                    src={TranslationPair}
-                                                                                                                />
-                                                                                                                <span>{targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}</span>
-                                                                                                                <img
-                                                                                                                    src={ArrowRightAltColor}
-                                                                                                                />
-                                                                                                                <span>
-                                                                                                                    {
-                                                                                                                        (targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) !== undefined &&
-                                                                                                                            targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) != null) ?
-                                                                                                                            targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language :
-                                                                                                                            targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language
-                                                                                                                    }
-                                                                                                                </span>
+                                                                                                    <div className="file-edit-list-inner-table-row" >
+                                                                                                        {project?.adaptive_simple &&
+                                                                                                            project?.adaptive_file_translate ? "" :
+
+                                                                                                            <div className={project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
+
+                                                                                                                {/* new updates */}
+
+                                                                                                                <div className="file-edit-translation-txt">
+                                                                                                                    <img
+                                                                                                                        className="translation-pair-L"
+                                                                                                                        src={TranslationPair}
+                                                                                                                    />
+                                                                                                                    <span>{targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}</span>
+                                                                                                                    <img
+                                                                                                                        src={ArrowRightAltColor}
+                                                                                                                    />
+                                                                                                                    <span>
+                                                                                                                        {
+                                                                                                                            (targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) !== undefined &&
+                                                                                                                                targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) != null) ?
+                                                                                                                                targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language :
+                                                                                                                                targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language
+                                                                                                                        }
+                                                                                                                    </span>
+                                                                                                                </div>
+
                                                                                                             </div>
-                                                                                                        </div>
-                                                                                                        <div className="file-edit-list-inner-table-cell">
+                                                                                                        }
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             {/* {projectType === 1 || projectType === 2 ? ( */}
                                                                                                             {selectedProjectFile?.filename !== undefined &&
                                                                                                                 <>
@@ -5685,7 +5747,8 @@ function Fileupload(props) {
                                                                                                             </div>
                                                                                                         )}
                                                                                                     </div> */}
-                                                                                                        <div className="file-edit-list-inner-table-cell circular-progress">
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell circular-progress"}>
                                                                                                             {selectedProjectFile?.progressLoading ? (
                                                                                                                 <ProgressBar
                                                                                                                     progressValue={selectedProjectFile.percentage || 0}
@@ -5731,7 +5794,7 @@ function Fileupload(props) {
                                                                                                                 }
                                                                                                             </div>
                                                                                                         </div>} */}
-    
+
                                                                                                             {(selectedProjectFile?.filename !== undefined && project?.get_project_type !== 5 && selectedProjectFile?.open_in !== "Download" && selectedProjectFile?.open_in !== "Ailaysa Writer or Text Editor") && (
                                                                                                                 <>
                                                                                                                     {/* Task assign info - STARTS HERE */}
@@ -5953,7 +6016,7 @@ function Fileupload(props) {
                                                                                                                         )
                                                                                                                     }
                                                                                                                     {/* Task assign info - ENDS HERE */}
-    
+
                                                                                                                     {/* Task re-assign info - STRATS HERE */}
                                                                                                                     {
                                                                                                                         (typeof selectedProjectFile?.task_reassign_info !== 'boolean' && selectedProjectFile?.task_reassign_info != null) ? (
@@ -6174,10 +6237,11 @@ function Fileupload(props) {
                                                                                                                     }
                                                                                                                 </>
                                                                                                             )}
-    
+
                                                                                                         </div>
-    
-                                                                                                        <div className="file-edit-list-inner-table-cell">
+
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             {/*  Need to destructure this following conditional code and set everything optimised properly */}
                                                                                                             <div className="file-assigned-member-lists">
                                                                                                                 {/* {console.log(userDetails.agency)}
@@ -6233,7 +6297,7 @@ function Fileupload(props) {
                                                                                                                                                                         // ?.join("")
                                                                                                                                                                         ?.toUpperCase()}
                                                                                                                                                             </span>
-    
+
                                                                                                                                                             <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                 <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                             </div>
@@ -6270,7 +6334,7 @@ function Fileupload(props) {
                                                                                                                                                                             // ?.join("")
                                                                                                                                                                             ?.toUpperCase()}
                                                                                                                                                                 </span>
-    
+
                                                                                                                                                                 <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                                 </div>
@@ -6281,7 +6345,7 @@ function Fileupload(props) {
                                                                                                                                                     } */}
                                                                                                                                                         </div>
                                                                                                                                                         {/* </Tooltip> */}
-    
+
                                                                                                                                                         {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
                                                                                                                                                         {
                                                                                                                                                             (selectedProjectFile?.task_assign_info?.length === 1 && (project?.steps?.find(each => each.steps === 2) && selectedProjectFile?.open_in !== 'Ailaysa Writer or Text Editor') && !is_internal_meber_editor) && (
@@ -6331,7 +6395,7 @@ function Fileupload(props) {
                                                                                                                                                                             // ?.join("")
                                                                                                                                                                             ?.toUpperCase()}
                                                                                                                                                                 </span>
-    
+
                                                                                                                                                                 <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                                 </div>
@@ -6340,7 +6404,7 @@ function Fileupload(props) {
                                                                                                                                                             (showAssignMemberInfobox && assignSelectedProject === selectedProjectFile.id) &&
                                                                                                                                                             <AssignInfoUiBox name={editorAssignmentDetails?.name} projectID={project.id} eachRole={eachRole} selectedProjectFile={selectedProjectFile} projectId={project.id} reviewer={role}/>
                                                                                                                                                         } */}
-    
+
                                                                                                                                                         </div>
                                                                                                                                                         {/* </Tooltip> */}
                                                                                                                                                     </>
@@ -6370,7 +6434,7 @@ function Fileupload(props) {
                                                                                                                                                                             // ?.join("")
                                                                                                                                                                             ?.toUpperCase()}
                                                                                                                                                                 </span>
-    
+
                                                                                                                                                                 <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                                 </div>
@@ -6430,7 +6494,7 @@ function Fileupload(props) {
                                                                                                                                                                             // ?.join("")
                                                                                                                                                                             ?.toUpperCase()}
                                                                                                                                                                 </span>
-    
+
                                                                                                                                                                 <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                                 </div>
@@ -6471,7 +6535,7 @@ function Fileupload(props) {
                                                                                                                                                                         // ?.join("")
                                                                                                                                                                         ?.toUpperCase()}
                                                                                                                                                             </span>
-    
+
                                                                                                                                                             <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                 <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                             </div>
@@ -6531,7 +6595,7 @@ function Fileupload(props) {
                                                                                                                                                                         // ?.join("")
                                                                                                                                                                         ?.toUpperCase()}
                                                                                                                                                             </span>
-    
+
                                                                                                                                                             <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                 <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                             </div>
@@ -6550,7 +6614,7 @@ function Fileupload(props) {
                                                                                                                             }
                                                                                                                         </>
                                                                                                                     )
-                                                                                                                    : ((!project?.file_translate ) && ((userDetails.agency ? (selectedProjectFile?.assignable && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.assignable)) && !is_internal_meber_editor)) && (
+                                                                                                                    : ((!project?.file_translate) && ((userDetails.agency ? (selectedProjectFile?.assignable && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.assignable)) && !is_internal_meber_editor)) && (
                                                                                                                         <>
                                                                                                                             <div className="unassigned-members-wrapper">
                                                                                                                                 <Tooltip title={t("assign_editor")} placement="top" arrow>
@@ -6571,7 +6635,7 @@ function Fileupload(props) {
                                                                                                                         </>
                                                                                                                     )
                                                                                                                 }
-    
+
                                                                                                                 {/* Re-assign task info for agency/LSP it will show the assigned info card - shows for LSP only */}
                                                                                                                 {(typeof selectedProjectFile?.task_reassign_info !== 'boolean' && selectedProjectFile?.task_reassign_info?.length) ?
                                                                                                                     (
@@ -6622,7 +6686,7 @@ function Fileupload(props) {
                                                                                                                                                                         // ?.join("")
                                                                                                                                                                         ?.toUpperCase()}
                                                                                                                                                             </span>
-    
+
                                                                                                                                                             <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                 <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                             </div>
@@ -6659,7 +6723,7 @@ function Fileupload(props) {
                                                                                                                                                                             // ?.join("")
                                                                                                                                                                             ?.toUpperCase()}
                                                                                                                                                                 </span>
-    
+
                                                                                                                                                                 <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                                 </div>
@@ -6670,7 +6734,7 @@ function Fileupload(props) {
                                                                                                                                                     } */}
                                                                                                                                                         </div>
                                                                                                                                                         {/* </Tooltip> */}
-    
+
                                                                                                                                                         {/* if editor is assigned but not reviewer then show add reviewer button, if reviewer step is present */}
                                                                                                                                                         {
                                                                                                                                                             (selectedProjectFile?.task_assign_info?.find(each => (userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each?.task_ven_status === 'task_accepted' && !is_internal_meber_editor) &&
@@ -6722,7 +6786,7 @@ function Fileupload(props) {
                                                                                                                                                                             // ?.join("")
                                                                                                                                                                             ?.toUpperCase()}
                                                                                                                                                                 </span>
-    
+
                                                                                                                                                                 <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                                 </div>
@@ -6760,7 +6824,7 @@ function Fileupload(props) {
                                                                                                                                                                             // ?.join("")
                                                                                                                                                                             ?.toUpperCase()}
                                                                                                                                                                 </span>
-    
+
                                                                                                                                                                 <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                                 </div>
@@ -6820,7 +6884,7 @@ function Fileupload(props) {
                                                                                                                                                                             // ?.join("")
                                                                                                                                                                             ?.toUpperCase()}
                                                                                                                                                                 </span>
-    
+
                                                                                                                                                                 <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                     <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                                 </div>
@@ -6861,7 +6925,7 @@ function Fileupload(props) {
                                                                                                                                                                         // ?.join("")
                                                                                                                                                                         ?.toUpperCase()}
                                                                                                                                                             </span>
-    
+
                                                                                                                                                             <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                 <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} eachRole={eachRole} selectedProjectFile={selectedProjectFile} reviewer={role} />
                                                                                                                                                             </div>
@@ -6921,7 +6985,7 @@ function Fileupload(props) {
                                                                                                                                                                         // ?.join("")
                                                                                                                                                                         ?.toUpperCase()}
                                                                                                                                                             </span>
-    
+
                                                                                                                                                             <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                 <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                             </div>
@@ -6970,7 +7034,7 @@ function Fileupload(props) {
                                                                                                                     )
                                                                                                                 }
                                                                                                             </div>
-    
+
                                                                                                             {/* Task action button logic ---- STARTS HERE */}
                                                                                                             {/* {console.log(selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))))} */}
                                                                                                             <div className="project-list-action-wrap">
@@ -7377,7 +7441,7 @@ function Fileupload(props) {
                                                                                                                                             </>
                                                                                                                                         }
                                                                                                                                     </>
-    
+
                                                                                                                                 )
                                                                                                                             }
                                                                                                                             else if (!eachRole?.assign_to_details?.external_editor && Config.userState?.id === eachRole?.assign_to_details.id) {  // condition if editor is not external editor (user is internal editor)
@@ -7442,7 +7506,7 @@ function Fileupload(props) {
                                                                                                                                             <ProgressAnimateButton />
                                                                                                                                         ) : (
                                                                                                                                             <button className="workspace-files-OpenProjectButton"
-    
+
                                                                                                                                                 type="button"
                                                                                                                                                 // disabled={!eachRole?.task_assign_detail?.can_open}
                                                                                                                                                 onMouseUp={(e) =>
@@ -7456,7 +7520,7 @@ function Fileupload(props) {
                                                                                                                                                         project.project_name,
                                                                                                                                                         project.id,
                                                                                                                                                         project?.get_project_type,
-                                                                                                                                                         null,
+                                                                                                                                                        null,
                                                                                                                                                         null,
                                                                                                                                                         null,
                                                                                                                                                         null,
@@ -7596,7 +7660,7 @@ function Fileupload(props) {
                                                                                                                                                         project.project_name,
                                                                                                                                                         project.id,
                                                                                                                                                         project?.get_project_type,
-                                                                                                                                                         null,
+                                                                                                                                                        null,
                                                                                                                                                         null,
                                                                                                                                                         null,
                                                                                                                                                         null,
@@ -7701,7 +7765,7 @@ function Fileupload(props) {
                                                                                                                                                 }
                                                                                                                                             </>
                                                                                                                                         )}
-                                                                                                                                        
+
                                                                                                                                     </div>
                                                                                                                                 </>
                                                                                                                             )
@@ -7833,7 +7897,7 @@ function Fileupload(props) {
                                                                                                                                                         project.project_name,
                                                                                                                                                         project.id,
                                                                                                                                                         project?.get_project_type,
-                                                                                                                                                         null,
+                                                                                                                                                        null,
                                                                                                                                                         null,
                                                                                                                                                         null,
                                                                                                                                                         null,
@@ -7943,7 +8007,7 @@ function Fileupload(props) {
                                                                                                                             )
                                                                                                                         )
                                                                                                                     )
-    
+
                                                                                                                 ) : (    // if project is not assigned to anyone
                                                                                                                     (selectedProjectFile?.converted != null && (project?.get_project_type == 1 || project?.get_project_type == 2)) ? (   // pdf convert logic 
                                                                                                                         selectedProjectFile?.converted ? (    // if pdf is converted
@@ -8167,71 +8231,71 @@ function Fileupload(props) {
                                                                                                                     ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (
                                                                                                                         <>
                                                                                                                             {(!project.adaptive_file_translate && selectedProjectFile?.file_translate_done) ? (
-                                                                                                                                    <button
+                                                                                                                                <button
                                                                                                                                     className="workspace-files-OpenProjectButton"
                                                                                                                                     type="button"
                                                                                                                                     style={{ paddingLeft: "16px", paddingRight: "16px" }}
                                                                                                                                     onMouseUp={() => downloadTaskTargetFile(selectedProjectFile)}
-                                                                                                                                    >
+                                                                                                                                >
                                                                                                                                     <span className="fileopen-new-btn">{t("download")}</span>
-                                                                                                                                    </button>
-                                                                                                                                ) : 
+                                                                                                                                </button>
+                                                                                                                            ) :
                                                                                                                                 ((project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED") ||
-                                                                                                                                  selectedProjectFile.percentage == 100) ? (
+                                                                                                                                    selectedProjectFile.percentage == 100) ? (
                                                                                                                                     <button
-                                                                                                                                    className="workspace-files-OpenProjectButton"
-                                                                                                                                    type="button"
-                                                                                                                                    style={{ paddingLeft: "16px", paddingRight: "16px" }}
-                                                                                                                                    onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)} 
+                                                                                                                                        className="workspace-files-OpenProjectButton"
+                                                                                                                                        type="button"
+                                                                                                                                        style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                        onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)}
                                                                                                                                     >
-                                                                                                                                    <span className="fileopen-new-btn">{t("download")}</span>
+                                                                                                                                        <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                                     </button>
                                                                                                                                 ) : (   // not translated then show translate btn
-                                                                                                                                selectedProjectFile?.isProcessing ? (
-                                                                                                                                    <ProgressAnimateButton />
-                                                                                                                                ) : selectedProjectFile?.adaptive_file_translate_status == 'NOT_INITIATED' ? (
-                                                                                                                                    <>
+                                                                                                                                    selectedProjectFile?.isProcessing ? (
+                                                                                                                                        <ProgressAnimateButton />
+                                                                                                                                    ) : selectedProjectFile?.adaptive_file_translate_status == 'NOT_INITIATED' ? (
+                                                                                                                                        <>
+                                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                type="button"
+                                                                                                                                                style={{
+                                                                                                                                                    paddingLeft: "16px",
+                                                                                                                                                    paddingRight: "16px"
+                                                                                                                                                }}
+                                                                                                                                                onMouseUp={(e) => getTaskTransDownloadStatus(selectedProjectFile?.id)}
+                                                                                                                                            >
+                                                                                                                                                <span className="fileopen-new-btn">{t("translate")}</span>
+                                                                                                                                            </button>
+                                                                                                                                        </>
+                                                                                                                                    ) : selectedProjectFile?.adaptive_file_translate_status == 'ONGOING' ? (
+                                                                                                                                        <>
+                                                                                                                                            <button className="workspace-files-OpenProjectButton"
+                                                                                                                                                type="button"
+                                                                                                                                                style={{
+                                                                                                                                                    paddingLeft: "16px",
+                                                                                                                                                    paddingRight: "16px",
+                                                                                                                                                    display: "flex",
+                                                                                                                                                    alignItems: "center"
+                                                                                                                                                }}
+                                                                                                                                                onMouseUp={(e) => getTaskTranslationProgress('', selectedProjectFile?.id)}
+                                                                                                                                            >   <ButtonLoader />
+                                                                                                                                                <span className="fileopen-new-btn" style={{
+                                                                                                                                                    paddingLeft: "5px"
+                                                                                                                                                }}>{'Processing'}</span>
+                                                                                                                                            </button>
+                                                                                                                                        </>
+                                                                                                                                    ) : (
                                                                                                                                         <button className="workspace-files-OpenProjectButton"
                                                                                                                                             type="button"
                                                                                                                                             style={{
                                                                                                                                                 paddingLeft: "16px",
                                                                                                                                                 paddingRight: "16px"
                                                                                                                                             }}
-                                                                                                                                            onMouseUp={(e) => getTaskTransDownloadStatus(selectedProjectFile?.id)}
+                                                                                                                                            onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)}
                                                                                                                                         >
-                                                                                                                                            <span className="fileopen-new-btn">{t("translate")}</span>
+                                                                                                                                            <span className="fileopen-new-btn">{"Old " + t("translate")}</span>
                                                                                                                                         </button>
-                                                                                                                                    </>
-                                                                                                                                ) : selectedProjectFile?.adaptive_file_translate_status == 'ONGOING' ? (
-                                                                                                                                    <>
-                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                            type="button"
-                                                                                                                                            style={{
-                                                                                                                                                paddingLeft: "16px",
-                                                                                                                                                paddingRight: "16px",
-                                                                                                                                                display: "flex",
-                                                                                                                                                alignItems: "center"
-                                                                                                                                            }}
-                                                                                                                                            onMouseUp={(e) => getTaskTranslationProgress('', selectedProjectFile?.id)}
-                                                                                                                                        >   <ButtonLoader />
-                                                                                                                                            <span className="fileopen-new-btn" style={{
-                                                                                                                                                paddingLeft: "5px"
-                                                                                                                                            }}>{'Processing'}</span>
-                                                                                                                                        </button>
-                                                                                                                                    </>
-                                                                                                                                ) : (
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        style={{
-                                                                                                                                            paddingLeft: "16px",
-                                                                                                                                            paddingRight: "16px"
-                                                                                                                                        }}
-                                                                                                                                        onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)}
-                                                                                                                                    >
-                                                                                                                                        <span className="fileopen-new-btn">{"Old " + t("translate")}</span>
-                                                                                                                                    </button>
-                                                                                                                                )
-                                                                                                                            )}
+                                                                                                                                    )
+                                                                                                                                )}
                                                                                                                             <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
                                                                                                                         </>
                                                                                                                     ) : (
@@ -8261,7 +8325,7 @@ function Fileupload(props) {
                                                                                                                                                     project.project_name,
                                                                                                                                                     project.id,
                                                                                                                                                     project?.get_project_type,
-                                                                                                                                                     null,
+                                                                                                                                                    null,
                                                                                                                                                     null,
                                                                                                                                                     null,
                                                                                                                                                     null,
@@ -8290,9 +8354,9 @@ function Fileupload(props) {
                                                                                                                                                         {
                                                                                                                                                             moreOptions?.filter(item => (
                                                                                                                                                                 project?.file_translate ? item?.id === 2 :
-                                                                                                                                                                (project?.get_project_type !== 5 && project?.get_project_type !== 3 && project?.get_project_type !== 10) ?
-                                                                                                                                                                    (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
-                                                                                                                                                                    : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
+                                                                                                                                                                    (project?.get_project_type !== 5 && project?.get_project_type !== 3 && project?.get_project_type !== 10) ?
+                                                                                                                                                                        (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
+                                                                                                                                                                        : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
                                                                                                                                                             ))?.map((item) => {
                                                                                                                                                                 return (
                                                                                                                                                                     <li
@@ -8327,10 +8391,10 @@ function Fileupload(props) {
                                                                                                                                                                 <ul>
                                                                                                                                                                     {
                                                                                                                                                                         subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
-                                                                                                                                                                            console.log(project.adaptive_file_translate,"checkedclick2")
+                                                                                                                                                                            console.log(project.adaptive_file_translate, "checkedclick2")
                                                                                                                                                                             if (project.adaptive_file_translate && item.label === t("mt_only")) {
                                                                                                                                                                                 return null;
-                                                                                                                                                                              }
+                                                                                                                                                                            }
 
                                                                                                                                                                             return (
                                                                                                                                                                                 <li
@@ -8420,7 +8484,7 @@ function Fileupload(props) {
                                                                                                                         animation="wave"
                                                                                                                         variant="rounded"
                                                                                                                         width={30}
-    
+
                                                                                                                     />
                                                                                                                     <Skeleton
                                                                                                                         animation="wave"
@@ -9194,7 +9258,7 @@ function Fileupload(props) {
                             {!unassignTaskDeleteAlert && (
                                 <Button
                                     style={isTaskDeleting ? { display: 'flex', alignItems: 'baseline' } : {}}
-                                    onClick={() =>  projectObject.current?.get_project_type == 6 ? !isTaskDeleting && handleDeleteDesignerProj(projectObject.current,selectedDesignerProject.current) : !isTaskDeleting && taskDeleteFunction()}
+                                    onClick={() => projectObject.current?.get_project_type == 6 ? !isTaskDeleting && handleDeleteDesignerProj(projectObject.current, selectedDesignerProject.current) : !isTaskDeleting && taskDeleteFunction()}
                                     variant="contained"
                                 >
                                     {isTaskDeleting ? (
@@ -9212,8 +9276,8 @@ function Fileupload(props) {
                 </div>
             </Rodal>)}
 
-                {/* modal for task delete */}
-                {showTaskDesignIndividualDeleteAlert && (<Rodal
+            {/* modal for task delete */}
+            {showTaskDesignIndividualDeleteAlert && (<Rodal
                 visible={showTaskDesignIndividualDeleteAlert}
                 {...modaloptions}
                 showCloseButton={false}
@@ -9251,7 +9315,7 @@ function Fileupload(props) {
                             {!unassignTaskDeleteAlert && (
                                 <Button
                                     style={isTaskDeleting ? { display: 'flex', alignItems: 'baseline' } : {}}
-                                    onClick={() =>  selectedProjectFiles?.length !== 1 ? !isTaskDeleting && handleDeleteDesignerProj(projectObject.current,selectedDesignerProject.current) : !isTaskDeleting && handleDeleteDesignerProj(projectObject.current,null)}
+                                    onClick={() => selectedProjectFiles?.length !== 1 ? !isTaskDeleting && handleDeleteDesignerProj(projectObject.current, selectedDesignerProject.current) : !isTaskDeleting && handleDeleteDesignerProj(projectObject.current, null)}
                                     variant="contained"
                                 >
                                     {isTaskDeleting ? (
@@ -9287,7 +9351,7 @@ function Fileupload(props) {
                             <Button onClick={() => { setShowExpressDeleteModal(false) }}>{t("discard")}</Button>
                             <Button
                                 style={isExpressProjectDeleting ? { display: 'flex', alignItems: 'baseline' } : {}}
-                                onClick={() => projectObject.current?.get_project_type == 6 ? !isExpressProjectDeleting && handleDeleteDesignerProj(projectObject.current,null) : !isExpressProjectDeleting && deleteExpressProject()}
+                                onClick={() => projectObject.current?.get_project_type == 6 ? !isExpressProjectDeleting && handleDeleteDesignerProj(projectObject.current, null) : !isExpressProjectDeleting && deleteExpressProject()}
                                 variant="contained"
                             >
                                 {isExpressProjectDeleting ? (
@@ -9406,7 +9470,7 @@ function Fileupload(props) {
                                 <img src={AssetsDeleteIcon} alt="close_black" />
                                 {t("delete_project")}
                             </ButtonBase>
-                            <ButtonBase className="instant-edit-update-btn" onClick={() => { !isExpressUpdating && (targetLanguage?.length !== 0 ? (projectObject.current?.get_project_type == 6 ? handleDeleteDesignerProjectUpdate(projectObject.current): updateExpressProject()) : focusTargetLangDiv()) }}>
+                            <ButtonBase className="instant-edit-update-btn" onClick={() => { !isExpressUpdating && (targetLanguage?.length !== 0 ? (projectObject.current?.get_project_type == 6 ? handleDeleteDesignerProjectUpdate(projectObject.current) : updateExpressProject()) : focusTargetLangDiv()) }}>
                                 {isExpressUpdating ? t('updating') : t('update')}
                                 {isExpressUpdating && <ButtonLoader />}
                             </ButtonBase>
@@ -9434,36 +9498,36 @@ function Fileupload(props) {
                     </div>
                 </div>
             </Rodal>)}
-            
+
             {/* <Prompt
                 when={isDownloading}
                 message={handleBlockedNavigation}
             /> */}
             <ReactRouterPrompt when={isDownloading}>
-            {({ isActive, onConfirm, onCancel }) => {
-                return (
-                    <Rodal
-                        visible={isActive}
-                        showCloseButton={false}
-                        onclose={() => console.log()}
-                        className="ai-mark-confirm-box"
-                    >
-                        <div className="confirmation-warning-wrapper">
-                            <div className="confirm-top">
-                                <div><span onClick={onCancel}><CloseIcon /></span></div>
-                                <div>{t("download_progress")}!</div>
-                                <div>{t("download_progrss_note")}</div>
-                            </div>
-                            <div className="confirm-bottom">
-                                <div>
-                                    <Button onClick={onCancel}>{t("close")}</Button>
-                                    <Button onClick={onConfirm} variant="contained">{t("ok")}</Button>
+                {({ isActive, onConfirm, onCancel }) => {
+                    return (
+                        <Rodal
+                            visible={isActive}
+                            showCloseButton={false}
+                            onclose={() => console.log()}
+                            className="ai-mark-confirm-box"
+                        >
+                            <div className="confirmation-warning-wrapper">
+                                <div className="confirm-top">
+                                    <div><span onClick={onCancel}><CloseIcon /></span></div>
+                                    <div>{t("download_progress")}!</div>
+                                    <div>{t("download_progrss_note")}</div>
+                                </div>
+                                <div className="confirm-bottom">
+                                    <div>
+                                        <Button onClick={onCancel}>{t("close")}</Button>
+                                        <Button onClick={onConfirm} variant="contained">{t("ok")}</Button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Rodal>
-                )
-            }}
+                        </Rodal>
+                    )
+                }}
             </ReactRouterPrompt>
 
             {showdocCreditCheckAlert && (<Rodal
@@ -9612,15 +9676,15 @@ function Fileupload(props) {
                     </div>
                 </Rodal>
             )}
-            
+
             {showFileErrorModal && (
-                <Rodal 
-                    className="ts-rodal-mask" 
-                    visible={showFileErrorModal} 
+                <Rodal
+                    className="ts-rodal-mask"
+                    visible={showFileErrorModal}
                     closeMaskOnClick={false}
                     width={528}
                     height="auto"
-                    onClose={() => console.log()} 
+                    onClose={() => console.log()}
                     showCloseButton={false}
                 >
                     <span className="modal-close-btn lang-close" onClick={(e) => { setShowFileErrorModal(false) }}>

@@ -8383,10 +8383,18 @@ mark.highlight-selected {
     /* border-bottom: 1px solid #ebecee; */
     padding: 12px 12px 12px 0px;
 }
-
+.proj-type-icon-wrap{
+    padding-bottom: 20px;
+}
 .file-edit-list-inner-table-cell {
     border-bottom: 1px solid #ebecee;
     padding: 7px 11px 7px 0px;
+    display: flex;
+    align-items: center;
+}
+.new-file-edit-list-inner-table-cell {
+    border-bottom: 1px solid #ebecee;
+    padding: 7px 11px 7px 72px;
     display: flex;
     align-items: center;
 }
@@ -8882,6 +8890,27 @@ ul.asset-glossary-projects-wrap-list li .asset-project-info-wrap .assets-icon .g
 
 }
 
+.new-file-edit-list-inner-table-cell:first-child {
+    width: 100%;
+    max-width: 33.3%;
+    padding: 7px 11px 7px 47px;
+    /* background-color: red !important; */
+}
+
+.new-file-edit-list-inner-table-cell:nth-child(2) {
+    width: 100%;
+    max-width: 33.3%;
+    padding: 7px 11px 7px 20px !important;
+    /* background-color: blue !important; */
+}
+
+.new-file-edit-list-inner-table-cell:nth-child(3) {
+    width: 100%;
+    max-width: 33.3%;
+    justify-content: end;
+    /* background-color: green !important; */
+}
+
 .progress-txt.border-right-add.file-progress-txt {
     width: 30px !important;
 }
@@ -9372,8 +9401,9 @@ ul.asset-glossary-projects-wrap-list li .asset-project-info-wrap .assets-icon .g
 }
 
 .focused-proj-row .file-edit-list-table-cell .file-edit-translation-txt span {
-    font-weight: 600;
+    font-weight: 500 !important;
     background: #cbdeff;
+    font-size: 11px !important;
 }
 
 .focused-proj-row .file-edit-list-table-cell .file-edit-translation-txt.word-count span {

@@ -5827,7 +5827,8 @@ console.log(formdata,"formdata1")
                                                                                     
                                                                                     {/* {project?.get_project_type === 6 && <span class="empty-box-icon"></span>} */}
                                                                                     <div className="proj-title-list-container">
-                                                                                        <div className="proj-type-icon-wrap">
+                                                                                        <div className={openedProjectId === project.id && project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ?"proj-type-icon-wrap" : ""}>
                                                                                             <span className={"proj-type-icon " + (project?.get_project_type == 6 ? "designer-bg" : (project?.get_project_type === 1 || project?.get_project_type === 2) ? "translate-bg" : (project?.get_project_type === 3 || project?.get_project_type === 10) ? "assets-bg" : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 2) ? "voice-bg" : "")}>
                                                                                                 {
                                                                                                     (project?.get_project_type === 1 || project?.get_project_type === 2) ?
@@ -5912,6 +5913,30 @@ console.log(formdata,"formdata1")
                                                                                                     (project?.get_project_type === 5) ? t("instant") : (project?.get_project_type === 6) && t("proj_list_cate_design")}
                                                                                                 </span>
                                                                                             </div>
+ {/* new updates */}
+                                                                                            {openedProjectId === project.id &&
+                                                                                                project?.adaptive_simple &&
+                                                                                                project?.adaptive_file_translate && selectedProjectFiles.map((selectedProjectFile) => (
+                                                                                                    <div className="file-edit-translation-txt">
+                                                                                                        {/* <img
+                                                                                                            className="translation-pair-L"
+                                                                                                            src={TranslationPair}
+                                                                                                        /> */}
+                                                                                                        <span>{targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}</span>
+                                                                                                        <img
+                                                                                                            src={ArrowRightAltColor}
+                                                                                                        />
+                                                                                                        <span>
+                                                                                                            {
+                                                                                                                (targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) !== undefined &&
+                                                                                                                    targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) != null) ?
+                                                                                                                    targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language :
+                                                                                                                    targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language
+                                                                                                            }
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                ))}
+                                                                                            {/* <div>kjhuggjh</div>     */}
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -6115,7 +6140,12 @@ console.log(formdata,"formdata1")
                                                                                                     key={selectedProjectFile.id}
                                                                                                 >
                                                                                                     <div className="file-edit-list-inner-table-row">
-                                                                                                        <div className="file-edit-list-inner-table-cell">
+
+                                                                                                        {/* New Update */}
+                                                                                                        {project?.adaptive_simple &&
+                                                                                                            project?.adaptive_file_translate ? "" :
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             <div className="file-edit-translation-txt">
                                                                                                                 <img
                                                                                                                     className="translation-pair-L"
@@ -6135,7 +6165,9 @@ console.log(formdata,"formdata1")
                                                                                                                 </span>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                        <div className="file-edit-list-inner-table-cell">
+                                                                                        }
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                            project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             {/* {projectType === 1 || projectType === 2 ? ( */}
                                                                                                             {selectedProjectFile?.filename !== undefined &&
                                                                                                                 <>
@@ -6209,7 +6241,8 @@ console.log(formdata,"formdata1")
                                                                                                             </div>
                                                                                                         )}
                                                                                                     </div> */}
-                                                                                                        <div className="file-edit-list-inner-table-cell circular-progress">
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                            project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell circular-progress"}>
                                                                                                             {selectedProjectFile?.progressLoading ? (
                                                                                                                 <ProgressBar
                                                                                                                     progressValue={selectedProjectFile.percentage || 0}
@@ -6699,7 +6732,9 @@ console.log(formdata,"formdata1")
                                                                                                             )}
     
                                                                                                         </div>
-                                                                                                        <div className="file-edit-list-inner-table-cell">
+
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             {/*  Need to destructure this following conditional code and set everything optimised properly */}
                                                                                                             <div className="file-assigned-member-lists">
                                                                                                                 {/* {console.log(userDetails.agency)}
@@ -9001,6 +9036,7 @@ console.log(formdata,"formdata1")
                                                                         <div className="file-edit-list-table-cell-wrap">
                                                                             <div className="file-edit-list-table-cell">
                                                                                 <span className="empty-box-icon"></span>
+                                                                                {/* new update */}
                                                                                 <div className="proj-title-list-container">
                                                                                     {
                                                                                         (project.docx_url_field !== null && project.docx_file_name !== null) ?
@@ -9040,6 +9076,9 @@ console.log(formdata,"formdata1")
                                                                                                 </span>
                                                                                             </Tooltip>
                                                                                         </div>
+
+
+                                                                                 
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
