@@ -480,11 +480,11 @@ const AilaysaNewGlossEditingArea = (props) => {
                 let listAfterDeletion = termsList?.filter(each => each.id !== term_id)
                 termsListRef.current = listAfterDeletion
                 termsListCopyRef.current = listAfterDeletion
-                let listAfterLoaderRemoved = Config.updateSpecificKeyInList(listAfterDeletion, term_id, 'isDeleting', false)
-                
-                setTermsList(listAfterLoaderRemoved)
-                setTermsListCopy(listAfterLoaderRemoved)
-                setShowTermDeletModal(false)
+                let listAfterLoaderRemoved = Config.updateSpecificKeyInList(listAfterDeletion, term_id, 'isDeleting', false);
+                setTermsList(listAfterLoaderRemoved);
+                setTermsListCopy(listAfterLoaderRemoved);
+                Config.toast(`${t("terms_delete_success")}`);
+                setShowTermDeletModal(false);
                 setTotalTerms(totalTerms - 1)
             },
             error: (err) => { setShowTermDeletModal(false) }
@@ -836,10 +836,8 @@ const AilaysaNewGlossEditingArea = (props) => {
             method: "DELETE",
             auth: true,
             success: (response) => {
-                
                 Config.toast(`${t("terms_delete_success")}`);
-                setShowTermDeletModal(false)
-
+                setShowTermDeletModal(false);
                 setTimeout(() => {
                     getTermsList();
                 }, 80);

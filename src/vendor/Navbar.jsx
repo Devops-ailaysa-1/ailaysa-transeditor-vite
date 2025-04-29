@@ -37,9 +37,10 @@ import AppsIcon from "./styles-svg/AppsIcon";
 import StartUpTNCampaignOffer from "./model-select/StartUpTNCampaignOffer";
 import WorkspaceLogo from "../assets/images/new-ui-icons/new-ailyasa-wrkspace-logo.svg"
 import ChatBookLogo from "../assets/images/ailaysa-chat-books.svg"
-import AiTranslatorimg from '../assets/images/AiTranslatorimg.svg'
-import ProjectsLogo from "../assets/images/new_projects_logo_new.svg"
-import ChevronLeftBlack from "../assets/images/new-ui-icons/chevron_left_black.svg"
+import AiTranslatorimg from '../assets/images/AiTranslatorimg.svg';
+import ProjectsLogo from "../assets/images/new_projects_logo_new.svg";
+import AiTransEditorImg from "../assets/images/ailaysa _transeditor_navbar_logo.svg";
+import ChevronLeftBlack from "../assets/images/new-ui-icons/chevron_left_black.svg";
 import ArrowRightAltColor from "../assets/images/new-ui-icons/arrow_right_alt_color.svg"
 import HelpOutlineGrey from "../assets/images/new-ui-icons/help_outline_grey.svg"
 import HelpOutline from "../assets/images/new-ui-icons/help_outline.svg"
@@ -1048,6 +1049,21 @@ function Navbar(props) {
         // update the list once download completed
     }
 
+    /**
+     * This methos used to return the navbar logo based on the selected menu.
+     * @returns ProjectsLogo
+     * 
+     * @author Padmabharahti Subiramanian 
+     * @since 29 APR 2025
+     */
+    const getLogo = () => {
+        if (props.isWhite) return WorkspaceLogo;
+        if (props.istranseditor) return AiTransEditorImg;
+        if (props.istranslator) return AiTranslatorimg;
+        if (isAiChatBook) return ChatBookLogo;
+        return ProjectsLogo;
+    };
+
     return (
         <React.Fragment>
             <div className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "navbar-stripe-wrapper stick-top" : "navbar-stripe-wrapper"}>
@@ -1082,15 +1098,7 @@ function Navbar(props) {
                         }
                         <Link className="navbar-display-logo" to={"/file-upload?page=1&order_by=-id"}>
                             <img
-                                src={
-                                    props.isWhite ? 
-                                        WorkspaceLogo
-                                    : isAiChatBook ?
-                                        ChatBookLogo
-                                    : props.istranslator ?
-                                    AiTranslatorimg :
-                                        ProjectsLogo
-                                }
+                                src={getLogo()} 
                                 alt="logo"
                             />
                         </Link>

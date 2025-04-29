@@ -27,7 +27,6 @@ const ProjectSetup = () => {
         }
     }, [])
     
-
     const getEdiorSettingStatus = () => {
         Config.axios({
 			url: `${Config.BASE_URL}/vendor/editor_settings_status/`,
@@ -43,6 +42,13 @@ const ProjectSetup = () => {
 		});
     } 
 
+    const navbarProps = {};
+    if (params?.category === "translate" && params?.menu === "files") {
+        navbarProps.istranseditor = true;
+    } else if (params?.category === "translate" && params?.menu === "translate-files") {
+        navbarProps.istranslator = true;
+    }
+
     return (
         <>
             {params?.category === "all-templates" ? 
@@ -52,7 +58,7 @@ const ProjectSetup = () => {
                 </>
                 :
                 <>
-                    <Navbar istranslator={true}/>
+                    <Navbar {...navbarProps}/>
                     <div className="ai-new-project-setup-wrapper">
                         <div className="ai-working-col-wrapper">
                             {/* {isIncompleteEditorSettings && (
