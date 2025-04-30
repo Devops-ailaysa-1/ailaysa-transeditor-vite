@@ -7781,7 +7781,7 @@ useEffect(() => {
 
                                     {/* //New changes */}
 
-                                    {!check_is_adaptive &&
+                                    {/* {!check_is_adaptive && */}
                                 <ul>
                                     <Tooltip title={t("merge")} placement="bottom" arrow>
                                         <li className={!isShowMergeIcon ? "onclickdisable" : ""} onClick={mergeSegments}>
@@ -7806,7 +7806,7 @@ useEffect(() => {
                                         </li>
                                     </Tooltip>
                                 </ul>
-}
+{/* } */}
                                 {supportedImeLanguage?.includes(targetLanguageCode) &&  <ul className="last-row-tools-1" onClick={handleIme}>
                                     <li>
                                         <Tooltip title="Transliteration typing" placement="bottom" arrow>
