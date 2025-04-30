@@ -1439,7 +1439,7 @@ function Navbar(props) {
                                                                         {animateDownloding === 'BILINGUAL' && <DownloadAnimation />}
                                                                     </MenuItem>
 
-                                                                    {!check_is_adaptive &&
+                                                                    {/* {!check_is_adaptive && */}
                                                                     <>
                                                                     {
                                                                         props.mtEnable && (
@@ -1450,7 +1450,7 @@ function Navbar(props) {
                                                                         )
                                                                     }
                                                                     </>
-                                                                }
+                                                                {/* } */}
                                                                     {!props?.prevPathRef?.current?.includes('my-stories') && (
                                                                         <>
                                                                             <MenuItem className={"menu-list-item " + (animateDownloding === 'SOURCE' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "SOURCE")}>
@@ -1514,9 +1514,9 @@ function Navbar(props) {
                                         </Tooltip>
                                         {props.isWhite ? (
                                             <ul ref={HelpOutside} className={`submenu submenu-animated submenu_fadeIn ${helpDrpVisibility ? "show" : ""}`}>
-                                                {/* <li style={{display: isEnterprise ? "none" : ""}}>
+                                                <li style={{display: isEnterprise ? "none" : ""}}>
                                                     <a onClick={() => {dispatch(setShowAdaptiveMTIntroModal(true)); setHelpDrpVisibility(false)}}>{t("adaptive_trans_help_text")}</a>
-                                                </li> */}
+                                                </li>
                                                 <li>
                                                     <a onClick={() => {props.showHowToTour(); setHelpDrpVisibility(false)}}>{t("how_to_edit_&_download")}</a>
                                                 </li>

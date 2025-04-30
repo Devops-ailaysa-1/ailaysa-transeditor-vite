@@ -169,6 +169,9 @@ function AdvancedProjectType(props) {
             setAdaptiveTransEnable(false)
         }
     } 
+    useEffect(()=>{
+        setTranslationByPage(false)
+    },[adaptiveTransEnable])
 
     const Option = (props) => {
         return (
@@ -286,7 +289,7 @@ function AdvancedProjectType(props) {
                                 <div className={"form-wrapper " + (projectType === 4 && "single-advance-project")}>
                                     <div className={projectType !== 4 && "d-flex gap-3 files-space-align"}>
 
-{!adaptiveTransEnable &&
+{/* {!adaptiveTransEnable && */}
 <>
                                         {projectType !== 4 && 
                                         <div className="form-group mr-3">
@@ -320,7 +323,7 @@ function AdvancedProjectType(props) {
                                         }
 
 </>
-}
+{/* } */}
 
                                         <div className="form-group">
                                             <label className="adv-form-label">{t("set_deadline")}</label>
@@ -422,7 +425,7 @@ function AdvancedProjectType(props) {
 
                                     
                                         <>
-                                        {!adaptiveTransEnable &&
+                                        {/* {!adaptiveTransEnable && */}
                                             <div className="flex items-center" style={!props.mtEnable ? {opacity: 0.5} : {}}>
                                                 <Checkbox
                                                     id="pre-translate"
@@ -437,14 +440,14 @@ function AdvancedProjectType(props) {
                                                 </label>{disablePreTranslate && <small style={{marginLeft: '5px'}}>({t("pre_translation_on_going")})</small>}
                                             
                                             </div>
-}
+{/* } */}
                                             <div 
                                                 className={[
                                                     "d-flex gap-3 files-space-align",
                                                     preTranslate ? "disable opacity-60" : ""
                                                 ].join(' ')}
                                             >
-                                                {!adaptiveTransEnable &&
+                                                {/* {!adaptiveTransEnable && */}
                                                 <div 
                                                 className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3 mt-2"
                                                 style={!props.mtEnable ? {pointerEvents: 'none', opacity: '0.5', paddingLeft: '10px'} : {paddingLeft: '10px'}} >
@@ -468,7 +471,7 @@ function AdvancedProjectType(props) {
 
                                                     </>
                                                 </div>
-                                                }
+                                                {/* } */}
                                             </div>
                                         </>
                                     }

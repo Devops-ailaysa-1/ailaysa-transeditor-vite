@@ -3659,9 +3659,11 @@ function TranslateFiles(props) {
                                             </div>
                                         </div>
                                     </div>
-<div className="translation_text_container">Translation Preferences</div>
+<div className="translation_text_container">
+    {/* Translation Preferences */}
+    </div>
                                     <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 ">
-                                        {/* <div className="flex items-center">
+                                        <div className="flex items-center">
                                             <Checkbox
                                                 id="machine-type"
                                                 checked={mtEnable}
@@ -3674,7 +3676,7 @@ function TranslateFiles(props) {
                                             >
                                                 {t("apply_mt")}
                                             </label>
-                                        </div> */}
+                                        </div>
                                         <div 
                                             className={[
                                                 "flex items-center gap-4 mt-3 ml-4",
