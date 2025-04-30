@@ -30243,6 +30243,11 @@ h4.history-seconday-wrap-header {
     box-shadow: none !important;
 }
 
+.workspace-files-OpenProjectButton:disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+}
+
 .workspace-files-nav-OpenProjectButton {
     background-color: #0074d3;
     box-shadow: none !important;

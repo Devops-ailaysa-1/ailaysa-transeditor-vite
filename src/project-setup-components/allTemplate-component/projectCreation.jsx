@@ -5,7 +5,7 @@
  *    It allows users to input project details such as project name, select source and target languages,
  *    and upload translation files for processing.
  * 
- * Author: Padmabharathi
+ * Author: Padmabharathi Subiramanian
  * Since: April 2025
  */
 
@@ -94,7 +94,6 @@ function ProjectCreation(props) {
         useState(false);
     const [createdProjects, setCreatedProjects] = useState([]);
     const [fileError, setFileError] = useState("");
-   
     const [fileUrlError, setFileUrlError] = useState("");
     const [projectNameError, setProjectNameError] = useState("");
     const [sourceLanguageError, setSourceLanguageError] = useState("");
@@ -217,14 +216,10 @@ function ProjectCreation(props) {
     const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
     const [projectId, setProjectId] = useState("");
     const progressMap = [
-        { min: 0, max: 5, message: "Reading source content" },
-        { min: 5, max: 15, message: "Deciding on style" },
-        { min: 15, max: 30, message: "Preprocessing" },
-        { min: 30, max: 50, message: "Translating" },
-        { min: 50, max: 60, message: "Checking Translation" },
-        { min: 60, max: 70, message: "Enhancing Translation" },
-        { min: 70, max: 80, message: "Almost Finished" },
-        { min: 80, max: 99, message: "Finishing" },
+        { min: 0, max: 15, message: "Reading source content" },
+        { min: 15, max: 25, message: "Deciding on style" },
+        { min: 25, max: 70, message: "Translating" },
+        { min: 70, max: 99, message: "Enhancing Translation" },
         { min: 99, max: 100, message: "Translation Complete"}
     ];
     const projectCreationErrorMsgMap = {
@@ -670,6 +665,9 @@ function ProjectCreation(props) {
             Config.toast(t("file_format_not_support"), 'warning');
             return false;
         } else if (!request && ext?.toLowerCase() === ".pdf") {
+            Config.toast(t("file_format_not_support"), 'warning');
+            return false;
+        } else if (!request && ['.txt', '.docx'].indexOf(ext?.toLowerCase()) == -1) {
             Config.toast(t("file_format_not_support"), 'warning');
             return false;
         }
@@ -2752,12 +2750,12 @@ function ProjectCreation(props) {
                                                             </div>
                                                             <div className="file-upload-instruction" style={{flexDirection:'column'}}>
                                                       <div className="supp-file-format">
-                                                       <div>
+                                                       {/* <div> */}
                                                           <span className="supported-file-tooltip">
                                                              {t(("supported_file_formats"))}:
                                                          </span>
                                                          <span className="supported-file-tooltip"> TXT, DOCX</span>
-                                                       </div>
+                                                       {/* </div> */}
                                                      </div>
                                                      <div className="file-upload_instruct-row">
                                                      <span className="max-word-note mr-2">
@@ -3107,7 +3105,7 @@ function ProjectCreation(props) {
                                                                                          progressBarStyle={{ width: "270px", pr: "30px" }}
                                                                                     />
                                                                                 ) : (
-                                                                                 task.percentage === 100 && (
+                                                                                task.percentage === 100 && (
                                                                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0',width:'30%' }}>
                                                                                     <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
                                                                                    <span style={{ color: '#3c4043', fontWeight: '500' }}>Translation completed</span>
@@ -3120,7 +3118,7 @@ function ProjectCreation(props) {
                                                                                      className="translate-download-btn"
                                                                                      type="submit"
                                                                                      id={task.id}
-                                                                                     disabled={task.percentage !== 100}
+                                                                                     disabled={task?.progressLoading || task.percentage !== 100}
                                                                                      onMouseUp={() => { downloadTaskTargetFile(task?.id); }}
                                                                                  >
                                                                                  <span className="fileupload-new-btn">
