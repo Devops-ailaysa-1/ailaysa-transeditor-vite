@@ -8868,7 +8868,8 @@ ul.asset-glossary-projects-wrap-list li .asset-project-info-wrap .assets-icon .g
 
 .file-edit-list-inner-table-cell:first-child {
     width: 100%;
-    max-width: 25%;
+    /* max-width: 25%; */
+    max-width: 35%;
 }
 
 .file-edit-list-inner-table-cell:nth-child(2) {
@@ -8878,7 +8879,8 @@ ul.asset-glossary-projects-wrap-list li .asset-project-info-wrap .assets-icon .g
 
 .file-edit-list-inner-table-cell:nth-child(3) {
     width: 100%;
-    max-width: 25%;
+    /* max-width: 25%; */
+    max-width: 18%;
 }
 
 .file-edit-list-inner-table-cell:nth-child(4) {
@@ -8910,7 +8912,9 @@ ul.asset-glossary-projects-wrap-list li .asset-project-info-wrap .assets-icon .g
     justify-content: end;
     /* background-color: green !important; */
 }
-
+.new-file-edit-list-inner-table-cell .doc-icon img {
+    padding-right: 0.5rem;
+}
 .progress-txt.border-right-add.file-progress-txt {
     width: 30px !important;
 }
