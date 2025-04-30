@@ -2961,12 +2961,12 @@ function TranslateFiles(props) {
                             </div>
                         </div>
                     </div> */}
-                    <div className="translation-actions">
+                    {/* <div className="translation-actions">
                         <div></div>
                         <div style={{alignContent: 'end'}}>
                             <button className={"glossary-btn" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")} onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 { openGlossariesModal && 
                     <AdvanceTranslateGlossaryModal 
