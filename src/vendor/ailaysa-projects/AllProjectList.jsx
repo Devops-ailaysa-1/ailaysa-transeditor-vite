@@ -396,14 +396,10 @@ function AllProjectList(props) {
     // Start
     const [downloadTaskFile, setDownloadTaskTargetFile] =  useState({});
     const progressMap = [
-        { min: 0, max: 5, message: "Reading source content" },
-        { min: 5, max: 15, message: "Deciding on style" },
-        { min: 15, max: 30, message: "Preprocessing" },
-        { min: 30, max: 50, message: "Translating" },
-        { min: 50, max: 60, message: "Checking Translation" },
-        { min: 60, max: 70, message: "Enhancing Translation" },
-        { min: 70, max: 80, message: "Almost Finished" },
-        { min: 80, max: 99, message: "Finishing" },
+        { min: 0, max: 15, message: "Reading source content" },
+        { min: 15, max: 25, message: "Deciding on style" },
+        { min: 25, max: 70, message: "Translating" },
+        { min: 70, max: 99, message: "Enhancing Translation" },
         { min: 99, max: 100, message: "Translation Complete"}
     ];
 
@@ -8668,20 +8664,32 @@ console.log(formdata,"formdata1")
                                                                                                                                     >
                                                                                                                                     <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                                     </button>
-                                                                                                                                ) : ((project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED") ||
-                                                                                                                                    selectedProjectFile.percentage == 100) ? (
+                                                                                                                                ) : (project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED") ? (
                                                                                                                                     <button
                                                                                                                                     className="workspace-files-OpenProjectButton"
-                                                                                                                                    type="button"
+                                                                                                                                    type="button" 
                                                                                                                                     style={{ paddingLeft: "16px", paddingRight: "16px" }}
-                                                                                                                                    onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)} 
+                                                                                                                                    onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)}
                                                                                                                                     >
                                                                                                                                     <span className="fileopen-new-btn">
                                                                                                                                         {selectedProjectFile?.id === isDownloading && <SaveButtonLoader />}
                                                                                                                                         {t("download")}
                                                                                                                                     </span>
                                                                                                                                     </button> 
-                                                                                                                                )  : (   // not translated then show translate btn
+                                                                                                                                ) : (selectedProjectFile?.percentage >= 0) ? (
+                                                                                                                                    <button
+                                                                                                                                    className="workspace-files-OpenProjectButton"
+                                                                                                                                    type="button" 
+                                                                                                                                    style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                    onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)}
+                                                                                                                                    disabled={selectedProjectFile?.progressLoading || selectedProjectFile?.percentage !== 100}
+                                                                                                                                    >
+                                                                                                                                    <span className="fileopen-new-btn">
+                                                                                                                                        {selectedProjectFile?.id === isDownloading && <SaveButtonLoader />}
+                                                                                                                                        {t("download")}
+                                                                                                                                    </span>
+                                                                                                                                    </button> 
+                                                                                                                                ) : (   // not translated then show translate btn
                                                                                                                                 selectedProjectFile?.isProcessing ? (
                                                                                                                                     <ProgressAnimateButton />
                                                                                                                                 ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'NOT_INITIATED' ? (
