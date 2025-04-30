@@ -30,7 +30,7 @@
 @media(max-width: 1301px){
   .file-upload_instruct-row{
     flex-direction: column;
-    gap: 8px;
+    gap: 2px;
   }
 
   .max-word-note{
