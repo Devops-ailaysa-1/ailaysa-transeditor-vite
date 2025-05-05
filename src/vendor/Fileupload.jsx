@@ -4720,7 +4720,7 @@ function Fileupload(props) {
                 }
                 url = `${Config.BASE_URL}/${downloadEntry.url}`
             } else {
-                url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=ORIGINAL`;
+                url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=SIMPLE`;
             }
             const response = await Config.downloadFileFromApi(url);
             Config.downloadFileInBrowser(response);
