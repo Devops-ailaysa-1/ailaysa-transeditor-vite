@@ -220,7 +220,7 @@ function ProjectCreation(props) {
         { min: 15, max: 25, message: "Deciding on style" },
         { min: 25, max: 70, message: "Translating" },
         { min: 70, max: 99, message: "Enhancing Translation" },
-        { min: 99, max: 100, message: "Translation Complete"}
+        { min: 99, max: 100, message: "Finishing"}
     ];
     const projectCreationErrorMsgMap = {
         'File is Empty' : 'empty_file_detect',
@@ -872,8 +872,10 @@ function ProjectCreation(props) {
                             isProcessing: false
                         }
                     })//projectTaskList
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
+                    projectTaskListRef.current = newArr;
+                    for(var i = 0; i < newArr.length; i++) {
+                        getTaskTransDownloadStatus(newArr[i]?.id);
+                    }
                     setProjectId(proj_id);
                     return;
                 } else if (action === 'GLOSSARY') {
@@ -1328,7 +1330,8 @@ function ProjectCreation(props) {
             },
             error: (err) => {
                 if (err?.response?.data?.files) {
-                    Config.toast(t("submitted_file_empty"), 'warning')
+                    setIsSubmitted(false);
+                    Config.toast(t("submitted_file_empty"), 'warning');
                 }
                 const msg = err?.response?.data?.msg || err?.response?.data?.error;
                 const translationKey = projectCreationErrorMsgMap[msg];
@@ -2154,7 +2157,7 @@ function ProjectCreation(props) {
      */
     const getTaskTranslationProgress = (endpoint, taskId) => {
        Config.axios({
-            url: `${Config.BASE_URL}/workspace/adaptive_file_translate/${projectId}`,
+            url: `${Config.BASE_URL}/${endpoint}`,
             method: "GET",
             auth: true,
             success: (response) => {
@@ -2689,6 +2692,7 @@ function ProjectCreation(props) {
                                                             : "col-xs-12 mt-3")
                                                         + (projectTaskList?.length !== 0 ? " behind-overlay" : "")
                                                     }
+                                                    style={{marginBottom: '36px'}}
                                                 >
                                                     <DragandDrop handleDrop={handleDrop}>
                                                         <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
@@ -3112,7 +3116,7 @@ function ProjectCreation(props) {
                                                                                 </div>
                                                                                  )
                                                                                )}
-                                                                                {task.percentage >= 0 ? (
+                                                                                {task.percentage >= 0 && (
                                                                                     <div className="overll_convert-pdf-list-UploadProjectButton">
                                                                                     <button
                                                                                      className="translate-download-btn"
@@ -3127,22 +3131,23 @@ function ProjectCreation(props) {
                                                                                  </span>
                                                                                    </button>
                                                                                    </div>
-                                                                                ) : task?.isProcessing ? (
-                                                                                    <ProgressAnimateButton />
-                                                                                ) : (
-                                                                                    <div className="overll_convert-pdf-list-UploadProjectButton">
-                                                                                    <button
-                                                                                        className="convert-pdf-list-UploadProjectButton"
-                                                                                        type="submit"
-                                                                                        id={task.id}
-                                                                                        disabled={task?.progressLoading}
-                                                                                        onMouseUp={() => getTaskTransDownloadStatus(task?.id)}
-                                                                                    >
-                                                                                    <span className="fileupload-new-btn">{t("translate")}</span>
-                                                                                    </button>
-                                                                                    </div>
-                                                                                )
+                                                                                ) 
                                                                               }
+                                                                              {/*  : task?.isProcessing ? (
+-                                                                                    <ProgressAnimateButton />  -----> progress animation loader
+-                                                                                ) : (
+-                                                                                    <div className="overll_convert-pdf-list-UploadProjectButton"> 
+-                                                                                    <button   -----> Translte button for individual task
+-                                                                                        className="convert-pdf-list-UploadProjectButton"
+-                                                                                        type="submit"
+-                                                                                        id={task.id}
+-                                                                                        disabled={task?.progressLoading}
+-                                                                                        onMouseUp={() => getTaskTransDownloadStatus(task?.id)}
+-                                                                                    >
+-                                                                                    <span className="fileupload-new-btn">{t("translate")}</span>
+-                                                                                    </button>
+-                                                                                    </div>
+-                                                                                ) */}
                                                                             </div>
                                                                         ))}
                                                                     </div>
@@ -3166,11 +3171,11 @@ function ProjectCreation(props) {
                                         onMouseUp={(e) => handleSubmit(e)}
                                         disabled={isSubmitted}>
                                        {isSubmitted && <SaveButtonLoader />}
-                                       Next
+                                       Translate
                                      </button>
                                     </div>
                                 )}
-                                {projectTaskList?.find(each => !each.isProcessing) && (
+                                {projectTaskList.length !== 0 && (
                                     <div className="new-btn-grp">
                                        <HtmlTooltip  className="tooltip_overlay"
                                          title={

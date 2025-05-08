@@ -21,6 +21,8 @@ const ProgressBar = ({ progressValue = 0, progressMap, progressBarStyle = {} }) 
     const dotInterval = setInterval(() => {
       setDots((prev) => (prev.length < 3 ? prev + "." : ""));
     }, 500);
+    const match = progressMap.find(item => progressValue >= item.min && (progressValue < item.max || (progressValue === 100 && item.max === 100)));
+    setProgressLabel(match ? match.message : "");
     return () => clearInterval(dotInterval);
   }, []);
 
@@ -49,7 +51,6 @@ const ProgressBar = ({ progressValue = 0, progressMap, progressBarStyle = {} }) 
         return nextProgress;
       });
     }, 50); // Adjust timing here for faster or slower animation
-
     return () => clearInterval(interval);
   }, [progressValue]);
 

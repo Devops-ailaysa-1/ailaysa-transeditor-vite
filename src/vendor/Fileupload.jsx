@@ -4879,7 +4879,7 @@ function Fileupload(props) {
         { min: 15, max: 25, message: "Deciding on style" },
         { min: 25, max: 70, message: "Translating" },
         { min: 70, max: 99, message: "Enhancing Translation" },
-        { min: 99, max: 100, message: "Translation Complete"}
+        { min: 99, max: 100, message: "Finishing"}
     ];
 
     const getBatchByTaskId = (batchList, key, taskId) => {
