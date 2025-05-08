@@ -51,7 +51,7 @@ import { SimpleTranslateGlossaryModal } from "../../vendor/model-select/Ailaysa-
 import { setSimpleTranslateGlossaryModal } from "../../features/SimpleTranslateGlossaryModalSlice";
 import { useSelector } from "react-redux";
 import Breadcrumbs from "../Breadcrumbs";
-
+import Zoom from '@mui/material/Zoom';
 
 function ProjectCreation(props) {
     const {
@@ -2843,7 +2843,7 @@ function ProjectCreation(props) {
                                                                                     key={eachKey + files[eachKey].name}
                                                                                     className="file-name-list"
                                                                                 >
-                                                                                    <div className="filename" style={{ width: '90%' }}>
+                                                                                      <div className="filename" style={{ width: '90%' }}>
                                                                                         {
                                                                                             <img
                                                                                                 src={
@@ -2861,13 +2861,13 @@ function ProjectCreation(props) {
                                                                                                 .slice(0, -1)
                                                                                                 .join(".")}
                                                                                         </span>
-                                                                                        <span className="extension">
+                                                                                        <span className="simple-file-extension">
                                                                                             {"." +
                                                                                                 files[eachKey].name
                                                                                                     .split(".")
                                                                                                     .pop()}
                                                                                         </span>
-                                                                                    </div>
+                                                                                      </div>
                                                                                     <span
                                                                                         className="upload-file-delete"
                                                                                         data-file-index={eachKey}
@@ -3077,6 +3077,7 @@ function ProjectCreation(props) {
                                                                                 key={task.id}
                                                                                 className="file-name-list progress-cust"
                                                                             >
+                                                                                <Tooltip TransitionComponent={Zoom} title={task.filename} placement="top-start">
                                                                                 <div className="filename" style={{ alignItems: 'center' }}>
                                                                                     {
                                                                                         <img
@@ -3089,19 +3090,20 @@ function ProjectCreation(props) {
                                                                                     }
                                                                                     <div className="file-name-info-wrapper">
                                                                                         <div className="file-name-row">
-                                                                                            <span className="filename-length">
+                                                                                            <span className="simple-file-edit-proj-txt-file-name">
                                                                                                 {task.filename
                                                                                                     .split(".")
                                                                                                     .slice(0, -1)
                                                                                                     .join(".")}
                                                                                             </span>
-                                                                                            <span className="extension">
+                                                                                            <span className="simple-file-extension">
                                                                                                 {"." +
                                                                                                     task.filename.split(".").pop()}
                                                                                             </span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
+                                                                                </Tooltip>
                                                                                 {task?.progressLoading ? (
                                                                                      <ProgressBar
                                                                                          progressValue={task.percentage || 0}
