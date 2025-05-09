@@ -44883,3 +44883,29 @@ body{
     color: #aaa;
     pointer-events: none;
 }
+
+.simple-file-edit-proj-txt-file-name {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    color: #3c4043;
+    transition: 0.3s all ease;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: middle;
+    width: auto;
+    max-width: 310px;
+    cursor: context-menu;
+}
+
+.simple-file-extension {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 24px;
+    color: rgb(60, 64, 67);
+    cursor: context-menu;
+}
