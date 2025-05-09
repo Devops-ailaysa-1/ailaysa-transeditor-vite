@@ -6249,7 +6249,7 @@ console.log(formdata,"formdata1")
                                                                                                                 selectedProjectFile?.percentage === 100 && (
                                                                                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0'}}>
                                                                                                                         <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
-                                                                                                                        <span style={{ color: 'green', fontWeight: 'bold' }}>Translation Completed</span>
+                                                                                                                        <span style={{ color: '#3c4043', fontWeight: '500' }}>Translation Completed</span>
                                                                                                                     </div>
                                                                                                                 )
                                                                                                             )}
@@ -8692,7 +8692,7 @@ console.log(formdata,"formdata1")
                                                                                                                         <>
                                                                                                                                {(!project.adaptive_file_translate && selectedProjectFile?.file_translate_done) ? (
                                                                                                                                     <button
-                                                                                                                                    className="workspace-files-OpenProjectButton"
+                                                                                                                                    className="translate-download-btn"
                                                                                                                                     type="button"
                                                                                                                                     style={{ paddingLeft: "16px", paddingRight: "16px" }}
                                                                                                                                     onMouseUp={() => downloadTaskTargetFile(selectedProjectFile)}
@@ -8701,7 +8701,7 @@ console.log(formdata,"formdata1")
                                                                                                                                     </button>
                                                                                                                                 ) : (project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED") ? (
                                                                                                                                     <button
-                                                                                                                                    className="workspace-files-OpenProjectButton"
+                                                                                                                                    className="translate-download-btn"
                                                                                                                                     type="button" 
                                                                                                                                     style={{ paddingLeft: "16px", paddingRight: "16px" }}
                                                                                                                                     onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)}
@@ -8713,7 +8713,7 @@ console.log(formdata,"formdata1")
                                                                                                                                     </button> 
                                                                                                                                 ) : (selectedProjectFile?.percentage >= 0) ? (
                                                                                                                                     <button
-                                                                                                                                    className="workspace-files-OpenProjectButton"
+                                                                                                                                    className="translate-download-btn"
                                                                                                                                     type="button" 
                                                                                                                                     style={{ paddingLeft: "16px", paddingRight: "16px" }}
                                                                                                                                     onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)}
