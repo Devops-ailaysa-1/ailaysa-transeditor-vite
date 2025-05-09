@@ -128,7 +128,7 @@ import WordchoiceIcon from "../assets/images/choicelist.svg"
 import HowToRegister from "../assets/images/new-ui-icons/how_to_register.svg"
 import ReactRouterPrompt from 'react-router-prompt'
 import ProgressBar from "../project-setup-components/allTemplate-component/ProgressBar";
-
+import { SaveButtonLoader } from "../loader/CommonSaveBtnLoader";
 
 function Fileupload(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -4722,6 +4722,7 @@ function Fileupload(props) {
             } else {
                 url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=SIMPLE`;
             }
+            setIsDownloading(task_data.id); 
             const response = await Config.downloadFileFromApi(url);
             Config.downloadFileInBrowser(response);
         } catch (error) {
@@ -4879,7 +4880,7 @@ function Fileupload(props) {
         { min: 15, max: 25, message: "Deciding on style" },
         { min: 25, max: 70, message: "Translating" },
         { min: 70, max: 99, message: "Enhancing Translation" },
-        { min: 99, max: 100, message: "Finishing"}
+        { min: 99, max: 100, message: "Translation Complete"}
     ];
 
     const getBatchByTaskId = (batchList, key, taskId) => {
@@ -5755,7 +5756,7 @@ function Fileupload(props) {
                                                                                                                 selectedProjectFile?.percentage === 100 && (
                                                                                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0' }}>
                                                                                                                         <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
-                                                                                                                        <span style={{ color: 'green', fontWeight: 'bold' }}>Translation Completed</span>
+                                                                                                                        <span style={{ color: '#3c4043', fontWeight: '500' }}>Translation Completed</span>
                                                                                                                     </div>
                                                                                                                 )
                                                                                                             )}
@@ -8228,7 +8229,7 @@ function Fileupload(props) {
                                                                                                                         <>
                                                                                                                             {(!project.adaptive_file_translate && selectedProjectFile?.file_translate_done) ? (
                                                                                                                                 <button
-                                                                                                                                    className="workspace-files-OpenProjectButton"
+                                                                                                                                    className="translate-download-btn"
                                                                                                                                     type="button"
                                                                                                                                     style={{ paddingLeft: "16px", paddingRight: "16px" }}
                                                                                                                                     onMouseUp={() => downloadTaskTargetFile(selectedProjectFile)}
@@ -8237,16 +8238,19 @@ function Fileupload(props) {
                                                                                                                                     </button>
                                                                                                                                 ) : (project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED") ? (
                                                                                                                                     <button
-                                                                                                                                        className="workspace-files-OpenProjectButton"
+                                                                                                                                        className="translate-download-btn"
                                                                                                                                         type="button"
                                                                                                                                         style={{ paddingLeft: "16px", paddingRight: "16px" }}
                                                                                                                                         onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)}
                                                                                                                                     >
-                                                                                                                                        <span className="fileopen-new-btn">{t("download")}</span>
+                                                                                                                                        <span className="fileopen-new-btn">
+                                                                                                                                           {selectedProjectFile?.id === isDownloading && <SaveButtonLoader />}
+                                                                                                                                           {t("download")}
+                                                                                                                                        </span>
                                                                                                                                     </button>
                                                                                                                                 ) : (selectedProjectFile?.percentage >= 0) ? (
                                                                                                                                     <button
-                                                                                                                                    className="workspace-files-OpenProjectButton"
+                                                                                                                                    className="translate-download-btn"
                                                                                                                                     type="button" 
                                                                                                                                     style={{ paddingLeft: "16px", paddingRight: "16px" }}
                                                                                                                                     onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)}
