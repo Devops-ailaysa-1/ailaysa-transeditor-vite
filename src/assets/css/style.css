@@ -41104,6 +41104,32 @@ h1.chat-file-title{
     cursor: context-menu;
 }
 
+.file-name-list .sft-lang-pair{
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+}
+
+.file-name-list .sft-lang-pair span {
+    background: #e8f0fe;
+    border-radius: 2px;
+    padding: 3px 5px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 12px;
+    color: #0074d3;
+    width: auto;
+    text-align: center;
+    cursor: context-menu;
+}
+
+.file-name-list .sft-lang-pair span:hover{
+    background: #e8f0fe;
+    color: #0074d3;
+    cursor: context-menu;
+}
+
 .chat-book-body-inner-wrapper .chat-receiver-msg:not(:last-child),
 .chat-book-body-inner-wrapper .chat-sender-msg:not(:last-child){
     margin-bottom: 15px;
@@ -44899,6 +44925,7 @@ body{
     width: auto;
     max-width: 310px;
     cursor: context-menu;
+    padding: 0px 0px 0px 9px !important;
 }
 
 .simple-file-extension {
