@@ -346,7 +346,6 @@ function AllProjectList(props) {
     const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([])
 
     const [isDownloading, setIsDownloading] = useState(false);
-    const [isRetrying, setIsRetrying] = useState(false);
     const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false)
     const [navigationModalVisible, setNavigationModalVisible] = useState(false)
     const [confirmedNavigation, setConfirmedNavigation] = useState(false)
