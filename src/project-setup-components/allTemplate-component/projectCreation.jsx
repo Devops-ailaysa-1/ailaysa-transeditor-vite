@@ -864,6 +864,7 @@ function ProjectCreation(props) {
             auth: true,
             success: (dashboardResponse) => {
                 if(action === 'trans-download'){
+                    setProjectId(proj_id);
                     setTranslateDownloadBtnLoader(false);
                     // add isProcessing:falsez key to all the task by default
                     let newArr = dashboardResponse.data?.map(obj => {
@@ -876,7 +877,6 @@ function ProjectCreation(props) {
                     for(var i = 0; i < newArr.length; i++) {
                         getTaskTransDownloadStatus(newArr[i]?.id);
                     }
-                    setProjectId(proj_id);
                     return;
                 } else if (action === 'GLOSSARY') {
                     const glossaryData = dashboardResponse.data[0];
@@ -2113,6 +2113,13 @@ function ProjectCreation(props) {
     const updateProjectTaskList = (taskId, percentage, status) => {
         const updatedTasks = projectTaskListRef.current?.map(task => {
             if (task.id === taskId) {
+                if ('FAILED' === status.toUpperCase()) {
+                    task.adaptive_file_translate_status = 'FAILED';
+                    task.isProcessing = false;
+                    task.percentage = 0;
+                    return task;
+                }
+                task.adaptive_file_translate_status = 'ONGOING';
                 const updatedTask = {
                     ...task,
                     percentage,
@@ -2156,6 +2163,11 @@ function ProjectCreation(props) {
      * @since  08 APR 2025
      */
     const getTaskTranslationProgress = (endpoint, taskId) => {
+        if (endpoint == null || endpoint == '') {
+            endpoint = `workspace/adaptive_file_translate/${projectId}`;
+            if (projectId == null || projectId == '')
+                return;
+        }
        Config.axios({
             url: `${Config.BASE_URL}/${endpoint}`,
             method: "GET",
@@ -2175,6 +2187,8 @@ function ProjectCreation(props) {
                                     url: batch.download_file
                                   };
                                 downloadTargetFile.push(newDownloadItem);
+                            } else if ('FAILED' === batch?.status?.toUpperCase()) {
+                                return;
                             } else {
                                 getProgressData(endpoint, taskId);
                             }
@@ -3104,7 +3118,18 @@ function ProjectCreation(props) {
                                                                                     </div>
                                                                                 </div>
                                                                                 </Tooltip>
-                                                                                {task?.progressLoading ? (
+                                                                                { task.adaptive_file_translate_status == 'FAILED' ? (
+                                                                                    <div class="error-container">
+                                                                                        <div class="error-message">
+                                                                                            <span class="error-icon">
+                                                                                            {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                                                                               <path d="M9 12.75C9.2125 12.75 9.39063 12.6781 9.53438 12.5344C9.67813 12.3906 9.75 12.2125 9.75 12C9.75 11.7875 9.67813 11.6094 9.53438 11.4656C9.39063 11.3219 9.2125 11.25 9 11.25C8.7875 11.25 8.60938 11.3219 8.46563 11.4656C8.32188 11.6094 8.25 11.7875 8.25 12C8.25 12.2125 8.32188 12.3906 8.46563 12.5344C8.60938 12.6781 8.7875 12.75 9 12.75ZM8.25 9.75H9.75V5.25H8.25V9.75ZM9 16.5C7.9625 16.5 6.9875 16.3031 6.075 15.9094C5.1625 15.5156 4.36875 14.9813 3.69375 14.3063C3.01875 13.6313 2.48438 12.8375 2.09063 11.925C1.69688 11.0125 1.5 10.0375 1.5 9C1.5 7.9625 1.69688 6.9875 2.09063 6.075C2.48438 5.1625 3.01875 4.36875 3.69375 3.69375C4.36875 3.01875 5.1625 2.48438 6.075 2.09063C6.9875 1.69688 7.9625 1.5 9 1.5C10.0375 1.5 11.0125 1.69688 11.925 2.09063C12.8375 2.48438 13.6313 3.01875 14.3063 3.69375C14.9813 4.36875 15.5156 5.1625 15.9094 6.075C16.3031 6.9875 16.5 7.9625 16.5 9C16.5 10.0375 16.3031 11.0125 15.9094 11.925C15.5156 12.8375 14.9813 13.6313 14.3063 14.3063C13.6313 14.9813 12.8375 15.5156 11.925 15.9094C11.0125 16.3031 10.0375 16.5 9 16.5ZM9 15C10.675 15 12.0938 14.4188 13.2563 13.2563C14.4188 12.0938 15 10.675 15 9C15 7.325 14.4188 5.90625 13.2563 4.74375C12.0938 3.58125 10.675 3 9 3C7.325 3 5.90625 3.58125 4.74375 4.74375C3.58125 5.90625 3 7.325 3 9C3 10.675 3.58125 12.0938 4.74375 13.2563C5.90625 14.4188 7.325 15 9 15Z" fill="#E41E3F"/>
+                                                                                            </svg> */}
+                                                                                            </span>
+                                                                                            Oops! Something went wrong. Retry to continue from where you left off.
+                                                                                        </div>
+                                                                                    </div>
+                                                                                ) : task?.progressLoading ? (
                                                                                      <ProgressBar
                                                                                          progressValue={task.percentage || 0}
                                                                                          progressMap={progressMap}
@@ -3118,7 +3143,18 @@ function ProjectCreation(props) {
                                                                                 </div>
                                                                                  )
                                                                                )}
-                                                                                {task.percentage >= 0 && (
+                                                                                { task.adaptive_file_translate_status == 'FAILED' ?(
+                                                                                    <>
+                                                                                        <button
+                                                                                            className="workspace-files-OpenProjectButton"
+                                                                                            type="button"
+                                                                                            style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                            onMouseUp={(e) => getTaskTransDownloadStatus(task?.id)}
+                                                                                            >
+                                                                                            <span className="fileopen-new-btn">{t("Retry")}</span>
+                                                                                        </button>
+                                                                                    </>
+                                                                                ) : task.percentage >= 0 && (
                                                                                     <div className="overll_convert-pdf-list-UploadProjectButton">
                                                                                     <button
                                                                                      className="translate-download-btn"

@@ -4896,6 +4896,13 @@ function Fileupload(props) {
     const updateProjectTaskList = (taskId, percentage, status) => {
         const updatedTasks = selectedProjectFilesRef.current.map(task => {
             if (task.id === taskId) {
+                if ('FAILED' === status.toUpperCase()) {
+                    task.adaptive_file_translate_status = 'FAILED';
+                    task.isProcessing = false;
+                    task.percentage = 0;
+                    return task;
+                }
+                task.adaptive_file_translate_status = 'ONGOING';
                 const updatedTask =  {
                     ...task,
                     percentage,
@@ -4936,10 +4943,10 @@ function Fileupload(props) {
     }, [openedProjectId]);
 
     const getTaskTranslationProgress = (endpoint, taskId, projectId) => {
-        if (endpoint == null || endpoint == '')
-            endpoint = `workspace/adaptive_file_translate/${projectId}`;
         if (projectId == null || projectId == '')
             projectId = openedProjectId;
+        if (endpoint == null || endpoint == '')
+            endpoint = `workspace/adaptive_file_translate/${projectId}`;
         // Only proceed if this project is still the selected one
         if ((projectId !== selectedProjectIdRef.current) || (window.location.pathname !== '/translations')) {
             return; // Skip outdated task
@@ -4963,6 +4970,8 @@ function Fileupload(props) {
                                     url: batch.download_file
                                 };
                                 downloadTargetFile.push(newDownloadItem);
+                            } else if ('FAILED' === batch?.status?.toUpperCase()) {
+                                return;
                             } else {
                                 getProgressData(endpoint, batch?.task_id, projectId);
                             }
@@ -5746,7 +5755,15 @@ function Fileupload(props) {
                                                                                                     </div> */}
                                                                                                         <div className={project?.adaptive_simple &&
                                                                                                                 project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell circular-progress"}>
-                                                                                                            {selectedProjectFile?.progressLoading ? (
+                                                                                                            { selectedProjectFile.adaptive_file_translate_status == 'FAILED' ? (
+                                                                                                                <div class="error-container">
+                                                                                                                    <div class="error-message">
+                                                                                                                        <span class="error-icon">
+                                                                                                                        </span>
+                                                                                                                        Oops! Something went wrong. Retry to continue from where you left off.
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            ) : selectedProjectFile?.progressLoading ? (
                                                                                                                 <ProgressBar
                                                                                                                     progressValue={selectedProjectFile.percentage || 0}
                                                                                                                     progressMap={progressMap}
@@ -8248,7 +8265,7 @@ function Fileupload(props) {
                                                                                                                                            {t("download")}
                                                                                                                                         </span>
                                                                                                                                     </button>
-                                                                                                                                ) : (selectedProjectFile?.percentage >= 0) ? (
+                                                                                                                                ) : (selectedProjectFile?.percentage >= 0 && selectedProjectFile.adaptive_file_translate_status != 'FAILED') ? (
                                                                                                                                     <button
                                                                                                                                     className="translate-download-btn"
                                                                                                                                     type="button" 
@@ -8294,6 +8311,17 @@ function Fileupload(props) {
                                                                                                                                                 }}>{'Processing'}</span>
                                                                                                                                             </button>
                                                                                                                                         </>
+                                                                                                                                    ) : selectedProjectFile.adaptive_file_translate_status == 'FAILED' ?(
+                                                                                                                                        <>
+                                                                                                                                            <button
+                                                                                                                                                className="workspace-files-OpenProjectButton"
+                                                                                                                                                type="button"
+                                                                                                                                                style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                                onMouseUp={(e) => getTaskTransDownloadStatus(selectedProjectFile?.id)}
+                                                                                                                                                >
+                                                                                                                                                <span className="fileopen-new-btn">{t("Retry")}</span>
+                                                                                                                                            </button>
+                                                                                                                                        </>
                                                                                                                                     ) : (
                                                                                                                                         <button className="workspace-files-OpenProjectButton"
                                                                                                                                             type="button"
@@ -8303,7 +8331,7 @@ function Fileupload(props) {
                                                                                                                                             }}
                                                                                                                                             onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)}
                                                                                                                                         >
-                                                                                                                                            <span className="fileopen-new-btn">{"Old " + t("translate")}</span>
+                                                                                                                                            <span className="fileopen-new-btn">{t("translate")}</span>
                                                                                                                                         </button>
                                                                                                                                     )
                                                                                                                                 )}

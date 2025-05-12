@@ -345,7 +345,8 @@ function AllProjectList(props) {
 
     const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([])
 
-    const [isDownloading, setIsDownloading] = useState(false)
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [isRetrying, setIsRetrying] = useState(false);
     const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false)
     const [navigationModalVisible, setNavigationModalVisible] = useState(false)
     const [confirmedNavigation, setConfirmedNavigation] = useState(false)
@@ -5166,6 +5167,13 @@ console.log(formdata,"formdata1")
     const updateProjectTaskList = (taskId, percentage, status) => {
         const updatedTasks = selectedProjectFilesRef.current.map(task => {
             if (task.id === taskId) {
+                if ('FAILED' === status.toUpperCase()) {
+                    task.adaptive_file_translate_status = 'FAILED';
+                    task.isProcessing = false;
+                    task.percentage = 0;
+                    return task;
+                }
+                task.adaptive_file_translate_status = 'ONGOING';
                 const updatedTask = {
                     ...task,
                     percentage,
@@ -5173,7 +5181,7 @@ console.log(formdata,"formdata1")
                     file_translate_done: percentage == 100,
                     isProcessing: percentage !== 100
                 };
-                
+
                 // Set progressLoading based on percentage
                 if (percentage === 100) {
                     // Temporarily set to true, will be set to false after timeout
@@ -5202,14 +5210,14 @@ console.log(formdata,"formdata1")
     }
 
     const getTaskTranslationProgress = (endpoint, taskId, projectId) => {
-        if (endpoint == null || endpoint == '')
-            endpoint = `workspace/adaptive_file_translate/${projectId}`;
         if (projectId == null || projectId == '')
             projectId = openedProjectId;
+        if (endpoint == null || endpoint == '')
+            endpoint = `workspace/adaptive_file_translate/${projectId}`;        
         // Only proceed if this project is still the selected one
-        if ((projectId !== selectedProjectIdRef.current) || (window.location.pathname !== '/file-upload')) {
+        if ((projectId !== selectedProjectIdRef.current) || (window.location.pathname !== '/file-upload'))
            return; // Skip outdated task
-        }
+
         Config.axios({
             url: `${Config.BASE_URL}/${endpoint}`,
             method: "GET",
@@ -5222,13 +5230,16 @@ console.log(formdata,"formdata1")
                     const batch = getBatchByTaskId(batchList, 'task_id', taskId);
                     if (batch != null && batchList != null && batchList.length > 0) {
                         batchList.map(batch => {
+                            // batch.status = 'FAILED';
                             updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status);
-                            if (batch?.status === 'completed') {
+                            if ('COMPLETED' === batch?.status?.toUpperCase()) {
                                 const newDownloadItem = {
                                     taskId: batch.task_id,
                                     url: batch.download_file
                                   };
                                 downloadTargetFile.push(newDownloadItem);
+                            } else if ('FAILED' === batch?.status?.toUpperCase()) {
+                                return;
                             } else {
                                 getProgressData(endpoint, batch?.task_id, projectId);
                             }
@@ -5300,9 +5311,6 @@ console.log(formdata,"formdata1")
                 auth: true,
                 ...(controller !== undefined && {signal: controller.signal}),
                 success: (response) => {
-
-
-
                     if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
                         getTaskTranslationProgress(response.data.endpoint, task_id);
                     }
@@ -6239,7 +6247,14 @@ console.log(formdata,"formdata1")
                                                                                                     </div> */}
                                                                                                         <div className={project?.adaptive_simple &&
                                                                                                             project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell circular-progress"}>
-                                                                                                            {selectedProjectFile?.progressLoading ? (
+                                                                                                            { project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'FAILED' ? (
+                                                                                                                <div class="error-container">
+                                                                                                                    <div class="error-message">
+                                                                                                                        <span class="error-icon"></span>
+                                                                                                                        Oops! Something went wrong. Retry to continue from where you left off.
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            ) : selectedProjectFile?.progressLoading ? (
                                                                                                                 <ProgressBar
                                                                                                                     progressValue={selectedProjectFile.percentage || 0}
                                                                                                                     progressMap={progressMap}
@@ -8711,7 +8726,7 @@ console.log(formdata,"formdata1")
                                                                                                                                         {t("download")}
                                                                                                                                     </span>
                                                                                                                                     </button> 
-                                                                                                                                ) : (selectedProjectFile?.percentage >= 0) ? (
+                                                                                                                                ) : (selectedProjectFile?.percentage >= 0 && selectedProjectFile.adaptive_file_translate_status != 'FAILED') ? (
                                                                                                                                     <button
                                                                                                                                     className="translate-download-btn"
                                                                                                                                     type="button" 
@@ -8755,6 +8770,17 @@ console.log(formdata,"formdata1")
                                                                                                                                             <span className="fileopen-new-btn" style={{
                                                                                                                                                 paddingLeft: "5px"
                                                                                                                                             }}>{'Processing'}</span>
+                                                                                                                                        </button>
+                                                                                                                                    </>
+                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'FAILED' ?(
+                                                                                                                                    <>
+                                                                                                                                        <button
+                                                                                                                                            className="workspace-files-OpenProjectButton"
+                                                                                                                                            type="button"
+                                                                                                                                            style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                            onMouseUp={(e) => getTaskTransDownloadStatus(selectedProjectFile?.id)}
+                                                                                                                                            >
+                                                                                                                                            <span className="fileopen-new-btn">{t("Retry")}</span>
                                                                                                                                         </button>
                                                                                                                                     </>
                                                                                                                                 ) : (

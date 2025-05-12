@@ -44909,3 +44909,27 @@ body{
     color: rgb(60, 64, 67);
     cursor: context-menu;
 }
+
+.error-container {
+    background-color: #ffeef1;
+    border: 0px solid #f5c6cb;
+    padding: 4px 6px;
+    border-radius: 4px;
+    /* margin-bottom: 12px; */
+    width: auto;
+}
+  
+ .error-message {
+    color: #3c4043;
+    font-size: 14px;
+    display: block;
+    align-items: center;
+    /* margin-bottom: 8px; */
+    font-weight: bold;
+}
+  
+.error-icon {
+    margin-right: 6px;
+    font-weight: bold;
+}
+  
