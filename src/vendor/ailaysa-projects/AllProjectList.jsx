@@ -6246,7 +6246,7 @@ console.log(formdata,"formdata1")
                                                                                                     </div> */}
                                                                                                         <div className={project?.adaptive_simple &&
                                                                                                             project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell circular-progress"}>
-                                                                                                            { project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'FAILED' ? (
+                                                                                                            { project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'FAILED'  ? (
                                                                                                                 <div class="error-container">
                                                                                                                     <div class="error-message">
                                                                                                                         <span class="error-icon">
@@ -8745,7 +8745,7 @@ console.log(formdata,"formdata1")
                                                                                                                                 ) : (   // not translated then show translate btn
                                                                                                                                 selectedProjectFile?.isProcessing ? (
                                                                                                                                     <ProgressAnimateButton />
-                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'NOT_INITIATED' ? (
+                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'NOT_INITIATED' && project.adaptive_simple ? (
                                                                                                                                     <>
                                                                                                                                         <button className="workspace-files-OpenProjectButton"
                                                                                                                                             type="button"
@@ -8758,7 +8758,7 @@ console.log(formdata,"formdata1")
                                                                                                                                             <span className="fileopen-new-btn">{t("translate")}</span>
                                                                                                                                         </button>
                                                                                                                                     </>
-                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'ONGOING' ? (
+                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'ONGOING' && project.adaptive_simple  ? (
                                                                                                                                     <>
                                                                                                                                         <button className="workspace-files-OpenProjectButton"
                                                                                                                                             type="button"
@@ -8775,7 +8775,7 @@ console.log(formdata,"formdata1")
                                                                                                                                             }}>{'Processing'}</span>
                                                                                                                                         </button>
                                                                                                                                     </>
-                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'FAILED' ?(
+                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'FAILED' && project.adaptive_simple ?(
                                                                                                                                     <>
                                                                                                                                         <button
                                                                                                                                             className="workspace-files-OpenProjectButton"

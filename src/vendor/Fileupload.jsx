@@ -5755,7 +5755,7 @@ function Fileupload(props) {
                                                                                                     </div> */}
                                                                                                         <div className={project?.adaptive_simple &&
                                                                                                                 project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell circular-progress"}>
-                                                                                                            { selectedProjectFile.adaptive_file_translate_status == 'FAILED' ? (
+                                                                                                            { project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'FAILED' ? (
                                                                                                                 <div class="error-container">
                                                                                                                     <div class="error-message">
                                                                                                                         <span class="error-icon">
@@ -8284,7 +8284,7 @@ function Fileupload(props) {
                                                                                                                                 )  : (   // not translated then show translate btn
                                                                                                                                     selectedProjectFile?.isProcessing ? (
                                                                                                                                         <ProgressAnimateButton />
-                                                                                                                                    ) : selectedProjectFile?.adaptive_file_translate_status == 'NOT_INITIATED' ? (
+                                                                                                                                    ) : selectedProjectFile?.adaptive_file_translate_status == 'NOT_INITIATED' && project.adaptive_simple ? (
                                                                                                                                         <>
                                                                                                                                             <button className="workspace-files-OpenProjectButton"
                                                                                                                                                 type="button"
@@ -8297,7 +8297,7 @@ function Fileupload(props) {
                                                                                                                                                 <span className="fileopen-new-btn">{t("translate")}</span>
                                                                                                                                             </button>
                                                                                                                                         </>
-                                                                                                                                    ) : selectedProjectFile?.adaptive_file_translate_status == 'ONGOING' ? (
+                                                                                                                                    ) : selectedProjectFile?.adaptive_file_translate_status == 'ONGOING' && project.adaptive_simple ? (
                                                                                                                                         <>
                                                                                                                                             <button className="workspace-files-OpenProjectButton"
                                                                                                                                                 type="button"
@@ -8314,7 +8314,7 @@ function Fileupload(props) {
                                                                                                                                                 }}>{'Processing'}</span>
                                                                                                                                             </button>
                                                                                                                                         </>
-                                                                                                                                    ) : selectedProjectFile.adaptive_file_translate_status == 'FAILED' ?(
+                                                                                                                                    ) : selectedProjectFile.adaptive_file_translate_status == 'FAILED' && project.adaptive_simple ?(
                                                                                                                                         <>
                                                                                                                                             <button
                                                                                                                                                 className="workspace-files-OpenProjectButton"
