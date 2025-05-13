@@ -4644,31 +4644,24 @@ function AllProjectList(props) {
                 });
                 setCreatedProjects(newArr);
             },
-            error: (err) => { 
-            }
+            error: (err) => { }
         });
     }
 
     const downloadTaskTargetFile = async(task_data) => {
-        let {id, filename} = task_data
-        let {name, extension} = Config.getNameAndExtension(filename)
-        
+        let {id, filename} = task_data;
+        let {name, extension} = Config.getNameAndExtension(filename);
         // add in download list
-        dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }))
-
-        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`
+        dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }));
+        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`;
         const response = await Config.downloadFileFromApi(url);
-
         // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
+        dispatch(updateDownloadingFile({ id: id, status: 2 }));
+        Config.downloadFileInBrowser(response);
         setTimeout(() => {
             // remove the downloaded file from list
-            dispatch(deleteDownloadingFile({ id: id }))
+            dispatch(deleteDownloadingFile({ id: id }));
         }, 8000);
-
     }
     
     /**
@@ -4708,19 +4701,19 @@ function AllProjectList(props) {
         if(projectObject.current?.id === undefined) return;
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
-            axiosFileTranslateAbortController.abort()
+            axiosFileTranslateAbortController.abort();
         }
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-        let task_list_arr = []
-        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing)
+        let task_list_arr = [];
+        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing);
         let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
         if(alreadyProcessingTask?.length !== 0){
-            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
         }else{
-            task_list_arr = [task_id]
+            task_list_arr = [task_id];
         }
-        fileTranslatingTaskListRef.current = task_list_arr
+        fileTranslatingTaskListRef.current = task_list_arr;
         // create task list to process
         let list = ""
         fileTranslatingTaskListRef.current?.map((each, index) => {
@@ -4733,12 +4726,12 @@ function AllProjectList(props) {
                     return {
                         ...obj,
                         isProcessing: true,
-                    }
+                    };
                 }
-                return obj
+                return obj;
             })
-            selectedProjectFilesRef.current = newArr 
-            setSelectedProjectFiles(newArr)
+            selectedProjectFilesRef.current = newArr;
+            setSelectedProjectFiles(newArr);
         }
 
         Config.axios({
@@ -4748,47 +4741,45 @@ function AllProjectList(props) {
             success: (response) => {
                 // if called with project_id, returns list if task_data
                 if(response.data?.results !== undefined){
-                    let dataList = response.data?.results
+                    let dataList = response.data?.results;
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
                         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
-                            let status = dataList?.find(each => each.task === obj.id)?.status
+                            let status = dataList?.find(each => each.task === obj.id)?.status;
                             return {
                                 ...obj,
                                 isProcessing: status == 400 ? true : false,
                                 status: status,
                                 file_translate_done: status === 200 ? true : obj.file_translate_done
-                            }
+                            };
                         }
-                        return obj
+                        return obj;
                     })
-                    selectedProjectFilesRef.current = newArr 
-                    setSelectedProjectFiles(newArr)
-                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false
+                    selectedProjectFilesRef.current = newArr;
+                    setSelectedProjectFiles(newArr);
+                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false;
+                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false;
+                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false;
                     
                     if(isPageNumNotFound){
                         // Config.toast(`File couldn't process!`, 'error')
-                        setShowFileErrorModal(true)
+                        setShowFileErrorModal(true);
                         let newArr = selectedProjectFilesRef.current?.map(obj => {
                             if(obj.status === 404){
                                 return {
                                     ...obj,
                                     isProcessing: false,
-                                }
+                                };
                             }
-                            return obj
+                            return obj;
                         })
-                        selectedProjectFilesRef.current = newArr 
-                        setSelectedProjectFiles(newArr)
-                        return
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles(newArr);
+                        return;
                     }
-                    
-                    if(insuffientCredit) setShowCreditAlertModal(true)
-
+                    if(insuffientCredit) setShowCreditAlertModal(true);
                     if(isAnyTaskIsProcessing){
                         setTimeout(() => {
-                            getProjectTransDownloadStatus(task_id)
+                            getProjectTransDownloadStatus(task_id);
                         }, 5000);
                     }
                 }
@@ -4800,11 +4791,11 @@ function AllProjectList(props) {
                             return {
                                 ...obj,
                                 isProcessing: false,
-                            }
-                        })
-                        selectedProjectFilesRef.current = newArr 
-                        setSelectedProjectFiles(newArr)
-                        setShowCreditAlertModal(true)
+                            };
+                        });
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles(newArr);
+                        setShowCreditAlertModal(true);
                     }
                 }
             },
@@ -4816,17 +4807,16 @@ function AllProjectList(props) {
                                 ...obj,
                                 isProcessing: false,
                                 file_translate_done: false
-                            }
+                            };
                         }
-                        return obj
+                        return obj;
                     })
-                    selectedProjectFilesRef.current = newArr 
-                    setSelectedProjectFiles(newArr)
+                    selectedProjectFilesRef.current = newArr; 
+                    setSelectedProjectFiles(newArr);
                 }
             }
         });
     }
-
 
     const getBatchByTaskId = (batchList, key, taskId) => {
         return batchList.find(batch => batch[key] === taskId);
@@ -4838,6 +4828,15 @@ function AllProjectList(props) {
         }, 6000);
     }
 
+     /**
+     * This method used to update whole project list fields
+     * @param {*} taskId 
+     * @param {*} percentage 
+     * @param {*} status 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const updateProjectTaskList = (taskId, percentage, status) => {
         const updatedTasks = selectedProjectFilesRef.current.map(task => {
             if (task.id === taskId) {
@@ -4855,12 +4854,10 @@ function AllProjectList(props) {
                     file_translate_done: percentage == 100,
                     isProcessing: percentage !== 100
                 };
-
                 // Set progressLoading based on percentage
                 if (percentage === 100) {
                     // Temporarily set to true, will be set to false after timeout
                     updatedTask.progressLoading = true;
-    
                     // Delay clearing the loader
                     setTimeout(() => {
                         const finalTasks = selectedProjectFilesRef.current.map(t => {
@@ -4879,10 +4876,18 @@ function AllProjectList(props) {
             }
             return task;
         });
-        selectedProjectFilesRef.current = updatedTasks
+        selectedProjectFilesRef.current = updatedTasks;
         setSelectedProjectFiles([...updatedTasks]);
     }
 
+     /**
+     * This method used to get the pooling API to find a task progress data.
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since  08 APR 2025
+     */
     const getTaskTranslationProgress = (endpoint, taskId, projectId) => {
         if (projectId == null || projectId == '')
             projectId = openedProjectId;
@@ -4943,19 +4948,19 @@ function AllProjectList(props) {
     const getTaskTransDownloadStatus = (task_id) => {
         if(projectObject.current?.id === undefined) return;
             if (axiosFileTranslateAbortController) {
-                axiosFileTranslateAbortController.abort()
+                axiosFileTranslateAbortController.abort();
             }
             const controller = new AbortController();
             setAxiosFileTranslateAbortController(controller);
-            let task_list_arr = []
-            let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED")
-            let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
+            let task_list_arr = [];
+            let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED");
+            let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id);
             if(alreadyProcessingTask?.length !== 0){
-                task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+                task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
             }else{
-                task_list_arr = [task_id]
+                task_list_arr = [task_id];
             }
-            fileTranslatingTaskListRef.current = task_list_arr
+            fileTranslatingTaskListRef.current = task_list_arr;
             // create task list to process
             let list = ""
             fileTranslatingTaskListRef.current?.map((each, index) => {
@@ -4972,8 +4977,8 @@ function AllProjectList(props) {
                     }
                     return obj
                 })
-                selectedProjectFilesRef.current = newArr 
-                setSelectedProjectFiles(newArr)
+                selectedProjectFilesRef.current = newArr;
+                setSelectedProjectFiles(newArr);
             }
             let formData = new FormData();
             formData.append("task", task_id);
@@ -5001,8 +5006,8 @@ function AllProjectList(props) {
                             }
                             return obj
                         })
-                        selectedProjectFilesRef.current = newArr 
-                        setSelectedProjectFiles(newArr)
+                        selectedProjectFilesRef.current = newArr; 
+                        setSelectedProjectFiles(newArr);
                     }
                     if(err?.response?.status === 400){
                         if(err?.response?.data?.msg === 'Insufficient Credits'){
@@ -5039,36 +5044,35 @@ function AllProjectList(props) {
         }
 
     const handleBookOpen = (book_id) => {
-        history(`/book-writing?book=${book_id}`, {state: {from: 'list'}})
+        history(`/book-writing?book=${book_id}`, {state: {from: 'list'}});
     }
 
     const handleBookDownload = (bookId) => {
         if(bookId){
-            setMoreEl(false)
-            setOpenedMoreOption(null)
-            getBookDetails(bookId)
+            setMoreEl(false);
+            setOpenedMoreOption(null);
+            getBookDetails(bookId);
         }
     } 
 
     const getBookDetails = (book_id) => {
-        if(book_id === undefined || book_id === null) return
+        if(book_id === undefined || book_id === null) return;
         Config.axios({
             url: `${Config.BASE_URL}/writer/bookcreation/${book_id}/`,
             method: "GET",
             auth: true,
             success: (response) => {
-                let data = response.data
-                bookCreationRef.current = data
+                let data = response.data;
+                bookCreationRef.current = data;
                 setTimeout(() => {
-                    handleDownloadAll()
+                    handleDownloadAll();
                 }, 10);
             },
         });
     } 
 
     const filesDownload = async(html_data, item) => {
-        var summerNoteData = html_data
-
+        var summerNoteData = html_data;        
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -5078,10 +5082,8 @@ function AllProjectList(props) {
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    let c = attribs?.color ? attribs?.color : ''
-                    let s = attribs?.style ? attribs.style : ''
-
-
+                    let c = attribs?.color ? attribs?.color : '';
+                    let s = attribs?.style ? attribs.style : '';
                     return {
                         tagName: 'span',
                         //   attribs: {
@@ -5095,21 +5097,16 @@ function AllProjectList(props) {
                 }
             }
         });
-
         // regex to replace all <p><br /></p>
-        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />')
-        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '')
-
+        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />');
+        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '');
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
-
         // formData.append("name", documentNameRef.current.innerText);
         var myHeaders = new Headers();
         var formdata = new FormData();
-
         formdata.append("html", removedStyleAttribFromImg);
         // formdata.append("html_str", removedStyleAttribFromImg)
-        formdata.append("name", "name")
-        
+        formdata.append("name", "name");
         var requestOptions = {
             method: 'POST',
             body: formdata,
@@ -5119,37 +5116,34 @@ function AllProjectList(props) {
         try{
             let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
             // let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions)
-         
             if (data.status === 200) {
-                let response = await data.blob()
-    
-                let fileObj = new File([response], `${(item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+                let response = await data.blob();
+                let fileObj = new File([response], `${(item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
                 return fileObj;
             }else {
                 console.error('Failed to download file');
                 return null;
             }
         }catch(e) {
-            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
+            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }));
         }
     } 
 
     const handleDownloadAll = () => {
-        allDownloadedFilesArrRef.current = []
-        let arr = []
+        allDownloadedFilesArrRef.current = [];
+        let arr = [];
         bookCreationRef.current?.front_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
         bookCreationRef.current?.body_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
         bookCreationRef.current?.back_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
-        dispatch(addDownloadingFiles({ id: bookCreationRef.current?.id, file_name: bookCreationRef.current?.name, ext: '.docx', status: 1 }))
-
+        dispatch(addDownloadingFiles({ id: bookCreationRef.current?.id, file_name: bookCreationRef.current?.name, ext: '.docx', status: 1 }));
         downloadFilesInOrder(arr).then(() => {
-            mergeFile()
+            mergeFile();
         })
     } 
 
@@ -5168,8 +5162,7 @@ function AllProjectList(props) {
     const mergeFile = async() => {
         let formData = new FormData();
         let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
-        );
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null );
         let token = userCacheData != null ? userCacheData?.token : "";
         allDownloadedFilesArrRef.current?.forEach(each => {
             formData.append("docx_files", each);
@@ -5185,29 +5178,25 @@ function AllProjectList(props) {
         }).then(function (response) {
             //handle success
             const filename = response.headers['content-disposition']?.split('filename*=')[1];
-            let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''))
+            let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''));
             const url = URL.createObjectURL(new Blob([response.data]));
-
             var fileDownload = document.createElement("a");
             document.body.appendChild(fileDownload);
             // fileDownload.href = URL.createObjectURL(response.data);
-            fileDownload.href = url
+            fileDownload.href = url;
             fileDownload.download = Config.unescape(`${bookName}`);
             fileDownload?.click();
             document.body.removeChild(fileDownload);
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: bookCreationRef.current?.id, status: 2 }))
-
+            dispatch(updateDownloadingFile({ id: bookCreationRef.current?.id, status: 2 }));
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
+                dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }));
             }, 8000);
-
-
         }).catch((e) =>{
-            console.log(e)
-            Config.toast('Failed to download file', 'error')
-            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
+            console.log(e);
+            Config.toast('Failed to download file', 'error');
+            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }));
         })
     } 
 
@@ -5502,7 +5491,6 @@ function AllProjectList(props) {
                                                                                                 <KeyboardArrowDownIcon className="proj-list-arrow-down" />
                                                                                         }
                                                                                     </span>
-                                                                                    
                                                                                     {/* {project?.get_project_type === 6 && <span class="empty-box-icon"></span>} */}
                                                                                     <div className="proj-title-list-container">
                                                                                         <div className={openedProjectId === project.id && project?.adaptive_simple &&
@@ -5527,7 +5515,6 @@ function AllProjectList(props) {
                                                                                                 }
     
                                                                                             </span>
-    
                                                                                         </div>
                                                                                         <div className="proj-list-info">
                                                                                             <div className="proj-information">
@@ -5547,7 +5534,6 @@ function AllProjectList(props) {
                                                                                                             </span>}
                                                                                                     </span>
                                                                                                 </Tooltip>
-    
                                                                                                 {/* project.is_proj_analysed is removed from the below condition */}
                                                                                                 {project?.project_analysis?.proj_word_count != null && project?.project_analysis.proj_word_count != 0 ? (
                                                                                                     <div className="position-relative">
@@ -5573,7 +5559,6 @@ function AllProjectList(props) {
                                                                                                         </span>
                                                                                                     </div>
                                                                                                 )}
-    
                                                                                                 {project.assigned && (
                                                                                                     <span className="pl-2 pr-2">
                                                                                                         <img
@@ -5591,7 +5576,6 @@ function AllProjectList(props) {
                                                                                                     (project?.get_project_type === 5) ? t("instant") : (project?.get_project_type === 6) && t("proj_list_cate_design")}
                                                                                                 </span>
                                                                                             </div>
- {/* new updates */}
                                                                                             {openedProjectId === project.id &&
                                                                                                 project?.adaptive_simple &&
                                                                                                 project?.adaptive_file_translate && selectedProjectFiles.map((selectedProjectFile) => (
@@ -5770,12 +5754,10 @@ function AllProjectList(props) {
                                                                                                     Config.userState?.id
                                                                                                     ? "Assigner" : "Editor"
                                                                                             }
-    
                                                                                             // New logic
                                                                                             if (selectedProjectFile?.task_assign_info?.length === 2) {
     
                                                                                             }
-    
                                                                                             if (selectedProjectFile?.task_assign_info?.length === 2) {
                                                                                                 editorAssignmentDetails =
                                                                                                     selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
@@ -5789,10 +5771,8 @@ function AllProjectList(props) {
                                                                                                         ? selectedProjectFile?.task_assign_info[1]?.assigned_by_details
                                                                                                         : selectedProjectFile?.task_assign_info[1]?.assign_to_details;
                                                                                             }
-                                                                                            
                                                                                             let taskAssignStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.task_status
                                                                                             let taskClientStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.client_response
-
                                                                                             selectedFilesData = (
                                                                                                 <div 
                                                                                                     className={
@@ -6420,7 +6400,6 @@ function AllProjectList(props) {
                                                                                                             )}
     
                                                                                                         </div>
-
                                                                                                         <div className={project?.adaptive_simple &&
                                                                                                                 project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             {/*  Need to destructure this following conditional code and set everything optimised properly */}
@@ -9954,6 +9933,7 @@ function AllProjectList(props) {
                     POFilesDetails={POFilesDetails}
                 />
             )}
+
             {showTaskReworkReasonModal && (<Rodal
                 visible={showTaskReworkReasonModal}
                 showCloseButton={false}
@@ -10145,7 +10125,6 @@ function AllProjectList(props) {
                     </div>
                 </div>
             </Rodal>)}
-
 
             {/* Document file delete confirmation modal */}
             {showDeleteFileModal && (<Rodal
