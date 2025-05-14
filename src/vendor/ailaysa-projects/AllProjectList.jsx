@@ -4818,10 +4818,26 @@ function AllProjectList(props) {
         });
     }
 
+    /**
+     * This method used to get the pooling API to find a task progress data.
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since  08 APR 2025
+     */
     const getBatchByTaskId = (batchList, key, taskId) => {
         return batchList.find(batch => batch[key] === taskId);
     };
 
+     /**
+     * This method used to trigger the polling API to know the file translation progress data.
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const getProgressData = (endpoint, taskId, projectId) => {
         setTimeout(() => {
             getTaskTranslationProgress(endpoint, taskId, projectId);
