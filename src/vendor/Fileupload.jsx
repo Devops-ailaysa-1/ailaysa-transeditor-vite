@@ -182,7 +182,6 @@ function Fileupload(props) {
     const [showLSPAssignManage, setShowLSPAssignManage] = useState(false);
     const [assignStep, setAssignStep] = useState(null);
     const [createdProjects, setCreatedProjects] = useState([]);
-    console.log(createdProjects, "translatecreatedProjects");
     const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
     const [fileUrlError, setFileUrlError] = useState("");
