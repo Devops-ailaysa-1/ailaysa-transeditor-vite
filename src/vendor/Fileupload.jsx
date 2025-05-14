@@ -138,16 +138,15 @@ function Fileupload(props) {
         setTargetLanguageOptions,
         targetLanguageOptionsRef,
         mainContainerRef
-    } = props
+    } = props;
     const location = useLocation();
     const { t } = useTranslation();
     const history = useNavigate();
-    const dispatch = useDispatch()
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
-    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
-
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
+    const dispatch = useDispatch();
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const languageOptionsList = useSelector((state) => state.languageOptionsList.value);
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
 
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -169,7 +168,7 @@ function Fileupload(props) {
     const [contentTypeOptions, setContentTypeOptions] = useState(null);
     const [projectName, setProjectName] = useState("");
     const [projectType, setProjectType] = useState(null);
-    const [projectTypeOptions, setProjectTypeOptions] = useState([])
+    const [projectTypeOptions, setProjectTypeOptions] = useState([]);
     const [mtpeEngines, setMtpeEngines] = useState([]);
     const [mtpeEngineOptions, setMtpeEngineOptions] = useState([]);
     const [selectedMTEngine, setSelectedMTEngine] = useState({ value: 1, label: "Google" });
@@ -182,10 +181,7 @@ function Fileupload(props) {
     const [showIndividualAssignManage, setShowIndividualAssignManage] = useState(false);
     const [showLSPAssignManage, setShowLSPAssignManage] = useState(false);
     const [assignStep, setAssignStep] = useState(null);
-
-    // const [preTranslate, setPreTranslate] = useState(false)
     const [createdProjects, setCreatedProjects] = useState([]);
-    console.log(createdProjects, "translatecreatedProjects")
     const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
     const [fileUrlError, setFileUrlError] = useState("");
@@ -211,14 +207,6 @@ function Fileupload(props) {
     const [fileUploadTabActive, setFileUploadTabActive] = useState(1);
     const [selectedProjectFilesCount, setSelectedProjectFilesCount] = useState(1);
     const [selectedProjectFiles, setSelectedProjectFiles] = useState([]);
-
-    console.log("Selected File:", selectedProjectFiles[0]?.source_language);
-    console.log("Selected File:2",
-        targetLanguageOptionsRef.current?.find(
-            each => each.id === 37
-        )
-    );
-
     const [machineLangTranslationChange, setmachineLangTranslationChange] = useState(null);
     const [editProjectId, setEditProjectId] = useState(null);
     const [sourceLanguageDisable, setSourceLanguageDisable] = useState(false);
@@ -279,30 +267,27 @@ function Fileupload(props) {
     const [isProductTourSeen, setIsProductTourSeen] = useState(true);
     const [postEditStep, setPostEditStep] = useState(true);
     const [proofReadStep, setProofReadStep] = useState(false);
-    const [selectedProjectFiledID, setselectedProjectFiledID] = useState(null)
+    const [selectedProjectFiledID, setselectedProjectFiledID] = useState(null);
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
-    const [poPDFUrl, setPoPDFUrl] = useState(null)
-    const [particularClickedTask, setParticularClickedTask] = useState(null)
-    const [stepToAccept, setStepToAccept] = useState(null)
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
+    const [poPDFUrl, setPoPDFUrl] = useState(null);
+    const [particularClickedTask, setParticularClickedTask] = useState(null);
+    const [stepToAccept, setStepToAccept] = useState(null);
     const searchAreaRef = useRef(null);
     const [selectFileRow, setSelectFileRow] = useState(false);
     const [availCredits, setAvailCredits] = useState(false);
-    const [projectFilterType, setprojectFilterType] = useState(null)
-    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null)
-
+    const [projectFilterType, setprojectFilterType] = useState(null);
+    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null);
     const [documentSubmitParameters, setDocumentSubmitParameters] = useState({
         taskid: null,
         step: null,
         confirm: null,
         total: null,
         isTaskReassigned: false
-    })
-    const [showSubmitDocumentAlertModal, setShowSubmitDocumentAlertModal] = useState(false)
-
+    });
+    const [showSubmitDocumentAlertModal, setShowSubmitDocumentAlertModal] = useState(false);
     const [showElement, setShowElement] = useState(true);
-
     // Glossary project states
     const [primaryGlossarySourceName, setPrimaryGlossarySourceName] = useState("");
     const [glossaryCopyrightOwner, setGlossaryCopyrightOwner] = useState("");
@@ -312,99 +297,76 @@ function Fileupload(props) {
     const [selectedUsagePermission, setSelectedUsagePermission] = useState({ value: 1, label: t("Private") });
     const [glossaryProjectCreationResponse, setGlossaryProjectCreationResponse] = useState(null);
     const [selectedGlossaryProject, setSelectedGlossaryProject] = useState(null)
-    const [orderByValue, setOrderByValue] = useState(null)
+    const [orderByValue, setOrderByValue] = useState(null);
     const [sortEl, setSortEl] = useState(null);
     const [moreEl, setMoreEl] = useState(null);
     const [openEl, setOpenEl] = useState(null);
-    const [subDownloadOption, setSubDownloadOption] = useState(null)
+    const [subDownloadOption, setSubDownloadOption] = useState(null);
     const [openedMoreOption, setOpenedMoreOption] = useState(null);
     const [showOpenAs, setShowOpenAs] = useState(null);
     const [orderBySelectedValue, setOrderBySelectedValue] = useState(2);
     const sortOpen = Boolean(sortEl);
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-
-    const [showProcessingModal, setShowProcessingModal] = useState(false)
-    const [editInstantProjectModal, setEditInstantProjectModal] = useState(false)
-    const [textToSpeechConvert, setTextToSpeechConvert] = useState(false)
-    const [isTranscribing, setIsTranscribing] = useState(false)
-    const [partialPretranslate, setPartialPretranslate] = useState(false)
-    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
-    const [unassignTaskDeleteAlert, setUnassignTaskDeleteAlert] = useState(false)
-
-    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null)
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const [showProcessingModal, setShowProcessingModal] = useState(false);
+    const [editInstantProjectModal, setEditInstantProjectModal] = useState(false);
+    const [textToSpeechConvert, setTextToSpeechConvert] = useState(false);
+    const [isTranscribing, setIsTranscribing] = useState(false);
+    const [partialPretranslate, setPartialPretranslate] = useState(false);
+    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false);
+    const [unassignTaskDeleteAlert, setUnassignTaskDeleteAlert] = useState(false);
+    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
     const [taskActionOpen, setTaskActionOpen] = useState(false);
-    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null)
-
-    const [expressProjectName, setExpressProjectName] = useState('')
-
+    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null);
+    const [expressProjectName, setExpressProjectName] = useState('');
     // project analysis states
-    const [payableRatesAPI, setPayableRatesAPI] = useState(null)
-    const [payablRateValueAPI, setPayablRateValueAPI] = useState(null)
-    const [projectAnalysisedData, setProjectAnalysisedData] = useState(null)
-    const [projectAnalysisUnitSwitch, setProjectAnalysisUnitSwitch] = useState(false)
-
-
+    const [payableRatesAPI, setPayableRatesAPI] = useState(null);
+    const [payablRateValueAPI, setPayablRateValueAPI] = useState(null);
+    const [projectAnalysisedData, setProjectAnalysisedData] = useState(null);
+    const [projectAnalysisUnitSwitch, setProjectAnalysisUnitSwitch] = useState(false);
     const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
     const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState([]);
-    const [hasTeam, setHasTeam] = useState(false)
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
+    const [hasTeam, setHasTeam] = useState(false);
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
     const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
-    const [isExpressUpdating, setIsExpressUpdating] = useState(false)
-    const [showExpressDeleteModal, setShowExpressDeleteModal] = useState(false) // state to show confirmation modal for express project
-
-    const [preTranslateAllTask, setPreTranslateAllTask] = useState([])
-    const [createdProjectsList, setCreatedProjectsList] = useState([])
-
-    const [isPdfTranslating, setIsPdfTranslating] = useState(false)
-
-    const [transcriptionTaskList, setTranscriptionTaskList] = useState([])
-
-    const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([])
-
-    const [isDownloading, setIsDownloading] = useState(false)
-    const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false)
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-    const [confirmedNavigation, setConfirmedNavigation] = useState(false)
-    const [lastLocation, setLastLocation] = useState(null)
-    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false)
-
-    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false)
-    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('')
-
+    const [isExpressUpdating, setIsExpressUpdating] = useState(false);
+    const [showExpressDeleteModal, setShowExpressDeleteModal] = useState(false); // state to show confirmation modal for express project
+    const [preTranslateAllTask, setPreTranslateAllTask] = useState([]);
+    const [createdProjectsList, setCreatedProjectsList] = useState([]);
+    const [isPdfTranslating, setIsPdfTranslating] = useState(false);
+    const [transcriptionTaskList, setTranscriptionTaskList] = useState([]);
+    const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([]);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false);
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
+    const [confirmedNavigation, setConfirmedNavigation] = useState(false);
+    const [lastLocation, setLastLocation] = useState(null);
+    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false);
+    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false);
+    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('');
     // states for open as button
     const [downloadOpen, setDownloadOpen] = useState(false);
-
-    // const [anchorEl, setAnchorEl] = useState(null); // This is the common anchor element for all poppers
     const [popperAnchorEl, setPopperAnchorEl] = useState({}); // Separate anchor element for each popper
-    const [showPOFilesModal, setShowPOFilesModal] = useState(false)
-    const [POFilesDetails, setPOFilesDetails] = useState(null)
-
-    const [isReworkSending, setIsReworkSending] = useState(false)
-    const [isDeadlineExtendReqSending, setIsDeadlineExtendReqSending] = useState(false)
-
-    const [showDeadlineCrossedModal, setShowDeadlineCrossedModal] = useState(false)
-
-    const [vendorChangeRequestReason, setVendorChangeRequestReason] = useState("")
-    const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false)
-    const [isApproving, setIsApproving] = useState(false)
-
+    const [showPOFilesModal, setShowPOFilesModal] = useState(false);
+    const [POFilesDetails, setPOFilesDetails] = useState(null);
+    const [isReworkSending, setIsReworkSending] = useState(false);
+    const [isDeadlineExtendReqSending, setIsDeadlineExtendReqSending] = useState(false);
+    const [showDeadlineCrossedModal, setShowDeadlineCrossedModal] = useState(false);
+    const [vendorChangeRequestReason, setVendorChangeRequestReason] = useState("");
+    const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false);
+    const [isApproving, setIsApproving] = useState(false);
     const [assetsSelectedTypeFilter, setAssetsSelectedTypeFilter] = useState("glossary");
-
-    const [isTaskDeleting, setIsTaskDeleting] = useState(false)
-    const [isExpressProjectDeleting, setIsExpressProjectDeleting] = useState(false)
-
+    const [isTaskDeleting, setIsTaskDeleting] = useState(false);
+    const [isExpressProjectDeleting, setIsExpressProjectDeleting] = useState(false);
     const [isDesignDeleting, setIsDesignDeleting] = useState(false);
     const [axiosVendorDashboardAbortController, setAxiosVendorDashboardAbortController] = useState(null);
     const [axiosFileTranslateAbortController, setAxiosFileTranslateAbortController] = useState(null);
     const [showFileErrorModal, setShowFileErrorModal] = useState(false);
-    const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false)
+    const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false);
     const downloadAnchorRef = useRef(null);
-    const projectIdForPOModal = useRef(null)
-    const projectTypeForPOModal = useRef(null)
-
-    const clientResponseDataRef = useRef(null)
-    const projectListAbortControllerRef = useRef(null)
-
+    const projectIdForPOModal = useRef(null);
+    const projectTypeForPOModal = useRef(null);
+    const clientResponseDataRef = useRef(null);
+    const projectListAbortControllerRef = useRef(null);
     /* State constants - end */
 
     /* Ref constants - start */
@@ -421,14 +383,8 @@ function Fileupload(props) {
     const deletedJobIds = useRef([]);
     const deletedSubjectIds = useRef([]);
     const deletedContentIds = useRef([]);
-    const projectTypeRef = useRef(null)
-    const assignedMemberCardRef = useRef(null)
-
-    // const allowedFileLength = useRef(10)
-    // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`)
-    // const allowedTargetLanguageLength = useRef(20)
-    // const allowedFileSize = useRef(100) //In MB
-    // const fileSizeErrMsg = useRef(`Exceeds the file(s) size limit of ${allowedFileSize.current} MB`)
+    const projectTypeRef = useRef(null);
+    const assignedMemberCardRef = useRef(null);
     const allowedSingleFileSize = useRef(100); // in MB
     const singleFileSizeError = useRef(t("file_size_exceeds"));
     const projectIdToSelect = useRef(null);
@@ -437,61 +393,46 @@ function Fileupload(props) {
     const typing = useRef(false);
     const typingTimeout = useRef(0);
     const projectEditable = useRef(false);
-
-    const downloadref = useRef(null)
-    const downloadedFileName = useRef(null)
+    const downloadref = useRef(null);
+    const downloadedFileName = useRef(null);
     const searchTermCloseOutside = useRef();
-    const didMountRef = useRef(0)
-
-    const searchTermRef = useRef(null)
-    const openFileId = useRef(null)
-    const projectAnalysisTempProjectId = useRef(null)
-    const projectAnalysisApiCounter = useRef(0)
-    const isPdfConversionPostCalled = useRef(false)
+    const didMountRef = useRef(0);
+    const searchTermRef = useRef(null);
+    const openFileId = useRef(null);
+    const projectAnalysisTempProjectId = useRef(null);
+    const projectAnalysisApiCounter = useRef(0);
+    const isPdfConversionPostCalled = useRef(false);
     const taskActionAnchorRef = useRef(null);
-    const taskDeleteParam = useRef(null)
-    const expressProjectIdRef = useRef(null)
-    const targetLangDivRef = useRef(null)
-    const isProjectPreTranslate = useRef(false)
-    const createdProjectsRef = useRef([])
-    const selectedProjectFilesRef = useRef([])
-    const myTimeoutFunc = useRef(null)
-    const selectedProjectIdRef = useRef(null)
-    const projectObject = useRef(null)
-    const selectedDesignerProject = useRef(null)
-
-    const isProjectTransciptionRef = useRef(false)
-
-    const analysisRunningProjectListRef = useRef(null)
-    const wordCountAnalysisTimeoutRef = useRef(null)
-    const wordCountAnalysisTriggerRef = useRef(false)
-
-    const mtRawDownloadRetryLimit = useRef(2)
-    const mtRawDownloadRetryCounter = useRef(0)
-
-    const downloadingFilesList = useRef([])
-
-    const mtRawCeleryTimeOutRef = useRef(null)
-
-    const downloadDiffFilesParamRef = useRef(null)
-    const docCreditCheckAlertRef = useRef(null)
-
+    const taskDeleteParam = useRef(null);
+    const expressProjectIdRef = useRef(null);
+    const targetLangDivRef = useRef(null);
+    const isProjectPreTranslate = useRef(false);
+    const createdProjectsRef = useRef([]);
+    const selectedProjectFilesRef = useRef([]);
+    const myTimeoutFunc = useRef(null);
+    const selectedProjectIdRef = useRef(null);
+    const projectObject = useRef(null);
+    const selectedDesignerProject = useRef(null);
+    const isProjectTransciptionRef = useRef(false);
+    const analysisRunningProjectListRef = useRef(null);
+    const wordCountAnalysisTimeoutRef = useRef(null);
+    const wordCountAnalysisTriggerRef = useRef(false);
+    const mtRawDownloadRetryLimit = useRef(2);
+    const mtRawDownloadRetryCounter = useRef(0);
+    const downloadingFilesList = useRef([]);
+    const mtRawCeleryTimeOutRef = useRef(null);
+    const downloadDiffFilesParamRef = useRef(null);
+    const docCreditCheckAlertRef = useRef(null);
     // userefs for collaborate section (assign & manage)
-    const selectedFileRow = useRef(null)
-
-    const stepOptionsRef = useRef(null)
-    const isTaskReassigned = useRef(false)
-
-    const taskDetailsForDeadlineCrossedTask = useRef(null)
-    const fileTranslatingTaskListRef = useRef([])
-
-    let paginationTimeOut = null
-
-
+    const selectedFileRow = useRef(null);
+    const stepOptionsRef = useRef(null);
+    const isTaskReassigned = useRef(false);
+    const taskDetailsForDeadlineCrossedTask = useRef(null);
+    const fileTranslatingTaskListRef = useRef([]);
     /* Ref constants - end */
 
+    let paginationTimeOut = null
     var id = window.setTimeout(function () { }, 0);
-
     const open = Boolean(anchorEl); //Assigned task open
 
     const CircularProgressWithLabel = (props) => {
@@ -528,9 +469,8 @@ function Fileupload(props) {
         let timeOut = setTimeout(function () {
             setShowElement(false);
         }, 10000);
-
         return () => {
-            clearTimeout(timeOut)
+            clearTimeout(timeOut);
         }
     }, []);
 
@@ -540,9 +480,7 @@ function Fileupload(props) {
                 setFileListSearchEnlarge(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -554,9 +492,7 @@ function Fileupload(props) {
                 setFileListSearchEnlarge(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -568,7 +504,6 @@ function Fileupload(props) {
         // set browser tab title as "Projects"
     }, []);
 
-
     /* Check for clicing outside of the dropdown */
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -576,9 +511,7 @@ function Fileupload(props) {
                 setMoreEl(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -591,9 +524,7 @@ function Fileupload(props) {
                 setOpenEl(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -606,9 +537,7 @@ function Fileupload(props) {
                 setShowAssignMemberInfobox(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -627,27 +556,24 @@ function Fileupload(props) {
             bid_info: task.bid_job_detail_info,
             task_data: task,
             project_data: project
-        }
-
-        setAssignStep(selectedStep)
-        setShowIndividualAssignManage(true)
+        };
+        setAssignStep(selectedStep);
+        setShowIndividualAssignManage(true);
     }
 
     const handleShowLSPAssignManage = (e, project) => {
         e.stopPropagation();
-        // console.log(assign_enable)
         selectedFileRow.current = {
             project: project?.id,
             steps: project?.steps,
             assign_enable: project?.assign_enable,
             project_data: project
-        }
-        setShowLSPAssignManage(true)
+        };
+        setShowLSPAssignManage(true);
     }
 
     /* Edit task assignment by id */
     const editAssignedTask = (e, project, task, jobId, stepId) => {
-        // console.log(taskId)
         // e.stopPropagation()
         selectedFileRow.current = {
             task: task.id,
@@ -656,9 +582,9 @@ function Fileupload(props) {
             assign_enable: project?.assign_enable,
             task_data: task,
             project_data: project
-        }
-        setAssignStep(stepId)
-        setShowIndividualAssignManage(true)
+        };
+        setAssignStep(stepId);
+        setShowIndividualAssignManage(true);
         setAssignedTaskId(task.id);
         // props.history(`/collaborate?project=${projectId}&task=${taskId}&job=${jobId}&_edit=${true}&_step=${stepId}`);
         // setAnchorEl(null);
@@ -689,12 +615,12 @@ function Fileupload(props) {
 
     const handleSubDownloadOption = (e, id) => {
         e.stopPropagation();
-        setSubDownloadOption(true)
+        setSubDownloadOption(true);
     }
 
     const handleSubDownloadOptioHide = (e, id) => {
         e.stopPropagation();
-        setSubDownloadOption(false)
+        setSubDownloadOption(false);
     }
 
     const moreOptions = [
@@ -714,7 +640,7 @@ function Fileupload(props) {
             icon: <ReceiptLongOutlinedIcon />,
             label: t("view_po"),
         }
-    ]
+    ];
 
     const moreOptionsForPDF = [
         {
@@ -729,10 +655,9 @@ function Fileupload(props) {
             label: t("delete"),
         },
 
-    ]
+    ];
 
     // new changes
-
     const subDownloadOptions = [
         {
             id: 1,
@@ -764,7 +689,7 @@ function Fileupload(props) {
             value: 'XLIFF',
             label: "XLIFF",
         },
-    ]
+    ];
 
     const moreOptionsForDoc = [
         {
@@ -778,7 +703,7 @@ function Fileupload(props) {
             label: t("delete"),
         },
 
-    ]
+    ];
 
     const moreOptionsForDesigner = [
         {
@@ -801,11 +726,11 @@ function Fileupload(props) {
             icon: <ReceiptLongOutlinedIcon className="receipt-icon" />,
             label: t("view_po"),
         }
-    ]
+    ];
 
     const handleSelectedOrderItem = (selected_option) => {
-        setOrderBySelectedValue(selected_option)
-        orderBy(selected_option.value)
+        setOrderBySelectedValue(selected_option);
+        orderBy(selected_option.value);
         setSortEl(null);
     };
 
@@ -815,13 +740,13 @@ function Fileupload(props) {
 
 
     const openAddOn = () => {
-        window.open(Config.USER_PORTAL_HOST + "/add-ons")
-        setAvailCredits(false)
+        window.open(Config.USER_PORTAL_HOST + "/add-ons");
+        setAvailCredits(false);
     }
 
     const openSubcription = () => {
-        window.open(Config.USER_PORTAL_HOST + "/subscription-plans")
-        setAvailCredits(false)
+        window.open(Config.USER_PORTAL_HOST + "/subscription-plans");
+        setAvailCredits(false);
     }
 
 
@@ -832,7 +757,6 @@ function Fileupload(props) {
     }
 
     const hideAssignManageModal = () => setShowAssignManageModal(false);
-
     const hideVersionControlModal = () => setShowVersionControlModal(false);
 
     const modaloptions = {
@@ -910,31 +834,30 @@ function Fileupload(props) {
         { value: 'text_to_speech', label: t("ai_voice_proj") },
         { value: 'express', label: t("instant_trans_proj") },
         { value: 'assigned', label: t("assign_proj") },
-    ]
+    ];
 
     const orderByOptions = [
         { value: 'project_name', label: t("a_to_z") },
         { value: '-project_name', label: t("z_to_a") },
         { value: '-id', label: t("most_recent") },
         { value: 'id', label: t("least_recent") },
-    ]
+    ];
 
     const orderByOptionsForAssets = [
         { value: 'project_name', label: t("a_to_z") },
         { value: '-project_name', label: t("z_to_a") },
         { value: '-created_at', label: t("most_recent") },
         { value: 'created_at', label: t("least_recent") },
-    ]
+    ];
 
     const openAsOption = [
         { value: 'editor', label: t('editor') },
         { value: 'reviewer', label: t('reviewer') }
-    ]
+    ];
 
     const handleSelectOrderBy = (selected) => {
-        orderBy(selected)
+        orderBy(selected);
     }
-
 
     /* Show / Hide the Github, Gitlab file upload */
     const handleShowVersionControlModal = (image, platform) => {
@@ -952,27 +875,21 @@ function Fileupload(props) {
                 setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription);
                 setAddonCredit(response?.data?.credits_left?.addon);
                 setSubscriptionCredit(response?.data?.credits_left?.subscription);
-                // console.log(response?.data?.credits_left?.total_buyed)
-                // console.log(progressPercentage)
                 if (response?.data?.credits_left?.total_buyed === 0) {
-                    setProgressPercentage(0)
+                    setProgressPercentage(0);
                 } else {
-                    setProgressPercentage(
-                        (((response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription) / response?.data?.credits_left?.total_buyed) * 100).toFixed(2)
-                    )
+                    setProgressPercentage((((response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription) / response?.data?.credits_left?.total_buyed) * 100).toFixed(2));
                 }
-
             },
         });
     };
-
 
     const getSteps = () => {
         Config.axios({
             url: `${Config.BASE_URL}/workspace/steps/`,
             auth: true,
             success: (response) => {
-                stepOptionsRef.current = response.data
+                stepOptionsRef.current = response.data;
                 // setStep(response.data);
             },
         });
@@ -1005,18 +922,17 @@ function Fileupload(props) {
     };
 
     const showSettingsModal = (e, project_id) => {
-        e.stopPropagation()
+        e.stopPropagation();
         setSelectedProjectId(project_id);
         setshowSettings(true);
         // document.querySelector('.padding-correction').style.overflow = 'hidden';
     }
 
-
     /* 
         - Get the analysis data if it's not counted already
     */
     const showWordCountModal = (e = null, projectId = 0, isProjectAnalyzed = true) => {
-        e.stopPropagation()
+        e.stopPropagation();
         if (projectId && !isProjectAnalyzed) {
             setShowWordCountLoader(true);
 
@@ -1039,7 +955,6 @@ function Fileupload(props) {
     };
 
     const hideWordCountModal = () => setshowWordCount(false);
-
 
     /* Set tab change if clicked only other tabs */
     const activeToggle = (tab) => {
@@ -1127,8 +1042,6 @@ function Fileupload(props) {
         return true
     } */
 
-
-
     /* Switch to file upload view */
     const switchFileUpload = (e, value) => {
         setShowFileUpload(value);
@@ -1183,26 +1096,25 @@ function Fileupload(props) {
     /* Handling source language selection */
     const handleSourceLangClick = (value, name, e) => {
         setshowSrcLangModal(false);
-        setSearchInput('')
+        setSearchInput('');
     };
 
     /* Handling target language selection */
     const handleTargetLangClick = (value, e) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
-            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected");
             targetLanguageTemp = Config.removeItemFromArray(
                 targetLanguageTemp,
                 value
             );
         } else {
-            e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected");
             targetLanguageTemp.push(value);
         }
         setTargetLanguage([...new Set(targetLanguageTemp)]);
-        setSearchInput('')
-        setOnFocusWrap(false)
-
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     useEffect(() => {
@@ -1212,12 +1124,12 @@ function Fileupload(props) {
 
     useEffect(() => {
         if (targetLanguage) {
-            let list = ""
+            let list = "";
             targetLanguage?.map((each, index) => {
                 list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
                     }`;
             });
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
     }, [targetLanguage, targetLanguageOptionsRef.current])
 
@@ -1233,7 +1145,6 @@ function Fileupload(props) {
                 });
             }
         });
-        // console.log(a)
         let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
         setTargetLangListToRemove(targetLangToRemove);
     }, [targetLanguage]);
@@ -1245,16 +1156,16 @@ function Fileupload(props) {
         // let url = `/file-upload?page=1&order_by=${orderParam}`;
         // if (filterParam != null) url += `&filter=${filterParam}`;
         // props.history(url);
-        projectSearchFunctionality('clear-search')
+        projectSearchFunctionality('clear-search');
         setFileListSearchEnlarge(false);
-        setIsSearchTermDelete(true)
+        setIsSearchTermDelete(true);
     }
 
     useEffect(() => {
         if (projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
-            projectSearchFunctionality('clear-search')
+            projectSearchFunctionality('clear-search');
         } else if (projectSearchTerm == "" && searchTermRef.current !== "" && searchTermRef.current !== null) {
-            projectSearchFunctionality('clear-search')
+            projectSearchFunctionality('clear-search');
         }
     }, [projectSearchTerm])
 
@@ -1269,7 +1180,6 @@ function Fileupload(props) {
     /* Show the pagination content a the bottom */
     useEffect(() => {
         if (didMount) paginationContentFunction(currentPage);
-
         return () => {
             if (paginationTimeOut) clearTimeout(paginationTimeOut);
         }
@@ -1277,25 +1187,24 @@ function Fileupload(props) {
 
     const SearchTermFilterEnter = (e) => {
         if (e.which === 13 && projectSearchTerm == "") {
-            setFileListSearchEnlarge(false)
-            e.target.blur()
+            setFileListSearchEnlarge(false);
+            e.target.blur();
         } else if (e.which === 13) {
-            projectSearchFunctionality()
-
-            setFileListSearchEnlarge(false)
-            searchTermRef.current = projectSearchTerm
-            e.target.blur()
+            projectSearchFunctionality();
+            setFileListSearchEnlarge(false);
+            searchTermRef.current = projectSearchTerm;
+            e.target.blur();
         }
     }
 
     const handleSearchDropDownClick = (e) => {
-        projectSearchFunctionality()
+        projectSearchFunctionality();
     }
 
     const projectSearchFunctionality = (param) => {
-        let orderby = URL_SEARCH_PARAMS.get("order_by")
-        let filter = URL_SEARCH_PARAMS.get("filter")
-        let url = ''
+        let orderby = URL_SEARCH_PARAMS.get("order_by");
+        let filter = URL_SEARCH_PARAMS.get("filter");
+        let url = '';
         if (activeProjTab === 3) {
             url = `/translations?page=1`;
         } else if (activeProjTab === 4) {
@@ -1307,7 +1216,6 @@ function Fileupload(props) {
         } else if (activeProjTab === 9) {
             url = `/designs?page=1`;
         }
-
         if (orderby != null) url += `&order_by=${orderby}`;
         if (filter != null) url += `&filter=${filter}`;
         let typeParam = URL_SEARCH_PARAMS.get("type")
@@ -1315,7 +1223,7 @@ function Fileupload(props) {
         if (param !== 'clear-search') {
             if (projectSearchTerm != null) url += `&search=${projectSearchTerm}`;
         } else if (param === 'clear-search') {
-            setIsSearchTermDelete(true)
+            setIsSearchTermDelete(true);
         }
         history(url);
     }
@@ -1323,43 +1231,37 @@ function Fileupload(props) {
     /* Go to the top of the page when move to another pages */
     useEffect(() => {
         const controller = new AbortController();
-
         let pageParam = URL_SEARCH_PARAMS.get("page")
         if (pageParam !== null && pageParam !== undefined) {
             listProjects(controller);
         }
-        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
-
+        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("page")]);
 
     /* Go to the top of the page when ordering */
     useEffect(() => {
         const controller = new AbortController();
-
-        let order = URL_SEARCH_PARAMS.get("order_by")
+        let order = URL_SEARCH_PARAMS.get("order_by");
         if (order !== null && order !== undefined) {
-            setOrderBySelectedValue(activeProjTab !== 6 ? orderByOptions?.find(each => each?.value == order) : orderByOptionsForAssets?.find(each => each?.value == order))
+            setOrderBySelectedValue(activeProjTab !== 6 ? orderByOptions?.find(each => each?.value == order) : orderByOptionsForAssets?.find(each => each?.value == order));
             listProjects(controller);
         }
-
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("order_by")]);
 
     useEffect(() => {
-        let filterParam = URL_SEARCH_PARAMS.get("filter")
+        let filterParam = URL_SEARCH_PARAMS.get("filter");
         if (filterParam !== null && filterParam !== undefined) {
-            // console.log('from filter');
-            let filtered = projectTypes?.find(each => each?.value == filterParam)
-            // console.log(filtered)
+            let filtered = projectTypes?.find(each => each?.value == filterParam);
             setprojectFilterType({
                 value: filtered?.value,
                 label: filtered?.label?.charAt(0)?.toUpperCase() + filtered?.label?.slice(1)
-            })
+            });
         }
         // fileUploadTop.current.scrollIntoView(
         //     {
@@ -1372,64 +1274,59 @@ function Fileupload(props) {
 
     useEffect(() => {
         const controller = new AbortController();
-
-        let searchParam = URL_SEARCH_PARAMS.get("search")
+        let searchParam = URL_SEARCH_PARAMS.get("search");
         if (searchParam !== null && searchParam !== undefined) {
-            setProjectSearchTerm(searchParam)
+            setProjectSearchTerm(searchParam);
             listProjects(controller);
         } else if (isSearchTermDelete) {
             listProjects(controller);
         }
-
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("search"), isSearchTermDelete]);
 
     useEffect(() => {
-        let proceedAssignParam = URL_SEARCH_PARAMS.get("proceed-assgin")
-        let projectIdParam = URL_SEARCH_PARAMS.get("project")
+        let proceedAssignParam = URL_SEARCH_PARAMS.get("proceed-assgin");
+        let projectIdParam = URL_SEARCH_PARAMS.get("project");
         if (proceedAssignParam !== null && proceedAssignParam !== undefined && projectIdParam && createdProjectsList?.length !== 0) {
-            let assignIcon = document.querySelector(`#project-assigni-icon-${projectIdParam}`)
-            console.log(assignIcon);
-            assignIcon?.click()
-
+            let assignIcon = document.querySelector(`#project-assigni-icon-${projectIdParam}`);
+            assignIcon?.click();
         }
     }, [URL_SEARCH_PARAMS.get("proceed-assgin"), createdProjectsList]);
 
 
     // automatically open accordian based on the project ID  
     useEffect(() => {
-        let id = URL_SEARCH_PARAMS.get("open-project")
+        let id = URL_SEARCH_PARAMS.get("open-project");
         if (id !== null && createdProjectsList?.length !== 0) {
             if (!createdProjectsList?.find(each => each?.id == id)) return;
-            let selectedRow = document.querySelector(`div[data-key='${id}']`)
+            let selectedRow = document.querySelector(`div[data-key='${id}']`);
             selectedRow?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',
             });
-            setSelectFileRow(true)
-            selectProjectById(id)
+            setSelectFileRow(true);
+            selectProjectById(id);
         }
     }, [createdProjectsList, URL_SEARCH_PARAMS.get("open-project")]);
 
     useEffect(() => {
         const controller = new AbortController();
-        let typeParam = URL_SEARCH_PARAMS.get("type")
+        let typeParam = URL_SEARCH_PARAMS.get("type");
         if (typeParam !== null && typeParam !== undefined) {
-            setAssetsSelectedTypeFilter(typeParam)
-            listProjects(controller)
+            setAssetsSelectedTypeFilter(typeParam);
+            listProjects(controller);
         }
-
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("type")]);
 
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        clearTimeout(myTimeoutFunc.current)
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        clearTimeout(myTimeoutFunc.current);
         let url = ''
         if (activeProjTab === 3) {
             url = `/translations?page=${page}`;
@@ -1442,8 +1339,7 @@ function Fileupload(props) {
         } else if (activeProjTab === 9) {
             url = `/designs?page=${page}`;
         }
-
-        let queryParam = new URLSearchParams(window.location.search)
+        let queryParam = new URLSearchParams(window.location.search);
         let orderParam = queryParam.get("order_by");
         if (orderParam != null) url += `&order_by=${orderParam}`;
         let projectIdParam = queryParam.get("open-project");
@@ -1459,9 +1355,9 @@ function Fileupload(props) {
 
     /* Set order by value and redirect */
     const orderBy = (orderFieldTemp) => {
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        let page = 1
-        let url = ''
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        let page = 1;
+        let url = '';
         if (activeProjTab === 3) {
             url = `/translations?page=${page}`;
         } else if (activeProjTab === 4) {
@@ -1474,7 +1370,6 @@ function Fileupload(props) {
             url = `/designs?page=${page}`;
         }
         if (orderFieldTemp != null) url += `&order_by=${orderFieldTemp}`;
-
         let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
         if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
         let filter = URL_SEARCH_PARAMS.get("filter");
@@ -1488,14 +1383,13 @@ function Fileupload(props) {
 
     // handle project type filter
     const handleProjectType = (selected) => {
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        let page = URL_SEARCH_PARAMS.get("page")
-        let orderby = URL_SEARCH_PARAMS.get("order_by")
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        let page = URL_SEARCH_PARAMS.get("page");
+        let orderby = URL_SEARCH_PARAMS.get("order_by");
         let searchParam = URL_SEARCH_PARAMS.get("search");
-        let url = ''
-        // console.log(selected);
+        let url = '';
         setprojectFilterType(selected);
-        projectTypeRef.current = selected
+        projectTypeRef.current = selected;
         if (projectFilterType?.value != selected?.value) {
             url = `/file-upload?page=1${orderby ? `&order_by=${orderby}` : ''}`;
             if (selected?.value != null) url += `&filter=${selected?.value}`;
@@ -1507,13 +1401,11 @@ function Fileupload(props) {
         history(url);
     };
 
-
     /* Lsiting already created projects */
     const listProjects = () => {
         setFileListSearchEnlarge(false);
         setShowListingLoader(true);
-        setCreatedProjects([])
-
+        setCreatedProjects([]);
         // setprojectFilterType(null)
         /* Page param set/get - start */
         let page = 1;
@@ -1522,7 +1414,6 @@ function Fileupload(props) {
             setCurrentPage(pageParam);
             page = pageParam;
         } else setCurrentPage(pageParam);
-
         /* Page param set/get - start */
         /* ordering param set/get - start */
         // let orderFieldTemp = "";
@@ -1531,28 +1422,23 @@ function Fileupload(props) {
         // orderParam;
         let filterParam = URL_SEARCH_PARAMS.get("filter");
         let searchParam = URL_SEARCH_PARAMS.get("search");
-        let typeParam = URL_SEARCH_PARAMS.get("type") ? URL_SEARCH_PARAMS.get("type") : 'glossary'
-
+        let typeParam = URL_SEARCH_PARAMS.get("type") ? URL_SEARCH_PARAMS.get("type") : 'glossary';
         /* ordering param set/get - end */
         // console.log(projectFilterType)
         let url = `${Config.BASE_URL}/workspace/project/quick/setup/?page=${page}${orderParam != null ? `&ordering=${orderParam}` : ''}`;
         if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
-
-        if (activeProjTab === 3) url += `&filter=translation`
-        if (activeProjTab === 4) url += `&filter=transcription`
-        if (activeProjTab === 5) url += `&filter=ai_voice`
-        if (activeProjTab === 6 && typeParam === 'glossary') url += `&filter=glossary`
-        if (activeProjTab === 6 && typeParam === 'wordchoices') url += `&filter=word_choices`
-        if (activeProjTab === 9) url += `&filter=designer`
+        if (activeProjTab === 3) url += `&filter=translation`;
+        if (activeProjTab === 4) url += `&filter=transcription`;
+        if (activeProjTab === 5) url += `&filter=ai_voice`;
+        if (activeProjTab === 6 && typeParam === 'glossary') url += `&filter=glossary`;
+        if (activeProjTab === 6 && typeParam === 'wordchoices') url += `&filter=word_choices`;
+        if (activeProjTab === 9) url += `&filter=designer`;
         // if (activeProjTab === 8) url += `&filter=word_choices`
-
         if (projectListAbortControllerRef.current) {
-            projectListAbortControllerRef.current.abort()
+            projectListAbortControllerRef.current.abort();
         }
-
         const controller = new AbortController();
-        projectListAbortControllerRef.current = controller
-
+        projectListAbortControllerRef.current = controller;
         let params = {
             url: url,
             auth: true,
@@ -1561,16 +1447,16 @@ function Fileupload(props) {
             success: (response) => {
                 // setOrderField(orderFieldTemp);
                 setCreatedProjects(response.data.results);
-                setCreatedProjectsList(response.data.results)
-                createdProjectsRef.current = response.data.results
+                setCreatedProjectsList(response.data.results);
+                createdProjectsRef.current = response.data.results;
                 setShowListingLoader(false);
                 if (response.data.results.length === 0) setEmptyProjects(true);
                 else setEmptyProjects(false);
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
                 if (response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))?.length !== 0) {
-                    setAnalysisRunningProjectList(response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id')))
-                    analysisRunningProjectListRef.current = response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))
+                    setAnalysisRunningProjectList(response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id')));
+                    analysisRunningProjectListRef.current = response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'));
                 }
             },
             error: (error) => {
@@ -1597,17 +1483,14 @@ function Fileupload(props) {
                 url: `${Config.BASE_URL}/workspace/project/word_char/count?${list}`,
                 auth: true,
                 success: (response) => {
-                    let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'))
-                    let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'))
-                    // console.log(analysisRunningProjectListRef.current)
+                    let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'));
+                    let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'));
                     // if(finishedProj?.length !== 0){
                     //     // console.log(finishedProj)
                     //     finishedProj?.map(each => {
 
                     //     })
                     // }
-                    // console.log(runningProj)
-
                     if (runningProj?.length !== 0) {
                         const newArr = createdProjectsRef.current?.map(obj => {
                             if (obj.id === response.data?.out?.find(each => each.proj === obj.id)?.proj) {
@@ -1618,12 +1501,11 @@ function Fileupload(props) {
                             }
                             return obj;
                         });
-                        setCreatedProjects(newArr)
+                        setCreatedProjects(newArr);
                         wordCountAnalysisTimeoutRef.current = setTimeout(() => {
-                            console.log(runningProj)
-                            setAnalysisRunningProjectList(runningProj)
-                            analysisRunningProjectListRef.current = runningProj
-                            wordCountAnalysisTriggerRef.current = !wordCountAnalysisTriggerRef.current
+                            setAnalysisRunningProjectList(runningProj);
+                            analysisRunningProjectListRef.current = runningProj;
+                            wordCountAnalysisTriggerRef.current = !wordCountAnalysisTriggerRef.current;
                         }, 8000);
                     } else {
                         const newArr = createdProjectsRef.current?.map(obj => {
@@ -1640,7 +1522,7 @@ function Fileupload(props) {
                         // update the new task word count in the task list 
                         if (openedProjectId) {
                             try {
-                                let projTaskWordData = response.data?.out?.find(each => each.proj == openedProjectId)?.task_words
+                                let projTaskWordData = response.data?.out?.find(each => each.proj == openedProjectId)?.task_words;
                                 let newArr = selectedProjectFiles.map(obj => {
                                     if (projTaskWordData.find(each => each[obj.id])) {
                                         return {
@@ -1650,27 +1532,21 @@ function Fileupload(props) {
                                     }
                                     return obj
                                 })
-                                console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                             } catch (e) {
-                                console.log(e)
+                                console.log(e);
                             }
                         }
-
-                        setCreatedProjects(newArr)
-
+                        setCreatedProjects(newArr);
                     }
                 },
-                error: (err) => {
-
-                }
+                error: (err) => { }
             });
         }
         return () => {
-            clearTimeout(wordCountAnalysisTimeoutRef.current)
+            clearTimeout(wordCountAnalysisTimeoutRef.current);
         }
     }, [analysisRunningProjectList])
-
 
     /* Reset the project creation form */
     const resetForm = () => {
@@ -1701,20 +1577,18 @@ function Fileupload(props) {
         }
     };
 
-
-
     /* Select a particular project by id */
     const selectProjectById = (projectId, shouldListFiles) => {
         if (shouldListFiles !== "dont-open") setOpenedProjectId(projectId);
         setSelectedProjectId(projectId);
         listFiles(projectId);
         selectedProjectIdRef.current = projectId
-        setTranscriptionTaskList([])
-        setPreTranslateAllTask([])
+        setTranscriptionTaskList([]);
+        setPreTranslateAllTask([]);
         // while (id--) {
         //     window.clearTimeout(id); // will do nothing if no timeout with id is present
         // } 
-        clearTimeout(myTimeoutFunc.current)
+        clearTimeout(myTimeoutFunc.current);
         let createdProject = createdProjects.find((element) => element.id == projectId);
         if (createdProject?.project_name != null) setSelectedProjectName(createdProject.project_name);
         if (createdProject?.project_analysis != null) {
@@ -1726,37 +1600,33 @@ function Fileupload(props) {
     };
 
     const handleAnalysisCollapse = (index) => {
-        let collapseByIndex = [...showAnalysisCollapse]
+        let collapseByIndex = [...showAnalysisCollapse];
         collapseByIndex[index] = !collapseByIndex[index];
         setShowAnalysisCollapse(collapseByIndex);
     }
 
     /* Collapse the project selection */
     const selectProject = (e, projectId, project) => {
-
         let shouldListFiles = e.target.getAttribute("should-open-files");
-
         if (hasParentThisClass(e?.target, "selected-file-row") || hasParentThisClass(e?.target, "dont-open-files")) return;
         setSelectedProjectFiles([]);
         // setProjectType(projectType);
-        projectObject.current = project
+        projectObject.current = project;
         // console.log(openedProjectId)
         if (projectId == openedProjectId) {
             setOpenedProjectId(null);
             selectedProjectIdRef.current = null;
         } else {
-            setSelectFileRow(true)
+            setSelectFileRow(true);
             selectProjectById(projectId, shouldListFiles);
         }
     };
 
     /* List files for specific project */
     const listFiles = (projectId) => {
-
         if (axiosVendorDashboardAbortController) {
-            axiosVendorDashboardAbortController.abort()
+            axiosVendorDashboardAbortController.abort();
         }
-
         const controller = new AbortController();
         setAxiosVendorDashboardAbortController(controller);
 
@@ -1766,20 +1636,13 @@ function Fileupload(props) {
             ...(controller !== undefined && { signal: controller.signal }),
             success: (response) => {
                 // let responseTemp = response.data;
-                setPreTranslateAllTask([])
-                selectedProjectFilesRef.current = response.data
-
-                // console.log(createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail);
+                setPreTranslateAllTask([]);
+                selectedProjectFilesRef.current = response.data;
                 // getVoiceTranscribeTaskStatus(projectId)
-
-                isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate
-                // console.log(isProjectPreTranslate.current);
-                // console.log(isProjectTransciptionRef.current);
-
+                isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate;
                 if (createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail != null) {
-                    isProjectTransciptionRef.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail.project_type_sub_category == 1
+                    isProjectTransciptionRef.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail.project_type_sub_category == 1;
                 }
-
                 if (isProjectPreTranslate.current || isProjectTransciptionRef.current) {
                     // for transcription projects
                     if (isProjectTransciptionRef.current) {
@@ -1796,28 +1659,22 @@ function Fileupload(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
-                                let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True')
+                                setSelectedProjectFiles(newArr);
+                                let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True');
                                 if (voiceStatusResponse.data.res?.length !== canOpenFiles?.length) {
-                                    setTranscriptionTaskList(voiceStatusResponse.data.res)
+                                    setTranscriptionTaskList(voiceStatusResponse.data.res);
                                 }
                             },
-                            error: (err) => {
-
-                            }
+                            error: (err) => { }
                         });
                     }
-
                     // for pre-translate projects
-
                     if (isProjectPreTranslate.current) {
                         Config.axios({
                             url: `${Config.BASE_URL}/workspace/task_status/?project=${selectedProjectIdRef.current}`,
                             auth: true,
                             success: (statusResponse) => {
                                 const newArr = response.data?.map(obj => {
-                                    // console.log(statusResponse.data.res?.find(each => each.task === obj.id)?.task)
                                     if (obj.id === statusResponse.data.res?.find(each => each.task === obj.id)?.task) {
                                         return {
                                             ...obj,
@@ -1831,16 +1688,13 @@ function Fileupload(props) {
                                     }
                                     return obj;
                                 });
-                                console.log(newArr)
-                                setSelectedProjectFiles(newArr)
-                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
+                                setSelectedProjectFiles(newArr);
+                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True');
                                 if (statusResponse.data.res?.length !== canOpenFiles?.length) {
-                                    setPreTranslateAllTask(statusResponse.data.res)
+                                    setPreTranslateAllTask(statusResponse.data.res);
                                 }
                             },
-                            error: (err) => {
-
-                            }
+                            error: (err) => { }
                         });
                     }
                 }
@@ -1860,12 +1714,9 @@ function Fileupload(props) {
         });
     };
 
-
-
     useEffect(() => {
         if (transcriptionTaskList?.length !== 0) {
-            let canOpenFiles = transcriptionTaskList?.filter(each => each.open == 'True')
-            // console.log(canOpenFiles)
+            let canOpenFiles = transcriptionTaskList?.filter(each => each.open == 'True');
             if (transcriptionTaskList?.length !== canOpenFiles?.length) {   // if any one of the task is not 
                 myTimeoutFunc.current = setTimeout(() => {
                     Config.axios({
@@ -1888,13 +1739,11 @@ function Fileupload(props) {
                                     return obj;
                                 });
                                 // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                             })
-                            setTranscriptionTaskList(response.data.res)
+                            setTranscriptionTaskList(response.data.res);
                         },
-                        error: (err) => {
-
-                        }
+                        error: (err) => {}
                     });
                 }, 3000);
             } else {
@@ -1904,8 +1753,7 @@ function Fileupload(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr);
-                setSelectedProjectFiles(newArr)
+                setSelectedProjectFiles(newArr);
             }
         }
     }, [transcriptionTaskList])
@@ -1913,7 +1761,7 @@ function Fileupload(props) {
 
     useEffect(() => {
         if (preTranslateAllTask?.length !== 0) {
-            let canOpenFiles = preTranslateAllTask?.filter(each => each.open == 'True')
+            let canOpenFiles = preTranslateAllTask?.filter(each => each.open == 'True');
             // console.log(canOpenFiles)
             if (preTranslateAllTask?.length !== canOpenFiles?.length) {   // if any one of the task is not 
                 myTimeoutFunc.current = setTimeout(() => {
@@ -1937,14 +1785,11 @@ function Fileupload(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                             })
-                            setPreTranslateAllTask(response.data.res)
+                            setPreTranslateAllTask(response.data.res);
                         },
-                        error: (err) => {
-
-                        }
+                        error: (err) => { }
                     });
                 }, 3000);
             } else {
@@ -1954,7 +1799,7 @@ function Fileupload(props) {
                     }
                     return obj;
                 });
-                setSelectedProjectFiles(newArr)
+                setSelectedProjectFiles(newArr);
             }
         }
     }, [preTranslateAllTask])
@@ -1962,8 +1807,7 @@ function Fileupload(props) {
     const filter_isadaptive = createdProjectsList?.find(
         (dat) => String(dat?.id) === String(openedProjectId)
     );
-
-    console.log(openedProjectId, filter_isadaptive, createdProjectsList, "downloadingFilesList2")
+    
     const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as, selectedProjectFile, project) => {
         let prevPageInfo = {
             pageNo: URL_SEARCH_PARAMS.get("page"),
@@ -1972,18 +1816,15 @@ function Fileupload(props) {
             search: URL_SEARCH_PARAMS.get("search"),
             projectId: project_id,
             fromProjectList: true
-        }
+        };
         if (openIn === "Designer") {
             // writer the designer open logic here
-            console.log('open designer')
             const index = selectedProjectFilesRef.current.findIndex(obj => obj?.design_project?.desg_job === selectedProjectFile?.design_project?.desg_job);
-            let subUrl = project?.designer_project_detail?.type == 'image_design' ? `&view=2` : `&code=${selectedProjectFile?.target_language}&view=2`
-            let url = `/workspace/${project?.designer_project_detail?.type == 'image_design' ? 'design' : 'image-translate'}/?project=${selectedProjectFile?.design_project?.desg_project}&page=${1}&lang=${index}`
-            window.open(Config.DESIGNER_HOST + url + subUrl)
-
-
+            let subUrl = project?.designer_project_detail?.type == 'image_design' ? `&view=2` : `&code=${selectedProjectFile?.target_language}&view=2`;
+            let url = `/workspace/${project?.designer_project_detail?.type == 'image_design' ? 'design' : 'image-translate'}/?project=${selectedProjectFile?.design_project?.desg_project}&page=${1}&lang=${index}`;
+            window.open(Config.DESIGNER_HOST + url + subUrl);
         } else if (openIn === "ExpressEditor") {
-            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, { state: { filename: fileName } })
+            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, { state: { filename: fileName } });
         } else {
             if (from !== 'task-download') {
                 setClickedOpenButton(key);
@@ -1995,13 +1836,13 @@ function Fileupload(props) {
                     success: (response) => {
                         setClickedOpenButton(null);
                         if (response?.data?.msg === undefined) {
-                            docCreditCheckAlertRef.current = response.data.doc_credit_check_open_alert
+                            docCreditCheckAlertRef.current = response.data.doc_credit_check_open_alert;
                             if (from === 'task-download') {
-                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName)
+                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName);
                             } else {
                                 setTimeout(() => {
                                     // window.location.href = 'workspace/' + response.data.document_id
-                                    let lastPageAvailable = localStorage.getItem(response.data.document_id)
+                                    let lastPageAvailable = localStorage.getItem(response.data.document_id);
                                     if (lastPageAvailable) {
                                         history(lastPageAvailable, {
                                             state: {
@@ -2022,11 +1863,11 @@ function Fileupload(props) {
                             }
                         } else {
                             if (from === 'task-download') {
-                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName)
+                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName);
                             } else {
                                 setTimeout(() => {
                                     // window.location.href = 'workspace/' + response.data.document_id
-                                    let lastPageAvailable = localStorage.getItem(response.data?.doc_data?.document_id)
+                                    let lastPageAvailable = localStorage.getItem(response.data?.doc_data?.document_id);
                                     if (lastPageAvailable) {
                                         history(lastPageAvailable, {
                                             state: {
@@ -2052,18 +1893,17 @@ function Fileupload(props) {
                             Config.toast('Oops ! The file is empty', 'error');
                         }
                         if (err?.response?.data?.msg?.includes('Mt only Ongoing')) {
-                            setShowProcessingModal(true)
+                            setShowProcessingModal(true);
                             // openFile(null, null, null, url)
                             setTimeout(() => {
-                                setShowProcessingModal(false)
+                                setShowProcessingModal(false);
                             }, 4000);
                         }
                         if (err?.response?.data?.msg?.includes('Pre Translation Ongoing')) {  // this error comes when the pre-translate is enabled in update flow
-                            setShowProcessingModal(true)
-
+                            setShowProcessingModal(true);
                             // pre-translate loader update flow (when the task open is cicked)
-                            setPreTranslateAllTask([])
-                            isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate
+                            setPreTranslateAllTask([]);
+                            isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate;
                             if (isProjectPreTranslate.current) {
                                 Config.axios({
                                     url: `${Config.BASE_URL}/workspace/task_status/?project=${selectedProjectIdRef.current}`,
@@ -2083,21 +1923,18 @@ function Fileupload(props) {
                                             }
                                             return obj;
                                         });
-                                        // console.log(newArr)
-                                        setSelectedProjectFiles(newArr)
-                                        let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
+                                        setSelectedProjectFiles(newArr);
+                                        let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True');
                                         if (statusResponse.data.res?.length !== canOpenFiles?.length) {
-                                            setPreTranslateAllTask(statusResponse.data.res)
+                                            setPreTranslateAllTask(statusResponse.data.res);
                                         }
                                     },
-                                    error: (err) => {
-
-                                    }
+                                    error: (err) => { }
                                 });
                             }
-                            // openFile(null, null, null, url)
+                            // openFile(null, null, null, url);
                             setTimeout(() => {
-                                setShowProcessingModal(false)
+                                setShowProcessingModal(false);
                             }, 4000);
                         }
                         setClickedOpenButton(null);
@@ -2162,11 +1999,9 @@ function Fileupload(props) {
         setTaskActionAnchorEl(null)
     };
 
-
     /* File upload drag and drop handling */
     const handleDrop = (filesTemp, request = null) => {
         //Also check handleChange
-
         let fileList = [...files];
         Object.keys(filesTemp).map((eachKey) => {
             if (!request && isSupportedFile(filesTemp[eachKey])) {
@@ -2185,7 +2020,6 @@ function Fileupload(props) {
         if (request === "tmx") setTMXFiles(fileList);
         else if (request === "tbx") setTBXFiles(fileList);
         else setFiles(fileList);
-
         setShowFileUpload(false);
         // setFiles(prevState => [...prevState, fileList])
     };
@@ -2306,9 +2140,9 @@ function Fileupload(props) {
     };
 
     const editProject = (e = null, projectId, projectType, project) => {
-        e.stopPropagation()
+        e.stopPropagation();
         // page information for redirecting to same page after updation is done.
-        projectObject.current = project
+        projectObject.current = project;
         let prevPageInfo = {
             pageNo: URL_SEARCH_PARAMS.get("page"),
             orderBy: URL_SEARCH_PARAMS.get("order_by"),
@@ -2316,7 +2150,7 @@ function Fileupload(props) {
             search: URL_SEARCH_PARAMS.get("search"),
             projectId: projectId,
             fromProjectList: true
-        }
+        };
         if (projectType === 1 || projectType === 2) {
             history("/create/translate/files/translate-files?get-project-info=" + projectId + "&type=" + projectType, { state: prevPageInfo });
         } else if (projectType === 3) {
@@ -2330,20 +2164,18 @@ function Fileupload(props) {
                 history("/create/speech/text-to-speech?get-project-info=" + projectId + "&type=" + projectType, { state: prevPageInfo });
             }
         } else if (projectType === 5) {
-            setEditInstantProjectModal(true)
-            expressProjectIdRef.current = projectId
-            editExpressProject(e, projectId)
+            setEditInstantProjectModal(true);
+            expressProjectIdRef.current = projectId;
+            editExpressProject(e, projectId);
             // props.history("/create/translate/text/instant-text?get-project-info=" + projectId + "&type=" + projectType, {filename: project?.project_name, prevPageInfo})
         } else if (projectType === 6) {
-            setEditInstantProjectModal(true)
+            setEditInstantProjectModal(true);
             // deisgner project edit code here'
-            handleRetriveDesignProject(e, project)
-            console.log('designer project edit')
+            handleRetriveDesignProject(e, project);
         } else if (projectType === 10) {
             history(`/create/assets/wordchoice?project=${projectId}`, { state: prevPageInfo });
         }
     };
-
 
     useEffect(() => {
         selectedSteps?.map((each) => {
@@ -2369,21 +2201,20 @@ function Fileupload(props) {
 
 
     const editExpressProject = (e, projectId) => {
-        e.stopPropagation()
-        setSkeletonLoader(true)
+        e.stopPropagation();
+        setSkeletonLoader(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/express_project_detail/${projectId}`,
             auth: true,
             success: (response) => {
-                // console.log(mtpeEngineRef.current);
                 let { data } = response;
-                setExpressProjectName(data.project_name)
-                setHasTeam(data.team)
+                setExpressProjectName(data.project_name);
+                setHasTeam(data.team);
                 setEditJobs(data.jobs);
                 let editTargetLanguages = [];
                 let tar = [];
                 let tarID = [];
-
                 response.data?.jobs?.map((each) => {
                     let a = each?.source_target_pair_names?.split("->");
                     tar.push({ language: a[1], id: each?.target_language });
@@ -2403,12 +2234,11 @@ function Fileupload(props) {
                 let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                     (element) => element.id == data?.source_lang
                 );
-
                 setTimeout(() => {
                     setSourceLabel(editSourceLanguage?.language);
-                    setSourceLanguage(data?.source_lang)
+                    setSourceLanguage(data?.source_lang);
                     setTargetLanguage(editTargetLanguages);
-                    setSkeletonLoader(false)
+                    setSkeletonLoader(false);
                 }, 80);
             },
         });
@@ -2416,19 +2246,14 @@ function Fileupload(props) {
 
     const updateExpressProject = () => {
         let formdata = new FormData();
-        setIsExpressUpdating(true)
-
+        setIsExpressUpdating(true);
         formdata.append("source_language", sourceLanguage);
-
         if (expressProjectName?.trim() === '') {
-            Config.toast(t("enter_proj_name"))
+            Config.toast(t("enter_proj_name"));
             return;
         }
-
         formdata.append("project_name", expressProjectName?.trim());
-
         formdata.append("team", hasTeam);
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
@@ -2437,9 +2262,6 @@ function Fileupload(props) {
             )
                 formdata.append("target_languages", eachTargetLanguage?.id);
         });
-
-
-
         let list = "";
         targetLangListToRemove?.map((each, index) => {
             list += `${each.id}${index !== targetLangListToRemove.length - 1 ? "," : ""
@@ -2458,9 +2280,8 @@ function Fileupload(props) {
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_updated_success"));
-                setEditInstantProjectModal(false)
-                setIsExpressUpdating(false)
-
+                setEditInstantProjectModal(false);
+                setIsExpressUpdating(false);
                 // update the word count and project name of the project
                 const newArr = createdProjects?.map(obj => {
                     if (obj.id === expressProjectIdRef.current) {
@@ -2472,36 +2293,36 @@ function Fileupload(props) {
                     }
                     return obj;
                 });
-                setCreatedProjects(newArr)
+                setCreatedProjects(newArr);
             },
         });
     }
 
-
     /* Delete a project by id */
     const deleteExpressProject = () => {
-        setIsExpressProjectDeleting(true)
+        setIsExpressProjectDeleting(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/project/quick/setup/${expressProjectIdRef.current}`,
             method: "DELETE",
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_deleted"));
-                let filteredArr = createdProjects?.filter(each => each.id !== expressProjectIdRef.current)
-                setShowExpressDeleteModal(false)
-                setEditInstantProjectModal(false)
+                let filteredArr = createdProjects?.filter(each => each.id !== expressProjectIdRef.current);
+                setShowExpressDeleteModal(false);
+                setEditInstantProjectModal(false);
                 setShowListingLoader(false);
-                setIsExpressProjectDeleting(false)
+                setIsExpressProjectDeleting(false);
                 if (filteredArr?.length === 0) setEmptyProjects(true);
-                setCreatedProjects(filteredArr)
+                setCreatedProjects(filteredArr);
             },
             error: (err) => {
                 if (err?.response?.data?.msg?.includes('assigned')) {
-                    setShowExpressDeleteModal(false)
-                    SetShowAssignedProjectDeleteAlert(true)
-                    setIsExpressProjectDeleting(false)
+                    setShowExpressDeleteModal(false);
+                    SetShowAssignedProjectDeleteAlert(true);
+                    setIsExpressProjectDeleting(false);
                 }
-                setIsExpressProjectDeleting(false)
+                setIsExpressProjectDeleting(false);
             }
         });
     };
@@ -2528,18 +2349,17 @@ function Fileupload(props) {
         setAnchorEl(null);
     };
 
-
     // unassign editor from task
     const unassignEditor = (e, taskId, stepId, project, is_reassigned) => {
         e.stopPropagation();
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_info/?task=${taskId}&step=${stepId}${is_reassigned !== null ? '&reassigned=True' : ''}`,
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("task_unassigned"));
-                listFiles(project?.id)
+                listFiles(project?.id);
                 // props.history(`/file-upload?page=1&order_by=-id&open-project=${projectID}`)
                 // setAnchorEl(null);
             },
@@ -2548,7 +2368,7 @@ function Fileupload(props) {
 
     /* Assinged details if assigned */
     const assignToProject = (e, projectId) => {
-        e.stopPropagation()
+        e.stopPropagation();
         setAssignProjectId(projectId);
         history(`/collaborate?project=${projectId}`);
         // activeToggle(3);
@@ -2626,9 +2446,8 @@ function Fileupload(props) {
     let activeColorTarget = "";
     let editorAssignmentDetails = {};
     let reviewerAssignDetails = {};
-    let role = ""
+    let role = "";
     let isAssignedProject = null;
-
 
     // get the PO pdf url
     const getPOPdf = (assignmentId) => {
@@ -2639,9 +2458,9 @@ function Fileupload(props) {
             success: (response) => {
                 if (response.status === 200) {
                     // console.log(response.data.url)
-                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`)
+                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
@@ -2650,14 +2469,10 @@ function Fileupload(props) {
     // task accept api 
     const taskAssignUpdate = (targetValue) => {
         // e.stopPropagation(); 
-        // console.log(particularClickedTask)
         var formdata = new FormData();
         formdata.append("task_ven_status ", targetValue);
         formdata.append("task", particularClickedTask);
         formdata.append("step", stepToAccept);
-
-        // console.log(isTaskReassigned.current)
-
         if (isTaskReassigned.current) {
             formdata.append("reassigned", 'True')
         }
@@ -2669,73 +2484,49 @@ function Fileupload(props) {
             data: formdata,
             success: (response) => {
                 if (response.status === 200) {
-                    // console.log(response.data)
-                    setShowPoModal(false)
-                    listFiles(openedProjectId)
-                    isTaskReassigned.current = false
+                    setShowPoModal(false);
+                    listFiles(openedProjectId);
+                    isTaskReassigned.current = false;
                     // setAcceptedRates(response.data["Previously Agreed Rates"])
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
     }
 
     const handleAcceptBtn = (assignmentId, taskId, step, is_reassigned) => {
-        setParticularClickedTask(taskId)
-        setStepToAccept(step)
-        getPOPdf(assignmentId)
-        setShowPoModal(true)
-        // console.log(is_reassigned)
-        isTaskReassigned.current = typeof is_reassigned === 'boolean' ? true : false
+        setParticularClickedTask(taskId);
+        setStepToAccept(step);
+        getPOPdf(assignmentId);
+        setShowPoModal(true);
+        isTaskReassigned.current = typeof is_reassigned === 'boolean' ? true : false;
     }
 
     // peoples circle
     const AssignInfoUiBox = (props) => {
         let { project, selectedProjectFile, eachRole } = props;
-        // console.log(selectedProjectFile);
-        // console.log(eachRole?.assigned_by_details?.avatar);
-        // console.log(eachRole);
-
         // let editorProfile = (Config.userState?.id !== eachRole?.assign_to_details?.id && eachRole?.assign_to_details?.avatar)
-
-        // console.log(eachRole);
         // let assigned_by_name = (Config.userState?.id === eachRole?.assigned_by_details?.id ? 
         //                     eachRole?.assigned_by_details?.name : 
         //                     eachRole?.assign_to_details?.name)
-
         // let assigned_to_name = (Config.userState?.id === eachRole?.assign_to_details?.id ? 
         //                     eachRole?.assign_to_details?.name :
         //                     eachRole?.assigned_by_details?.name)  
-
         // let editorEmail = (Config.userState?.id === eachRole?.assign_to_details?.id ? 
         //                     eachRole?.assigned_by_details?.email : 
         //                     eachRole?.assign_to_details?.email)
-
-
-        let assigned_by_name = eachRole?.assigned_by_details?.name
-        let assigned_to_name = eachRole?.assign_to_details?.name
-        let assigned_to_isExternal = eachRole?.assign_to_details?.external_editor
-
-
-        let assignedByOrAssignedTo = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("assigned_to")}:` : `${t("assigned_by")}:`
-
-        let by_or_to = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("to_sm")}` : `${t("by")}`
-
-        let editorProfile = (by_or_to === 'by' ? eachRole?.assign_to_details?.avatar : eachRole?.assigned_by_details?.avatar)
-
+        let assigned_by_name = eachRole?.assigned_by_details?.name;
+        let assigned_to_name = eachRole?.assign_to_details?.name;
+        let assigned_to_isExternal = eachRole?.assign_to_details?.external_editor;
+        let assignedByOrAssignedTo = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("assigned_to")}:` : `${t("assigned_by")}:`;
+        let by_or_to = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("to_sm")}` : `${t("by")}`;
+        let editorProfile = (by_or_to === 'by' ? eachRole?.assign_to_details?.avatar : eachRole?.assigned_by_details?.avatar);
         // let assignBy = Config.userState?.id === eachRole?.assign_to_details?.id ? true : false
-        let editorRole = eachRole?.task_assign_detail?.step === 1 ? t("editor") : t("reviewer")
-
-        let stepId = eachRole?.task_assign_detail?.step === 1 ? 1 : eachRole?.task_assign_detail?.step === 2 && 2
-
-        let assign_info = selectedProjectFile?.task_assign_info?.find(each => each.task_assign_detail.step === stepId)
-        // console.log(assign_info);
-        // console.log(eachRole);
+        let editorRole = eachRole?.task_assign_detail?.step === 1 ? t("editor") : t("reviewer");
+        let stepId = eachRole?.task_assign_detail?.step === 1 ? 1 : eachRole?.task_assign_detail?.step === 2 && 2;
+        let assign_info = selectedProjectFile?.task_assign_info?.find(each => each.task_assign_detail.step === stepId);
         // && assign_info.task_assign_detail.task_status === "Completed"
-
-        // console.log(assignedByOrAssignedTo)
-        // console.log(by_or_to === 'by' ? assigned_by_name : assigned_to_name)
 
         return (
             // <div className="custom-assign-box-wrapper">
@@ -2956,27 +2747,21 @@ function Fileupload(props) {
 
     // download source audo file 
     const downloadSourceAudioFile = async (taskData) => {
-        let { id, filename } = taskData
+        let { id, filename } = taskData;
         try {
             // add in download list
-            dispatch(addDownloadingFiles({ id: id, file_name: filename?.split('.')[0], ext: '.mp3', status: 1 }))
-
-            let url = `${Config.BASE_URL}/workspace/download_text_to_speech_source/?task=${id}`
+            dispatch(addDownloadingFiles({ id: id, file_name: filename?.split('.')[0], ext: '.mp3', status: 1 }));
+            let url = `${Config.BASE_URL}/workspace/download_text_to_speech_source/?task=${id}`;
             const response = await Config.downloadFileFromApi(url);
-
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-            Config.downloadFileInBrowser(response)
-
-
+            dispatch(updateDownloadingFile({ id: id, status: 2 }));
+            Config.downloadFileInBrowser(response);
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: id }))
+                dispatch(deleteDownloadingFile({ id: id }));
             }, 8000);
-
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
@@ -3002,7 +2787,6 @@ function Fileupload(props) {
         formData.append("task", taskID);
         formData.append("step", step);
         formData.append("status", "3"); // submit: 3, in-progress: 2
-
         if (documentSubmitParameters?.isTaskReassigned) {
             formData.append("reassigned", 'True')
         }
@@ -3013,41 +2797,40 @@ function Fileupload(props) {
             data: formData,
             auth: true,
             success: (response) => {
-                listFiles(openedProjectId)
-                setShowSubmitDocumentAlertModal(false)
-                setDocumentSubmitParameters({ ...documentSubmitParameters, isTaskReassigned: false })
-                Config.toast(t("document_submitted"))
+                listFiles(openedProjectId);
+                setShowSubmitDocumentAlertModal(false);
+                setDocumentSubmitParameters({ ...documentSubmitParameters, isTaskReassigned: false });
+                Config.toast(t("document_submitted"));
             }
         });
     }
 
     useEffect(() => {
         if (documentSubmitParameters?.taskid !== null) {
-            getDocumentProgress(documentSubmitParameters?.confirm, documentSubmitParameters?.total)
+            getDocumentProgress(documentSubmitParameters?.confirm, documentSubmitParameters?.total);
         }
     }, [documentSubmitParameters])
 
 
     const getDocumentProgress = (confirmed, total) => {
         if (confirmed == total) {
-            handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step)
+            handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step);
         }
         else {
-            setShowSubmitDocumentAlertModal(true)
+            setShowSubmitDocumentAlertModal(true);
         }
     }
 
     const handleDocuemtSubmitConfirmation = () => {
-        handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step)
+        handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step);
     }
 
     useEffect(() => {
         if (location.state?.documentLock !== undefined) {
-            let documentLockReason = location?.state?.documentLock
-            Config.toast(`${documentLockReason}`, 'warning')
+            let documentLockReason = location?.state?.documentLock;
+            Config.toast(`${documentLockReason}`, 'warning');
         }
     }, [location.state?.documentLock])
-
 
     const transcribeAudioFile = (projectID, taskID, key) => {
         let formdata = new FormData();
@@ -3060,24 +2843,24 @@ function Fileupload(props) {
             auth: true,
             success: (response) => {
                 if (response.status === 200) {
-                    Config.toast(t("audio_file_transcribed"))
-                    setClickedOpenButton(null)
-                    listFiles(projectID)
+                    Config.toast(t("audio_file_transcribed"));
+                    setClickedOpenButton(null);
+                    listFiles(projectID);
                 }
                 getCreditStatus();
             },
             error: (err) => {
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                        setShowCreditAlertModal(true)
-                        setClickedOpenButton(null)
+                        setShowCreditAlertModal(true);
+                        setClickedOpenButton(null);
                     }
                     if (err.response.data?.msg?.includes('Transcription is ongoing.')) {
-                        setShowProcessingModal(true)
-                        setIsTranscribing(true)
-                        setClickedOpenButton(null)
+                        setShowProcessingModal(true);
+                        setIsTranscribing(true);
+                        setClickedOpenButton(null);
+                        setTranscriptionTaskList([]);
 
-                        setTranscriptionTaskList([])
                         Config.axios({
                             url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${selectedProjectIdRef.current}`,
                             auth: true,
@@ -3095,24 +2878,19 @@ function Fileupload(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
-                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
+                                setSelectedProjectFiles(newArr);
+                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True');
                                 if (statusResponse.data.res?.length !== canOpenFiles?.length) {
-                                    setTranscriptionTaskList(statusResponse.data.res)
+                                    setTranscriptionTaskList(statusResponse.data.res);
                                 }
                             },
-                            error: (err) => {
-
-                            }
+                            error: (err) => { }
                         });
-
                         setTimeout(() => {
-                            setTextToSpeechConvert(false)
-                            setShowProcessingModal(false)
-                            setIsTranscribing(false)
+                            setTextToSpeechConvert(false);
+                            setShowProcessingModal(false);
+                            setIsTranscribing(false);
                         }, 4000);
-
                         // setTranscriptionTaskList([])
                         // Config.axios({
                         //     url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${selectedProjectIdRef.current}`,
@@ -3148,17 +2926,14 @@ function Fileupload(props) {
 
     const handleBulkDownload = async (e, project) => {
         e?.stopPropagation();
-
-        let { id, project_name, get_project_type } = project
-        let url
-        let designDownloadUrl
+        let { id, project_name, get_project_type } = project;
+        let url;
+        let designDownloadUrl;
         if (get_project_type === 6) {
             // writer designer project zip download code here 
             // remove the below return statement after done coding
-            console.log('designer project zip download')
-            console.log(project)
             if (project.designer_project_detail.type == "image_translate") {
-                designDownloadUrl = Config.BASE_URL + `/ai-image-translation/image-download?image_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1`
+                designDownloadUrl = Config.BASE_URL + `/ai-image-translation/image-download?image_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1`;
             } else {
                 const startNumber = 1;
                 const endNumber = project.designer_project_detail.pages;
@@ -3166,71 +2941,60 @@ function Fileupload(props) {
                     const numberToMap = index + startNumber;
                     return `page_number_list=${numberToMap}`;
                 }).join('&');
-
-                console.log(formattedString);
-                designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1&` + formattedString
-                console.log(url)
+                designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1&` + formattedString;
             }
-
         }
-
         // add in download list
         dispatch(addDownloadingFiles({ id: id, file_name: project_name, ext: '.zip', status: 1 }))
         if (get_project_type === 6) {
-            url = designDownloadUrl
+            url = designDownloadUrl;
         } else {
-            url = `${Config.BASE_URL}/workspace/download/${id}/`
-
+            url = `${Config.BASE_URL}/workspace/download/${id}/`;
         }
-
         const response = await Config.downloadFileFromApi(url);
-
         // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
+        dispatch(updateDownloadingFile({ id: id, status: 2 }));
+        Config.downloadFileInBrowser(response);
         setTimeout(() => {
             // remove the downloaded file from list
-            dispatch(deleteDownloadingFile({ id: id }))
+            dispatch(deleteDownloadingFile({ id: id }));
         }, 8000);
     }
 
     const convertSourceFileToAudio = (taskid) => {
-        setClickedOpenButton(taskid)
+        setClickedOpenButton(taskid);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/convert_text_to_speech_source/?task=${taskid}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data?.source_audio_file)
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === taskid) {
                         return { ...obj, audio_file_url: response.data?.source_audio_file };
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                setSelectedProjectFiles(newArr)
-                setClickedOpenButton(null)
+                setSelectedProjectFiles(newArr);
+                setClickedOpenButton(null);
                 getCreditStatus();
             },
             error: (err) => {
                 if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                    setShowCreditAlertModal(true)
-                    setClickedOpenButton(null)
+                    setShowCreditAlertModal(true);
+                    setClickedOpenButton(null);
                 }
                 if (err.response.data?.msg !== undefined && err.response.data?.msg?.includes('Text to Speech conversion ongoing')) {
-                    setShowProcessingModal(true)
-                    setTextToSpeechConvert(true)
-                    setClickedOpenButton(null)
+                    setShowProcessingModal(true);
+                    setTextToSpeechConvert(true);
+                    setClickedOpenButton(null);
                     setTimeout(() => {
-                        setTextToSpeechConvert(false)
-                        setShowProcessingModal(false)
-                        setShowProcessingModal(false)
+                        setTextToSpeechConvert(false);
+                        setShowProcessingModal(false);
+                        setShowProcessingModal(false);
                     }, 4000);
                 } else {
-                    Config.toast('Download failed', 'error')
-                    setClickedOpenButton(null)
+                    Config.toast('Download failed', 'error');
+                    setClickedOpenButton(null);
                 }
                 getCreditStatus();
                 // Config.toast('Download failed', 'error')
@@ -3239,8 +3003,8 @@ function Fileupload(props) {
     }
 
     const handlePartialPretranslateClose = () => {
-        setPartialPretranslate(false)
-        let lastPageAvailable = localStorage.getItem(openFileId.current)
+        setPartialPretranslate(false);
+        let lastPageAvailable = localStorage.getItem(openFileId.current);
         if (lastPageAvailable) {
             history(lastPageAvailable);
         } else {
@@ -3248,27 +3012,24 @@ function Fileupload(props) {
         }
     }
 
-
     // get analysied report for project and its task (project analysis)
     const handleShowAnalysisModal = (e, projectID, callback = false) => {
         e?.stopPropagation();
-        setProjectAnalysisedData(null)
+        setProjectAnalysisedData(null);
         if (!callback) {
-            projectAnalysisTempProjectId.current = projectID
+            projectAnalysisTempProjectId.current = projectID;
         }
-        projectAnalysisApiCounter.current++
-        // console.log(projectID)
+        projectAnalysisApiCounter.current++;
+
         Config.axios({
             url: `${Config.BASE_URL}/tm/project_analysis/${projectID}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 let {
                     payable_rate,
                     project_wwc,
                     task_wwc
-                } = response.data
-
+                } = response.data;
                 let payable_rates = {
                     info: {
                         id: payable_rate?.id,
@@ -3289,8 +3050,7 @@ function Fileupload(props) {
                         key10: payable_rate?.tm_102_percentage,
                     }
                 }
-
-                let project = []
+                let project = [];
                 project_wwc?.map(each => {
                     project.push({
                         projectInfo: {
@@ -3324,10 +3084,8 @@ function Fileupload(props) {
                             key11: each?.char_tm_102,
                         }
                     })
-                })
-
-
-                let task = []
+                });
+                let task = [];
                 task_wwc?.map(each => {
                     let charData = each?.char_detail
                     task.push({
@@ -3363,20 +3121,18 @@ function Fileupload(props) {
                             key11: charData?.tm_102
                         }
                     })
-                })
-                setProjectAnalysisedData({ payable_rates, project, task })
+                });
+                setProjectAnalysisedData({ payable_rates, project, task });
             },
             error: (err) => {
                 if (err.response?.status === 401) {
                     setTimeout(() => {
-                        // console.log(projectAnalysisTempProjectId.current)
                         if (projectAnalysisApiCounter.current <= 10) {
-                            handleShowAnalysisModal(e, projectAnalysisTempProjectId.current, true)
+                            handleShowAnalysisModal(e, projectAnalysisTempProjectId.current, true);
                         } else {
-                            setShowProjectAnalysis(false)
+                            setShowProjectAnalysis(false);
                         }
                     }, 6000);
-
                 }
             }
         });
@@ -3384,64 +3140,55 @@ function Fileupload(props) {
 
     // project analysis whole project excel with task download
     const downloadProjectAnalysisReport = async (e, projectID) => {
-        e.stopPropagation()
-        let url = `${Config.BASE_URL}/tm/get_report/?project_id=${projectID}`
+        e.stopPropagation();
+        let url = `${Config.BASE_URL}/tm/get_report/?project_id=${projectID}`;
         // let url = `${Config.BASE_URL}/tm/get_report/?task_id=${taskID}` // project analysis task excel download
         const response = await Config.downloadFileFromApi(url);
-        Config.downloadFileInBrowser(response)
+        Config.downloadFileInBrowser(response);
     }
-
 
     // download convert docx file 
     const downloadConvertDocxFile = async (taskData) => {
-        let { id, filename } = taskData
+        let { id, filename } = taskData;
         try {
             // add in download list
-            dispatch(addDownloadingFiles({ id: id, file_name: filename?.split('.')[0], ext: '.docx', status: 1 }))
-
-            let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?task_id=${id}`
+            dispatch(addDownloadingFiles({ id: id, file_name: filename?.split('.')[0], ext: '.docx', status: 1 }));
+            let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?task_id=${id}`;
             const response = await Config.downloadFileFromApi(url);
-
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-            Config.downloadFileInBrowser(response)
-
-
+            dispatch(updateDownloadingFile({ id: id, status: 2 }));
+            Config.downloadFileInBrowser(response);
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: id }))
+                dispatch(deleteDownloadingFile({ id: id }));
             }, 8000);
-
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
-
     const convertPdfToDocxFromTask = (taskId, projectId) => {
-        setClickedOpenButton(taskId)
+        setClickedOpenButton(taskId);
+
         Config.axios({
             url: `${Config.BASE_URL}/exportpdf/convert_pdf_from_task/${taskId}/`,
             method: 'POST',
             auth: true,
             success: (response) => {
-                // console.log(response.data);
-                checkPdfConversionStatus(taskId, projectId, 'first')
+                checkPdfConversionStatus(taskId, projectId, 'first');
                 getCreditStatus();
-                setClickedOpenButton(null)
+                setClickedOpenButton(null);
             },
             error: (err) => {
                 if (err.response?.data?.msg?.includes('Insufficient Credits')) {
-                    setShowCreditAlertModal(true)
-                    setClickedOpenButton(null)
+                    setShowCreditAlertModal(true);
+                    setClickedOpenButton(null);
                 }
                 if (err.response?.data?.msg?.includes('File Cannot be Processed')) {
-                    Config.toast(t("file_is_corrupted"), 'error')
-                    listFiles(projectId)
-                    // console.log(newArr)
+                    Config.toast(t("file_is_corrupted"), 'error');
+                    listFiles(projectId);
                 }
-                setClickedOpenButton(null)
+                setClickedOpenButton(null);
                 // else{
                 //     Config.toast('Conversion failed', 'error')
                 //     setClickedOpenButton(null)
@@ -3456,7 +3203,6 @@ function Fileupload(props) {
             url: `${Config.BASE_URL}/exportpdf/convertpdftodocx/?task=${taskId}`,
             auth: true,
             success: (response) => {
-                console.log(response.data);
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === taskId) {
                         return {
@@ -3466,34 +3212,32 @@ function Fileupload(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                setSelectedProjectFiles(newArr)
-                setClickedOpenButton(null)
-
+                setSelectedProjectFiles(newArr);
+                setClickedOpenButton(null);
                 if (isFrist) {
                     if (response.data?.status === '') {
-                        convertPdfToDocxFromTask(taskId, projectId)
+                        convertPdfToDocxFromTask(taskId, projectId);
                     }
                     else if (response.data?.status === 'YET TO START') {
-                        setShowProcessingModal(true)
-                        setTextToSpeechConvert(true)
+                        setShowProcessingModal(true);
+                        setTextToSpeechConvert(true);
                         setTimeout(() => {
-                            setShowProcessingModal(false)
-                            setTextToSpeechConvert(false)
+                            setShowProcessingModal(false);
+                            setTextToSpeechConvert(false);
                         }, 4000);
                         setTimeout(() => {
-                            checkPdfConversionStatus(taskId)
+                            checkPdfConversionStatus(taskId);
                         }, 4000);
                     }
                     else if (response.data?.status == 'PENDING') {
-                        setShowProcessingModal(true)
-                        setTextToSpeechConvert(true)
+                        setShowProcessingModal(true);
+                        setTextToSpeechConvert(true);
                         setTimeout(() => {
-                            setShowProcessingModal(false)
-                            setTextToSpeechConvert(false)
+                            setShowProcessingModal(false);
+                            setTextToSpeechConvert(false);
                         }, 4000);
                         setTimeout(() => {
-                            checkPdfConversionStatus(taskId)
+                            checkPdfConversionStatus(taskId);
                         }, 4000);
                     } else if (response.data?.status == 'ERROR') {
                         const newArr = selectedProjectFiles?.map(obj => {
@@ -3505,9 +3249,8 @@ function Fileupload(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
-                        setSelectedProjectFiles(newArr)
-                        setClickedOpenButton(null)
+                        setSelectedProjectFiles(newArr);
+                        setClickedOpenButton(null);
                     } else if (response.data?.status == 'DONE') {
                         const newArr = selectedProjectFiles?.map(obj => {
                             if (obj.id === taskId) {
@@ -3520,19 +3263,18 @@ function Fileupload(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
-                        setSelectedProjectFiles(newArr)
-                        setClickedOpenButton(null)
+                        setSelectedProjectFiles(newArr);
+                        setClickedOpenButton(null);
                     }
                 } else {
                     if (response.data?.status === 'YET TO START') {
                         setTimeout(() => {
-                            checkPdfConversionStatus(taskId)
+                            checkPdfConversionStatus(taskId);
                         }, 4000);
                     }
                     else if (response.data?.status == 'PENDING') {
                         setTimeout(() => {
-                            checkPdfConversionStatus(taskId)
+                            checkPdfConversionStatus(taskId);
                         }, 4000);
                     } else if (response.data?.status == 'ERROR') {
                         const newArr = selectedProjectFiles?.map(obj => {
@@ -3544,9 +3286,8 @@ function Fileupload(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
-                        setSelectedProjectFiles(newArr)
-                        setClickedOpenButton(null)
+                        setSelectedProjectFiles(newArr);
+                        setClickedOpenButton(null);
                     } else if (response.data?.status == 'DONE') {
                         const newArr = selectedProjectFiles?.map(obj => {
                             if (obj.id === taskId) {
@@ -3559,9 +3300,8 @@ function Fileupload(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
-                        setSelectedProjectFiles(newArr)
-                        setClickedOpenButton(null)
+                        setSelectedProjectFiles(newArr);
+                        setClickedOpenButton(null);
                     }
                 }
             }
@@ -3576,7 +3316,7 @@ function Fileupload(props) {
             search: URL_SEARCH_PARAMS.get("search"),
             projectId: projectId,
             fromProjectList: true
-        }
+        };
         history(`/word-processor?task=${id}`, {
             state: {
                 docName: name,
@@ -3584,13 +3324,12 @@ function Fileupload(props) {
                 prevPageInfo,
                 prevPath: location.pathname + location.search
             }
-        })
+        });
     }
 
     const translateFromPdfTask = (taskId, projectId) => {
-        setIsPdfTranslating(true)
+        setIsPdfTranslating(true);
         let formdata = new FormData();
-
         formdata.append("pdf_task_id", taskId);
 
         Config.axios({
@@ -3605,72 +3344,66 @@ function Fileupload(props) {
             auth: true,
             success: (response) => {
                 if (response.data?.id) {
-                    Config.toast(t("translation_task_created"))
-                    listFiles(response.data?.id)
-                    setIsPdfTranslating(false)
+                    Config.toast(t("translation_task_created"));
+                    listFiles(response.data?.id);
+                    setIsPdfTranslating(false);
                 }
             },
             error: (err) => {
-                setIsPdfTranslating(false)
+                setIsPdfTranslating(false);
             }
         });
     }
 
     const handleTaskDeleteButton = (e, project_id, taskId, taskAssignInfo) => {
-        e.preventDefault()
-        setMoreEl(false)
+        e.preventDefault();
+        setMoreEl(false);
         // e.stopPropagation()
-
-        // console.log(project_id)
-        // console.log(taskId)
-        // console.log(taskAssignInfo)
         taskDeleteParam.current = {
             project_id: project_id,
             taskId: taskId
-        }
+        };
         if (taskAssignInfo !== null) {
-            taskDeleteFunction()
+            taskDeleteFunction();
         } else {
-            setShowTaskDeleteAlert(true)
+            setShowTaskDeleteAlert(true);
         }
-
     }
 
     const taskDeleteFunction = () => {
-        setIsTaskDeleting(true)
+        setIsTaskDeleting(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/tasks/${taskDeleteParam.current?.taskId}/`,
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                setIsTaskDeleting(false)
+                setIsTaskDeleting(false);
                 if (selectedProjectFiles?.length === 1) {
                     Config.toast(t("deleted_success"));
-                    setCreatedProjects(createdProjects?.filter(each => each.id !== taskDeleteParam.current?.project_id))
+                    setCreatedProjects(createdProjects?.filter(each => each.id !== taskDeleteParam.current?.project_id));
                     if (createdProjects?.filter(each => each.id !== taskDeleteParam.current?.project_id)?.length === 0) setEmptyProjects(true);
                 } else {
                     Config.toast(t("task_deleted_success"));
                 }
-                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each.id !== taskDeleteParam.current?.taskId))
-                setShowTaskDeleteAlert(false)
+                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each.id !== taskDeleteParam.current?.taskId));
+                setShowTaskDeleteAlert(false);
             },
             error: (err) => {
                 if (err.response?.status === 400) {
                     if (err.response?.data?.Message?.includes('Unassign')) {
-                        setShowTaskDeleteAlert(true)
-                        setUnassignTaskDeleteAlert(true)
-                        setIsTaskDeleting(false)
+                        setShowTaskDeleteAlert(true);
+                        setUnassignTaskDeleteAlert(true);
+                        setIsTaskDeleting(false);
                     }
                 }
-                setIsTaskDeleting(false)
+                setIsTaskDeleting(false);
             }
         });
     }
 
-
     const focusTargetLangDiv = () => {
-        if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #E74C3C;'
+        if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #E74C3C;';
         setTimeout(() => {
             if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #ced4da;'
         }, 1000);
@@ -3681,7 +3414,6 @@ function Fileupload(props) {
             url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${projectId}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 // const newArr = selectedProjectFiles?.map(obj => {
                 //     // console.log(response.data.res?.find(each => each.task === obj.id)?.task)
                 //     if (obj.id === response.data.res?.find(each => each.task === obj.id)?.task) {
@@ -3689,12 +3421,9 @@ function Fileupload(props) {
                 //     }
                 //     return obj;
                 // });
-                // // console.log(newArr)
                 // setSelectedProjectFiles(newArr)
             },
-            error: (err) => {
-
-            }
+            error: (err) => { }
         });
     }
 
@@ -3717,17 +3446,13 @@ function Fileupload(props) {
                 }
             );
             if (response !== undefined) {
-
                 // update the list once download completed
-                dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }))
-
+                dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }));
                 setTimeout(() => {
                     // remove the downloaded file from list
                     dispatch(deleteDownloadingFile({ id: uniqueKey }))
                 }, 8000);
-
-                Config.downloadFileInBrowser(response)
-
+                Config.downloadFileInBrowser(response);
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === task_id) {
                         return {
@@ -3737,13 +3462,12 @@ function Fileupload(props) {
                     }
                     return obj;
                 });
-                setSelectedProjectFiles(newArr)
+                setSelectedProjectFiles(newArr);
                 // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== task_id)
-                setIsDownloading(false)
+                setIsDownloading(false);
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
-            let responseObj = JSON.parse(await err.response.data.text())
+            let responseObj = JSON.parse(await err.response.data.text());
             if (err.response.status === 400) {
                 if (responseObj?.msg?.includes('Pending')) {
                     mtRawCeleryTimeOutRef.current = setTimeout(() => {
@@ -3751,14 +3475,14 @@ function Fileupload(props) {
                     }, 8000);
                 } else {
                     setTimeout(() => {
-                        mtRawDownloadRetryCounter.current++
+                        mtRawDownloadRetryCounter.current++;
                         if (mtRawDownloadRetryCounter.current < mtRawDownloadRetryLimit.current) {
-                            dispatch(deleteDownloadingFile({ id: uniqueKey }))
-                            downloadDifferentFile('MTRAW', documentId, null, null, task_id)
+                            dispatch(deleteDownloadingFile({ id: uniqueKey }));
+                            downloadDifferentFile('MTRAW', documentId, null, null, task_id);
                         } else {
-                            dispatch(deleteDownloadingFile({ id: uniqueKey }))
+                            dispatch(deleteDownloadingFile({ id: uniqueKey }));
                             // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== task_id)
-                            setIsDownloading(false)
+                            setIsDownloading(false);
                         }
                     }, 8000);
                 }
@@ -3766,11 +3490,10 @@ function Fileupload(props) {
         }
     }
 
-
     /* Download different type of output files */
     const downloadDifferentFile = async (type, documentId, e, key = null, id = null, url = "", isFirstOpen, openIn, projectName, project_id, projectType, taskFileName) => {
-        setMoreEl(false)
-        setSubDownloadOption(false)
+        setMoreEl(false);
+        setSubDownloadOption(false);
         // if task is not opened (document id - null)
         if (documentId == null) {
             openFile(
@@ -3786,18 +3509,15 @@ function Fileupload(props) {
                 "task-download",
                 type,
                 taskFileName
-            )
+            );
             return;
         }
-
         if (docCreditCheckAlertRef.current && type === 'MTRAW') {
-            setShowDocCreditCheckAlert(true)
-            downloadDiffFilesParamRef.current = { type, documentId, e, key, id, url, isFirstOpen, openIn, projectName, project_id, projectType, taskFileName }
+            setShowDocCreditCheckAlert(true);
+            downloadDiffFilesParamRef.current = { type, documentId, e, key, id, url, isFirstOpen, openIn, projectName, project_id, projectType, taskFileName };
             return;
         }
-
-        let uniqueKey = generateKey()
-
+        let uniqueKey = generateKey();
         const newArr = selectedProjectFiles?.map(obj => {
             if (obj.id === id) {
                 return {
@@ -3807,10 +3527,9 @@ function Fileupload(props) {
             }
             return obj;
         });
-        setSelectedProjectFiles(newArr)
-        setIsDownloading(true)
+        setSelectedProjectFiles(newArr);
+        setIsDownloading(true);
         // downloadingFilesList.current.push(id)
-
         // add in download list
         dispatch(addDownloadingFiles(
             {
@@ -3820,9 +3539,7 @@ function Fileupload(props) {
                     type === 'BILINGUAL' ? '.xlsx' : type === 'TMX' ? '.tmx' : type === 'XLIFF' ? '.xliff' : '',
                 status: type !== 'MTRAW' ? 1 : 3    // 1 for downloading and 3 for processing
             }
-        ))
-
-
+        ));
         // throw new Error("uncomment this line to mock failure of API");
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
@@ -3840,17 +3557,13 @@ function Fileupload(props) {
                 },
             );
             if (response !== undefined) {
-
                 // update the list once download completed
-                dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }))
-
-                Config.downloadFileInBrowser(response)
-
+                dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }));
+                Config.downloadFileInBrowser(response);
                 setTimeout(() => {
                     // remove the downloaded file from list
-                    dispatch(deleteDownloadingFile({ id: uniqueKey }))
+                    dispatch(deleteDownloadingFile({ id: uniqueKey }));
                 }, 8000);
-
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === id) {
                         return {
@@ -3860,22 +3573,21 @@ function Fileupload(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                setSelectedProjectFiles(newArr)
+                setSelectedProjectFiles(newArr);
                 // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
-                setIsDownloading(false)
+                setIsDownloading(false);
             }
         } catch (err) {
             // console.log(JSON.parse(await err.response.data.text()))
-            let responseObj = JSON.parse(await err.response.data.text())
+            let responseObj = JSON.parse(await err.response.data.text());
             if (err.response.status === 400) {
                 if (responseObj?.celery_id) {
-                    mtRawCeleryCheck(responseObj?.celery_id, documentId, id, uniqueKey)
+                    mtRawCeleryCheck(responseObj?.celery_id, documentId, id, uniqueKey);
                 } else {
                     if (responseObj?.msg?.includes('under process')) {
-                        Config.toast(t("file_is_under_process"), 'warning')
+                        Config.toast(t("file_is_under_process"), 'warning');
                     } else {
-                        Config.toast(t("download_failed"), 'error')
+                        Config.toast(t("download_failed"), 'error');
                     }
                     const newArr = selectedProjectFiles?.map(obj => {
                         if (obj.id === id) {
@@ -3886,10 +3598,10 @@ function Fileupload(props) {
                         }
                         return obj;
                     });
-                    setSelectedProjectFiles(newArr)
-                    dispatch(deleteDownloadingFile({ id: uniqueKey }))
+                    setSelectedProjectFiles(newArr);
+                    dispatch(deleteDownloadingFile({ id: uniqueKey }));
                     // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
-                    setIsDownloading(false)
+                    setIsDownloading(false);
                 }
             } else if (err.response.status === 409) {
                 const newArr = selectedProjectFiles?.map(obj => {
@@ -3901,12 +3613,11 @@ function Fileupload(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                Config.toast(t("something_wrong_file_process"), 'warning')
-                setSelectedProjectFiles(newArr)
-                dispatch(deleteDownloadingFile({ id: uniqueKey }))
+                Config.toast(t("something_wrong_file_process"), 'warning');
+                setSelectedProjectFiles(newArr);
+                dispatch(deleteDownloadingFile({ id: uniqueKey }));
                 // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
-                setIsDownloading(false)
+                setIsDownloading(false);
             }
         }
     };
@@ -3915,35 +3626,34 @@ function Fileupload(props) {
         if (confirmedNavigation && lastLocation) {
             // clearTimeout(mtRawCeleryTimeOutRef.current)
             // Navigate to the previous blocked location with your navigate function
-            history(lastLocation.pathname)
+            history(lastLocation.pathname);
         }
     }, [confirmedNavigation, lastLocation])
 
     const handleBlockedNavigation = (nextLocation) => {
-
         if (!confirmedNavigation && window.location.pathname) {
-            setLastLocation(nextLocation)
+            setLastLocation(nextLocation);
             if (nextLocation.hash != "#!" && nextLocation.search == '') {
-                setNavigationModalVisible(true)
-                return false
+                setNavigationModalVisible(true);
+                return false;
             }
             if (nextLocation.state === null && nextLocation.search == '') {
-                setNavigationModalVisible(true)
-                return false
+                setNavigationModalVisible(true);
+                return false;
             }
         }
     }
 
     const handleConfirmNavigationClick = () => {
-        setNavigationModalVisible(false)
-        setConfirmedNavigation(true)
+        setNavigationModalVisible(false);
+        setConfirmedNavigation(true);
     }
 
     const handleMtOnyDownloadYes = () => {
-        let { type, documentId, e, key, id, url, isFirstOpen, openIn, fileName, project_id, projectType, taskFileName } = downloadDiffFilesParamRef.current
+        let { type, documentId, e, key, id, url, isFirstOpen, openIn, fileName, project_id, projectType, taskFileName } = downloadDiffFilesParamRef.current;
         setShowDocCreditCheckAlert(false);
-        docCreditCheckAlertRef.current = null
-        downloadDifferentFile(type, documentId, e, key, id, url, isFirstOpen, openIn, fileName, project_id, projectType, taskFileName)
+        docCreditCheckAlertRef.current = null;
+        downloadDifferentFile(type, documentId, e, key, id, url, isFirstOpen, openIn, fileName, project_id, projectType, taskFileName);
     }
 
     const handleGeneralPurposeOpenBtn = (project, eachRole, task) => {
@@ -3952,12 +3662,12 @@ function Fileupload(props) {
                 task_id: task.id,
                 step: eachRole?.task_assign_detail?.step,
                 reassign: task.task_reassign_info !== null ? true : false,
-            }
-            setShowDeadlineCrossedModal(true)
+            };
+            setShowDeadlineCrossedModal(true);
         } else {
-            setShowPOConfirmModal(true)
-            projectIdForPOModal.current = project.id
-            projectTypeForPOModal.current = project.get_project_type
+            setShowPOConfirmModal(true);
+            projectIdForPOModal.current = project.id;
+            projectTypeForPOModal.current = project.get_project_type;
         }
     }
 
@@ -3969,17 +3679,14 @@ function Fileupload(props) {
     };
 
     const handleDrpDownToggle = (e) => {
-        e.stopPropagation()
+        e.stopPropagation();
         setDownloadOpen((prevOpen) => !prevOpen);
     };
 
     const handleOpenAsButton = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as, assignInfo, taskData) => {
-        let step = open_as === 'editor' ? 1 : 2
-        let isTaskAccepted = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted") ? true : false
-        let stepData = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted")
-
-        console.log(assignInfo);
-
+        let step = open_as === 'editor' ? 1 : 2;
+        let isTaskAccepted = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted") ? true : false;
+        let stepData = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted");
         if (isTaskAccepted) {
             // if(!stepData?.task_assign_detail?.can_open){
             //     Config.toast(`${step === 1 ? 'Reviewer' : 'Editor'} is working!!!`, 'warning')
@@ -3999,29 +3706,29 @@ function Fileupload(props) {
                 downloadType,
                 taskFileName,
                 open_as
-            )
+            );
         } else {
-            let eachRole = assignInfo?.find(each => each.task_assign_detail.step === step)
+            let eachRole = assignInfo?.find(each => each.task_assign_detail.step === step);
             if (Config.calculateTimeLeftPercentage(eachRole.created_at, eachRole.deadline) == 0) {
                 taskDetailsForDeadlineCrossedTask.current = {
                     task_id: id,
                     step: step = open_as === 'editor' ? 1 : 2,
                     reassign: taskData.task_reassign_info !== null ? true : false,
-                }
-                setShowDeadlineCrossedModal(true)
+                };
+                setShowDeadlineCrossedModal(true);
             } else {
-                setShowPOConfirmModal(true)
-                projectIdForPOModal.current = project_id
-                projectTypeForPOModal.current = projectType
+                setShowPOConfirmModal(true);
+                projectIdForPOModal.current = project_id;
+                projectTypeForPOModal.current = projectType;
             }
         }
     }
 
     // function for customer side so that customer can approve or reject the task
     const clientSideTaskResponseUpdate = () => {
-        let { task_id, response, step, reassign, project_id } = clientResponseDataRef.current
+        let { task_id, response, step, reassign, project_id } = clientResponseDataRef.current;
         if (response === 2 && customerTaskReworkReasonText?.trim() === '') {
-            setShowTaskReworkReasonModal(true)
+            setShowTaskReworkReasonModal(true);
             return;
         }
         var formdata = new FormData();
@@ -4031,15 +3738,12 @@ function Fileupload(props) {
         if (response === 2) {
             formdata.append("client_reason", customerTaskReworkReasonText);
         }
-
         if (reassign) {
-            formdata.append("reassigned", 'True')
+            formdata.append("reassigned", 'True');
         }
+        if (response === 1) setIsApproving(true);
+        setIsReworkSending(true);
 
-        if (response === 1) setIsApproving(true)
-
-        setIsReworkSending(true)
-        // console.log(clientResponseDataRef.current);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_update/`,
             auth: true,
@@ -4047,24 +3751,24 @@ function Fileupload(props) {
             data: formdata,
             success: (api_response) => {
                 if (api_response.status === 200) {
-                    clientResponseDataRef.current = null
-                    setIsApproving(false)
+                    clientResponseDataRef.current = null;
+                    setIsApproving(false);
                     if (response === 1) {
-                        Config.toast(`${step === 1 ? t('editing') : t('reviewing')} ${t("step_approved")}`)
-                        listFiles(project_id)
+                        Config.toast(`${step === 1 ? t('editing') : t('reviewing')} ${t("step_approved")}`);
+                        listFiles(project_id);
                     } else if (response === 2) {
-                        Config.toast(`${t("rework_initiate")}`)
-                        listFiles(project_id)
+                        Config.toast(`${t("rework_initiate")}`);
+                        listFiles(project_id);
                     }
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
-                setIsReworkSending(false)
-                setShowTaskReworkReasonModal(false)
+                setIsReworkSending(false);
+                setShowTaskReworkReasonModal(false);
             },
             error: (err) => {
-                setIsApproving(false)
-                setIsReworkSending(false)
+                setIsApproving(false);
+                setIsReworkSending(false);
             }
         });
     }
@@ -4077,19 +3781,19 @@ function Fileupload(props) {
             task_id: task.id,
             reassign: task.task_reassign_info !== null ? true : false,
             project_id: projectId
-        }
-        clientSideTaskResponseUpdate()
+        };
+        clientSideTaskResponseUpdate();
     }
 
     const getPODetailsForTask = (task_id) => {
-        setMoreEl(false)
+        setMoreEl(false);
+
         Config.axios({
             url: `${Config.BASE_URL}/aipay/po/?task=${task_id}`,
             auth: true,
             success: (response) => {
-                console.log(response);
-                setPOFilesDetails(response.data)
-                setShowPOFilesModal(true)
+                setPOFilesDetails(response.data);
+                setShowPOFilesModal(true);
             },
             error: (err) => { }
         });
@@ -4097,14 +3801,12 @@ function Fileupload(props) {
 
     const sendExtendTaskDeadlineRequest = () => {
         console.log(taskDetailsForDeadlineCrossedTask.current);
-        let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current
-
+        let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current;
         var formdata = new FormData();
         formdata.append("task", task_id);
         formdata.append("step", step);
         formdata.append("reassigned", reassign ? 'True' : 'False')
-
-        setIsDeadlineExtendReqSending(true)
+        setIsDeadlineExtendReqSending(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/send_msg_extend_deadline/`,
@@ -4113,22 +3815,21 @@ function Fileupload(props) {
             data: formdata,
             success: (api_response) => {
                 if (api_response.status === 200) {
-                    Config.toast(`${t("deadline_req_sent")}`)
+                    Config.toast(`${t("deadline_req_sent")}`);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
-                setIsDeadlineExtendReqSending(false)
-                setShowDeadlineCrossedModal(false)
+                setIsDeadlineExtendReqSending(false);
+                setShowDeadlineCrossedModal(false);
             },
             error: (err) => {
-                setIsDeadlineExtendReqSending(false)
+                setIsDeadlineExtendReqSending(false);
             }
         });
     }
 
-
     const MoreOptionsIcon = (props) => {
-        let { selectedProjectFile, project, key, onlyDelete, disabled } = props
+        let { selectedProjectFile, project, key, onlyDelete, disabled } = props;
         return (
             <div className="more-options-wrap" style={disabled ? { pointerEvents: 'none', opacity: 0.5 } : {}}>
                 <ButtonBase onClick={(e) => handleMoreVertOption(e, selectedProjectFile?.id)} className="sorting-icon">
@@ -4217,7 +3918,7 @@ function Fileupload(props) {
     }
 
     const MoreOptionsIconPDF = (props) => {
-        let { project, deleteOnly, from, taskPDF, selectedProjectFile } = props
+        let { project, deleteOnly, from, taskPDF, selectedProjectFile } = props;
         return (
             <div className="more-options-wrap">
                 <ButtonBase onMouseUp={(e) => handleMoreVertOption(e, selectedProjectFile?.id)} className="sorting-icon">
@@ -4255,8 +3956,7 @@ function Fileupload(props) {
     }
 
     const MoreOptionsIconDesigner = (props) => {
-        let { project, removeDelete, removeEdit, selectedProjectFile, deleteOnly, assigned } = props
-        console.log(assigned)
+        let { project, removeDelete, removeEdit, selectedProjectFile, deleteOnly, assigned } = props;
         return (
             <div className="more-options-wrap">
                 <ButtonBase onMouseUp={(e) => handleMoreVertOption(e, selectedProjectFile?.id !== undefined ? selectedProjectFile?.id : project.id)} className="sorting-icon">
@@ -4297,8 +3997,8 @@ function Fileupload(props) {
 
     const handleAssetsTypeFilterClick = (type) => {
         let url = `/assets?page=1`;
-        let queryParam = new URLSearchParams(window.location.search)
-        setAssetsSelectedTypeFilter(type)
+        let queryParam = new URLSearchParams(window.location.search);
+        setAssetsSelectedTypeFilter(type);
         let orderParam = queryParam.get("order_by");
         if (orderParam != null) url += `&order_by=${orderParam}`;
         let projectIdParam = queryParam.get("open-project");
@@ -4309,11 +4009,10 @@ function Fileupload(props) {
         history(url);
     }
 
-
     const handleCreateNewProjectBtnClick = () => {
         const search_param = new URLSearchParams(window.location.search);
         if (activeProjTab === 9) {    // redirect to designer
-            window.open(Config.DESIGNER_HOST)
+            window.open(Config.DESIGNER_HOST);
         } else {
             history(
                 activeProjTab === 3 ? "/create/translate/files/translate-files" :
@@ -4324,14 +4023,13 @@ function Fileupload(props) {
         }
     }
 
-
     const handleRetriveDesignProject = (e, proj) => {
-        e.stopPropagation()
-        let url = ''
+        e.stopPropagation();
+        let url = '';
         if (proj.designer_project_detail.type === "image_design") {
-            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj.designer_project_detail.des_proj_id}`
+            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj.designer_project_detail.des_proj_id}`;
         } else {
-            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj.designer_project_detail.des_proj_id}`
+            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj.designer_project_detail.des_proj_id}`;
         }
 
         Config.axios({
@@ -4340,8 +4038,7 @@ function Fileupload(props) {
             auth: true,
             success: (response) => {
                 let { data } = response;
-                console.log(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name)
-                setExpressProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name)
+                setExpressProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name);
                 // setHasTeam(data.team)
                 let editTargetLanguages = [];
                 let tar = [];
@@ -4349,7 +4046,6 @@ function Fileupload(props) {
                 if (proj.designer_project_detail.type === "image_design") {
                     setEditJobs(data.canvas_translation);
                     response.data?.canvas_translation?.map((each) => {
-
                         tar.push({ language: each?.target_language, id: each?.target_language });
                         tarID.push(each.target_language);
                     });
@@ -4367,17 +4063,15 @@ function Fileupload(props) {
                     let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                         (element) => element.id == data?.canvas_translation[0]?.source_language
                     );
-
                     setTimeout(() => {
                         setSourceLabel(editSourceLanguage?.language);
-                        setSourceLanguage(data?.canvas_translation[0]?.source_language)
+                        setSourceLanguage(data?.canvas_translation[0]?.source_language);
                         setTargetLanguage(editTargetLanguages);
-                        setSkeletonLoader(false)
+                        setSkeletonLoader(false);
                     }, 80);
                 } else {
                     setEditJobs(data?.image_inpaint_creation);
                     response.data?.image_inpaint_creation?.map((each) => {
-
                         tar.push({ language: each?.target_language, id: each?.target_language });
                         tarID.push(each.target_language);
                     });
@@ -4395,39 +4089,31 @@ function Fileupload(props) {
                     let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                         (element) => element.id == data?.source_language
                     );
-
                     setTimeout(() => {
                         setSourceLabel(editSourceLanguage?.language);
-                        setSourceLanguage(data?.source_language)
+                        setSourceLanguage(data?.source_language);
                         setTargetLanguage(editTargetLanguages);
-                        setSkeletonLoader(false)
+                        setSkeletonLoader(false);
                     }, 80);
                 }
-
             },
         });
     }
 
-
     // for designer project edit
     const handleEditDesignerProj = (e, proj) => {
-        console.log('designer edit')
-        handleRetriveDesignProject(e, proj)
+        handleRetriveDesignProject(e, proj);
     }
 
     // for designer project delete
     const handleDownloadDesignerProj = async (proj, selectedProjectFile) => {
-
-        let url
-        let designDownloadUrl
-        let nameofDownload
-        let extention
-
+        let url;
+        let designDownloadUrl;
+        let nameofDownload;
+        let extention;
         if (proj?.designer_project_detail?.type == "image_translate") {
-            designDownloadUrl = Config.BASE_URL + `/ai-image-translation/image-download?image_id=${proj.designer_project_detail.des_proj_id}&file_format=png&language=${selectedProjectFile.target_language}&export_size=1`
-            console.log(designDownloadUrl)
-
-            nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`
+            designDownloadUrl = Config.BASE_URL + `/ai-image-translation/image-download?image_id=${proj.designer_project_detail.des_proj_id}&file_format=png&language=${selectedProjectFile.target_language}&export_size=1`;
+            nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`;
         } else {
             const startNumber = 1;
             const endNumber = proj?.designer_project_detail?.pages;
@@ -4435,131 +4121,107 @@ function Fileupload(props) {
                 const numberToMap = index + startNumber;
                 return `page_number_list=${numberToMap}`;
             }).join('&');
-
-            console.log(formattedString);
             if (selectedProjectFile == null) {
-                designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${proj?.designer_project_detail?.des_proj_id}&file_format=png&export_size=1&` + formattedString
-                nameofDownload = `${proj?.project_name}`
+                designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${proj?.designer_project_detail?.des_proj_id}&file_format=png&export_size=1&` + formattedString;
+                nameofDownload = `${proj?.project_name}`;
                 if (proj?.designer_project_detail?.pages == 1) {
-                    extention = '.png'
+                    extention = '.png';
                 } else {
-                    extention = '.zip'
+                    extention = '.zip';
                 }
             } else {
-                designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${proj?.designer_project_detail?.des_proj_id}&file_format=png&language=${selectedProjectFile?.target_language}&export_size=1&` + formattedString
-                nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`
+                designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${proj?.designer_project_detail?.des_proj_id}&file_format=png&language=${selectedProjectFile?.target_language}&export_size=1&` + formattedString;
+                nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`;
                 if (proj?.designer_project_detail?.pages == 1) {
-                    extention = '.png'
+                    extention = '.png';
                 } else {
-                    extention = '.zip'
+                    extention = '.zip';
                 }
             }
-            console.log(designDownloadUrl)
         }
         // add in download list
-        dispatch(addDownloadingFiles({ id: id, file_name: nameofDownload, ext: extention, status: 1 }))
-
-        url = designDownloadUrl
+        dispatch(addDownloadingFiles({ id: id, file_name: nameofDownload, ext: extention, status: 1 }));
+        url = designDownloadUrl;
         const response = await Config.downloadFileFromApi(url);
-
         // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
+        dispatch(updateDownloadingFile({ id: id, status: 2 }));
+        Config.downloadFileInBrowser(response);
         setTimeout(() => {
             // remove the downloaded file from list
-            dispatch(deleteDownloadingFile({ id: id }))
+            dispatch(deleteDownloadingFile({ id: id }));
         }, 8000);
     }
-
     // for designer project delete
-    // for designer project delete
-
     const handleDeleteDesignerProjectHandle = (proj, selectedProj) => {
-        selectedDesignerProject.current = selectedProj
-        projectObject.current = proj
+        selectedDesignerProject.current = selectedProj;
+        projectObject.current = proj;
         if (selectedProj == null) {
-            setShowExpressDeleteModal(true)
+            setShowExpressDeleteModal(true);
         } else {
-            console.log(selectedProj)
-            console.log(selectedProjectFilesRef.current)
-
             if (selectedProj.task_assign_info != null) {
-                SetShowAssignedProjectDeleteAlert(true)
+                SetShowAssignedProjectDeleteAlert(true);
             } else {
-                setShowTaskDesignIndividualDeleteAlert(true)
-
+                setShowTaskDesignIndividualDeleteAlert(true);
             }
         }
     }
 
     // for designer project delete
     const handleDeleteDesignerProj = (proj, selectedProjectFile) => {
-
-        console.log(proj)
-        let url = ''
+        let url = '';
         if (proj?.designer_project_detail?.type === "image_design") {
-            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj?.designer_project_detail?.des_proj_id}/`
+            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj?.designer_project_detail?.des_proj_id}/`;
             if (selectedProjectFile == null) {
-                handleDeleteDesignWholeProject(proj, url)
+                handleDeleteDesignWholeProject(proj, url);
             } else {
-                handleDeleteDesignTaskOfProject(proj, url, selectedProjectFile?.design_project?.desg_job)
-
+                handleDeleteDesignTaskOfProject(proj, url, selectedProjectFile?.design_project?.desg_job);
             }
         } else {
-            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj?.designer_project_detail?.des_proj_id}/`
+            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj?.designer_project_detail?.des_proj_id}/`;
             if (selectedProjectFile == null) {
-                handleDeleteDesignWholeProject(proj, url)
+                handleDeleteDesignWholeProject(proj, url);
             } else {
-                handleDeleteDesignTaskOfProject(proj, url, selectedProjectFile?.design_project?.desg_job)
+                handleDeleteDesignTaskOfProject(proj, url, selectedProjectFile?.design_project?.desg_job);
             }
         }
-
-        setIsDesignDeleting(true)
-
-
+        setIsDesignDeleting(true);
     }
 
-
-
     const handleDeleteDesignWholeProject = (proj, url) => {
-        setIsTaskDeleting(true)
-        setIsExpressProjectDeleting(true)
+        setIsTaskDeleting(true);
+        setIsExpressProjectDeleting(true);
 
         Config.axios({
             url: url,
             method: 'DELETE',
             auth: true,
             success: (response) => {
-
-                setIsTaskDeleting(false)
-                // console.log(response.data)
+                setIsTaskDeleting(false);
                 Config.toast(proj?.designer_project_detail?.type === "image_design" ? 'Design project deleted' : 'Image project deleted');
-                setIsDesignDeleting(false)
+                setIsDesignDeleting(false);
                 const newArr = createdProjects?.filter(obj => obj.id !== proj.id);
-                setCreatedProjects(newArr)
+                setCreatedProjects(newArr);
                 // if(newArr?.length === 15){
                 //     getDocumentList()
                 // }
-                setShowTaskDesignIndividualDeleteAlert(false)
-                setIsExpressProjectDeleting(false)
-                setShowExpressDeleteModal(false)
-                setEditInstantProjectModal(false)
-                if (newArr?.length == 0) setEmptyProjects(true)
+                setShowTaskDesignIndividualDeleteAlert(false);
+                setIsExpressProjectDeleting(false);
+                setShowExpressDeleteModal(false);
+                setEditInstantProjectModal(false);
+                if (newArr?.length == 0) setEmptyProjects(true);
             },
             error: (err) => {
-                setIsTaskDeleting(false)
-                setIsExpressProjectDeleting(false)
-                setIsDesignDeleting(false)
+                setIsTaskDeleting(false);
+                setIsExpressProjectDeleting(false);
+                setIsDesignDeleting(false);
             }
         });
     }
-    const handleDeleteDesignTaskOfProject = (proj, url, id) => {
-        setIsTaskDeleting(true)
 
+    const handleDeleteDesignTaskOfProject = (proj, url, id) => {
+        setIsTaskDeleting(true);
         let formdata = new FormData();
-        formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target', id)
+        formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target', id);
 
         Config.axios({
             url: url,
@@ -4567,88 +4229,65 @@ function Fileupload(props) {
             formData: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(proj.designer_project_detail.type === "image_design" ? 'Design task deleted' : 'Image task deleted');
-                setIsTaskDeleting(false)
+                setIsTaskDeleting(false);
                 if (selectedProjectFiles?.length === 1) {
-                    // Config.toast(t("deleted_success"));
-                    setCreatedProjects(createdProjects?.filter(each => each?.design_project?.desg_job !== id))
+                    setCreatedProjects(createdProjects?.filter(each => each?.design_project?.desg_job !== id));
                     if (createdProjects?.filter(each => each?.design_project?.desg_job !== id)?.length === 0) setEmptyProjects(true);
                 } else {
                     // Config.toast(t("task_deleted_success"));
                 }
-                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each?.design_project?.desg_job !== id))
-                setShowTaskDesignIndividualDeleteAlert(false)
-
+                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each?.design_project?.desg_job !== id));
+                setShowTaskDesignIndividualDeleteAlert(false);
             },
             error: (err) => {
-                setShowTaskDesignIndividualDeleteAlert(true)
-                setIsTaskDeleting(false)
-                setIsDesignDeleting(false)
+                setShowTaskDesignIndividualDeleteAlert(true);
+                setIsTaskDeleting(false);
+                setIsDesignDeleting(false);
             }
         });
     }
 
-
     // for designer project open before translate
     const handleOpenNonTranslatedDesignProject = (project) => {
-        console.log(project)
-        console.log('open in designer')
-        let subUrl = project.designer_project_detail.type == 'image_design' ? `&page=${1}` : ''
-        let url = `/editor/${project.designer_project_detail.type == 'image_design' ? 'design' : 'image-translate'}/?project=${project.designer_project_detail.des_proj_id}`
-        console.log(project.designer_project_detail)
+        let subUrl = project.designer_project_detail.type == 'image_design' ? `&page=${1}` : '';
+        let url = `/editor/${project.designer_project_detail.type == 'image_design' ? 'design' : 'image-translate'}/?project=${project.designer_project_detail.des_proj_id}`;
         // window.open(Config. DESIGNER_HOST+ url)
-        window.open(Config.DESIGNER_HOST + url + subUrl)
-
+        window.open(Config.DESIGNER_HOST + url + subUrl);
     }
 
     const handleDeleteDesignerProjectUpdate = (proj) => {
-        console.log(proj)
         let formdata = new FormData();
-        setIsExpressUpdating(true)
+        setIsExpressUpdating(true);
         if (sourceLanguage != '') {
             formdata.append("source_language", sourceLanguage);
         }
-
         if (expressProjectName?.trim() === '') {
-            Config.toast(t("enter_proj_name"))
+            Config.toast(t("enter_proj_name"));
             return;
         }
-
         formdata.append(proj?.designer_project_detail?.type === "image_design" ? "file_name" : "project_name", expressProjectName?.trim());
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
                     (element) => element.target_language == eachTargetLanguage?.id
                 ) == null
             )
-                formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'canvas_translation_tar_lang' : 'inpaint_creation_target_lang', eachTargetLanguage?.id);
+            formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'canvas_translation_tar_lang' : 'inpaint_creation_target_lang', eachTargetLanguage?.id);
         });
-
         editJobs.map((eachTargetLanguage) => {
-            console.log(eachTargetLanguage?.target_language)
-            console.log(targetLangListToRemove)
-            console.log(targetLangListToRemove.find(
-                (element) => element.target_language != eachTargetLanguage?.target_language
-            ))
-            console.log(targetLangListToRemove.find(
-                (element) => element.target_language == eachTargetLanguage?.target_language
-            ))
             if (
                 targetLangListToRemove.find(
                     (element) => element.target_language == eachTargetLanguage?.target_language
                 )
             )
-                formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target', eachTargetLanguage?.id);
+            formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target', eachTargetLanguage?.id);
         });
-
-
-        let url = ''
+        let url = '';
         if (proj.designer_project_detail.type === "image_design") {
-            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj.designer_project_detail.des_proj_id}/`
+            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj.designer_project_detail.des_proj_id}/`;
         } else {
-            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj.designer_project_detail.des_proj_id}/`
+            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj.designer_project_detail.des_proj_id}/`;
         }
 
         Config.axios({
@@ -4658,8 +4297,8 @@ function Fileupload(props) {
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_updated_success"));
-                setEditInstantProjectModal(false)
-                setIsExpressUpdating(false)
+                setEditInstantProjectModal(false);
+                setIsExpressUpdating(false);
                 // update the word count and project name of the project
                 const newArr = createdProjects?.map(obj => {
                     if (obj.id === proj?.id) {
@@ -4670,34 +4309,26 @@ function Fileupload(props) {
                     }
                     return obj;
                 });
-                setCreatedProjects(newArr)
-                listFiles(proj.id)
-
-            },
-            error: (err) => {
-
-            }
+                setCreatedProjects(newArr);
+                listFiles(proj.id);
+             },
+            error: (err) => {}
         });
     }
 
     const downloadTaskTargetFile = async (task_data) => {
-        let { id, filename } = task_data
-        let { name, extension } = Config.getNameAndExtension(filename)
-
+        let { id, filename } = task_data;
+        let { name, extension } = Config.getNameAndExtension(filename);
         // add in download list
-        dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }))
-
-        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`
+        dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }));
+        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`;
         const response = await Config.downloadFileFromApi(url);
-
         // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
+        dispatch(updateDownloadingFile({ id: id, status: 2 }));
+        Config.downloadFileInBrowser(response);
         setTimeout(() => {
             // remove the downloaded file from list
-            dispatch(deleteDownloadingFile({ id: id }))
+            dispatch(deleteDownloadingFile({ id: id }));
         }, 8000);
     }
 
@@ -4718,7 +4349,7 @@ function Fileupload(props) {
                     console.error("Download URL not found for task:", task_id);
                     return;
                 }
-                url = `${Config.BASE_URL}/${downloadEntry.url}`
+                url = `${Config.BASE_URL}/${downloadEntry.url}`;
             } else {
                 url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=SIMPLE`;
             }
@@ -4735,37 +4366,26 @@ function Fileupload(props) {
     // this api will initiate the file translate process and provide the status of each task
     const getProjectTransDownloadStatus = (task_id) => {
         if (projectObject.current?.id === undefined) return;
-
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
-            axiosFileTranslateAbortController.abort()
+            axiosFileTranslateAbortController.abort();
         }
-
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-
-        let task_list_arr = []
-
-        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing)
-        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
-        console.log(alreadyProcessingTaskIds)
+        let task_list_arr = [];
+        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing);
+        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id);
         if (alreadyProcessingTask?.length !== 0) {
-            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
         } else {
-            task_list_arr = [task_id]
+            task_list_arr = [task_id];
         }
-        console.log("taskList: " + task_list_arr?.toString())
-
-        fileTranslatingTaskListRef.current = task_list_arr
-
+        fileTranslatingTaskListRef.current = task_list_arr;
         // create task list to process
-        let list = ""
+        let list = "";
         fileTranslatingTaskListRef.current?.map((each, index) => {
             list += `task=${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
-
-        console.log(list)
-
         // display the button loader as soon as the user clicks the TRANSLATE button
         if (task_id !== undefined) {
             let newArr = selectedProjectFilesRef.current?.map(obj => {
@@ -4777,8 +4397,8 @@ function Fileupload(props) {
                 }
                 return obj
             })
-            selectedProjectFilesRef.current = newArr
-            setSelectedProjectFiles(newArr)
+            selectedProjectFilesRef.current = newArr;
+            setSelectedProjectFiles(newArr);
         }
 
         Config.axios({
@@ -4788,7 +4408,7 @@ function Fileupload(props) {
             success: (response) => {
                 // if called with project_id, returns list if task_data
                 if (response.data?.results !== undefined) {
-                    let dataList = response.data?.results
+                    let dataList = response.data?.results;
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
                         if (obj.id === dataList?.find(each => each.task === obj.id)?.task) {
                             let status = dataList?.find(each => each.task === obj.id)?.status
@@ -4800,21 +4420,15 @@ function Fileupload(props) {
                             }
                         }
                         return obj
-                    })
-                    console.log('modified list with isProcessing key')
-                    console.log(newArr)
-                    selectedProjectFilesRef.current = newArr
-                    setSelectedProjectFiles(newArr)
-
-                    console.log('isAnyTaskIsProcessing')
-
-                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false
-
+                    });
+                    selectedProjectFilesRef.current = newArr;
+                    setSelectedProjectFiles(newArr);
+                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false;
+                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false;
+                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false;
                     if (isPageNumNotFound) {
                         // Config.toast(`File couldn't process!`, 'error')
-                        setShowFileErrorModal(true)
+                        setShowFileErrorModal(true);
                         let newArr = selectedProjectFilesRef.current?.map(obj => {
                             if (obj.status === 404) {
                                 return {
@@ -4823,17 +4437,15 @@ function Fileupload(props) {
                                 }
                             }
                             return obj
-                        })
-                        selectedProjectFilesRef.current = newArr
-                        setSelectedProjectFiles(newArr)
-                        return
+                        });
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles(newArr);
+                        return;
                     }
-
-                    if (insuffientCredit) setShowCreditAlertModal(true)
-
+                    if (insuffientCredit) setShowCreditAlertModal(true);
                     if (isAnyTaskIsProcessing) {
                         setTimeout(() => {
-                            getProjectTransDownloadStatus(task_id)
+                            getProjectTransDownloadStatus(task_id);
                         }, 5000);
                     }
                 }
@@ -4846,11 +4458,10 @@ function Fileupload(props) {
                                 ...obj,
                                 isProcessing: false,
                             }
-                        })
-                        console.log(newArr)
-                        selectedProjectFilesRef.current = newArr
-                        setSelectedProjectFiles(newArr)
-                        setShowCreditAlertModal(true)
+                        });
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles(newArr);
+                        setShowCreditAlertModal(true);
                     }
                 }
             },
@@ -4865,10 +4476,9 @@ function Fileupload(props) {
                             }
                         }
                         return obj
-                    })
-                    console.log(newArr)
-                    selectedProjectFilesRef.current = newArr
-                    setSelectedProjectFiles(newArr)
+                    });
+                    selectedProjectFilesRef.current = newArr;
+                    setSelectedProjectFiles(newArr);
                 }
             }
         });
@@ -4883,16 +4493,41 @@ function Fileupload(props) {
         { min: 99, max: 100, message: "Translation Complete"}
     ];
 
+    /**
+     * This method used to get the pooling API to find a task progress data.
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since  08 APR 2025
+     */
     const getBatchByTaskId = (batchList, key, taskId) => {
         return batchList.find(batch => batch[key] === taskId);
     };
 
+    /**
+     * This method used to trigger the polling API to know the file translation progress data.
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const getProgressData = (endpoint, taskId, projectId) => {
         setTimeout(() => {
             getTaskTranslationProgress(endpoint, taskId, projectId);
         }, 6000);
     }
 
+     /**
+     * This method used to update whole project list fields
+     * @param {*} taskId 
+     * @param {*} percentage 
+     * @param {*} status 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
     const updateProjectTaskList = (taskId, percentage, status) => {
         const updatedTasks = selectedProjectFilesRef.current.map(task => {
             if (task.id === taskId) {
@@ -4934,7 +4569,7 @@ function Fileupload(props) {
             }
             return task;
         });
-        selectedProjectFilesRef.current = updatedTasks
+        selectedProjectFilesRef.current = updatedTasks;
         setSelectedProjectFiles([...updatedTasks]);
     }
 
@@ -5001,21 +4636,21 @@ function Fileupload(props) {
     const getTaskTransDownloadStatus = (task_id) => {
         if (projectObject.current?.id === undefined) return;
         if (axiosFileTranslateAbortController) {
-            axiosFileTranslateAbortController.abort()
+            axiosFileTranslateAbortController.abort();
         }
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-        let task_list_arr = []
-        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED")
-        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
+        let task_list_arr = [];
+        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED");
+        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id);
         if (alreadyProcessingTask?.length !== 0) {
-            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
         } else {
-            task_list_arr = [task_id]
+            task_list_arr = [task_id];
         }
-        fileTranslatingTaskListRef.current = task_list_arr
+        fileTranslatingTaskListRef.current = task_list_arr;
         // create task list to process
-        let list = ""
+        let list = "";
         fileTranslatingTaskListRef.current?.map((each, index) => {
             list += `${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
@@ -5028,13 +4663,14 @@ function Fileupload(props) {
                         isProcessing: true
                     }
                 }
-                return obj
+                return obj;
             })
-            selectedProjectFilesRef.current = newArr
-            setSelectedProjectFiles(newArr)
+            selectedProjectFilesRef.current = newArr;
+            setSelectedProjectFiles(newArr);
         }
         let formData = new FormData();
         formData.append("task", task_id);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/adaptive_file_translate/`,
             method: "POST",
@@ -5058,8 +4694,8 @@ function Fileupload(props) {
                         }
                         return obj
                     })
-                    selectedProjectFilesRef.current = newArr
-                    setSelectedProjectFiles(newArr)
+                    selectedProjectFilesRef.current = newArr;
+                    setSelectedProjectFiles(newArr);
                 }
                 if (err?.response?.status === 400) {
                     if (err?.response?.data?.msg === 'Insufficient Credits') {
@@ -5071,7 +4707,7 @@ function Fileupload(props) {
                                     isProcessing: false
                                 }
                             }
-                            return obj
+                            return obj;
                         })
                         selectedProjectFilesRef.current = newArr;
                         setSelectedProjectFiles([...newArr]);
@@ -5086,7 +4722,7 @@ function Fileupload(props) {
                                 isProcessing: false
                             }
                         }
-                        return obj
+                        return obj;
                     })
                     selectedProjectFilesRef.current = newArr;
                     setSelectedProjectFiles([...newArr]);
