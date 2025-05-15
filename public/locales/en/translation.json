@@ -712,6 +712,7 @@
     "instant": "Instant",
     "assign_proj": "Assigned projects",
     "file_format_not_support": "This file format is not yet supported. File ignored.",
+    "file_not_support_message": "This file format is not supported yet. Supported formats: TXT, DOCX.",
     "the_file": "The file",
     "already_added": "is already added",
     "change_request_reason": "Change request reason",
