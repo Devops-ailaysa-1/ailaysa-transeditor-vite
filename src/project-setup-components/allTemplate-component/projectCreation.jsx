@@ -1288,6 +1288,7 @@ function ProjectCreation(props) {
             error: (err) => {
                 if (err?.response?.data?.files) {
                     setIsSubmitted(false);
+                    setFiles([]);
                     Config.toast(t("submitted_file_empty"), 'warning');
                 }
                 const msg = err?.response?.data?.msg || err?.response?.data?.error;
