@@ -118,6 +118,7 @@ export const SimpleTranslateGlossaryModal = (props) => {
                                 <AilaysaNewGlossEditingArea 
                                     setActiveScreen={setActiveScreen}
                                     glossTaskId={selectedTaskId} //{defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails.task_id}
+                                     isFrom = 'Simple_Glossary'
                                 />
                             ) : (
                                 <ImportTerms 
