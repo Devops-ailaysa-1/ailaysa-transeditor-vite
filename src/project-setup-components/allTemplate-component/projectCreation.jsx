@@ -2684,15 +2684,15 @@ function ProjectCreation(props) {
                                                        {/* </div> */}
                                                      </div>
                                                      <div className="file-upload_instruct-row">
-                                                     <span className="max-word-note mr-2">
+                                                     <span className="max-word-note">
                                                         {t("limit_for_file_upload")}: <span>1 file upload</span>
                                                      </span>
-                                                      <span className="max-word-note">
-                                                        {t("file_upload_conditon_note_3")}: <span>10,000</span>
+                                                      <span className="max-file-note">
+                                                        {t("file_upload_conditon_note_3")}: <span>2,000</span> 
                                                      </span>
-                                                     <span className="max-file-note">
+                                                     {/* <span className="max-file-note">
                                                      {t("file_upload_condition_note_2")}: <span>100 MB</span>
-                                                     </span>
+                                                     </span> */}
                                                     </div>
                                                   </div>
                                                   </div>
