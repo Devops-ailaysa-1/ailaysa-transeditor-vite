@@ -626,25 +626,25 @@ function ProjectCreation(props) {
         let fileName = name.substring(0, lastDot);
         let ext = "." + name.substring(lastDot + 1);
         if (!request && supportFileExtensions.indexOf(ext?.toLowerCase()) == -1) {
-            Config.toast(t("file_format_not_support"), 'warning');
+            Config.toast(t("file_not_support_message"), 'warning');
             return false;
         } else if (
             request === "tmx" &&
             supportedTMXFileExtensions.indexOf(ext) == -1
         ) {
-            Config.toast(t("file_format_not_support"), 'warning');
+            Config.toast(t("file_not_support_message"), 'warning');
             return false;
         } else if (
             request === "tbx" &&
             supportedTBXFileExtensions.indexOf(ext) == -1
         ) {
-            Config.toast(t("file_format_not_support"), 'warning');
+            Config.toast(t("file_not_support_message"), 'warning');
             return false;
         } else if (!request && ext?.toLowerCase() === ".pdf") {
-            Config.toast(t("file_format_not_support"), 'warning');
+            Config.toast(t("file_not_support_message"), 'warning');
             return false;
         } else if (!request && ['.txt', '.docx'].indexOf(ext?.toLowerCase()) == -1) {
-            Config.toast(t("file_format_not_support"), 'warning');
+            Config.toast(t("file_not_support_message"), 'warning');
             return false;
         }
         return true;
