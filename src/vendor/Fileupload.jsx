@@ -4528,10 +4528,10 @@ function Fileupload(props) {
      * @author Padmabharathi Subiramanian 
      * @since Apr 08 2025
      */
-    const updateProjectTaskList = (taskId, percentage, status) => {
+    const updateProjectTaskList = (taskId, percentage, status, batchData) => {
         const updatedTasks = selectedProjectFilesRef.current.map(task => {
             if (task.id === taskId) {
-                if ('FAILED' === status.toUpperCase()) {
+                if (('FAILED' === status.toUpperCase()) && ((batchData?.completed_batches + batchData?.failed_batches) === batchData?.total_batches)) {
                     task.adaptive_file_translate_status = 'FAILED';
                     task.isProcessing = false;
                     task.percentage = 0;
@@ -4598,14 +4598,14 @@ function Fileupload(props) {
                     const batch = getBatchByTaskId(batchList, 'task_id', taskId);
                     if (batch != null && batchList != null && batchList.length > 0) {
                         batchList.map(batch => {
-                            updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status);
+                            updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status, batch);
                             if (batch?.status === 'completed') {
                                 const newDownloadItem = {
                                     taskId: batch.task_id,
                                     url: batch.download_file
                                 };
                                 downloadTargetFile.push(newDownloadItem);
-                            } else if ('FAILED' === batch?.status?.toUpperCase()) {
+                            } else if (('FAILED' === batch?.status?.toUpperCase()) && ((batch?.completed_batches + batch?.failed_batches) === batch?.total_batches)) {
                                 return;
                             } else {
                                 getProgressData(endpoint, batch?.task_id, projectId);
