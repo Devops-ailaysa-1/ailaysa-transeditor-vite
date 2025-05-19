@@ -1281,7 +1281,7 @@ function ProjectCreation(props) {
                 setProjectName(response.data.project_name);
                 contentprojectNameRef.current.innerText = response.data.project_name;
                 getProjectTaskData(response.data.id, action);
-                Config.toast("Project is created successfully");
+                Config.toast("Your project is now ready, and the translation process has begun.");
                 setIsShowNote(true);
                 return;
             },
