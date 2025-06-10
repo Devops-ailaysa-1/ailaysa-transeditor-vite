@@ -1,50 +1,42 @@
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import Config from '../../Config'
-import { useDispatch } from 'react-redux'
-import { setShowCustomSettingsModal } from '../../features/ShowCustomSettingsModalSlice'
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import Config from '../../Config';
+import { useDispatch } from 'react-redux';
+import { setShowCustomSettingsModal } from '../../features/ShowCustomSettingsModalSlice';
 
 export const MyStyleBox = (props) => {
-
     const {
         myStyleData,
         getMyStyle
-    } = props
-
-    console.log(myStyleData)
-
-    let data = myStyleData[0]
-
-    const {t} = useTranslation()
-    const dispatch = useDispatch()
-
-    const [myStylePrompt, setMyStylePrompt] = useState(myStyleData?.length ? data?.brand_voice_result_prompt : "")
-    const [isSaving, setIsSaving] = useState(false)
+    } = props;
+    let data = myStyleData[0];
+    const {t} = useTranslation();
+    const dispatch = useDispatch();
+    const [myStylePrompt, setMyStylePrompt] = useState(myStyleData?.length ? data?.brand_voice_result_prompt : "");
+    const [isSaving, setIsSaving] = useState(false);
 
     const createUpdatePrompt = () => {
         let formdata = new FormData();
-
         if(myStylePrompt?.trim()?.length === 0) {
-            Config.toast(t("empty_my_style_text"), "warning")
-            return
+            Config.toast(t("empty_my_style_text"), "warning");
+            return;
         }
-        
-        formdata.append('brand_voice_result_prompt', myStylePrompt)
-        setIsSaving(true)
+        formdata.append('brand_voice_result_prompt', myStylePrompt);
+        setIsSaving(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/my-style/${myStyleData?.length ? `${data?.id}/` : ''}`,
             method: myStyleData?.length ? "PUT" : "POST",
             data: formdata,
             auth: true,
             success: (response) => {
-               console.log(response.data)
-               setIsSaving(false)
-               dispatch(setShowCustomSettingsModal(false))
-               getMyStyle()
+               setIsSaving(false);
+               dispatch(setShowCustomSettingsModal(false));
+               getMyStyle();
             },
             error: (err) => {
-                console.log(err)
-                setIsSaving(false)
+                console.error(err);
+                setIsSaving(false);
             }
         })
     } 
@@ -83,5 +75,5 @@ export const MyStyleBox = (props) => {
                 </div>
             </div>
         </div>
-    )
+    );
 }

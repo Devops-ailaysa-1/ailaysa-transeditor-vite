@@ -14,7 +14,6 @@ import { BlueButtonLoader } from "../../../loader/BlueButtonLoader";
 import { useNavigate } from "react-router-dom";
 
 const CoAuthorPanel = (props, ref) => {
-
     let { 
         getBookDetails,
         createdBookIdRef,
@@ -42,22 +41,18 @@ const CoAuthorPanel = (props, ref) => {
         setIsGenerateLoadingFreestyle,
         setCoAuthorPanelView,
         setShowCreditAlertModal
-    } = props
-
+    } = props;
     const { t } = useTranslation();
-    const history = useNavigate()
+    const history = useNavigate();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const levelOptions = useSelector((state) => state.bookLevelOption.value)
-    const genreOptions = useSelector((state) => state.bookGenreOption.value)
-
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const levelOptions = useSelector((state) => state.bookLevelOption.value);
+    const genreOptions = useSelector((state) => state.bookGenreOption.value);
     // const [selectedLevel, setSelectedLevel] = useState(null);
     // const [selectedGenre, setSelectedGenre] = useState(null);
     // const [authorIdentity, setAuthorIdentity] = useState("");
     // const [bookDescription, setBookDescription] = useState("");
     // const [bookTitle, setBookTitle] = useState("");
-    
     // const [selectedTitle, setSelectedTitle] = useState({
     //     id: null, title: ''
     // });
@@ -66,16 +61,14 @@ const CoAuthorPanel = (props, ref) => {
         title: false,
         chapter: false
     });
-
-    const authorIdentityInputRef = useRef(null)
-    const bookDescriptionInputRef = useRef(null)
-    const bookTitleInputRef = useRef(null)
-    const bookLevelSelectRef = useRef(null)
-    const bookGenreSelectRef = useRef(null)
-    const updateTitleManuallyRef = useRef(true)
+    const authorIdentityInputRef = useRef(null);
+    const bookDescriptionInputRef = useRef(null);
+    const bookTitleInputRef = useRef(null);
+    const bookLevelSelectRef = useRef(null);
+    const bookGenreSelectRef = useRef(null);
+    const updateTitleManuallyRef = useRef(true);
     // const chaptersCreatedRef = useRef(false)
     
-
     const Newvariants = {
         hidden: {
             opacity: 0,
@@ -183,23 +176,21 @@ const CoAuthorPanel = (props, ref) => {
 
     // get book details from api
     useEffect(() => {
-        let bookId = URL_SEARCH_PARAMS.get('book')
+        let bookId = URL_SEARCH_PARAMS.get('book');
         if(bookId) {
-            getBookDetails(bookId)
+            getBookDetails(bookId);
         }
-    }, [URL_SEARCH_PARAMS.get('book')])
+    }, [URL_SEARCH_PARAMS.get('book')]);
     
-
     // this hook is used to expose the child function to parent in a form of a "ref"
     useImperativeHandle(bookCreationPanelRef, () => {
         return {
             createBook: () => {
                 if(isFromValidated()){
                     if(createdBookIdRef.current === null){
-                        createBook('create-chapter')
+                        createBook('create-chapter');
                     }else{
-                        // console.log('create chapters')
-                        createChapters()
+                        createChapters();
                     }
                 }
             }
@@ -208,54 +199,55 @@ const CoAuthorPanel = (props, ref) => {
 
     const addErrorFieldClass = (element, select = false) => {
         if(!select){
-            element.classList.add('error-field-style')
+            element.classList.add('error-field-style');
         }else{
-            element.classList.add('error-select-style')
+            element.classList.add('error-select-style');
         }
     }
     
     const removeErrorFieldClass = (element, select = false) => {
         if(!select){
-            element.classList.remove('error-field-style')
+            element.classList.remove('error-field-style');
         }else{
-            element.classList.remove('error-select-style')
+            element.classList.remove('error-select-style');
         }
     }
 
     const handleAuthorIdentityChange = (e) => {
-        let value = e.target.value
-        setAuthorIdentity(value)
+        let value = e.target.value;
+        setAuthorIdentity(value);
         if(value?.trim()?.length !== 0){
-            removeErrorFieldClass(authorIdentityInputRef.current)
+            removeErrorFieldClass(authorIdentityInputRef.current);
         }
     } 
+
     const handleBookDescriptionChange = (e) => {
-        let value = e.target.value
-        setBookDescription(value)
+        let value = e.target.value;
+        setBookDescription(value);
         if(value?.trim()?.length !== 0){
-            removeErrorFieldClass(bookDescriptionInputRef.current)
+            removeErrorFieldClass(bookDescriptionInputRef.current);
         }
     } 
     const handleBookTitleChange = (e) => {
-        let value = e.target.value
-        setBookTitle(value)
+        let value = e.target.value;
+        setBookTitle(value);
         if(value?.trim()?.length !== 0){
-            removeErrorFieldClass(bookTitleInputRef.current)
+            removeErrorFieldClass(bookTitleInputRef.current);
         }else{
             setSelectedTitle({
                 id: null, title: ''
-            })
+            });
         }
     } 
 
     const handleBookLevelSelect = (selected) => {
-        setSelectedLevel(selected)
-        removeErrorFieldClass(bookLevelSelectRef.current, true)
+        setSelectedLevel(selected);
+        removeErrorFieldClass(bookLevelSelectRef.current, true);
     } 
 
     const handleBookGenreSelect = (selected) => {
-        setSelectedGenre(selected)
-        removeErrorFieldClass(bookGenreSelectRef.current, true)
+        setSelectedGenre(selected);
+        removeErrorFieldClass(bookGenreSelectRef.current, true);
     } 
 
     const handleTitleSelect = (id, titleText) => {
@@ -263,79 +255,67 @@ const CoAuthorPanel = (props, ref) => {
             id,
             title: titleText
         });
-        setBookTitle(titleText)
-        removeErrorFieldClass(bookTitleInputRef.current)
-        bookTitleInputRef.current.focus()
+        setBookTitle(titleText);
+        removeErrorFieldClass(bookTitleInputRef.current);
+        bookTitleInputRef.current.focus();
     }
-
-    
-    
+        
     const isFromValidated = (direct = true) => {
         if(
             authorIdentity?.trim()?.length === 0 || bookDescription?.trim()?.length === 0 || (direct && bookTitle?.trim()?.length === 0) 
             || selectedLevel?.value === undefined || selectedGenre?.value === undefined
         ){
             if(authorIdentity?.trim()?.length === 0){
-                addErrorFieldClass(authorIdentityInputRef.current)
+                addErrorFieldClass(authorIdentityInputRef.current);
             }
             if(bookDescription?.trim()?.length === 0){
-                addErrorFieldClass(bookDescriptionInputRef.current)
+                addErrorFieldClass(bookDescriptionInputRef.current);
             }
             if(direct && bookTitle?.trim()?.length === 0){
-                addErrorFieldClass(bookTitleInputRef.current)
+                addErrorFieldClass(bookTitleInputRef.current);
             }
             if(selectedLevel?.value === undefined){
-                addErrorFieldClass(bookLevelSelectRef.current, true)
+                addErrorFieldClass(bookLevelSelectRef.current, true);
             }
             if(selectedGenre?.value === undefined){
-                addErrorFieldClass(bookGenreSelectRef.current, true)
+                addErrorFieldClass(bookGenreSelectRef.current, true);
             }
-            return false
+            return false;
         }
-        return true
+        return true;
     } 
 
     const createBook = (from) => {
         let formdata = new FormData();
-
         formdata.append("description", bookDescription);
         formdata.append("book_language", bookLanguage);
         formdata.append("level", selectedLevel?.value);
         formdata.append("genre", selectedGenre?.value);
         formdata.append("author_info", authorIdentity);
-
         if(bookTitle?.trim()?.length !== 0) formdata.append("title", bookTitle);
-
-        
         if (from === 'gen-title'){
-            setIsGenerating({...isGenerating, title: true})
+            setIsGenerating({...isGenerating, title: true});
         } else {
-            setIsGenerateLoadingFreestyle(true)
+            setIsGenerateLoadingFreestyle(true);
         }
         
-
         Config.axios({
             url: `${Config.BASE_URL}/writer/bookcreation/`,
             method: "POST",
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-                let data = response.data
-                createdBookIdRef.current = data?.id
-                
-                if(data?.id === undefined) return
-
-                history(`/book-writing?book=${data.id}`)
-
-                if(from === 'create-chapter') createChapters()
-                
-                if (from === 'gen-title') generateBookTitles()
+                let data = response.data;
+                createdBookIdRef.current = data?.id;
+                if(data?.id === undefined) return;
+                history(`/book-writing?book=${data.id}`);
+                if(from === 'create-chapter') createChapters();
+                if (from === 'gen-title') generateBookTitles();
             },
             error: (err) => {
                 if (err?.response.status === 400) {
-                    setIsGenerateLoadingFreestyle(false)
-                    Config.toast('Please try again!!!', 'error')
+                    setIsGenerateLoadingFreestyle(false);
+                    Config.toast('Please try again!!!', 'error');
                 }
             }
         });
@@ -343,13 +323,11 @@ const CoAuthorPanel = (props, ref) => {
 
     const updateBook = (update) => {
         let formdata = new FormData();
-        // console.log(bookTitle)
         if(bookTitle === null || bookTitle === undefined || bookTitle?.trim()?.length === 0){
-            addErrorFieldClass(bookTitleInputRef.current)
-            bookTitleInputRef.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" })
+            addErrorFieldClass(bookTitleInputRef.current);
+            bookTitleInputRef.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
             return;
         }
-
         if(update === 'title'){
             formdata.append("title", bookTitle);
         }
@@ -360,60 +338,54 @@ const CoAuthorPanel = (props, ref) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 if(update === 'title') {
-                    updateTitleManuallyRef.current = false
-                    createChapters()
+                    updateTitleManuallyRef.current = false;
+                    createChapters();
                 }
                 // let data = response.data
                 // createdBookIdRef.current = data.id
             },
             error: (err) => {
                 if (err?.response.status === 400) {
-                    
+                    console.error(err);
                 }
             }
         });
     } 
 
     const generateBookTitles = () => {
-
         if (createdBookIdRef.current === null) {
             if(isFromValidated(false)){
-                createBook('gen-title')
+                createBook('gen-title');
             }
             return;
         }
-        
-        setIsGenerating({...isGenerating, title: true})
-
+        setIsGenerating({...isGenerating, title: true});
         let formdata = new FormData();
         formdata.append("book_creation", createdBookIdRef.current);
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/booktitle/`,
             method: "POST",
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 // let leftSideBarScrollingDiv = document.querySelector('.gen-prop-main-wrap')
                 // leftSideBarScrollingDiv.scrollTo({
                 //     top: leftSideBarScrollingDiv.scrollHeight,
                 //     behavior: 'smooth'
                 // }); 
-                setBookTitleList(response.data)
-                // getBookDetails(createdBookIdRef.current)
-                
-                setIsGenerating({...isGenerating, title: false})
+                setBookTitleList(response.data);
+                setIsGenerating({...isGenerating, title: false});
             },
             error: (err) => {
-                setIsGenerating({...isGenerating, title: false})
+                setIsGenerating({...isGenerating, title: false});
                 if (err?.response?.status === 400) {
                     if (err?.response?.data?.msg?.includes('Insufficient')) {    // this error comes when the pre-translate is enabled in create flow
-                        setShowCreditAlertModal(true)
+                        setShowCreditAlertModal(true);
                     }
                 } else if (err?.response?.status === 500) {
-                    Config.toast(t("too_many_requests"))
+                    Config.toast(t("too_many_requests"));
                 }
             }
         });
@@ -421,12 +393,7 @@ const CoAuthorPanel = (props, ref) => {
 
     const createChapters = () => {
         let formdata = new FormData();
-
         // if generated title is selected then send book_title_id and creation id
-        // console.log(selectedTitle?.title?.trim())
-        // console.log(bookTitle?.trim())
-        // console.log(selectedTitle?.title?.trim() === bookTitle?.trim())
-
         if(selectedTitle?.id !== undefined && selectedTitle?.title?.trim() === bookTitle?.trim()){
             formdata.append("book_title", selectedTitle?.id);
             formdata.append("book_creation", createdBookIdRef.current);
@@ -434,13 +401,12 @@ const CoAuthorPanel = (props, ref) => {
         // if not selected the generated id then send book creation id
         else{
             if(updateTitleManuallyRef.current){
-                updateBook('title')
-                return
+                updateBook('title');
+                return;
             }
             formdata.append("book_creation", createdBookIdRef.current); 
         }
-        
-        setIsGenerateLoadingFreestyle(true)
+        setIsGenerateLoadingFreestyle(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/writer/bookbodymatter/`,
@@ -448,14 +414,14 @@ const CoAuthorPanel = (props, ref) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                chaptersCreatedRef.current = true
-                getBookDetails(createdBookIdRef.current)
+                chaptersCreatedRef.current = true;
+                getBookDetails(createdBookIdRef.current);
             },
             error: (err) => {
                 if (err?.response.status === 400) {
-                    setShowCreditAlertModal(true)
-                    setIsGenerateLoadingFreestyle(false)
-                    Config.toast('Please try again!!!', 'error')
+                    setShowCreditAlertModal(true);
+                    setIsGenerateLoadingFreestyle(false);
+                    Config.toast('Please try again!!!', 'error');
                 }
             }
         });
@@ -612,4 +578,4 @@ const CoAuthorPanel = (props, ref) => {
     )
 }
 
-export default React.forwardRef(CoAuthorPanel) 
+export default React.forwardRef(CoAuthorPanel);

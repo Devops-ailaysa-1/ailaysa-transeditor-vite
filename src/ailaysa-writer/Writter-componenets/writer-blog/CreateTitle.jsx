@@ -552,18 +552,12 @@ const CreateTitle = (props) => {
 
 
     const generateBlogTitles = () => {
-
-        if (createTitleformValidation()) return
-
-        setIsTitleGenerating(true)
-
+        if (createTitleformValidation()) return;
+        setIsTitleGenerating(true);
         if (createdBlogIdRef.current == null) {
             createBlog('gen-titles')
             return;
         }
-        // console.log(blogKeywords)
-        // console.log(blogCreationResponse.current?.keywords)
-
         if (createdBlogIdRef.current !== null && (
             blogCreationResponse.current?.keywords?.trim() !== getKeywordStringList(chipsArray) ||
             blogCreationResponse.current?.user_title?.trim() !== blogTopic?.trim() ||
@@ -573,17 +567,15 @@ const CreateTitle = (props) => {
             updateBlog('gen-titles')
             return;
         }
-
-
         let formdata = new FormData();
         formdata.append("blog_creation_gen", createdBlogIdRef.current);
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogtitle/`,
             method: "POST",
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 setIsTitleGenerating(false)
                 // setBlogTitlesList(response.data)
                 // setTitleListCopy(response.data)

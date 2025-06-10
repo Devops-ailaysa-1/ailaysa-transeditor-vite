@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
-import './prompty_library_modal.css'
+import React, { useEffect, useRef, useState } from 'react';
+import './prompty_library_modal.css';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import CloseIcon from '@mui/icons-material/Close';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { Swiper, SwiperSlide } from 'swiper/react';
-
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -18,20 +17,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import generateKey from '../../project-setup-components/speech-component/speech-to-text/recorder-components/utils/GenerateKey';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
-import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg"
+import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg";
 import { MoreMenu } from './MoreMenu';
 import Config from '../../vendor/Config';
 
 export const PromptLibraryModal = (props) => {
-    let {contenteditableRef, toggleState} = props
-
-    const [showPromptLibrary, setShowPromptLibrary] = useState(true)
-    const [activePromptTab, setActivePromptTab] = useState(1)
-    const [selectedDomain, setSelectedDomain] = useState(1)
-    const [selectedCategory, setselectedCategory] = useState(1)
-    const [selectedSubCategory, setselectedSubCategory] = useState(1)
-    const [isNewOrEditMode, setIsNewOrEditMode] = useState(false)
-    const [searchQueryText, setSearchQueryText] = useState("")
+    let {contenteditableRef, toggleState} = props;
+    const [showPromptLibrary, setShowPromptLibrary] = useState(true);
+    const [activePromptTab, setActivePromptTab] = useState(1);
+    const [selectedDomain, setSelectedDomain] = useState(1);
+    const [selectedCategory, setselectedCategory] = useState(1);
+    const [selectedSubCategory, setselectedSubCategory] = useState(1);
+    const [isNewOrEditMode, setIsNewOrEditMode] = useState(false);
+    const [searchQueryText, setSearchQueryText] = useState("");
 
     let promptCardsListInit = [
         {
@@ -46,14 +44,14 @@ export const PromptLibraryModal = (props) => {
             id: 3,
             prompt_content: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
         },
-    ]
+    ];
 
-    const [domainList, setDomainList] = useState([])
-    const [categoryList, setCategoryList] = useState([])
-    const [subCategoryList, setSubCategoryList] = useState([])
-    const [promptCardsList, setPromptCardsList] = useState([])
-    const [promptCardsListCopy, setPromptCardsListCopy] = useState([])
-    const [promptSearchResList, setPromptSearchResList] = useState(null)
+    const [domainList, setDomainList] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [subCategoryList, setSubCategoryList] = useState([]);
+    const [promptCardsList, setPromptCardsList] = useState([]);
+    const [promptCardsListCopy, setPromptCardsListCopy] = useState([]);
+    const [promptSearchResList, setPromptSearchResList] = useState(null);
     
     const promptSystemValueRef = useRef([])
     const promptCardsContainerRef = useRef(null)
@@ -62,8 +60,8 @@ export const PromptLibraryModal = (props) => {
 
     // get all system values on component load
     useEffect(() => {
-        getPromptLibSysValues()
-    }, [])
+        getPromptLibSysValues();
+    }, []);
 
     // based on selected domain set category list and select first category
     useEffect(() => {
@@ -71,12 +69,12 @@ export const PromptLibraryModal = (props) => {
             let domain = promptSystemValueRef.current?.find(each => each.id === selectedDomain)
             let category = domain.domain_category?.map(each => (
                 {id: each.id, name: each.category_name}
-            ))
-            setCategoryList(category)
-            try { setselectedCategory(category[0]?.id) }
-            catch(err){ console.log(err) }
+            ));
+            setCategoryList(category);
+            try { setselectedCategory(category[0]?.id); }
+            catch(err){ console.error(err); }
         }
-    }, [selectedDomain, promptSystemValueRef.current])
+    }, [selectedDomain, promptSystemValueRef.current]);
 
     // based on selected category set sub-category list and select first sub-category
     useEffect(() => {
@@ -85,40 +83,37 @@ export const PromptLibraryModal = (props) => {
             let category = domain?.find(each => each.id === selectedCategory)
             let subCategorys = category?.cat_subcategories?.map(each => (
                 {id: each.id, name: each.sub_category_name}
-            )) 
-            setSubCategoryList(subCategorys)
-            try { setselectedSubCategory(subCategorys[0]?.id) }
-            catch(err) { console.log(err) }
+            ));
+            setSubCategoryList(subCategorys);
+            try { setselectedSubCategory(subCategorys[0]?.id); }
+            catch(err) { console.error(err); }
         }
-    }, [selectedCategory, promptSystemValueRef.current])
+    }, [selectedCategory, promptSystemValueRef.current]);
 
     // based on sub-cateogry call getPromptsForSubcategory() method to get all prompts
     useEffect(() => {
         if(selectedSubCategory && promptSystemValueRef.current?.length !== 0){
             if(searchQueryText.trim() === "") {
-                getPromptsForSubcategory(selectedSubCategory)
+                getPromptsForSubcategory(selectedSubCategory);
             }
         }
-    }, [selectedSubCategory, promptSystemValueRef.current, searchQueryText])
+    }, [selectedSubCategory, promptSystemValueRef.current, searchQueryText]);
 
     useEffect(() => {
         if(activePromptTab === 1) {
-            
         }
-    }, [activePromptTab])
-    
-    
+    }, [activePromptTab]);
+        
     // check whether any prompt card is in "edit" or new "state"
     useEffect(() => {
         if(promptCardsList?.length !== 0){
             if(promptCardsList.find(each => (each.isNew || each.isEdit))){
-                setIsNewOrEditMode(true)
+                setIsNewOrEditMode(true);
             }else{
-                setIsNewOrEditMode(false)
+                setIsNewOrEditMode(false);
             }
         }
-    }, [promptCardsList])
-
+    }, [promptCardsList]);
 
     // JSX component for custom button
     const PromptButton = (props) => {
@@ -249,23 +244,21 @@ export const PromptLibraryModal = (props) => {
             url: `${Config.BASE_URL}/app/domain-prompt-library`,
             auth: true,
             success: (response) => {
-                promptSystemValueRef.current = response.data
+                promptSystemValueRef.current = response.data;
                 let domains = response.data?.map(each => (
                     {id: each.id, name: each.name}
-                ))
-                setDomainList(domains)
+                ));
+                setDomainList(domains);
             },
         });
     }
 
     const getPromptsForSubcategory = (id) => {
         if(!id) return  // fallback
-
         // it will abort/cancel the ongoing api request
         if (axiosGetPromptCardsAbortControllerRef.current) {
-            axiosGetPromptCardsAbortControllerRef.current.abort()
+            axiosGetPromptCardsAbortControllerRef.current.abort();
         }
-    
         const controller = new AbortController();
         axiosGetPromptCardsAbortControllerRef.current = controller
 
@@ -274,9 +267,9 @@ export const PromptLibraryModal = (props) => {
             auth: true,
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
-                promptCardsContainerRef.current?.scrollTo({top: 0})
-                setPromptCardsList(response.data)
-                setPromptCardsListCopy(response.data)
+                promptCardsContainerRef.current?.scrollTo({top: 0});
+                setPromptCardsList(response.data);
+                setPromptCardsListCopy(response.data);
             },
         });
     }
@@ -293,9 +286,8 @@ export const PromptLibraryModal = (props) => {
                 return obj   
             }
         })
-        return newArr
+        return newArr;
     } 
-
 
     const addNewListItemInList = (e, list, setList, key) => {
         let newItem = {
@@ -303,15 +295,14 @@ export const PromptLibraryModal = (props) => {
             prompt_content: '',
             [key]: true
         }
-        console.log(list)
-        let newArr = [newItem, ...list]
-        setList(newArr)
+        let newArr = [newItem, ...list];
+        setList(newArr);
     } 
 
     const handleInputKeyDown = (e, itemId, list, setList) => {
         if(e.target.value?.trim() === '') return 
         if(e.which === 13){
-            handleInputBlur(e, itemId, list, setList)
+            handleInputBlur(e, itemId, list, setList);
         }
     }
     
@@ -320,12 +311,12 @@ export const PromptLibraryModal = (props) => {
         if(e.target.value?.trim() === ''){
             setList(list.filter(each => each.id !== itemId))
         }else{
-            setList(updateSpecificKeyInList(list, itemId, 'isEditable', false))
+            setList(updateSpecificKeyInList(list, itemId, 'isEditable', false));
         }
     } 
 
     const handleInputChange = (e, itemId, list, setList) => {
-        setList(updateSpecificKeyInList(list, itemId, 'name', e.target.value))
+        setList(updateSpecificKeyInList(list, itemId, 'name', e.target.value));
     } 
 
     const handlePromptChange = (e, itemId) => {
@@ -336,47 +327,45 @@ export const PromptLibraryModal = (props) => {
                     prompt_content: e.target.value
                 }
             }
-            return obj
-        })
-        setPromptCardsListCopy(newArr)
-        // setPromptCardsList(newArr)
+            return obj;
+        });
+        setPromptCardsListCopy(newArr);
     } 
 
     const handlePromptCancelBtn = (e, itemId) => {
-        if(itemId) setPromptCardsList(promptCardsList?.filter(each => each.id !== itemId))
-        else setPromptCardsList(promptCardsList?.filter(each => !each.isNew))
+        if(itemId) setPromptCardsList(promptCardsList?.filter(each => each.id !== itemId));
+        else setPromptCardsList(promptCardsList?.filter(each => !each.isNew));
     }
     
     const handleAddPromptBtn = (e, itemId) => {
-        if(promptCardsListCopy?.find(each => each.id === itemId)?.prompt_content?.trim() === "") return
-        let value = promptCardsListCopy?.find(each => each.id === itemId)?.prompt_content?.trim()
-        let updatedPromptArr = updateSpecificKeyInList(promptCardsList, itemId, 'prompt_content', value)
-        let closeNewPrompt = updateSpecificKeyInList(updatedPromptArr, itemId, 'isNew', false)
-
-        setPromptCardsList(closeNewPrompt)
+        if(promptCardsListCopy?.find(each => each.id === itemId)?.prompt_content?.trim() === "") return;
+        let value = promptCardsListCopy?.find(each => each.id === itemId)?.prompt_content?.trim();
+        let updatedPromptArr = updateSpecificKeyInList(promptCardsList, itemId, 'prompt_content', value);
+        let closeNewPrompt = updateSpecificKeyInList(updatedPromptArr, itemId, 'isNew', false);
+        setPromptCardsList(closeNewPrompt);
     }
 
     const handleToggleEditPromptCard = (e, itemId, isEdit) => {
-        let newArr = updateSpecificKeyInList(promptCardsList, itemId, 'isEdit', isEdit)
-        setPromptCardsList(newArr)
-        setPromptCardsListCopy(newArr)
+        let newArr = updateSpecificKeyInList(promptCardsList, itemId, 'isEdit', isEdit);
+        setPromptCardsList(newArr);
+        setPromptCardsListCopy(newArr);
     }
 
     const handleToggleDeletePromptCard = (e, itemId, isDelete) => {
-        let newArr = updateSpecificKeyInList(promptCardsList, itemId, 'isDelete', isDelete)
-        setPromptCardsList(newArr)
-        setPromptCardsListCopy(newArr)
+        let newArr = updateSpecificKeyInList(promptCardsList, itemId, 'isDelete', isDelete);
+        setPromptCardsList(newArr);
+        setPromptCardsListCopy(newArr);
     }
 
     const handleDeletePromptCard = (e, itemId) => {
-        setPromptCardsList(promptCardsList?.filter(each => each.id !== itemId))
+        setPromptCardsList(promptCardsList?.filter(each => each.id !== itemId));
     }
 
     const handleSavePromptCard = (e, itemId) => {
-        let value = promptCardsListCopy.find(each => each.id === itemId)?.prompt_content
-        let updatedPromptArr = updateSpecificKeyInList(promptCardsList, itemId, 'prompt_content', value)
-        let closePromptEdit = updateSpecificKeyInList(updatedPromptArr, itemId, 'isEdit', false)
-        setPromptCardsList(closePromptEdit)
+        let value = promptCardsListCopy.find(each => each.id === itemId)?.prompt_content;
+        let updatedPromptArr = updateSpecificKeyInList(promptCardsList, itemId, 'prompt_content', value);
+        let closePromptEdit = updateSpecificKeyInList(updatedPromptArr, itemId, 'isEdit', false);
+        setPromptCardsList(closePromptEdit);
     }
 
     const styleTextWithinBrackets = (text) => {
@@ -424,17 +413,15 @@ export const PromptLibraryModal = (props) => {
     };
 
     const handleUsePromptBtn = (prompt_content) => {
-        toggleState()
-        contenteditableRef.current.innerHTML = replacePlaceholders(prompt_content)
-        setShowPromptLibrary(false)
+        toggleState();
+        contenteditableRef.current.innerHTML = replacePlaceholders(prompt_content);
+        setShowPromptLibrary(false);
     } 
 
-
     const handleSearchPromptChange = (e) => {
-        let value = e.target.value
-        setSearchQueryText(value)
-
-        if(value?.trim() === '') return
+        let value = e.target.value;
+        setSearchQueryText(value);
+        if(value?.trim() === '') return;
         
         Config.debounceApiCalls(async() => {
             // get prompt search results  
@@ -442,13 +429,12 @@ export const PromptLibraryModal = (props) => {
                 url: `${Config.BASE_URL}/app/prompt-library?search=${value}`,
                 auth: true,
                 success: (response) => {
-                    setPromptCardsList(response.data)
-                    setPromptCardsListCopy(response.data)
+                    setPromptCardsList(response.data);
+                    setPromptCardsListCopy(response.data);
                 },
             });
         })
     } 
-
 
     return (
         <>
@@ -498,8 +484,7 @@ export const PromptLibraryModal = (props) => {
                                     style={
                                         searchQueryText !== "" ? {display: 'none'} : {}
                                     }
-                                >
-                                    
+                                > 
                                     {activePromptTab === 1 && (
                                         <DomainCapsuleList />
                                     )}
@@ -606,7 +591,6 @@ export const PromptLibraryModal = (props) => {
                                         searchQueryText !== "" ? {width: '100%'} : {}
                                     } 
                                 >
-
                                     <div
                                         ref={promptCardsContainerRef} 
                                         className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}
