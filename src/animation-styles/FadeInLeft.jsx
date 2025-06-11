@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react"
-import { motion } from "framer-motion"
+import React, { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 function FadeInLeft ({ children, props }) {
     return (
@@ -16,4 +16,4 @@ function FadeInLeft ({ children, props }) {
   }
 
 
-  export default FadeInLeft
+  export default FadeInLeft;

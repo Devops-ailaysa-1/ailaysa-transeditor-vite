@@ -108,13 +108,11 @@ export const FontFamilyList2 = [
 
 ];
 
-
 // export const sizeData = [
 //     {
 //         "name": "Full HD",
 //         "width": "1920",
 //         "height": "1080"
-
 //     },
 //     {
 //         "name": "Instagram profile photo",
@@ -130,7 +128,6 @@ export const FontFamilyList2 = [
 //         "name": "Instagram Story",
 //         "width": "1920",
 //         "height": "1080"
-
 //     },
 //     {
 //         "name": "Instagram Ad",
@@ -146,19 +143,16 @@ export const FontFamilyList2 = [
 //         "name": "Instagram portrait",
 //         "width": "1350",
 //         "height": "1080"
-
 //     },
 //     {
 //         "name": "IGTV cover photo",
 //         "width": "654",
 //         "height": "420"
-
 //     },
 //     {
 //         "name": "IGTV and Reel video",
 //         "width": "1920",
 //         "height": "1080"
-
 //     },
 //     {
 //         "name": "Facebook profile photo",
@@ -246,8 +240,7 @@ export const FontFamilyList2 = [
 //         "width": "480",
 //         "height": "70"
 //     }
-// ]
-
+// ];
 
 export const FontFamilyList = [
     { name: "Archivo Black" },
@@ -358,9 +351,7 @@ export const FontFamilyList = [
     { name: "Uchen" },
 ];
 
-
 export const ArabicFontFamilyList = [
-
     { name: "Alkalami" },
     { name: "Almarai" },
     { name: "Amiri" },
@@ -380,7 +371,6 @@ export const ArabicFontFamilyList = [
 ];
 
 export const BengaliFontFamilyList = [
-
     { name: "Anek Bangla" },
     { name: "Atma" },
     { name: "Baloo Da 2" },
@@ -390,18 +380,14 @@ export const BengaliFontFamilyList = [
     { name: "Noto Sans Bengali" },
     { name: "Noto Serif Bengali" },
     { name: "Tiro Bangla" },
-
 ];
 
 export const ChineseHkFontFamilyList = [
-
     { name: "Noto Sans HK" },
     { name: "Noto Serif HK" },
-
 ];
 
 export const ChineseSimpFontFamilyList = [
-
     { name: "Liu Jian Mao Cao" },
     { name: "Long Cang" },
     { name: "Ma Shan Zheng" },
@@ -411,14 +397,11 @@ export const ChineseSimpFontFamilyList = [
     { name: "ZCOOL QingKe HuangYou" },
     { name: "ZCOOL XiaoWei" },
     { name: "Zhi Mang Xing" },
-
 ];
 
 export const ChineseTrFontFamilyList = [
-
     { name: "Noto Sans TC" },
     { name: "Noto Serif TC" },
-
 ];
 
 export const GujaratiFontFamilyList = [
@@ -434,7 +417,6 @@ export const GujaratiFontFamilyList = [
     { name: "Noto Serif Gujarati" },
     { name: "Rasa" },
     { name: "Shrikhand" },
-
 ];
 
 export const GurmukhiFontFamilyList = [
@@ -446,8 +428,6 @@ export const GurmukhiFontFamilyList = [
     { name: "Noto Sans Gurmukhi" },
     { name: "Noto Serif Gurmukhi" },
     { name: "Tiro Gurmukhi" },
-
-
 ];
 
 export const KanadaFontFamilyList = [
@@ -459,7 +439,6 @@ export const KanadaFontFamilyList = [
     { name: "Noto Sans Kannada" },
     { name: "Noto Serif Kannada" },
     { name: "Tiro Kannada" },
-
 ];
 
 export const MalayalamFontFamilyList = [
@@ -471,37 +450,30 @@ export const MalayalamFontFamilyList = [
     { name: "Manjari" },
     { name: "Noto Sans Malayalam" },
     { name: "Noto Serif Malayalam" },
-
 ];
 
 export const MyanmarFontFamilyList = [
     { name: "Noto Sans Myanmar" },
     { name: "Noto Serif Myanmar" },
     { name: "Padauk" },
-
 ];
 
 export const OriyaFontFamilyList = [
     { name: "Anek Odia" },
     { name: "Baloo Bhaina 2" },
     { name: "Noto Sans Oriya" },
-
-
 ];
 
 export const SinhalaFontFamilyList = [
-
     { name: "Abhaya Libre" },
     { name: "Gemunu Libre" },
     { name: "Noto Sans Sinhala" },
     { name: "Noto Serif Sinhala" },
     { name: "Stick No Bills" },
     { name: "Yaldevi" },
-
 ];
 
 export const TamilFontFamilyList = [
-
     { name: "Anek Tamil" },
     { name: "Arima" },
     { name: "Arima Madurai" },
@@ -517,12 +489,10 @@ export const TamilFontFamilyList = [
     { name: "Oi" },
     { name: "Pavanam" },
     { name: "Tiro Tamil" },
-
 ];
 
 
 export const TeluguFontFamilyList = [
-
     { name: 'Anek Telugu' },
     { name: 'Baloo Tammudu 2' },
     { name: 'Gurajada' },
@@ -538,20 +508,15 @@ export const TeluguFontFamilyList = [
     { name: 'Tenali Ramakrishna' },
     { name: 'Timmana' },
     { name: 'Tiro Telugu' },
-
-
 ];
 
 export const TibetanFontFamilyList = [
-
     { name: "Jomolhari" },
     { name: "Noto Serif Tibetan" },
     { name: "Uchen" },
-
 ];
 
 export const langFilter = [
-
     {
         "label": "Afrikaans",
         "value": 1
@@ -948,7 +913,7 @@ export const langFilter = [
         "label": "Chinese (Simplified)",
         "value": 108
     }
-]
+];
 
 // export const promptData = [
 //         { prompt: "Rewrite" },
@@ -969,10 +934,7 @@ export const langFilter = [
 //         { prompt: "Change to social media style" },
 //         { prompt: "Change to journalistic style" },
 //         { prompt: "Change to academic style" },
-//         { prompt: "rewrite the sentence for a school kid" },
-    
-    
-
+//         { prompt: "rewrite the sentence for a school kid" }, 
 // ];
 
 

@@ -9,16 +9,15 @@ import { useTranslation } from "react-i18next";
 import BlogWizard from "../../../assets/images/blog-wizard.svg"
 
 const BlogHeader = (props) => {
-  const { setStepWizard, stepWizard, setStepWizardComplete, stepWizardComplete } = props
+  const { setStepWizard, stepWizard, setStepWizardComplete, stepWizardComplete } = props;
   const { t } = useTranslation();
-  
   const history = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
 
   const closeBlogWizardButton = () => {
-	dispatch(setBlogCreationResponse(null))
-	history(location.state?.prevPath !== undefined ? location.state?.prevPath : '/documents-list?page=1')
+	    dispatch(setBlogCreationResponse(null));
+	    history(location.state?.prevPath !== undefined ? location.state?.prevPath : '/documents-list?page=1');
   } 
 
   return (
@@ -39,4 +38,4 @@ const BlogHeader = (props) => {
   )
 }
 
-export default BlogHeader
+export default BlogHeader;

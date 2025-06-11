@@ -1,8 +1,7 @@
 import React from 'react';
-import downloading from './downloading.json'
-// import Lottie from 'react-lottie'
+import downloading from './downloading.json';
+// import Lottie from 'react-lottie';
 import Lottie from 'lottie-react';
-
 
 const DownloadAnimation = () => {
 
@@ -13,7 +12,7 @@ const DownloadAnimation = () => {
         rendererSettings: {
         preserveAspectRatio: "xMidYMid slice",
         },
-    }
+    };
 
     return ( 
         <div className='downloading-animation ai-fadeIn'> 
@@ -22,4 +21,4 @@ const DownloadAnimation = () => {
     )
 }
 
-export default DownloadAnimation
+export default DownloadAnimation;

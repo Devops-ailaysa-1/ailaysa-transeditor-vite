@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react';
 import Select, { components } from "react-select";
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -180,11 +180,11 @@ const WriterCharacterCountFooter = (props) => {
         currentSummerNoteTextData,
         zoomLevel,
         setZoomLevel
-    } = props
+    } = props;
 
     const { t } = useTranslation();
-    const writerWordCount = useSelector((state) => state.writerWordCounts.value)
-    const writerSelectionWordCount = useSelector((state) => state.writerSelectionCount.value)
+    const writerWordCount = useSelector((state) => state.writerWordCounts.value);
+    const writerSelectionWordCount = useSelector((state) => state.writerSelectionCount.value);
 	const [selectedZoomLevel, setSelectedZoomLevel] = useState(1);
 
     const wordOptions = [
@@ -196,22 +196,22 @@ const WriterCharacterCountFooter = (props) => {
             value: "word",
             label: `${writerWordCount.word} words`
         }
-    ]
+    ];
 
-    const [selectedCount, setSelectedCount] = useState(wordOptions[1])
+    const [selectedCount, setSelectedCount] = useState(wordOptions[1]);
 
     // it triggers a rerender to get the updated the counts in the select component
     useEffect(() => {
         if(selectedCount?.value === 'char'){
-            setSelectedCount(wordOptions[0])
+            setSelectedCount(wordOptions[0]);
         }else{
-            setSelectedCount(wordOptions[1])
+            setSelectedCount(wordOptions[1]);
         }
-    }, [writerWordCount])
+    }, [writerWordCount]);
 
     const handleZoomSelect = e => {
 		setSelectedZoomLevel(e.value);
-		setZoomLevel(e.value)
+		setZoomLevel(e.value);
 	};
     
     const zoomScaling = [
@@ -243,7 +243,7 @@ const WriterCharacterCountFooter = (props) => {
 			value: 2,
 			label: "200%"
 		}
-	]
+	];
 
 
     return (
@@ -307,4 +307,4 @@ const WriterCharacterCountFooter = (props) => {
     )
 }
 
-export default WriterCharacterCountFooter
+export default WriterCharacterCountFooter;

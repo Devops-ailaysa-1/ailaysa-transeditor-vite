@@ -66,13 +66,12 @@ const CreateTitle = (props) => {
         setIsEnableCollapse,
         groupByKey,
         flattenObject
-    } = props
+    } = props;
     const location = useLocation();
     const history = useNavigate();
     const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const { t } = useTranslation();
-
     const [keywordSuggestions, setKeywordSuggestions] = useState(false);
     // const [isEnableCollapse, setIsEnableCollapse] = useState(false);
     const [blogKeywords, setBlogKeywords] = useState("");
@@ -80,37 +79,29 @@ const CreateTitle = (props) => {
     const [selectedItem, setSelectedItem] = useState([]);
     const [selectedTitle, setSelectedTitle] = useState(null);
     const [isEditItem, setIsEditItem] = useState([]);
-    const [isCopied, setIsCopied] = useState(false)
-
+    const [isCopied, setIsCopied] = useState(false);
     // Create title step states
-    const [blogTopic, setBlogTopic] = useState('')
-    const [createdBlogId, setCreatedBlogId] = useState(null)
-    const [blogKeywordsList, setBlogKeywordsList] = useState([])
-    const [isKeywordGenerating, setIsKeywordGenerating] = useState({ main: false, createMore: false })
-    const [isTitleGenerating, setIsTitleGenerating] = useState(false)
-    const [blogTitlesList, setBlogTitlesList] = useState([])
-    const [isTitleEditMode, setIsTitleEditMode] = useState(false)
-    const [titleListCopy, setTitleListCopy] = useState([])
-    const [isOutlineGenerating, setIsOutlineGenerating] = useState(false)
-
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-    const [selectedTitleText, setSelectedTitleText] = useState('')
-
-    const [chipsArray, setChipsArray] = useState([])
+    const [blogTopic, setBlogTopic] = useState('');
+    const [createdBlogId, setCreatedBlogId] = useState(null);
+    const [blogKeywordsList, setBlogKeywordsList] = useState([]);
+    const [isKeywordGenerating, setIsKeywordGenerating] = useState({ main: false, createMore: false });
+    const [isTitleGenerating, setIsTitleGenerating] = useState(false);
+    const [blogTitlesList, setBlogTitlesList] = useState([]);
+    const [isTitleEditMode, setIsTitleEditMode] = useState(false);
+    const [titleListCopy, setTitleListCopy] = useState([]);
+    const [isOutlineGenerating, setIsOutlineGenerating] = useState(false);
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const [selectedTitleText, setSelectedTitleText] = useState('');
+    const [chipsArray, setChipsArray] = useState([]);
     const [chipsCopyArray, setChipsCopyArray] = useState([]);
-
-    const createdBlogIdRef = useRef(null)
-    const blogCreationResponse = useRef(null)
-
-    const selectedTitleTextRef = useRef(null)
-    const blogTopicRef = useRef(null)
-    const blogKeywordsRef = useRef(null)
-
-    const blogTopicInputRef = useRef(null)
-    const blogKeywordInputRef = useRef(null)
-    const blogKeywordsListRef = useRef([])
-
-
+    const createdBlogIdRef = useRef(null);
+    const blogCreationResponse = useRef(null);
+    const selectedTitleTextRef = useRef(null);
+    const blogTopicRef = useRef(null);
+    const blogKeywordsRef = useRef(null);
+    const blogTopicInputRef = useRef(null);
+    const blogKeywordInputRef = useRef(null);
+    const blogKeywordsListRef = useRef([]);
 
     const variants = {
         hidden: {
@@ -124,7 +115,6 @@ const CreateTitle = (props) => {
             display: "flex"
         }
     };
-
 
     const Newvariants = {
         hidden: {
@@ -157,8 +147,6 @@ const CreateTitle = (props) => {
             borderRadius: "4px",
             width: "max-content",
             minWidth: "100%",
-
-
         }),
         option: (provided, state) => ({
             ...provided,
@@ -217,18 +205,18 @@ const CreateTitle = (props) => {
     };
 
     const handleSelectedTitle = (id, titleText) => {
-        selectedTitleTextRef.current = titleText
-        setSelectedTitleText(titleText)
+        selectedTitleTextRef.current = titleText;
+        setSelectedTitleText(titleText);
         setSelectedTitle(id);
     };
 
     const handleCreateTileCollapse = () => {
-        setCreateTitleCollapse(!createTitleCollapse)
+        setCreateTitleCollapse(!createTitleCollapse);
     };
 
     const handleGenerateOutlines = () => {
-        setStepWizard("select-outline")
-        setStepWizardComplete(1)
+        setStepWizard("select-outline");
+        setStepWizardComplete(1);
     }
 
     const handleSelectToneChange = (selectedOption) => {
@@ -236,8 +224,8 @@ const CreateTitle = (props) => {
     }
 
     const handleTextCopy = (text) => {
-        navigator.clipboard.writeText(text)
-        setIsCopied(true)
+        navigator.clipboard.writeText(text);
+        setIsCopied(true);
     }
 
     // useEffect(() => {
@@ -252,134 +240,117 @@ const CreateTitle = (props) => {
                 setTimeout(() => {
                     if (URL_SEARCH_PARAMS.get("blog")) {
                         // console.log(location.pathname)
-                        saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), window.location.pathname)
+                        saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), window.location.pathname);
                     }
                 }, 500);
             }
         }
-    }, [stepWizard])
-
+    }, [stepWizard]);
 
     useEffect(() => {
         if (totalBlogResponseObj !== null) {
-            setBlogTopic(totalBlogResponseObj.user_title)
-            blogTopicRef.current = totalBlogResponseObj.user_title
+            setBlogTopic(totalBlogResponseObj.user_title);
+            blogTopicRef.current = totalBlogResponseObj.user_title;
             // setBlogKeywords((totalBlogResponseObj.keywords_mt !== null && totalBlogResponseObj.keywords_mt !== '') ? totalBlogResponseObj.keywords_mt : totalBlogResponseObj.keywords)
             // setBlogKeywords(totalBlogResponseObj.keywords)
-
-            let a = totalBlogResponseObj.keywords?.split(',')?.filter(each => each !== '')
+            let a = totalBlogResponseObj.keywords?.split(',')?.filter(each => each !== '');
             let keywordList = [...new Map(totalBlogResponseObj?.blog_key_create?.map(item => [item['blog_keyword'], item])).values()];
-
-            let inGeneratedList = keywordList?.filter(each => a?.some(item => item?.trim()?.toLowerCase() === each.blog_keyword?.toLowerCase()))
-            let notInGeneratedList = a?.filter(each => !totalBlogResponseObj.blog_key_create?.some(item => each?.trim()?.toLowerCase() === item.blog_keyword?.toLowerCase()))
-            // console.log(inGeneratedList);
-            // console.log(notInGeneratedList);
-
-            let chip_arr = []
+            let inGeneratedList = keywordList?.filter(each => a?.some(item => item?.trim()?.toLowerCase() === each.blog_keyword?.toLowerCase()));
+            let notInGeneratedList = a?.filter(each => !totalBlogResponseObj.blog_key_create?.some(item => each?.trim()?.toLowerCase() === item.blog_keyword?.toLowerCase()));
+            let chip_arr = [];
             inGeneratedList?.forEach(element => {
                 chip_arr.push({
                     id: element.id,
                     name: element.blog_keyword
-                })
+                });
             });
             notInGeneratedList?.forEach(element => {
                 chip_arr.push({
                     id: generateKey(),
                     name: element
-                })
+                });
             });
-
             if (chipsArray?.length === 0) {
                 setChipsArray(chip_arr);
             }
-
-            // console.log(totalBlogResponseObj.blog_key_create?.filter(each => !inGeneratedList.some(item => item.id === each.id)));
-            setBlogKeywordsList(keywordList?.filter(each => !inGeneratedList.some(item => item.id === each.id)))
-
+            setBlogKeywordsList(keywordList?.filter(each => !inGeneratedList.some(item => item.id === each.id)));
             // setBlogKeywordsList(totalBlogResponseObj.blog_key_create)
-            blogKeywordsListRef.current = totalBlogResponseObj.blog_key_create
-
+            blogKeywordsListRef.current = totalBlogResponseObj.blog_key_create;
             // blogKeywordsRef.current = totalBlogResponseObj.keywords
             // blogKeywordsRef.current = (totalBlogResponseObj.keywords_mt !== null && totalBlogResponseObj.keywords_mt !== '') ? totalBlogResponseObj.keywords_mt : totalBlogResponseObj.keywords
-            setSelectedTone(toneOptions?.find(each => each.value === totalBlogResponseObj.tone))
-            setCreatedBlogId(totalBlogResponseObj.id)
-            setBlogTitlesList(totalBlogResponseObj.blog_title_create)
-            setSelectedTitle(totalBlogResponseObj.blog_title_create?.find(each => each.selected_field)?.id)
-            setSourceLanguage(totalBlogResponseObj?.user_language)
-            setSourceLabel(languageOptionsList?.find(each => each.id == totalBlogResponseObj?.user_language)?.language)
-            selectedTitleTextRef.current = totalBlogResponseObj.blog_title_create?.find(each => each.selected_field)?.blog_title
-            setSelectedTitleText(totalBlogResponseObj.blog_title_create?.find(each => each.selected_field)?.blog_title)
-            blogCreationResponseRef.current = totalBlogResponseObj
-            createdBlogIdRef.current = totalBlogResponseObj.id
-            blogCreationResponse.current = totalBlogResponseObj
+            setSelectedTone(toneOptions?.find(each => each.value === totalBlogResponseObj.tone));
+            setCreatedBlogId(totalBlogResponseObj.id);
+            setBlogTitlesList(totalBlogResponseObj.blog_title_create);
+            setSelectedTitle(totalBlogResponseObj.blog_title_create?.find(each => each.selected_field)?.id);
+            setSourceLanguage(totalBlogResponseObj?.user_language);
+            setSourceLabel(languageOptionsList?.find(each => each.id == totalBlogResponseObj?.user_language)?.language);
+            selectedTitleTextRef.current = totalBlogResponseObj.blog_title_create?.find(each => each.selected_field)?.blog_title;
+            setSelectedTitleText(totalBlogResponseObj.blog_title_create?.find(each => each.selected_field)?.blog_title);
+            blogCreationResponseRef.current = totalBlogResponseObj;
+            createdBlogIdRef.current = totalBlogResponseObj.id;
+            blogCreationResponse.current = totalBlogResponseObj;
         }
-    }, [totalBlogResponseObj])
+    }, [totalBlogResponseObj]);
 
     useEffect(() => {
         if (blogTitlesList?.length !== 0) {
             if (blogTitlesList?.find(each => each.selected_field)) {
-                selectedTitleTextRef.current = blogTitlesList?.find(each => each.selected_field)?.blog_title
-                setSelectedTitleText(blogTitlesList?.find(each => each.selected_field)?.blog_title)
+                selectedTitleTextRef.current = blogTitlesList?.find(each => each.selected_field)?.blog_title;
+                setSelectedTitleText(blogTitlesList?.find(each => each.selected_field)?.blog_title);
             } else {
-                setSelectedTitleText(blogTitlesList[0]?.blog_title)
+                setSelectedTitleText(blogTitlesList[0]?.blog_title);
                 setSelectedTitle(blogTitlesList[0]?.id);
             }
         }
-    }, [blogTitlesList])
+    }, [blogTitlesList]);
 
     // automatically update the user-language when source language is changed
     useEffect(() => {
         if (blogCreationResponseRef.current !== null && (sourceLanguage != blogCreationResponseRef.current?.user_language)) {
-            updateBlog()
+            updateBlog();
         }
-    }, [sourceLanguage])
+    }, [sourceLanguage]);
 
     // automatically update the user-tone when tone is changed
     useEffect(() => {
         if (blogCreationResponseRef.current !== null && (selectedTone?.value != blogCreationResponseRef.current?.tone)) {
-            updateBlog()
+            updateBlog();
         }
-    }, [selectedTone])
-
+    }, [selectedTone]);
 
     const handleKeywordsClick = (keywordText, keywordId) => {
-
-        let keywordLength = getKeywordStringList(chipsArray)?.trim()?.length + keywordText?.trim()?.length + (chipsArray?.length === 0 ? 0 : 1)
+        let keywordLength = getKeywordStringList(chipsArray)?.trim()?.length + keywordText?.trim()?.length + (chipsArray?.length === 0 ? 0 : 1);
         if (keywordLength > 200) {
             toast.clearWaitingQueue();
-            Config.toast(t("keyword_warn_note"), 'warning')
+            Config.toast(t("keyword_warn_note"), 'warning');
             // blogKeywordInputRef.current.style.border = fieldErrorStyle.border
-            return
+            return;
         }
-
-        blogKeywordInputRef.current.style.border = fieldDefaultStyle.border
+        blogKeywordInputRef.current.style.border = fieldDefaultStyle.border;
         setChipsArray(prevState => [...prevState, { id: keywordId, name: keywordText?.trim() }]);
-        setBlogKeywordsList(blogKeywordsList?.filter(item => item.id !== keywordId))
+        setBlogKeywordsList(blogKeywordsList?.filter(item => item.id !== keywordId));
     };
 
     const deleteChip = (chip_id) => {
-        setChipsArray(prevState => prevState.filter((chip) => chip.id !== chip_id))
-        let isBlogKeywordChip = blogKeywordsListRef.current?.find(item => item.id === chip_id)
-        if (isBlogKeywordChip) setBlogKeywordsList(prevState => [...prevState, isBlogKeywordChip])
+        setChipsArray(prevState => prevState.filter((chip) => chip.id !== chip_id));
+        let isBlogKeywordChip = blogKeywordsListRef.current?.find(item => item.id === chip_id);
+        if (isBlogKeywordChip) setBlogKeywordsList(prevState => [...prevState, isBlogKeywordChip]);
     }
 
     const getKeywordStringList = (list) => {
-        let keyword_list = ''
+        let keyword_list = '';
         list?.forEach((each, index) => {
-            keyword_list += `${each.name}${index !== list?.length - 1 ? "," : ""}`
+            keyword_list += `${each.name}${index !== list?.length - 1 ? "," : ""}`;
         })
-        // console.log(keyword_list);
-        return keyword_list
+        return keyword_list;
     }
 
     const createBlog = (from) => {
         let formdata = new FormData();
-
         formdata.append("user_title", blogTopic);
         formdata.append("user_language", sourceLanguage);
         formdata.append("tone", selectedTone?.value);
         formdata.append("keywords", getKeywordStringList(chipsArray));
-
         // number of keywords by default is 10, for now its given 5 but later this can be get from user
         formdata.append("response_copies_keyword", 5);
 
@@ -389,31 +360,26 @@ const CreateTitle = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-                setCreatedBlogId(response.data.id)
-                blogCreationResponseRef.current = response.data
-                createdBlogIdRef.current = response.data.id
-                blogCreationResponse.current = response.data
-
-                blogTopicRef.current = blogTopic
-                blogKeywordsRef.current = blogKeywords
-
-                history(`${window.location.pathname}?blog=${response.data.id}`, {state: { prevPath: location.state?.prevPath }})
-
-                if (from === 'gen-keyword') generateBlogKeywords('main')
-
-                if (from === 'gen-titles') generateBlogTitles('gen')
+                setCreatedBlogId(response.data.id);
+                blogCreationResponseRef.current = response.data;
+                createdBlogIdRef.current = response.data.id;
+                blogCreationResponse.current = response.data;
+                blogTopicRef.current = blogTopic;
+                blogKeywordsRef.current = blogKeywords;
+                history(`${window.location.pathname}?blog=${response.data.id}`, {state: { prevPath: location.state?.prevPath }});
+                if (from === 'gen-keyword') generateBlogKeywords('main');
+                if (from === 'gen-titles') generateBlogTitles('gen');
             },
             error: (err) => {
                 if (err?.response.status === 400) {
-                    setCreatedBlogId(err?.response?.data.blog_id)
-                    createdBlogIdRef.current = err?.response?.data.blog_id
+                    setCreatedBlogId(err?.response?.data.blog_id);
+                    createdBlogIdRef.current = err?.response?.data.blog_id;
                     if (err?.response?.data?.msg?.includes('Insufficient')) {    // this error comes when the pre-translate is enabled in create flow
-                        setShowCreditAlertModal(true)
+                        setShowCreditAlertModal(true);
                     }
                 }
-                setIsKeywordGenerating({ main: false, createMore: false })
-                setIsTitleGenerating(false)
+                setIsKeywordGenerating({ main: false, createMore: false });
+                setIsTitleGenerating(false);
             }
         });
     }
@@ -433,9 +399,6 @@ const CreateTitle = (props) => {
         if (blogCreationResponse.current?.tone !== selectedTone?.value) {
             formdata.append("tone", selectedTone?.value);
         }
-
-        // console.log(blogKeywords)
-
         // number of keywords by default is 10, for now its given 5 but later this can be get from user
         // formdata.append("response_copies_keyword", 5);  
 
@@ -445,72 +408,63 @@ const CreateTitle = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                // setCreatedBlogId(response.data.id)
-                createdBlogIdRef.current = response.data.id
-                blogCreationResponse.current = response.data
-
-                if (from === 'gen-keyword') generateBlogKeywords('main')
-
-                if (from === 'gen-titles') generateBlogTitles('gen')
-
+                // setCreatedBlogId(response.data.id);
+                createdBlogIdRef.current = response.data.id;
+                blogCreationResponse.current = response.data;
+                if (from === 'gen-keyword') generateBlogKeywords('main');
+                if (from === 'gen-titles') generateBlogTitles('gen');
             },
             error: (err) => {
-                setShowCreditAlertModal(true)
-                setIsTitleGenerating(false)
-                setIsKeywordGenerating({ main: false, createMore: false })
+                setShowCreditAlertModal(true);
+                setIsTitleGenerating(false);
+                setIsKeywordGenerating({ main: false, createMore: false });
             }
         });
     }
 
     // generate, regenerate or create more keywords all have same functionality
     const generateBlogKeywords = (from) => {
-
-        if (from === 'main') setIsKeywordGenerating({ ...isKeywordGenerating, main: true })
-        if (from === 'create-more') setIsKeywordGenerating({ ...isKeywordGenerating, createMore: true })
-
+        if (from === 'main') setIsKeywordGenerating({ ...isKeywordGenerating, main: true });
+        if (from === 'create-more') setIsKeywordGenerating({ ...isKeywordGenerating, createMore: true });
         if (createdBlogIdRef.current == null) {
-            createBlog('gen-keyword')
+            createBlog('gen-keyword');
             return;
         }
-
         if (createdBlogIdRef.current !== null && (
             blogCreationResponse.current?.user_title?.trim() !== blogTopic?.trim() ||
             blogCreationResponse.current?.tone !== selectedTone?.value ||
             blogCreationResponse.current?.user_language !== sourceLanguage)
         ) {
-            updateBlog('gen-keyword')
+            updateBlog('gen-keyword');
             return;
         }
-
-
         let formdata = new FormData();
         formdata.append("blog_creation", createdBlogIdRef.current);
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogkeyword/`,
             method: "POST",
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-                if (from === 'main') setIsKeywordGenerating({ ...isKeywordGenerating, main: false })
-                if (from === 'create-more') setIsKeywordGenerating({ ...isKeywordGenerating, createMore: false })
-                blogKeywordsListRef.current = response.data
+                if (from === 'main') setIsKeywordGenerating({ ...isKeywordGenerating, main: false });
+                if (from === 'create-more') setIsKeywordGenerating({ ...isKeywordGenerating, createMore: false });
+                blogKeywordsListRef.current = response.data;
                 // filter only the distinct keywords
                 let keywordList = [...new Map(response.data?.map(item => [item['blog_keyword'], item])).values()];
-
-                setBlogKeywordsList(keywordList)
-                setKeywordSuggestions(true)
-                saveBlogWizardLastStep(createdBlogIdRef.current, window.location.pathname)
+                setBlogKeywordsList(keywordList);
+                setKeywordSuggestions(true);
+                saveBlogWizardLastStep(createdBlogIdRef.current, window.location.pathname);
             },
             error: (err) => {
-                if (from === 'main') setIsKeywordGenerating({ ...isKeywordGenerating, main: false })
-                if (from === 'create-more') setIsKeywordGenerating({ ...isKeywordGenerating, createMore: false })
+                if (from === 'main') setIsKeywordGenerating({ ...isKeywordGenerating, main: false });
+                if (from === 'create-more') setIsKeywordGenerating({ ...isKeywordGenerating, createMore: false });
                 if (err?.response.status === 400) {
                     if (err?.response?.data?.msg?.includes('Insufficient')) {    // this error comes when the pre-translate is enabled in create flow
-                        setShowCreditAlertModal(true)
+                        setShowCreditAlertModal(true);
                     }
                 } else if (err?.response.status === 500) {
-                    Config.toast(t("too_many_requests"))
+                    Config.toast(t("too_many_requests"));
                 }
             }
         });
@@ -526,13 +480,13 @@ const CreateTitle = (props) => {
     const createTitleformValidation = () => {
         if (blogTopic?.trim() === '') {
             // console.log('both are empty');
-            blogTopicInputRef.current.style.border = fieldErrorStyle.border
+            blogTopicInputRef.current.style.border = fieldErrorStyle.border;
             // blogKeywordInputRef.current.style.border = fieldErrorStyle.border
-            return true
+            return true;
         } else if (blogTopic?.trim() === '') {
             // console.log('topic empty');
-            blogTopicInputRef.current.style.border = fieldErrorStyle.border
-            return true
+            blogTopicInputRef.current.style.border = fieldErrorStyle.border;
+            return true;
         }
         // else if(chipsArray?.length === 0){
         //     // console.log('keyword empty');
@@ -543,19 +497,18 @@ const CreateTitle = (props) => {
 
     useEffect(() => {
         if (blogTopicInputRef.current.style.border) {
-            if (blogTopic?.trim() !== '') blogTopicInputRef.current.style.border = fieldDefaultStyle.border
+            if (blogTopic?.trim() !== '') blogTopicInputRef.current.style.border = fieldDefaultStyle.border;
         }
         if (blogKeywordInputRef.current.style.border) {
-            if (blogKeywords?.trim() !== '') blogKeywordInputRef.current.style.border = fieldDefaultStyle.border
+            if (blogKeywords?.trim() !== '') blogKeywordInputRef.current.style.border = fieldDefaultStyle.border;
         }
-    }, [blogTopic, blogKeywords])
-
+    }, [blogTopic, blogKeywords]);
 
     const generateBlogTitles = () => {
         if (createTitleformValidation()) return;
         setIsTitleGenerating(true);
         if (createdBlogIdRef.current == null) {
-            createBlog('gen-titles')
+            createBlog('gen-titles');
             return;
         }
         if (createdBlogIdRef.current !== null && (
@@ -564,7 +517,7 @@ const CreateTitle = (props) => {
             blogCreationResponse.current?.tone !== selectedTone?.value ||
             blogCreationResponse.current?.user_language !== sourceLanguage)
         ) {
-            updateBlog('gen-titles')
+            updateBlog('gen-titles');
             return;
         }
         let formdata = new FormData();
@@ -576,27 +529,26 @@ const CreateTitle = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                setIsTitleGenerating(false)
+                setIsTitleGenerating(false);
                 // setBlogTitlesList(response.data)
                 // setTitleListCopy(response.data)
-                setIsEnableCollapse(true)
-                setCreateTitleCollapse(false)
-                getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog') ? URL_SEARCH_PARAMS.get('blog') : blogCreationResponse.current?.id)
+                setIsEnableCollapse(true);
+                setCreateTitleCollapse(false);
+                getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog') ? URL_SEARCH_PARAMS.get('blog') : blogCreationResponse.current?.id);
                 // saveBlogWizardLastStep(createdBlogIdRef.current, window.location.pathname)
             },
             error: (err) => {
-                setIsTitleGenerating(false)
+                setIsTitleGenerating(false);
                 if (err?.response.status === 400) {
                     if (err?.response?.data?.msg?.includes('Insufficient')) {    // this error comes when the pre-translate is enabled in create flow
-                        setShowCreditAlertModal(true)
+                        setShowCreditAlertModal(true);
                     }
                 } else if (err?.response.status === 500) {
-                    Config.toast(t("too_many_requests"))
+                    Config.toast(t("too_many_requests"));
                 }
             }
         });
     }
-
 
     // onchange handler
     const handleTitleChange = (e, itemId) => {
@@ -609,7 +561,7 @@ const CreateTitle = (props) => {
             }
             return obj;
         });
-        setBlogTitlesList(newArr)
+        setBlogTitlesList(newArr);
     };
 
     const handleTitleEditModeToggle = (itemId, action) => {
@@ -623,22 +575,21 @@ const CreateTitle = (props) => {
             return obj;
         });
         if (action === 'close') setIsTitleEditMode(false)
-        else setIsTitleEditMode(true)
-
-        setTitleListCopy(newArr)
-        setBlogTitlesList(newArr)
+        else setIsTitleEditMode(true);
+        setTitleListCopy(newArr);
+        setBlogTitlesList(newArr);
     }
 
     const updateBlogTitle = (itemId, blogTitle) => {
         let formdata = new FormData();
         formdata.append("blog_title", blogTitle);
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogtitle/${itemId}/`,
             method: "PUT",
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 const newArr = blogTitlesList?.map(obj => {
                     if (obj.id === itemId) {
                         return {
@@ -649,23 +600,20 @@ const CreateTitle = (props) => {
                     }
                     return obj;
                 });
-                setIsTitleEditMode(false)
-                setBlogTitlesList(newArr)
+                setIsTitleEditMode(false);
+                setBlogTitlesList(newArr);
             },
         });
     }
 
     const generateBlogOutLine = () => {
-
-
-
-        setIsOutlineGenerating(true)
+        setIsOutlineGenerating(true);
         // for blog title update
         let formData = new FormData();
         // for generating blog outline
         let formdata = new FormData();
-
         formData.append("user_title", selectedTitleText);
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogcreation/${createdBlogIdRef.current}/`,
             method: "PUT",
@@ -673,61 +621,54 @@ const CreateTitle = (props) => {
             auth: true,
             success: (response) => {
                 formdata.append("blog_title_gen", selectedTitle);
+
                 Config.axios({
                     url: `${Config.BASE_URL}/writer/blogoutline/`,
                     method: "POST",
                     data: formdata,
                     auth: true,
                     success: (response) => {
-                        // console.log(response.data)
-                        isNavigatedInternally.current = true
-                        getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog') ? URL_SEARCH_PARAMS.get('blog') : blogCreationResponse.current?.id)
-                        blogOutlineGenResponseRef.current = response.data
-                        let groupedRes = groupByKey(response.data?.blog_outline_session, 'group')
-                        setBlogOutlineList(flattenObject(groupedRes))
-
-                        setIsOutlineGenerating(false)
-                        handleGenerateOutlines()
-                        history(`/writer-blog/select-outline${window.location.search}`, {state: { prevPath: location.state?.prevPath }})
+                        isNavigatedInternally.current = true;
+                        getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog') ? URL_SEARCH_PARAMS.get('blog') : blogCreationResponse.current?.id);
+                        blogOutlineGenResponseRef.current = response.data;
+                        let groupedRes = groupByKey(response.data?.blog_outline_session, 'group');
+                        setBlogOutlineList(flattenObject(groupedRes));
+                        setIsOutlineGenerating(false);
+                        handleGenerateOutlines();
+                        history(`/writer-blog/select-outline${window.location.search}`, {state: { prevPath: location.state?.prevPath }});
                     },
                     error: (err) => {
-                        setIsOutlineGenerating(false)
+                        setIsOutlineGenerating(false);
                         if (err?.response.status === 400) {
                             if (err?.response?.data?.msg?.includes('Insufficient')) {    // this error comes when the pre-translate is enabled in create flow
-                                setShowCreditAlertModal(true)
+                                setShowCreditAlertModal(true);
                             }
                         } else if (err?.response.status === 500) {
-                            Config.toast(t("too_many_requests"))
+                            Config.toast(t("too_many_requests"));
                         }
                     }
                 });
             },
             error: (err) => {
-                setShowCreditAlertModal(true)
-                setIsTitleGenerating(false)
-                setIsKeywordGenerating({ main: false, createMore: false })
-                setIsOutlineGenerating(false)
+                setShowCreditAlertModal(true);
+                setIsTitleGenerating(false);
+                setIsKeywordGenerating({ main: false, createMore: false });
+                setIsOutlineGenerating(false);
             }
         });
-
-
     }
 
     const deleteTitleObj = (titleId) => {
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogtitle/${titleId}/`,
             method: "DELETE",
             auth: true,
             success: (response) => {
-                setBlogTitlesList(blogTitlesList?.filter(each => each.id != titleId))
-                // console.log(response)
+                setBlogTitlesList(blogTitlesList?.filter(each => each.id != titleId));
             },
         });
     }
-
-
-
-
 
     return (
         <>
@@ -1027,4 +968,4 @@ const CreateTitle = (props) => {
     )
 }
 
-export default CreateTitle
+export default CreateTitle;

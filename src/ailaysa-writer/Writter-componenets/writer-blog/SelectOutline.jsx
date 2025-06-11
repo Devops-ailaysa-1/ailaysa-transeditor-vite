@@ -26,7 +26,7 @@ import "rodal/lib/rodal.css";
 import Button from '@mui/material/Button';
 import { toast } from 'react-toastify';
 import { useTranslation } from "react-i18next";
-import DoubleArrow from "../../../assets/images/double_arrow.svg"
+import DoubleArrow from "../../../assets/images/double_arrow.svg";
 
 const IOSSwitch = styled((props) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -96,116 +96,102 @@ const SelectOutline = (props) => {
         setSelectIndividual,
         saveBlogWizardLastStep,
         isNavigatedInternally
-    } = props
-
+    } = props;
     const location = useLocation();
     const history = useNavigate();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-
     const [selectedGroupId, setSelectedGroupId] = useState(null);
     const [selectedIndividualTitle, setSelectedIndividualTitle] = useState(null);
     const [isEditItem, setIsEditItem] = useState([]);
     const [isEditIndividualItem, setIsEditIndividualItem] = useState([]);
     const [selectIndividualTitles, setSelectIndividualTitles] = useState([]);
-    const [isCopied, setIsCopied] = useState(false)
-
+    const [isCopied, setIsCopied] = useState(false);
     // outline step states
-    const [isIndividualEditMode, setIsIndividualEditMode] = useState(false)
-    const [isGroupEditMode, setIsGroupEditMode] = useState(false)
-    const [outlineListCopy, setOutlineListCopy] = useState([])
-    const [groupedOutlineListCopy, setGroupedOutlineListCopy] = useState([])
-    const [checkedOutlineList, setCheckedOutlineList] = useState([])
-    const [groupedOutlineList, setGroupedOutlineList] = useState([])
-
-    const [showDeleteOutlineGrpModal, setShowDeleteOutlineGrpModal] = useState(false)
-
-    const selectedOutlinesRef = useRef([])
-    const unSelectedOutlinesRef = useRef([])
-
-    const checkedOutlineListTemp = useRef([])
-
-    const outlineReorderingRef = useRef([])
-    const reorderedGroupIdRef = useRef(null)
-    const groupIdToDeleteRef = useRef(null)
+    const [isIndividualEditMode, setIsIndividualEditMode] = useState(false);
+    const [isGroupEditMode, setIsGroupEditMode] = useState(false);
+    const [outlineListCopy, setOutlineListCopy] = useState([]);
+    const [groupedOutlineListCopy, setGroupedOutlineListCopy] = useState([]);
+    const [checkedOutlineList, setCheckedOutlineList] = useState([]);
+    const [groupedOutlineList, setGroupedOutlineList] = useState([]);
+    const [showDeleteOutlineGrpModal, setShowDeleteOutlineGrpModal] = useState(false);
+    const selectedOutlinesRef = useRef([]);
+    const unSelectedOutlinesRef = useRef([]);
+    const checkedOutlineListTemp = useRef([]);
+    const outlineReorderingRef = useRef([]);
+    const reorderedGroupIdRef = useRef(null);
+    const groupIdToDeleteRef = useRef(null);
 
     const handleGenerateOutlines = () => {
-        setStepWizard("generate-article")
-        setStepWizardComplete(2)
+        setStepWizard("generate-article");
+        setStepWizardComplete(2);
     }
     
     const handleSelectedGroup = (id) => {
         setSelectedGroupId(id);
     };
     
-
     const handleIndividualSelectedTitle = (index) => {
         setSelectedIndividualTitle(index);
     };
 
     const handleTextCopy = (e, text) => {
         e.stopPropagation();
-		navigator.clipboard.writeText(text)
-        setIsCopied(true)
+		navigator.clipboard.writeText(text);
+        setIsCopied(true);
 	}
 
     useEffect(() => {
         if(stepWizard === "select-outline"){
             setTimeout(() => {
                 if(URL_SEARCH_PARAMS.get("blog")){
-                    console.log(location.pathname)
-                    saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), window.location.pathname)
+                    console.log(location.pathname);
+                    saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), window.location.pathname);
                 }
             }, 500);
         }
-    }, [stepWizard])
+    }, [stepWizard]);
 
     useEffect(() => {
-        let blogParam = URL_SEARCH_PARAMS.get("blog")
+        let blogParam = URL_SEARCH_PARAMS.get("blog");
         if (blogParam && totalBlogResponseObj === null) {
-            getTotalBlogCreationObject(blogParam)
+            getTotalBlogCreationObject(blogParam);
         }
-    }, [URL_SEARCH_PARAMS.get("blog")])
-
+    }, [URL_SEARCH_PARAMS.get("blog")]);
     
     // this will group the object that belongs to the same group | group name is the key and the value is array of objects -> groupName: [{}, {}..] 
     useEffect(() => {
         if(blogOutlineList?.length !== 0){
-            let selected_list = []
+            let selected_list = [];
             blogOutlineList?.map((each, index) => {
                 if(each.selected_field) {
-                    selected_list?.push(each.id)
+                    selected_list?.push(each.id);
                 }
             })
-            if(checkedOutlineListTemp.current?.length === 0) setCheckedOutlineList(selected_list)
-            else setCheckedOutlineList(checkedOutlineListTemp.current)
-
+            if(checkedOutlineListTemp.current?.length === 0) setCheckedOutlineList(selected_list);
+            else setCheckedOutlineList(checkedOutlineListTemp.current);
             if(blogOutlineList?.find(each => each.selected_field)?.group !== undefined){
-                setSelectedGroupId(blogOutlineList?.find(each => each.selected_field)?.group)
+                setSelectedGroupId(blogOutlineList?.find(each => each.selected_field)?.group);
             }else{
-                setSelectedGroupId(blogOutlineList?.find((each, index) => index === 0)?.group)
+                setSelectedGroupId(blogOutlineList?.find((each, index) => index === 0)?.group);
             }
-            selectedOutlinesRef.current = selected_list
+            selectedOutlinesRef.current = selected_list;
             let groupedList = blogOutlineList?.reduce((acc, d) => {
-                if (Object.keys(acc).includes(d.group)) return acc;
-                
+                if (Object.keys(acc).includes(d.group)) return acc;                
                 acc[d.group] = blogOutlineList?.filter(g => g.group === d.group); 
                 return acc;
             }, {})
             const groupedArray = Object.entries(groupedList)?.map(([group, outlines]) => {
                 return { id: group, outlines };
             });
-
-            setGroupedOutlineList(groupedArray)
-            setGroupedOutlineListCopy(groupedArray)
-            // console.log(groupedArray)
+            setGroupedOutlineList(groupedArray);
+            setGroupedOutlineListCopy(groupedArray);
         }
-    }, [blogOutlineList])
+    }, [blogOutlineList]);
     
     useEffect(() => {
       console.log(blogOutlineGenResponseRef.current);
-    }, [blogOutlineGenResponseRef.current])
-    
-    
+    }, [blogOutlineGenResponseRef.current]);
+        
     const handleIndividualOutlineChange = (e, itemId) => {
         const newArr = blogOutlineList?.map(obj => {
             if (obj.id === itemId) {
@@ -216,16 +202,15 @@ const SelectOutline = (props) => {
             }
             return obj;
         });
-        // console.log(newArr)
-        setBlogOutlineList(newArr)
+        setBlogOutlineList(newArr);
     }
 
     const updateIndividualOutline = (itemId, blogOutline, callAPI) => {
         let formdata = new FormData();
 
         if(!callAPI){
-            let selected_title_obj =  totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field)
-            let outline_list = selected_title_obj?.blogoutline_title[0]?.blog_outline_session
+            let selected_title_obj =  totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field);
+            let outline_list = selected_title_obj?.blogoutline_title[0]?.blog_outline_session;
             console.log(outline_list);
             console.log(outline_list?.find(each => each.id === itemId));
             const newArr = blogOutlineList?.map(obj => {
@@ -238,19 +223,18 @@ const SelectOutline = (props) => {
                 }
                 return obj;
             });
-            setIsIndividualEditMode(false)
-            setBlogOutlineList(newArr)
-            return
+            setIsIndividualEditMode(false);
+            setBlogOutlineList(newArr);
+            return;
         }
+        formdata.append("blog_outline", blogOutline); 
 
-        formdata.append("blog_outline", blogOutline);   
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogoutlinesession/${itemId}/`, 
             method: "PUT",
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 const newArr = blogOutlineList?.map(obj => {
                     if (obj.id === itemId) {
                         return {
@@ -261,8 +245,8 @@ const SelectOutline = (props) => {
                     }
                     return obj;
                 });
-                setIsIndividualEditMode(false)
-                setBlogOutlineList(newArr)
+                setIsIndividualEditMode(false);
+                setBlogOutlineList(newArr);
             },
         });
     } 
@@ -285,38 +269,34 @@ const SelectOutline = (props) => {
             }
             return obj;
         });
-        // console.log(newArr)
-        setGroupedOutlineList(newArr)
+        setGroupedOutlineList(newArr);
     }
 
     const handleOutlineSelect = (event, outlineId) => {
         if(event.target.checked){
-            checkedOutlineListTemp.current = [...checkedOutlineList, outlineId]
-            setCheckedOutlineList([...checkedOutlineList, outlineId])        
+            checkedOutlineListTemp.current = [...checkedOutlineList, outlineId];
+            setCheckedOutlineList([...checkedOutlineList, outlineId]);        
         }else if(event.target.checked === false){
-            let newCheckedTerms = checkedOutlineList.filter(id => id !== outlineId)
-            checkedOutlineListTemp.current = newCheckedTerms
-            setCheckedOutlineList(newCheckedTerms)
+            let newCheckedTerms = checkedOutlineList.filter(id => id !== outlineId);
+            checkedOutlineListTemp.current = newCheckedTerms;
+            setCheckedOutlineList(newCheckedTerms);
         }
     } 
 
     useEffect(() => {
         unSelectedOutlinesRef.current = selectedOutlinesRef.current.filter(o1 => !checkedOutlineList.some(o2 => o1 === o2));
-    }, [checkedOutlineList])
+    }, [checkedOutlineList]);
     
-
     const updateSelectedOutlinesInBlog = () => {
         let formdata = new FormData();
-
         if(selectIndividual){   // individual outline selection
             checkedOutlineList?.map((outlineId) => {
                 formdata.append("selected", outlineId);
-            })
-    
+            });
             if(unSelectedOutlinesRef.current?.length !== 0){
                 unSelectedOutlinesRef.current?.map(outlineId => {
                     formdata.append("unselected", outlineId);
-                })
+                });
             }
         }else{  // group outline section selection
             formdata.append("selected_group", selectedGroupId);
@@ -328,10 +308,10 @@ const SelectOutline = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                isNavigatedInternally.current = true
-                getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog'))
-                handleGenerateOutlines()
-                history(`/writer-blog/generate-article${window.location.search}`, {state: {prevPath: location.state?.prevPath}})
+                isNavigatedInternally.current = true;
+                getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog'));
+                handleGenerateOutlines();
+                history(`/writer-blog/generate-article${window.location.search}`, {state: {prevPath: location.state?.prevPath}});
             },
         });
     } 
@@ -339,7 +319,7 @@ const SelectOutline = (props) => {
     // create a new outline for a particular group
     const createNewOutline = (blog_outline) => {
         let formdata = new FormData();
-        let selected_title_obj =  totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field)
+        let selected_title_obj =  totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field);
         formdata.append("blog_outline_gen", blogOutlineGenResponseRef.current?.id ? blogOutlineGenResponseRef.current?.id : selected_title_obj?.blogoutline_title[0].id);  
         formdata.append("blog_outline", blog_outline);  
         formdata.append("group", selectedGroupId);  
@@ -351,13 +331,11 @@ const SelectOutline = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-                const newArr = [...blogOutlineList, response.data] 
-                // console.log(newArr)
-                setBlogOutlineList(newArr)
+                const newArr = [...blogOutlineList, response.data];
+                setBlogOutlineList(newArr);
             },
             error: (err) => {
-                
+                console.error(err);
             }
         });
     } 
@@ -379,14 +357,12 @@ const SelectOutline = (props) => {
             }
             return obj;
         });
-        // console.log(newArr)
-        setGroupedOutlineList(newArr)
+        setGroupedOutlineList(newArr);
     } 
     
     // delete the created local outline box
     const deleteLocalOutline = (e, outlineId, groupId) => {
-        // console.log(outlineId)
-        e.stopPropagation()
+        e.stopPropagation();
         const newArr = groupedOutlineList?.map(obj => {
             if (obj.id == groupId) {
                 return{
@@ -396,46 +372,43 @@ const SelectOutline = (props) => {
             }
             return obj;
         });
-        // console.log(newArr)
-        setGroupedOutlineList(newArr)
+        setGroupedOutlineList(newArr);
     }
 
     // delete group
     const deleteOutlineGroup = (groupId) => {
         if(groupedOutlineList?.length === 1){
-            Config.toast(t("minimum_outline_grp_note"), 'warning')
-            setShowDeleteOutlineGrpModal(false)
+            Config.toast(t("minimum_outline_grp_note"), 'warning');
+            setShowDeleteOutlineGrpModal(false);
             return;
         }
-        let selected_title_obj =  totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field)
+        let selected_title_obj =  totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field);
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogoutlinesession/?blog_title=${blogOutlineGenResponseRef.current?.blog_title_gen ? blogOutlineGenResponseRef.current?.blog_title_gen : selected_title_obj?.blogoutline_title[0]?.blog_title_gen}&group=${groupId}`,
             method: "DELETE",
             auth: true,
             success: (response) => {
-                setBlogOutlineList(blogOutlineList?.filter(each => each.group != groupId))
-                // console.log(response)
-                setShowDeleteOutlineGrpModal(false)
+                setBlogOutlineList(blogOutlineList?.filter(each => each.group != groupId));
+                setShowDeleteOutlineGrpModal(false);
             },
-            error: () =>{setShowDeleteOutlineGrpModal(false)}
+            error: () =>{setShowDeleteOutlineGrpModal(false);}
         });
     } 
 
     // delete individual
     const deleteIndividualOutline = (outlineId, groupId) => {
-
         if(groupId !== undefined){
-            let grp = groupedOutlineList?.find(each => each.id == groupId)?.outlines
+            let grp = groupedOutlineList?.find(each => each.id == groupId)?.outlines;
             if(grp?.length <= 4){
-                Config.toast(t("minimum_outline_note"), 'warning')
+                Config.toast(t("minimum_outline_note"), 'warning');
                 toast.clearWaitingQueue();
                 return;
             }
         }else{
-            // console.log(blogOutlineList?.length)
             if(blogOutlineList?.length <= 4){
                 toast.clearWaitingQueue();
-                Config.toast(t("minimum_outline_note"), 'warning')
+                Config.toast(t("minimum_outline_note"), 'warning');
                 return;
             }
         }
@@ -445,8 +418,7 @@ const SelectOutline = (props) => {
             method: "DELETE",
             auth: true,
             success: (response) => {
-                setBlogOutlineList(blogOutlineList?.filter(each => each.id != outlineId))
-                // console.log(response)
+                setBlogOutlineList(blogOutlineList?.filter(each => each.id != outlineId));
             },
         });
     } 
@@ -456,7 +428,6 @@ const SelectOutline = (props) => {
         const items = Array.from(groupedOutlineList?.find(each => each.id == groupId)?.outlines);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
-
         const newArr = groupedOutlineList?.map(obj => {
             if (obj.id == groupId) {
                 return{
@@ -466,31 +437,26 @@ const SelectOutline = (props) => {
             }
             return obj;
         });
-        outlineReorderingRef.current = items
-        reorderedGroupIdRef.current = groupId
-        setGroupedOutlineList(newArr)
+        outlineReorderingRef.current = items;
+        reorderedGroupIdRef.current = groupId;
+        setGroupedOutlineList(newArr);
     }
 
     useEffect(() => {
       if(outlineReorderingRef.current?.length !== 0){
-        updateOutlineOrder()
+        updateOutlineOrder();
       }
-    }, [outlineReorderingRef.current])
+    }, [outlineReorderingRef.current]);
     
-
     const updateOutlineOrder = () => {
         let formdata = new FormData();
-        let reorder_list = ''
+        let reorder_list = '';
         // console.log(outlineReorderingRef.current)
         outlineReorderingRef.current?.map((each, index) => {
             reorder_list += `${each.temp_order}${
                 index !== outlineReorderingRef.current.length - 1 ? "," : ""
             }`;
         });
-
-        // console.log(reorder_list)
-        
-        
         formdata.append("order_list", reorder_list);
         formdata.append("group", reorderedGroupIdRef.current);
         
@@ -500,11 +466,10 @@ const SelectOutline = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog'))
+                getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog'));
             },
         });
     } 
-
 
     return (
         <div className="blog-create-box-wrap select-outline">
@@ -709,4 +674,4 @@ const SelectOutline = (props) => {
     )
 }
 
-export default SelectOutline
+export default SelectOutline;
