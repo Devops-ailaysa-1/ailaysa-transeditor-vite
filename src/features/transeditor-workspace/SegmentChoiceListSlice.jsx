@@ -5,7 +5,7 @@ export const SegmentChoiceListSlice = createSlice({
     initialState: {value: []},
     reducers: {
         setSegmentChoiceList: (state, action) => {
-            state.value = action.payload
+            state.value = action.payload;
         }
     }
 })

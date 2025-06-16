@@ -4,10 +4,9 @@ import { useTranslation } from "react-i18next";
 import { CircularProgress } from "@mui/material";
 import ModifiedStoriesFilter from "./ModifiedStoriesFilter";
 import { useSelector } from "react-redux";
-import { ButtonBase } from '@mui/material'
+import { ButtonBase } from '@mui/material';
 
-const DashboardOverview = (props) => {
-    
+const DashboardOverview = (props) => {    
     let { 
         isDataFetching,
         showEditorReportModal,
@@ -19,15 +18,14 @@ const DashboardOverview = (props) => {
         fromDate,
         setFromDate,
         activeTab
-     } = props
+     } = props;
 
     const { t } = useTranslation();
-    const userDetails = useSelector((state) => state.userDetails.value)
-    let is_internal_member_editor = userDetails?.internal_member_team_detail?.role === 'Editor'    
+    const userDetails = useSelector((state) => state.userDetails.value);
+    let is_internal_member_editor = userDetails?.internal_member_team_detail?.role === 'Editor' ;   
 
     return (
-        <section className="dashboard-wrapper">
-           
+        <section className="dashboard-wrapper">           
             {!is_internal_member_editor && activeTab === 1 ? (  // general
                 <div className="dashboard-overview-list">
                     <div className="dashboard-overview-list-item">
@@ -166,4 +164,4 @@ const DashboardOverview = (props) => {
     )
 }
 
-export default DashboardOverview
+export default DashboardOverview;

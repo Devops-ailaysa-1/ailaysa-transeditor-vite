@@ -28,6 +28,7 @@
 } 
 
 @media(max-width: 1301px){
+
   .file-upload_instruct-row{
     flex-direction: column;
     gap: 2px;
@@ -55,9 +56,11 @@
   .choice-list-inner-wrapper{
     padding-left: 0px;
   }
+
 }
 
 @media(max-width: 1680px){
+  
   .transphraseing-popover-box {
     max-width: 500px;
   }

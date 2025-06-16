@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 export const WriterRangeObjectSlice = createSlice({
     name: 'writerRangeObject',
     initialState: {value: {range: null}},
     reducers: {
         setWriterRangeObject: (state, action) => {
-            state.value = action.payload
+            state.value = action.payload;
         }
     }
 })

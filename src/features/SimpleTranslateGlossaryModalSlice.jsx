@@ -5,14 +5,14 @@
  * @author Padmabharathi Subiramanian 
  * @since  APR 09 2025
  */
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 export const SimpleTranslateGlossaryModalSlice = createSlice({
     name: 'SimpleTranslateGlossaryModalSlice',
     initialState: {value: false},
     reducers: {
         setSimpleTranslateGlossaryModal: (state, action) => {
-            state.value = action.payload
+            state.value = action.payload;
         }
     }
 })

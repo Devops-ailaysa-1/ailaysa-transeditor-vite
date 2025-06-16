@@ -1,12 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 export const ToggleGlossTermAddFormSlice = createSlice({
     name: 'toggleGlossTermAddForm',
     initialState: {value: false},
     reducers: {
         setShowGlossTermAddForm: (state, action) => {
-            // console.log(state)
-            state.value = action.payload
+            state.value = action.payload;
         }
     }
 })

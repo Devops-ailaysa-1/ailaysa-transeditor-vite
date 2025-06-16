@@ -1,5 +1,5 @@
-import React, { useState, useEffect, createRef, useRef } from "react"
-import { ButtonBase, Tooltip } from '@mui/material'
+import React, { useState, useEffect, createRef, useRef } from "react";
+import { ButtonBase, Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
@@ -7,7 +7,7 @@ import Sourcelanguage from "../vendor/lang-modal/Sourcelanguage";
 import Targetlanguage from "../vendor/lang-modal/Targetlanguage";
 import Config from "../vendor/Config";
 import { useSelector } from "react-redux";
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion';
 import { BlueButtonLoader } from "../loader/BlueButtonLoader";
 import BlackClose from "../assets/images/new-ui-icons/close_black.svg";
 
@@ -25,7 +25,7 @@ const LanguageSelector = (props) => {
         restrictedTargetLang,
         sourceLangSelectBoxRef,
         targetLangSelectBoxRef
-    } = props
+    } = props;
     const { t } = useTranslation();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 
@@ -43,11 +43,11 @@ const LanguageSelector = (props) => {
     const [sourceLabel, setSourceLabel] = useState("");
     const [allLangDetailsList, setAllLangDetailsList] = useState(null);
     const [targetLabel, setTargetLabel] = useState("");
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
     const [sourceTargetValidation, setSourceTargetValidation] = useState({
         source: false,
         target: false,
-    })
+    });
     const [editProjectId, setEditProjectId] = useState(null);
     const [editJobs, setEditJobs] = useState([]);
     const deletedJobIds = useRef([]);
@@ -57,8 +57,7 @@ const LanguageSelector = (props) => {
     const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
-
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
     const targetLanguageOptionsRef = useRef(languageOptionsList);
     const searchAreaRef = useRef(null);
 
@@ -74,51 +73,45 @@ const LanguageSelector = (props) => {
     }, []);
 
     useEffect(() => {
-
         // remove the source language from the target language list
-        setTargetLanguageOptions(targetLanguageOptions?.filter(each => each.id !== sourceLanguage))
+        setTargetLanguageOptions(targetLanguageOptions?.filter(each => each.id !== sourceLanguage));
         if (targetLanguage !== '') {
-            setTargetLanguage(prevState => prevState?.filter(each => each?.id !== sourceLanguage))
+            setTargetLanguage(prevState => prevState?.filter(each => each?.id !== sourceLanguage));
         }
-
-        //   console.log(allLangDetailsList.find(function(each){each.language === sourceLanguage})
     }, [sourceLanguage]);
 
 
     useEffect(() => {
-        let langParam = URL_SEARCH_PARAMS.get('lang') ? URL_SEARCH_PARAMS.get('lang') : "English"
-        let langParamId = targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.id
-       
+        let langParam = URL_SEARCH_PARAMS.get('lang') ? URL_SEARCH_PARAMS.get('lang') : "English";
+        let langParamId = targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.id;       
         if(defaultPair && targetLanguageOptionsRef.current?.length !== 0){
-            // setSourceLanguage(defaultPair.src)
-            // setSourceLabel(targetLanguageOptionsRef.current?.find((each) => each.id === defaultPair.src)?.language)
-            let tar = []
+            // setSourceLanguage(defaultPair.src);
+            // setSourceLabel(targetLanguageOptionsRef.current?.find((each) => each.id === defaultPair.src)?.language);
+            let tar = [];
             defaultPair.tar?.forEach((lang) => {
                 if(lang != langParamId){
                     tar.push(targetLanguageOptionsRef.current?.find((each) => each.id == lang))
                 }
-            }) 
-            setTargetLanguage([...tar])
+            }) ;
+            setTargetLanguage([...tar]);
         }
 
         if(targetLanguageOptionsRef.current?.length !== 0){
-            setSourceLanguage(langParamId)
+            setSourceLanguage(langParamId);
             setSourceLabel(targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.language)
         }
-    },[targetLanguageOptionsRef.current, URL_SEARCH_PARAMS.get('lang')])
+    },[targetLanguageOptionsRef.current, URL_SEARCH_PARAMS.get('lang')]);
     
     useEffect(() => {
         if(targetLanguage?.length !== 0 && targetLanguageOptionsRef.current?.length !== 0){
-            let langParam = URL_SEARCH_PARAMS.get('lang') ? URL_SEARCH_PARAMS.get('lang') : "English"
-            let langParamId = targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.id
-    
+            let langParam = URL_SEARCH_PARAMS.get('lang') ? URL_SEARCH_PARAMS.get('lang') : "English";
+            let langParamId = targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.id;    
             if(targetLanguage?.find(lang => lang.id == langParamId)){
-                setTargetLanguage(targetLanguage?.filter(lang => lang.id != langParamId))
+                setTargetLanguage(targetLanguage?.filter(lang => lang.id != langParamId));
             }
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current])
+    }, [targetLanguage, targetLanguageOptionsRef.current]);
     
-
     const handleTargetModalCloseBtn = (e) => {
         // if(targetLanguage?.length < 1){
         //     Config.toast(t("at_least_language_selected"), 'warning')
@@ -126,7 +119,7 @@ const LanguageSelector = (props) => {
         // }
         setshowTarLangModal(false); 
         setSearchInput(''); 
-        setOnFocusWrap(false)
+        setOnFocusWrap(false);
         
     }
 
@@ -155,7 +148,7 @@ const LanguageSelector = (props) => {
     }
 
     const removeErrorFieldClass = (element, select = false) => {
-        element.classList.remove('error-field-style')
+        element.classList.remove('error-field-style');
     }
 
     const removeAlreadySelectedTargetlanguage = () => {
@@ -164,7 +157,7 @@ const LanguageSelector = (props) => {
 
     /* Handling source language selection */
     const handleSourceLangClick = (value, name, e) => {
-        removeErrorFieldClass(sourceLangSelectBoxRef.current)
+        removeErrorFieldClass(sourceLangSelectBoxRef.current);
         setSourceLanguage(value);
         setshowSrcLangModal(false);
         setSourceLabel(name);
@@ -172,28 +165,26 @@ const LanguageSelector = (props) => {
             ...sourceTargetValidation,
             source: false,
         });
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     /* Handling target language selection */
-    const handleTargetLangClick = (value, e) => {
-        
+    const handleTargetLangClick = (value, e) => {        
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
         if(restrictedTargetLang?.find(each => each === value.id)){
-            Config.toast('This language has already been claimed', 'warning')
-            return
+            Config.toast('This language has already been claimed', 'warning');
+            return;
         }
         if(targetLanguage?.length === 2 && (targetLanguage?.find(each => each.id === value.id) ? false : true)){
-            Config.toast('Maximum 2 languages can be added for better project management', 'warning')
-            return
+            Config.toast('Maximum 2 languages can be added for better project management', 'warning');
+            return;
         }
-
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
-            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected")
-            targetLanguageTemp = targetLanguageTemp?.filter(each => each?.id !== value?.id)
+            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected");
+            targetLanguageTemp = targetLanguageTemp?.filter(each => each?.id !== value?.id);
         } else {
-            e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected");
             targetLanguageTemp.push(value);
         }
         setTargetLanguage([...new Set(targetLanguageTemp)]);
@@ -201,8 +192,8 @@ const LanguageSelector = (props) => {
             ...sourceTargetValidation,
             target: false,
         });
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     useEffect(() => {
@@ -213,7 +204,7 @@ const LanguageSelector = (props) => {
     useEffect(() => {
         if (didMount) {
             if (targetLanguage?.length > 0){
-                removeErrorFieldClass(targetLangSelectBoxRef.current)
+                removeErrorFieldClass(targetLangSelectBoxRef.current);
                 setTargetLanguageError("");
             } 
             else setTargetLanguageError(t("target_validation_note"));
@@ -222,14 +213,14 @@ const LanguageSelector = (props) => {
 
     useEffect(() => {
         if (targetLanguage) {
-            let list = ""
+            let list = "";
             targetLanguage?.map((each, index) => {
                 list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
                     }`;
             });
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current])
+    }, [targetLanguage, targetLanguageOptionsRef.current]);
 
     useEffect(() => {
         if (targetLanguage !== "") {
@@ -244,15 +235,14 @@ const LanguageSelector = (props) => {
                 }
             });
             let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
-            //   console.log(targetLangToRemove)
             setTargetLangListToRemove(targetLangToRemove);
         }
     }, [targetLanguage]);
 
     const focusSourceLangDiv = () => {
-        if (sourceLangSelectBoxRef.current !== null) sourceLangSelectBoxRef.current.style = 'border: 1px solid #E74C3C;'
+        if (sourceLangSelectBoxRef.current !== null) sourceLangSelectBoxRef.current.style = 'border: 1px solid #E74C3C;';
         setTimeout(() => {
-            if (sourceLangSelectBoxRef.current !== null) sourceLangSelectBoxRef.current.style = 'border: 1px solid #ced4da;'
+            if (sourceLangSelectBoxRef.current !== null) sourceLangSelectBoxRef.current.style = 'border: 1px solid #ced4da;';
         }, 1000);
     }
 

@@ -89,27 +89,27 @@ import { data } from "jquery";
 import SourceLanguage from "../vendor/lang-modal/Sourcelanguage";
 import TargetLanguage from "../vendor/lang-modal/Targetlanguage";
 import SearchBarIcon from "../assets/images/chat/chat-search.svg"
-import DinamalarImgPlaceholder from "../assets/images/dinamalar-news/dinamalar.jpg"
-import NoImgPlaceholder from "../assets/images/no-img-found.png"
-import FederalImgPlaceholder from "../assets/images/federal-news/federal_placeholder.png"
-import BlueRightArrow from "../assets/images/new-ui-icons/arrow_right_alt_color.svg"
-import PaginationLeftArrow from "../assets/images/new-ui-icons/pagination-left.svg"
-import PaginationRightArrow from "../assets/images/new-ui-icons/pagination-right.svg"
-import ChangeRequestIcon from "../assets/images/change-request.svg"
-import NoEditorIcon from "../assets/images/no-editors-found-2.svg"
-import EmptyProjectIcon from "../assets/images/empty-projects-folder.svg"
-import PlusIcon from "../assets/images/new-ui-icons/plus.svg"
-import EditIcon from "../assets/images/new-ui-icons/pencil-edit-new.svg"
-import FileUploadIcon from "../assets/images/new-ui-icons/upload_file.svg"
-import DeleteBinIcon from "../assets/images/new-ui-icons/assets-delete-icon.svg"
-import DownloadIcon from "../assets/images/new-ui-icons/file_download.svg"
-import BlackCloseIcon from "../assets/images/new-ui-icons/close_black.svg"
-import BarChatIcon from "../assets/images/new-ui-icons/stacked_bar_chart_blue.svg"
-import InsufficientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg"
-import RedCircleIcon from "../assets/images/new-ui-icons/remove_circle_red.svg"
-import FileErrorIcon from "../assets/images/new-ui-icons/file-error.png"
+import DinamalarImgPlaceholder from "../assets/images/dinamalar-news/dinamalar.jpg";
+import NoImgPlaceholder from "../assets/images/no-img-found.png";
+import FederalImgPlaceholder from "../assets/images/federal-news/federal_placeholder.png";
+import BlueRightArrow from "../assets/images/new-ui-icons/arrow_right_alt_color.svg";
+import PaginationLeftArrow from "../assets/images/new-ui-icons/pagination-left.svg";
+import PaginationRightArrow from "../assets/images/new-ui-icons/pagination-right.svg";
+import ChangeRequestIcon from "../assets/images/change-request.svg";
+import NoEditorIcon from "../assets/images/no-editors-found-2.svg";
+import EmptyProjectIcon from "../assets/images/empty-projects-folder.svg";
+import PlusIcon from "../assets/images/new-ui-icons/plus.svg";
+import EditIcon from "../assets/images/new-ui-icons/pencil-edit-new.svg";
+import FileUploadIcon from "../assets/images/new-ui-icons/upload_file.svg";
+import DeleteBinIcon from "../assets/images/new-ui-icons/assets-delete-icon.svg";
+import DownloadIcon from "../assets/images/new-ui-icons/file_download.svg";
+import BlackCloseIcon from "../assets/images/new-ui-icons/close_black.svg";
+import BarChatIcon from "../assets/images/new-ui-icons/stacked_bar_chart_blue.svg";
+import InsufficientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg";
+import RedCircleIcon from "../assets/images/new-ui-icons/remove_circle_red.svg";
+import FileErrorIcon from "../assets/images/new-ui-icons/file-error.png";
 import { CircularProgress as CircularLoader } from "@mui/material";
-import ReactRouterPrompt from 'react-router-prompt'
+import ReactRouterPrompt from 'react-router-prompt';
 
 function MyStories(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -123,18 +123,17 @@ function MyStories(props) {
         setSelectedStoryDetails,
         openAddStoryModal,
         editorsListOption
-    } = props
+    } = props;
     const location = useLocation();
     const { t } = useTranslation();
     const history = useNavigate();
-    const dispatch = useDispatch()
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
-    const isFederal = useSelector((state) => state.isFederalNews.value)
+    const dispatch = useDispatch();
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
+    const isFederal = useSelector((state) => state.isFederalNews.value);    
+    const languageOptionsList = useSelector((state) => state.languageOptionsList.value);
     
-    const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
-    
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
 
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -156,7 +155,7 @@ function MyStories(props) {
     const [contentTypeOptions, setContentTypeOptions] = useState(null);
     const [projectName, setProjectName] = useState("");
     const [projectType, setProjectType] = useState(null);
-    const [projectTypeOptions, setProjectTypeOptions] = useState([])
+    const [projectTypeOptions, setProjectTypeOptions] = useState([]);
     const [mtpeEngines, setMtpeEngines] = useState([]);
     const [mtpeEngineOptions, setMtpeEngineOptions] = useState([]);
     const [selectedMTEngine, setSelectedMTEngine] = useState({ value: 1, label: "Google" });
@@ -171,8 +170,7 @@ function MyStories(props) {
     const [showEditorReportModal, setShowEditorReportModal] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
     const [assignStep, setAssignStep] = useState(null);
-
-    // const [preTranslate, setPreTranslate] = useState(false)
+    // const [preTranslate, setPreTranslate] = useState(false);
     const [createdProjects, setCreatedProjects] = useState([]);
     const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
@@ -262,27 +260,24 @@ function MyStories(props) {
     const [selectedProjectFiledID, setselectedProjectFiledID] = useState(null)
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
-    const [poPDFUrl, setPoPDFUrl] = useState(null)
-    const [particularClickedTask, setParticularClickedTask] = useState(null)
-    const [stepToAccept, setStepToAccept] = useState(null)
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
+    const [poPDFUrl, setPoPDFUrl] = useState(null);
+    const [particularClickedTask, setParticularClickedTask] = useState(null);
+    const [stepToAccept, setStepToAccept] = useState(null);
     const searchAreaRef = useRef(null);
     const [selectFileRow, setSelectFileRow] = useState(false);
     const [availCredits, setAvailCredits] = useState(false);
-    const [projectFilterType, setprojectFilterType] = useState(null)
-    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null)
-
+    const [projectFilterType, setprojectFilterType] = useState(null);
+    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null);
     const [documentSubmitParameters, setDocumentSubmitParameters] = useState({
         taskid: null,
         step: null,
         confirm: null,
         total: null,
         isTaskReassigned: false
-    })
-    const [showSubmitDocumentAlertModal, setShowSubmitDocumentAlertModal] = useState(false)
-
+    });
+    const [showSubmitDocumentAlertModal, setShowSubmitDocumentAlertModal] = useState(false);
     const [showElement, setShowElement] = useState(true);
-
     // Glossary project states
     const [primaryGlossarySourceName, setPrimaryGlossarySourceName] = useState("");
     const [glossaryCopyrightOwner, setGlossaryCopyrightOwner] = useState("");
@@ -291,111 +286,88 @@ function MyStories(props) {
     const [glossaryLicense, setGlossaryLicense] = useState("");
     const [selectedUsagePermission, setSelectedUsagePermission] = useState({ value: 1, label: t("Private") });
     const [glossaryProjectCreationResponse, setGlossaryProjectCreationResponse] = useState(null);
-    const [selectedGlossaryProject, setSelectedGlossaryProject] = useState(null)
-    const [orderByValue, setOrderByValue] = useState(null)
+    const [selectedGlossaryProject, setSelectedGlossaryProject] = useState(null);
+    const [orderByValue, setOrderByValue] = useState(null);
     const [sortEl, setSortEl] = useState(null);
     const [moreEl, setMoreEl] = useState(null);
     const [openEl, setOpenEl] = useState(null);
-    const [subDownloadOption, setSubDownloadOption] = useState(null)
+    const [subDownloadOption, setSubDownloadOption] = useState(null);
     const [openedMoreOption, setOpenedMoreOption] = useState(null);
     const [showOpenAs, setShowOpenAs] = useState(null);
     const [orderBySelectedValue, setOrderBySelectedValue] = useState(2);
     const sortOpen = Boolean(sortEl);
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-
-    const [showProcessingModal, setShowProcessingModal] = useState(false)
-    const [editInstantProjectModal, setEditInstantProjectModal] = useState(false)
-    const [textToSpeechConvert, setTextToSpeechConvert] = useState(false)
-    const [isTranscribing, setIsTranscribing] = useState(false)
-    const [partialPretranslate, setPartialPretranslate] = useState(false)
-    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
-    const [unassignTaskDeleteAlert, setUnassignTaskDeleteAlert] = useState(false)
-
-    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null)
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const [showProcessingModal, setShowProcessingModal] = useState(false);
+    const [editInstantProjectModal, setEditInstantProjectModal] = useState(false);
+    const [textToSpeechConvert, setTextToSpeechConvert] = useState(false);
+    const [isTranscribing, setIsTranscribing] = useState(false);
+    const [partialPretranslate, setPartialPretranslate] = useState(false);
+    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false);
+    const [unassignTaskDeleteAlert, setUnassignTaskDeleteAlert] = useState(false);;
+    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
     const [taskActionOpen, setTaskActionOpen] = useState(false);
-    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null)
-
-    const [storyProjectName, setstoryProjectName] = useState('')
-
+    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null);
+    const [storyProjectName, setstoryProjectName] = useState('');
     // project analysis states
-    const [payableRatesAPI, setPayableRatesAPI] = useState(null)
-    const [payablRateValueAPI, setPayablRateValueAPI] = useState(null)
-    const [projectAnalysisedData, setProjectAnalysisedData] = useState(null)
-    const [projectAnalysisUnitSwitch, setProjectAnalysisUnitSwitch] = useState(false)
-
-
+    const [payableRatesAPI, setPayableRatesAPI] = useState(null);
+    const [payablRateValueAPI, setPayablRateValueAPI] = useState(null);
+    const [projectAnalysisedData, setProjectAnalysisedData] = useState(null);
+    const [projectAnalysisUnitSwitch, setProjectAnalysisUnitSwitch] = useState(false);
     const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
     const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState([]);
-    const [hasTeam, setHasTeam] = useState(false)
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
+    const [hasTeam, setHasTeam] = useState(false);
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
     const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
-    const [isStoryProjUpdating, setIsStoryProjUpdating] = useState(false)
-    const [showStoryProjDeleteModal, setShowStoryProjDeleteModal] = useState(false) // state to show confirmation modal for express project
-
-    const [preTranslateAllTask, setPreTranslateAllTask] = useState([])
-    const [createdProjectsList, setCreatedProjectsList] = useState([])
-
-    const [isPdfTranslating, setIsPdfTranslating] = useState(false)
-
-    const [transcriptionTaskList, setTranscriptionTaskList] = useState([])
-
-    const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([])
-
-    const [isDownloading, setIsDownloading] = useState(false)
-    const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false)
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-    const [confirmedNavigation, setConfirmedNavigation] = useState(false)
-    const [lastLocation, setLastLocation] = useState(null)
-    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false)
-
-    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false)
-    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('')
-
+    const [isStoryProjUpdating, setIsStoryProjUpdating] = useState(false);
+    const [showStoryProjDeleteModal, setShowStoryProjDeleteModal] = useState(false); // state to show confirmation modal for express project
+    const [preTranslateAllTask, setPreTranslateAllTask] = useState([]);
+    const [createdProjectsList, setCreatedProjectsList] = useState([]);
+    const [isPdfTranslating, setIsPdfTranslating] = useState(false);
+    const [transcriptionTaskList, setTranscriptionTaskList] = useState([]);
+    const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([]);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false);
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
+    const [confirmedNavigation, setConfirmedNavigation] = useState(false);
+    const [lastLocation, setLastLocation] = useState(null);
+    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false);
+    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false);
+    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('');
     // states for open as button
     const [downloadOpen, setDownloadOpen] = useState(false);
-
     // const [anchorEl, setAnchorEl] = useState(null); // This is the common anchor element for all poppers
     const [popperAnchorEl, setPopperAnchorEl] = useState({}); // Separate anchor element for each popper
-    const [showPOFilesModal, setShowPOFilesModal] = useState(false)
-    const [POFilesDetails, setPOFilesDetails] = useState(null)
-
-    const [isReworkSending, setIsReworkSending] = useState(false)
-    const [isDeadlineExtendReqSending, setIsDeadlineExtendReqSending] = useState(false)
-
-    const [showDeadlineCrossedModal, setShowDeadlineCrossedModal] = useState(false)
-
-    const [vendorChangeRequestReason, setVendorChangeRequestReason] = useState("")
-    const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false)
-    const [isApproving, setIsApproving] = useState(false)
-
-    const [isTaskDeleting, setIsTaskDeleting] = useState(false)
-    const [isStoryProjectDeleting, setIsStoryProjectDeleting] = useState(false)
-    
+    const [showPOFilesModal, setShowPOFilesModal] = useState(false);
+    const [POFilesDetails, setPOFilesDetails] = useState(null);
+    const [isReworkSending, setIsReworkSending] = useState(false);
+    const [isDeadlineExtendReqSending, setIsDeadlineExtendReqSending] = useState(false);
+    const [showDeadlineCrossedModal, setShowDeadlineCrossedModal] = useState(false);
+    const [vendorChangeRequestReason, setVendorChangeRequestReason] = useState("");
+    const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false);
+    const [isApproving, setIsApproving] = useState(false);
+    const [isTaskDeleting, setIsTaskDeleting] = useState(false);
+    const [isStoryProjectDeleting, setIsStoryProjectDeleting] = useState(false)  ;  
     const [isDesignDeleting, setIsDesignDeleting] = useState(false);
     const [axiosVendorDashboardAbortController, setAxiosVendorDashboardAbortController] = useState(null);
     const [axiosFileTranslateAbortController, setAxiosFileTranslateAbortController] = useState(null);
     const [showFileErrorModal, setShowFileErrorModal] = useState(false);
-    const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false)
-    const [isStoryIdPushing, setIsStoryIdPushing] = useState(null)
-    const [refreshParam, setRefreshParam] = useState(false)
-
-    const [isEditorFilterDropDownOpen, setIsEditorFilterDropDownOpen] = useState(false)
-    // const [editorsListOption, setEditorsListOption] = useState([])
-    const [checkedEditors, setCheckedEditors] = useState([])
+    const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false);
+    const [isStoryIdPushing, setIsStoryIdPushing] = useState(null);
+    const [refreshParam, setRefreshParam] = useState(false);
+    const [isEditorFilterDropDownOpen, setIsEditorFilterDropDownOpen] = useState(false);
+    // const [editorsListOption, setEditorsListOption] = useState([]);
+    const [checkedEditors, setCheckedEditors] = useState([]);
     const [editorUnassignData, setEditorUnassignData] = useState({
         task_id: null,
         isUnassigning: false
-    })
+    });
+    const [myStoriesSettingsBox, setMyStoriesSettingsBox] = useState(false)
 
     const downloadAnchorRef = useRef(null);
     const projectIdForPOModal = useRef(null)
-    const projectTypeForPOModal = useRef(null)
-
-    const clientResponseDataRef = useRef(null)
-
-    const [myStoriesSettingsBox, setMyStoriesSettingsBox] = useState(false)
-    const myStoriesSettingsBoxRef = useRef()
-
+    const projectTypeForPOModal = useRef(null);
+    const clientResponseDataRef = useRef(null);    
+    const myStoriesSettingsBoxRef = useRef();
     /* State constants - end */
 
     /* Ref constants - start */
@@ -413,13 +385,12 @@ function MyStories(props) {
     const deletedSubjectIds = useRef([]);
     const deletedContentIds = useRef([]);
     const projectTypeRef = useRef(null)
-    const assignedMemberCardRef = useRef(null)
-
-    // const allowedFileLength = useRef(10)
-    // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`)
-    // const allowedTargetLanguageLength = useRef(20)
-    // const allowedFileSize = useRef(100) //In MB
-    // const fileSizeErrMsg = useRef(`Exceeds the file(s) size limit of ${allowedFileSize.current} MB`)
+    const assignedMemberCardRef = useRef(null);
+    // const allowedFileLength = useRef(10);
+    // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`);
+    // const allowedTargetLanguageLength = useRef(20);
+    // const allowedFileSize = useRef(100); //In MB
+    // const fileSizeErrMsg = useRef(`Exceeds the file(s) size limit of ${allowedFileSize.current} MB`);
     const allowedSingleFileSize = useRef(100); // in MB
     const singleFileSizeError = useRef(t("file_size_exceeds"));
     const projectIdToSelect = useRef(null);
@@ -428,74 +399,57 @@ function MyStories(props) {
     const typing = useRef(false);
     const typingTimeout = useRef(0);
     const projectEditable = useRef(false);
-
-    const downloadref = useRef(null)
-    const downloadedFileName = useRef(null)
+    const downloadref = useRef(null);
+    const downloadedFileName = useRef(null);
     const searchTermCloseOutside = useRef();
-    const didMountRef = useRef(0)
-
-    const searchTermRef = useRef(null)
-    const openFileId = useRef(null)
-    const projectAnalysisTempProjectId = useRef(null)
-    const projectAnalysisApiCounter = useRef(0)
-    const isPdfConversionPostCalled = useRef(false)
+    const didMountRef = useRef(0);
+    const searchTermRef = useRef(null);
+    const openFileId = useRef(null);
+    const projectAnalysisTempProjectId = useRef(null);
+    const projectAnalysisApiCounter = useRef(0);
+    const isPdfConversionPostCalled = useRef(false);
     const taskActionAnchorRef = useRef(null);
-    const taskDeleteParam = useRef(null)
-    const storyProjectIdRef = useRef(null)
-    const targetLangDivRef = useRef(null)
-    const isProjectPreTranslate = useRef(false)
-    const createdProjectsRef = useRef([])
-    const selectedProjectFilesRef = useRef([])
-    const myTimeoutFunc = useRef(null)
-    const selectedProjectIdRef = useRef(null)
-    const projectObject = useRef(null)
-    const selectedDesignerProject = useRef(null)
-
-    const isProjectTransciptionRef = useRef(false)
-
-    const analysisRunningProjectListRef = useRef(null)
-    const wordCountAnalysisTimeoutRef = useRef(null)
-    const wordCountAnalysisTriggerRef = useRef(false)
-
-    const mtRawDownloadRetryLimit = useRef(2)
-    const mtRawDownloadRetryCounter = useRef(0)
-
-    const downloadingFilesList = useRef([])
-
-    const mtRawCeleryTimeOutRef = useRef(null)
-
-    const downloadDiffFilesParamRef = useRef(null)
-    const docCreditCheckAlertRef = useRef(null)
-
+    const taskDeleteParam = useRef(null);
+    const storyProjectIdRef = useRef(null);
+    const targetLangDivRef = useRef(null);
+    const isProjectPreTranslate = useRef(false);
+    const createdProjectsRef = useRef([]);
+    const selectedProjectFilesRef = useRef([]);
+    const myTimeoutFunc = useRef(null);
+    const selectedProjectIdRef = useRef(null);
+    const projectObject = useRef(null);
+    const selectedDesignerProject = useRef(null);
+    const isProjectTransciptionRef = useRef(false);
+    const analysisRunningProjectListRef = useRef(null);
+    const wordCountAnalysisTimeoutRef = useRef(null);
+    const wordCountAnalysisTriggerRef = useRef(false);
+    const mtRawDownloadRetryLimit = useRef(2);
+    const mtRawDownloadRetryCounter = useRef(0);
+    const downloadingFilesList = useRef([]);
+    const mtRawCeleryTimeOutRef = useRef(null);
+    const downloadDiffFilesParamRef = useRef(null);
+    const docCreditCheckAlertRef = useRef(null);
     // userefs for collaborate section (assign & manage)
-    const selectedFileRow = useRef(null)
-
-    const stepOptionsRef = useRef(null)
-    const isTaskReassigned = useRef(false)
-
-    const taskDetailsForDeadlineCrossedTask = useRef(null)
-    const fileTranslatingTaskListRef = useRef([])
-    const axiosListProjectControllerRef = useRef(null)
-    const isProjectListEmptyRef = useRef(false)
-    const editorDropDownBoxRef = useRef(null)
-
-    const openProjectListCounterRef = useRef(0)
-
-    let paginationTimeOut = null
-
-
+    const selectedFileRow = useRef(null);
+    const stepOptionsRef = useRef(null);
+    const isTaskReassigned = useRef(false);
+    const taskDetailsForDeadlineCrossedTask = useRef(null);
+    const fileTranslatingTaskListRef = useRef([]);
+    const axiosListProjectControllerRef = useRef(null);
+    const isProjectListEmptyRef = useRef(false);
+    const editorDropDownBoxRef = useRef(null);
+    const openProjectListCounterRef = useRef(0);
     /* Ref constants - end */
-
+    let paginationTimeOut = null;
     var id = window.setTimeout(function () { }, 0);
-
     const open = Boolean(anchorEl); //Assigned task open
 
     const openReportModal = () => {
-        setShowReportModal(true)
+        setShowReportModal(true);
     } 
 
     const CircularProgressWithLabel = (props) => {
-        // setOpenedProjectId()
+        // setOpenedProjectId();
         return (
             <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                 <CircularProgress variant="determinate" {...props} className={"circular-foreground"} />
@@ -530,7 +484,7 @@ function MyStories(props) {
         }, 10000);
 
         return () => {
-            clearTimeout(timeOut)
+            clearTimeout(timeOut);
         }
     }, []);
 
@@ -540,9 +494,7 @@ function MyStories(props) {
                 setFileListSearchEnlarge(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -554,14 +506,11 @@ function MyStories(props) {
                 setFileListSearchEnlarge(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
     });
-
 
     /* Check for clicing outside of the dropdown */
     useEffect(() => {
@@ -570,9 +519,7 @@ function MyStories(props) {
                 setMoreEl(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -585,9 +532,7 @@ function MyStories(props) {
                 setOpenEl(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -600,9 +545,7 @@ function MyStories(props) {
                 setShowAssignMemberInfobox(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -611,15 +554,12 @@ function MyStories(props) {
     /* Check for clicing outside of the editor filter dropdown */
     useEffect(() => {
         const handleClickOutside = (e) => {
-            let filterDropDownBox = e.target.closest('.editor-filter') ? true : false
-            // console.log("filterDropDownBox" + filterDropDownBox)
+            let filterDropDownBox = e.target.closest('.editor-filter') ? true : false;
             if (editorDropDownBoxRef.current && !filterDropDownBox) {
                 setIsEditorFilterDropDownOpen(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -628,7 +568,6 @@ function MyStories(props) {
 
     const handleIndividualTaskAssignManage = (e, selectedStep, task, project) => {
         e.stopPropagation();
-        // console.log(task);
         selectedFileRow.current = {
             task: task.id,
             job: task.job,
@@ -639,28 +578,25 @@ function MyStories(props) {
             bid_info: task.bid_job_detail_info,
             task_data: task,
             project_data: project
-        }
-
-        setAssignStep(selectedStep)
-        setShowIndividualAssignManage(true)
+        };
+        setAssignStep(selectedStep);
+        setShowIndividualAssignManage(true);
     }
 
     const handleShowLSPAssignManage = (e, project) => {
         e.stopPropagation();
-        // console.log(assign_enable)
         selectedFileRow.current = {
             project: project?.id,
             steps: project?.steps,
             assign_enable: project?.assign_enable,
             project_data: project
-        }
-        setShowLSPAssignManage(true)
+        };
+        setShowLSPAssignManage(true);
     }
 
     /* Edit task assignment by id */
     const editAssignedTask = (e, project, task, jobId, stepId) => {
-        // console.log(taskId)
-        // e.stopPropagation()
+        // e.stopPropagation();
         selectedFileRow.current = {
             task: task.id,
             job: jobId,
@@ -668,9 +604,9 @@ function MyStories(props) {
             assign_enable: project?.assign_enable,
             task_data: task,
             project_data: project
-        }
-        setAssignStep(stepId)
-        setShowIndividualAssignManage(true)
+        };
+        setAssignStep(stepId);
+        setShowIndividualAssignManage(true);
         setAssignedTaskId(task.id);
         // props.history(`/collaborate?project=${projectId}&task=${taskId}&job=${jobId}&_edit=${true}&_step=${stepId}`);
         // setAnchorEl(null);
@@ -684,29 +620,29 @@ function MyStories(props) {
     const handleShowAssignMemberInfo = (e, id) => {
         e.stopPropagation();
         setShowAssignMemberInfobox(true);
-        setAssignSelectedProject(id)
+        setAssignSelectedProject(id);
     };
 
     const handleMoreVertOption = (e, id) => {
         e.stopPropagation();
         setMoreEl(true);
-        setOpenedMoreOption(id)
+        setOpenedMoreOption(id);
     };
 
     const handleOpenAsOption = (e, id) => {
         e.stopPropagation();
         setOpenEl(true);
-        setShowOpenAs(id)
+        setShowOpenAs(id);
     };
 
     const handleSubDownloadOption = (e, id) => {
         e.stopPropagation();
-        setSubDownloadOption(true)
+        setSubDownloadOption(true);
     }
 
     const handleSubDownloadOptioHide = (e, id) => {
         e.stopPropagation();
-        setSubDownloadOption(false)
+        setSubDownloadOption(false);
     }
 
     const moreOptions = [
@@ -726,7 +662,7 @@ function MyStories(props) {
         //     icon: <ReceiptLongOutlinedIcon />,
         //     label: t("view_po"),
         // }
-    ]
+    ];
 
     const moreOptionsForPDF = [
         {
@@ -741,7 +677,7 @@ function MyStories(props) {
             label: t("delete"),
         },
 
-    ]
+    ];
 
     const subDownloadOptions = [
         {
@@ -774,7 +710,7 @@ function MyStories(props) {
         //     value: 'XLIFF',
         //     label: "XLIFF",
         // },
-    ]
+    ];
 
     const moreOptionsForDoc = [
         {
@@ -788,7 +724,7 @@ function MyStories(props) {
             label: t("delete"),
         },
 
-    ]
+    ];
 
     const moreOptionsForDesigner = [
         {
@@ -811,11 +747,11 @@ function MyStories(props) {
             icon: <ReceiptLongOutlinedIcon className="receipt-icon" />,
             label: t("view_po"),
         }
-    ]
+    ];
 
     const handleSelectedOrderItem = (selected_option) => {
-        setOrderBySelectedValue(selected_option)
-        orderBy(selected_option.value)
+        setOrderBySelectedValue(selected_option);
+        orderBy(selected_option.value);
         setSortEl(null);
     };
 
@@ -823,26 +759,22 @@ function MyStories(props) {
         setSortEl(null);
     };
 
-
     const openAddOn = () => {
-        window.open(Config.USER_PORTAL_HOST + "/add-ons")
-        setAvailCredits(false)
+        window.open(Config.USER_PORTAL_HOST + "/add-ons");
+        setAvailCredits(false);
     }
 
     const openSubcription = () => {
-        window.open(Config.USER_PORTAL_HOST + "/subscription-plans")
-        setAvailCredits(false)
+        window.open(Config.USER_PORTAL_HOST + "/subscription-plans");
+        setAvailCredits(false);
     }
-
 
     const hideSettingsModal = () => {
         setshowSettings(false);
         document.querySelector('.padding-correction').style.overflow = 'unset';
-
     }
 
     const hideAssignManageModal = () => setShowAssignManageModal(false);
-
     const hideVersionControlModal = () => setShowVersionControlModal(false);
 
     const modaloptions = {
@@ -920,31 +852,30 @@ function MyStories(props) {
         { value: 'text_to_speech', label: t("ai_voice_proj") },
         { value: 'express', label: t("instant_trans_proj") },
         { value: 'assigned', label: t("assign_proj") },
-    ]
+    ];
 
     const orderByOptions = [
         { value: 'project_name', label: t("a_to_z") },
         { value: '-project_name', label: t("z_to_a") },
         { value: '-id', label: t("most_recent") },
         { value: 'id', label: t("least_recent") },
-    ]
+    ];
 
     const orderByOptionsForAssets = [
         { value: 'project_name', label: t("a_to_z") },
         { value: '-project_name', label: t("z_to_a") },
         { value: '-created_at', label: t("most_recent") },
         { value: 'created_at', label: t("least_recent") },
-    ]
+    ];
 
     const openAsOption = [
         { value: 'editor', label: t('editor') },
         { value: 'reviewer', label: t('reviewer') }
-    ]
+    ];
 
     const handleSelectOrderBy = (selected) => {
-        orderBy(selected)
+        orderBy(selected);
     }
-
 
     /* Show / Hide the Github, Gitlab file upload */
     const handleShowVersionControlModal = (image, platform) => {
@@ -962,27 +893,23 @@ function MyStories(props) {
                 setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription);
                 setAddonCredit(response?.data?.credits_left?.addon);
                 setSubscriptionCredit(response?.data?.credits_left?.subscription);
-                // console.log(response?.data?.credits_left?.total_buyed)
-                // console.log(progressPercentage)
                 if (response?.data?.credits_left?.total_buyed === 0) {
-                    setProgressPercentage(0)
+                    setProgressPercentage(0);
                 } else {
                     setProgressPercentage(
                         (((response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription) / response?.data?.credits_left?.total_buyed) * 100).toFixed(2)
-                    )
+                    );
                 }
-
             },
         });
     };
-
 
     const getSteps = () => {
         Config.axios({
             url: `${Config.BASE_URL}/workspace/steps/`,
             auth: true,
             success: (response) => {
-                stepOptionsRef.current = response.data
+                stepOptionsRef.current = response.data;
                 // setStep(response.data);
             },
         });
@@ -1015,18 +942,15 @@ function MyStories(props) {
     };
 
     const showSettingsModal = (e, project_id) => {
-        e.stopPropagation()
+        e.stopPropagation();
         setSelectedProjectId(project_id);
         setshowSettings(true);
         // document.querySelector('.padding-correction').style.overflow = 'hidden';
     }
 
-
-    /* 
-        - Get the analysis data if it's not counted already
-    */
+    /* - Get the analysis data if it's not counted already */
     const showWordCountModal = (e = null, projectId = 0, isProjectAnalyzed = true) => {
-        e.stopPropagation()
+        e.stopPropagation();
         if (projectId && !isProjectAnalyzed) {
             setShowWordCountLoader(true);
 
@@ -1049,7 +973,6 @@ function MyStories(props) {
     };
 
     const hideWordCountModal = () => setshowWordCount(false);
-
 
     /* Set tab change if clicked only other tabs */
     const activeToggle = (tab) => {
@@ -1137,8 +1060,6 @@ function MyStories(props) {
         return true
     } */
 
-
-
     /* Switch to file upload view */
     const switchFileUpload = (e, value) => {
         setShowFileUpload(value);
@@ -1157,20 +1078,20 @@ function MyStories(props) {
         switch (e.target.name) {
             case "files": {
                 let thisFiles = e.target.files;
-                // let fileList = JSON.parse(JSON.stringify(files))
+                // let fileList = JSON.parse(JSON.stringify(files));
                 let fileList = [...files];
                 Object.keys(thisFiles).map((eachKey) => {
                     if (isSupportedFile(thisFiles[eachKey])) {
                         // Check for supprted file types
-                        // if (editFiles.length + fileList.length < allowedFileLength.current)
+                        // if (editFiles.length + fileList.length < allowedFileLength.current);
                         if (thisFiles[eachKey].size / 1024 / 1024 <= allowedSingleFileSize.current) fileList.push(thisFiles[eachKey]);
                         else Config.toast(singleFileSizeError.current, "error");
                         // else
-                        // Config.toast(fileLengthErrMsg.current, 'error')
+                        // Config.toast(fileLengthErrMsg.current, 'error');
                     }
                 });
                 setFiles(fileList);
-                // setFiles(prevState => [...prevState, e.target.files])
+                // setFiles(prevState => [...prevState, e.target.files]);
                 break;
             }
             case "projectName": {
@@ -1193,18 +1114,17 @@ function MyStories(props) {
     /* Handling source language selection */
     const handleSourceLangClick = (value, name, e) => {
         setshowSrcLangModal(false);
-        setSearchInput('')
+        setSearchInput('');
     };
 
     const handleTargetModalCloseBtn = (e) => {
         if(targetLanguage?.length < 1){
-            Config.toast(t("at_least_language_selected"), 'warning')
+            Config.toast(t("at_least_language_selected"), 'warning');
             return;
         }
         setshowTarLangModal(false); 
         setSearchInput(''); 
-        setOnFocusWrap(false)
-        
+        setOnFocusWrap(false);        
     }
 
     /* Handling target language selection */

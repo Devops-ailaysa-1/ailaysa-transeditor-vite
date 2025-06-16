@@ -1,16 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 import Cookies from "js-cookie";
 
-console.log("campaign-strip: " + Cookies.get("hideCampaignStrip"))
-let campaign_cookie = Cookies.get("hideCampaignStrip")
+console.log("campaign-strip: " + Cookies.get("hideCampaignStrip"));
+let campaign_cookie = Cookies.get("hideCampaignStrip");
 
 export const CampaignCouponStripSlice = createSlice({
     name: 'showCampaignStrip',
     initialState: { value: campaign_cookie == undefined ? true : false },
     reducers: {
         setShowCampaignStrip: (state, action) => {
-            // console.log('state: ' + state)
-            state.value = action.payload
+            state.value = action.payload;
         }
     }
 })
