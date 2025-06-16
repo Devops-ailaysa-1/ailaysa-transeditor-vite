@@ -1,6 +1,6 @@
 import React from 'react';
-import AnalysisAnime from "./analysis_loader.json"
-// import Lottie from 'react-lottie'
+import AnalysisAnime from "./analysis_loader.json";
+// import Lottie from 'react-lottie';
 import { useLottie } from "lottie-react";
 
 export const AnalysisLoader = () => {
@@ -12,8 +12,7 @@ export const AnalysisLoader = () => {
         rendererSettings: {
         preserveAspectRatio: "xMidYMid slice",
         },
-    }
-
+    };
     const { View } = useLottie(defaultOptions);
 
   return (

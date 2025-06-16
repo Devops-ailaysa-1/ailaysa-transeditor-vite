@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
 import classnames from "classnames";
@@ -18,7 +18,7 @@ import { ButtonBase } from '@mui/material'
 import { setShowGlobalTransition } from "../features/GlobalTransitionSlice";
 import GetStories from './GetStories';
 // import DashboardNewProjDrpDown from '../dashboard/DashboardNewProjDrpDown';
-import StorySingleViewModal from "./StorySingleViewModal"
+import StorySingleViewModal from "./StorySingleViewModal";
 import MyStories from './MyStories';
 import AddStoryModal from './AddStoryModal';
 
@@ -27,56 +27,51 @@ const NewsProjects = () => {
     const history = useNavigate();
     const dispatch = useDispatch();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const isFederal = useSelector((state) => state.isFederalNews.value)
-    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
-
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
-    const isIncompleteEditorSettings = useSelector((state) => state.editorSettingStatus.value)
-
-
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const isFederal = useSelector((state) => state.isFederalNews.value);
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
     const [activeProjTab, setActiveProjTab] = useState(isDinamalar || is_internal_meber_editor ? 2 : 1);
     const [tourStepIndex, setTourStepIndex] = useState(0);
     const [targetLanguageOptions, setTargetLanguageOptions] = useState(null);
     const [isProductTourSeen, setIsProductTourSeen] = useState(true);
     const [isViewStoryModal, setIsViewStoryModal] = useState(false);
     const [activeTab, setActiveTab] = useState(1);
-    const [selectedStoryDetails, setSelectedStoryDetails] = useState(null)
-    const [showAddStoryModal, setShowAddStoryModal] = useState(false)
-    const [editorsListOption, setEditorsListOption] = useState([])
+    const [selectedStoryDetails, setSelectedStoryDetails] = useState(null);
+    const [showAddStoryModal, setShowAddStoryModal] = useState(false);
+    const [editorsListOption, setEditorsListOption] = useState([]);
 
-    const mainContainerRef = useRef(null)
+    const mainContainerRef = useRef(null);
     const targetLanguageOptionsRef = useRef([]);
-    
 
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
+    const isIncompleteEditorSettings = useSelector((state) => state.editorSettingStatus.value);
+         
     const BeaconComponent = React.forwardRef((props, ref) => <div ref={ref} className="d-none"></div>);
 
     useEffect(() => {
         const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-        let filterParam = URL_SEARCH_PARAMS.get('filter')
-        // console.log(filterParam)
-
+        let filterParam = URL_SEARCH_PARAMS.get('filter');
         if (window.location.pathname?.includes("all-stories")) {
-            setActiveProjTab(1)
+            setActiveProjTab(1);
         } else if (window.location.pathname?.includes("my-stories")) {
             if(filterParam === 'submitted'){
-                setActiveProjTab(3)
+                setActiveProjTab(3);
             }else if(filterParam === 'approved'){
-                setActiveProjTab(4)
+                setActiveProjTab(4);
             }else{
-                setActiveProjTab(2)
+                setActiveProjTab(2);
             }
         } else if (window.location.pathname?.includes("add-stories")){
-            setActiveProjTab(3)
+            setActiveProjTab(3);
         }
-    }, [window.location.pathname, URL_SEARCH_PARAMS.get('filter')])
+    }, [window.location.pathname, URL_SEARCH_PARAMS.get('filter')]);
 
     // clear the story details when view story modal is closed
     useEffect(() => {
         if(!isViewStoryModal){
-            setSelectedStoryDetails(null)
+            setSelectedStoryDetails(null);
         }
-    }, [isViewStoryModal]) 
+    }, [isViewStoryModal]) ;
 
     useEffect(() => {
         // let pageParam = window.location.pathname;
@@ -85,11 +80,11 @@ const NewsProjects = () => {
             // let filterParam = URL_SEARCH_PARAMS.get("filter");
             // let searchParam = URL_SEARCH_PARAMS.get("search");
             let browserUrl = `/all-stories?page=1`;
-            history(browserUrl)
+            history(browserUrl);
         }
         getLanguagesList()
         if (userDetails?.is_vendor) {
-            getEdiorSettingStatus()
+            getEdiorSettingStatus();
         }        
         document.title = 'Ailaysa | News Projects';
     }, []);
@@ -97,17 +92,16 @@ const NewsProjects = () => {
     // get the editors list for dinamalar user
     useEffect(() => {
         if(isDinamalar){
-            getEditorsListOption()
+            getEditorsListOption();
         }
-    }, [isDinamalar])
+    }, [isDinamalar]);
     
-
     const getEdiorSettingStatus = () => {
         Config.axios({
             url: `${Config.BASE_URL}/vendor/editor_settings_status/`,
             auth: true,
             success: (response) => {
-                dispatch(setEditorSettingStatus(response.data['incomplete status']))
+                dispatch(setEditorSettingStatus(response.data['incomplete status']));
             },
             error: (err) => {
                 if (err.response?.data?.msg === "Unauthorised" || err.response?.data?.code === "bad_authorization_header") {
@@ -122,7 +116,7 @@ const NewsProjects = () => {
             url: `${Config.BASE_URL}/auth/editors_list/`,
             auth: true,
             success: (response) => {
-                setEditorsListOption(response.data)
+                setEditorsListOption(response.data);
             },
         });
     } 
@@ -158,7 +152,6 @@ const NewsProjects = () => {
         }
     };
 
-
     /* Set tab change if clicked only other tabs */
     const activeToggle = (tab) => {
         if (activeTab != tab) {
@@ -186,16 +179,15 @@ const NewsProjects = () => {
     };
 
     const openAddStoryModal = () => {
-        setShowAddStoryModal(true)
+        setShowAddStoryModal(true);
     } 
 
     const handlePorjectListSwitch = (tab, filter) => {
         const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
         setActiveProjTab(tab);
-        URL_SEARCH_PARAMS.set('page', 1)
-        URL_SEARCH_PARAMS.set('filter', filter)
+        URL_SEARCH_PARAMS.set('page', 1);
+        URL_SEARCH_PARAMS.set('filter', filter);
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-
         // history("/my-stories?page=1&filter=inprogress")
     } 
 
@@ -380,4 +372,4 @@ const NewsProjects = () => {
     )
 }
 
-export default NewsProjects
+export default NewsProjects;
