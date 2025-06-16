@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import React from "react";
-import PdfConvertCollapse from "./PdfConvertCollapse"
+import PdfConvertCollapse from "./PdfConvertCollapse";
 
 const ToolkitCollapse = () => {
     return (

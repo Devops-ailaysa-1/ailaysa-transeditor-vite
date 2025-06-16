@@ -7,57 +7,45 @@ import ButtonBase from '@mui/material/ButtonBase';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import Skeleton from '@mui/material/Skeleton';
 
-
-
-
 const Writing = (props) => {
-    Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
-    
+    Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.    
     const history = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
     const [dataItem, setDataItem] = useState(null);
     const [cardLoaders, setCardLoaders] = useState(false);
 
-
-
     const getCardContent = async() => {
-        setCardLoaders(true)
-        let newItem = []
+        setCardLoaders(true);
+        let newItem = [];
         var myHeaders = new Headers();
-
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         };
+        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/app-template?populate=deep`, requestOptions);
 
-        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/app-template?populate=deep`, requestOptions)
         if (data.status === 200) {
-            let response = await data.json()
+            let response = await data.json();
             let {
                 Apps_Templates
-            } = response?.data?.attributes
-
-            let AppsCardsInfo = []
+            } = response?.data?.attributes;
+            let AppsCardsInfo = [];
             Apps_Templates?.map((each) => {
-                AppsCardsInfo.push(each.apps_template_cards.data.flat(1))
-            })
-
+                AppsCardsInfo.push(each.apps_template_cards.data.flat(1));
+            });
             newItem = AppsCardsInfo.flat(1)?.filter((newVal) => {
                 return newVal.attributes?.category === "Write with AI";
             });
-            console.log(newItem)
             setDataItem(newItem);
-            setCardLoaders(false)
+            setCardLoaders(false);
         }
     } 
 
     useEffect(() => {
         getCardContent();
-    }, [])
-    
-
+    }, []);
 
     return (
         <React.Fragment>

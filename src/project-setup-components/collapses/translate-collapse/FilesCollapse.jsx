@@ -3,7 +3,7 @@ import { NavLink, useParams, useNavigate} from "react-router-dom";
 import Config from "../../../vendor/Config";
 import { Collapse } from "reactstrap";
 import { useTranslation } from "react-i18next";
-import TranslateFileMenu from "../../../assets/images/new-create-hub/translate-files-menu.svg"
+import TranslateFileMenu from "../../../assets/images/new-create-hub/translate-files-menu.svg";
 
 const FilesCollapse = (props) => {
     const { t } = useTranslation();
@@ -26,7 +26,7 @@ const FilesCollapse = (props) => {
         } else {
             setFilesCollapse(false);
         }
-    }, [window.location.pathname])
+    }, [window.location.pathname]);
 
     const handleFilesCollapser = () => {
         setFilesCollapse(!filesCollapse);

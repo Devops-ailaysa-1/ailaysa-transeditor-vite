@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import Config from "../../../vendor/Config";
 import { Collapse } from "reactstrap";
-import ExpandMoreIcon from "../../../assets/images/new-ui-icons/expand_more.svg"
+import ExpandMoreIcon from "../../../assets/images/new-ui-icons/expand_more.svg";
 
 const TranslationMemories = () => {
     const [filesCollapse, setFilesCollapse] = useState(false);

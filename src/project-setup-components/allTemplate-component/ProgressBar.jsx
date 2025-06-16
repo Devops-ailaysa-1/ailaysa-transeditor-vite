@@ -1,3 +1,11 @@
+/**
+ * Component: ProjectCreation
+ * Description: 
+ *    This component is responsible for showing the progress bar based on the given percentage value.
+ * 
+ * Author: Padmabharathi Subiramanian
+ * Since: April 2025
+ */
 import React, { useState, useEffect } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";

@@ -21,7 +21,7 @@ const InfinityScrollComponent = (props) => {
     loader,
     setHasMore,
     hasMore
-  } = props
+  } = props;
   // const [hasMore, setHasMore] = useState(true);
 //   const js = 
 
@@ -33,17 +33,18 @@ const getMorePost = async () => {
   const url = new URL(allList.next);
   const searchParams = url.searchParams;
   let page = searchParams.get('page');
+
   Config.axios({
     url:  Config.BASE_URL + `${path}page=${page}`,
     method: "GET",
     auth: true,
     success: (response) => {
-        setAllList(response.data)
-        setAllData((post) => [...post, ...response.data.results])
+        setAllList(response.data);
+        setAllData((post) => [...post, ...response.data.results]);
     },
     error: (err) => {
-        console.log(err)
-        Config.toast('Something went wrong', 'error')
+        console.error(err);
+        Config.toast('Something went wrong', 'error');
     },
 });
 };
