@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Cookies from "js-cookie";
 
-console.log("campaign-strip: " + Cookies.get("hideCampaignStrip"));
 let campaign_cookie = Cookies.get("hideCampaignStrip");
 
 export const CampaignCouponStripSlice = createSlice({
