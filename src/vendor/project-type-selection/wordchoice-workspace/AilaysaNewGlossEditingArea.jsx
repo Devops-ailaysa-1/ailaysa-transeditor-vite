@@ -939,13 +939,11 @@ const AilaysaNewGlossEditingArea = (props) => {
                         </>
                     ) :  (
                         <>
-                            {isFrom !== 'Simple_Glossary' && (
-                               <button className="convert-pdf-list-UploadProjectButton mr-2" onClick={() => setActiveScreen(2)}>
-                                  <span className="fileupload-new-btn bulk-upload-span">
+                            <button className="convert-pdf-list-UploadProjectButton mr-2" onClick={() => setActiveScreen(2)}>
+                                <span className="fileupload-new-btn bulk-upload-span">
                                     {t("import_terms")}
-                                  </span>
-                               </button>
-                            )}
+                                </span>
+                             </button>
                             {isFrom === 'Advance_Glossary' && (
                                 <Select
                                     options={taskOptionList}
