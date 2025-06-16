@@ -38,28 +38,24 @@
 // import { FontFamilyList, ArabicFontFamilyList, BengaliFontFamilyList, ChineseHkFontFamilyList, ChineseSimpFontFamilyList, ChineseTrFontFamilyList, GujaratiFontFamilyList, GurmukhiFontFamilyList, KanadaFontFamilyList, MalayalamFontFamilyList, MyanmarFontFamilyList, OriyaFontFamilyList, SinhalaFontFamilyList, TamilFontFamilyList, TeluguFontFamilyList, TibetanFontFamilyList } from './WritterData'
 // import Select from 'react-select'
 
-
 // const WritterToolbar = (props) => {
-
 //     const {
 //         writterref,
 //         editor
-//     } = props
+//     } = props;
 
-//     console.log(writterref);
+// const [bold , setBold] = useState(false);
+// const [italic, setItalic] = useState(false);
+// const [underline, setUnderline] = useState(false);
+// const [strike, setStrike] = useState(false);
+// const [subScript, setSubScript] = useState(false);
+// const [superscript, setSuperscript] = useState(false);
+// const [foreColor, setForeColor] = useState('#000000');
+// const [backcolor, setBackcolor] = useState('#000000');
+// const [activeFontFamily, setActiveFontFamily] = useState('Ariel');
+// const [fontSize, setFontSize] = useState('20');
 
-// const [bold , setBold] = useState(false)
-// const [italic, setItalic] = useState(false)
-// const [underline, setUnderline] = useState(false)
-// const [strike, setStrike] = useState(false)
-// const [subScript, setSubScript] = useState(false)
-// const [superscript, setSuperscript] = useState(false)
-// const [foreColor, setForeColor] = useState('#000000')
-// const [backcolor, setBackcolor] = useState('#000000')
-// const [activeFontFamily, setActiveFontFamily] = useState('Ariel')
-// const [fontSize, setFontSize] = useState('20')
-
-// const results = []
+// const results = [];
 // FontFamilyList.forEach((ff) => {
 //   results.push({
 //     label: ff.name,
@@ -67,111 +63,91 @@
 //     value: ff.name,
 //   });
 // });
-// const [ options, setOptions] = useState(results)
+// const [ options, setOptions] = useState(results);
 
 // const allToolbarFunction = (e) => {
-//     editor.summernote(e.currentTarget.dataset.id)
+//     editor.summernote(e.currentTarget.dataset.id);
 //     if(e.currentTarget.dataset.id == 'bold'){
 //         if(!bold){
-//             setBold(true)
+//             setBold(true);
 //         }else{
-//             setBold(false)
+//             setBold(false);
 //         }
 //     }
-
 //     if(e.currentTarget.dataset.id == 'italic'){
 //         if(!italic){
-//             setItalic(true)
+//             setItalic(true);
 //         }else{
-//             setItalic(false)
+//             setItalic(false);
 //         }
 //     }
-
 //     if(e.currentTarget.dataset.id == 'underline'){
 //         if(!underline){
-//             setUnderline(true)
+//             setUnderline(true);
 //         }else{
-//             setUnderline(false)
+//             setUnderline(false);
 //         }
 //     }
-
 //     if(e.currentTarget.dataset.id == 'strikethrough'){
 //         if(!strike){
-//             setStrike(true)
+//             setStrike(true);
 //         }else{
-//             setStrike(false)
+//             setStrike(false);
 //         }
 //     }
-
 //     if(e.currentTarget.dataset.id == 'subscript'){
 //         if(!subScript){
-//             setSubScript(true)
-//             setSuperscript(false)
+//             setSubScript(true);
+//             setSuperscript(false);
 
 //         }else{
-//             setSubScript(false)
+//             setSubScript(false);
 //         }
 //     }
-
 //     if(e.currentTarget.dataset.id == 'superscript'){
 //         if(!superscript){
-//             setSuperscript(true)
-//             setSubScript(false)
-
+//             setSuperscript(true);
+//             setSubScript(false);
 //         }else{
-//             setSuperscript(false)
+//             setSuperscript(false);
 //         }
 //     }
 // }
 
 // const textForeColor = (color) => {
-//     console.log(color);
-
-//     setForeColor("rgba(" + color.rgb.r + "," + color.rgb.g + "," + color.rgb.b + "," + color.rgb.a + ")")    
-
+//     setForeColor("rgba(" + color.rgb.r + "," + color.rgb.g + "," + color.rgb.b + "," + color.rgb.a + ")"); 
 //     editor.summernote('restoreRange');
-//     editor.summernote('foreColor', "rgba(" + color.rgb.r + "," + color.rgb.g + "," + color.rgb.b + "," + color.rgb.a + ")")
-
+//     editor.summernote('foreColor', "rgba(" + color.rgb.r + "," + color.rgb.g + "," + color.rgb.b + "," + color.rgb.a + ")");
 // }
 
 // const textBackColor = (color) => {
-//     console.log("rgba(" + color.rgb.r + "," + color.rgb.g + "," + color.rgb.b + "," + color.rgb.a + ")");
 //     setBackcolor("rgba(" + color.rgb.r + "," + color.rgb.g + "," + color.rgb.b + "," + color.rgb.a + ")")    
 //     editor.summernote('restoreRange');
-//     editor.summernote('backColor',  "rgba(" + color.rgb.r + "," + color.rgb.g + "," + color.rgb.b + "," + color.rgb.a + ")")
-
+//     editor.summernote('backColor',  "rgba(" + color.rgb.r + "," + color.rgb.g + "," + color.rgb.b + "," + color.rgb.a + ")");
 // }
 
-// // useEffect(() => {
-// //     if(foreColor != null){
-// //         editor.summernote('foreColor', foreColor)
-
-// //     }
-
-// // },[foreColor])
+// useEffect(() => {
+//if(foreColor != null){
+// editor.summernote('foreColor', foreColor);
+//  }
+// // },[foreColor]);
 
 // // useEffect(() => {
 // //     if(backcolor != null){
-// //         editor.summernote('backColor', backcolor)
-// //         console.log('ran');
+// //         editor.summernote('backColor', backcolor);
 // //     }
-// // },[backcolor])
+// // },[backcolor]);
 
 // const restoreRange = () => {
-
 //     editor.summernote('restoreRange');
-
 // }
 
 // const restoreFocus = () => {
 // }
 
 // const handleFontFamily= (selected) =>{
-//     console.log(selected);
 //     editor.summernote('fontName', selected.value);
 // }
-
-//     console.log(FontFamilyList);
 
 //     const AilaysaTooltip = withStyles({
 //         tooltip: {
@@ -196,7 +172,6 @@
 //             <AilaysaTooltip title="Undo" placement="bottom" arrow>
 //                 <div className="toolbar-hovereffect" data-id="undo" onClick={allToolbarFunction} >
 //                     <UndoIcon className="toolbar-icons" />
-
 //                 </div>
 //                 </AilaysaTooltip>
 //                 <AilaysaTooltip title="Redo" placement="bottom" arrow>
@@ -216,31 +191,25 @@
 //                 </div>
 //                 </AilaysaTooltip>
 //                 <AilaysaTooltip title="Paste" placement="bottom" arrow>
-
 //                 <div className="toolbar-hovereffect" data-id="paste" onClick={() => {}}>
 //                     <ContentPasteGoIcon className="toolbar-icons"/>
 //                 </div>
 //                 </AilaysaTooltip>
 //                 {/* <AilaysaTooltip title="Print" placement="bottom" arrow>
-
 //                     <div className="toolbar-hovereffect" >
 //                 <PrintIcon className="toolbar-icons"/>
 //                 </div>
 //                 </AilaysaTooltip> */}
-//                 {/* <AilaysaTooltip title="Spell check" placement="bottom" arrow>
-                
+//                 {/* <AilaysaTooltip title="Spell check" placement="bottom" arrow>                
 //                 <div className="toolbar-hovereffect">
 //                     <SpellcheckIcon className="toolbar-icons"/>
 //                 </div>
 //                 </AilaysaTooltip> */}
 //                 <AilaysaTooltip title="Format painter" placement="bottom" arrow>
-
 //                 <div className="toolbar-hovereffect" >
-
 //                 <FormatPaintIcon className="toolbar-icons"/>
 //                 </div>
 //                 </AilaysaTooltip>
-
 //                 <div className="seperator"></div>
 //                 {/* <div className="toolbar-icons">
 //                     <span className="toolbar-icons">
@@ -259,8 +228,7 @@
 //                     placement="bottom-left"
 //                     target="headings"
 //                     trigger="legacy"
-//                     hideArrow
-//                 >
+//                     hideArrow >
 //                    <div className="headings-container">
 //                     <span>Normal</span>
 //                     <span>Quote</span>
@@ -283,10 +251,8 @@
 //                     placement="bottom-left"
 //                     target="fontfamily"
 //                     trigger="legacy"
-//                     hideArrow
-//                 >
+//                     hideArrow>
 //                     <div className="fontFamily-container">
-                    
 //                     {FontFamilyList.map((ff) => {
 //                         return(
 //                             <div onClick={() =>{setActiveFontFamily(ff.name)}}>{ff.name}</div>
@@ -294,7 +260,6 @@
 //                     })}
 //                     </div>
 //                     </UncontrolledPopover>
-
 //                         {/* <Select
 //                             placeholder="FontFamily"
 //                             options={options}
@@ -343,53 +308,37 @@
 //                 <SuperscriptIcon className={superscript?"toolbar-icons active-tools-color" : "toolbar-icons"}/>
 //                 </div>
 //                 </AilaysaTooltip>
-
 //                 <div className="toolbar-hovereffect"   id="color" type="button">
 //                 <AilaysaTooltip title="Text color" placement="top" arrow>
-
 //                 <svg className="toolbar-icons" id="Group_1086" data-name="Group 1086" xmlns="http://www.w3.org/2000/svg" width="18.435" height="20.397" viewBox="0 0 18.435 20.397">
 //                     <rect id="Rectangle_2350" data-name="Rectangle 2350" width="18.435" height="4.136" transform="translate(0 16.261)" fill={foreColor}/>
 //                     <path id="Path_2683" data-name="Path 2683" d="M11.861,2.2h.094L14.2,8.178H9.591ZM10.7,0,5.1,13.236H7.654L8.93,9.974h5.909l1.252,3.262h2.718L13.35,0Z" transform="translate(-2.69)" fill="#5f6368"/>
 //                 </svg>
-//                 </AilaysaTooltip>
-                
+//                 </AilaysaTooltip>                
 //                 </div>
 //                 <UncontrolledPopover
 //                     placement="bottom"
 //                     target="color"
-//                     trigger="hover"
-//                 >
-                   
+//                     trigger="hover" >                   
 //                    <SketchPicker  color={foreColor} onChange={(color) => textForeColor(color)}  onChangeComplete={(color) => textForeColor(color)} />
-//                 </UncontrolledPopover>
-
-               
-
+//                 </UncontrolledPopover>   
 //                 <div className="toolbar-hovereffect"  id="textBackcolor" type="button">
 //                 <AilaysaTooltip title="Text background color" placement="top" arrow>
-
 //                 <BrushIcon className="toolbar-icons"/>
-//                 </AilaysaTooltip>
-                
+//                 </AilaysaTooltip>                
 //                 </div>
 //                 <UncontrolledPopover
 //                     placement="bottom"
 //                     target="textBackcolor"
-//                     trigger="hover"
-//                 >
-                   
+//                     trigger="hover">
 //                    <SketchPicker color={backcolor} onChange={(color) => textBackColor(color)}  onChangeComplete={(color) => textBackColor(color)} />
 //                 </UncontrolledPopover>
-
-               
 //                 <div className="seperator"></div>
 //                 <AilaysaTooltip title="Link" placement="bottom" arrow>
 //                 <div className="toolbar-hovereffect" >
-
 //                 <LinkIcon className="toolbar-icons"/>
 //                 </div>
 //                 </AilaysaTooltip>
-
 //                 {/* <div className="toolbar-hovereffect">
 
 //                 <AddCommentOutlinedIcon className="toolbar-icons"/>
@@ -400,95 +349,68 @@
 //                     <ArrowDropDownIcon className="toolbar-icons down-arrow"/>
 //                 </div>
 //                 </AilaysaTooltip>
-
 //                 <div className="seperator"></div>
 //                 <AilaysaTooltip title="Left" placement="bottom" arrow>
-
 //                 <div className="toolbar-hovereffect">
-
 //                 <FormatAlignLeftOutlinedIcon className="toolbar-icons" data-id="justifyLeft" onClick={allToolbarFunction}/>
 //                 </div>
 //                 </AilaysaTooltip>
 //                 <AilaysaTooltip title="Center" placement="bottom" arrow>
-
 //                 <div className="toolbar-hovereffect">
-
 //                 <FormatAlignCenterOutlinedIcon className="toolbar-icons" data-id="justifyCenter" onClick={allToolbarFunction}/>
 //                 </div>
 //                 </AilaysaTooltip>
 //                 <AilaysaTooltip title="Right" placement="bottom" arrow>
-
 //                 <div className="toolbar-hovereffect">
-
 //                 <FormatAlignRightOutlinedIcon className="toolbar-icons" data-id="justifyRight" onClick={allToolbarFunction}/>
 //                 </div>
 //                 </AilaysaTooltip>
 //                 <AilaysaTooltip title="Justify" placement="bottom" arrow>
-
 //                 <div className="toolbar-hovereffect">
-
 //                 <FormatAlignJustifyOutlinedIcon className="toolbar-icons" data-id="justifyFull" onClick={allToolbarFunction}/>
 //                 </div>
 //                 </AilaysaTooltip>
-
 //                 <div className="seperator"></div>
 //                 <AilaysaTooltip title="Spacing" placement="bottom" arrow>
-
 //                 <div className="toolbar-hovereffect">
-
 //                 <FormatLineSpacingOutlinedIcon className="toolbar-icons"/>
 //                 </div>
 //                 </AilaysaTooltip>
-
 //                 <div className="seperator"></div>
 //                 {/* <div className="toolbar-icons">
 //                     <assName="toolbar-icons " src={Config.HOST_URL + "assets/images/checklist.svg"} />
 //                     <ArrowDropDownIcon className="toolbar-icons down-arrow"/>
-
 //                 </div> */}
 //                 <AilaysaTooltip title="Unordered List" placement="bottom" arrow>
 //                 <div className="toolbar-icons"  data-id="insertUnorderedList" onClick={allToolbarFunction}>
 //                     <FormatListBulletedIcon className="toolbar-icons down-arrow"/>
 //                     <ArrowDropDownIcon className="toolbar-icons down-arrow"/>
-
 //                 </div>
 //                 </AilaysaTooltip>
 //                 <AilaysaTooltip title="Ordered List" placement="bottom" arrow>
-
 //                 <div className="toolbar-icons"  data-id="insertOrderedList" onClick={allToolbarFunction}>
 //                     <FormatListNumberedIcon className="toolbar-icons down-arrow"/>
 //                     <ArrowDropDownIcon className="toolbar-icons down-arrow"/>
-
 //                 </div>
 //                 </AilaysaTooltip>
 //                 <AilaysaTooltip title="Increase indent" placement="bottom" arrow>
-
 //                 <div className="toolbar-hovereffect">
-
 //                     <FormatIndentDecreaseIcon className="toolbar-icons"  data-id="indent" onClick={allToolbarFunction}/>
 //                     </div>
 //                 </AilaysaTooltip>
 //                 <AilaysaTooltip title="Decrease indent" placement="bottom" arrow>
-
 //                 <div className="toolbar-hovereffect">
-
 //                 <FormatIndentIncreaseIcon className="toolbar-icons" data-id="outdent" onClick={allToolbarFunction}/>
 //                 </div>
 //                 </AilaysaTooltip>
-//                 <AilaysaTooltip title="Remove format" placement="bottom" arrow>
-               
+//                 <AilaysaTooltip title="Remove format" placement="bottom" arrow>               
 //                 <div className="toolbar-hovereffect" data-id="removeFormat" onClick={allToolbarFunction}>
-
 //                 <FormatClearIcon className="toolbar-icons" />
 //                 </div>
 //                 </AilaysaTooltip>
-
-//             </div>
-            
+//             </div>            
 //         </div>
 //     )
-
-
 // }
 
 // export default WritterToolbar;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion';
 import DatePicker from "../vendor/date-time-picker/DatePicker";
 import DatePickerNewIcon from "../vendor/styles-svg/DatePickerNewIcon";
 import Config from "../vendor/Config";
@@ -14,13 +14,11 @@ const ModifiedStoriesFilter = (props) => {
         setToDate,
         fromDate,
         setFromDate
-    } = props
+    } = props;
 
     const { t } = useTranslation();
-    const [modifiedDateSelectBox, setModifiedDateSelectBox] = useState(false)
-
-    const modifiedDateSelectBoxRef = useRef()
-
+    const [modifiedDateSelectBox, setModifiedDateSelectBox] = useState(false);
+    const modifiedDateSelectBoxRef = useRef();
     
     const DataFilterOptions = [
         { value: 'today', label: "Today" },
@@ -30,40 +28,35 @@ const ModifiedStoriesFilter = (props) => {
     /* Check for clicing outside of the New project Dropdown */
     // useEffect(() => {
     //     const handleClickOutside = (e) => {
-    //         let isDatePickerBox = e.target.closest('.MuiDateCalendar-root') ? true : false
-    //         let filterBtn = document.querySelector('.modified-stories-dropdown-wrapper___button-wrap')
-
+    //         let isDatePickerBox = e.target.closest('.MuiDateCalendar-root') ? true : false;
+    //         let filterBtn = document.querySelector('.modified-stories-dropdown-wrapper___button-wrap');
     //         if (modifiedDateSelectBoxRef.current && !modifiedDateSelectBoxRef.current.contains(e.target) && !isDatePickerBox) {
-    //             // handleModifiedDatepickerVisibility(false)
-    //             // setModifiedDateSelectBox(false)
+    //             // handleModifiedDatepickerVisibility(false);
+    //             // setModifiedDateSelectBox(false);
     //         }
     //     };
-
     //     document.addEventListener("mousedown", handleClickOutside);
-
     //     return () => {
     //         document.removeEventListener("mousedown", handleClickOutside);
     //     };
     // }, []);
 
-
     useEffect(() => {
         if(fromDate !== null){
             if(fromDate <= toDate) {
-                handleModifiedDatepickerVisibility(false)
-                return
+                handleModifiedDatepickerVisibility(false);
+                return;
             }
-            setToDate(null)
+            setToDate(null);
         }
-    }, [fromDate])
+    }, [fromDate]);
 
     useEffect(() => {
         if(toDate !== null) {
-            handleModifiedDatepickerVisibility(false)
+            handleModifiedDatepickerVisibility(false);
         }
-    }, [toDate])
-    
-  
+    }, [toDate]);
+      
     const handleModifiedDatepickerVisibility = (show = true) => {
         setModifiedDateSelectBox(show);
     };
@@ -77,12 +70,12 @@ const ModifiedStoriesFilter = (props) => {
     };
 
     const handleMenuItemClick = (item) => {
-        setUserReportFilterSelectedValue(item)
-        handleModifiedDatepickerVisibility(false)
+        setUserReportFilterSelectedValue(item);
+        handleModifiedDatepickerVisibility(false);
     } 
 
     const handleClickAway = () => {
-        setModifiedDateSelectBox(false)
+        setModifiedDateSelectBox(false);
     } 
 
     return (
@@ -153,4 +146,4 @@ const ModifiedStoriesFilter = (props) => {
     )
 }
 
-export default ModifiedStoriesFilter
+export default ModifiedStoriesFilter;

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react"
-import { motion } from "framer-motion"
+import React, { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 function ZoomInAnime ({ children }) {
     return (
@@ -21,5 +21,4 @@ function ZoomInAnime ({ children }) {
     );
   }
 
-
-  export default ZoomInAnime
+  export default ZoomInAnime;

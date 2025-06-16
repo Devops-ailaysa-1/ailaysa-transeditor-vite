@@ -1,26 +1,18 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-
 
 export const Prompt = () => {
     const { t } = useTranslation();
-
-    const [step,setStep] = useState(1)
-
-    const [processStep,setProcessstep] = useState(1)
-
-
+    const [step,setStep] = useState(1);
+    const [processStep,setProcessstep] = useState(1);
 
     const prevstep =()=>{
-        if(step > 1 )setStep(current=>current-1) 
+        if(step > 1 )setStep(current=>current-1) ;
     }
     const nextstep =()=>{ 
-        if(step < processStep ) setStep(current=>current+1) 
+        if(step < processStep ) setStep(current=>current+1) ;
     }
-   
-
-
-  
+     
   return <>
         <div className="blog_generator">
             <div className="blog_form">

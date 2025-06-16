@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 
 const EditorRolesList = (props) => {
-    let { workReport, activeTab } = props
+    let { workReport, activeTab } = props;
     const { t } = useTranslation();
 
     return (
@@ -93,4 +93,4 @@ const EditorRolesList = (props) => {
     )
 }
 
-export default EditorRolesList
+export default EditorRolesList;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from "react-redux";
@@ -6,18 +6,15 @@ import { useTranslation } from "react-i18next";
 
 
 const Steps = (props) => {
-    const { setStepWizard, stepWizard, setStepWizardComplete, stepWizardComplete} = props
-
-    const blogCreationResponse = useSelector((state) => state.blogCreationRes.value)
+    const { setStepWizard, stepWizard, setStepWizardComplete, stepWizardComplete} = props;
+    const blogCreationResponse = useSelector((state) => state.blogCreationRes.value);
     const { t } = useTranslation();
-
     const location = useLocation();
-    const history = useNavigate()
+    const history = useNavigate();
 
     const handleWizardSwitch = (steps) => {
-        setStepWizard(steps)
-        history(`/writer-blog/${steps}${window.location.search}`)
-        
+        setStepWizard(steps);
+        history(`/writer-blog/${steps}${window.location.search}`);        
     }
 
     return (
@@ -65,4 +62,4 @@ const Steps = (props) => {
     )
 }
 
-export default Steps
+export default Steps;

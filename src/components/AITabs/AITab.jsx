@@ -1,6 +1,6 @@
-import React from 'react'
-import propTypes from 'prop-types'
-import './tab.css'
+import React from 'react';
+import propTypes from 'prop-types';
+import './tab.css';
 
 export const AITab = ({
     dataList,
@@ -13,7 +13,7 @@ export const AITab = ({
 }) => {
     
     const changeTab = (item) => {
-        onChange(item)
+        onChange(item);
     }
 
     return (
@@ -113,4 +113,4 @@ AITab.defaultProps = {
         }
     ],
     activeTab: 1
-}
+};

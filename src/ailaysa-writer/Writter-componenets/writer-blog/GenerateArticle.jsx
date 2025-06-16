@@ -24,9 +24,9 @@ import { ChipInputField } from "../../../vendor/custom-component/ChipInputField"
 import { useDispatch } from 'react-redux';
 import { setBlogCreationResponse } from "../../../features/BlogCreationSlice";
 import { useTranslation } from "react-i18next";
-import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
-import InsufficientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg"
-import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg"
+import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg";
+import InsufficientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg";
+import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg";
 
 const GenerateArticle = (props) => {
     const {
@@ -65,35 +65,29 @@ const GenerateArticle = (props) => {
         blogCreationResponseRef,
         saveBlogWizardLastStep,
         isNavigatedInternally
-    } = props
-
+    } = props;
     const location = useLocation();
     const history = useNavigate();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-    const dispatch = useDispatch()
-
+    const dispatch = useDispatch();
     const [keywordSuggestions, setKeywordSuggestions] = useState(false);
-    const [blogTopic, setBlogTopic] = useState('')
+    const [blogTopic, setBlogTopic] = useState('');
     const [blogKeywords, setBlogKeywords] = useState("");
-    const [blogOutlineList, setBlogOutlineList] = useState([])
+    const [blogOutlineList, setBlogOutlineList] = useState([]);
     const [selectedTitle, setSelectedTitle] = useState(null);
     const [isEditItem, setIsEditItem] = useState([]);
-    const [isArticleGenerating, setIsArticleGenerating] = useState(false)
-    const [chipsArray, setChipsArray] = useState([])
+    const [isArticleGenerating, setIsArticleGenerating] = useState(false);
+    const [chipsArray, setChipsArray] = useState([]);
     const [chipsCopyArray, setChipsCopyArray] = useState([]);
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-
-    const blogTopicRef = useRef(null)
-    const blogKeywordsRef = useRef(null)
-
-    const blogTopicInputRef = useRef(null)
-    const blogKeywordsInputRef = useRef(null)
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const blogTopicRef = useRef(null);
+    const blogKeywordsRef = useRef(null);
+    const blogTopicInputRef = useRef(null);
+    const blogKeywordsInputRef = useRef(null);
     const { t } = useTranslation();
-
     const typing = useRef(false);
     const typingTimeout = useRef(0);
-    const titlesWrapper = useRef(null)
-
+    const titlesWrapper = useRef(null);
     const handleEditTitle = (id) => {
         const newSelectedItems = [...isEditItem]; // Create a copy of the selectedItems array
         newSelectedItems[id] = !newSelectedItems[id]; // Toggle the selected state of the clicked item
@@ -105,6 +99,7 @@ const GenerateArticle = (props) => {
         height: 'auto',
         // onClose: () => setshowSettings(false),
     };
+
     const handleSelectedTitle = (id) => {
         setSelectedTitle(id);
     };
@@ -192,86 +187,78 @@ const GenerateArticle = (props) => {
     }
 
     const handleGenerateArticles = () => {
-        setStepWizardComplete(3)
+        setStepWizardComplete(3);
     }
 
     useEffect(() => {
         if (stepWizard === "generate-article") {
-            console.log(window.location)
             if (URL_SEARCH_PARAMS.get("blog")) {
                 setTimeout(() => {
                     if (URL_SEARCH_PARAMS.get("blog")) {
-                        saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), window.location.pathname)
+                        saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), window.location.pathname);
                     }
                 }, 200);
             }
         }
-    }, [stepWizard])
+    }, [stepWizard]);
 
     useEffect(() => {
-        let blogParam = URL_SEARCH_PARAMS.get("blog")
+        let blogParam = URL_SEARCH_PARAMS.get("blog");
         if (blogParam && totalBlogResponseObj === null) {
-            getTotalBlogCreationObject(blogParam)
+            getTotalBlogCreationObject(blogParam);
         }
-    }, [URL_SEARCH_PARAMS.get("blog")])
+    }, [URL_SEARCH_PARAMS.get("blog")]);
 
     useEffect(() => {
         if (totalBlogResponseObj !== null) {
-            setBlogTopic(totalBlogResponseObj.user_title)
-            blogTopicRef.current = totalBlogResponseObj.user_title
-
-            let a = totalBlogResponseObj.keywords?.split(',')?.filter(each => each !== '')
+            setBlogTopic(totalBlogResponseObj.user_title);
+            blogTopicRef.current = totalBlogResponseObj.user_title;
+            let a = totalBlogResponseObj.keywords?.split(',')?.filter(each => each !== '');
             let keywordList = [...new Map(totalBlogResponseObj?.blog_key_create?.map(item => [item['blog_keyword'], item])).values()];
-            let inGeneratedList = keywordList?.filter(each => a?.some(item => item?.trim()?.toLowerCase() === each.blog_keyword?.toLowerCase()))
-            let notInGeneratedList = a?.filter(each => !totalBlogResponseObj.blog_key_create?.some(item => each?.trim()?.toLowerCase() === item.blog_keyword?.toLowerCase()))
-
-            let chip_arr = []
+            let inGeneratedList = keywordList?.filter(each => a?.some(item => item?.trim()?.toLowerCase() === each.blog_keyword?.toLowerCase()));
+            let notInGeneratedList = a?.filter(each => !totalBlogResponseObj.blog_key_create?.some(item => each?.trim()?.toLowerCase() === item.blog_keyword?.toLowerCase()));
+            let chip_arr = [];
             inGeneratedList?.forEach(element => {
                 chip_arr.push({
                     id: element.id,
                     name: element.blog_keyword
-                })
+                });
             });
             notInGeneratedList?.forEach(element => {
                 chip_arr.push({
                     id: generateKey(),
                     name: element
-                })
+                });
             });
-
-            // console.log(a);
-            // console.log(chip_arr);
             setChipsArray(chip_arr);
-
             // setBlogKeywords((totalBlogResponseObj.keywords_mt !== null && totalBlogResponseObj.keywords_mt !== '') ? totalBlogResponseObj.keywords_mt : totalBlogResponseObj.keywords)
             // blogKeywordsRef.current = (totalBlogResponseObj.keywords_mt !== null && totalBlogResponseObj.keywords_mt !== '') ? totalBlogResponseObj.keywords_mt : totalBlogResponseObj.keywords
-
-            setSelectedTone(toneOptions?.find(each => each.value === totalBlogResponseObj.tone))
-            let selected_title_obj = totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field)
-            setBlogOutlineList(selected_title_obj?.blogoutline_title[0].blog_outline_session?.filter(each => each.selected_field))
+            setSelectedTone(toneOptions?.find(each => each.value === totalBlogResponseObj.tone));
+            let selected_title_obj = totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field);
+            setBlogOutlineList(selected_title_obj?.blogoutline_title[0].blog_outline_session?.filter(each => each.selected_field));
         }
-    }, [totalBlogResponseObj])
+    }, [totalBlogResponseObj]);
 
     // automatically update the user-language when source language is changed
     useEffect(() => {
         if (blogCreationResponseRef.current !== null && (sourceLanguage != blogCreationResponseRef.current?.user_language)) {
-            updateBlog()
+            updateBlog();
         }
-    }, [sourceLanguage])
+    }, [sourceLanguage]);
 
     // automatically update the user-tone when tone is changed
     useEffect(() => {
         if (blogCreationResponseRef.current !== null && (selectedTone?.value != blogCreationResponseRef.current?.tone)) {
-            updateBlog()
+            updateBlog();
         }
-    }, [selectedTone])
+    }, [selectedTone]);
 
     // automatically update the keywords when added or removed
     useEffect(() => {
         if (blogCreationResponseRef.current !== null && (blogCreationResponseRef.current?.keywords?.trim() !== getKeywordStringList(chipsArray)) && chipsArray?.length !== 0) {
-            debounce(null, () => updateBlog('keyword'))
+            debounce(null, () => updateBlog('keyword'));
         }
-    }, [chipsArray])
+    }, [chipsArray]);
 
     const debounce = (e, callback) => {
         if (typingTimeout.current) clearTimeout(typingTimeout.current);
@@ -284,20 +271,20 @@ const GenerateArticle = (props) => {
     // changes the input field color to default once somthing is typed
     useEffect(() => {
         if (blogTopicInputRef.current.style.border) {
-            if (blogTopic?.trim() !== '') blogTopicInputRef.current.style.border = fieldDefaultStyle.border
+            if (blogTopic?.trim() !== '') blogTopicInputRef.current.style.border = fieldDefaultStyle.border;
         }
         if (blogKeywordsInputRef.current.style.border) {
-            if (blogKeywords?.trim() !== '') blogKeywordsInputRef.current.style.border = fieldDefaultStyle.border
+            if (blogKeywords?.trim() !== '') blogKeywordsInputRef.current.style.border = fieldDefaultStyle.border;
         }
-    }, [blogTopic, blogKeywords])
+    }, [blogTopic, blogKeywords]);
 
     const getKeywordStringList = (list) => {
-        let keyword_list = ''
+        let keyword_list = '';
         list?.forEach((each, index) => {
-            keyword_list += `${each.name}${index !== list?.length - 1 ? "," : ""}`
+            keyword_list += `${each.name}${index !== list?.length - 1 ? "," : ""}`;
         })
         // console.log(keyword_list);
-        return keyword_list
+        return keyword_list;
     }
 
     // handle outline textarea onchange event 
@@ -311,7 +298,7 @@ const GenerateArticle = (props) => {
             }
             return obj;
         });
-        setBlogOutlineList(newArr)
+        setBlogOutlineList(newArr);
     }
 
     // locally create a outline box for new blog outline entering the outline
@@ -323,7 +310,7 @@ const GenerateArticle = (props) => {
             blog_outline_mt: "",
             localOutline: true
         }]
-        setBlogOutlineList(newArr)
+        setBlogOutlineList(newArr);
     }
 
     // create a new outline for a particular group
@@ -341,7 +328,6 @@ const GenerateArticle = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 const newArr = blogOutlineList?.map(obj => {
                     if (obj.id === outlineId) {
                         return {
@@ -354,8 +340,7 @@ const GenerateArticle = (props) => {
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                setBlogOutlineList(newArr)
+                setBlogOutlineList(newArr);
             },
         });
     }
@@ -365,8 +350,8 @@ const GenerateArticle = (props) => {
         let formdata = new FormData();
 
         if (!callAPI) {
-            let selected_title_obj = totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field)
-            let outline_list = selected_title_obj?.blogoutline_title[0]?.blog_outline_session
+            let selected_title_obj = totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field);
+            let outline_list = selected_title_obj?.blogoutline_title[0]?.blog_outline_session;
             console.log(outline_list);
             console.log(outline_list?.find(each => each.id === itemId));
             const newArr = blogOutlineList?.map(obj => {
@@ -380,18 +365,17 @@ const GenerateArticle = (props) => {
                 return obj;
             });
             // setIsIndividualEditMode(false)
-            setBlogOutlineList(newArr)
-            return
+            setBlogOutlineList(newArr);
+            return;
         }
-
         formdata.append("blog_outline", blogOutline);
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogoutlinesession/${itemId}/`,
             method: "PUT",
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 const newArr = blogOutlineList?.map(obj => {
                     if (obj.id === itemId) {
                         return {
@@ -401,48 +385,48 @@ const GenerateArticle = (props) => {
                     }
                     return obj;
                 });
-                setBlogOutlineList(newArr)
+                setBlogOutlineList(newArr);
             },
         });
     }
 
     // delete the created local outline box
     const deleteLocalOutline = (e, itemId) => {
-        setBlogOutlineList(blogOutlineList?.filter(each => each.id !== itemId))
+        setBlogOutlineList(blogOutlineList?.filter(each => each.id !== itemId));
     }
 
     const deleteIndividualOutline = (outlineId) => {
         if (blogOutlineList?.length <= 4) {
-            Config.toast(t("minimum_outline_note"), 'warning')
+            Config.toast(t("minimum_outline_note"), 'warning');
             return;
         }
+
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogoutlinesession/${outlineId}/`,
             method: "DELETE",
             auth: true,
             success: (response) => {
-                setBlogOutlineList(blogOutlineList?.filter(each => each.id != outlineId))
-                getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog'))
-                // console.log(response)
+                setBlogOutlineList(blogOutlineList?.filter(each => each.id != outlineId));
+                getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog'));
             },
         });
     }
 
     const deleteChip = (chip_id) => {
-        setChipsArray(prevState => prevState.filter((chip) => chip.id !== chip_id))
+        setChipsArray(prevState => prevState.filter((chip) => chip.id !== chip_id));
         // let isBlogKeywordChip = blogKeywordsListRef.current?.find(item => item.id === chip_id)
         // if(isBlogKeywordChip) setBlogKeywordsList(prevState => [...prevState, isBlogKeywordChip])
     }
 
     useEffect(() => {
         console.log(blogCreationResponseRef.current);
-    }, [blogCreationResponseRef.current])
+    }, [blogCreationResponseRef.current]);
 
     const updateBlog = (from) => {
         let formdata = new FormData();
         if (from === 'topic') {
             if (blogTopic?.trim() === '') {
-                blogTopicInputRef.current.style.border = fieldErrorStyle.border
+                blogTopicInputRef.current.style.border = fieldErrorStyle.border;
                 return;
             }
             formdata.append("user_title", blogTopic);
@@ -451,7 +435,7 @@ const GenerateArticle = (props) => {
             console.log(chipsArray?.length);
             if (chipsArray?.length === 0) {
                 console.log('from keyword inside if');
-                blogKeywordsInputRef.current.style.border = fieldErrorStyle.border
+                blogKeywordsInputRef.current.style.border = fieldErrorStyle.border;
                 return;
             }
             formdata.append("keywords", getKeywordStringList(chipsArray));
@@ -470,20 +454,15 @@ const GenerateArticle = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                getTotalBlogCreationObject(totalBlogResponseObj.id)
+                getTotalBlogCreationObject(totalBlogResponseObj.id);
                 if (from === 'gen-article') {
-                    generateBlogArticle()
+                    generateBlogArticle();
                 }
-
-                // console.log(response.data)
                 // setCreatedBlogId(response.data.id)
                 // createdBlogIdRef.current = response.data.id
                 // blogCreationResponse.current = response.data
-
                 // if(from === 'gen-keyword') generateBlogKeywords('main')
-
                 // if(from === 'gen-titles') generateBlogTitles('gen')
-
             },
         });
     }
@@ -493,13 +472,12 @@ const GenerateArticle = (props) => {
         const items = Array.from(blogOutlineList);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
-
         setBlogOutlineList(items);
     }
 
     const generateBlogArticle = () => {
         // let formdata = new FormData();
-        setIsArticleGenerating(true)
+        setIsArticleGenerating(true);
         // if(blogCreationResponseRef.current?.tone !== selectedTone?.value || 
         //     blogCreationResponseRef.current?.user_language !== sourceLanguage
         // ){
@@ -516,28 +494,23 @@ const GenerateArticle = (props) => {
             method: "GET",
             auth: true,
             success: (response) => {
-                // console.log(response)
-                let outline_list = ''
+                let outline_list = '';
                 blogOutlineList?.map((each, index) => {
                     outline_list += `${each.id}${index !== blogOutlineList.length - 1 ? "," : ""
                         }`;
                 });
-                console.log(outline_list);
-                console.log(blogCreationResponseRef.current?.id);
-                dispatch(setBlogCreationResponse(null))
-                history(`/word-processor/article/?outline_section_list=${outline_list}&blog_creation=${blogCreationResponseRef.current?.id}&lang=${sourceLanguage}&title=${blogTopicRef.current}`)
+                dispatch(setBlogCreationResponse(null));
+                history(`/word-processor/article/?outline_section_list=${outline_list}&blog_creation=${blogCreationResponseRef.current?.id}&lang=${sourceLanguage}&title=${blogTopicRef.current}`);
             },
             error: (err) => {
                 if (err.response.status == 400) {
-                    setShowCreditAlertModal(true)
+                    setShowCreditAlertModal(true);
                 }
-                setIsArticleGenerating(false)
+                setIsArticleGenerating(false);
             }
         });
 
-
         // formdata.append("outline_section_list", outline_list);  
-
         // formdata.append("blog_creation", blogCreationResponseRef.current?.id);  
         // Config.axios({
         //     url: `${Config.BASE_URL}/openai/blogarticle/`, 
@@ -556,9 +529,6 @@ const GenerateArticle = (props) => {
         // 	}
         // });
     }
-
-
-
 
     return (
         <>
@@ -742,7 +712,6 @@ const GenerateArticle = (props) => {
                             alt="close_black"
                         />
                     </span>
-
                     <SourceLanguage
                         sourceLanguage={sourceLanguage}
                         showSrcLangModal={showSrcLangModal}
@@ -823,4 +792,4 @@ const GenerateArticle = (props) => {
     )
 }
 
-export default GenerateArticle
+export default GenerateArticle;

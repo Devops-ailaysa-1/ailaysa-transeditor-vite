@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
 
 export const ShowTranslateDocumentModalSlice = createSlice({
     name: 'ShowTranslateDocumentModalSlice',
     initialState: {value: false},
     reducers: {
         setShowTranslateDocumentModal: (state, action) => {
-            state.value = action.payload
+            state.value = action.payload;
         }
     }
 })

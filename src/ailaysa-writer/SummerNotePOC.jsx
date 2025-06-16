@@ -1,4 +1,4 @@
-// import React, { useEffect } from 'react'
+// import React, { useEffect } from 'react';
 // import {useHistory} from "react-router-dom";
 // import Config from '../vendor/Config';
 // import { useState } from 'react';
@@ -8,33 +8,26 @@
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import Cookies from "js-cookie";
 // import axios from "axios";
-
 // import CodeMirror from 'codemirror/lib/codemirror';
 // import 'codemirror/lib/codemirror.css';
 // import 'codemirror/mode/xml/xml';
-// import 'codemirror/theme/monokai.css'
-
+// import 'codemirror/theme/monokai.css';
 // import 'summernote/dist/summernote-bs4';
 // import 'summernote/dist/summernote-bs4.css';
-
-// // import HTMLtoDOCX from 'html-to-docx'
-// import HTMLtoDOCX from "html-to-docx/dist/html-to-docx.umd"
-
-
+// // import HTMLtoDOCX from 'html-to-docx';
+// import HTMLtoDOCX from "html-to-docx/dist/html-to-docx.umd";
 // // import asBlob  from '@types/html-docx-js';
-// import { asBlob } from 'html-docx-js-typescript'
-
-// import htmlDocx from 'html-docx-js/dist/html-docx'
+// import { asBlob } from 'html-docx-js-typescript';
+// import htmlDocx from 'html-docx-js/dist/html-docx';
 // import { useRef } from 'react';
 
 // export const SummernoteEditor = () => {
-
 //     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 //     const history = useHistory();
 //     const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
-//     const [projectId, setProjectId] = useState(null)
-//     const downloadref = useRef(null)
-//     const downloadedFileName = useRef(null)
+//     const [projectId, setProjectId] = useState(null);
+//     const downloadref = useRef(null);
+//     const downloadedFileName = useRef(null);
 
 //     const FontFamilyList = [
 //         "Archivo Black" ,
@@ -142,8 +135,7 @@
 //         "Silkscreen" ,
 //         "Space Mono" ,
 //         "Teko" ,
-//         "Uchen" ,
-        
+//         "Uchen" ,        
 //     ];
 
 //     useEffect(() => {
@@ -166,45 +158,32 @@
 //                 ['paperSize',['paperSize']], // The Button
 //                 ['pagebreak',['pagebreak']],
 //             ],
-//         });
-    
-//         $('.dropdown-toggle').dropdown();
-    
+//         });    
+//         $('.dropdown-toggle').dropdown();    
 //         // $('.summernote').summernote('code', '<p>hello world</p>')
 //     }, [])
 
 //     async function exportHTML(){
-//         var data = $('.summernote').summernote('code')
-//         console.log(data);
-
+//         var data = $('.summernote').summernote('code');
 //         // var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
 //         //      "xmlns:w='urn:schemas-microsoft-com:office:word' "+
 //         //      "xmlns='http://www.w3.org/TR/REC-html40'>"+
 //         //      "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
-
 //         var header = `<html>
 //         <head>
 //           <meta charset="UTF-8">
 //         </head>
 //         <body>`;
-
 //         var footer = "</body></html>";
-//         var innerhtml = data
-//         var sourceHTML = header+innerhtml+footer;
-        
+//         var innerhtml = data;
+//         var sourceHTML = header+innerhtml+footer;        
 //         // const blobObj = await htmlDocx.asBlob(sourceHTML);
 //         const blobObj = await HTMLtoDOCX(sourceHTML);
 //         // const blobObj = await asBlob(sourceHTML);
-
-//         console.log(blobObj);
-
 //         var source = 'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=utf-8,' + encodeURIComponent(sourceHTML);
 //         // const newBlobUrl = URL.createObjectURL(source);
-
 //         const blob = new Blob(['\ufeff', source], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-//         let file = new File([blobObj], 'document.docx', { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-        
-//         // console.log(newBlobUrl);
+//         let file = new File([blobObj], 'document.docx', { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });  
 //         var fileDownload = document.createElement("a");
 //         document.body.appendChild(fileDownload);
 //         fileDownload.href = URL.createObjectURL(blobObj);
@@ -214,22 +193,20 @@
 //         document.body.removeChild(fileDownload);
 //     }
     
-
 //     useEffect(() => {
-//         let taskParam = URL_SEARCH_PARAMS.get("task")
+//         let taskParam = URL_SEARCH_PARAMS.get("task");
 //         if(taskParam){
-//             getWriterHtmlData(taskParam, 'task')
+//             getWriterHtmlData(taskParam, 'task');
 //         }
-//     }, [URL_SEARCH_PARAMS.get("task")])
+//     }, [URL_SEARCH_PARAMS.get("task")]);
     
 //     useEffect(() => {
-//         let pdfParam = URL_SEARCH_PARAMS.get("pdf-id")
+//         let pdfParam = URL_SEARCH_PARAMS.get("pdf-id");
 //         if(pdfParam){
-//             getWriterHtmlData(pdfParam, 'id')
+//             getWriterHtmlData(pdfParam, 'id');
 //         }
-//     }, [URL_SEARCH_PARAMS.get("pdf-id")])
+//     }, [URL_SEARCH_PARAMS.get("pdf-id")]);
     
-
 //     // get and load the html data
 //     const getWriterHtmlData = (id, target) => {
 //         Config.axios({
@@ -238,9 +215,9 @@
 //             success: (response) => {
 //                 if(response.data?.html_data !== null){
 //                     if(target === 'id'){
-//                         $('.summernote').summernote('code', response.data[0]?.html_data)
+//                         $('.summernote').summernote('code', response.data[0]?.html_data);
 //                     }else{
-//                         $('.summernote').summernote('code', response.data?.html_data)
+//                         $('.summernote').summernote('code', response.data?.html_data);
 //                     }
 //                 }
 //             }
@@ -249,32 +226,20 @@
     
 //     // update/save the html data with docx file
 //     const saveHtmlData = async(target) => {
-
-//         let taskParam = URL_SEARCH_PARAMS.get("task")
-//         let pdfParam = URL_SEARCH_PARAMS.get("pdf-id")
-
-//         let formData = new FormData();
-        
-//         var htmlData = $('.summernote').summernote('code')
-        
+//         let taskParam = URL_SEARCH_PARAMS.get("task");
+//         let pdfParam = URL_SEARCH_PARAMS.get("pdf-id");
+//         let formData = new FormData();        
+//         var htmlData = $('.summernote').summernote('code');        
 //         var header = "<!DOCTYPE html xmlns:o='urn:schemas-microsoft-com:office:office' " +
 //         "xmlns:w='http://schemas.openxmlformats.org/wordprocessingml/2006/main' " + 
 //         "xmlns='https://www.w3.org/TR/html40'><head><meta http-equiv=Content-Type content='text/html; charset=utf-8'><title></title></head><body>";
-
 //         var footer = "</body></html>";
 //         var innerhtml = htmlData
-//         var sourceHTML = header+innerhtml+footer;
-        
+//         var sourceHTML = header+innerhtml+footer;        
 //         // const blobObj = await asBlob(sourceHTML);
-
 //         const blobObj = await htmlDocx.asBlob(sourceHTML);
-
-//         let fileObj = new File([blobObj], 'document.docx', { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-
-//         console.log(fileObj);
-
-//         formData.append("html_data", htmlData);
-        
+//         let fileObj = new File([blobObj], 'document.docx', { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+//         formData.append("html_data", htmlData);        
 //         if(target !== 'translate'){
 //             formData.append("docx_file", fileObj);
 //         }
@@ -287,17 +252,16 @@
 //             success: (response) => {
 //                 if(response.data?.id){
 //                     if(target !== 'translate'){
-//                         Config.toast('Saved successfully')
+//                         Config.toast('Saved successfully');
 //                     }
 //                 }
 //             }
 //         });
 //     }
 
-
 //     const translateWriteData = () => {
-//         let taskParam = URL_SEARCH_PARAMS.get("task")
-//         let pdfParam = URL_SEARCH_PARAMS.get("pdf-id")
+//         let taskParam = URL_SEARCH_PARAMS.get("task");
+//         let pdfParam = URL_SEARCH_PARAMS.get("pdf-id");
 
 //         Config.axios({
 //             url: `${Config.BASE_URL}/workspace/translate_from_pdf/${taskParam ? taskParam : pdfParam}/`, 
@@ -305,8 +269,8 @@
 //             auth: true,
 //             success: (response) => {
 //                 if(response.data?.id){
-//                     saveHtmlData('translate')
-//                     history.push(`/file-upload?page=1&order_by=-id`)
+//                     saveHtmlData('translate');
+//                     history.push(`/file-upload?page=1&order_by=-id`);
 //                 }
 //             }
 //         });
@@ -317,8 +281,8 @@
 //         let userCacheData = JSON.parse(
 //             typeof Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(process.env.REACT_APP_USER_COOKIE_KEY_NAME) : null
 //         );
-//         // console.log(a);
 //         let token = userCacheData != null ? userCacheData?.token : "";
+
 //         return axios.get(
 //             url,
 //           {
@@ -334,13 +298,10 @@
 //     };
 
 //     const nodeTesting = async() => {
-
-//         let url = `http://localhost:8000/`
+//         let url = `http://localhost:8000/`;
 //         const response = await downloadFileFromApi(url);
-//         console.log(response);
 //         // const filename =  response.headers['content-disposition']?.split('filename*=')[1];
-//         // downloadedFileName.current = decodeURIComponent(filename?.replace(`UTF-8''`, ''))
-//         // console.log(filename);
+//         // downloadedFileName.current = decodeURIComponent(filename?.replace(`UTF-8''`, ''));
 //         var fileDownload = document.createElement("a");
 //         document.body.appendChild(fileDownload);
 //         fileDownload.href = URL.createObjectURL(response.data);
@@ -351,19 +312,17 @@
 //     } 
 
 //     useEffect(() => {
-//         getDocumentList()
-//     }, [])
-    
-    
+//         getDocumentList();
+//     }, []);
+        
 //     const getDocumentList = () => {
 
 //         Config.axios({
 //             url: `${Config.BASE_URL}/workspace/mydocuments/`, 
 //             auth: true,
 //             success: (response) => {
-//                 console.log(response);
 //                 if(response.data){
-//                     // setDocumentsList(response.data?.results)
+//                    setDocumentsList(response.data?.results);
 //                 }
 //             }
 //         });
@@ -371,7 +330,6 @@
 
 //     // const updateSpeechToTextProject = (key) => {
 //     //     let formdata = new FormData();
-
 //     //     formdata.append("pdf_task_id", parseInt(taskID));
 
 //     //     Config.axios({
@@ -386,32 +344,26 @@
 //     //         auth: true,
 //     //         success: (response) => {
 //     //             setClickedOpenButton(null);
-//     //                 // console.log(response.data)
-//     //             // if(operationValue === 'translate'){
+//     //             if(operationValue === 'translate'){
 //     //                 Config.toast("Project updated successfully");
-//     //                 // history.push(`/file-upload?page=1&order_by=-id&open-project=${response?.data?.id}`)
-                    
-//     //                 history.push(`/file-upload?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`)
+//     //                 history.push(`/file-upload?page=1&order_by=-id&open-project=${response?.data?.id}`);
+//     //                 history.push(`/file-upload?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`);
 //     //             // } 
-//     //             // operationValue === 'download' && downloadSourceAudioFile(response?.data?.id)
+//     //             // operationValue === 'download' && downloadSourceAudioFile(response?.data?.id);
 //     //         },
 //     //     });
 //     // } 
-
-
 
 //     return (
 //         <div>
 //             <button onClick={exportHTML}> download</button>
 //             <button onClick={() => saveHtmlData('save')}> Save</button>
 //             <button onClick={() => translateWriteData()}> Translate</button>
-//             {/* <button onClick={nodeTesting}> Translate</button> */}
-            
+//             {/* <button onClick={nodeTesting}> Translate</button> */}            
 //             <form method="post">
 //                 <textarea className="summernote" name="editordata"></textarea>
 //             </form>
 //             <a href={hiddenLinkUrl} download={downloadedFileName.current} className="hidden" ref={downloadref} />
-
 //         </div>
 //     )
 // }

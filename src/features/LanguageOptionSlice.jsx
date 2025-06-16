@@ -5,7 +5,7 @@ export const LanguageOptionSlice = createSlice({
     initialState: {value: []},
     reducers: {
         setLanguageOptionsList: (state, action) => {
-            state.value = action.payload
+            state.value = action.payload;
         }
     }
 })

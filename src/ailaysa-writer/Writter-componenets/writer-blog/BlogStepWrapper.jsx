@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
-import CreateTitle from './CreateTitle'
-import SelectOutline from './SelectOutline'
-import GenerateArticle from './GenerateArticle'
+import CreateTitle from './CreateTitle';
+import SelectOutline from './SelectOutline';
+import GenerateArticle from './GenerateArticle';
 import { useParams } from "react-router-dom";
 import Config from '../../../vendor/Config';
 import { useDispatch } from "react-redux";
@@ -41,37 +41,28 @@ const BlogStepWrapper = (props) => {
         setshowTarLangModal,
         targetLabel,
         setTargetLabel
-    } = props
-
+    } = props;
     const params = useParams();
-
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const history = useNavigate();
     const location = useLocation();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-
-    // const blogCreationResponse = useSelector((state) => state.blogCreationRes.value)
-
-    const [blogOutlineList, setBlogOutlineList] = useState([])
-    const [toneOptions, setToneOptions] = useState([])
-    const [selectedTone, setSelectedTone] = useState(null)
-    const [totalBlogResponseObj, setTotalBlogResponseObj] = useState(null)
-
+    // const blogCreationResponse = useSelector((state) => state.blogCreationRes.value);
+    const [blogOutlineList, setBlogOutlineList] = useState([]);
+    const [toneOptions, setToneOptions] = useState([]);
+    const [selectedTone, setSelectedTone] = useState(null);
+    const [totalBlogResponseObj, setTotalBlogResponseObj] = useState(null);
     const [selectIndividual, setSelectIndividual] = useState(false);
     const [createTitleCollapse, setCreateTitleCollapse] = useState(true);
     const [isEnableCollapse, setIsEnableCollapse] = useState(false);
-
-    const blogCreationResponseRef = useRef(null)
-    const blogOutlineGenResponseRef = useRef(null)
-    const isNavigatedInternally = useRef(false)
-
-    
-    const toneOptionsRef = useRef(null)
+    const blogCreationResponseRef = useRef(null);
+    const blogOutlineGenResponseRef = useRef(null);
+    const isNavigatedInternally = useRef(false);
+       const toneOptionsRef = useRef(null);
 
     useEffect(() => {
-        getAiWritingTone()
-    }, [])
-
+        getAiWritingTone();
+    }, []);
     
     const getAiWritingTone = () => {
         Config.axios({
@@ -79,65 +70,61 @@ const BlogStepWrapper = (props) => {
             method: "GET",
             auth: true,
             success: (response) => {
-                let options = []
+                let options = [];
                 response.data?.map(each => {
                     options.push({
                         value: each.id,
                         label: each.tone
-                    })
-                })
-                toneOptionsRef.current = options
-                setToneOptions(options)
-                setSelectedTone(options[0])
+                    });
+                });
+                toneOptionsRef.current = options;
+                setToneOptions(options);
+                setSelectedTone(options[0]);
             },
         });
     };
 
     useEffect(() => {
-        let blogParam = URL_SEARCH_PARAMS.get("blog")
+        let blogParam = URL_SEARCH_PARAMS.get("blog");
         if (blogParam && totalBlogResponseObj === null) {
-            getTotalBlogCreationObject(blogParam)
+            getTotalBlogCreationObject(blogParam);
         }
        
-    }, [URL_SEARCH_PARAMS.get("blog")])
-
+    }, [URL_SEARCH_PARAMS.get("blog")]);
   
     const getTotalBlogCreationObject = (blogId) => {
-        if(!blogId) return 
+        if(!blogId) return; 
          
         Config.axios({
             url: `${Config.BASE_URL}/writer/blogcreation/${blogId}`,
             method: "GET",
             auth: true,
             success: (response) => {
-                dispatch(setBlogCreationResponse(response.data))
+                dispatch(setBlogCreationResponse(response.data));
                 // console.log(response.data?.steps)
-                setIsEnableCollapse(true)
+                setIsEnableCollapse(true);
                 if(!isNavigatedInternally.current) {
-                    if(response.data?.steps?.includes('create-title')) setStepWizard('create-title')
-                    if(response.data?.steps?.includes('select-outline')) setStepWizard('select-outline')
-                    if(response.data?.steps?.includes('generate-article')) setStepWizard('generate-article')
-                    history((response.data?.steps !== null ? response.data?.steps : '/writer-blog/create-title') + window.location.search, {state: {prevPath: location.state?.prevPath}})
+                    if(response.data?.steps?.includes('create-title')) setStepWizard('create-title');
+                    if(response.data?.steps?.includes('select-outline')) setStepWizard('select-outline');
+                    if(response.data?.steps?.includes('generate-article')) setStepWizard('generate-article');
+                    history((response.data?.steps !== null ? response.data?.steps : '/writer-blog/create-title') + window.location.search, {state: {prevPath: location.state?.prevPath}});
                 } 
-                setTotalBlogResponseObj(response.data)
-                blogCreationResponseRef.current = response.data
-                let selected_title_obj =  response.data?.blog_title_create?.find(each => each.selected_field)
-            // console.log(selected_title_obj)
-                
+                setTotalBlogResponseObj(response.data);
+                blogCreationResponseRef.current = response.data;
+                let selected_title_obj =  response.data?.blog_title_create?.find(each => each.selected_field);
                 if(selected_title_obj !== undefined){
-                    setStepWizardComplete(1)
-                    let groupedRes =  groupByKey(selected_title_obj?.blogoutline_title[0].blog_outline_session, 'group')
+                    setStepWizardComplete(1);
+                    let groupedRes =  groupByKey(selected_title_obj?.blogoutline_title[0].blog_outline_session, 'group');
                     if(selected_title_obj?.blogoutline_title[0].blog_outline_session?.find(each => each.selected_field)){
-                        setStepWizardComplete(2)
+                        setStepWizardComplete(2);
                     }
-                    setBlogOutlineList(flattenObject(groupedRes))
+                    setBlogOutlineList(flattenObject(groupedRes));
                 }
             },
         });
     }
 
     const saveBlogWizardLastStep = (blogId, step) => {
-        // console.log(step)
         let formdata = new FormData();
         formdata.append("steps", step);  
 
@@ -147,21 +134,20 @@ const BlogStepWrapper = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                dispatch(setBlogCreationResponse(response.data))
-                // console.log(response.data?.steps)
-                setIsEnableCollapse(true)
+                dispatch(setBlogCreationResponse(response.data));
+                setIsEnableCollapse(true);
                 if(!isNavigatedInternally.current) {
-                    if(response.data?.steps?.includes('create-title')) setStepWizard('create-title')
-                    if(response.data?.steps?.includes('select-outline')) setStepWizard('select-outline')
-                    if(response.data?.steps?.includes('generate-article')) setStepWizard('generate-article')
-                    history((response.data?.steps !== null ? response.data?.steps : '/writer-blog/create-title') + window.location.search, {state: {prevPath: location.state?.prevPath}})
+                    if(response.data?.steps?.includes('create-title')) setStepWizard('create-title');
+                    if(response.data?.steps?.includes('select-outline')) setStepWizard('select-outline');
+                    if(response.data?.steps?.includes('generate-article')) setStepWizard('generate-article');
+                    history((response.data?.steps !== null ? response.data?.steps : '/writer-blog/create-title') + window.location.search, {state: {prevPath: location.state?.prevPath}});
                 }
-                setTotalBlogResponseObj(response.data)
-                blogCreationResponseRef.current = response.data
-                let selected_title_obj =  response.data?.blog_title_create?.find(each => each.selected_field)
+                setTotalBlogResponseObj(response.data);
+                blogCreationResponseRef.current = response.data;
+                let selected_title_obj =  response.data?.blog_title_create?.find(each => each.selected_field);
                 if(selected_title_obj !== undefined){
-                    let groupedRes =  groupByKey(selected_title_obj?.blogoutline_title[0].blog_outline_session, 'group')
-                    setBlogOutlineList(flattenObject(groupedRes))
+                    let groupedRes =  groupByKey(selected_title_obj?.blogoutline_title[0].blog_outline_session, 'group');
+                    setBlogOutlineList(flattenObject(groupedRes));
                 }
             },
         });
@@ -293,4 +279,4 @@ const BlogStepWrapper = (props) => {
     )
 }
 
-export default BlogStepWrapper
+export default BlogStepWrapper;

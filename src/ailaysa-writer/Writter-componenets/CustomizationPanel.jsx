@@ -24,8 +24,8 @@ import { setShowCustomSettingsModal } from "../../features/ShowCustomSettingsMod
 import { useTranslation } from "react-i18next";
 import $ from 'jquery';
 import ImageGallery from "../../project-setup-components/image-gallery/ImageGallery";
-import DiscardPopup from "../../assets/images/new-ui-icons/discard-popup.svg"
-import ImpFileIcon from "../../assets/images/new-ui-icons/imp-icon-file.svg"
+import DiscardPopup from "../../assets/images/new-ui-icons/discard-popup.svg";
+import ImpFileIcon from "../../assets/images/new-ui-icons/imp-icon-file.svg";
 
 const CustomizationPanel = (props) => {
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -47,53 +47,49 @@ const CustomizationPanel = (props) => {
         promptMainWrapper, 
         setPromptMainWrapper,
         showPlaceHolderDivForBook
-    } = props
-
-    const location = useLocation()
-    const dispatch = useDispatch()
-    const defaultSettings = useSelector((state) => state.customizationSetting.value)
+    } = props;
+    const location = useLocation();
+    const dispatch = useDispatch();
+    const defaultSettings = useSelector((state) => state.customizationSetting.value);
     const { t } = useTranslation();
-
-
-    const [selectionString, setSelectionString] = useState('')
+    const [selectionString, setSelectionString] = useState('');
     const [targetLanguage, setTargetLanguage] = useState([]);
     const [sourceLanguage, setSourceLanguage] = useState();   // by default engligh is selected as source
     const [sourceLabel, setSourceLabel] = useState(t("select_source_language"));  // by default english source label is set 
     // const [showSrcLangModal, setshowSrcLangModal] = useState(false);
     const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
     // const [showTarLangModal, setshowTarLangModal] = useState(false);
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState(null)
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState(null);
     const [filteredResults, setFilteredResults] = useState([]);
     const [selectedMTEngine, setSelectedMTEngine] = useState(1);
     const [mtpeEngineOptions, setMtpeEngineOptions] = useState([]);
-    const [targetLanguageAskCutomizationLabel, setTargetLanguageAskCutomizationLabel] = useState('English')
+    const [targetLanguageAskCutomizationLabel, setTargetLanguageAskCutomizationLabel] = useState('English');
     const [mtpeEngines, setMtpeEngines] = useState([]);
     const [commonTarValue, setCommonTarValue] = useState(null);
     const [commonSrcValue, setCommonSrcValue] = useState(null);
-    const [tempsrc, setTempsrc] = useState(null)
-    const [tempsrclab, setTempsrclab] = useState(null)
-    const [temptar, setTemptar] = useState(null)
+    const [tempsrc, setTempsrc] = useState(null);
+    const [tempsrclab, setTempsrclab] = useState(null);
+    const [temptar, setTemptar] = useState(null);
     const [error, setError] = useState({ inputText: "", sourceLanguage: "", targetLanguage: "" });
     const [targetLabel, setTargetLabel] = useState(t("target_language"));
-    const [autoDetectIndication, setAutoDetectIndication] = useState(false)
+    const [autoDetectIndication, setAutoDetectIndication] = useState(false);
     const [sourceLanguageOptions, setSourceLanguageOptions] = useState(null);
     const [targetLanguageOptions, setTargetLanguageOptions] = useState(null);
     const [sourceLanguageAsk, setSourceLanguageAsk] = useState(17);   // by default engligh is selected as source
-    const [showGallery, setShowGallery] = useState(false)
-    const [sidebarType, setSidebarType] = useState('')
-    
+    const [showGallery, setShowGallery] = useState(false);
+    const [sidebarType, setSidebarType] = useState('');    
     const searchAreaRef = useRef(null);
-    const mtEngineOptionRef = useRef(null)
-    const mtEngineOptionsRef = useRef(null)
-    const autoDetectFireEnable = useRef(true)
-    const wordbytesize = useRef(false)
-    const targetLanguageOptionsRef = useRef(null)
-    const fromDefaultLang = useRef(false)
-    const allLangDetailsListRef = useRef(null)
-    const commonSrcValueRef = useRef(null)
-    const commonTarValueRef = useRef(null)
-    const commonMtpeEngineRef = useRef(null)
+    const mtEngineOptionRef = useRef(null);
+    const mtEngineOptionsRef = useRef(null);
+    const autoDetectFireEnable = useRef(true);
+    const wordbytesize = useRef(false);
+    const targetLanguageOptionsRef = useRef(null);
+    const fromDefaultLang = useRef(false);
+    const allLangDetailsListRef = useRef(null);
+    const commonSrcValueRef = useRef(null);
+    const commonTarValueRef = useRef(null);
+    const commonMtpeEngineRef = useRef(null);
     
     const targetDiv = document.querySelector('.note-editable');
 
@@ -104,9 +100,9 @@ const CustomizationPanel = (props) => {
     };
 
     useEffect(() => {
-        getMtEngines()
-        getAllLangDetailsList()
-        getLanguagesList()
+        getMtEngines();
+        getAllLangDetailsList();
+        getLanguagesList();
     }, [])
 
     useEffect(() => {
@@ -116,30 +112,26 @@ const CustomizationPanel = (props) => {
         const srcTranslateFilterRes = sourceFilter?.filter(
             (each) => each?.translate === true
         );
-
         let sortedSrcMtpe = srcTranslateFilterRes?.map((each) => {
             return each?.mtpe_engines;
         });
-        commonSrcValueRef.current = sortedSrcMtpe
-
+        commonSrcValueRef.current = sortedSrcMtpe;
         // remove the source language from the target language list
-        setTargetLanguageOptions(targetLanguageOptionsRef.current?.filter(each => each.id !== sourceLanguage))
+        setTargetLanguageOptions(targetLanguageOptionsRef.current?.filter(each => each.id !== sourceLanguage));
         if (sourceLanguage == targetLanguage[0]) {
-            setTargetLanguage([])
+            setTargetLanguage([]);
         }
     }, [sourceLanguage]);
 
     useEffect(() => {
         let targetArr = [];
         for (let i = 0; i < targetLanguage?.length; i++) {
-            // console.log(targetLanguage[i].id)
             targetArr?.push(
                 allLangDetailsListRef.current?.filter(
                     (each) => each?.language === targetLanguage[i]?.id
                 )
             );
         }
-
         const tarTranslateFilter = targetArr?.map((each) => {
             return each?.filter((eachTargetArr) => eachTargetArr?.translate === true);
         });
@@ -154,13 +146,11 @@ const CustomizationPanel = (props) => {
                 return a?.indexOf(v) !== -1;
             });
         });
-        commonTarValueRef.current = commonTarMtpeEngine
-
+        commonTarValueRef.current = commonTarMtpeEngine;
         const common = commonSrcValueRef.current?.filter((value) =>
             commonTarValueRef.current?.includes(value)
         );
-        commonMtpeEngineRef.current = common
-        
+        commonMtpeEngineRef.current = common;
         let engines = [];
         const engine = mtEngineOptionRef.current?.filter((value) =>
             commonMtpeEngineRef.current?.includes(value?.id)
@@ -171,131 +161,113 @@ const CustomizationPanel = (props) => {
                 label: eachEngine?.name?.replaceAll("_", " "),
             })
         }
-
         );
         setMtpeEngineOptions(engines);
-
-        mtEngineOptionsRef.current = engines
-        
+        mtEngineOptionsRef.current = engines;        
         if (mtEngineOptionsRef.current.find(e => { return e.value == selectedMTEngine }) == undefined) {
             if (!fromDefaultLang.current) {
-                setSelectedMTEngine(mtEngineOptionsRef.current[0]?.value)
+                setSelectedMTEngine(mtEngineOptionsRef.current[0]?.value);
             }
         }
     }, [targetLanguage]);
-
   
     useEffect(() => {
-        setTempsrc(sourceLanguage)
-        setTemptar(targetLanguage)
-        setTempsrclab(sourceLabel)
-    }, [translateWritterSwitch])
-
+        setTempsrc(sourceLanguage);
+        setTemptar(targetLanguage);
+        setTempsrclab(sourceLabel);
+    }, [translateWritterSwitch]);
 
     useEffect(() => {
         if (location.state?.aiWritingCateg) {
-            // console.log('inside')
             if (isNaN(parseInt(location.state?.aiWritingCateg))) {
-                setRightSideBar(true)
+                setRightSideBar(true);
                 setTimeout(() => {
                     if (document.querySelector(`#customize-${location.state?.aiWritingCateg}`)) {
-                        document.querySelector(`#customize-${location.state?.aiWritingCateg}`)?.style.setProperty('animation', 'highlight 8s')
+                        document.querySelector(`#customize-${location.state?.aiWritingCateg}`)?.style.setProperty('animation', 'highlight 8s');
                         setTimeout(() => {
-                            document.querySelector(`#customize-${location.state?.aiWritingCateg}`)?.style.setProperty('animation', '')
+                            document.querySelector(`#customize-${location.state?.aiWritingCateg}`)?.style.setProperty('animation', '');
                         }, 10000);
                     }
                 }, 1500);
             } else if (window.innerWidth <= 1300) {
-                setRightSideBar(false)
+                setRightSideBar(false);
             }
         } else if (window.innerWidth <= 1300) {
-            setRightSideBar(false)
+            setRightSideBar(false);
         }
-    }, [window.innerWidth, location.state])
+    }, [window.innerWidth, location.state]);
 
     useEffect(() => {
         if (window.getSelection() && document?.querySelector(".note-editable.card-block")) {
             if (document?.querySelector(".note-editable.card-block")) {
-                document?.querySelector(".note-editable.card-block").addEventListener('mouseup', () => { detectSourceLanguage(window.getSelection()?.toString().trim()) })
-                return () => { document?.querySelector(".note-editable.card-block")?.removeEventListener('mouseup', () => { detectSourceLanguage(window.getSelection()?.toString().trim()) }) }
+                document?.querySelector(".note-editable.card-block").addEventListener('mouseup', () => { detectSourceLanguage(window.getSelection()?.toString().trim()) });
+                return () => { document?.querySelector(".note-editable.card-block")?.removeEventListener('mouseup', () => { detectSourceLanguage(window.getSelection()?.toString().trim()) }); }
             }
         }
-    }, [])
+    }, []);
 
     // change the z-index of the spl character modal when lang modal is opened
     useEffect(() => {
-        let splCharModal = document.querySelector('.writer-spl-char-modal')
-        // console.log(splCharModal)
-        // console.log(showSrcLangModal)
+        let splCharModal = document.querySelector('.writer-spl-char-modal');
         if(splCharModal){
             if(showSrcLangModal){
-                splCharModal.style.zIndex = 0
+                splCharModal.style.zIndex = 0;
             }else{
-                splCharModal.style.zIndex = 11
+                splCharModal.style.zIndex = 11;
             }
         }
-    }, [showSrcLangModal])
-
+    }, [showSrcLangModal]);
 
     // change the selectedMtEngine state when the default settings is changed
     useEffect(() => {
         if(defaultSettings?.mt_engine !== null){
-            setSelectedMTEngine(defaultSettings?.mt_engine)
+            setSelectedMTEngine(defaultSettings?.mt_engine);
         }
-    }, [defaultSettings?.mt_engine])
+    }, [defaultSettings?.mt_engine]);
       
-    
     useEffect(() => {
         if(targetDiv !== null && targetDiv !== undefined){
             if (targetDiv) {
                 targetDiv.addEventListener("selectstart", handleAddWorkingAreaListener);
-        
-                targetDiv.addEventListener("blur", handleRemoveWorkingAreaListener)
-                
-                document.addEventListener('mouseup', handleSelectionListener)
-                
+                targetDiv.addEventListener("blur", handleRemoveWorkingAreaListener);                
+                document.addEventListener('mouseup', handleSelectionListener);                
                 return () => {
                     targetDiv.removeEventListener("selectstart", handleAddWorkingAreaListener);
-        
-                    targetDiv.removeEventListener("blur", handleRemoveWorkingAreaListener)  
-                    
+                    targetDiv.removeEventListener("blur", handleRemoveWorkingAreaListener);  
                     document.removeEventListener("mouseup", handleSelectionListener);
                 }
             }
         }
-    }, [targetDiv])
-    
-    
+    }, [targetDiv]);
+        
     const handleAddWorkingAreaListener = () => {
         document.addEventListener("selectionchange", logSelection);
     } 
+
     const handleRemoveWorkingAreaListener = () => {
         document.removeEventListener("selectionchange", logSelection);
     } 
 
     const logSelection = (e) => {
-        setSelectionString(document.getSelection().toString())
+        setSelectionString(document.getSelection().toString());
     }
 
     const handleClearSelection = (e) => {
         setTimeout(() => {
-            let sel = window.getSelection()
-            let isSelectedInsideEditor = sel?.anchorNode?.parentElement?.closest('.note-editable') ? true : false
-
+            let sel = window.getSelection();
+            let isSelectedInsideEditor = sel?.anchorNode?.parentElement?.closest('.note-editable') ? true : false;
             if(window.getSelection()?.toString()?.trim()?.length === 0 || !isSelectedInsideEditor) {
-                setSelectionString('')
+                setSelectionString('');
             }
         }, 80);
     }
 
     const handleSelectionListener = (e) => {
-        // console.log(e.target)
-        let workingArea = e?.target?.closest('.note-editable') === null ? false : true
-        let toolbar = e?.target?.closest('.note-toolbar') === null ? false : true
-        let customizationPanel = e?.target?.closest('.customization-panel') === null ? false : true
-        
+        let workingArea = e?.target?.closest('.note-editable') === null ? false : true;
+        let toolbar = e?.target?.closest('.note-toolbar') === null ? false : true;
+        let customizationPanel = e?.target?.closest('.customization-panel') === null ? false : true;        
         if(!workingArea && !toolbar && !customizationPanel){
-            handleClearSelection(e)
+            handleClearSelection(e);
         }
     } 
 
@@ -306,25 +278,24 @@ const CustomizationPanel = (props) => {
             auth: true,
             success: (response) => {
                 if (response?.status === 200 && ((response.data?.src !== null && response.data?.tar !== null) || response.data?.id)) {
-                    fromDefaultLang.current = true
-                    setSourceLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.src)?.language)
-                    setSourceLanguage(response.data.src)
-                    setTargetLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.tar)?.language)
-                    setTargetLanguage([targetLanguageOptionsRef.current?.find(each => each.id === response.data.tar)])
-                    setSelectedMTEngine(response.data.mt_engine)
+                    fromDefaultLang.current = true;
+                    setSourceLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.src)?.language);
+                    setSourceLanguage(response.data.src);
+                    setTargetLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.tar)?.language);
+                    setTargetLanguage([targetLanguageOptionsRef.current?.find(each => each.id === response.data.tar)]);
+                    setSelectedMTEngine(response.data.mt_engine);
                     dispatch(setDefaultSettings({
                         id: response.data?.id ? response.data?.id : null,
                         mt_engine: response.data.mt_engine,
                         newline: response.data?.new_line,
                         append: response.data?.append,
                         result_in_modal: true
-                    }))
-                    // console.log(defaultSettings);
+                    }));
                 } else {
-                    setSourceLabel(t("search_source_language"))
-                    setTargetLabel(t("search_target_language"))
-                    setSourceLanguage("")
-                    setTargetLanguage([])
+                    setSourceLabel(t("search_source_language"));
+                    setTargetLabel(t("search_target_language"));
+                    setSourceLanguage("");
+                    setTargetLanguage([]);
                 }
             },
         })
@@ -335,9 +306,9 @@ const CustomizationPanel = (props) => {
         setshowSrcLangModal(false);
         setSourceLabel(name);
         setError({ ...error, sourceLanguage: "" });
-        setSearchInput('')
-        setOnFocusWrap(false)
-        summerNoteEditorRef.current.summernote('restoreRange')
+        setSearchInput('');
+        setOnFocusWrap(false);
+        summerNoteEditorRef.current.summernote('restoreRange');
     };
 
     /* Handling target language selection */
@@ -346,9 +317,9 @@ const CustomizationPanel = (props) => {
         setshowTarLangModal(false);
         setTargetLabel(name);
         setError({ ...error, targetLanguage: "" });
-        setSearchInput('')
-        setOnFocusWrap(false)
-        summerNoteEditorRef.current.summernote('restoreRange')
+        setSearchInput('');
+        setOnFocusWrap(false);
+        summerNoteEditorRef.current.summernote('restoreRange');
     };
 
     const getAllLangDetailsList = () => {
@@ -356,7 +327,7 @@ const CustomizationPanel = (props) => {
             url: Config.BASE_URL + "/app/mt-language-support/",
             auth: true,
             success: (response) => {
-                allLangDetailsListRef.current = response.data
+                allLangDetailsListRef.current = response.data;
                 // setAllLangDetailsList(response.data);
             },
         };
@@ -369,10 +340,10 @@ const CustomizationPanel = (props) => {
             url: Config.BASE_URL + "/app/language/",
             auth: true,
             success: (response) => {
-                targetLanguageOptionsRef.current = response.data
-                setSourceLanguageOptions(response.data)
-                setTargetLanguageOptions(response.data)
-                getSavedCustomSettings()
+                targetLanguageOptionsRef.current = response.data;
+                setSourceLanguageOptions(response.data);
+                setTargetLanguageOptions(response.data);
+                getSavedCustomSettings();
             },
         };
         Config.axios(params);
@@ -383,7 +354,7 @@ const CustomizationPanel = (props) => {
             url: `${Config.BASE_URL}/app/mt_engines/`,
             auth: true,
             success: (response) => {
-                mtEngineOptionRef.current = response?.data
+                mtEngineOptionRef.current = response?.data;
                 setMtpeEngines(response?.data);
             },
         });
@@ -411,11 +382,9 @@ const CustomizationPanel = (props) => {
     function getSentencesContainingWords(paragraph, selectedWordsString) {
         // Split the selected words string into an array of individual words
         var selectedWords = selectedWordsString.split(" ");
-    
         // Split the paragraph into sentences
         var sentences = paragraph.split(/[.!?]/);
         var resultSentences = [];
-    
         // Loop through each sentence
         for (var i = 0; i < sentences.length; i++) {
             var sentence = sentences[i].trim();
@@ -429,18 +398,16 @@ const CustomizationPanel = (props) => {
                 }
             }
         }
-    
         return resultSentences.length > 0 ? resultSentences : null;
     }
 
     const detectSourceLanguage = (text) => {
         if (window.getSelection().toString()) {
             if (text?.length >= 2 && text?.length < 5000) {
-                let sel = window.getSelection().toString()?.slice(0, 150)
-               
+                let sel = window.getSelection().toString()?.slice(0, 150);
                 if(sel?.split(' ')?.filter(each => each !== '')?.length < 6){
-                    let sentence = getSentencesContainingWords(window.getSelection().anchorNode.textContent, window.getSelection()?.toString())
-                    sel = sentence !== null ? sentence?.slice(0, 2) : sel
+                    let sentence = getSentencesContainingWords(window.getSelection().anchorNode.textContent, window.getSelection()?.toString());
+                    sel = sentence !== null ? sentence?.slice(0, 2) : sel;
                 }
 
                 Config.axios({
@@ -448,26 +415,23 @@ const CustomizationPanel = (props) => {
                     url: `${Config.BASE_URL}/auth/lang_detect/?text=${sel?.slice(0, 150)}`,
                     auth: true,
                     success: (response) => {
-                        setSourceLanguageAsk(response.data?.lang_id)
-                        let grammarCheckBtn = document.getElementById('customize-20')
-                        // console.log(sourceLanguageAsk)
+                        setSourceLanguageAsk(response.data?.lang_id);
+                        let grammarCheckBtn = document.getElementById('customize-20');
                         if (grammarCheckBtn) {
                             if (response.data?.lang_id != 17) {
-                                grammarCheckBtn.style.setProperty('opacity', '0.4')
-                                grammarCheckBtn.style.setProperty('pointer-events', 'none')
-                            } else {
+                                grammarCheckBtn.style.setProperty('opacity', '0.4');
+                                grammarCheckBtn.style.setProperty('pointer-events', 'none');                            } else {
                                 if (((count(selectionString?.replace(/\n/g, ''))?.chars >= 5 * 4 && count(selectionString?.replace(/\n/g, ''))?.chars <= 500))) {
-                                    grammarCheckBtn.style.setProperty('opacity', '1')
-                                    grammarCheckBtn.style.setProperty('pointer-events', 'all')
+                                    grammarCheckBtn.style.setProperty('opacity', '1');
+                                    grammarCheckBtn.style.setProperty('pointer-events', 'all');
                                 }
                             }
                         }
                     },
                     error: (err) => {
-
+                        console.error(err);
                     }
                 });
-
             }
         }
     }
@@ -475,14 +439,14 @@ const CustomizationPanel = (props) => {
     const translatevalidation = (id, custom, catagory, src, tar, mtengin) => {
         if (sourceLanguage && targetLanguage && selectedMTEngine) {
             if (mtpeEngineOptions.length > 0 && !selectedMTEngine) {
-                setTranslateWritterSwitch(true)
+                setTranslateWritterSwitch(true);
             }
             else if (mtpeEngineOptions.length > 0 && selectedMTEngine) {
-                getAiCustomizationResult(id, custom, catagory, src, tar, mtengin)
+                getAiCustomizationResult(id, custom, catagory, src, tar, mtengin);
             }
         }
         else {
-            setTranslateWritterSwitch(true)
+            setTranslateWritterSwitch(true);
         }
     }
 
@@ -504,7 +468,6 @@ const CustomizationPanel = (props) => {
     //     }
     // }, [selectedMTEngine, sourceLanguage, targetLanguage])
     
-
     return (
         <React.Fragment>
             <div className={showGallery ? "prompt-bubble-header d-none" : "prompt-bubble-header"}>

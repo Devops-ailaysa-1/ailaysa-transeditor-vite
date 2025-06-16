@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import Config from '../../vendor/Config';
@@ -6,50 +6,42 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from 'react-i18next';
 import Skeleton from '@mui/material/Skeleton';
-import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
-import ChatSearch from "../../assets/images/chat/chat-search.svg"
-import ChatSearchBarClose from "../../assets/images/assign-page/search-bar-close.svg"
-import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg"
-import EmptyProjectFolder from "../../assets/images/empty-projects-folder.svg"
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
+import ChatSearch from "../../assets/images/chat/chat-search.svg";
+import ChatSearchBarClose from "../../assets/images/assign-page/search-bar-close.svg";
+import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg";
+import EmptyProjectFolder from "../../assets/images/empty-projects-folder.svg";
 
 const DocumentListModal = (props) => {
-
     let {
         showDocumentListModal,
         setShowDocumentListModal
-    } = props
-
+    } = props;
     const { t } = useTranslation();
-    const [searchTerm, setSearchTerm] = useState("")
-    const [openFileLoader, setOpenFileLoader] = useState(false)
-    const [documentsList, setDocumentsList] = useState(null)
+    const [searchTerm, setSearchTerm] = useState("");
+    const [openFileLoader, setOpenFileLoader] = useState(false);
+    const [documentsList, setDocumentsList] = useState(null);
     const [isSearchDropDownShow, setIsSearchDropDownShow] = useState(false);
     const [showEmptyProjects, setEmptyProjects] = useState(false);
     const [isSearchTermDeleted, setIsSearchTermDeleted] = useState(false);
-
     const dropDownDivRef = useRef(null);
     const isDocNameSearchedRef = useRef(null);
     const searchBoxRef = useRef(null);
 
     useEffect(() => {
-        getMyDocumentList()
-    }, [])
+        getMyDocumentList();
+    }, []);
 
     // drop-down close listener when outside is clicked
     useEffect(() => {
         const handleDropDownClickOutside = (e) => {
             if (dropDownDivRef.current && !dropDownDivRef.current.contains(e.target)) {
-                console.log(searchBoxRef.current)
                 if(searchBoxRef.current?.value === ""){
-                    console.log(searchBoxRef.current?.value)
-                    console.log('inside')
                     setIsSearchDropDownShow(false);
                 }
             }
         };
-
         document.addEventListener("mousedown", handleDropDownClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleDropDownClickOutside);
         };
@@ -58,74 +50,71 @@ const DocumentListModal = (props) => {
     // call api only when param is changed or something is searched
     useEffect(() => {
         if(isSearchTermDeleted){
-            if(isDocNameSearchedRef.current) getMyDocumentList()
-            setIsSearchTermDeleted(false)
+            if(isDocNameSearchedRef.current) getMyDocumentList();
+            setIsSearchTermDeleted(false);
         }
-    }, [isSearchTermDeleted])
-
+    }, [isSearchTermDeleted]);
 
     const handleDocSearchTerm = ((e) => {
-        setSearchTerm(e.target.value)
+        setSearchTerm(e.target.value);
     })
 
     const handleKeyUp = (e) => {
         if (e.which === 13 && searchTerm?.trim() !== "") {
-            getMyDocumentList()
+            getMyDocumentList();
             setIsSearchDropDownShow(false);
-            e.target.blur()
+            e.target.blur();
         }
         if((e.key === 'Backspace' || e.key === 'Delete') && searchTerm?.trim() === ""){
-            setIsSearchTermDeleted(true)
+            setIsSearchTermDeleted(true);
         }
     }
 
     const handleCloseSearchBox = () => {
-        setSearchTerm("")
-        setIsSearchDropDownShow(false)
-        setIsSearchTermDeleted(true)
+        setSearchTerm("");
+        setIsSearchDropDownShow(false);
+        setIsSearchTermDeleted(true);
     }
 
     const handleDropDownClick = () => {
-        getMyDocumentList()
+        getMyDocumentList();
         setIsSearchDropDownShow(false);
     } 
 
     const getMyDocumentList = () => {
-        setOpenFileLoader(true)
-        setDocumentsList([])
-        let list = []
+        setOpenFileLoader(true);
+        setDocumentsList([]);
+        let list = [];
         let url = `${Config.BASE_URL}/workspace/mydocuments?pagination=False`;
         if (searchTerm) {
             url += `&doc_name=${searchTerm}`;
-            isDocNameSearchedRef.current = true
-        }else isDocNameSearchedRef.current = false
+            isDocNameSearchedRef.current = true;
+        }else isDocNameSearchedRef.current = false;
 
         Config.axios({
             url: url,
             method: "GET",
             auth: true,
             success: (response) => {
-                list = response?.data
-                console.log(list)
+                list = response?.data;
                 if (list.length === 0) setEmptyProjects(true);
                 else setEmptyProjects(false);
                 setTimeout(() => {
-                    setDocumentsList(list)
+                    setDocumentsList(list);
                 }, 200);
-                setOpenFileLoader(false)
+                setOpenFileLoader(false);
             },
         });
     }
 
     const openInNewTab = (url) => {
-        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-        if (newWindow) newWindow.opener = null
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+        if (newWindow) newWindow.opener = null;
       }
 
     const openDocument = (id) => {
         // window.location.href = `/word-processor?document-id=${id}`
-        openInNewTab(Config.TRANSEDITOR_HOST + `/word-processor?document-id=${id}`)
-
+        openInNewTab(Config.TRANSEDITOR_HOST + `/word-processor?document-id=${id}`);
     }
 
     return (
@@ -309,4 +298,4 @@ const DocumentListModal = (props) => {
     )
 }
 
-export default DocumentListModal
+export default DocumentListModal;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 //import { historyDetailDump, historyDump } from './HistoryCardDump';
@@ -10,7 +10,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Skeleton from '@mui/material/Skeleton';
 import { useTranslation } from "react-i18next";
-import AssetsDeleteIcon from "../../assets/images/new-ui-icons/assets-delete-icon.svg"
+import AssetsDeleteIcon from "../../assets/images/new-ui-icons/assets-delete-icon.svg";
 
 export const PromptHistory = (props) => {
     let {
@@ -25,58 +25,55 @@ export const PromptHistory = (props) => {
         setHistoryTab,
         saveHtmlDataForDocument,
         isCopiedFromSummernoteRef
-    } = props
+    } = props;
 
-    const [promptHistoryList, setPromptHistoryList] = useState(null)
-    const [customizationHistoryList, setCustomizationHistoryList] = useState(null)
-    const [aiImageHistoryList, setAiImageHistoryList] = useState([])
-    const [promptCardIndex, setPromptCardIndex] = useState(null)
-    const [customizeCardIndex, setCustomizeCardIndex] = useState(null)
-    const [imageCardIndex, setImageCardIndex] = useState(null)
-    const [toggleState, setToggleState] = useState(1)
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
-    const [promptSearchText, setPromptSearchText] = useState('')
-    const [customizeSearchText, setCustomizeSearchText] = useState('')
-
-    const [isCopied, setIsCopied] = useState(false)
+    const [promptHistoryList, setPromptHistoryList] = useState(null);
+    const [customizationHistoryList, setCustomizationHistoryList] = useState(null);
+    const [aiImageHistoryList, setAiImageHistoryList] = useState([]);
+    const [promptCardIndex, setPromptCardIndex] = useState(null);
+    const [customizeCardIndex, setCustomizeCardIndex] = useState(null);
+    const [imageCardIndex, setImageCardIndex] = useState(null);
+    const [toggleState, setToggleState] = useState(1);
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
+    const [promptSearchText, setPromptSearchText] = useState('');
+    const [customizeSearchText, setCustomizeSearchText] = useState('');
+    const [isCopied, setIsCopied] = useState(false);
 
     const typing = useRef(false);
     const typingTimeout = useRef(0);
-    const searchPromptTextRef = useRef('')
-    const searchCustomizeTextRef = useRef('')
+    const searchPromptTextRef = useRef('');
+    const searchCustomizeTextRef = useRef('');
     const langSearchOutsideClick = useRef();
 
     const { t } = useTranslation();
 
-
-    const rightAlignLangId = [4, 83, 31, 60, 101, 88, 106]
+    const rightAlignLangId = [4, 83, 31, 60, 101, 88, 106];
 
     useEffect(() => {
         if (historyTab) {
-            getPromptHistory()
-            getCustomizationHistory()
-            getAIImageHistory()
+            getPromptHistory();
+            getCustomizationHistory();
+            getAIImageHistory();
         }
-    }, [historyTab])
-
+    }, [historyTab]);
 
     useEffect(() => {
         if (promptHistoryList !== null && promptHistoryList?.length !== 0) {
-            setPromptCardIndex(promptHistoryList[0]?.id)
+            setPromptCardIndex(promptHistoryList[0]?.id);
         }
-    }, [promptHistoryList])
+    }, [promptHistoryList]);
 
     useEffect(() => {
         if (customizationHistoryList !== null && customizationHistoryList?.length !== 0) {
-            setCustomizeCardIndex(customizationHistoryList[0]?.id)
+            setCustomizeCardIndex(customizationHistoryList[0]?.id);
         }
-    }, [customizationHistoryList])
+    }, [customizationHistoryList]);
 
     useEffect(() => {
         if (aiImageHistoryList !== null && aiImageHistoryList?.length !== 0) {
-            setImageCardIndex(aiImageHistoryList[0]?.id)
+            setImageCardIndex(aiImageHistoryList[0]?.id);
         }
-    }, [aiImageHistoryList])
+    }, [aiImageHistoryList]);
 
     // handle click outside the search input box
     useEffect(() => {
@@ -99,8 +96,8 @@ export const PromptHistory = (props) => {
             success: (response) => {
                 setPromptHistoryList(response.data)
                 if (target === 'from-delete') {
-                    let found = response.data?.find(each => each?.id === promptId)
-                    found !== undefined ? setPromptCardIndex(promptId) : setPromptCardIndex(response.data[0]?.id)
+                    let found = response.data?.find(each => each?.id === promptId);
+                    found !== undefined ? setPromptCardIndex(promptId) : setPromptCardIndex(response.data[0]?.id);
                 }
             },
         });
@@ -113,7 +110,7 @@ export const PromptHistory = (props) => {
             success: (response) => {
                 setCustomizationHistoryList(response.data)
                 if (target === 'from-delete') {
-                    setCustomizeCardIndex(response.data[0]?.id)
+                    setCustomizeCardIndex(response.data[0]?.id);
                     // let found = response.data?.find(each => each?.id === customizeId)
                     // found !== undefined ? setCustomizeCardIndex(customizeId) : setCustomizeCardIndex(response.data[0]?.id)
                 }
@@ -126,7 +123,7 @@ export const PromptHistory = (props) => {
             url: `${Config.BASE_URL}/writer/image_history/`,
             auth: true,
             success: (response) => {
-                setAiImageHistoryList(response.data)
+                setAiImageHistoryList(response.data);
             },
         });
     }
@@ -141,20 +138,20 @@ export const PromptHistory = (props) => {
                 Config.toast(t("deleted_success"))
                 if (from === 'prompt-history') {
                     if (target === 'prompt_id') {     // remove the prompt object dynamically from list and active & scroll to the first item in list
-                        setPromptHistoryList(promptHistoryList?.filter(each => each.id !== id))
+                        setPromptHistoryList(promptHistoryList?.filter(each => each.id !== id));
                         setTimeout(() => {
                             let activeItem = document.querySelector('.history-leaf.active')
                             activeItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
                         }, 50);
                     } else if (target === 'obj_id') {  // remove the individual prompt object and get the new prompt history list from API
-                        getPromptHistory('from-delete', promptId)
+                        getPromptHistory('from-delete', promptId);
                     }
                 }
                 if (target === 'customize_obj_id') {      // remove the customization object dynamically from list and active & scroll to the first item in list
-                    setCustomizationHistoryList(customizationHistoryList?.filter(each => each.id !== id))
+                    setCustomizationHistoryList(customizationHistoryList?.filter(each => each.id !== id));
                     setTimeout(() => {
-                        let activeItem = document.querySelector('.history-leaf.active')
-                        activeItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+                        let activeItem = document.querySelector('.history-leaf.active');
+                        activeItem?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
                     }, 50);
                 }
             },
@@ -162,16 +159,15 @@ export const PromptHistory = (props) => {
     }
 
     const openPromptHistoryData = (id) => {
-        setPromptCardIndex(id)
+        setPromptCardIndex(id);
     }
 
     const openCustomizeHistoryData = (id) => {
-        setCustomizeCardIndex(id)
+        setCustomizeCardIndex(id);
     }
     const openAiImageHistoryData = (id) => {
-        setImageCardIndex(id)
+        setImageCardIndex(id);
     }
-
 
     const countWords = (count) => {
         if (count?.length === 0) {
@@ -184,14 +180,13 @@ export const PromptHistory = (props) => {
         }
     }
 
-
     const handleTextCopy = (text) => {
-        navigator.clipboard.writeText(text)
-        setIsCopied(true)
-        isCopiedFromSummernoteRef.current = true
+        navigator.clipboard.writeText(text);
+        setIsCopied(true);
+        isCopiedFromSummernoteRef.current = true;
         setTimeout(() => {
             if(isCopiedFromSummernoteRef.current){
-                isCopiedFromSummernoteRef.current = false
+                isCopiedFromSummernoteRef.current = false;
             }
         }, 8000);
     }
@@ -209,30 +204,30 @@ export const PromptHistory = (props) => {
 
     const handleOnclick = (e) => {
         searchPromptTextRef.current?.focus();
-        setOnFocusWrap(true)
+        setOnFocusWrap(true);
     }
 
     const handleCloseIconPress = () => {
         if (toggleState === 1) {
-            setPromptSearchText('')
-            searchPromptTextRef.current.value = ''
-            getPromptHistory()
+            setPromptSearchText('');
+            searchPromptTextRef.current.value = '';
+            getPromptHistory();
         }
         else {
-            setCustomizeSearchText('')
-            searchCustomizeTextRef.current.value = ''
-            getCustomizationHistory()
+            setCustomizeSearchText('');
+            searchCustomizeTextRef.current.value = '';
+            getCustomizationHistory();
         }
-        setOnFocusWrap(false)
+        setOnFocusWrap(false);
     }
 
     const handleSearchBoxChange = (e) => {
         if (toggleState === 1) {
-            debounce(getPromptHistory)
-            setPromptSearchText(e.target.value)
+            debounce(getPromptHistory);
+            setPromptSearchText(e.target.value);
         } else {
-            debounce(getCustomizationHistory)
-            setCustomizeSearchText(e.target.value)
+            debounce(getCustomizationHistory);
+            setCustomizeSearchText(e.target.value);
         }
     }
 
@@ -242,11 +237,11 @@ export const PromptHistory = (props) => {
         const rng = summerNoteEditorRef.current.summernote('editor.getLastRange');
         setTimeout(() => {
             // place the cursor on old position and insert the image
-            rng.select()
+            rng.select();
             var imgNode = document.createElement('img');
-            imgNode.src = imageUrl
+            imgNode.src = imageUrl;
             summerNoteEditorRef.current.summernote("insertNode", imgNode);
-            imgNode?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+            imgNode?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
             // document.querySelector('.note-editable').appendChild(imgNode)?.scrollIntoView({ behavior: "smooth", block: "center" })
         }, 600);
     }
@@ -257,6 +252,7 @@ export const PromptHistory = (props) => {
         const ctx = c.getContext("2d");
         img.crossOrigin = "";
         img.src = imageURL;
+
         return new Promise(resolve => {
             img.onload = function () {
                 c.width = this.naturalWidth;
@@ -264,7 +260,7 @@ export const PromptHistory = (props) => {
                 ctx.drawImage(this, 0, 0);
                 c.toBlob((blob) => {
                     // here the image is a blob
-                    resolve(blob)
+                    resolve(blob);
                 }, "image/png", 1);
             };
         })
@@ -273,11 +269,11 @@ export const PromptHistory = (props) => {
     const { ClipboardItem } = window;
 
     async function copyImage(imageURL) {
-        const blob = await imageToBlob(imageURL)
+        const blob = await imageToBlob(imageURL);
         const item = new ClipboardItem({ "image/png": blob });
         navigator.clipboard.write([item]);
-        setIsCopied(true)
-        // Config.toast('Image copied')
+        setIsCopied(true);
+        // Config.toast('Image copied');
     }
 
     return (
@@ -322,8 +318,6 @@ export const PromptHistory = (props) => {
                             </div>
                         }
                     </div>
-
-
                     <div className='prompt__history'>
                         {(promptHistoryList === null && toggleState == 1) && Array(4).fill(null)?.map((item, index) => {
                             return (
@@ -399,7 +393,6 @@ export const PromptHistory = (props) => {
                                 })
                             ) : (
                                 <p className='prompt-history-no-prompt'>{t("no_prompt")}</p>
-
                             )
                         ) : toggleState == 2 ? (
                             // tab2 content
@@ -417,7 +410,6 @@ export const PromptHistory = (props) => {
                                 })
                             ) : (
                                 <p className='prompt-history-no-prompt'>{t("no_customization")}</p>
-
                             )
                         ) : toggleState == 3 ? (
                             aiImageHistoryList?.length !== 0 ? (
@@ -434,8 +426,6 @@ export const PromptHistory = (props) => {
                                 })
                             ) : (
                                 <p className='prompt-history-no-prompt'>{t("no_ai_image")}</p>
-
-
                             )
                         ) : null}
                     </div>
@@ -469,7 +459,6 @@ export const PromptHistory = (props) => {
                                         <Skeleton variant="text" sx={{ fontSize: '14px' }} width={75} />
                                     </p>
                                 </div>
-
                                 <div className='history-detail-lines'>
                                     <p className='title'>
                                         <Skeleton variant="text" sx={{ fontSize: '14px' }} width={75} />
@@ -477,7 +466,6 @@ export const PromptHistory = (props) => {
                                     </p>
                                     <p className="value">
                                         <Skeleton variant="text" sx={{ fontSize: '14px' }} width={75} />
-
                                     </p>
                                 </div>
                                 {
@@ -510,7 +498,6 @@ export const PromptHistory = (props) => {
                                     <p>
                                         <Skeleton variant="text" sx={{ fontSize: '14px' }} />
                                         <Skeleton variant="text" sx={{ fontSize: '14px' }} width={300} />
-
                                     </p>
                                     <div className="result-toolbar">
                                         <div className="word-box-wrapper">
@@ -533,7 +520,6 @@ export const PromptHistory = (props) => {
                                         </div>
                                     </div>
                                 </div>
-
                                 <Skeleton variant="rectangular" width={125} height={50} />
                             </div>
                         </div>
@@ -575,7 +561,6 @@ export const PromptHistory = (props) => {
                             </div>
                             <div className='history-secondary-wrap'>
                                 <h4 className='history-seconday-wrap-header'><Skeleton variant="text" sx={{ fontSize: '16px' }} width={75} /></h4>
-
                                 <div className='history-content-details'>
                                     <p>
                                         <Skeleton variant="text" sx={{ fontSize: '14px' }} />
@@ -604,18 +589,15 @@ export const PromptHistory = (props) => {
                                             <div className="result-icon-single-item" >
                                                 <Skeleton variant="circular" width={25} height={25} />
                                             </div>
-
                                             <div className="result-icon-single-item" >
                                                 <Skeleton variant="circular" width={25} height={25} />
                                             </div>
-
                                             <div className="result-icon-single-item" >
                                                 <Skeleton variant="circular" width={25} height={25} />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                                 <Skeleton variant="rectangular" width={125} height={50} />
                             </div>
                         </div>
@@ -635,7 +617,6 @@ export const PromptHistory = (props) => {
                             </div>
                             <div className='history-secondary-wrap'>
                                 <h4 className='history-seconday-wrap-header'><Skeleton variant="text" sx={{ fontSize: '16px' }} width={75} /></h4>
-
                                 <div className='history-content-details'>
                                     <p>
                                         <Skeleton variant="rectangular" width={300} height={300} />
@@ -657,12 +638,10 @@ export const PromptHistory = (props) => {
                                         </div>
                                     </div>
                                 </div>
-
                                 <Skeleton variant="rectangular" width={125} height={50} />
                             </div>
                         </div>
                     }
-
                     {toggleState == 1 ? (
                         promptHistoryList?.length !== 0 ? (
                             promptHistoryList?.map((eachPrompt) => {
