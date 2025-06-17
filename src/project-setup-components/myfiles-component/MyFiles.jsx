@@ -17,27 +17,25 @@ import MenuItem from '@mui/material/MenuItem';
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha';
 import PaginationLeft  from "../../assets/images/new-ui-icons/pagination-left.svg";
 import PaginationRight  from "../../assets/images/new-ui-icons/pagination-right.svg";
-import PlusIcon from "../../assets/images/new-ui-icons/plus.svg"
-import ChatSearch from "../../assets/images/chat/chat-search.svg"
-import SearchBarClose from "../../assets/images/assign-page/search-bar-close.svg"
-import DeleteBinIcon from "../../assets/images/new-ui-icons/assets-delete-icon.svg"
-import NoEditorsFound2 from "../../assets/images/no-editors-found-2.svg"
-import EmptyProjectsFolder from "../../assets/images/empty-projects-folder.svg"
-import ConfirmIcon from "../../assets/images/new-ui-icons/confirm-icon.svg"
+import PlusIcon from "../../assets/images/new-ui-icons/plus.svg";
+import ChatSearch from "../../assets/images/chat/chat-search.svg";
+import SearchBarClose from "../../assets/images/assign-page/search-bar-close.svg";
+import DeleteBinIcon from "../../assets/images/new-ui-icons/assets-delete-icon.svg";
+import NoEditorsFound2 from "../../assets/images/no-editors-found-2.svg";
+import EmptyProjectsFolder from "../../assets/images/empty-projects-folder.svg";
+import ConfirmIcon from "../../assets/images/new-ui-icons/confirm-icon.svg";
 
 const MyFiles = (props) => {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-
     const location = useLocation();
     const { t } = useTranslation();
     const history = useNavigate();
-
     const [didMount, setDidMount] = useState(false);
     const [fileListSearchEnlarge, setFileListSearchEnlarge] = useState(false);
     const [isSearchTermDelete, setIsSearchTermDelete] = useState(false);
-    const [documentsList, setDocumentsList] = useState(null)
-    const [documentName, setDocumentName] = useState("Untitled")
+    const [documentsList, setDocumentsList] = useState(null);
+    const [documentName, setDocumentName] = useState("Untitled");
     const [activeTab, setActiveTab] = useState(1);
     const [projectSearchTerm, setProjectSearchTerm] = useState("");
     const [showEmptyProjects, setEmptyProjects] = useState(false);
@@ -49,19 +47,16 @@ const MyFiles = (props) => {
     const [selectedDocumntId, setSelectedDocumntId] = useState(null);
     const [convetedDocsListSearch, setConvertedDocsListSearch] = useState(false);
     const [convetedDocsSearchTerm, setConvertedDocsSearchTerm] = useState("");
-    const [selectedSortValue, setselectedSortValue] = useState('-id')
+    const [selectedSortValue, setselectedSortValue] = useState('-id');
     const [sortEl, setSortEl] = useState(null);
-
 
     const fileUploadTop = createRef();
     const projectsPerPage = useRef(20);
-    const searchTermRef = useRef(null)
-    const documentIdRef = useRef(null)
+    const searchTermRef = useRef(null);
+    const documentIdRef = useRef(null);
     const searchTermCloseOutside = useRef();
 
     const open = Boolean(sortEl);
-
-    // console.log(paginationContent);
 
     // const AiMarkSubmit = withStyles((theme) => ({
     //     root: {
@@ -143,37 +138,35 @@ const MyFiles = (props) => {
     //     },
     // }))(Button);
 
-
     const orderByOptions = [
         { value: 'doc_name', label: 'A-Z' },
         { value: '-doc_name', label: 'Z-A' },
         { value: '-id', label: t("most_recent") },
         { value: 'id', label: t("least_recent") },
-    ]
-       
+    ];       
     const modaloption = {
         closeMaskOnClick: false,
         width: 784,
     };
 
     useEffect(() => {
-        setDidMount(true)
-        getDocumentList()
-    }, [])
+        setDidMount(true);
+        getDocumentList();
+    }, []);
 
     useEffect(() => {
         if(activeTab === 1){
-            history(`/create/my-files/documents-list?page=1`)
+            history(`/create/my-files/documents-list?page=1`);
         }else{
-            history(`/create/my-files/pdf-list?page=1`)
+            history(`/create/my-files/pdf-list?page=1`);
         }
-    }, [activeTab])
+    }, [activeTab]);
 
     useEffect(() =>{
         if(projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete){
-            setIsSearchTermDelete(false)
+            setIsSearchTermDelete(false);
         }
-    }, [projectSearchTerm, isSearchTermDelete])
+    }, [projectSearchTerm, isSearchTermDelete]);
 
     useEffect(() => {
         const handleSearchTermClickOutside = (e) => {
@@ -181,9 +174,7 @@ const MyFiles = (props) => {
                 setConvertedDocsListSearch(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -194,7 +185,7 @@ const MyFiles = (props) => {
     };
 
     const handleSelectedMenuItem = (e, index, value) => {
-        setselectedSortValue(value)
+        setselectedSortValue(value);
         setSortEl(null);
     };
 
@@ -205,37 +196,37 @@ const MyFiles = (props) => {
     const SearchTermFilterEnter = (e) => {
         if(e.which === 13 && convetedDocsSearchTerm == ""){
             setConvertedDocsListSearch(false);
-            e.target.blur()
+            e.target.blur();
         }else if(e.which === 13){
             let pageParam = URL_SEARCH_PARAMS.get("page");
             if(pageParam != 1){
-                pageSelect(1)
+                pageSelect(1);
             }else{
-                getDocumentList()
+                getDocumentList();
             }
             setConvertedDocsListSearch(false);
-            searchTermRef.current = convetedDocsSearchTerm
-            e.target.blur()
+            searchTermRef.current = convetedDocsSearchTerm;
+            e.target.blur();
         }
     }
 
     const handleCloseSearchBox = () => {
-        setConvertedDocsSearchTerm("")
-        setConvertedDocsListSearch(false)
-        setIsSearchTermDelete(true)
+        setConvertedDocsSearchTerm("");
+        setConvertedDocsListSearch(false);
+        setIsSearchTermDelete(true);
     }
 
     useEffect(() => {
         if(selectedSortValue !== null){
-            setDocumentsList([])
-            getDocumentList()
+            setDocumentsList([]);
+            getDocumentList();
         }
-    }, [selectedSortValue])
+    }, [selectedSortValue]);
 
 
     const getDocumentList = () => {
         setShowListingLoader(true);
-        let list = []
+        let list = [];
         /* Page param set/get - start */
         let page = 1;
         let pageParam = URL_SEARCH_PARAMS.get("page");
@@ -246,16 +237,16 @@ const MyFiles = (props) => {
         /* Page param set/get - start */
         let url = `${Config.BASE_URL}/workspace/mydocuments?page=${page}`;
         if (convetedDocsSearchTerm) url += `&doc_name=${convetedDocsSearchTerm}`;
-        if (selectedSortValue !== null) url += `&ordering=${selectedSortValue}` 
+        if (selectedSortValue !== null) url += `&ordering=${selectedSortValue}` ;
         let params = {
             url: url,
             auth: true,
             success: (response) => {
-                list = response?.data?.results
+                list = response?.data?.results;
                 if (list.length == 0) setEmptyProjects(true);
                 else setEmptyProjects(false);
                 setTimeout(() => {
-                    setDocumentsList(list)
+                    setDocumentsList(list);
                 }, 200);
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
@@ -267,7 +258,7 @@ const MyFiles = (props) => {
 
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
-        setDocumentsList([])
+        setDocumentsList([]);
         let url = `/create/my-files/documents-list?page=${page}`;
         let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
         if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
@@ -331,9 +322,8 @@ const MyFiles = (props) => {
         }, 100);
     };
 
-    useEffect(() => {
-      
-    }, [paginationContent])
+    useEffect(() => {      
+    }, [paginationContent]);
 
     /* Show the pagination content a the bottom */
     useEffect(() => {
@@ -347,15 +337,10 @@ const MyFiles = (props) => {
         if(URL_SEARCH_PARAMS.get("page") !== null && URL_SEARCH_PARAMS.get("page") != 'null'){
             getDocumentList();
         }else if (URL_SEARCH_PARAMS.get("page") == null || URL_SEARCH_PARAMS.get("page") == 'null'){
-            // let page = URL_SEARCH_PARAMS.get("page")
-            history(`/create/my-files/documents-list?page=1`)
+            // let page = URL_SEARCH_PARAMS.get("page");
+            history(`/create/my-files/documents-list?page=1`);
         }
-        fileUploadTop.current?.scrollIntoView(
-            {
-                behavior: "smooth",
-            },
-            100
-        );
+        fileUploadTop.current?.scrollIntoView( { behavior: "smooth" }, 100);
     }, [URL_SEARCH_PARAMS.get("page")]);
 
     const deleteDocument = (documentId) => {
@@ -364,7 +349,6 @@ const MyFiles = (props) => {
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast("Document deleted successfully");
                 const newArr = documentsList?.filter(obj => obj.id !== documentId);
                 setDocumentsList(newArr)
