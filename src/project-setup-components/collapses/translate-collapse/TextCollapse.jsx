@@ -3,7 +3,7 @@ import { NavLink, useParams, useNavigate} from "react-router-dom";
 import Config from "../../../vendor/Config";
 import { Collapse } from "reactstrap";
 import { useTranslation } from "react-i18next";
-import InstantTranslateIcon from "../../../assets/images/new-create-hub/instant-translate-menu.svg"
+import InstantTranslateIcon from "../../../assets/images/new-create-hub/instant-translate-menu.svg";
 
 const TextCollapse = (props) => {
     const { t } = useTranslation();
@@ -30,18 +30,16 @@ const TextCollapse = (props) => {
         }else{
             setTextCollapse(false);
         }
-    }, [window.location.pathname])
+    }, [window.location.pathname]);
 
     useEffect(() => {
         let pathname = window.location.search;
-        // console.log(window.location.pathname)
-        // console.log(Config.userState?.internal_member_team_detail?.role === 'Editor')
         if(Config.userState?.internal_member_team_detail?.role === 'Editor'){
             if(!pathname?.includes("task")){
-                history("/file-upload")
+                history("/file-upload");
             }
         }
-    }, [window.location])
+    }, [window.location]);
 
     return (
         <React.Fragment>

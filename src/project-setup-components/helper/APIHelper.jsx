@@ -1,5 +1,4 @@
 // import { aiApiConfigs } from "../config/Config";
-
 import Config from "../../vendor/Config";
 
 const API_URL = Config.BASE_URL;
@@ -7,7 +6,6 @@ const API_URL = Config.BASE_URL;
 export const getProjectsFromTransEditor = async (access_token) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer  ${access_token}`);
-
     var requestOptions = {
         method: "GET",
         headers: myHeaders,
@@ -22,6 +20,7 @@ export const getProjectsFromTransEditor = async (access_token) => {
         } catch (err) {
             return err;
         }
+
     } catch (error) {
         return error;
     }
@@ -30,7 +29,6 @@ export const getProjectsFromTransEditor = async (access_token) => {
 export const getProjectFilesAndJobsFromTransEditor = async (access_token, project_id) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer  ${access_token}`);
-
     var requestOptions = {
         method: "GET",
         headers: myHeaders,
@@ -45,6 +43,7 @@ export const getProjectFilesAndJobsFromTransEditor = async (access_token, projec
         } catch (err) {
             return err;
         }
+
     } catch (error) {
         return error;
     }
@@ -53,7 +52,6 @@ export const getProjectFilesAndJobsFromTransEditor = async (access_token, projec
 export const getFilesDocumentURLFromTransEditor = async (access_token, project_id) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer  ${access_token}`);
-
     var requestOptions = {
         method: "GET",
         headers: myHeaders,
@@ -68,6 +66,7 @@ export const getFilesDocumentURLFromTransEditor = async (access_token, project_i
         } catch (err) {
             return err;
         }
+
     } catch (error) {
         return error;
     }
@@ -76,7 +75,6 @@ export const getFilesDocumentURLFromTransEditor = async (access_token, project_i
 export const getFilesDocumentIdFromTranseditor = async (access_token, document_url) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer  ${access_token}`);
-
     var requestOptions = {
         method: "GET",
         headers: myHeaders,
@@ -91,6 +89,7 @@ export const getFilesDocumentIdFromTranseditor = async (access_token, document_u
         } catch (err) {
             return err;
         }
+        
     } catch (error) {
         return error;
     }

@@ -19,15 +19,15 @@ import Pagination from '@mui/material/Pagination';
 import Cookies from "js-cookie";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useTranslation } from "react-i18next";
-import ChatSearch from "../../../assets/images/chat/chat-search.svg"
-import SearchBarClose from "../../../assets/images/assign-page/search-bar-close.svg"
-import NoEditorsFoundTwo from "../../../assets/images/no-editors-found-2.svg"
-import NoSearchTermsFound from "../../../assets/images/no-search-terms-found.svg"
-import ArrowRightColor from "../../../assets/images/new-ui-icons/arrow_right_alt_color.svg"
-import WikipediaIcon from "../../../assets/images/glossary-workspace/wikipedia.svg"
-import WikitionaryIcon from "../../../assets/images/glossary-workspace/wiktionary.png"
-import TranslateBlack from "../../../assets/images/glossary-workspace/translate_black.svg"
-import TermDeleteIcon from "../../../assets/images/new-ui-icons/term_delete_icon.svg"
+import ChatSearch from "../../../assets/images/chat/chat-search.svg";
+import SearchBarClose from "../../../assets/images/assign-page/search-bar-close.svg";
+import NoEditorsFoundTwo from "../../../assets/images/no-editors-found-2.svg";
+import NoSearchTermsFound from "../../../assets/images/no-search-terms-found.svg";
+import ArrowRightColor from "../../../assets/images/new-ui-icons/arrow_right_alt_color.svg";
+import WikipediaIcon from "../../../assets/images/glossary-workspace/wikipedia.svg";
+import WikitionaryIcon from "../../../assets/images/glossary-workspace/wiktionary.png";
+import TranslateBlack from "../../../assets/images/glossary-workspace/translate_black.svg";
+import TermDeleteIcon from "../../../assets/images/new-ui-icons/term_delete_icon.svg";
 
 const SearchTerms = (props) => {
     const { t } = useTranslation();
@@ -43,11 +43,10 @@ const SearchTerms = (props) => {
     const [glossaryList, setGlossaryList] = useState([]);
     const [glossaryListOptions, setGlossaryListOptions] = useState([]);
     let [termPage, setTermPage] = useState(1);
-    const PER_PAGE = 20;
-
-
     const [sortEl, setSortEl] = useState(null);
     const [selectedValue, setSelectedValue] = useState();
+
+    const PER_PAGE = 20;    
     const open = Boolean(sortEl);
 
     const searchTermScroll = useRef();
@@ -61,33 +60,30 @@ const SearchTerms = (props) => {
         setTermPage(p);
         TermData.jump(p);
         searchTermScroll.current.scrollTo(0,0);
-      };
-
+    };
     
     useEffect(() => {
         if (typeof Cookies.get("isCreditPromptSeen") == "undefined"){
-            setCreditsPromptClose(true)
+            setCreditsPromptClose(true);
         }
     }, []);
 
-
     const handleCloseCreditsPrompt = () => {
          Cookies.set("isCreditPromptSeen", true, { domain: import.meta.env.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
-         setCreditsPromptClose(false)
+         setCreditsPromptClose(false);
     }
 
     const handleWikipediaCopyText = () => {
-        navigator.clipboard.writeText(wikipediaData?.target)
+        navigator.clipboard.writeText(wikipediaData?.target);
     }
 
     const handleWikitionaryCopyText = () => {
-        navigator.clipboard.writeText(wiktionaryData?.target)
+        navigator.clipboard.writeText(wiktionaryData?.target);
     }
 
     const handleMtSuggestionCopyText = (text) => {
-        navigator.clipboard.writeText(mtSuggestion)
+        navigator.clipboard.writeText(mtSuggestion);
     }
-
 
     useEffect(() => {
         const handleSearchTermClickOutside = (e) => {
@@ -95,21 +91,18 @@ const SearchTerms = (props) => {
                 setGlossaryTermSearchList(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
     });
-
 
     const handleSortClick = (e) => {
         setSortEl(e.currentTarget);
     };
 
     const handleSelectedMenuItem = (e, index) => {
-        setSelectedValue(index)
+        setSelectedValue(index);
         setSortEl(null);
     };
 
@@ -118,12 +111,12 @@ const SearchTerms = (props) => {
     };
 
     useEffect(() => {
-        listGlossaryProjects()
+        listGlossaryProjects();
     }, []);
 
     useEffect(() => {
         if(glossaryListId != "") {
-            globalGlossarySearchTerm()
+            globalGlossarySearchTerm();
         }
     }, [glossaryListId]);
 
@@ -133,31 +126,30 @@ const SearchTerms = (props) => {
             url: url,
             auth: true,
             success: (response) => {
-                setGlossaryList(response.data)
+                setGlossaryList(response.data);
             },
         });
     }
 
     const handleGlossaryProjChange = (selected) => {
-        setGlossaryListId(selected)
+        setGlossaryListId(selected);
     }
     
-
     // set glossary name list as stepOptions for select
     useEffect(() => {
         let glossaryListWrap = []
         glossaryListWrap.push({
             value: "all_glossaries",
             label: t("all_glossaries"),
-        }) 
+        }); 
         glossaryList.map(each => {
             glossaryListWrap.push({
                 value: each.glossary_id,
                 label: each.glossary_name,
-            })  
-        }) 
-        setGlossaryListOptions(glossaryListWrap)
-    }, [glossaryList])
+            }); 
+        }); 
+        setGlossaryListOptions(glossaryListWrap);
+    }, [glossaryList]);
 
     const customProjectTypeSelectStyles = {
         placeholder: (provided, state) => ({
@@ -216,6 +208,7 @@ const SearchTerms = (props) => {
             },
         }),
     };
+
     const customStepSelectStyles = {
         placeholder: (provided, state) => ({
             ...provided,
@@ -273,7 +266,7 @@ const SearchTerms = (props) => {
         { value: 'all_terms', label: t("all_terms") },
         { value: 'source', label: t("src_lang_terms") },
         { value: 'target', label: t("tar_lang_terms") }
-    ]
+    ];
 
     const DropdownIndicator = (props) => {
         return (
@@ -293,28 +286,28 @@ const SearchTerms = (props) => {
         { value: '-project_name', label: t("z_to_a") },
         { value: '-id', label: t("most_recent") },
         { value: 'id', label: t("least_recent") },
-    ]
+    ];
 
     useEffect(() => {
         if(glossarySearchTerm !== ""){
-            globalGlossarySearchTerm()
+            globalGlossarySearchTerm();
         }
-    }, [termFilterSelect])
-
+    }, [termFilterSelect]);
 
     const globalGlossarySearchTerm = () => {
-        searchTermRef.current = glossarySearchTerm
+        searchTermRef.current = glossarySearchTerm;
         setGlossaryTermSearchList(false);
         setShowSearchTermLoader(true);
-        let url = `${Config.BASE_URL}/glex/whole_glossary_term_search/?term=${glossarySearchTerm}`
-        if(termFilterSelect !== 'all_terms' && termFilterSelect !== undefined) url += `&search_in=${termFilterSelect}`
-        if(glossaryListId?.value !== "all_glossaries" && glossaryListId?.value !== undefined) url += `&glossary_id=${glossaryListId?.value}`
+        let url = `${Config.BASE_URL}/glex/whole_glossary_term_search/?term=${glossarySearchTerm}`;
+        if(termFilterSelect !== 'all_terms' && termFilterSelect !== undefined) url += `&search_in=${termFilterSelect}`;
+        if(glossaryListId?.value !== "all_glossaries" && glossaryListId?.value !== undefined) url += `&glossary_id=${glossaryListId?.value}`;
+
         Config.axios({
             url: url,
             auth: true,
             success: (response) => {
                 setTimeout(() => {
-                    setGlobalSearchResult(response.data?.results)
+                    setGlobalSearchResult(response.data?.results);
                 }, 350);
                 setShowSearchTermLoader(false);
             }
@@ -322,12 +315,11 @@ const SearchTerms = (props) => {
     } 
 
     // ======================================================================================
-
     const [addNewTermModal, setAddNewTermModal] = useState(false);
     const [editTermForm, setEditTermForm] = useState(false);
     const [termCreateTabs, setTermCreateTabs] = useState(1);
-    const [wikipediaData, setWikipediaData] = useState(null)
-    const [wiktionaryData, setWiktionaryData] = useState(null)
+    const [wikipediaData, setWikipediaData] = useState(null);
+    const [wiktionaryData, setWiktionaryData] = useState(null);
     const [selectedItem, setSelectedItem] = useState(null);
     const [sourceLanguageTerm, setSourceLanguageTerm] = useState("");
     const [targetLanguageTerm, setTargetLanguageTerm] = useState("");
@@ -351,15 +343,13 @@ const SearchTerms = (props) => {
         tl_definition: false,
         src_sl_term: false,
         src_tl_term: false
-    })
+    });
     const [glexTerms, setGlexTerms] = useState([]);
-    const [mtSuggestion, setMtSuggestion] = useState(null)
+    const [mtSuggestion, setMtSuggestion] = useState(null);
 
-
-    const sourceLangRef = useRef(null)
-    const targetLangRef = useRef(null)
+    const sourceLangRef = useRef(null);
+    const targetLangRef = useRef(null);
     const documentId = useRef(null);
-
     
     const partOfSpeechOptions = [
         { value: 1, label: t("verb") },
@@ -370,7 +360,6 @@ const SearchTerms = (props) => {
         { value: 6, label: t("other") },
         { value: "", label: t("none") }
     ];
-
     const termTypeOptions = [
         { value: "fullForm", label: "Full form" },
         { value: "acronym", label: "Acronym" },
@@ -379,14 +368,12 @@ const SearchTerms = (props) => {
         { value: "varient", label: "Varient" },
         { value: "phrase", label: "Phrase" },
     ];
-
     const genderOptions = [
         { value: 1, label: "Masculine" },
         { value: 2, label: "Feminine" },
         { value: 3, label: "Neutral" },
         { value: 4, label: "Other" },
     ];
-
     const usageStatusOptions = [
         { value: "preferred", label: "Preferred" },
         { value: "admitted", label: "Admitted" },
@@ -504,7 +491,6 @@ const SearchTerms = (props) => {
         });
         // if (value !== 0) setSelectedItem(value);
     };
-
     
     const handleSaveButton = () => {
         let term = -1;
@@ -521,8 +507,8 @@ const SearchTerms = (props) => {
                 method = "PUT";
                 term = 2;
             }
-
             let data = handleFormData(formdata);
+
             Config.axios({
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -539,12 +525,12 @@ const SearchTerms = (props) => {
                     } 
                     else if (term == 2){
                         Config.toast(t("term_updated"));
-                        globalGlossarySearchTerm()
+                        globalGlossarySearchTerm();
                     } 
                     setTimeout(() => {
                         // getGlexTerms(term === 1 ? response?.data?.id : 0);
                     }, 80);
-                    setAddNewTermModal(false)
+                    setAddNewTermModal(false);
                 },
                 error: (err) => {
                     if(err.response.status === 400){
@@ -622,7 +608,6 @@ const SearchTerms = (props) => {
         }),
     };
 
-
     const modaloption = {
         height:'auto',
         closeMaskOnClick: false,
@@ -635,8 +620,7 @@ const SearchTerms = (props) => {
                 method: "GET",
                 auth: true,
                 success: (response) => {
-                    // console.log(response.data);
-                    setWikipediaData(response.data.out)
+                    setWikipediaData(response.data.out);
                 },
             });
         } 
@@ -649,8 +633,7 @@ const SearchTerms = (props) => {
                 method: "GET",
                 auth: true,
                 success: (response) => {
-                    // console.log(response.data);
-                    setWiktionaryData(response.data.out)
+                    setWiktionaryData(response.data.out);
                 },
             });
         }
@@ -659,15 +642,16 @@ const SearchTerms = (props) => {
     const getMTTranslation = (term) => {
         var formdata = new FormData();
         formdata.append("source", term);
+
         Config.axios({
             url: `${Config.BASE_URL}/glex/get_translation/${documentId.current}/`,
             method: "POST",
             data: formdata,
             auth: true,
             success: (response) => {
-                setTargetLanguageTerm(response.data?.target_mt)
-                // setMtSuggestion(response.data?.target_mt)
-                // setWiktionaryData(response.data.out)
+                setTargetLanguageTerm(response.data?.target_mt);
+                // setMtSuggestion(response.data?.target_mt);
+                // setWiktionaryData(response.data.out);
             },
             error: (err) => {
                 if(err.response.status === 424){
@@ -678,28 +662,27 @@ const SearchTerms = (props) => {
     } 
 
     const handleEachGlossaryTerms = (e, searchItem) => {
-        // console.log(item)
-        documentId.current = searchItem?.task_id
+        documentId.current = searchItem?.task_id;
         e.stopPropagation();
         setAddNewTermModal(true);
         setEditTermForm(true);
-        setTaskId(searchItem?.task_id)
-        getWikipedia(searchItem?.sl_term, searchItem?.task_id)
-        getWiktionary(searchItem?.sl_term, searchItem?.task_id)
+        setTaskId(searchItem?.task_id);
+        getWikipedia(searchItem?.sl_term, searchItem?.task_id);
+        getWiktionary(searchItem?.sl_term, searchItem?.task_id);
         setSelectedItem(searchItem?.term_id);
         setSourceLanguageTerm(searchItem?.sl_term ? searchItem?.sl_term : "");
         setTargetLanguageTerm(searchItem?.tl_term ? searchItem?.tl_term : "");
         setSelectedPOS(partOfSpeechOptions?.find((pos) => pos.label === searchItem.pos));
-        setMtSuggestion(null)
+        setMtSuggestion(null);
     }
 
     const handleAddNewTermModal = (e, id) => {
-        documentId.current = id
+        documentId.current = id;
         addNewTerm();
-        setWikipediaData(null)
-        setEditTermForm(false)
+        setWikipediaData(null);
+        setEditTermForm(false);
         setAddNewTermModal(true);
-        setTermCreateTabs(1)
+        setTermCreateTabs(1);
     }
 
     // This function has to be encountered when add new button is added
@@ -724,13 +707,12 @@ const SearchTerms = (props) => {
         setSelectedUsageStatus({});
         setGeographyUsage("");
         setTermLocation("");
-        setWikipediaData(null)
-        setWiktionaryData(null)
-        setMtSuggestion(null)
+        setWikipediaData(null);
+        setWiktionaryData(null);
+        setMtSuggestion(null);
     };
 
     // ======================================================================================
-
 
     // const CustomCellRadiobtn = withStyles({
     //     root: {
@@ -752,18 +734,18 @@ const SearchTerms = (props) => {
     const SearchTermFilterEnter = (e) => {
         if(e.which === 13 && glossarySearchTerm == ""){
             setGlossaryTermSearchList(false);
-            e.target.blur()
+            e.target.blur();
         }else if(e.which === 13){
             searchTermRef.current = glossarySearchTerm 
             if(searchTermRef.current === ""){
-                setGlobalSearchResult([])
+                setGlobalSearchResult([]);
                 setGlossarySearchTerm("");
-                setGlossaryListId("")
+                setGlossaryListId("");
                 searchTermRef.current = null;
             }else{
-                globalGlossarySearchTerm()
+                globalGlossarySearchTerm();
                 setGlossaryTermSearchList(false);
-                e.target.blur() 
+                e.target.blur();
             }
         }
     }
@@ -777,9 +759,9 @@ const SearchTerms = (props) => {
 
     // useEffect(() => {
     //     if(glossarySearchTerm === ""){
-    //         searchTermRef.current = null
+    //         searchTermRef.current = null;
     //     }
-    // },[glossarySearchTerm])
+    // },[glossarySearchTerm]);
     
     return (
         <React.Fragment>

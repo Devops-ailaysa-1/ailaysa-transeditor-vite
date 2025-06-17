@@ -1,6 +1,6 @@
 import React from 'react';
-import MessageTypingAnime from "./message-loader.json"
-// import Lottie from 'react-lottie'
+import MessageTypingAnime from "./message-loader.json";
+// import Lottie from 'react-lottie';
 import { useLottie } from "lottie-react";
 
 export const MessageTypingAnimation = () => {
@@ -12,8 +12,7 @@ export const MessageTypingAnimation = () => {
         // rendererSettings: {
         // preserveAspectRatio: "xMidYMid slice",
         // },
-    }
-
+    };
     const { View } = useLottie(defaultOptions);
 
   return (

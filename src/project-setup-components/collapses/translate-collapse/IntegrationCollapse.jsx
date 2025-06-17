@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import Config from "../../../vendor/Config";
 import { Collapse } from "reactstrap";
 
-
 const TextCollapse = () => {
     const [textCollapse, setTextCollapse] = useState(false);
 

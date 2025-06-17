@@ -6,6 +6,7 @@ export const languages = [
       dir: "ltr",
       class_name: "__eng__",
     },
+
     // {
     //   code: "es",
     //   name: "Español",
@@ -13,6 +14,7 @@ export const languages = [
     //   dir: "ltr",
     //   class_name: "__span__",
     // },
+
     // {
     //   code: "ch",
     //   name: "繁体中文",
@@ -20,6 +22,7 @@ export const languages = [
     //   dir: "ltr",
     //   class_name: "__chin__",
     // },
+
     // {
     //   code: "fr",
     //   name: "Français",
@@ -27,6 +30,7 @@ export const languages = [
     //   dir: "ltr",
     //   class_name: "__fran__",
     // },
+
     // {
     //   code: "ar",
     //   name: "عربى",
@@ -34,6 +38,7 @@ export const languages = [
     //   dir: "rtl",
     //   class_name: "__arab__",
     // },
+
     {
       code: "ta",
       name: "தமிழ்",
@@ -41,6 +46,7 @@ export const languages = [
       dir: "ltr",
       class_name: "__tam__",
     },
+
     {
       code: "hi",
       name: "हिन्दी",
@@ -48,5 +54,6 @@ export const languages = [
       dir: "ltr",
       class_name: "__hin__",
     },
+    
   ];
   

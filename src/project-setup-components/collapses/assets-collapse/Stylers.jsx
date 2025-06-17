@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import Config from "../../../vendor/Config";
 import { Collapse } from "reactstrap";
-import ExpansMoreIcon from "../../../assets/images/new-ui-icons/expand_more.svg"
-
+import ExpansMoreIcon from "../../../assets/images/new-ui-icons/expand_more.svg";
 
 const Stylers = () => {
     const [filesCollapse, setFilesCollapse] = useState(false);
