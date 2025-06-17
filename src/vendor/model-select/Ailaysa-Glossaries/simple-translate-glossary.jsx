@@ -24,6 +24,7 @@ export const SimpleTranslateGlossaryModal = (props) => {
 
     const [activeScreen, setActiveScreen] = useState(1);
     const [glossaryList, setGlossaryList] = useState([])
+    const [defaultGlossDetails, setDefaultGlossDetails] = useState(null);
     const [selectedGlossaryList, setSelectedGlossaryList] = useState([])
     const projectFilesListRef = useRef([])
     const [selectedTaskId, setSelectedTaskId] = useState(null)
@@ -47,6 +48,16 @@ export const SimpleTranslateGlossaryModal = (props) => {
             }, 1000);
         }
     }, [showSimpleTranslateGlossaryModal])
+
+    
+    useEffect(() => {
+        if(showSimpleTranslateGlossaryModal){
+            setDefaultGlossDetails(defaultGlossDetailsRef?.current)
+            getGlossaryList()
+            getSelectedGlossaries()
+            getProjectFiles()
+        }
+    }, [defaultGlossDetailsRef?.current, showSimpleTranslateGlossaryModal])
     
     /**
      * This method used to close the glossary modal popup update the state value.
@@ -72,6 +83,35 @@ export const SimpleTranslateGlossaryModal = (props) => {
         });
     };
 
+    const getGlossaryList = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary&task=${documentDetails.task_id}`,
+            auth: true,
+            success: (response) => {
+                let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef?.current?.gloss_id)
+                setGlossaryList(res)
+            },
+            error: (err) => {
+                // setisGlossaryListLoading(false)
+            }
+        });
+    };
+
+    const getProjectFiles = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace/files_jobs/${documentDetails.project}/?task=${documentDetails.task_id}`,
+            auth: true,
+            success: (response) => {
+                try {
+                    // exclude the pdf files from the list - pdf files can't be used for term extraction
+                    let list = response.data.files.filter(each => each.filename.split('.')[1].toLowerCase() !== 'pdf')
+                    projectFilesListRef.current = list
+                } catch(e) {
+                    console.log(e)
+                }
+            },
+        });
+    }
 
     return (
         <>
@@ -117,8 +157,9 @@ export const SimpleTranslateGlossaryModal = (props) => {
                             {activeScreen === 1 ? (
                                 <AilaysaNewGlossEditingArea 
                                     setActiveScreen={setActiveScreen}
-                                    glossTaskId={selectedTaskId} //{defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails.task_id}
-                                     isFrom = 'Simple_Glossary'
+                                    glossTaskId={defaultGlossDetails ? defaultGlossDetails?.gloss_task_id
+                                        : documentDetails && documentDetails.task_id ? documentDetails.task_id : selectedTaskId}
+                                    isFrom = 'Simple_Glossary'
                                 />
                             ) : (
                                 <ImportTerms 
@@ -131,8 +172,8 @@ export const SimpleTranslateGlossaryModal = (props) => {
                                     getSelectedGlossaries={getSelectedGlossaries}
                                     setActiveScreen={setActiveScreen}
                                     defaultGlossDetailsRef={defaultGlossDetailsRef}
-                                    excludedTermsOption={[1,2]}
-                                    defaultActiveImportTab={3}
+                                    excludedTermsOption={[2]}
+                                    defaultActiveImportTab={1}
                                     isFrom = {"simpleGlossary"}
                                 />
                             )}

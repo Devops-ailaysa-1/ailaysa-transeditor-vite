@@ -381,8 +381,7 @@ export const ImportTerms = (props) => {
 
     return (
         <>
-            {isFrom !== 'simpleGlossary' &&
-             <AITab
+            {<AITab
               onChange={handleOnTabChange} 
               activeTab={activeImportTab}
               dataList={importTermsTabList?.filter(item => !excludedTermsOption?.includes(item.value))}
