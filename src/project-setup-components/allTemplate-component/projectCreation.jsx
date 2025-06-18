@@ -2190,7 +2190,7 @@ function ProjectCreation(props) {
                 handleGlossarySubmit(isLanguageChanges);
             } else {
                 setOpenGlossariesModal(true);
-                    dispatch(setSimpleTranslateGlossaryModal(true));
+                dispatch(setSimpleTranslateGlossaryModal(true));
             }
         };
 
@@ -2343,6 +2343,7 @@ function ProjectCreation(props) {
                             defaultGlossDetailsRef={defaultGlossDetailsRef}
                             getDefaultGlossDetails={getDefaultGlossDetails}
                             glossTaskId={glossaryTaskId}
+                            glossaryProjectId = {glossaryProjectId}
                         />
                     } 
                 </div>
@@ -3168,9 +3169,7 @@ function ProjectCreation(props) {
                     )}
                     </div>
                     </div>
-
-{!shownote &&
-
+                   {!shownote &&
                     <div class="tips-container">
                         <div class="tips-header">Note</div>
                           <ul class="tips-list">
@@ -3179,7 +3178,7 @@ function ProjectCreation(props) {
                             {/* <li>Include a glossary of key terms (like brand names, technical words, or phrases) before translation to ensure accurate and consistent results across your document.</li> */}
                           </ul>
                     </div>
-}
+                 }
                 </div>
             </div>
             {showSrcLangModal && (<Rodal
