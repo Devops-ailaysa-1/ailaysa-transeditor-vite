@@ -1,6 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import './ailaysa_glossaries.css'
-import { useTranslation } from 'react-i18next'
+/**
+ * This modal represents the simple file translation glossary option.
+ * 
+ * @author Padmabharathi Subiramanian 
+ * @since  APR 09 2025
+ */
+import React, { useEffect, useRef, useState } from 'react';
+import './ailaysa_glossaries.css';
+import { useTranslation } from 'react-i18next';
 import { ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper } from '@mui/material';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
@@ -14,104 +20,93 @@ import { setSimpleTranslateGlossaryModal } from '../../../features/SimpleTransla
 import Config from '../../Config';
 
 export const SimpleTranslateGlossaryModal = (props) => {
+    let { documentDetails, defaultGlossDetailsRef, getDefaultGlossDetails, glossTaskId, glossaryProjectId } = props;
 
-    let { documentDetails, defaultGlossDetailsRef, getDefaultGlossDetails, glossTaskId } = props
-
-    const {t} = useTranslation()
-    const dispatch = useDispatch()
-    
-    const showSimpleTranslateGlossaryModal = useSelector(state => state.showSimpleTranslateGlossaryModal.value)
+    const {t} = useTranslation();
+    const dispatch = useDispatch();    
+    const showSimpleTranslateGlossaryModal = useSelector(state => state.showSimpleTranslateGlossaryModal.value);
 
     const [activeScreen, setActiveScreen] = useState(1);
-    const [glossaryList, setGlossaryList] = useState([])
+    const [glossaryList, setGlossaryList] = useState([]);
     const [defaultGlossDetails, setDefaultGlossDetails] = useState(null);
-    const [selectedGlossaryList, setSelectedGlossaryList] = useState([])
-    const projectFilesListRef = useRef([])
-    const [selectedTaskId, setSelectedTaskId] = useState(null)
+    const [selectedGlossaryList, setSelectedGlossaryList] = useState([]);
+    const projectFilesListRef = useRef([]);
+    const [selectedTaskId, setSelectedTaskId] = useState(null);
 
     useEffect(() => {
         if(showSimpleTranslateGlossaryModal && documentDetails){
-            setActiveScreen(1)
+            setActiveScreen(1);
         }
-    }, [showSimpleTranslateGlossaryModal, documentDetails])
+    }, [showSimpleTranslateGlossaryModal, documentDetails]);
 
     useEffect(() => {
         if(glossTaskId){
-            setSelectedTaskId(glossTaskId)
+            setSelectedTaskId(glossTaskId);
         }
-    }, [glossTaskId])
+    }, [glossTaskId]);
 
     useEffect(() => {
         if(showSimpleTranslateGlossaryModal){
             setTimeout(() => {
-                getDefaultGlossDetails()
+                getDefaultGlossDetails();
             }, 1000);
         }
-    }, [showSimpleTranslateGlossaryModal])
-
+    }, [showSimpleTranslateGlossaryModal]);
     
     useEffect(() => {
         if(showSimpleTranslateGlossaryModal){
-            setDefaultGlossDetails(defaultGlossDetailsRef?.current)
-            getGlossaryList()
-            getSelectedGlossaries()
-            getProjectFiles()
+            setDefaultGlossDetails(defaultGlossDetailsRef?.current);
+            getGlossaryList();
+            getSelectedGlossaries();
         }
-    }, [defaultGlossDetailsRef?.current, showSimpleTranslateGlossaryModal])
+    }, [defaultGlossDetailsRef?.current, showSimpleTranslateGlossaryModal]);
     
     /**
      * This method used to close the glossary modal popup update the state value.
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 09 2025
      */
     const closeGlossaryModal = () => {
-        dispatch(setSimpleTranslateGlossaryModal(false))
+        dispatch(setSimpleTranslateGlossaryModal(false));
     } 
 
+    /**
+     * This method used to get the selected glossary projects for that particular glossary project.
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @sice JUN 18 2025
+     */
     const getSelectedGlossaries = () => {
         Config.axios({
-            url: `${Config.BASE_URL}/glex/glossary_selected/?project=${documentDetails.project}&option=glossary`,
+            url: `${Config.BASE_URL}/glex/glossary_selected/?project=${glossaryProjectId}&option=glossary`,
             auth: true,
             success: (response) => {
-                console.log("selected gloss")
-                console.log(response.data)
-                console.log("default gloss")
-                console.log(defaultGlossDetailsRef?.current)
-                let res = response.data?.filter(each => each.glossary != defaultGlossDetailsRef?.current?.gloss_id)
-                console.log("default gloss removed")
-                console.log(res)
-                setSelectedGlossaryList(res)
+                let res = response.data?.filter(each => each.glossary != defaultGlossDetailsRef?.current?.gloss_id);
+                setSelectedGlossaryList(res);
             },
         });
     };
 
+    /**
+     * This method used to get the glossary project list for the source and target language pair for the simple trnslate project.
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @sice JUN 18 2025
+     */
     const getGlossaryList = () => {
         Config.axios({
-            url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary&task=${documentDetails.task_id}`,
+            url: `${Config.BASE_URL}/glex/glossaries/${glossaryProjectId}/?option=glossary`,
             auth: true,
             success: (response) => {
-                let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef?.current?.gloss_id)
-                setGlossaryList(res)
+                let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef?.current?.gloss_id);
+                setGlossaryList(res);
             },
             error: (err) => {
-                // setisGlossaryListLoading(false)
+                console.error(err);
             }
         });
     };
-
-    const getProjectFiles = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace/files_jobs/${documentDetails.project}/?task=${documentDetails.task_id}`,
-            auth: true,
-            success: (response) => {
-                try {
-                    // exclude the pdf files from the list - pdf files can't be used for term extraction
-                    let list = response.data.files.filter(each => each.filename.split('.')[1].toLowerCase() !== 'pdf')
-                    projectFilesListRef.current = list
-                } catch(e) {
-                    console.log(e)
-                }
-            },
-        });
-    }
 
     return (
         <>
@@ -174,6 +169,7 @@ export const SimpleTranslateGlossaryModal = (props) => {
                                     defaultGlossDetailsRef={defaultGlossDetailsRef}
                                     excludedTermsOption={[2]}
                                     defaultActiveImportTab={1}
+                                    glossaryProjectId =  {glossaryProjectId}
                                     isFrom = {"simpleGlossary"}
                                 />
                             )}
