@@ -84,6 +84,7 @@ const Config = {
         }
     },
     toast: function (alertText = "", type = "success", dismiss=false) {
+        console.log(dismiss,"dismissed")
         //Toast alert
         // toast.configure();
         toast.clearWaitingQueue()
