@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const MainAILoader = (props) => {
   return (
@@ -18,5 +18,5 @@ export const MainAILoader = (props) => {
             <div className="svg-logo"></div>
         </section>
     </>
-  )
+  );
 }

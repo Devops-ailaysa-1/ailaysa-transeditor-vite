@@ -23,19 +23,16 @@ import ReactRouterPrompt from "react-router-prompt";
 
 const CreateGlossaries = (props) => {
 	const { sidebarActiveTab, setSidebarActiveTab } = props;
-
 	const { t } = useTranslation();
 	const location = useLocation();
 	/* State constants - start */
 	const params = useParams();
 	const history = useNavigate();
-	// const glossaryContext = useContext(glossaryContext)
-
+	// const glossaryContext = useContext(glossaryContext);
 	const { pathname } = useLocation();
 	const [navigationModalVisible, setNavigationModalVisible] = useState(false);
 	const [lastLocation, setLastLocation] = useState(null);
 	const [confirmedNavigation, setConfirmedNavigation] = useState(false);
-
 	const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 	// Glossary project states
 	const [didMount, setDidMount] = useState(false);
@@ -59,13 +56,9 @@ const CreateGlossaries = (props) => {
 	const [projectName, setProjectName] = useState("");
 	const [contentTypeOptions, setContentTypeOptions] = useState(null);
 	const [mtEnable, setMtEnable] = useState(true);
-	const [primaryGlossarySourceName, setPrimaryGlossarySourceName] =
-		useState("");
+	const [primaryGlossarySourceName, setPrimaryGlossarySourceName] = useState("");
 	const [glossaryCopyrightOwner, setGlossaryCopyrightOwner] = useState("");
-	const [
-		detailsOfPrimaryGlossarySourceName,
-		setDetailsOfPrimaryGlossarySourceName,
-	] = useState("");
+	const [detailsOfPrimaryGlossarySourceName, setDetailsOfPrimaryGlossarySourceName] = useState("");
 	const [glossaryGeneralNotes, setglossaryGeneralNotes] = useState("");
 	const [glossaryLicense, setGlossaryLicense] = useState("");
 	const [selectedUsagePermission, setSelectedUsagePermission] = useState({
@@ -73,8 +66,7 @@ const CreateGlossaries = (props) => {
 		label: t("private"),
 	});
 	const [selectedMTEngine, setSelectedMTEngine] = useState({});
-	const [glossaryProjectCreationResponse, setGlossaryProjectCreationResponse] =
-		useState(null);
+	const [glossaryProjectCreationResponse, setGlossaryProjectCreationResponse] = useState(null);
 	const [projectNameError, setProjectNameError] = useState("");
 	const [sourceLanguageError, setSourceLanguageError] = useState("");
 	const [targetLanguageError, setTargetLanguageError] = useState("");
@@ -108,12 +100,9 @@ const CreateGlossaries = (props) => {
 	const [projectAvailalbility, setProjectAvailalbility] = useState(null);
 	const [showUpdateLoader, setShowUpdateLoader] = useState(false);
 	const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
-	const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState(
-		[]
-	);
+	const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState([]);
 	const [fetchedData, setFetchedData] = useState(null);
 	const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
-
 	const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
 	const [allLangDetailsList, setAllLangDetailsList] = useState(null);
 	const [commonTarValue, setCommonTarValue] = useState(null);
@@ -122,19 +111,18 @@ const CreateGlossaries = (props) => {
 	const [mtpeEngines, setMtpeEngines] = useState([]);
 	const [selectedMTFromAPI, setSelectedMTFromAPI] = useState({});
 	const [hasFocus, setHasFocus] = useState(false);
-
 	// steps related states
 	const [steps, setSteps] = useState([]);
 	const [stepOptions, setStepOptions] = useState([]);
 	const [selectedSteps, setSelectedSteps] = useState([]);
 	const [stepsFromApi, setstepsFromApi] = useState([]);
-
 	const [isEditable, setisEditable] = useState(false);
 	const [goBackCreateBtn, setGoBackCreateBtn] = useState(false);
 	const [goBackEditBtn, setGoBackEditBtn] = useState(false);
 	const [revisionStepEdit, setRevisionStepEdit] = useState(null);
-
 	const [hasTeam, setHasTeam] = useState(null);
+	const [checkchangenav, setCheckchangenav] = useState(false);
+	const [page, setPage] = useState(0);
 
 	const searchAreaRef = useRef(null);
 	const projectIdToSelect = useRef(null);
@@ -151,8 +139,7 @@ const CreateGlossaries = (props) => {
 	const stepOptionRef = useRef(null);
 	const mtEngineOptionRef = useRef(null);
 	const prevPageInfo = useRef(null);
-	const [checkchangenav, setCheckchangenav] = useState(false);
-	const [page, setPage] = useState(0);
+
 	// const stepOptions = [
 	//     { value: 1, label: "Post editing", },
 	//     { value: 2, label: "Proof reading",  },
@@ -205,7 +192,6 @@ const CreateGlossaries = (props) => {
 			});
 		});
 		let targetLangToRemove = editJobs?.filter((each) => !a.includes(each.id));
-		//   console.log(targetLangToRemove)
 		setTargetLangListToRemove(targetLangToRemove);
 	}, [targetLanguage]);
 
@@ -272,6 +258,7 @@ const CreateGlossaries = (props) => {
 
 	const editGlossaryProject = (projectId) => {
 		projectEditable.current = true;
+
 		Config.axios({
 			url: `${Config.BASE_URL}/workspace/files_jobs/${projectId}/`,
 			method: "GET",
@@ -281,13 +268,10 @@ const CreateGlossaries = (props) => {
 					data,
 					data: { glossary },
 				} = response;
-				setGlossaryProjectCreationResponse(response?.data)
-
-				// console.log(sourceLanguageOptions)
+				setGlossaryProjectCreationResponse(response?.data);
 				let editSourceLanguage = targetLanguageOptionsRef.current.find(
 					(element) => element.id === data.jobs[0].source_language
 				);
-				// console.log(editSourceLanguage)
 				setSourceLanguage(editSourceLanguage.id);
 				let deadlineLocal = Config.convertUTCToLocal(data?.project_deadline);
 				setDeadline(deadlineLocal);
@@ -297,7 +281,6 @@ const CreateGlossaries = (props) => {
 				let selected_mt = mtEngineOptionRef.current?.find(
 					(engine) => engine?.id === data?.mt_engine_id
 				);
-
 				setSelectedUsagePermission(
 					usagePermissionOptions?.find(
 						(each) => glossary?.usage_permission === each.label
@@ -322,7 +305,6 @@ const CreateGlossaries = (props) => {
 				});
 				setAlreadySelectedTarLang(tar);
 				setAlreadySelecetedTarLangID(tarID);
-
 				let editTargetLanguages = [];
 				data?.jobs?.map((job) => {
 					editTargetLanguages?.push(
@@ -331,7 +313,6 @@ const CreateGlossaries = (props) => {
 						)
 					);
 				});
-
 				setTimeout(() => {
 					setTargetLanguage(editTargetLanguages);
 					setSelectedMTFromAPI({
@@ -349,7 +330,6 @@ const CreateGlossaries = (props) => {
 					) {
 						contentprojectNameRef.current.innerText = data?.project_name;
 					}
-
 					setSelectedSteps(
 						stepOptionRef.current?.filter((stepOpt) =>
 							data?.steps.some((each) => stepOpt.value === each.steps)
@@ -360,12 +340,11 @@ const CreateGlossaries = (props) => {
 							data?.steps.some((each) => stepOpt.value === each.steps)
 						)
 					);
-
 					setIsLoading(false);
 				}, 80);
 			},
 			error: (e) => {
-				// console.log(e)
+				console.error(e);
 			},
 		});
 	};
@@ -469,7 +448,6 @@ const CreateGlossaries = (props) => {
 			url: Config.BASE_URL + "/app/mt-language-support/",
 			auth: true,
 			success: (response) => {
-				// console.log(response.data)
 				setAllLangDetailsList(response.data);
 			},
 		};
@@ -484,16 +462,15 @@ const CreateGlossaries = (props) => {
 			success: (response) => {
 				mtEngineOptionRef.current = response?.data;
 				setMtpeEngines(response?.data);
-				// console.log(response?.data)
 				// setMtpeEngines(response?.data);
-				// let engine =[]
+				// let engine =[];
 				// response?.data?.map((each) =>{
 				//     engine.push({
 				//         value: each?.id,
 				//         label: each?.name,
-				//     })
-				// })
-				// setMtpeEngineOptions(engine)
+				//     });
+				// });
+				// setMtpeEngineOptions(engine);
 			},
 		});
 	};
@@ -502,19 +479,13 @@ const CreateGlossaries = (props) => {
 		let sourceFilter = allLangDetailsList?.filter(
 			(each) => each?.language == sourceLanguage
 		);
-
 		let srcTranslateFilterRes = sourceFilter?.filter(
 			(each) => each?.translate === true
 		);
-
-		// console.log(srcTranslateFilterRes)
-
 		let sortedSrcMtpe = srcTranslateFilterRes?.map((each) => {
 			return each?.mtpe_engines;
 		});
-		// console.log(sortedSrcMtpe)
 		setCommonSrcValue(sortedSrcMtpe);
-
 		// remove the source language from the target language list
 		setTargetLanguageOptions(
 			targetLanguageOptionsRef.current?.filter(
@@ -526,14 +497,11 @@ const CreateGlossaries = (props) => {
 				targetLanguage?.filter((each) => each?.id !== sourceLanguage)
 			);
 		}
-		//   console.log(allLangDetailsList.find(function(each){each.language === sourceLanguage})
 	}, [sourceLanguage]);
 
 	useEffect(() => {
-		// console.log(targetLanguage)
 		let targetArr = [];
 		for (let i = 0; i < targetLanguage?.length; i++) {
-			// console.log(targetLanguage[i].id)
 			targetArr?.push(
 				allLangDetailsList?.filter(
 					(each2) => each2?.language === targetLanguage[i]?.id
@@ -544,7 +512,6 @@ const CreateGlossaries = (props) => {
 			return each?.filter((eachTargetArr) => eachTargetArr?.translate === true);
 		});
 
-		// console.log(tarTranslateFilter)
 		let sortedTarMtpe = tarTranslateFilter?.map((each) => {
 			return each.map((each2) => {
 				return each2?.mtpe_engines;
@@ -555,7 +522,6 @@ const CreateGlossaries = (props) => {
 				return a?.indexOf(v) !== -1;
 			});
 		});
-		// console.log(commonTarMtpeEngine)
 		setCommonTarValue(commonTarMtpeEngine);
 	}, [targetLanguage]);
 
@@ -563,7 +529,6 @@ const CreateGlossaries = (props) => {
 		const common = commonSrcValue?.filter((value) =>
 			commonTarValue?.includes(value)
 		);
-		// console.log(common)
 		setCommonMtpeEngine(common);
 	}, [commonSrcValue, commonTarValue]);
 
@@ -578,15 +543,13 @@ const CreateGlossaries = (props) => {
 				label: eachEngine?.name?.replaceAll("_", " "),
 			})
 		);
-		// console.log(engines)
-		// mtEngineOptionRef.current = engines
+		// mtEngineOptionRef.current = engines;
 		setMtpeEngineOptions(engines);
 	}, [commonMtpeEngine]);
 
 	// by default google mt is selected
 	useEffect(() => {
 		if (!isEditable) {
-			// console.log(mtpeEngineOptions)
 			setSelectedMTEngine(
 				mtpeEngineOptions?.filter((each) => each?.value === 1)
 			);
@@ -605,9 +568,6 @@ const CreateGlossaries = (props) => {
 					label: eachEngine?.name?.replaceAll("_", " "),
 				})
 			);
-			// console.log(engines)
-			// console.log(engines?.find((each) => each.value === selectedMTFromAPI.value))
-			// console.log(engines?.find((each) => each.value === selectedMTFromAPI.value) ? false : true)
 			if (
 				engines?.find((each) => each.value === selectedMTFromAPI.value)
 					? false
@@ -630,6 +590,7 @@ const CreateGlossaries = (props) => {
 		setGoBackCreateBtn(false);
 		setPage(0);
 	};
+
 	/* Reset the project creation form */
 	const resetForm = () => {
 		if (projectName) {
@@ -651,8 +612,7 @@ const CreateGlossaries = (props) => {
 		setContentType([]);
 		setDeadline(null);
 		setMtEnable(true);
-		// setPreTranslate(false);l
-
+		// setPreTranslate(false);
 		setFiles([]);
 		setisEditable(false);
 		setAlreadySelectedTarLang([]);
@@ -662,7 +622,6 @@ const CreateGlossaries = (props) => {
 			setTargetLanguageError("");
 			setFileError("");
 		}, 100);
-
 		setPrimaryGlossarySourceName("");
 		setGlossaryCopyrightOwner("");
 		setDetailsOfPrimaryGlossarySourceName("");
@@ -697,14 +656,15 @@ const CreateGlossaries = (props) => {
 	/* Handling source language selection */
 	const handleSourceLangClick = (value, name, e) => {
 		/* let elements = document.getElementsByClassName('list selected')
-								for (let i = 0; i < elements.length; i++) {
-												elements[i].classList.remove('selected')
-								}
-								e.target.classList.add("selected") */
+			for (let i = 0; i < elements.length; i++) {
+				elements[i].classList.remove('selected')
+			}
+		e.target.classList.add("selected") */
 		setSourceLanguage(value);
 		setshowSrcLangModal(false);
 		setSourceLabel(name);
 	};
+
 	const modaloptions = {
 		closeMaskOnClick: false,
 		width: navigationModalVisible ? 520 : null,
@@ -776,15 +736,11 @@ const CreateGlossaries = (props) => {
 			return;
 		}
 		if (sourceLanguageError != "") setSourceLanguageError("");
-		// console.log(targetLanguage)
-		// console.log(targetLanguage)
-
 		if (targetLanguage == "" || targetLanguage?.length == 0) {
 			setTargetLanguageError(t("select_target_language-1"));
 			return;
 		}
 		if (targetLanguageError != "") setTargetLanguageError("");
-
 		if (fileUrl != "") {
 			var regExp =
 				/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
@@ -796,20 +752,16 @@ const CreateGlossaries = (props) => {
 			}
 		}
 		/* Validation - end */
-
 		formData.append("project_type", projectType);
 		if (selectedMTEngine?.value !== undefined) {
 			formData.append("mt_engine", selectedMTEngine?.value);
 		}
-
 		formData.append("source_language", sourceLanguage);
-
 		if (targetLanguage !== "") {
 			targetLanguage?.map((eachTargetLanguage) => {
 				formData.append("target_languages", eachTargetLanguage?.id);
 			});
 		}
-
 		subjectField?.length > 0 &&
 			subjectField?.map((eachSubjectField) => {
 				formData.append("subjects", eachSubjectField?.id);
@@ -818,25 +770,20 @@ const CreateGlossaries = (props) => {
 			contentType?.map((eachContentType) => {
 				formData.append("contents", eachContentType?.id);
 			});
-
 		let deadlineUTC = Config.convertLocalToUTC(deadline);
 		deadline && formData.append("project_deadline", deadlineUTC);
 		formData.append("mt_enable", mtEnable);
-
 		formData.append("primary_glossary_source_name", primaryGlossarySourceName);
 		formData.append("source_Copyright_owner", glossaryCopyrightOwner);
 		formData.append("details_of_PGS", detailsOfPrimaryGlossarySourceName);
 		formData.append("notes", glossaryGeneralNotes);
 		formData.append("usage_permission", selectedUsagePermission?.label);
 		formData.append("public_license", glossaryLicense);
-
 		selectedSteps?.map((eachStep) => {
 			formData.append("steps", eachStep?.value);
 		});
-
 		// postEditStep && formData.append("steps", 1);
 		// proofReadStep && formData.append("steps", 2);
-
 		// formData.append("project_name", projectName);
 		if (projectName !== null && projectName?.trim() !== "") {
 			formData.append("project_name", projectName);
@@ -862,6 +809,7 @@ const CreateGlossaries = (props) => {
 			url = Config.BASE_URL + "/workspace/project/quick/setup/";
 		else url = Config.BASE_URL + "/srt/fileUpload";
 		setShowCreateLoader(true);
+
 		Config.axios({
 			headers: {
 				"Access-Control-Allow-Origin": "*",
@@ -894,7 +842,6 @@ const CreateGlossaries = (props) => {
 	};
 
 	// useEffect(() => {
-	//   console.log(projectName)
 	// }, [projectName])
 
 	/* Update the edited values */
@@ -921,11 +868,10 @@ const CreateGlossaries = (props) => {
 			return;
 		}
 		/* if (teamSelect?.value == null || teamSelect?.value == '') {
-												setTeamSelectError('Select a team')
-												return
-								} */
+			setTeamSelectError('Select a team')
+			return
+		} */
 		if (sourceLanguageError != "") setSourceLanguageError("");
-
 		if (fileUrl != "") {
 			var regExp =
 				/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
@@ -938,14 +884,11 @@ const CreateGlossaries = (props) => {
 		}
 		/* Validation end */
 		formData.append("project_type", projectType);
-
 		if (selectedMTEngine?.value !== undefined) {
 			formData.append("mt_engine", selectedMTEngine?.value);
 		}
-
 		formData.append("source_language", sourceLanguage);
 		let targetLanguageArr = [];
-
 		if (targetLanguage !== null && targetLanguage[0] !== undefined) {
 			targetLanguage?.map((eachTargetLanguage) => {
 				if (
@@ -953,14 +896,11 @@ const CreateGlossaries = (props) => {
 						(element) => element.target_language == eachTargetLanguage?.id
 					) == null
 				) {
-					// console.log(eachTargetLanguage)
 					formData.append("target_languages", eachTargetLanguage?.id);
 				}
 			});
 		}
-
 		formData.append("team", hasTeam);
-
 		subjectField.map((eachSubjectField) => {
 			if (
 				editSubjects.find(
@@ -969,7 +909,6 @@ const CreateGlossaries = (props) => {
 			)
 				formData.append("subjects", eachSubjectField.id);
 		});
-
 		contentType.map((eachContentType) => {
 			if (
 				editContents.find(
@@ -978,12 +917,9 @@ const CreateGlossaries = (props) => {
 			)
 				formData.append("contents", eachContentType.id);
 		});
-
 		let deadlineUTC = Config.convertLocalToUTC(deadline);
-
 		deadline && formData.append("project_deadline", deadlineUTC);
 		formData.append("mt_enable", mtEnable);
-
 		if (primaryGlossarySourceName !== "") {
 			formData.append(
 				"primary_glossary_source_name",
@@ -1010,24 +946,18 @@ const CreateGlossaries = (props) => {
 				glossaryGeneralNotes !== null ? glossaryGeneralNotes : ""
 			);
 		}
-
 		formData.append("usage_permission", selectedUsagePermission?.label);
-
 		if (glossaryLicense !== "") {
 			formData.append(
 				"public_license",
 				glossaryLicense !== null ? glossaryLicense : ""
 			);
 		}
-
 		let stepsToRemoveList = stepOptions?.filter((stepOpt) =>
 			selectedSteps?.some((each) => stepOpt.value !== each.value)
 		);
-		// console.log(stepsToRemoveList)
-
 		let deleteIdList = "";
 		if (stepsFromApi.length > selectedSteps.length) {
-			//   console.log(stepsToRemoveList)
 			stepsToRemoveList?.map((each, index) => {
 				deleteIdList += `${each.value}${
 					index !== stepsToRemoveList?.length - 1 ? "," : ""
@@ -1038,23 +968,18 @@ const CreateGlossaries = (props) => {
 				formData.append("steps", each.value);
 			});
 		}
-
 		// formData.append("project_name", projectName);
 		if (projectName !== null && projectName?.trim() !== "") {
 			formData.append("project_name", projectName);
 		}
-
 		let list = "";
 		targetLangListToRemove?.map((each, index) => {
 			list += `${each.id}${
 				index !== targetLangListToRemove.length - 1 ? "," : ""
 			}`;
 		});
-
 		// if (projectAvailalbility === "team") formData.append("team", true);
-
 		// else formData.append("team", false);
-
 		if (fileUrl != "") formData.append("url", fileUrl);
 		let url = "";
 		if (fileUrl == "")
@@ -1081,8 +1006,8 @@ const CreateGlossaries = (props) => {
 				} else {
 					setShowUpdateLoader(false);
 					/* listProjects()
-																listFiles(editProjectId)
-																editProject(null, editProjectId) */
+					listFiles(editProjectId)
+					editProject(null, editProjectId) */
 					/* List files - start */
 					// if (currentPage == 1) listProjects();
 					// else setCurrentPage(1);

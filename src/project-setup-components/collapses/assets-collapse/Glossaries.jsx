@@ -5,8 +5,8 @@ import { Collapse } from "reactstrap";
 import ButtonBase from '@mui/material/ButtonBase';
 import AddIcon from '@mui/icons-material/Add';
 import { useTranslation } from "react-i18next";
-import BooksHub from "../../../assets/images/new-create-hub/books.svg"
-import ExpansMoreIcon from "../../../assets/images/new-ui-icons/expand_more.svg"
+import BooksHub from "../../../assets/images/new-create-hub/books.svg";
+import ExpansMoreIcon from "../../../assets/images/new-ui-icons/expand_more.svg";
 
 const Glossaries = () => {
     const { t } = useTranslation();

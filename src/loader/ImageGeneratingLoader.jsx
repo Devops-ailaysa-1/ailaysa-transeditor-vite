@@ -1,6 +1,6 @@
 import React from 'react';
-import loaderSparkles from "./loader-sparkles.json"
-// import Lottie from 'react-lottie'
+import loaderSparkles from "./loader-sparkles.json";
+// import Lottie from 'react-lottie';
 import { useLottie } from "lottie-react";
 
 export const ImageGeneratingLoader = () => {
@@ -12,8 +12,7 @@ export const ImageGeneratingLoader = () => {
         rendererSettings: {
         preserveAspectRatio: "xMidYMid slice",
         },
-    }
-
+    };
     const { View } = useLottie(defaultOptions);
 
   return (

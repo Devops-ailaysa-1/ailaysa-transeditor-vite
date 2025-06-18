@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 import { ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper } from '@mui/material';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
@@ -9,18 +9,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setShowTranslateDocumentModal } from '../../features/ShowTranslateDocumentModalSlice';
 import { WidthFull } from '@mui/icons-material';
 import Config from '../../Config';
-import new_translate from '../../assets/images/translateicon.svg'
+import new_translate from '../../assets/images/translateicon.svg';
 
 export const TranslateDocumentModal = (props) => {
-
-    const {t} = useTranslation()
-    const dispatch = useDispatch()
-    const history = useNavigate();
-    
-    const showTranslateDocumentModal = useSelector(state => state.showTranslateDocumentModal.value)
+    const {t} = useTranslation();
+    const dispatch = useDispatch();
+    const history = useNavigate();    
+    const showTranslateDocumentModal = useSelector(state => state.showTranslateDocumentModal.value);
 
     const closeTranslateDocumentModal = () => {
-        dispatch(setShowTranslateDocumentModal(false))
+        dispatch(setShowTranslateDocumentModal(false));
     }
 
     const transTabList = [{
@@ -34,7 +32,6 @@ export const TranslateDocumentModal = (props) => {
         description: 'Leverage advanced tools for precise, collaborative, and context-aware translations.',
         url: '/create/translate/files/translate-files'
     }];
-
     const [activeTab, setActiveTab] = useState(transTabList[0]);
 
     const handleTranslateBtn = () => {

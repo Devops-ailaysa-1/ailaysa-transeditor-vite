@@ -24,6 +24,7 @@ export const ImportTerms = (props) => {
         defaultGlossDetailsRef,
         excludedTermsOption,
         defaultActiveImportTab,
+        glossaryProjectId,
         isFrom
     } = props
 
@@ -128,7 +129,11 @@ export const ImportTerms = (props) => {
     // add glossary
     const addGlossaryToProject = () => {
         let formData = new FormData();
-        formData.append("project", projectId);
+        if(isFrom === 'simpleGlossary'){
+            formData.append("project", glossaryProjectId);
+        }else {
+           formData.append("project", projectId);
+        }        
         if (selectedGlossaryList?.length == 0) {
             checkedGlossary?.map(each => {
                 formData.append("glossary", each);
@@ -381,8 +386,7 @@ export const ImportTerms = (props) => {
 
     return (
         <>
-            {isFrom !== 'simpleGlossary' &&
-             <AITab
+            {<AITab
               onChange={handleOnTabChange} 
               activeTab={activeImportTab}
               dataList={importTermsTabList?.filter(item => !excludedTermsOption?.includes(item.value))}

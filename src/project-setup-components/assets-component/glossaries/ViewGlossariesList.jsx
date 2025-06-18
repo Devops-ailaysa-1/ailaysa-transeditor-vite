@@ -31,25 +31,23 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import PaginationLeft from "../../../assets/images/new-ui-icons/pagination-left.svg"
-import PaginationRight from "../../../assets/images/new-ui-icons/pagination-right.svg"
-import ChatSearch from "../../../assets/images/chat/chat-search.svg"
-import SearchBarClose from "../../../assets/images/assign-page/search-bar-close.svg"
-import UnopenedProjSymbol from "../../../assets/images/new-unopened-proj-symbol.svg"
-import PlusIcon from "../../../assets/images/new-ui-icons/plus.svg"
-import WikipediaIcon from "../../../assets/images/glossary-workspace/wikipedia.svg"
-import WikitionaryIcon from "../../../assets/images/glossary-workspace/wiktionary.png"
-import TranslateBlack from "../../../assets/images/glossary-workspace/translate_black.svg"
-import TermDeleteIcon from "../../../assets/images/new-ui-icons/term_delete_icon.svg"
-import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
-
+import PaginationLeft from "../../../assets/images/new-ui-icons/pagination-left.svg";
+import PaginationRight from "../../../assets/images/new-ui-icons/pagination-right.svg";
+import ChatSearch from "../../../assets/images/chat/chat-search.svg";
+import SearchBarClose from "../../../assets/images/assign-page/search-bar-close.svg";
+import UnopenedProjSymbol from "../../../assets/images/new-unopened-proj-symbol.svg";
+import PlusIcon from "../../../assets/images/new-ui-icons/plus.svg";
+import WikipediaIcon from "../../../assets/images/glossary-workspace/wikipedia.svg";
+import WikitionaryIcon from "../../../assets/images/glossary-workspace/wiktionary.png";
+import TranslateBlack from "../../../assets/images/glossary-workspace/translate_black.svg";
+import TermDeleteIcon from "../../../assets/images/new-ui-icons/term_delete_icon.svg";
+import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg";
 
 const ViewGlossariesList = (props) => {
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const location = useLocation();
     const history = useNavigate();
     const { t } = useTranslation();
-
 
     const [didMount, setDidMount] = useState(false);
     const [glossaryListSearch, setGlossaryListSearch] = useState(false);
@@ -105,13 +103,15 @@ const ViewGlossariesList = (props) => {
     const [glossaryLicense, setGlossaryLicense] = useState("");
     const [selectedUsagePermission, setSelectedUsagePermission] = useState({ value: 1, label: t("private") });
     const [glossaryProjectCreationResponse, setGlossaryProjectCreationResponse] = useState(null);
-    const [selectedGlossaryProject, setSelectedGlossaryProject] = useState(null)
-    const [creditsDetectionPrompt, setCreditsDetectionPrompt] = useState(false)
+    const [selectedGlossaryProject, setSelectedGlossaryProject] = useState(null);
+    const [creditsDetectionPrompt, setCreditsDetectionPrompt] = useState(false);
 
-    const [mtSuggestion, setMtSuggestion] = useState(null)
-    const [showFirstGlossaryCreationModal, setShowFirstGlossaryCreationModal] = useState(false)
-    const [firstTaskId, setFirstTaskId] = useState(null)
-    const [projectID, setProjectID] = useState(null)
+    const [mtSuggestion, setMtSuggestion] = useState(null);
+    const [showFirstGlossaryCreationModal, setShowFirstGlossaryCreationModal] = useState(false);
+    const [firstTaskId, setFirstTaskId] = useState(null);
+    const [projectID, setProjectID] = useState(null);
+    const [sortEl, setSortEl] = useState(null);
+    const [selectedSortValue, setselectedSortValue] = useState('-id');
 
     const projectsPerPage = useRef(20);
     const fileUploadTop = createRef();
@@ -120,32 +120,27 @@ const ViewGlossariesList = (props) => {
     const projectIdToSelect = useRef(null);
     const searchTermCloseOutside = useRef();
     const didMountRef = useRef(null)
-    const isSearchTermDeletedRef = useRef(false)
-
-    const [sortEl, setSortEl] = useState(null);
-    const [selectedSortValue, setselectedSortValue] = useState('-id')
+    const isSearchTermDeletedRef = useRef(false);
+    
     const open = Boolean(sortEl);
-
-
     const showSettingsModal = () => setshowSettings(true);
-
     const showAddTermModal = (e) => setAddNewTermModal(true);
 
     // download source audo file 
     const downloadSourceAudioFile = (taskID) => {
-        window.location.href = `${Config.BASE_URL}/workspace/download_text_to_speech_source/?task=${taskID}`
+        window.location.href = `${Config.BASE_URL}/workspace/download_text_to_speech_source/?task=${taskID}`;
     }
 
     useEffect(() => {
         if (typeof Cookies.get("isCreditPromptSeen") == "undefined"){
-            setCreditsPromptClose(true)
+            setCreditsPromptClose(true);
         }
     }, []);
 
 
     const handleCloseCreditsPrompt = () => {
          Cookies.set("isCreditPromptSeen", true, { domain: import.meta.env.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
-         setCreditsPromptClose(false)
+         setCreditsPromptClose(false);
     } 
 
 
@@ -169,22 +164,19 @@ const ViewGlossariesList = (props) => {
                 setGlossaryListSearch(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
     });
-
 
     const handleSortClick = (e) => {
         setSortEl(e.currentTarget);
     };
 
     const handleSelectedMenuItem = (e, value) => {
-        setselectedSortValue(value)
-        orderBy(value)
+        setselectedSortValue(value);
+        orderBy(value);
         setSortEl(null);
     };
 
@@ -193,17 +185,16 @@ const ViewGlossariesList = (props) => {
     };
 
     const handleWikipediaCopyText = () => {
-        navigator.clipboard.writeText(wikipediaData?.target)
+        navigator.clipboard.writeText(wikipediaData?.target);
     }
 
     const handleWikitionaryCopyText = (text) => {
-        navigator.clipboard.writeText(text)
+        navigator.clipboard.writeText(text);
     }
 
     const handleMtSuggestionCopyText = (text) => {
-        navigator.clipboard.writeText(mtSuggestion)
+        navigator.clipboard.writeText(mtSuggestion);
     }
-
 
     // const Tooltip = withStyles({
     //     tooltip: {
@@ -325,10 +316,9 @@ const ViewGlossariesList = (props) => {
             method: "GET",
             success: (response) => {
                 if(response.status === 200){
-                    // console.log(response.data.url)
-                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`)
+                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`);
                 }else{
-                    Config.toast(t("something_went_wrong"), 'error')
+                    Config.toast(t("something_went_wrong"), 'error');
                 }
             },
         });
@@ -336,12 +326,11 @@ const ViewGlossariesList = (props) => {
 
 
     /* Open workspace for a particular job */
-    const openFile = (e, key = null, id = null, url = "", isFirstOpen) => {
-       
+    const openFile = (e, key = null, id = null, url = "", isFirstOpen) => {       
         // if url is null means its glossary project [glossary porject type = 3]
         if (projectType === 3) {
             setTimeout(() => {
-                // window.location.href = 'workspace/' + response.data.document_id
+                // window.location.href = 'workspace/' + response.data.document_id;
                 history?.push(`glossary-workspace?project-id=${selectedProjectId}&document-id=${id}`);
             });
         }     
@@ -349,33 +338,28 @@ const ViewGlossariesList = (props) => {
     };
 
     useEffect(() => {
-        setDidMount(true)
-    }, [])
+        setDidMount(true);
+    }, []);
 
     // call get list when sorting value is changed
     // useEffect(() => {
     //     if(selectedSortValue !== null){
-    //         setGlossaryProjectList([])
-    //         console.log('sort value');
-    //         // listGlossaryProjects()
+    //         setGlossaryProjectList([]);
+    //         // listGlossaryProjects();
     //     }
-    // }, [selectedSortValue])
+    // }, [selectedSortValue]);
 
     useEffect(() => {
-        // console.log(location.state?.isFirst)
         if(location.state?.isFirst){
-            setShowFirstGlossaryCreationModal(true)
-            setProjectID(URL_SEARCH_PARAMS.get("open-project"))
+            setShowFirstGlossaryCreationModal(true);
+            setProjectID(URL_SEARCH_PARAMS.get("open-project"));
         }
-    }, [location.state, URL_SEARCH_PARAMS.get("open-project")])
-    
-    
-
+    }, [location.state, URL_SEARCH_PARAMS.get("open-project")]);
+     
     const listGlossaryProjects = () => {
         setGlossaryListSearch(false);
         setShowListingLoader(true);
-
-        setGlossaryProjectList([])
+        setGlossaryProjectList([]);
         /* Page param set/get - start */
         let page = 1;
         let pageParam = URL_SEARCH_PARAMS.get("page");
@@ -383,7 +367,6 @@ const ViewGlossariesList = (props) => {
             // setCurrentPage(pageParam);
             page = pageParam;
         } else setCurrentPage(pageParam);
-
         let orderFieldTemp = "-id";
         let orderParam = URL_SEARCH_PARAMS.get("order_by");
         if (orderParam != null) orderFieldTemp = orderParam;
@@ -391,35 +374,30 @@ const ViewGlossariesList = (props) => {
         /* Page param set/get - start */
         let url = `${Config.BASE_URL}/workspace/project/quick/setup/?filter=glossary&page=${page}&ordering=${orderFieldTemp}`;
         if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
+        let list = [];
 
-        let list = []
         Config.axios({
             url: url,
             auth: true,
             success: (response) => {
-                list = response?.data?.results?.filter((each) => each?.assign_enable === true)
+                list = response?.data?.results?.filter((each) => each?.assign_enable === true);
                 if (list.length == 0) setEmptyProjects(true);
                 else setEmptyProjects(false);
                 setTimeout(() => {
-                    setGlossaryProjectList(list)
+                    setGlossaryProjectList(list);
                 }, 200);
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
                 setShowListingLoader(false);
-
                 // let id = URL_SEARCH_PARAMS.get("open-project")
                 // if(id != null){
                 //     selectProjectById(id)
                 //     setSelectFileRow(true)
-                // }
-                
+                // }                               
             },
         });
 
-    }
-    
-
-
+    }    
 
     /* Starts when user stops typing */
     const debounce = (callback) => {
@@ -429,9 +407,7 @@ const ViewGlossariesList = (props) => {
             // projectSearchTerm?.length && callback();
             callback();
         }, 400);
-    };
-    
-    
+    };       
 
      /* Show the pagination content a the bottom */
     useEffect(() => {
@@ -443,48 +419,37 @@ const ViewGlossariesList = (props) => {
     /* Go to the top of the page when move to another pages */
     useEffect(() => {
         if(URL_SEARCH_PARAMS.get("page") != null){
-            // console.log('from page');
             listGlossaryProjects();
         }else if (URL_SEARCH_PARAMS.get("page") == null || URL_SEARCH_PARAMS.get("page") == 'null'){
-            history(`/create/assets/glossaries/my-glossaries?page=1`)
+            history(`/create/assets/glossaries/my-glossaries?page=1`);
         }
-        fileUploadTop.current.scrollIntoView(
-            {
-                behavior: "smooth",
-            },
-            100
-        );
+        fileUploadTop.current.scrollIntoView({ behavior: "smooth"},  100);
     }, [URL_SEARCH_PARAMS.get("page")]);
 
     useEffect(() => {
-        let order = URL_SEARCH_PARAMS.get("order_by")
+        let order = URL_SEARCH_PARAMS.get("order_by");
         if(order !== null && order !== undefined){
-            setselectedSortValue(orderByOptions?.find(each => each?.value == order)?.value)
+            setselectedSortValue(orderByOptions?.find(each => each?.value == order)?.value);
             listGlossaryProjects();
         }
     }, [URL_SEARCH_PARAMS.get("order_by")]);
 
-
     // automatically open accordian based on the project ID  
     useEffect(() => {
-        let id = URL_SEARCH_PARAMS.get("open-project")
+        let id = URL_SEARCH_PARAMS.get("open-project");
         if(id != null){
-            setSelectFileRow(true)
-            selectProjectById(id)
+            setSelectFileRow(true);
+            selectProjectById(id);
         }
     }, [URL_SEARCH_PARAMS.get("open-project")]);
 
     useEffect(() => {
-        let searchParam = URL_SEARCH_PARAMS.get("search")
-        // console.log(isSearchTermDelete);
-        // console.log('fromsearch');
+        let searchParam = URL_SEARCH_PARAMS.get("search");
 
         if(searchParam !== null && searchParam !== undefined){
-            // console.log('from search');
-            setGlossarySearchTerm(searchParam)
-            listGlossaryProjects();
+            setGlossarySearchTerm(searchParam);
+            listGlossaryProjects();;
         }else if(isSearchTermDelete || isSearchTermDeletedRef.current){
-            // console.log('from search');
             listGlossaryProjects();
         }
     }, [URL_SEARCH_PARAMS.get("search")]);
@@ -516,7 +481,7 @@ const ViewGlossariesList = (props) => {
     };
     
     const projectSearchFunctionality = (param) => {
-        let orderby = URL_SEARCH_PARAMS.get("order_by")
+        let orderby = URL_SEARCH_PARAMS.get("order_by");
         let url = `/create/assets/glossaries/my-glossaries?page=1&order_by=${orderby}`;
         if(param !== 'clear-search'){
             if (glossarySearchTerm != null) url += `&search=${glossarySearchTerm}`;
@@ -530,52 +495,43 @@ const ViewGlossariesList = (props) => {
             setGlossaryListSearch(false);
             e.target.blur()
         }else if(e.which === 13){
-            // console.log('from search');
-            projectSearchFunctionality()
+            projectSearchFunctionality();
             setGlossaryListSearch(false);
             e.target.blur()
         }
     }
 
     const handleSearchDropDownClick = (e) => {
-        projectSearchFunctionality()
+        projectSearchFunctionality();
     } 
 
     useEffect(() =>{ 
         if(glossarySearchTerm == "" && isSearchTermDelete){
-            // console.log('from empty search');
-            isSearchTermDeletedRef.current = true
-            setIsSearchTermDelete(false)
-            projectSearchFunctionality('clear-search')
+            isSearchTermDeletedRef.current = true;
+            setIsSearchTermDelete(false);
+            projectSearchFunctionality('clear-search');
         }
-    }, [glossarySearchTerm, isSearchTermDelete])
+    }, [glossarySearchTerm, isSearchTermDelete]);
 
     const handleCloseSearchBox = () => {
-        setGlossarySearchTerm("")
-        setGlossaryListSearch(false)
-        setIsSearchTermDelete(true)
+        setGlossarySearchTerm("");
+        setGlossaryListSearch(false);
+        setIsSearchTermDelete(true);
     }
-
-
 
     let selectedFilesData = "";
     let isColorClassAdded = false;
     let activeColorTarget = "";
     let editorAssignmentDetails = {};
     let reviewerAssignDetails = {};
-    let role = ""
+    let role = "";
     let isAssignedProject = null;
 
-
-
     const editProject = (e = null, projectId, projectType) => {
-        // console.log(e, projectId, )
-        // console.log(projectType)
         if(projectType === 3){
             history?.push("/create/assets/glossaries/create?page=1&get-project-info=" + projectId + "&type=" + projectType );
         }
      };
-
 
     /* Pagination content and logic */
     const paginationContentFunction = (page = 1) => {
@@ -632,24 +588,20 @@ const ViewGlossariesList = (props) => {
         }, 100);
     };
 
-    useEffect(() => {
-      
-    }, [paginationContent])
+    useEffect(() => {      
+    }, [paginationContent]);
     
-
     /* Collapse the project selection */
     const selectProject = (e, projectId, projectType) => {
         let shouldListFiles = e.target?.getAttribute("should-open-files");
-
         if (hasParentThisClass(e?.target, "selected-file-row") || hasParentThisClass(e?.target, "dont-open-files")) return;
         setSelectedProjectFiles([]);
         setProjectType(projectType);
-
         if (projectId == openedProjectId) {
             setOpenedProjectId(null);
         } else {
             selectProjectById(projectId, shouldListFiles);
-            setSelectFileRow(true)
+            setSelectFileRow(true);
         }
     };
 
@@ -660,7 +612,6 @@ const ViewGlossariesList = (props) => {
             return element?.parentNode && hasParentThisClass(element?.parentNode, classname);
         }
     };
-
 
     /* Select a particular project by id */
     const selectProjectById = (projectId, shouldListFiles) => {
@@ -689,7 +640,6 @@ const ViewGlossariesList = (props) => {
 
     /* Edit task by id */
     const editTask = (e, projectId, taskId, stepId) => {
-        // console.log(taskId)
         setAssignedTaskId(taskId);
         props.history(`/collaborate?project=${projectId}&task=${taskId}&_edit=${true}&_step=${stepId}`);
         // setAnchorEl(null);
@@ -703,9 +653,8 @@ const ViewGlossariesList = (props) => {
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("task_unassigned"));
-                props.history(`/file-upload?page=1&open-project=${projectID}`)
+                props.history(`/file-upload?page=1&open-project=${projectID}`);
                 // setAnchorEl(null);
                 // listProjects(openedProjectId); 
             },
@@ -719,9 +668,10 @@ const ViewGlossariesList = (props) => {
             method: "GET",
             auth: true,
             success: (response) => {
-                setSelectedGlossaryProject(response.data.glossary_files)
+                setSelectedGlossaryProject(response.data.glossary_files);
                 setSelectedProjectFilesCount(response.data?.files?.length != null ? response.data.files.length : 1);
                 setProjectType(response.data?.project_type_id);
+
                 Config.axios({
                     url: Config.BASE_URL + "/workspace/vendor/dashboard/" + projectId,
                     auth: true,
@@ -736,16 +686,13 @@ const ViewGlossariesList = (props) => {
         });
     };
     
-
     const orderByOptions = [
         { value: 'project_name', label: t("a_to_z") },
         { value: '-project_name', label: t("z_to_a") },
         { value: '-id', label: t("most_recent") },
         { value: 'id', label: t("least_recent") },
-    ]
-
+    ];
     // ======================================================================================
-
     const [addNewTermModal, setAddNewTermModal] = useState(false);
     const [editTermForm, setEditTermForm] = useState(false);
     const [termCreateTabs, setTermCreateTabs] = useState(1);
@@ -777,11 +724,10 @@ const ViewGlossariesList = (props) => {
     })
     const [glexTerms, setGlexTerms] = useState([]);
 
-    const sourceLangRef = useRef(null)
-    const targetLangRef = useRef(null)
+    const sourceLangRef = useRef(null);
+    const targetLangRef = useRef(null);
     const documentId = useRef(null);
 
-    
     const partOfSpeechOptions = [
         { value: 1, label: t("verb") },
         { value: 2, label: t("noun") },
@@ -791,7 +737,6 @@ const ViewGlossariesList = (props) => {
         { value: 6, label: t("other") },
         { value: "", label: t("none") }
     ];
-
     const termTypeOptions = [
         { value: "fullForm", label: "Full form" },
         { value: "acronym", label: "Acronym" },
@@ -800,14 +745,12 @@ const ViewGlossariesList = (props) => {
         { value: "varient", label: "Varient" },
         { value: "phrase", label: "Phrase" },
     ];
-
     const genderOptions = [
         { value: 1, label: "Masculine" },
         { value: 2, label: "Feminine" },
         { value: 3, label: "Neutral" },
         { value: 4, label: "Other" },
     ];
-
     const usageStatusOptions = [
         { value: "preferred", label: "Preferred" },
         { value: "admitted", label: "Admitted" },
@@ -942,8 +885,8 @@ const ViewGlossariesList = (props) => {
                 method = "PUT";
                 term = 2;
             }
-
             let data = handleFormData(formdata);
+
             Config.axios({
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -1050,7 +993,6 @@ const ViewGlossariesList = (props) => {
         }),
     };
 
-
     const modaloption = {
         closeMaskOnClick: false,
         height:'auto',
@@ -1063,8 +1005,7 @@ const ViewGlossariesList = (props) => {
                 method: "GET",
                 auth: true,
                 success: (response) => {
-                    // console.log(response.data);
-                    setWikipediaData(response.data.out)
+                    setWikipediaData(response.data.out);
                 },
             });
         } 
@@ -1077,8 +1018,7 @@ const ViewGlossariesList = (props) => {
                 method: "GET",
                 auth: true,
                 success: (response) => {
-                    // console.log(response.data);
-                    setWiktionaryData(response.data.out)
+                    setWiktionaryData(response.data.out);
                 },
             });
         }
@@ -1093,9 +1033,9 @@ const ViewGlossariesList = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                setTargetLanguageTerm(response.data?.target_mt)
-                // setMtSuggestion(response.data?.target_mt)
-                // setWiktionaryData(response.data.out)
+                setTargetLanguageTerm(response.data?.target_mt);
+                // setMtSuggestion(response.data?.target_mt);
+                // setWiktionaryData(response.data.out);
             },
             error: (err) => {
                 if(err.response.status === 424){
@@ -1106,12 +1046,12 @@ const ViewGlossariesList = (props) => {
     } 
 
     const handleAddNewTermModal = (e, id) => {
-        documentId.current = id
+        documentId.current = id;
         addNewTerm();
-        setWikipediaData(null)
-        setEditTermForm(false)
+        setWikipediaData(null);
+        setEditTermForm(false);
         setAddNewTermModal(true);
-        setTermCreateTabs(1)
+        setTermCreateTabs(1);
     }
 
     // This function has to be encountered when add new button is added
@@ -1136,13 +1076,12 @@ const ViewGlossariesList = (props) => {
         setSelectedUsageStatus({});
         setGeographyUsage("");
         setTermLocation("");
-        setWikipediaData(null)
-        setWiktionaryData(null)
-        setMtSuggestion(null)
+        setWikipediaData(null);
+        setWiktionaryData(null);
+        setMtSuggestion(null);
     };
-
     // ======================================================================================
-
+    
     return (
         <React.Fragment>
             <section className="glossaries-list-wrapper" ref={fileUploadTop}>

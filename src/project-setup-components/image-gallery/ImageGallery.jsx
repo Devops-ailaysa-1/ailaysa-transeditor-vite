@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Config from '../../Config';
 import InfinityScrollComponent from './InfinityScrollComponent';
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry"
+import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import SearchIcon from '@mui/icons-material/Search';
 import IframeComponent from './IframeComponent';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import Tooltip from '@mui/material/Tooltip';
 import Skeleton from '@mui/material/Skeleton';
-import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
-import DiscardPopup from "../../assets/images/new-ui-icons/discard-popup.svg"
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
+import DiscardPopup from "../../assets/images/new-ui-icons/discard-popup.svg";
 
 const ImageGallery = (props) => {
     const  {
@@ -19,58 +19,51 @@ const ImageGallery = (props) => {
         setOpen,
         showDesigner,
         setShowDesigner
-    } = props
+    } = props;
     const [inpurSearchImage, setInputSearchImage] = useState("");
     const [galleryData, setGalleryData] = useState([]);
     const [galleryDataList, setGalleryDataList] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [focusOnSearch, setFocusOnSearch] = useState(false)
-    const designtypeSearch = useRef()
+    const designtypeSearch = useRef();
   
     function oddOrEven(x) {
         return (x & 1) ? "odd" : "even";
     }
 
-
     let inputDesignhandler = (e) => {
         //convert input text to lower case
         var lowerCase = e.target.value.toLowerCase();
         setInputSearchImage(lowerCase);
-
     };
 
-    const getDesignerImages = (e) => {
-        
+    const getDesignerImages = (e) => {        
         let urls = 
         sidebarType == 'Ai' ?
         inpurSearchImage != '' ? Config.BASE_URL + `/ai-image-translation/stable-diffusion/?search=${inpurSearchImage}` : Config.BASE_URL + `/ai-image-translation/stable-diffusion/`
         : 
         sidebarType == 'Design' ? inpurSearchImage != '' ? Config.BASE_URL + `/canvas/designer-list?search=${inpurSearchImage}&page=1` : Config.BASE_URL + `/canvas/designer-list?page=1`
         :
-        inpurSearchImage != '' ? Config.BASE_URL + `/canvas/canvas-user-images/?search=${inpurSearchImage}` : Config.BASE_URL + "/canvas/canvas-user-images/?page=1"
+        inpurSearchImage != '' ? Config.BASE_URL + `/canvas/canvas-user-images/?search=${inpurSearchImage}` : Config.BASE_URL + "/canvas/canvas-user-images/?page=1";
+
         Config.axios({
             url: urls,
             method: "GET",
             auth: true,
-            success: (response) => {
-             
-                setGalleryDataList(response.data)
-                setGalleryData(response.data.results)
+            success: (response) => {             
+                setGalleryDataList(response.data);
+                setGalleryData(response.data.results);
                 if(response.data.next != null){
-                    setHasMore(true)
+                    setHasMore(true);
                 }else{
-                    setHasMore(false)
-
+                    setHasMore(false);
                 }
             },
             error: (err) => {
-                console.log(err)
+                console.error(err);
             },
         });
-
     }
-
-
     
     function dataURLtoFile(dataurl, filename) {
         var arr = dataurl.split(','),
@@ -84,16 +77,12 @@ const ImageGallery = (props) => {
         return new File([u8arr], filename+'.png', {type:mime});
     }
 
-    const getJsonBase64 = (id,sub) => {
-        
-        console.log(sub)
-       
+    const getJsonBase64 = (id,sub) => {       
         Config.axios({
             url:  sub ? Config.BASE_URL + `/canvas/designer-list/${id}?target_id=${sub}&base_64=true` : Config.BASE_URL + `/canvas/designer-list/${id}?base_64=true`,
             method: "GET",
             auth: true,
-            success: (response) => {
-            
+            success: (response) => {            
                 click(dataURLtoFile(response.data.base_64,`design_${id}`))
                 // exportFabricJsonToPNG(response.data.json, (dataURL) => {
                 //     // The dataURL variable now contains the PNG data URL
@@ -101,53 +90,48 @@ const ImageGallery = (props) => {
                 // });
             },
             error: (err) => {
-                console.log(err)
+                console.error(err);
             },
         });
 
     }
 
-    const [dynamicUrl , setDynamicUrl] = useState('editor')
+    const [dynamicUrl , setDynamicUrl] = useState('editor');
  
     const openInDesigner = (data,translate) => {
-        console.log(translate)
         if(translate == false){
-            let url = `editor/${data.json.projectid.projectType}/?project=${data.json.projectid.projId}&page=${data.json.projectid.page}&type=${data.json.projectid.project_category_id}`
-            setDynamicUrl(url)
-            setShowDesigner(true)
+            let url = `editor/${data.json.projectid.projectType}/?project=${data.json.projectid.projId}&page=${data.json.projectid.page}&type=${data.json.projectid.project_category_id}`;
+            setDynamicUrl(url);
+            setShowDesigner(true);
         }else{
             const filteredArrays = galleryData.find(innerArray => {
                 return innerArray.some(obj => obj.project_id === data.json.projectid.projId);
               });
             //   let id = obj.canvas_trans_json === data.json.projectid.langId
             const index = filteredArrays.findIndex(obj => obj.canvas_trans_json === data.json.projectid.langId);
-            let url = `workspace/${data.json.projectid.projectType}/?project=${data.json.projectid.projId}&page=${data.json.projectid.page}&lang=${data.json.projectid.langId == null ? -1 : (index-1)}&view=1`
-            setDynamicUrl(url)
-            setShowDesigner(true)
+            let url = `workspace/${data.json.projectid.projectType}/?project=${data.json.projectid.projId}&page=${data.json.projectid.page}&lang=${data.json.projectid.langId == null ? -1 : (index-1)}&view=1`;
+            setDynamicUrl(url);
+            setShowDesigner(true);
         }
 
     }
 
-    const getJson = (id,sub,translate) => {
-        
-       
+    const getJson = (id,sub,translate) => {  
         Config.axios({
             url:  sub ? Config.BASE_URL + `/canvas/designer-list/${id}?target_id=${sub}` : Config.BASE_URL + `/canvas/designer-list/${id}`,
             method: "GET",
             auth: true,
             success: (response) => {
-                console.log(response)
-                openInDesigner(response.data,translate)
+                openInDesigner(response.data,translate);
                 // exportFabricJsonToPNG(response.data.json, (dataURL) => {
                 //     // The dataURL variable now contains the PNG data URL
                    
                 // });
             },
             error: (err) => {
-                console.log(err)
+                console.error(err);
             },
         });
-
     }
 
     function flatten(ary) {
@@ -161,34 +145,33 @@ const ImageGallery = (props) => {
         }
         return ret;
     }
+
     const fetchSearchedImage = (e) => {
         if (e.key === 'Enter') {
-            if ((e.target.value.length > 0) && (e.target.value != ' ')) {
-        
-                getDesignerImages(e.target.value)
-            }else{
-   
-                setInputSearchImage('')
-                getDesignerImages()
+            if ((e.target.value.length > 0) && (e.target.value != ' ')) {        
+                getDesignerImages(e.target.value);
+            }else{   
+                setInputSearchImage('');
+                getDesignerImages();
             }
         }
     }
 
     useEffect(() => {
         if(sidebarType == 'Design' && showDesigner == false){
-            setGalleryDataList([])
-            setGalleryData([])
-            getDesignerImages()
+            setGalleryDataList([]);
+            setGalleryData([]);
+            getDesignerImages();
         }else if(sidebarType == 'Ai' && showDesigner == false){
-            setGalleryDataList([])
-            setGalleryData([])
-            getDesignerImages()
+            setGalleryDataList([]);
+            setGalleryData([]);
+            getDesignerImages();
         }else if(sidebarType == 'User' && showDesigner == false){
-            setGalleryDataList([])
-            setGalleryData([])
-            getDesignerImages()
+            setGalleryDataList([]);
+            setGalleryData([]);
+            getDesignerImages();
         }
-    },[sidebarType,showDesigner])
+    },[sidebarType,showDesigner]);
 
     const getUrlExtension = (url) => {
         return url
@@ -196,24 +179,22 @@ const ImageGallery = (props) => {
           .split(".")
           .pop()
           .trim();
-      }
+    }
     
     const onImageEdit = async (imgUrl,key) => {
-        var imgExt = getUrlExtension(imgUrl);
-    
+        var imgExt = getUrlExtension(imgUrl);    
         const response = await fetch(imgUrl);
         const blob = await response.blob();
         const file = new File([blob], `ai_image_${key}.` + imgExt, {
           type: blob.type,
         });
-        click(file)
+        click(file);
     }
     
 //   async function getImage(url) {
 //   try {
 //     let file = await onImageEdit(url); // Assuming onImageEdit returns a Promise
-//     // Now that 'file' is fetched, you can call the 'click' functio
-//     console.log(file);
+//     // Now that 'file' is fetched, you can call the 'click' function
 //     click(file);
 //   } catch (error) {
 //     // Handle any errors that may occur during onImageEdit or click operations
@@ -221,20 +202,20 @@ const ImageGallery = (props) => {
 //   }
 // }
     
-const skeletonLoader =
-<ResponsiveMasonry className="mansory_grid" columnsCountBreakPoints={{ 350: 2, 750: 2, 900: 2 }}>
-    <Masonry columnsCount={2} gutter="5px">
-        {Array(15)
-            .fill(null)
-            .map((key, index) => (
-                <Skeleton key={index} variant="rectangular" className="images-section skeleton-radius" animation="wave" height={oddOrEven(index) == 'odd' ? 120 : 100} />
-            ))}
-    </Masonry>
-</ResponsiveMasonry>
+    const skeletonLoader =
+        <ResponsiveMasonry className="mansory_grid" columnsCountBreakPoints={{ 350: 2, 750: 2, 900: 2 }}>
+           <Masonry columnsCount={2} gutter="5px">
+               {Array(15)
+                 .fill(null)
+                 .map((key, index) => (
+                    <Skeleton key={index} variant="rectangular" className="images-section skeleton-radius" animation="wave" height={oddOrEven(index) == 'odd' ? 120 : 100} />
+               ))}
+          </Masonry>
+        </ResponsiveMasonry>
 
     const imageGallerStructure =   <ResponsiveMasonry className="mansory_grid" columnsCountBreakPoints={{ 350: 2, 750: 2, 900: 2 }}>
-    <Masonry columnsCount={2} gutter="5px">
-        {flatten(galleryData)?.map((file, key) => {
+       <Masonry columnsCount={2} gutter="5px">
+         {flatten(galleryData)?.map((file, key) => {
             return (
                 <div className="ai-wrapper" key={key} >
                     <img className="ai-generated-images images-section" src={sidebarType == 'Design' ?  Config.BASE_URL + file.thumbnail_src : Config.BASE_URL + file.thumbnail } />
@@ -252,19 +233,16 @@ const skeletonLoader =
                         </div>
                 </div>
             )
-        })}
-    </Masonry >
-</ResponsiveMasonry >
+          })}
+       </Masonry >
+    </ResponsiveMasonry >
 
        const getUrl = () => {
        // Assuming you have an iframe with the id "myIframe"
         var iframe = document.querySelector(".iframe-component");
-
         // Get the current URL of the iframe
         var iframeURL = iframe.contentWindow.location.href;
-
         // Log the URL to the console (you can do whatever you want with it)
-        console.log("The URL of the iframe is: " + iframeURL);
        }
     
     return (
@@ -272,12 +250,10 @@ const skeletonLoader =
             <div className="prompt-bubble-header">
                 <div className="prompt-bubble-title">
                     Image Gallery
-                </div>
-             
+                </div>             
                 <div className="modal-close-btn" onClick={() => { setOpen(false); }}>
                         <img className="icon-cutomize-close-writter" src={DiscardPopup} alt="file_upload" />
-                </div>
-             
+                </div>             
             </div>
              <div className={focusOnSearch ? "main-tab-search active-search-bar" : "main-tab-search"}>
                     <SearchIcon className="seacrh-icon" />
@@ -330,7 +306,6 @@ const skeletonLoader =
                                     <div></div>
                                 </div>
                             )}
-
                             {isGenerateLoading ? "Create new" : toggleState == 2 ? "Create new" : "Create new"} */}
                         </div>
                     </div>
