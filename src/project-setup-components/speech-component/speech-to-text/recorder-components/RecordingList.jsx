@@ -6,8 +6,8 @@ import Config from "../../../../Config";
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import getBlobDuration from 'get-blob-duration'
 import { useTranslation } from "react-i18next";
-import PauseIcon from "../../../../assets/images/project-setup/voice/pause-icon.svg"
-import CloseBlackIcon from "../../../../assets/images/new-ui-icons/close_black.svg"
+import PauseIcon from "../../../../assets/images/project-setup/voice/pause-icon.svg";
+import CloseBlackIcon from "../../../../assets/images/new-ui-icons/close_black.svg";
 
 export default function RecordingsList({ audio, audioFile, setAudioData, audioData, niceBytes, tempBlob}) {
   const { t } = useTranslation();
@@ -16,82 +16,72 @@ export default function RecordingsList({ audio, audioFile, setAudioData, audioDa
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0);
   const [sliderPercentage,setSliderPercentage] = useState(0);
+  const [sliderPosition, setSlidePosition] = useState(0);
+  const [thumbMarginLeft, setThumbMarginLeft] = useState(0);
+  const [sliderProgressWidth, setSliderProgressWidth] = useState(0);
+  const [currentSlider, setCurrentSlider] = useState(null);
+  const [currentThumb, setCurrentThumb] = useState(null);
+  const [bar, setBar] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(null);
+  const [totDuration, setTotDuration] = useState(0);
+  const [inputRangeValue, setInputRangeValue] = useState(null);
+  const [audioTagId, setAudioTagId] = useState(null);
+  const [currentTimeText, setCurrentTimeText] = useState(null);
+  const [currentAudioTime, setCurrentAudioTime] = useState(null);
 
   const audioPlayer = useRef(null); //Ref for HTML Audio tag
-  const displayTime = useRef(null); //Stores dom ref for div to be used to display time
+  const displayTime = useRef(null); //Stores dom ref for div to be used to display time  
+  const sliderRangeRef = useRef();
+  const sliderThumbRef = useRef() ;
 
-  const [sliderPosition, setSlidePosition] = useState(0)
-  const [thumbMarginLeft, setThumbMarginLeft] = useState(0)
-  const [sliderProgressWidth, setSliderProgressWidth] = useState(0)
-
-  const [currentSlider, setCurrentSlider] = useState(null)
-  const [currentThumb, setCurrentThumb] = useState(null)
-  const [bar, setBar] = useState(null)
-  const [isPlaying, setIsPlaying] = useState(null)
-
-  const [totDuration, setTotDuration] = useState(0)
-  const [inputRangeValue, setInputRangeValue] = useState(null)
-  const [audioTagId, setAudioTagId] = useState(null)
-  const [currentTimeText, setCurrentTimeText] = useState(null)
-  const [currentAudioTime, setCurrentAudioTime] = useState(null)
-
-  const sliderRangeRef = useRef()
-  const sliderThumbRef = useRef()
-
-  
-
-  useEffect(() => {
-    // console.log(sliderPercentage)
+    useEffect(() => {
         const slider = document.getElementById(currentSlider);
         const temp = document.getElementById(currentSlider);
         if(slider !== undefined){
             try{
-                slider.value = sliderPercentage
+                slider.value = sliderPercentage;
             }catch(e){
-                // console.log(e)
+               console.error(e);
             }
         }
         let thumb = document.getElementById(currentThumb);
-        const sliderRangeWidth = slider?.getBoundingClientRect()?.width
-        const thumbWidth = thumb?.getBoundingClientRect()?.width
-        const centerThumb = (thumbWidth / 100) * sliderPercentage * -1
-        const centerProgressBar = thumbWidth + sliderRangeWidth/100 * sliderPercentage - (thumbWidth/100 * sliderPercentage)
+        const sliderRangeWidth = slider?.getBoundingClientRect()?.width;
+        const thumbWidth = thumb?.getBoundingClientRect()?.width;
+        const centerThumb = (thumbWidth / 100) * sliderPercentage * -1;
+        const centerProgressBar = thumbWidth + sliderRangeWidth/100 * sliderPercentage - (thumbWidth/100 * sliderPercentage);
         try{
-            thumb.style.left = `${sliderPercentage}%`
-            thumb.style.marginLeft = `${centerThumb}px`
+            thumb.style.left = `${sliderPercentage}%`;
+            thumb.style.marginLeft = `${centerThumb}px`;
         }catch(e){
-            // console.log(e)
+            console.error(e);
         }
-
-        let progressBar = document.getElementById(bar)
+        let progressBar = document.getElementById(bar);
         try{
-            progressBar.style.width =  `${centerProgressBar}px`
+            progressBar.style.width =  `${centerProgressBar}px`;
         }catch(e){
-            // console.log(e)
+             console.error(e);
         }
-  }, [sliderPercentage])
+    }, [sliderPercentage]);
   
-
     const playPause = (e, id, sliderId, thumbId, barID, playPauseId, audPlayer) => {
-        setCurrentSlider(sliderId)
-        setCurrentThumb(thumbId)
-        setBar(barID)
-        setIsPlaying(playPauseId)
-        setTotDuration(null)
+        setCurrentSlider(sliderId);
+        setCurrentThumb(thumbId);
+        setBar(barID);
+        setIsPlaying(playPauseId);
+        setTotDuration(null);
         let player = document.getElementById(id);
         
         player.addEventListener('play', function(e) {
-            var audios = document.getElementsByTagName('audio');
-        
+            var audios = document.getElementsByTagName('audio');        
             for (var i = 0, len = audios.length; i < len; i++) {
                 if (audios[i] != e.target) {
                     audios[i].pause();
-                    // setPlay(false)
+                    // setPlay(false);
                 }
             }
         }, true);
         if (player.duration > 0 && !player.paused) {
-            setPlay(false)
+            setPlay(false);
             player.pause();
         } 
         else {
@@ -99,118 +89,90 @@ export default function RecordingsList({ audio, audioFile, setAudioData, audioDa
             player.play();
         }
     };
-
      
     const getDurationTime = (e, id, blob, currentDurationId) => {
-        let audio = document.getElementById(id)
+        let audio = document.getElementById(id);
         getBlobDuration(blob).then(function(duration) {
-            document.getElementById(currentDurationId).innerHTML = secondsToHms(duration)
+            document.getElementById(currentDurationId).innerHTML = secondsToHms(duration);
             audio = Math.floor(duration);
         });
     }
 
     useEffect(() => {
       if(totDuration !== null && totDuration !== Infinity && currentTimeText !== null && currentAudioTime !== null){
-        // console.log(totDuration)
-        const sliderPercent = ((currentAudioTime / totDuration) * 100).toFixed(2)
-        const audioTime = currentAudioTime
-        // console.log(currentAudioTime)
-        // console.log(sliderPercent)
-
-        setSliderPercentage(+sliderPercent)
-        document.getElementById(currentTimeText).innerHTML = secondsToHms(audioTime?.toFixed(2))
+        const sliderPercent = ((currentAudioTime / totDuration) * 100).toFixed(2);
+        const audioTime = currentAudioTime;
+        setSliderPercentage(+sliderPercent);
+        document.getElementById(currentTimeText).innerHTML = secondsToHms(audioTime?.toFixed(2));
       }
-    }, [currentAudioTime, totDuration])
-    
-    
+    }, [currentAudioTime, totDuration]);
+        
     const getCurrentDuration = (e, id, blob, currentTimeId) => {
         let player = document.getElementById(id);
         getBlobDuration(blob).then(function(duration) {
-            setTotDuration(duration)
+            setTotDuration(duration);
         });
-        setCurrentTimeText(currentTimeId)
-        setCurrentAudioTime(player.currentTime)
-        // console.log(totDuration)
-        // const sliderPercent = ((player.currentTime / totDuration) * 100).toFixed(2)
-        // const audioTime = player.currentTime
-        // console.log(sliderPercent)
-
-        // setSliderPercentage(+sliderPercent)
-        // document.getElementById(currentTimeId).innerHTML = secondsToHms(audioTime?.toFixed(2))
+        setCurrentTimeText(currentTimeId);
+        setCurrentAudioTime(player.currentTime);
+        // const sliderPercent = ((player.currentTime / totDuration) * 100).toFixed(2);
+        // const audioTime = player.currentTime;
+        // setSliderPercentage(+sliderPercent);
+        // document.getElementById(currentTimeId).innerHTML = secondsToHms(audioTime?.toFixed(2));
     }
 
     const handleSlider = (blob, id, e, sliderId, thumbId, barID, playPauseId) => {
-        setCurrentSlider(sliderId)
-        setCurrentThumb(thumbId)
-        setBar(barID)
-        setIsPlaying(playPauseId)
-        setAudioTagId(id)
+        setCurrentSlider(sliderId);
+        setCurrentThumb(thumbId);
+        setBar(barID);
+        setIsPlaying(playPauseId);
+        setAudioTagId(id);
         const audio = document.getElementById(id);
-        setInputRangeValue(e.target.value)
-        audio.currentTime = (totDuration / 100) * e.target.value
-        
-        setSliderPercentage(e.target.value)
+        setInputRangeValue(e.target.value);
+        audio.currentTime = (totDuration / 100) * e.target.value;        
+        setSliderPercentage(e.target.value);
     }
-
 
     // useEffect(() => {
     //   if(totDuration !== null && inputRangeValue !== null && audioTagId !== null){
-    //     // console.log(totDuration)
-    //     // console.log(inputRangeValue)
     //     const audio = document.getElementById(audioTagId);
-    //     // console.log((totDuration / 100) * inputRangeValue)
-    //     audio.currentTime = (totDuration / 100) * inputRangeValue
+    //     audio.currentTime = (totDuration / 100) * inputRangeValue;
     //   }
-    // }, [totDuration, inputRangeValue, audioTagId])
-    
-    
-
+    // }, [totDuration, inputRangeValue, audioTagId]);
+       
     function secondsToHms(seconds) {
-        if (!seconds) return '00:00'
-    
-        let duration = seconds
-        let hours = duration / 3600
-        duration = duration % 3600
-    
-        let min = parseInt(duration / 60)
-        duration = duration % 60
-    
-        let sec = parseInt(duration)
-    
+        if (!seconds) return '00:00';    
+        let duration = seconds;
+        let hours = duration / 3600;
+        duration = duration % 3600;    
+        let min = parseInt(duration / 60);
+        duration = duration % 60;    
+        let sec = parseInt(duration);    
         if (sec < 10) {
-          sec = `0${sec}`
+          sec = `0${sec}`;
         }
         if (min < 10) {
-          min = `0${min}`
-        }
+          min = `0${min}`;        }
     
         if (parseInt(hours, 10) > 0) {
-          return `${parseInt(hours, 10)}:${min}:${sec}`
+          return `${parseInt(hours, 10)}:${min}:${sec}`;
         } else if (min == 0) {
-          return `00:${sec}`
+          return `00:${sec}`;
         } else {
-          return `${min}:${sec}`
+          return `${min}:${sec}`;
         }
     }
-    // console.log(audioData);
 
     const setAudioDataDelete=(deleteRecording) =>{
-        // console.log(deleteRecording);
-        deleteAudio(deleteRecording)
-        // Config.removeItemFromArray(recordings,deleteRecording )
-
-        
+        deleteAudio(deleteRecording);
+        // Config.removeItemFromArray(recordings,deleteRecording );        
     }
-
-    
-//   useEffect(() => {
-
+   
+//  useEffect(() => {
 //     if(recordings.length !== 0 || (recordings.length === 0 && audioData.length !== 0)){
 //         console.log(recordings);
-//         setAudioData(recordings)
+//         setAudioData(recordings);
 //     }
-
-//   }, [recordings])
+//   }, [recordings]);
 
   return (
       <>

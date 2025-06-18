@@ -27,33 +27,35 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import CloseIcon from '@mui/icons-material/Close';
 import Radio from '@mui/material/Radio';
 import { AsyncPaginate } from "react-select-async-paginate";
-import ArrowRightGreyColor from "../../assets/images/new-create-hub/arrow_right_grey_color.svg"
-import ArrowRightAltColor from "../../assets/images/new-ui-icons/arrow_right_alt_color.svg"
+import ArrowRightGreyColor from "../../assets/images/new-create-hub/arrow_right_grey_color.svg";
+import ArrowRightAltColor from "../../assets/images/new-ui-icons/arrow_right_alt_color.svg";
 import PaginationLeft  from "../../assets/images/new-ui-icons/pagination-left.svg";
 import PaginationRight  from "../../assets/images/new-ui-icons/pagination-right.svg";
-import ChangeRequest from "../../assets/images/change-request.svg"
-import PlusIcon from "../../assets/images/new-ui-icons/plus.svg"
-import TranscriptionIcon from "../../assets/images/new-project-setup/transcription.svg"
-import SpeechWhiteIcon from "../../assets/images/new-project-setup/speech-icon-white.svg"
-import InstantTranslateIcon from "../../assets/images/instant-translate-icon.svg"
-import UnopenedProjSymbol from "../../assets/images/new-unopened-proj-symbol.svg"
-import BlogArticleIcon from "../../assets/images/blog-article.svg"
-import BlogArticleWizardIcon from "../../assets/images/blog-wizard.svg"
-import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
-import StackedBarChartBlue from "../../assets/images/new-ui-icons/stacked_bar_chart_blue.svg"
-import InsuffientIcon from "../../assets/images/new-ui-icons/insuffient-icon.svg"
-import RemoveCircleRed from "../../assets/images/new-ui-icons/remove_circle_red.svg"
-import AssetsDeleteIcon from "../../assets/images/new-ui-icons/assets-delete-icon.svg"
-import SearchBarClose from "../../assets/images/assign-page/search-bar-close.svg"
-import ChatSearch from "../../assets/images/chat/chat-search.svg"
-import NoEditorIcon from "../../assets/images/no-editors-found-2.svg"
-import EmptyProjectIcon from "../../assets/images/empty-projects-folder.svg"
-import ConfirmIcon from "../../assets/images/new-ui-icons/confirm-icon.svg"
+import ChangeRequest from "../../assets/images/change-request.svg";
+import PlusIcon from "../../assets/images/new-ui-icons/plus.svg";
+import TranscriptionIcon from "../../assets/images/new-project-setup/transcription.svg";
+import SpeechWhiteIcon from "../../assets/images/new-project-setup/speech-icon-white.svg";
+import InstantTranslateIcon from "../../assets/images/instant-translate-icon.svg";
+import UnopenedProjSymbol from "../../assets/images/new-unopened-proj-symbol.svg";
+import BlogArticleIcon from "../../assets/images/blog-article.svg";
+import BlogArticleWizardIcon from "../../assets/images/blog-wizard.svg";
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
+import StackedBarChartBlue from "../../assets/images/new-ui-icons/stacked_bar_chart_blue.svg";
+import InsuffientIcon from "../../assets/images/new-ui-icons/insuffient-icon.svg";
+import RemoveCircleRed from "../../assets/images/new-ui-icons/remove_circle_red.svg";
+import AssetsDeleteIcon from "../../assets/images/new-ui-icons/assets-delete-icon.svg";
+import SearchBarClose from "../../assets/images/assign-page/search-bar-close.svg";
+import ChatSearch from "../../assets/images/chat/chat-search.svg";
+import NoEditorIcon from "../../assets/images/no-editors-found-2.svg";
+import EmptyProjectIcon from "../../assets/images/empty-projects-folder.svg";
+import ConfirmIcon from "../../assets/images/new-ui-icons/confirm-icon.svg";
 
 const ConvertedPdfList = (props) => {
     const location = useLocation();
     const history = useNavigate();
     const { t } = useTranslation();
+    const open = Boolean(sortEl);
+    const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 
     const [didMount, setDidMount] = useState(false);
     const [allPDFtoDocxList, setAllPDFtoDocxList] = useState([]);
@@ -72,40 +74,36 @@ const ConvertedPdfList = (props) => {
     const [paginationContent, setPaginationContent] = useState("");
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [statusFilterType, setStatusFilterType] = useState(null)
+    const [statusFilterType, setStatusFilterType] = useState(null);
     const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
     const [showConvertProgress, setShowConvertProgress] = useState(false);
     const [showErrorStatus, setShowErrorStatus] = useState(false);
     const [sortEl, setSortEl] = useState(null);
-    const [selectedSortValue, setselectedSortValue] = useState('-id')
-    const [fileCheckTrigger, setFileCheckTrigger] = useState(false)
-    const [allPDFFileList, setAllPDFFileList] = useState([])
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-
+    const [selectedSortValue, setselectedSortValue] = useState('-id');
+    const [fileCheckTrigger, setFileCheckTrigger] = useState(false);
+    const [allPDFFileList, setAllPDFFileList] = useState([]);
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
     const [taskActionOpen, setTaskActionOpen] = useState(false);
-    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null)
-    const [filesProjectList, setFilesProjectList] = useState(null)
-    const [projectUpdateModal, setProjectUpdateModal] = useState(false)
-    const [selectedPdfObj, setSelectedPdfObj] = useState(null)
-    const [filesProjectListOptions, setFilesProjectListOptions] = useState(null)
-    const [selectedProjectToUpdate, setSelectedProjectToUpdate] = useState(null)
-    const [userTranslateChoice, setUserTranslateChoice] = useState('new')
+    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null);
+    const [filesProjectList, setFilesProjectList] = useState(null);
+    const [projectUpdateModal, setProjectUpdateModal] = useState(false);
+    const [selectedPdfObj, setSelectedPdfObj] = useState(null);
+    const [filesProjectListOptions, setFilesProjectListOptions] = useState(null);
+    const [selectedProjectToUpdate, setSelectedProjectToUpdate] = useState(null);
+    const [userTranslateChoice, setUserTranslateChoice] = useState('new');
 
-    const searchTermRef = useRef(null)
+    const searchTermRef = useRef(null);
     const projectsPerPage = useRef(20);
     const fileUploadTop = createRef();
     const pdfDownloadRequestData = useRef();
-    const downloadref = useRef(null)
-    const downloadedFileName = useRef(null)
-    const statusTypeRef = useRef(null)
+    const downloadref = useRef(null);
+    const downloadedFileName = useRef(null);
+    const statusTypeRef = useRef(null);
     const searchTermCloseOutside = useRef();
-    const fileIdList = useRef([])
-    const statusCheckTimeoutRef = useRef(null)
-    const triggerTimeoutRef = useRef(null)
-    const targetLanguageOptionsRef = useRef([]);
-
-    const open = Boolean(sortEl);
-    const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
+    const fileIdList = useRef([]);
+    const statusCheckTimeoutRef = useRef(null);
+    const triggerTimeoutRef = useRef(null);
+    const targetLanguageOptionsRef = useRef([]);    
 
     // const AddProjectButton = withStyles((theme) => ({
     //     root: {
@@ -254,7 +252,6 @@ const ConvertedPdfList = (props) => {
             },
         }),
     };    
-
     
     // const Tooltip = withStyles({
     //     tooltip: {
@@ -388,7 +385,6 @@ const ConvertedPdfList = (props) => {
     //     },
     // }))(Button);
 
-
     const DropdownIndicator = (props) => {
         return (
             <components.DropdownIndicator {...props}>
@@ -403,14 +399,14 @@ const ConvertedPdfList = (props) => {
         { value: 'ERROR', label: t("error") },
         { value: 'PENDING', label: t("process") },
         { value: 'YET TO START', label: 'Yet to start' }
-    ]
+    ];
 
     const handleSortClick = (e) => {
         setSortEl(e.currentTarget);
     };
 
     const handleSelectedMenuItem = (e, index, value) => {
-        setselectedSortValue(value)
+        setselectedSortValue(value);
         setSortEl(null);
     };
 
@@ -423,10 +419,7 @@ const ConvertedPdfList = (props) => {
         { value: '-pdf_file_name', label: 'Z-A' },
         { value: '-id', label: t("most_recent") },
         { value: 'id', label: t("least_recent") },
-    ]
-
-
-
+    ];
 
     // const AiMarkSubmit = withStyles((theme) => ({
     //     root: {
@@ -466,7 +459,6 @@ const ConvertedPdfList = (props) => {
     //     },
     // }))(Button);
 
-
     const convertmodaloption = {
         closeMaskOnClick: false,
         width: 528,
@@ -474,18 +466,17 @@ const ConvertedPdfList = (props) => {
     };
 
     const handleDrpDownToggle = (e, divId, pdfId, docx_file_name) => {
-        e.stopPropagation()
+        e.stopPropagation();
         if(taskActionAnchorEl === null){
-            setTaskActionAnchorEl(document.getElementById(divId))
+            setTaskActionAnchorEl(document.getElementById(divId));
         }else{
-            setTaskActionAnchorEl(null)
+            setTaskActionAnchorEl(null);
         }
     };
 
     const handleDropDownClose = (event) => {
-        setTaskActionAnchorEl(null)
+        setTaskActionAnchorEl(null);
     };
-
     
     useEffect(() => {
         const handleSearchTermClickOutside = (e) => {
@@ -493,9 +484,7 @@ const ConvertedPdfList = (props) => {
                 setConvertedPdfListSearch(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -506,14 +495,9 @@ const ConvertedPdfList = (props) => {
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
-        return axios.get(
-            url,
-          {
-            responseType: "blob",
-            /* 
-            */
+
+        return axios.get(url, {responseType: "blob", 
             headers: {
                 "Access-Control-Expose-Headers": "Content-Disposition",
                 Authorization: `Bearer ${token}`, // add authentication information as required by the backend APIs.
@@ -524,98 +508,95 @@ const ConvertedPdfList = (props) => {
 
     // download convert docx file 
     const downloadConvertDocxFile = async(taskID) => {
-        let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?id=${taskID}`
+        let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?id=${taskID}`;
         const response = await downloadFileFromApi(url);
-        Config.downloadFileInBrowser(response)
+        Config.downloadFileInBrowser(response);
     } 
 
     useEffect(() => {
-        setDidMount(true)
-        getLanguagesList()
-    }, [])
+        setDidMount(true);
+        getLanguagesList();
+    }, []);
 
     useEffect(() => {
         if(selectedSortValue !== null){
-            setAllPDFtoDocxList([])
-            getAllPDFList()
-            clearTimeout(statusCheckTimeoutRef.current)
-            clearTimeout(triggerTimeoutRef.current)
+            setAllPDFtoDocxList([]);
+            getAllPDFList();
+            clearTimeout(statusCheckTimeoutRef.current);
+            clearTimeout(triggerTimeoutRef.current);
         }
-    }, [selectedSortValue])
+    }, [selectedSortValue]);
 
     // // filter file list by its status
     useEffect(() => {
         setAllPDFtoDocxList([])
         if(statusFilterType !== null){
-            getAllPDFList()
-            clearTimeout(statusCheckTimeoutRef.current)
-            clearTimeout(triggerTimeoutRef.current)
-            // console.log('from filter');
+            getAllPDFList();
+            clearTimeout(statusCheckTimeoutRef.current);
+            clearTimeout(triggerTimeoutRef.current);
         }
-    }, [statusFilterType])
+    }, [statusFilterType]);
 
     const handleStatusFilter = (selected) => {
         setStatusFilterType(selected);
-        statusTypeRef.current = selected
+        statusTypeRef.current = selected;
         if(statusFilterType?.value != selected?.value){
-            pageSelect(1)
-            clearTimeout(statusCheckTimeoutRef.current)
-            clearTimeout(triggerTimeoutRef.current)
+            pageSelect(1);
+            clearTimeout(statusCheckTimeoutRef.current);
+            clearTimeout(triggerTimeoutRef.current);
         }
     };
 
     const SearchTermFilterEnter = (e) => {
         if(e.which === 13 && convetedPdfSearchTerm == ""){
             setConvertedPdfListSearch(false);
-            clearTimeout(statusCheckTimeoutRef.current)
-            clearTimeout(triggerTimeoutRef.current)
-            e.target.blur()
+            clearTimeout(statusCheckTimeoutRef.current);
+            clearTimeout(triggerTimeoutRef.current);
+            e.target.blur();
         }else if(e.which === 13){
             let pageParam = URL_SEARCH_PARAMS.get("page");
             if(pageParam != 1){
-                clearTimeout(statusCheckTimeoutRef.current)
-                clearTimeout(triggerTimeoutRef.current)
-                pageSelect(1)
+                clearTimeout(statusCheckTimeoutRef.current);
+                clearTimeout(triggerTimeoutRef.current);
+                pageSelect(1);
             }else{
-                getAllPDFList()
+                getAllPDFList();
             }
             setConvertedPdfListSearch(false);
-            searchTermRef.current = convetedPdfSearchTerm
-            e.target.blur()
+            searchTermRef.current = convetedPdfSearchTerm;
+            e.target.blur();
         }
     }
 
     useEffect(() =>{ 
         if(convetedPdfSearchTerm == "" && searchTermRef.current !== null &&isSearchTermDelete){
-            setAllPDFtoDocxList([])
-            getAllPDFList()
-            setIsSearchTermDelete(false)
-            clearTimeout(statusCheckTimeoutRef.current)
-            clearTimeout(triggerTimeoutRef.current)
+            setAllPDFtoDocxList([]);
+            getAllPDFList();
+            setIsSearchTermDelete(false);
+            clearTimeout(statusCheckTimeoutRef.current);
+            clearTimeout(triggerTimeoutRef.current);
         }
-    }, [convetedPdfSearchTerm, isSearchTermDelete])
+    }, [convetedPdfSearchTerm, isSearchTermDelete]);
 
     useEffect(() =>{ 
         if(convetedPdfSearchTerm == ""){
-            getAllPDFList()
-            setIsSearchTermDelete(false)
-            clearTimeout(statusCheckTimeoutRef.current)
-            clearTimeout(triggerTimeoutRef.current)
+            getAllPDFList();
+            setIsSearchTermDelete(false);
+            clearTimeout(statusCheckTimeoutRef.current);
+            clearTimeout(triggerTimeoutRef.current);
         }
-    }, [convetedPdfSearchTerm])
+    }, [convetedPdfSearchTerm]);
 
     const handleCloseSearchBox = () => {
-        setConvertedPdfSearchTerm("")
-        setConvertedPdfListSearch(false)
-        setIsSearchTermDelete(true)
+        setConvertedPdfSearchTerm("");
+        setConvertedPdfListSearch(false);
+        setIsSearchTermDelete(true);
     }
-
-
 
     const getAllPDFList = () => {
         if(showPendingStatus) setShowListingLoader(false);
         else setShowListingLoader(true);
-        let list = []
+        let list = [];
         /* Page param set/get - start */
         let page = 1;
         let pageParam = URL_SEARCH_PARAMS.get("page");
@@ -626,19 +607,19 @@ const ConvertedPdfList = (props) => {
         /* Page param set/get - start */
         let url = `${Config.BASE_URL}/exportpdf/convertpdftodocx?page=${page}`;
         if (convetedPdfSearchTerm) url += `&search=${convetedPdfSearchTerm}`;
-        if (selectedSortValue !== null) url += `&ordering=${selectedSortValue}` 
-        if(statusFilterType !== null && statusFilterType?.value !== 'all') url += `&status=${statusFilterType?.value}`
+        if (selectedSortValue !== null) url += `&ordering=${selectedSortValue}` ;
+        if(statusFilterType !== null && statusFilterType?.value !== 'all') url += `&status=${statusFilterType?.value}`;
         let params = {
             url: url,
             auth: true,
             success: (response) => {
-                list = response?.data?.results
+                list = response?.data?.results;
                 if (list.length == 0) setEmptyProjects(true);
                 else setEmptyProjects(false);
                 setTimeout(() => {
-                    setAllPDFtoDocxList(list)
-                    setAllPDFFileList(list)
-                    setShowConvertProgress(!showConvertProgress)
+                    setAllPDFtoDocxList(list);
+                    setAllPDFFileList(list);
+                    setShowConvertProgress(!showConvertProgress);
                 }, 200);
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
@@ -651,19 +632,16 @@ const ConvertedPdfList = (props) => {
     // this snippet will check if there is any pending convertion and if present, it starts to call api automatically(checkFileStatus)
     useEffect(() => {
       if(allPDFFileList?.length !== 0) {
-        let pendingFiles = allPDFFileList?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status != null && each?.status != 'YET TO START')
-        // console.log(pendingFiles);
+        let pendingFiles = allPDFFileList?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status != null && each?.status != 'YET TO START');
         if(pendingFiles?.length !== 0){
             pendingFiles?.map(each => {
-                fileIdList.current?.push(each.id)
+                fileIdList.current?.push(each.id);
             })
-            checkFileStatus()
+            checkFileStatus();
         }
-        // console.log(fileIdList.current);
       }
-    }, [allPDFFileList])
+    }, [allPDFFileList]);
     
-
     const SingleConvert = async(id) => {
         const newArr = allPDFtoDocxList?.map(obj => {
             if (obj.id === id) {
@@ -675,23 +653,21 @@ const ConvertedPdfList = (props) => {
             }
             return obj;
         });
-        console.log(newArr);
         setAllPDFtoDocxList(newArr);
         
         Config.axios({
             url: Config.BASE_URL + "/exportpdf/convert?id=" + id,
             auth: true,
             success: (response) => {
-                fileIdList.current?.push(id)
+                fileIdList.current?.push(id);
                 setTimeout(() => {
-                    checkFileStatus()
+                    checkFileStatus();
                 }, 3500);
-                console.log(fileIdList.current);
             },
             error: (err) => {
                 if(err.response.status === 400){
                     if(err.response.data?.msg?.includes('Insufficient Credits')){
-                        setShowCreditAlertModal(true)
+                        setShowCreditAlertModal(true);
                         const newArr = allPDFtoDocxList?.map(obj => {
                             if (obj.id === id) {
                                 return {
@@ -702,7 +678,6 @@ const ConvertedPdfList = (props) => {
                             }
                             return obj;
                         });
-                        // console.log(newArr);
                         setAllPDFtoDocxList(newArr);
                     }
                 }
@@ -711,25 +686,17 @@ const ConvertedPdfList = (props) => {
     } 
 
     const checkFileStatus = () => {
-        let idList = ''
+        let idList = '';
         fileIdList.current?.map((each, index) => {
             idList += `${each}${index !== fileIdList.current?.length - 1 ? "&id=" : ""}`
-        })
-        // console.log(idList);
-
+        });
         if(idList !== ''){
             Config.axios({
                 url: `${Config.BASE_URL}/exportpdf/convertpdftodocx?id=${idList}`,
                 auth: true,
                 success: (response) => {
-                    // console.log(response.data);
-                    // console.log(fileIdList.current);
-
                     const newArr = allPDFtoDocxList?.map(obj => {
-                        // console.log(response.data?.find(each => each?.id === obj?.id));
-                        // console.log(obj.id == response.data?.find(each => each?.id === obj?.id)?.id);
                         if (obj.id == response.data?.find(each => each?.id === obj?.id)?.id) {
-                            // console.log("pass")
                             return {
                                 ...obj,
                                 status: response.data?.find(each => each?.id === obj?.id)?.status != null ? response.data?.find(each => each?.id === obj?.id)?.status : 'PENDING',
@@ -742,10 +709,9 @@ const ConvertedPdfList = (props) => {
                         }
                         return obj;
                     });
-                    console.log(newArr);
                     setAllPDFtoDocxList(newArr);
                     triggerTimeoutRef.current = setTimeout(() => {
-                        setFileCheckTrigger(!fileCheckTrigger)
+                        setFileCheckTrigger(!fileCheckTrigger);
                     }, 20);
                 },
             });
@@ -754,25 +720,23 @@ const ConvertedPdfList = (props) => {
 
     useEffect(() => {
       if(allPDFtoDocxList?.length !== 0 && fileIdList?.length !== 0){
-        let remainingFiles = allPDFtoDocxList?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status != 'YET TO START' && each?.status != null)
-        console.log(remainingFiles)
+        let remainingFiles = allPDFtoDocxList?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status != 'YET TO START' && each?.status != null);
         if(remainingFiles?.length !== 0){
             statusCheckTimeoutRef.current = setTimeout(() => {
-                checkFileStatus()
+                checkFileStatus();
             }, 5000);
         }else{
-            // setIsFileConverting(false)
-            // Config.toast('Conversion completed')
+            // setIsFileConverting(false);
+            // Config.toast('Conversion completed');
         }
       }
-    }, [fileCheckTrigger])
+    }, [fileCheckTrigger]);
     
-
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
-        setAllPDFtoDocxList([])
-        clearTimeout(statusCheckTimeoutRef.current)
-        clearTimeout(triggerTimeoutRef.current)
+        setAllPDFtoDocxList([]);
+        clearTimeout(statusCheckTimeoutRef.current);
+        clearTimeout(triggerTimeoutRef.current);
         let url = `/create/tool-kit/pdf/pdf-list?page=${page}`;
         let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
         if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
@@ -836,9 +800,8 @@ const ConvertedPdfList = (props) => {
         }, 100);
     };
 
-    useEffect(() => {
-      
-    }, [paginationContent])
+    useEffect(() => {      
+    }, [paginationContent]);
 
     /* Show the pagination content a the bottom */
     useEffect(() => {
@@ -852,15 +815,10 @@ const ConvertedPdfList = (props) => {
         if(URL_SEARCH_PARAMS.get("page") !== null && URL_SEARCH_PARAMS.get("page") != 'null'){
             getAllPDFList();
         }else if (URL_SEARCH_PARAMS.get("page") == null || URL_SEARCH_PARAMS.get("page") == 'null'){
-            // let page = URL_SEARCH_PARAMS.get("page")
-            history(`/create/tool-kit/pdf/pdf-list?page=1`)
+            // let page = URL_SEARCH_PARAMS.get("page");
+            history(`/create/tool-kit/pdf/pdf-list?page=1`);
         }
-        fileUploadTop.current?.scrollIntoView(
-            {
-                behavior: "smooth",
-            },
-            100
-        );
+        fileUploadTop.current?.scrollIntoView( { behavior: "smooth", },100 );
     }, [URL_SEARCH_PARAMS.get("page")]);
 
     const handleDeleteModal = (id, name) => {
@@ -876,9 +834,9 @@ const ConvertedPdfList = (props) => {
             auth: true,
             success: (response) => {
                 if(response.data.msg === "deleted successfully"){
-                    getAllPDFList()
+                    getAllPDFList();
                     setShowDeleteFileModal(false);
-                    Config.toast('Deleted successfully')
+                    Config.toast('Deleted successfully');
                 }
             },
         };
@@ -891,8 +849,8 @@ const ConvertedPdfList = (props) => {
             url: Config.BASE_URL + "/app/language/",
             auth: true,
             success: (response) => {
-                targetLanguageOptionsRef.current = response.data
-                // getFilesProjectList()
+                targetLanguageOptionsRef.current = response.data;
+                // getFilesProjectList();
             },
         };
         Config.axios(params);
@@ -903,46 +861,42 @@ const ConvertedPdfList = (props) => {
             url: Config.BASE_URL + "/workspace/file_project_list/",
             auth: true,
             success: (response) => {
-                // console.log(response.data);
-                let arr = []
+                let arr = [];
                 response.data?.map(each => {
-                    let list = ""
+                    let list = "";
                     each.jobs?.target?.map((eachLang, index) => {
                         list += `${targetLanguageOptionsRef.current?.find(each => each.id === eachLang)?.language}${index !== each.jobs?.target?.length - 1 ? ", " : ""}`;
                     });
-
                     arr.push({
                         value: each.id,
                         label: `${each.project_name}=>${targetLanguageOptionsRef.current?.find(eachLang => eachLang.id == each.jobs?.source)?.language} -> ${list}`
-                    })
-                })
-                setFilesProjectListOptions(arr)
-                setFilesProjectList(response.data)
+                    });
+                });
+                setFilesProjectListOptions(arr);
+                setFilesProjectList(response.data);
             }
         });
     } 
 
     const handlePdfTranslateBtn = (id, docx_file_name) => {
-        setSelectedPdfObj({id, filename: docx_file_name})
-        setProjectUpdateModal(true)
+        setSelectedPdfObj({id, filename: docx_file_name});
+        setProjectUpdateModal(true);
     } 
 
     const handleProceedBtn = () => {
         if(userTranslateChoice === 'new'){
-            history(`/create/translate/files/translate-files?pdf=${selectedPdfObj?.id}`, {state: {filename: selectedPdfObj?.filename}})
+            history(`/create/translate/files/translate-files?pdf=${selectedPdfObj?.id}`, {state: {filename: selectedPdfObj?.filename}});
         }else{
-            history(`/create/translate/files/translate-files?pdf=${selectedPdfObj?.id}&get-project-info=${selectedProjectToUpdate?.id}&type=${1}`, {state: {filename: selectedPdfObj?.filename}})
+            history(`/create/translate/files/translate-files?pdf=${selectedPdfObj?.id}&get-project-info=${selectedProjectToUpdate?.id}&type=${1}`, {state: {filename: selectedPdfObj?.filename}});
         }
     } 
     
     const openWriter = (id, name) => {
-        history(`/word-processor?pdf-id=${id}`, {state: {docName: name, from: "My PDF", prevPath: location.pathname + location.search}})
+        history(`/word-processor?pdf-id=${id}`, {state: {docName: name, from: "My PDF", prevPath: location.pathname + location.search}});
     }
 
-
-
     const Option = (props) => {
-        let list = ""
+        let list = "";
         props.data?.jobs?.target?.map((eachLang, index) => {
             list += `${targetLanguageOptionsRef.current?.find(each => each.id === eachLang)?.language}${index !== props.data?.jobs?.target?.length - 1 ? ", " : ""}`;
         });
@@ -964,7 +918,7 @@ const ConvertedPdfList = (props) => {
 
     const ValueContainer = ({ children, ...props }) => {
         const { getValue, hasValue } = props;
-        let list = ""
+        let list = "";
         children[0]?.props.data?.jobs?.target?.map((eachLang, index) => {
             list += `${targetLanguageOptionsRef.current?.find(each => each.id === eachLang)?.language}${index !== children[0]?.props.data?.jobs?.target?.length - 1 ? ", " : ""}`;
         });
@@ -1016,7 +970,6 @@ const ConvertedPdfList = (props) => {
           },
         };
     };
-
 
     return (
         <React.Fragment>

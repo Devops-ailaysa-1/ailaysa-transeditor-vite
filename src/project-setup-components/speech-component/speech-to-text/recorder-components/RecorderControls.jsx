@@ -3,7 +3,6 @@ import ButtonBase from '@mui/material/ButtonBase';
 import MicIcon from '@mui/icons-material/Mic';
 import { useTranslation } from "react-i18next";
 
-
 export default function RecorderControls({ recorderState, handlers }) {
   const { t } = useTranslation();
   const { recordingMinutes, recordingSeconds, initRecording } = recorderState;

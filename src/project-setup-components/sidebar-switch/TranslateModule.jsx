@@ -5,10 +5,7 @@ import ProjectCreation from "../allTemplate-component/projectCreation";
 import InstantTextTranslate from "../translate-component/text/InstantTextTranslate";
 
 const TranslateModule = (props) => {
-    const {
-        sidebarActiveTab,
-        setSidebarActiveTab,
-    }=props
+    const { sidebarActiveTab, setSidebarActiveTab, } = props;
     const params = useParams();
 
     if (!params?.menu && !params?.action) {

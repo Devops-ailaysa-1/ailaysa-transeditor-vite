@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState} from 'react';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import Config from "../../vendor/Config";
@@ -12,12 +12,11 @@ import Button from '@mui/material/Button';
 import { ButtonBase } from '@mui/material';
 import { ButtonLoader } from '../../loader/CommonBtnLoader';
 import { useTranslation } from "react-i18next";
-import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
-import TempLoader from "../../assets/images/temp-download-loader.svg"
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
+import TempLoader from "../../assets/images/temp-download-loader.svg";
 
 const SimpleRodals = (props) => {
     const { t } = useTranslation();
-
     const {
         // filteredResults,
         // setFilteredResults,
@@ -72,8 +71,8 @@ const SimpleRodals = (props) => {
         isDocumentSubmitting
     } = props;
 
-    const [searchInput, setSearchInput] = useState('')
-    const [onFocusWrap, setOnFocusWrap] = useState('')
+    const [searchInput, setSearchInput] = useState('');
+    const [onFocusWrap, setOnFocusWrap] = useState('');
     const [filteredResults, setFilteredResults] = useState([]);
 
     const modaloption = {
@@ -83,7 +82,6 @@ const SimpleRodals = (props) => {
         width: showSubmitDocumentAlertModal ? 560 : props.showInsufficientConfirmAllModal ? 450 : (!props?.showUnHireModel && !showUnassignModal && !showZeroSegmentAlertModal && !props.showMtDisabledModal) ? 784 : 350,
         onClose: props.hideSettingsModal,
     };
-
 
     const DropdownIndicator = (props) => {
         return (
@@ -181,7 +179,6 @@ const SimpleRodals = (props) => {
                         />
                     </div>
                 </Rodal>
-
             ) : props.showTarLangModal ? (
                 <Rodal visible={props?.showTarLangModal} {...modaloption} showCloseButton={false} className="ai-tar-lang-select-modal">
                     <div className="lang-modal-wrapper">

@@ -2,10 +2,9 @@ import React, { useState, useEffect, createRef, useRef } from "react";
 // import QuillTextEditor from "../../../vendor/quill-text-editor/QuillTextEditor";
 import { useTranslation } from "react-i18next";
 
- 
 const TextInput = (props) => {
     const { t } = useTranslation();
-    const {textareaRef, translateSrcContent, setTranslateSrcContent} = props
+    const {textareaRef, translateSrcContent, setTranslateSrcContent} = props;
     return(
         <React.Fragment>
             <textarea

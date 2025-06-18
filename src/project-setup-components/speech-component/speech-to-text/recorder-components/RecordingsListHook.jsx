@@ -12,7 +12,6 @@ export default function useRecordingsList({ audio, audioFile, tempBlob,audioData
       });
   }, [audio]);
   
-
   return {
     audioData,
     deleteAudio: (audioKey) => deleteAudio(audioKey, setAudioData),
