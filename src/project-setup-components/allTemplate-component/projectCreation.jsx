@@ -1286,7 +1286,7 @@ function ProjectCreation(props) {
                 return;
             },
             error: (err) => {
-                
+                Config.toast("","",true)
                 if (err?.response?.data?.files ) {
                     setIsSubmitted(false);
                     setFiles([]);
@@ -1298,6 +1298,7 @@ function ProjectCreation(props) {
                   Config.toast(msg, 'error');
                   setFiles([]);
                   setIsSubmitted(false);
+                  
                 }
                 
                 setShowCreateLoader(false);
