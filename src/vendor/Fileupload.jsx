@@ -545,7 +545,7 @@ function Fileupload(props) {
 
     const handleIndividualTaskAssignManage = (e, selectedStep, task, project) => {
         e.stopPropagation();
-        console.log(task);
+        
         selectedFileRow.current = {
             task: task.id,
             job: task.job,
@@ -3800,7 +3800,7 @@ function Fileupload(props) {
     }
 
     const sendExtendTaskDeadlineRequest = () => {
-        console.log(taskDetailsForDeadlineCrossedTask.current);
+        // console.log(taskDetailsForDeadlineCrossedTask.current);
         let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current;
         var formdata = new FormData();
         formdata.append("task", task_id);
@@ -5211,7 +5211,7 @@ function Fileupload(props) {
                                                                                     openedProjectId == project.id &&
                                                                                     ((selectedProjectFiles?.length > 0) ? (
                                                                                         selectedProjectFiles.map((selectedProjectFile, key) => {
-                                                                                            console.log(selectedProjectFile, "selectedProjectFile")
+                                                                                            
                                                                                             isAssignedProject = createdProjects.find(
                                                                                                 (element) => element.id === openedProjectId
                                                                                             )?.assign_enable;
@@ -6711,7 +6711,7 @@ function Fileupload(props) {
                                                                                                                                                             </button>
                                                                                                                                                         ) : (selectedProjectFile?.task_assign_info?.filter(each => each.task_ven_status === 'task_accepted')?.length === 1) ? (
                                                                                                                                                             index === 0 &&
-                                                                                                                                                            <div className="open-as-button-wrapper">
+                                                                                                                                                            <div className="open-as-button-wrapper">    
                                                                                                                                                                 <button className="workspace-files-OpenProjectButton"
                                                                                                                                                                     style={{
                                                                                                                                                                         paddingLeft: "15px",
@@ -8069,7 +8069,7 @@ function Fileupload(props) {
                                                                                                                                                                 <ul>
                                                                                                                                                                     {
                                                                                                                                                                         subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
-                                                                                                                                                                            console.log(project.adaptive_file_translate, "checkedclick2")
+                                                                                                                                                                            
                                                                                                                                                                             if (project.adaptive_file_translate && item.label === t("mt_only")) {
                                                                                                                                                                                 return null;
                                                                                                                                                                             }

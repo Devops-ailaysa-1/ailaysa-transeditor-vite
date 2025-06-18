@@ -1286,18 +1286,20 @@ function ProjectCreation(props) {
                 return;
             },
             error: (err) => {
-                if (err?.response?.data?.files) {
+                
+                if (err?.response?.data?.files ) {
                     setIsSubmitted(false);
                     setFiles([]);
                     Config.toast(t("submitted_file_empty"), 'warning');
                 }
                 const msg = err?.response?.data?.msg || err?.response?.data?.error;
-                const translationKey = projectCreationErrorMsgMap[msg];
-                if (translationKey) {
-                  Config.toast(t(translationKey), 'error');
+                // const translationKey = projectCreationErrorMsgMap[msg];
+                if (msg) {
+                  Config.toast(msg, 'error');
                   setFiles([]);
                   setIsSubmitted(false);
                 }
+                
                 setShowCreateLoader(false);
                 setTranslateDownloadBtnLoader(false);
             }
@@ -2689,7 +2691,7 @@ function ProjectCreation(props) {
                                                         {t("limit_for_file_upload")}: <span>1 file upload</span>
                                                      </span>
                                                       <span className="max-file-note">
-                                                        {t("file_upload_conditon_note_3")}: <span>2,000</span> 
+                                                        {t("file_upload_conditon_note_3")}: <span>10,000</span> 
                                                      </span>
                                                      {/* <span className="max-file-note">
                                                      {t("file_upload_condition_note_2")}: <span>100 MB</span>
