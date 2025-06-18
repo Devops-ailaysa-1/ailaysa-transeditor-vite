@@ -351,13 +351,12 @@ const MyFiles = (props) => {
             success: (response) => {
                 Config.toast("Document deleted successfully");
                 const newArr = documentsList?.filter(obj => obj.id !== documentId);
-                setDocumentsList(newArr)
-                setShowDeleteFileModal(false)
-                if(newArr?.length == 0) setEmptyProjects(true)
+                setDocumentsList(newArr);
+                setShowDeleteFileModal(false);
+                if(newArr?.length == 0) setEmptyProjects(true);
             },
         });
     } 
-
 
     // const Tooltip = withStyles({
     //     tooltip: {
@@ -375,10 +374,9 @@ const MyFiles = (props) => {
     //         color: "#2A2A2A",
     //     },
     // })(Tooltip);
-
         
     const openWriter = (id, name) => {
-        history(`/word-processor?document-id=${id}`, {state: {docName: name, prevPath: window.location.pathname + window.location.search}})
+        history(`/word-processor?document-id=${id}`, {state: {docName: name, prevPath: window.location.pathname + window.location.search}});
     } 
 
     return (

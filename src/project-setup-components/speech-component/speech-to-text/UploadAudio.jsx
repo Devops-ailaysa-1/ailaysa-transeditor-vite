@@ -1,19 +1,14 @@
 import React, { useState, useEffect, createRef, useRef } from "react";
 import Config from "../../../vendor/Config";
 import { useTranslation } from "react-i18next";
-import VoiceUploadIcon from "../../../assets/images/project-setup/voice/voice-upload-icon.svg"
-import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
-
+import VoiceUploadIcon from "../../../assets/images/project-setup/voice/voice-upload-icon.svg";
+import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg";
 
 const UploadAudio = (props) => {
     const { t } = useTranslation();
-    let { DragandDrop, handleDrop, handleChange, files, removeFile, niceBytes, editFiles, deleteEditFile, removeTempFile} = props
-    // console.log(files);
-    // console.log(editFiles);  
-
+    let { DragandDrop, handleDrop, handleChange, files, removeFile, niceBytes, editFiles, deleteEditFile, removeTempFile} = props;
     const params = new URLSearchParams(window.location.search); 
-    const getParams= params.get('task')
-
+    const getParams= params.get('task');
 
     return (
         <React.Fragment>
@@ -35,8 +30,7 @@ const UploadAudio = (props) => {
                         </div>         
                     </div>
                 </DragandDrop>
-            }
-                
+            }                
                 {/* // <DragandDrop handleDrop={handleDrop}> */}
                    { (files.length > 0 || editFiles?.length > 0) && <div className="audio-file-list-wrapper">
                     {editFiles?.map((editFile) => {

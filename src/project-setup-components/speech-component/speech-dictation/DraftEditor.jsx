@@ -3,41 +3,28 @@ import React, { useEffect, useState } from "react";
 import { EditorState, Modifier,ContentState } from "draft-js";
 // import { Editor } from "react-draft-wysiwyg";
 import 'draft-js/dist/Draft.css';
-
-
-
 import VoiceEditor from "./VoiceEditor";
 import { Toolbar } from "./Toolbar";
 // import ClearButton from "./ClearButton";
 import { useTranslation } from "react-i18next";
 
-
-
 const DraftEditor = (props) => {
   const { t } = useTranslation();
+  let{speechSourceLanguageOption, setDictationInput, dictatedData, setDictatedData, dictationInput, dictationDataRef} = props;  
+  const [editorState, setEditorState] = useState(EditorState.createWithContent( ContentState.createFromText(dictationInput != null ? dictationInput : ""  ) ));
 
-
-  let{speechSourceLanguageOption, setDictationInput, dictatedData, setDictatedData, dictationInput, dictationDataRef} = props
-  const [editorState, setEditorState] = useState(EditorState.createWithContent(
-    ContentState.createFromText(dictationInput != null ? dictationInput : ""  )
-   ));
-
-   const onEditorStateChange = (editorState) => {
+  const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
   };
-
   
-  
-
   // useEffect(() => {
   //   if(editorState !== null){
-  //     setDictationInput(editorState.getCurrentContent().getPlainText())
+  //     setDictationInput(editorState.getCurrentContent().getPlainText());
   //   }
-  // }, [editorState])
+  // }, [editorState]);
 
     useEffect(() => {
     // if(dictationInput !== null){
-      // console.log(dictationInput);
     // }
     const contentState = Modifier.insertText(
       editorState.getCurrentContent(),
@@ -45,16 +32,14 @@ const DraftEditor = (props) => {
       dictationInput,
       editorState.getCurrentInlineStyle()
     );
-    EditorState?.push(editorState, contentState, "insert-characters")
+    EditorState?.push(editorState, contentState, "insert-characters");
     if(dictationInput == null ){
       setEditorState(EditorState.createWithContent(
         ContentState.createFromText("")
-       ))
+       ));
     }
-  }, [dictationInput])
-
+  }, [dictationInput]);
  
-
   return (
     <div className='ts-dictation'>
       {/* <Editor
