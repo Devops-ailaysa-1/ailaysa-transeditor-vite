@@ -1,11 +1,11 @@
 import React, { useState, useEffect, createRef, useRef } from "react";
 import Config from "../../../vendor/Config";
 import { useTranslation } from "react-i18next";
-import UploadFolder from "../../../assets/images/new-ui-icons/upload-folder.svg"
-import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
+import UploadFolder from "../../../assets/images/new-ui-icons/upload-folder.svg";
+import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg";
 
 const FileInput = (props) => {
-    const {DragandDrop, handleDrop, handleChange, files, removeFile, niceBytes, editFiles, deleteEditFile} = props
+    const {DragandDrop, handleDrop, handleChange, files, removeFile, niceBytes, editFiles, deleteEditFile} = props;
     const { t } = useTranslation();
 
     return(
@@ -28,9 +28,9 @@ const FileInput = (props) => {
                         </div>         
                     </div>
                 </DragandDrop>
-}
-                {/* // <DragandDrop handleDrop={handleDrop}> */}
-                   {(files.length > 0 || editFiles?.length > 0) &&  <div className="audio-file-list-wrapper">
+            }
+            {/* // <DragandDrop handleDrop={handleDrop}> */}
+                {(files.length > 0 || editFiles?.length > 0) &&  <div className="audio-file-list-wrapper">
                         {editFiles?.map((editFile) => {
                         return(
                             <>

@@ -28,7 +28,7 @@ import CachedIcon from '@mui/icons-material/Cached';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
-import getBlobDuration from 'get-blob-duration'
+import getBlobDuration from 'get-blob-duration';
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
@@ -47,30 +47,28 @@ import WarningIcon from '@mui/icons-material/Warning';
 import Cookies from "js-cookie";
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from "react-i18next";
-import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
-import RemoveCircleRed from "../../assets/images/new-ui-icons/remove_circle_red.svg"
-import InsuffientIcon from "../../assets/images/new-ui-icons/insuffient-icon.svg"
-import PauseIcon from "../../assets/images/project-setup/voice/pause-icon.svg"
-import ColorDocIcon from "../../assets/images/new-project-setup/color-doc-icon.svg"
-import ColorArrow from "../../assets/images/new-project-setup/color-arrow.svg"
-import ColorTranslateIcon from "../../assets/images/new-project-setup/color-translate-icon.svg"
-import ColorVoiceIcon from "../../assets/images/new-project-setup/color-voice-icon.svg"
-import ImpFileIcon from "../../assets/images/new-ui-icons/imp-icon-file.svg"
-import ReactRouterPrompt from 'react-router-prompt'
-import ArrowRightGreyColor from "../../assets/images/new-create-hub/arrow_right_grey_color.svg"
-import ConfirmIcon from "../../assets/images/new-ui-icons/confirm-icon.svg"
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
+import RemoveCircleRed from "../../assets/images/new-ui-icons/remove_circle_red.svg";
+import InsuffientIcon from "../../assets/images/new-ui-icons/insuffient-icon.svg";
+import PauseIcon from "../../assets/images/project-setup/voice/pause-icon.svg";
+import ColorDocIcon from "../../assets/images/new-project-setup/color-doc-icon.svg";
+import ColorArrow from "../../assets/images/new-project-setup/color-arrow.svg";
+import ColorTranslateIcon from "../../assets/images/new-project-setup/color-translate-icon.svg";
+import ColorVoiceIcon from "../../assets/images/new-project-setup/color-voice-icon.svg";
+import ImpFileIcon from "../../assets/images/new-ui-icons/imp-icon-file.svg";
+import ReactRouterPrompt from 'react-router-prompt';
+import ArrowRightGreyColor from "../../assets/images/new-create-hub/arrow_right_grey_color.svg";
+import ConfirmIcon from "../../assets/images/new-ui-icons/confirm-icon.svg";
 import { Checkbox } from "@mui/material";
 
 const TextToSpeech = (props) => {
     const history = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
-
     // const {
     //     browserSupportsSpeechRecognition
     // } = useSpeechRecognition();
-    const browserSupportsSpeechRecognition = null
-
+    const browserSupportsSpeechRecognition = null;
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 
     const [projectName, setProjectName] = useState("");
@@ -81,36 +79,26 @@ const TextToSpeech = (props) => {
     const [showTarLangModal, setshowTarLangModal] = useState(false);
     const [targetLanguageOptions, setTargetLanguageOptions] = useState(null);
     const [textToSpeechSwitch, setTextToSpeechSwitch] = useState(1);
-    const [flowSwitch, setFlowSwitch] = useState(1) // 1 - for source downlaod, 2 - for translate and download
+    const [flowSwitch, setFlowSwitch] = useState(1); // 1 - for source downlaod, 2 - for translate and download
     const [textToSpeechGlbSwitch, setTextToSpeechGlbSwitch] = useState(2);
     const [sourceLanguage, setSourceLanguage] = useState("");
     const [sourceLanguageOptions, setSourceLanguageOptions] = useState(null);
     const [sourceLabel, setSourceLabel] = useState(t("source_language"));
     const [showSrcLangModal, setshowSrcLangModal] = useState(false);
     const [files, setFiles] = useState([]);
-    const [deadline, setDeadline] = useState(null)
+    const [deadline, setDeadline] = useState(null);
     const [selectedTypeValue, setSelectedTypeValue] = useState("");
     const [selectedVoice, setSelectedVoice] = useState(null);
     const [selectedAudioConvert, setSelectedAudioConvert] = useState(false);
     // const [playPause, setPlayPause] = useState(false);
-    const [selectedVoiceValue, setSelectedVoiceValue] = useState()
-    const [preTranslate, setPreTranslate] = useState(false)
-    const [translationByPage, setTranslationByPage] = useState(true)
-
+    const [selectedVoiceValue, setSelectedVoiceValue] = useState();
+    const [preTranslate, setPreTranslate] = useState(false);
+    const [translationByPage, setTranslationByPage] = useState(true);
     const [mtEnable, setMtEnable] = useState(true);
-
-
-    const textareaRef = useRef();
-    const searchAreaRef = useRef(null);
-    const contentprojectNameRef = useRef();
-    const targetLanguageOptionsRef = useRef([]);
-    const projectQuickSetup = useRef(true);
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
-    const allowedSingleFileSize = useRef(100); // in MB
-    const singleFileSizeError = useRef(t("file_size_exceeds"));
-    const [showSettings, setshowSettings] = useState(false);
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
+     const [showSettings, setshowSettings] = useState(false);
     const [validationState, setValidationState] = useState({
         projectName: false,
         inputText: false,
@@ -118,13 +106,12 @@ const TextToSpeech = (props) => {
         srcLang: false,
         tarLang: false,
         dictatedData: false
-    })
-
+    });
     const [sourceLanguageDisable, setSourceLanguageDisable] = useState(false);
     const [sourceTargetValidation, setSourceTargetValidation] = useState({
         source: false,
         target: false,
-    })
+    });
     const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
     const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState(
         []
@@ -132,92 +119,68 @@ const TextToSpeech = (props) => {
     const [editFiles, setEditFiles] = useState([]);
     const [editJobs, setEditJobs] = useState([]);
     const [isEdit, setIsEdit] = useState(false)
-    const [hasTeam, setHasTeam] = useState(false)
+    const [hasTeam, setHasTeam] = useState(false);
     const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
-    const [editProjectId, setEditProjectId] = useState(null)
+    const [editProjectId, setEditProjectId] = useState(null);
     const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
     const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
-    const [projectId, setProjectId] = useState(null)
+    const [projectId, setProjectId] = useState(null);
     const [selectedProjectFiles, setSelectedProjectFiles] = useState([]);
-    const [animate, setAnimate] = useState(null)
+    const [animate, setAnimate] = useState(null);
     const [clickedOpenButton, setClickedOpenButton] = useState(false);
-    const [taskID, setTaskID] = useState(null)
-    const [showConvertAllModal, setShowConvertAllModal] = useState(false)
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-    const [dictationInput, setDictationInput] = useState("")
-    const [showProcessingModal, setShowProcessingModal] = useState(false)
-    const [isConversionGoing, setIsConversionGoing] = useState(false)
-    const [showBtnLoader, setShowBtnLoader] = useState(false)
-
+    const [taskID, setTaskID] = useState(null);
+    const [showConvertAllModal, setShowConvertAllModal] = useState(false);
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const [dictationInput, setDictationInput] = useState("");
+    const [showProcessingModal, setShowProcessingModal] = useState(false);
+    const [isConversionGoing, setIsConversionGoing] = useState(false);
+    const [showBtnLoader, setShowBtnLoader] = useState(false);
     // Auido Download States
-    const [showAudioOptionsModal, setShowAudioOptionsModal] = useState(false)
-    const [localeOptions, setLocaleOptions] = useState([])
-    const [genderOptions, setGenderOptions] = useState([])
-    const [audioLocale, setAudioLocale] = useState(null)
-    const [audioGender, setAudioGender] = useState([])
-    const [voiceType, setVoiceType] = useState(null)
-    const [isTranslatedAudioFileAvailable, setIsTranslatedAudioFileAvailable] = useState(null)
-
-    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null)
-
-
+    const [showAudioOptionsModal, setShowAudioOptionsModal] = useState(false);
+    const [localeOptions, setLocaleOptions] = useState([]);
+    const [genderOptions, setGenderOptions] = useState([]);
+    const [audioLocale, setAudioLocale] = useState(null);
+    const [audioGender, setAudioGender] = useState([]);
+    const [voiceType, setVoiceType] = useState(null);
+    const [isTranslatedAudioFileAvailable, setIsTranslatedAudioFileAvailable] = useState(null);
+    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
     // audio player states
-    const [isPlaying, setIsPlaying] = useState(null)
+    const [isPlaying, setIsPlaying] = useState(null);
     const [play, setPlay] = useState(false);
-    const [currentSlider, setCurrentSlider] = useState(null)
-    const [currentThumb, setCurrentThumb] = useState(null)
-    const [bar, setBar] = useState(null)
-    const [totDuration, setTotDuration] = useState(0)
-    const [inputRangeValue, setInputRangeValue] = useState(null)
-    const [audioTagId, setAudioTagId] = useState(null)
-    const [currentTimeText, setCurrentTimeText] = useState(null)
-    const [currentAudioTime, setCurrentAudioTime] = useState(null)
+    const [currentSlider, setCurrentSlider] = useState(null);
+    const [currentThumb, setCurrentThumb] = useState(null);
+    const [bar, setBar] = useState(null);
+    const [totDuration, setTotDuration] = useState(0);
+    const [inputRangeValue, setInputRangeValue] = useState(null);
+    const [audioTagId, setAudioTagId] = useState(null);
+    const [currentTimeText, setCurrentTimeText] = useState(null);
+    const [currentAudioTime, setCurrentAudioTime] = useState(null);
     const [sliderPercentage, setSliderPercentage] = useState(0);
-    const [isLoading, setIsLoading] = useState(false)  // state for showing skeleton
-    const [showPunctuationModal, setShowPunctuationModal] = useState(false)
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
-    const [isProjectDeleting, setIsProjectDeleting] = useState(false)
-
-
-    const audioPlayer = useRef(null); //Ref for HTML Audio tag
-    const sliderRangeRef = useRef()
-    const sliderThumbRef = useRef()
-    const dictationDataRef = useRef(null)
-
-    // steps related states
-    const [steps, setSteps] = useState([])
-    const [stepOptions, setStepOptions] = useState([])
+    const [isLoading, setIsLoading] = useState(false);  // state for showing skeleton
+    const [showPunctuationModal, setShowPunctuationModal] = useState(false);
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
+    const [isProjectDeleting, setIsProjectDeleting] = useState(false);
+       // steps related states
+    const [steps, setSteps] = useState([]);
+    const [stepOptions, setStepOptions] = useState([]);
     const [selectedSteps, setSelectedSteps] = useState([]);
-    const [stepsFromApi, setstepsFromApi] = useState([])
-    const [revisionStepEdit, setRevisionStepEdit] = useState(null)
-
-    const deletedEditFileIds = useRef([]);
-    const deletedJobIds = useRef([]);
-    const ref = useRef(null)
-    const targetLanguageOptionRef = useRef(null)
-    const dictatFilteredSourceLang = useRef(null)
-    const dictatedFilterListWithAccent = useRef(null)
-
+    const [stepsFromApi, setstepsFromApi] = useState([]);
+    const [revisionStepEdit, setRevisionStepEdit] = useState(null);
     // voice-dictation
     const [speechSourceLanguageOption, setSpeechSourceLanguageOption] = useState(null); // int
-    const [accentOptions, setAccentOptions] = useState(null)
-    const [selectedAccent, setSelectedAccent] = useState(null)
+    const [accentOptions, setAccentOptions] = useState(null);
+    const [selectedAccent, setSelectedAccent] = useState(null);
     const [isListening, setIsListening] = useState(false);
-    const [dictatedData, setDictatedData] = useState(null)
-
-    // const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
-    const [dictationTabSwitchAlert, setDictationTabSwitchAlert] = useState(false)
-
-    const [tempTabSwitch, setTempTabSwitch] = useState(1)
-    const [switchTrigger, setSwitchTrigger] = useState(false)
-    const [recentlyUsedLangs, setRecentlyUsedLangs] = useState([])
-    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-
+    const [dictatedData, setDictatedData] = useState(null);
+     // const [editorState, setEditorState] = useState(EditorState.createEmpty());
+    const [dictationTabSwitchAlert, setDictationTabSwitchAlert] = useState(false);
+    const [tempTabSwitch, setTempTabSwitch] = useState(1);
+    const [switchTrigger, setSwitchTrigger] = useState(false);
+    const [recentlyUsedLangs, setRecentlyUsedLangs] = useState([]);
+    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false);
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
     // adaptive translation state
     const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
-
     const [formValidation, setFormValidation] = useState({
         source: false,
         target: false,
@@ -225,25 +188,37 @@ const TextToSpeech = (props) => {
         file: false
     })
 
-
-    const prevT2SSwitch = useRef(null)
-    const downloadref = useRef(null)
-    const downloadedFileName = useRef(null)
-    const stepOptionsRef = useRef(null)
-    const prevPageInfo = useRef(null)
-    const sourceLangRef = useRef(null)
-    const projectDataFromApi = useRef(null)
-
+    const audioPlayer = useRef(null); //Ref for HTML Audio tag
+    const sliderRangeRef = useRef();
+    const sliderThumbRef = useRef();
+    const dictationDataRef = useRef(null);
+     const textareaRef = useRef();
+    const searchAreaRef = useRef(null);
+    const contentprojectNameRef = useRef();
+    const targetLanguageOptionsRef = useRef([]);
+    const projectQuickSetup = useRef(true);    
+    const allowedSingleFileSize = useRef(100); // in MB
+    const singleFileSizeError = useRef(t("file_size_exceeds"));   
+    const deletedEditFileIds = useRef([]);
+    const deletedJobIds = useRef([]);
+    const ref = useRef(null);
+    const targetLanguageOptionRef = useRef(null);
+    const dictatFilteredSourceLang = useRef(null);
+    const dictatedFilterListWithAccent = useRef(null);
+    const prevT2SSwitch = useRef(null);
+    const downloadref = useRef(null);
+    const downloadedFileName = useRef(null);
+    const stepOptionsRef = useRef(null);
+    const prevPageInfo = useRef(null);
+    const sourceLangRef = useRef(null);
+    const projectDataFromApi = useRef(null);
 
     const handleSelectedConvert = (e) => {
-        setSelectedAudioConvert(true)
+        setSelectedAudioConvert(true);
     }
 
     // useEffect(() => {
-    //   console.log(speechSourceLanguageOption);
-    // }, [speechSourceLanguageOption])
-
-
+    // }, [speechSourceLanguageOption]);
 
     // const TranslateButton = withStyles((theme) => ({
     //     root: {
@@ -278,7 +253,6 @@ const TextToSpeech = (props) => {
     //         },
     //     },
     // }))(Button);
-
 
     const customStepSelectStyles = {
         placeholder: (provided, state) => ({
@@ -472,25 +446,23 @@ const TextToSpeech = (props) => {
         const newArr = selectedProjectFiles?.map(obj => {
             return { ...obj, voice_gender: selectedOption, voice_locale: audioLocale };
         });
-        // console.log(newArr)
-        setSelectedProjectFiles(newArr)
+        setSelectedProjectFiles(newArr);
     };
 
     const handleSelectedVoiceValue = (selected) => {
-        setSelectedVoiceValue(selected)
+        setSelectedVoiceValue(selected);
     }
-
 
     // Initial Api calls
     useEffect(() => {
         voiceSupportedLangList();
-        getSteps()
+        getSteps();
     }, []);
 
     const voiceOptions = [
         { id: 1, label: 'Male' },
         { id: 2, label: 'Female' }
-    ]
+    ];
 
     const sourceAudioWrapper = [
         {
@@ -544,8 +516,7 @@ const TextToSpeech = (props) => {
             ]
 
         },
-    ]
-
+    ];
 
     const hideSettingsModal = () => setshowSettings(false);
 
@@ -578,7 +549,6 @@ const TextToSpeech = (props) => {
         onClose: hideSettingsModal,
     };
 
-
     const getSteps = () => {
         Config.axios({
             url: `${Config.BASE_URL}/workspace/steps/`,
@@ -588,6 +558,7 @@ const TextToSpeech = (props) => {
             },
         });
     }
+
     // set steps as stepOptions for react-select
     useEffect(() => {
         let stepList = []
@@ -597,66 +568,62 @@ const TextToSpeech = (props) => {
                     value: each.id,
                     label: each.name,
                     disabled: true
-                })
+                });
             } else {
                 stepList.push({
                     value: each.id,
                     label: each.name,
-                })
+                });
             }
-            setStepOptions(stepList)
-            stepOptionsRef.current = stepList
+            setStepOptions(stepList);
+            stepOptionsRef.current = stepList;
         })
-    }, [steps])
+    }, [steps]);
 
     // by default post editing is selected and it can't be removed [mandatory step]
     useEffect(() => {
-        setSelectedSteps(stepOptions?.filter(each => each.value === 1))
-    }, [stepOptions])
-
+        setSelectedSteps(stepOptions?.filter(each => each.value === 1));
+    }, [stepOptions]);
 
     // set the file area for edit project
     useEffect(() => {
         if (isEdit) {
-            setTextToSpeechSwitch(2)
+            setTextToSpeechSwitch(2);
         }
-    }, [isEdit])
+    }, [isEdit]);
 
     useEffect(() => {
         if (URL_SEARCH_PARAMS.get("get-project-info")) {
-            setFlowSwitch(2)
-            setTextToSpeechGlbSwitch(2)
-            setIsLoading(true)
+            setFlowSwitch(2);
+            setTextToSpeechGlbSwitch(2);
+            setIsLoading(true);
         }
-    }, [URL_SEARCH_PARAMS.get("get-project-info")])
+    }, [URL_SEARCH_PARAMS.get("get-project-info")]);
 
     useEffect(() => {
-        setTargetLanguageOptions(targetLanguageOptionRef.current?.filter(each => each.id !== sourceLanguage))
+        setTargetLanguageOptions(targetLanguageOptionRef.current?.filter(each => each.id !== sourceLanguage));
         if (targetLanguage !== '') {
-            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage))
+            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage));
         }
-    }, [sourceLanguage])
+    }, [sourceLanguage]);
 
     useEffect(() => {
         if (targetLanguageOptionRef.current !== null) {
             if (location.search === '') {
-                recentlyUsedLanguage()
+                recentlyUsedLanguage();
             }
         }
-    }, [targetLanguageOptionRef.current, location.search])
-
+    }, [targetLanguageOptionRef.current, location.search]);
 
     useEffect(() => {
         if (targetLanguage) {
-            let list = ""
+            let list = "";
             targetLanguage?.map((each, index) => {
-                list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
-                    }`;
+                list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""}`;
             });
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current])
-
+    }, [targetLanguage, targetLanguageOptionsRef.current]);
 
     useEffect(() => {
         if (
@@ -667,28 +634,27 @@ const TextToSpeech = (props) => {
         ) {
             let projectId = URL_SEARCH_PARAMS.get("get-project-info");
             let projectType = URL_SEARCH_PARAMS.get("type");
-            setIsEdit(true)
-            setEditProjectId(projectId)
+            setIsEdit(true);
+            setEditProjectId(projectId);
             editTextToSpeechProject(projectId, projectType);
         }
     }, [targetLanguageOptionRef.current, stepOptionsRef.current]);
 
     useEffect(() => {
         if (location.state?.prevPageInfo) {
-            prevPageInfo.current = location.state?.prevPageInfo
+            prevPageInfo.current = location.state?.prevPageInfo;
         }
         if (location.state?.aiWritingCateg) {
-            setFlowSwitch(2)
+            setFlowSwitch(2);
         }
-    }, [location.state])
+    }, [location.state]);
 
     // auto detect language when content is typed or pasted in textarea
     useEffect(() => {
         if(translateSrcContent?.trim() !== ''){
-            Config.debounceApiCalls(() => detectSourceLanguage())
+            Config.debounceApiCalls(() => detectSourceLanguage());
         }
-    }, [translateSrcContent])
-    
+    }, [translateSrcContent]);    
 
     // handler for steps selection
     const handleSelectedSteps = (selected) => {
@@ -701,45 +667,35 @@ const TextToSpeech = (props) => {
             method: "GET",
             auth: true,
             success: (response) => {
-                let {
-                    data,
-                    data: { glossary },
-                } = response;
+                let { data, data: { glossary }, } = response;
                 let editSourceLanguage = targetLanguageOptionRef.current?.find(
                     (element) => element.id == data.jobs[0].source_language
                 );
-
-                projectDataFromApi.current = response.data
-
+                projectDataFromApi.current = response.data;  
                 deletedJobIds.current = [];
                 deletedEditFileIds.current = [];
                 setFiles([]);
                 setEditFiles(data.files);
                 setEditJobs(data.jobs);
-
                 let tar = [];
                 let tarID = [];
-                // console.log(response.data?.jobs)
                 response.data?.jobs?.map((each) => {
                     let a = each?.source_target_pair_names?.split("->");
                     tar.push({ language: a[1], id: each?.target_language });
                     tarID.push(each.target_language);
                 });
-                setHasTeam(data?.team)
-                // console.log(tarID)
+                setHasTeam(data?.team);
                 setAlreadySelectedTarLang(tar);
                 setAlreadySelecetedTarLangID(tarID);
-                setMtEnable(data?.mt_enable)
-                setPreTranslate(data?.pre_translate)
-                setTranslationByPage(data?.get_mt_by_page)
+                setMtEnable(data?.mt_enable);
+                setPreTranslate(data?.pre_translate);
+                setTranslationByPage(data?.get_mt_by_page);
                 setSourceLanguage(editSourceLanguage?.id);
                 setSourceLabel(editSourceLanguage?.language);
                 setSourceLanguageDisable(true);
-                setAdaptiveTransEnable(data?.isAdaptive)
-
+                setAdaptiveTransEnable(data?.isAdaptive);
                 let deadlineLocal = Config.convertUTCToLocal(data?.project_deadline);
                 setDeadline(deadlineLocal);
-
                 let editTargetLanguages = [];
                 data?.jobs?.map((job) => {
                     if (job?.target_language !== null) {
@@ -750,16 +706,14 @@ const TextToSpeech = (props) => {
                         );
                     }
                 });
-                console.log(editTargetLanguages);
-
                 setTimeout(() => {
                     setProjectName(data.project_name);
                     setRevisionStepEdit(data?.revision_step_edit);
                     contentprojectNameRef.current.innerText = data.project_name;
                     setTargetLanguage(editTargetLanguages);
-                    setSelectedSteps(stepOptionsRef.current?.filter(stepOpt => data?.steps.some(each => stepOpt.value === each.steps)))
-                    setstepsFromApi(stepOptionsRef.current?.filter(stepOpt => data?.steps.some(each => stepOpt.value === each.steps)))
-                    setIsLoading(false)
+                    setSelectedSteps(stepOptionsRef.current?.filter(stepOpt => data?.steps.some(each => stepOpt.value === each.steps)));
+                    setstepsFromApi(stepOptionsRef.current?.filter(stepOpt => data?.steps.some(each => stepOpt.value === each.steps)));
+                    setIsLoading(false);
                 }, 80);
             },
         });
@@ -767,7 +721,6 @@ const TextToSpeech = (props) => {
 
     /* Delete files when editing */
     const deleteEditFile = (e, canDelete = false, editFileId) => {
-        // console.log(editFileId)
         if (canDelete) {
             let editFilesTemp = editFiles;
             let deleteValue = editFiles.find((element) => element.id == editFileId);
@@ -775,9 +728,8 @@ const TextToSpeech = (props) => {
             let deletedEditFileIdsTemp = deletedEditFileIds.current;
             deletedEditFileIdsTemp.push(editFileId);
             deletedEditFileIds.current = deletedEditFileIdsTemp;
-            // console.log(deletedEditFileIds.current)
             /*}
-                })*/
+            })*/
         } else Config.toast(t("file_progress_cannot_deleted"), "warning");
     };
 
@@ -785,28 +737,28 @@ const TextToSpeech = (props) => {
     const handleTargetLangClick = (value, e) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
-            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected");
             targetLanguageTemp = Config.removeItemFromArray(
                 targetLanguageTemp,
                 value
             );
         } else {
-            e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected");
             targetLanguageTemp.push(value);
         }
         setTargetLanguage([...new Set(targetLanguageTemp)]);
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
         if (flowSwitch === 2 && targetLanguageTemp.length == 0) {
             setValidationState({
                 ...validationState,
                 tarLang: true
-            })
+            });
         } else {
             setValidationState({
                 ...validationState,
                 tarLang: false
-            })
+            });
         }
     };
 
@@ -838,129 +790,106 @@ const TextToSpeech = (props) => {
                 });
             }
         });
-        // console.log(a)
         let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
         setTargetLangListToRemove(targetLangToRemove);
     }, [targetLanguage]);
 
     // useEffect(() => {
-    //   console.log(targetLangListToRemove)
-    // }, [targetLangListToRemove])
+    // }, [targetLangListToRemove]);
 
     // ============= Voice option selection logic starts =============
-
     useEffect(() => {
         if (selectedProjectFiles?.length !== 0) {
-            setIsTranslatedAudioFileAvailable(selectedProjectFiles[0]?.download_audio_source_file)
-            // console.log(selectedProjectFiles[0]?.download_audio_source_file)
+            setIsTranslatedAudioFileAvailable(selectedProjectFiles[0]?.download_audio_source_file);
         }
-    }, [selectedProjectFiles])
-
+    }, [selectedProjectFiles]);
 
     useEffect(() => {
-        // console.log(isTranslatedAudioFileAvailable)
         const localeCount = isTranslatedAudioFileAvailable?.reduce((a, { locale }) => (
             Object.assign(a, { [locale]: (a[locale] || 0) + 1 })
-        ), {})
+        ), {});
         const genderCount = isTranslatedAudioFileAvailable?.reduce((a, { gender }) => (
             Object.assign(a, { [gender]: (a[gender] || 0) + 1 })
-        ), {})
-
-        let gender_options = []
+        ), {});
+        let gender_options = [];
         if (genderCount !== null && genderCount !== undefined) {
             Object?.keys(genderCount)?.map((each, index) => {
                 gender_options.push({
                     value: index,
                     label: each.charAt(0) + each?.slice(1).toLowerCase()
-                })
-            })
+                });
+            });
         }
-
-        let locale_options = []
+        let locale_options = [];
         if (localeCount !== null && localeCount !== undefined) {
             Object?.keys(localeCount)?.map((each, index) => {
                 locale_options.push({
                     value: index,
                     label: each
-                })
-            })
+                });
+            });
         }
-
-        setLocaleOptions(locale_options)
-        setGenderOptions(gender_options)
-    }, [isTranslatedAudioFileAvailable])
+        setLocaleOptions(locale_options);
+        setGenderOptions(gender_options);
+    }, [isTranslatedAudioFileAvailable]);
 
     const handleLocaleChange = (selected) => {
-        setAudioLocale(selected)
+        setAudioLocale(selected);
     }
 
     const handleGenderChange = (selectedValue, id) => {
-        setAudioGender(selectedValue)
-        // console.log(id)
-
+        setAudioGender(selectedValue);
         const newArr = selectedProjectFiles?.map(obj => {
             if (obj.id === id) {
                 return { ...obj, voice_gender: selectedValue, voice_locale: audioLocale };
             }
             return obj;
         });
-        // console.log(newArr)
-        setSelectedProjectFiles(newArr)
+        setSelectedProjectFiles(newArr);
     }
-
 
     useEffect(() => {
         if (localeOptions?.length !== 0) {
-            setAudioLocale(localeOptions[0])
+            setAudioLocale(localeOptions[0]);
         }
         if (genderOptions?.length !== 0) {
-            setAudioGender(genderOptions[0])
+            setAudioGender(genderOptions[0]);
         }
-    }, [localeOptions, genderOptions])
-
+    }, [localeOptions, genderOptions]);
 
     useEffect(() => {
         if (audioLocale !== null) {
-            let filteredLocale = isTranslatedAudioFileAvailable?.filter(each => audioLocale.label.toUpperCase() == each.locale.toUpperCase())
-            // console.log(filteredLocale)
+            let filteredLocale = isTranslatedAudioFileAvailable?.filter(each => audioLocale.label.toUpperCase() == each.locale.toUpperCase());
             const filteredGender = filteredLocale?.reduce((a, { gender }) => (
                 Object.assign(a, { [gender]: (a[gender] || 0) + 1 })
-            ), {})
-
-            let filteredGenderOption = []
+            ), {});
+            let filteredGenderOption = [];
             if (filteredGender !== null && filteredGender !== undefined) {
                 Object?.keys(filteredGender)?.map((each, index) => {
                     filteredGenderOption.push({
                         value: index,
                         label: each.charAt(0) + each?.slice(1).toLowerCase()
-                    })
-                })
+                    });
+                });
             }
-            setGenderOptions(filteredGenderOption)
+            setGenderOptions(filteredGenderOption);
         }
-    }, [audioLocale])
+    }, [audioLocale]);
 
     useEffect(() => {
         if (audioLocale !== null && audioGender !== null) {
-            let filteredRes = isTranslatedAudioFileAvailable?.filter(each => audioLocale?.label == each?.locale && audioGender?.label.toUpperCase() == each?.gender.toUpperCase())
-            // console.log(filteredRes)
+            let filteredRes = isTranslatedAudioFileAvailable?.filter(each => audioLocale?.label == each?.locale && audioGender?.label.toUpperCase() == each?.gender.toUpperCase());
             const filteredVoiceType = filteredRes?.reduce((a, item) => (
                 Object.assign(a, { [item?.voice_type]: item })
-            ), {})
-           
+            ), {});           
             if (filteredVoiceType?.Wavenet !== undefined) {
-                setVoiceType(filteredVoiceType?.Wavenet?.voice_name)
+                setVoiceType(filteredVoiceType?.Wavenet?.voice_name);
             } else if (filteredVoiceType?.Standard !== undefined) {
-                setVoiceType(filteredVoiceType?.Standard?.voice_name)
+                setVoiceType(filteredVoiceType?.Standard?.voice_name);
             }
         }
-    }, [audioLocale, audioGender])
-
-
-
+    }, [audioLocale, audioGender]);
     // ============= Voice option selection logic ends =============
-
-
 
     /* Handling source language selection */
     const handleSourceLangClick = (value, name, e) => {
@@ -969,19 +898,18 @@ const TextToSpeech = (props) => {
             setValidationState({
                 ...validationState,
                 srcLang: true
-            })
+            });
         } else {
             setValidationState({
                 ...validationState,
                 srcLang: false
-            })
+            });
         }
         setshowSrcLangModal(false);
         setSourceLabel(name);
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
-
 
     /* Get source language options */
     const voiceSupportedLangList = () => {
@@ -994,24 +922,23 @@ const TextToSpeech = (props) => {
                 response?.data?.target_lang_list?.map(each => langList.push({
                     id: each.language_id,
                     language: each.language
-                }))
-                targetLanguageOptionRef.current = langList
-                let dictateFilterLang = []
+                }));
+                targetLanguageOptionRef.current = langList;
+                let dictateFilterLang = [];
                 //  = langList?.filter(each => webSpeechLang?.some(obj => each.id === obj.value));
-                let temp = webSpeechLang?.filter(each => langList?.some(obj => obj.id === each.value))
+                let temp = webSpeechLang?.filter(each => langList?.some(obj => obj.id === each.value));
                 temp?.map(each => {
                     dictateFilterLang.push({
                         id: each.value,
                         language: each.name,
                         code: each.code,
                         code_name: each.code_name
-                    })
-                })
-                dictatedFilterListWithAccent.current = dictateFilterLang
-                dictatFilteredSourceLang.current = [...new Map(dictateFilterLang.map(item => [item['id'], item])).values()]
-                // console.log(dictatFilteredSourceLang.current)
-                setTargetLanguageOptions(langList)
-                setSourceLanguageOptions(langList)
+                    });
+                });
+                dictatedFilterListWithAccent.current = dictateFilterLang;
+                dictatFilteredSourceLang.current = [...new Map(dictateFilterLang.map(item => [item['id'], item])).values()];
+                setTargetLanguageOptions(langList);
+                setSourceLanguageOptions(langList);
             },
         };
         Config.axios(params);
@@ -1019,25 +946,22 @@ const TextToSpeech = (props) => {
 
     useEffect(() => {
         if (sourceLanguage != '') {
-            setSelectedAccent(null)
-            setSpeechSourceLanguageOption(null)
-            let accentList = dictatedFilterListWithAccent.current?.filter(each => each.id === sourceLanguage)
-            // console.log(accentList)
-            let accent_options = []
+            setSelectedAccent(null);
+            setSpeechSourceLanguageOption(null);
+            let accentList = dictatedFilterListWithAccent.current?.filter(each => each.id === sourceLanguage);
+            let accent_options = [];
             accentList?.map((each, index) => {
                 accent_options.push({
                     value: each.code,
                     label: each.code_name
-                })
-            })
-            // console.log(accent_options)
+                });
+            });
             if (accent_options?.length === 1) {
-                setSpeechSourceLanguageOption(accent_options[0]?.value)
+                setSpeechSourceLanguageOption(accent_options[0]?.value);
             }
-            setAccentOptions(accent_options)
+            setAccentOptions(accent_options);
         }
-    }, [sourceLanguage])
-
+    }, [sourceLanguage]);
 
     useEffect(() => {
         contentprojectNameRef.current?.focus();
@@ -1045,8 +969,8 @@ const TextToSpeech = (props) => {
     }, [textToSpeechGlbSwitch === 2]);
 
     const handleAccentChange = (selectedValue) => {
-        setSelectedAccent(selectedValue)
-        setSpeechSourceLanguageOption(selectedValue.value)
+        setSelectedAccent(selectedValue);
+        setSpeechSourceLanguageOption(selectedValue.value);
     }
 
     const handleProjectNamechange = (e) => {
@@ -1067,7 +991,6 @@ const TextToSpeech = (props) => {
     const niceBytes = (x) => {
         let l = 0;
         let n = parseInt(x, 10) || 0;
-
         while (n >= 1024 && ++l) {
             n = n / 1024;
         }
@@ -1078,22 +1001,21 @@ const TextToSpeech = (props) => {
 
 
     /* File upload drag and drop handling */
-    const handleDrop = (filesTemp) => {
-       
+    const handleDrop = (filesTemp) => {       
         for (let i = 0; i < (filesTemp).length; i++) {
             if (filesTemp[i].name.length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
-                return
+                return;
             }
         }
         //Also check handleChange
-        let thisFiles = filesTemp
+        let thisFiles = filesTemp;
         let name = thisFiles[0]?.name;
         let lastDot = name?.lastIndexOf(".");
         let fileName = name?.substring(0, lastDot);
         let ext = "." + name?.substring(lastDot + 1);
         if (ext !== ".docx" && ext !== ".txt") {
-            Config.toast(t("unsupport_file_format"), 'warning')
+            Config.toast(t("unsupport_file_format"), 'warning');
             return;
         }
         let fileList = [...files];
@@ -1104,29 +1026,27 @@ const TextToSpeech = (props) => {
             )
                 fileList.push(filesTemp[eachKey]);
             else Config.toast(singleFileSizeError.current, "error");
-
         });
         setFiles(fileList);
         if (fileList.length === 0) {
             setValidationState({
                 ...validationState,
                 files: true
-            })
+            });
         } else {
             setValidationState({
                 ...validationState,
                 files: false
-            })
+            });
         }
     };
-
 
     /* Handling all the project creation form */
     const handleChange = (e) => {
         for (let i = 0; i < (e.target.files).length; i++) {
             if (e.target.files[i].name.length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
-                return
+                return;
             }
         }
         let thisFiles = e.target.files;
@@ -1135,17 +1055,16 @@ const TextToSpeech = (props) => {
         let fileName = name?.substring(0, lastDot);
         let ext = "." + name?.substring(lastDot + 1);
         if (ext !== ".docx" && ext !== ".txt") {
-            Config.toast(t("unsupport_file_format"), 'warning')
+            Config.toast(t("unsupport_file_format"), 'warning');
             return;
         }
-
         let fileList = [...files];
         Object.keys(thisFiles).map((eachKey) => {
             if (
                 thisFiles[eachKey].size / 1024 / 1024 <=
                 allowedSingleFileSize.current
             )
-                fileList.push(thisFiles[eachKey]);
+            fileList.push(thisFiles[eachKey]);
             else Config.toast(singleFileSizeError.current, "error");
         });
         setFiles(fileList);
@@ -1153,15 +1072,14 @@ const TextToSpeech = (props) => {
             setValidationState({
                 ...validationState,
                 files: true
-            })
+            });
         } else {
             setValidationState({
                 ...validationState,
                 files: false
-            })
+            });
         }
     }
-
 
     /* Removed dragged files */
     const removeFile = (e, index) => {
@@ -1183,11 +1101,9 @@ const TextToSpeech = (props) => {
         setDeadline(newValue);
     };
 
-
     const createTextToSpeechProject = (operationValue) => {
-        setShowBtnLoader(true)
+        setShowBtnLoader(true);
         let formdata = new FormData();
-
         formdata.append("source_language", sourceLanguage);
         // formdata.append("project_name", projectName);
         if (projectName !== null && projectName?.trim() !== "") {
@@ -1195,47 +1111,36 @@ const TextToSpeech = (props) => {
         }
         formdata.append("project_type", "4"); // by default project type if 4 for voice project
         formdata.append("sub_category", "2"); // sub category is 2 for text to speech
-
         let deadlineUTC = Config.convertLocalToUTC(deadline);
         deadline && formdata.append("project_deadline", deadlineUTC);
-
         selectedSteps?.map((each) => {
             formdata.append("steps", each.value);
-        })
-
+        });
         const regex = new RegExp('[.|?。!]+(\s|\n)?'); // check for punctuation validation
-
         if (textToSpeechSwitch === 1 && !regex.test(translateSrcContent?.trim()) && translateSrcContent?.trim()?.length > 350) {
-            setShowPunctuationModal(true)
+            setShowPunctuationModal(true);
             return;
         }
-
         if (textToSpeechSwitch === 3 && !regex.test(dictationInput?.trim()) && dictationInput?.trim()?.length > 350) {
-            setShowPunctuationModal(true)
+            setShowPunctuationModal(true);
             return;
         }
-
         textToSpeechSwitch === 1 && formdata.append("text_data", translateSrcContent?.trim());
-
         textToSpeechSwitch === 3 && formdata.append("text_data", dictationInput?.trim());
-
         if (textToSpeechSwitch === 2) {
             for (let x = 0; x < files.length; x++) {
                 if (typeof files[x] != "undefined") formdata.append("files", files[x]);
             }
         }
-
         // if translate/download button is clicked, then add targetlanguages to api
         if (operationValue === 'translate') {
             targetLanguage.map((eachTargetLanguage) => {
                 formdata.append("target_languages", eachTargetLanguage?.id);
             });
         }
-
         formdata.append("mt_enable", mtEnable);
         formdata.append("pre_translate", preTranslate);
         if(mtEnable) formdata.append("get_mt_by_page", translationByPage);
-
         formdata.append("isAdaptiveTranslation", adaptiveTransEnable);
 
         Config.axios({
@@ -1249,34 +1154,32 @@ const TextToSpeech = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                setProjectId(response.data?.id)
+                setProjectId(response.data?.id);
                 if (operationValue === 'translate') {
                     Config.toast(t("project_created_success"));
-                    history(`/ai-voices?page=1&order_by=-id&open-project=${response?.data?.id}`)
+                    history(`/ai-voices?page=1&order_by=-id&open-project=${response?.data?.id}`);
                 }
                 if (operationValue === 'download') {
                     Config.toast(t("project_created_success"));
+
                     Config.axios({
                         url: Config.BASE_URL + "/workspace/vendor/dashboard/" + response?.data?.id,
                         auth: true,
                         success: (response) => {
-                            // console.log(response.data)
                             setSelectedProjectFiles(response.data);
-                            setTextToSpeechGlbSwitch(3)
-                            setShowBtnLoader(false)
+                            setTextToSpeechGlbSwitch(3);
+                            setShowBtnLoader(false);
                         },
                     });
-                    // downloadSourceAudioFile(response?.data?.id)
+                    // downloadSourceAudioFile(response?.data?.id);
                 }
             },
         });
     }
 
     const updateTextToSpeechProject = (operationValue) => {
-        // console.log(projectName)
-        setShowBtnLoader(true)
+        setShowBtnLoader(true);
         let formdata = new FormData();
-
         formdata.append("source_language", sourceLanguage);
         // formdata.append("project_name", projectName);
         if (projectName !== null && projectName?.trim() !== "") {
@@ -1284,30 +1187,20 @@ const TextToSpeech = (props) => {
         }
         formdata.append("project_type", "4"); // by default project type if 4 for voice project
         formdata.append("sub_category", "2"); // sub category is 1 for speech to text
-
         let deadlineUTC = Config.convertLocalToUTC(deadline);
         deadline && formdata.append("project_deadline", deadlineUTC);
-
         formdata.append("team", hasTeam);
-
         selectedSteps?.map((each) => {
             formdata.append("steps", each.value);
-        })
-
-
-        formdata.append("mt_enable", mtEnable);
-        
+        });
+        formdata.append("mt_enable", mtEnable);        
         formdata.append("isAdaptiveTranslation", adaptiveTransEnable);
-
         if (projectDataFromApi.current?.pre_translate !== preTranslate) {
             formdata.append("pre_translate", preTranslate);
         }
-
         if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
             formdata.append("get_mt_by_page", translationByPage);
         }
-
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
@@ -1316,7 +1209,6 @@ const TextToSpeech = (props) => {
             )
                 formdata.append("target_languages", eachTargetLanguage?.id);
         });
-
         if (textToSpeechSwitch === 2) {
             for (let x = 0; x < files.length; x++) {
                 if (typeof files[x] != "undefined") formdata.append("files", files[x]);
@@ -1329,18 +1221,16 @@ const TextToSpeech = (props) => {
                     }`;
             }
         });
-
-        let stepsToRemoveList = stepOptions?.filter(stepOpt => selectedSteps?.some(each => stepOpt.value !== each.value))
-
-        let deleteIdList = ""
+        let stepsToRemoveList = stepOptions?.filter(stepOpt => selectedSteps?.some(each => stepOpt.value !== each.value));
+        let deleteIdList = "";
         if (stepsFromApi.length > selectedSteps?.length) {
             stepsToRemoveList?.map((each, index) => {
                 deleteIdList += `${each.value}${index !== stepsToRemoveList?.length - 1 ? "," : ""}`
-            })
+            });
         } else if (stepsFromApi.length < selectedSteps?.length) {
             stepsToRemoveList?.map(each => {
                 formdata.append("steps", each.value);
-            })
+            });
         }
 
         Config.axios({
@@ -1354,33 +1244,34 @@ const TextToSpeech = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                setShowBtnLoader(false)
+                setShowBtnLoader(false);
                 Config.toast(t("project_updated_success"));
-                history(`/ai-voices?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`)
-                operationValue === 'download' && downloadSourceAudioFile(response?.data?.id)
+                history(`/ai-voices?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`);
+                operationValue === 'download' && downloadSourceAudioFile(response?.data?.id);
             },
         });
     }
 
     /* Delete a project by id */
     const deleteProject = (projectId, isConfirmed = false) => {
-        setIsProjectDeleting(true)
+        setIsProjectDeleting(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/project/quick/setup/${projectId}`,
             method: "DELETE",
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_deleted"));
-                setIsProjectDeleting(false)
+                setIsProjectDeleting(false);
                 history("/ai-voices?page=1&order_by=-id");
             },
             error: (err) => {
                 if (err?.response?.data?.msg?.includes('assigned')) {
-                    setIsProjectDeleting(false)
-                    setShowTaskDeleteAlert(true)
-                    setShowDeleteConfirmationModal(false)
+                    setIsProjectDeleting(false);
+                    setShowTaskDeleteAlert(true);
+                    setShowDeleteConfirmationModal(false);
                 }
-                setIsProjectDeleting(false)
+                setIsProjectDeleting(false);
             }
         });
     };
@@ -1395,19 +1286,18 @@ const TextToSpeech = (props) => {
                 srcLang: true,
                 tarLang: true,
                 dictationInput: textToSpeechSwitch === 3 ? true : false
-            })
-            contentprojectNameRef.current.scrollIntoView()
+            });
+            contentprojectNameRef.current.scrollIntoView();
             contentprojectNameRef.current.focus();
             setHasFocus(true);
-            return false
-        }
-      
+            return false;
+        }      
         if (translateSrcContent.trim() === "" && textToSpeechSwitch === 1) {
             setValidationState({
                 ...validationState,
                 inputText: true
-            })
-            return false
+            });
+            return false;
         }
         if (files.length === 0 && textToSpeechSwitch === 2) {
             if (isEdit) {
@@ -1415,39 +1305,39 @@ const TextToSpeech = (props) => {
                     setValidationState({
                         ...validationState,
                         files: true
-                    })
-                    return false
+                    });
+                    return false;
                 }
             } else {
                 setValidationState({
                     ...validationState,
                     files: true
-                })
-                return false
+                });
+                return false;
             }
         }
         if (sourceLanguage === "") {
             setValidationState({
                 ...validationState,
                 srcLang: true
-            })
-            return false
+            });
+            return false;
         }
         if (textToSpeechSwitch === 3 && dictationInput?.trim() === "") {
             setValidationState({
                 ...validationState,
                 dictatedData: true
-            })
-            return false
+            });
+            return false;
         }
         if (flowSwitch === 2 && targetLanguage == "") {
             setValidationState({
                 ...validationState,
                 tarLang: true
-            })
-            return false
+            });
+            return false;
         }
-        return true
+        return true;
     }
 
     const downloadTxtFile = (id, target) => {
@@ -1455,8 +1345,8 @@ const TextToSpeech = (props) => {
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
+
         return axios.get(
             target === 'project' ?
                 `${Config.BASE_URL}/workspace/convert_and_download_text_to_speech_source/?project=${id}`
@@ -1475,7 +1365,7 @@ const TextToSpeech = (props) => {
 
     const downloadSourceAudioFile = async (id, target) => {
         const response = await downloadTxtFile(id, target);
-        Config.downloadFileInBrowser(response)
+        Config.downloadFileInBrowser(response);
     }
 
     const resetForm = () => {
@@ -1485,39 +1375,37 @@ const TextToSpeech = (props) => {
             files: false,
             srcLang: false,
             tarLang: false
-        })
-        setProjectName("")
-        setSourceLanguage("")
-        setTargetLanguage("")
-        setFiles([])
-        setTranslateSrcContent("")
-        setSelectedAccent(null)
-        setDeadline(null)
-        setDictationInput(null)
+        });
+        setProjectName("");
+        setSourceLanguage("");
+        setTargetLanguage("");
+        setFiles([]);
+        setTranslateSrcContent("");
+        setSelectedAccent(null);
+        setDeadline(null);
+        setDictationInput(null);
     }
 
-    const [convertingAll, setConvertingAll] = useState(false)
-    const currentTaskId = useRef(null)
-    const currentVoiceGender = useRef(null)
-    const currentVoiceLocale = useRef(null)
+    const [convertingAll, setConvertingAll] = useState(false);
+    const currentTaskId = useRef(null);
+    const currentVoiceGender = useRef(null);
+    const currentVoiceLocale = useRef(null);
 
     const convertSourceFileToAudioFile = (ID, target, voiceGender, voiceLocale) => {
         if (target === 'task') {
-            setAnimate(ID)
-            currentTaskId.current = ID
-            currentVoiceGender.current = voiceGender
-            currentVoiceLocale.current = voiceLocale
+            setAnimate(ID);
+            currentTaskId.current = ID;
+            currentVoiceGender.current = voiceGender;
+            currentVoiceLocale.current = voiceLocale;
         }
-
-        if (target === 'project') setClickedOpenButton(true)
+        if (target === 'project') setClickedOpenButton(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/convert_text_to_speech_source/?${target === 'task' ? "task=" + ID : ''}${target === 'project' ? "project=" + ID : ''}${voiceGender !== null ? "&gender=" + voiceGender?.label?.toUpperCase() : ''}${voiceLocale !== null ? "&language_locale=" + voiceLocale?.label : ''}${voiceType !== null ? "&voice_name=" + voiceType : ''}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data?.source_audio_file)
                 if (target === 'task') {
-                    setAnimate(null)
+                    setAnimate(null);
                     const newArr = selectedProjectFiles?.map(obj => {
                         if (obj.id === ID) {
                             return {
@@ -1527,8 +1415,7 @@ const TextToSpeech = (props) => {
                         }
                         return obj;
                     });
-                    // console.log(newArr)
-                    setSelectedProjectFiles(newArr)
+                    setSelectedProjectFiles(newArr);
                 }
                 if (target === 'project') {
                     const newArr = selectedProjectFiles?.map(obj => {
@@ -1537,229 +1424,204 @@ const TextToSpeech = (props) => {
                         }
                         return obj;
                     });
-                    // console.log(newArr)
-                    setAnimate(null)
-                    setShowConvertAllModal(false)
-                    setSelectedProjectFiles(newArr)
-                    setClickedOpenButton(false)
-                    setIsConversionGoing(false)
-                    setConvertingAll(false)
+                    setAnimate(null);
+                    setShowConvertAllModal(false);
+                    setSelectedProjectFiles(newArr);
+                    setClickedOpenButton(false);
+                    setIsConversionGoing(false);
+                    setConvertingAll(false);
                 }
             },
             error: (err) => {
                 if (err.response.status == 400) {
                     if (err.response.data?.msg === "Insufficient Credits") {
-                        setShowCreditAlertModal(true)
-                        setShowConvertAllModal(false)
-                        setClickedOpenButton(false)
-                        setConvertingAll(false)
-                        setAnimate(null)
+                        setShowCreditAlertModal(true);
+                        setShowConvertAllModal(false);
+                        setClickedOpenButton(false);
+                        setConvertingAll(false);
+                        setAnimate(null);
                     }
                     if (err.response.data?.msg?.includes('Text to Speech conversion ongoing')) {
-                        setShowConvertAllModal(false)
-                        setClickedOpenButton(false)
+                        setShowConvertAllModal(false);
+                        setClickedOpenButton(false);
                         if (target === 'task') {
                             setTimeout(() => {
-                                convertSourceFileToAudioFile(currentTaskId.current, 'task', currentVoiceGender.current, currentVoiceLocale.current)
+                                convertSourceFileToAudioFile(currentTaskId.current, 'task', currentVoiceGender.current, currentVoiceLocale.current);
                             }, 8000);
                         }
                         if (target === 'project') {
-                            setConvertingAll(true)
-                            setAnimate('all')
+                            setConvertingAll(true);
+                            setAnimate('all');
                             setTimeout(() => {
-                                convertSourceFileToAudioFile(projectId, 'project', audioGender, audioLocale)
+                                convertSourceFileToAudioFile(projectId, 'project', audioGender, audioLocale);
                             }, 8000);
                         }
-
                     }
                 } else {
                     Config.toast(t("conversion_failed"), 'error')
-                    setAnimate(null)
-                    setShowConvertAllModal(false)
-                    setClickedOpenButton(false)
-                    setIsConversionGoing(false)
-                    setConvertingAll(false)
+                    setAnimate(null);
+                    setShowConvertAllModal(false);
+                    setClickedOpenButton(false);
+                    setIsConversionGoing(false);
+                    setConvertingAll(false);
                 }
             }
         });
     }
 
-
-
     const handleSlider = (blob, id, e, sliderId, thumbId, barID, playPauseId) => {
-        setCurrentSlider(sliderId)
-        setCurrentThumb(thumbId)
-        setBar(barID)
-        setIsPlaying(playPauseId)
-        setAudioTagId(id)
+        setCurrentSlider(sliderId);
+        setCurrentThumb(thumbId);
+        setBar(barID);
+        setIsPlaying(playPauseId);
+        setAudioTagId(id);
         const audio = document.getElementById(id);
-        setInputRangeValue(e.target.value)
-        audio.currentTime = (totDuration / 100) * e.target.value
-
-        setSliderPercentage(e.target.value)
+        setInputRangeValue(e.target.value);
+        audio.currentTime = (totDuration / 100) * e.target.value;
+        setSliderPercentage(e.target.value);
     }
 
     useEffect(() => {
-        // console.log(sliderPercentage)
         const slider = document.getElementById(currentSlider);
         if (slider !== undefined) {
             try {
-                console.log(sliderPercentage)
-                slider.value = sliderPercentage
+                slider.value = sliderPercentage;
             } catch (e) {
-                console.log(e)
+                console.error(e);
             }
         }
         let thumb = document.getElementById(currentThumb);
-        const sliderRangeWidth = slider?.getBoundingClientRect()?.width
-        const thumbWidth = thumb?.getBoundingClientRect()?.width
-        const centerThumb = (thumbWidth / 100) * sliderPercentage * - 1
-        const centerProgressBar = thumbWidth + sliderRangeWidth / 100 * sliderPercentage - (thumbWidth / 100 * sliderPercentage)
+        const sliderRangeWidth = slider?.getBoundingClientRect()?.width;
+        const thumbWidth = thumb?.getBoundingClientRect()?.width;
+        const centerThumb = (thumbWidth / 100) * sliderPercentage * - 1;
+        const centerProgressBar = thumbWidth + sliderRangeWidth / 100 * sliderPercentage - (thumbWidth / 100 * sliderPercentage);
         try {
-            thumb.style.left = `${sliderPercentage}%`
-            thumb.style.marginLeft = `${centerThumb}px`
+            thumb.style.left = `${sliderPercentage}%`;
+            thumb.style.marginLeft = `${centerThumb}px`;
         } catch (e) {
-            console.log(e)
+            console.error(e);
         }
-
-        let progressBar = document.getElementById(bar)
+        let progressBar = document.getElementById(bar);
         try {
-            console.log(progressBar)
-            progressBar.style.width = `${centerProgressBar}px`
+            progressBar.style.width = `${centerProgressBar}px`;
         } catch (e) {
-            console.log(e)
+            console.error(e);
         }
-    }, [sliderPercentage])
+    }, [sliderPercentage]);
 
     const playPause = (e, id, sliderId, thumbId, barID, playPauseId, audPlayer) => {
-        setCurrentSlider(sliderId)
-        setCurrentThumb(thumbId)
-        setBar(barID)
-        setIsPlaying(playPauseId)
-        setTotDuration(null)
+        setCurrentSlider(sliderId);
+        setCurrentThumb(thumbId);
+        setBar(barID);
+        setIsPlaying(playPauseId);
+        setTotDuration(null);
         let player = document.getElementById(id);
 
         player.addEventListener('play', function (e) {
             var audios = document.getElementsByTagName('audio');
-
             for (var i = 0, len = audios.length; i < len; i++) {
                 if (audios[i] != e.target) {
                     audios[i].pause();
-                    // setPlay(false)
+                    // setPlay(false);
                 }
             }
         }, true);
         if (player.duration > 0 && !player.paused) {
-            setPlay(false)
+            setPlay(false);
             player.pause();
         }
         else {
-            setPlay(true)
+            setPlay(true);
             player.play();
         }
     };
 
     const getDurationTime = (e, id, blob, currentDurationId) => {
-        let audio = document.getElementById(id)
+        let audio = document.getElementById(id);
         try{
             getBlobDuration(blob).then(function (duration) {
-                document.getElementById(currentDurationId).innerHTML = secondsToHms(duration)
+                document.getElementById(currentDurationId).innerHTML = secondsToHms(duration);
                 audio = Math.floor(duration);
             });
         }catch(e) {
-            console.log(e)
+            console.error(e);
         }
     }
 
     useEffect(() => {
         if (totDuration !== null && totDuration !== Infinity && currentTimeText !== null && currentAudioTime !== null) {
-            // console.log(totDuration)
-            const sliderPercent = ((currentAudioTime / totDuration) * 100).toFixed(2)
-            const audioTime = currentAudioTime
-          
-            setSliderPercentage(+sliderPercent)
-            document.getElementById(currentTimeText).innerHTML = secondsToHms(audioTime?.toFixed(2))
+            const sliderPercent = ((currentAudioTime / totDuration) * 100).toFixed(2);
+            const audioTime = currentAudioTime;          
+            setSliderPercentage(+sliderPercent);
+            document.getElementById(currentTimeText).innerHTML = secondsToHms(audioTime?.toFixed(2));
         }
-    }, [currentAudioTime, totDuration])
-
+    }, [currentAudioTime, totDuration]);
 
     const getCurrentDuration = (e, id, blob, currentTimeId) => {
         let player = document.getElementById(id);
         getBlobDuration(blob).then(function (duration) {
-            setTotDuration(duration)
+            setTotDuration(duration);
         });
-        setCurrentTimeText(currentTimeId)
-        setCurrentAudioTime(player.currentTime)
+        setCurrentTimeText(currentTimeId);
+        setCurrentAudioTime(player.currentTime);
     }
-
 
     function secondsToHms(seconds) {
-        if (!seconds) return '00:00'
-
-        let duration = seconds
-        let hours = duration / 3600
-        duration = duration % 3600
-
-        let min = parseInt(duration / 60)
-        duration = duration % 60
-
-        let sec = parseInt(duration)
-
+        if (!seconds) return '00:00';
+        let duration = seconds;
+        let hours = duration / 3600;
+        duration = duration % 3600;
+        let min = parseInt(duration / 60);
+        duration = duration % 60;
+        let sec = parseInt(duration);
         if (sec < 10) {
-            sec = `0${sec}`
+            sec = `0${sec}`;
         }
         if (min < 10) {
-            min = `0${min}`
+            min = `0${min}`;
         }
-
         if (parseInt(hours, 10) > 0) {
-            return `${parseInt(hours, 10)}:${min}:${sec}`
+            return `${parseInt(hours, 10)}:${min}:${sec}`;
         } else if (min == 0) {
-            return `00:${sec}`
+            return `00:${sec}`;
         } else {
-            return `${min}:${sec}`
+            return `${min}:${sec}`;
         }
     }
-
 
     useEffect(() => {
         if (dictationInput !== "") {
             setValidationState({
                 ...validationState,
                 dictatedData: false
-            })
+            });
         }
-    }, [dictationInput])
-
-
-
+    }, [dictationInput]);
 
     useEffect(() => {
-
         if (tempTabSwitch !== 3 && prevT2SSwitch.current === 3 && dictationInput !== "") {
-            // setDictationTabSwitchAlert(true)
+            // setDictationTabSwitchAlert(true);
             setTextToSpeechSwitch(tempTabSwitch);
         } else {
             setTextToSpeechSwitch(tempTabSwitch);
         }
-    }, [tempTabSwitch, switchTrigger])
+    }, [tempTabSwitch, switchTrigger]);
 
     const handleTextToSpeechSwitch = (tab) => {
-        setTempTabSwitch(tab)
-        setSwitchTrigger(!switchTrigger)
+        setTempTabSwitch(tab);
+        setSwitchTrigger(!switchTrigger);
         if (tempTabSwitch !== prevT2SSwitch.current) {
-            prevT2SSwitch.current = textToSpeechSwitch
+            prevT2SSwitch.current = textToSpeechSwitch;
         }
     }
 
     const handleConfirmSwitch = () => {
         setTextToSpeechSwitch(tempTabSwitch);
-        setDictationTabSwitchAlert(false)
+        setDictationTabSwitchAlert(false);
     }
 
-
     const removebrtag = () => {
-        let rem = document.querySelector('.project-box')
+        let rem = document.querySelector('.project-box');
         var var1 = rem.getElementsByTagName('br');
 
         for (var i = var1.length; i--;) {
@@ -1770,9 +1632,8 @@ const TextToSpeech = (props) => {
     document.querySelector('[contenteditable]')?.addEventListener('paste', function pasteAsPlainText(event) {
         event.preventDefault();
         event.target.innerText = event.clipboardData.getData("text/plain");
-        removebrtag()
+        removebrtag();
     });
-
 
     const executeProposalScroll = () => {
         contentprojectNameRef.current.scrollTo(0, 0);
@@ -1783,9 +1644,9 @@ const TextToSpeech = (props) => {
             files.length <= 0 || dictationInput?.trim() === "" || translateSrcContent?.trim() === "" || 
             nextLocation.pathname?.includes('/text-to-speech') || nextLocation.pathname?.includes('/ai-voices')
         ) {
-            return false
+            return false;
         }
-        return true
+        return true;
     }
 
     const modaloptions = {
@@ -1811,39 +1672,39 @@ const TextToSpeech = (props) => {
             url: Config.BASE_URL + "/workspace/default_detail/",
             auth: true,
             success: (response) => {
-                let options = []
+                let options = [];
                 response.data?.recent_pairs?.map(each => {
-                    let filteredTar = each.tar.filter(eachTar => targetLanguageOptionRef.current.find(eachlang => eachlang.id === eachTar) !== undefined)   // filter the language that are in the language list
+                    let filteredTar = each.tar.filter(eachTar => targetLanguageOptionRef.current.find(eachlang => eachlang.id === eachTar) !== undefined);   // filter the language that are in the language list
                     if (targetLanguageOptionRef.current.find(eachlang => eachlang.id === each.src)?.language && filteredTar.map(eachTar => targetLanguageOptionRef.current.find(eachlang => eachlang.id === eachTar)?.language).join(', ') !== '') {
                         options.push({
                             value: `${each.src}->${filteredTar.join(',')}`,
                             label: `${targetLanguageOptionRef.current.find(eachlang => eachlang.id === each.src)?.language}`,
                             customAbbreviation: `${filteredTar?.length > 1 ? filteredTar.map(eachTar => targetLanguageOptionRef.current.find(eachlang => eachlang.id === eachTar)?.language).join(', ') : targetLanguageOptionRef.current.find(eachlang => eachlang.id === filteredTar[0])?.language
                                 }`
-                        })
+                        });
                     }
-                })
-                setRecentlyUsedLangs(options)
+                });
+                setRecentlyUsedLangs(options);
             },
         });
     }
 
     const handleRecentLangClick = (clickedLang) => {
-        let src = clickedLang.value.split('->')[0]
-        let tar = clickedLang.value.split('->')[1]?.split(',')
-        setSourceLabel(targetLanguageOptionRef.current?.find((element) => element.id == src).language)
-        setSourceLanguage(src)
-        let selectedTar = []
+        let src = clickedLang.value.split('->')[0];
+        let tar = clickedLang.value.split('->')[1]?.split(',');
+        setSourceLabel(targetLanguageOptionRef.current?.find((element) => element.id == src).language);
+        setSourceLanguage(src);
+        let selectedTar = [];
         tar?.map(eachTar => {
-            selectedTar.push(targetLanguageOptionRef.current?.find((element) => element.id == eachTar))
-        })
+            selectedTar.push(targetLanguageOptionRef.current?.find((element) => element.id == eachTar));
+        });
         setTargetLanguage([...new Set(selectedTar)]);
     }
 
     const focusSourceLangDiv = () => {
-        if (sourceLangRef.current !== null) sourceLangRef.current.style = 'border: 1px solid #E74C3C;'
+        if (sourceLangRef.current !== null) sourceLangRef.current.style = 'border: 1px solid #E74C3C;';
         setTimeout(() => {
-            if (sourceLangRef.current !== null) sourceLangRef.current.style = 'border: 1px solid #ced4da;'
+            if (sourceLangRef.current !== null) sourceLangRef.current.style = 'border: 1px solid #ced4da;';
         }, 1000);
     }
 
@@ -1853,17 +1714,15 @@ const TextToSpeech = (props) => {
                 url: Config.BASE_URL + "/auth/lang_detect/?text=" + translateSrcContent.split(' ').splice(0, 10).join(" "),
                 auth: true,
                 success: (response) => {
-                    setSourceLanguage(response.data?.lang_id)
-                    setSourceLabel(response.data?.language)
+                    setSourceLanguage(response.data?.lang_id);
+                    setSourceLabel(response.data?.language);
                 },
                 error: (err) => {
-                    // setAutoDetectIndication(false)
+                    // setAutoDetectIndication(false);
                 }
             });
         }
     } 
-
-
 
     return (
         <React.Fragment>

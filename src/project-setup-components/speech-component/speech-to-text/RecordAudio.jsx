@@ -9,10 +9,8 @@ import RecordingsList from "./recorder-components/RecordingList";
 import useRecorder from "./recorder-components/RecorderHooks";
 
 const RecordAudio = (props) => {
-
     const { recorderState, ...handlers } = useRecorder();
     const { audio, audioFile, tempBlob} = recorderState;
-
     let {
         isRecording,
         toggleRecording,
@@ -35,12 +33,11 @@ const RecordAudio = (props) => {
         setAudioData,
         audioData,
         niceBytes
-    }= props
+    }= props;
     
     return (
         <React.Fragment>
             <div className="record-audio-work-area">
-
                 {/* <div className="record-audio-wrapper">
                     <ButtonBase onClick={toggleRecording} className="icon-overview">
                         {

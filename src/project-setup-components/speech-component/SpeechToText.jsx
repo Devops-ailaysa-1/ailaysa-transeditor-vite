@@ -22,19 +22,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import Tooltip from '@mui/material/Tooltip';
 import { useTranslation } from "react-i18next";
 import ReactRouterPrompt from 'react-router-prompt'
-import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
 import { Checkbox, Radio } from "@mui/material";
 
 
 function SpeechToText(props) {
-
     const history = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
-
-
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-
     const [projectName, setProjectName] = useState("");
     const [hasFocus, setHasFocus] = useState(false);
     const [speechTextSwitch, setSpeechTextSwitch] = useState(1);
@@ -44,18 +40,16 @@ function SpeechToText(props) {
     const [showSrcLangModal, setshowSrcLangModal] = useState(false);
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
     const [files, setFiles] = useState([]);
     const [isRecording, setIsRecording] = useState(false);
     const [blobURL, setBlobUrl] = useState([]);
     const [play, setPlay] = useState(false);
     const [sliderPercentage, setSliderPercentage] = useState(0);
-    const [isPlaying, setIsPlaying] = useState(false)
-    const [duration, setDuration] = useState(0)
-    const [currentTime, setCurrentTime] = useState(0)
-    const [audioData, setAudioData] = useState([])
-
-
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [duration, setDuration] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [audioData, setAudioData] = useState([]);
     const searchAreaRef = useRef(null);
     const contentprojectNameRef = useRef();
     const projectIdToSelect = useRef(null);
@@ -66,29 +60,24 @@ function SpeechToText(props) {
     const displayTime = useRef(null); //Stores dom ref for div to be used to display time
     const allowedSingleFileSize = useRef(100); // in MB
     const singleFileSizeError = useRef(t("file_size_exceeds"));
-    const [deadline, setDeadline] = useState(null)
-
+    const [deadline, setDeadline] = useState(null);
     // steps related states
-    const [steps, setSteps] = useState([])
-    const [stepOptions, setStepOptions] = useState([])
+    const [steps, setSteps] = useState([]);
+    const [stepOptions, setStepOptions] = useState([]);
     const [selectedSteps, setSelectedSteps] = useState([]);
-    const [stepsFromApi, setstepsFromApi] = useState([])
-    const [revisionStepEdit, setRevisionStepEdit] = useState(null)
-
+    const [stepsFromApi, setstepsFromApi] = useState([]);
+    const [revisionStepEdit, setRevisionStepEdit] = useState(null);
     const [validationState, setValidationState] = useState({
         // projectName: false,
         recording: false,
         files: false,
         srcLang: false,
-        tarLang: false,
-
-    })
-
+        tarLang: false,});
     const [editFiles, setEditFiles] = useState([]);
     const [editJobs, setEditJobs] = useState([]);
-    const [isEdit, setIsEdit] = useState(false)
-    const [hasTeam, setHasTeam] = useState(false)
-    const [editProjectId, setEditProjectId] = useState(null)
+    const [isEdit, setIsEdit] = useState(false);
+    const [hasTeam, setHasTeam] = useState(false);
+    const [editProjectId, setEditProjectId] = useState(null);
     const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
     const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
     const [showSettings, setshowSettings] = useState(false);
@@ -98,79 +87,68 @@ function SpeechToText(props) {
     const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState([]);
     const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
     const [showTarLangModal, setshowTarLangModal] = useState(false);
-    const [isTargetLangExists, setIsTargetLangExists] = useState(false)
+    const [isTargetLangExists, setIsTargetLangExists] = useState(false);
     const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
-    const [taskID, setTaskID] = useState(null)
-    const [isLoading, setIsLoading] = useState(false) // state for showing skeleton
-
-    const [tempWriterFile, setTempWriterFile] = useState(null)
-    const [isTempWriterFileDeleted, setIsTempWriterFileDeleted] = useState(false)
+    const [taskID, setTaskID] = useState(null);
+    const [isLoading, setIsLoading] = useState(false); // state for showing skeleton
+    const [tempWriterFile, setTempWriterFile] = useState(null);
+    const [isTempWriterFileDeleted, setIsTempWriterFileDeleted] = useState(false);
     const [clickedOpenButton, setClickedOpenButton] = useState(null);
-
-    const [isTranslationTaskAvailable, setIsTranslationTaskAvailable] = useState(false)
+    const [isTranslationTaskAvailable, setIsTranslationTaskAvailable] = useState(false);
     const [mtEnable, setMtEnable] = useState(true);
-    const [preTranslate, setPreTranslate] = useState(false)
-    const [translationByPage, setTranslationByPage] = useState(true)
-    const [checkchangenav, setCheckchangenav] = useState(false)
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
-    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
-    const [isProjectDeleting, setIsProjectDeleting] = useState(false)
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-
+    const [preTranslate, setPreTranslate] = useState(false);
+    const [translationByPage, setTranslationByPage] = useState(true);
+    const [checkchangenav, setCheckchangenav] = useState(false);
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
+    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false);
+    const [isProjectDeleting, setIsProjectDeleting] = useState(false);
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
     // adaptive translation state
     const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
 
     const deletedEditFileIds = useRef([]);
     const deletedJobIds = useRef([]);
     const targetLanguageOptionsRef = useRef([]);
-    const stepOptionsRef = useRef(null)
-    const prevPageInfo = useRef(null)
-    const projectDataFromApi = useRef(null)
-
+    const stepOptionsRef = useRef(null);
+    const prevPageInfo = useRef(null);
+    const projectDataFromApi = useRef(null);
 
     useEffect(() => {
         if (location.state?.writerFile) {
-            // console.log(location.state?.writerFile)
-            // console.log(editFiles)
-            setTempWriterFile(location.state?.writerFile)
-            // setEditFiles(...editFiles, location.state?.writerFile)
+            setTempWriterFile(location.state?.writerFile);
+            // setEditFiles(...editFiles, location.state?.writerFile);
         }
-    }, [location.state])
-
+    }, [location.state]);
 
     // resetform
     const resetform = () => {
-        setAudioData([])
-        setFiles([])
-        setDeadline(null)
-        contentprojectNameRef.current.innerText = ''
-        setSourceLanguage("")
+        setAudioData([]);
+        setFiles([]);
+        setDeadline(null);
+        contentprojectNameRef.current.innerText = '';
+        setSourceLanguage("");
     }
-    // console.log(contentprojectNameRef.current.innerText)
-
-
 
     const handleProjectNamechange = (e) => {
         setProjectName(e.target.innerText);
-        // setValidationState({...validationState, projectName: false})
+        // setValidationState({...validationState, projectName: false});
     };
 
     const toggleRecording = () => {
         if (isRecording) {
-            stopRecording()
-            setIsRecording(false)
+            stopRecording();
+            setIsRecording(false);
         } else {
-            startRecording()
-            setIsRecording(true)
+            startRecording();
+            setIsRecording(true);
         }
     }
 
     const handleSlider = (e) => {
-        const audio = audioPlayer.current
-        audio.currentTime = (audio.duration / 100) * e.target.value
-        setSliderPercentage(e.target.value)
+        const audio = audioPlayer.current;
+        audio.currentTime = (audio.duration / 100) * e.target.value;
+        setSliderPercentage(e.target.value);
     }
-
 
     // const UploadProjectButton = withStyles((theme) => ({
     //     root: {
@@ -235,7 +213,6 @@ function SpeechToText(props) {
         onClose: hideSettingsModal,
     };
 
-
     useEffect(() => {
         contentprojectNameRef.current.focus();
         setHasFocus(true);
@@ -262,50 +239,43 @@ function SpeechToText(props) {
             .stop().getMp3().then(([buffer, blob]) => {
                 const newBlobUrl = URL.createObjectURL(blob); //generates url from blob
                 setBlobUrl([...blobURL, newBlobUrl]); //refreshes the page
-                // console.log(buffer)
                 setIsRecording(false);
-            }).catch((e) => console.log(e));
+            }).catch((e) => console.error(e));
     };
 
     const playPause = () => {
         //Handle play/pause of audio on click of play/pause button
         const player = audioPlayer.current;
-
         if (player.paused) {
-            setIsPlaying(true)
+            setIsPlaying(true);
             player.play();
         } else {
-            setIsPlaying(false)
+            setIsPlaying(false);
             player.pause();
         }
         setPlay(!play);
     };
 
     function secondsToHms(seconds) {
-        if (!seconds) return '00:00'
-
-        let duration = seconds
-        let hours = duration / 3600
-        duration = duration % 3600
-
-        let min = parseInt(duration / 60)
-        duration = duration % 60
-
-        let sec = parseInt(duration)
-
+        if (!seconds) return '00:00';
+        let duration = seconds;
+        let hours = duration / 3600;
+        duration = duration % 3600;
+        let min = parseInt(duration / 60);
+        duration = duration % 60;
+        let sec = parseInt(duration);
         if (sec < 10) {
-            sec = `0${sec}`
+            sec = `0${sec}`;
         }
         if (min < 10) {
-            min = `0${min}`
+            min = `0${min}`;
         }
-
         if (parseInt(hours, 10) > 0) {
-            return `${parseInt(hours, 10)}:${min}:${sec}`
+            return `${parseInt(hours, 10)}:${min}:${sec}`;
         } else if (min == 0) {
-            return `00:${sec}`
+            return `00:${sec}`;
         } else {
-            return `${min}:${sec}`
+            return `${min}:${sec}`;
         }
     }
 
@@ -332,13 +302,11 @@ function SpeechToText(props) {
         }
     };
 
-
     const getCurrentDuration = (e) => {
-        const sliderPercent = ((e.currentTarget.currentTime / e.currentTarget.duration) * 100).toFixed(2)
-        const audioTime = e.currentTarget.currentTime
-
-        setSliderPercentage(+sliderPercent)
-        setCurrentTime(audioTime.toFixed(2))
+        const sliderPercent = ((e.currentTarget.currentTime / e.currentTarget.duration) * 100).toFixed(2);
+        const audioTime = e.currentTarget.currentTime;
+        setSliderPercentage(+sliderPercent);
+        setCurrentTime(audioTime.toFixed(2));
     }
 
     const handleHideIcon = () => {
@@ -356,9 +324,9 @@ function SpeechToText(props) {
             url: Config.BASE_URL + "/app/language/",
             auth: true,
             success: (response) => {
-                targetLanguageOptionsRef.current = response.data
+                targetLanguageOptionsRef.current = response.data;
                 setSourceLanguageOptions(response.data);
-                setTargetLanguageOptions(response.data)
+                setTargetLanguageOptions(response.data);
             },
         };
         Config.axios(params);
@@ -366,7 +334,7 @@ function SpeechToText(props) {
 
     useEffect(() => {
         getSourceLanguages();
-        getSteps()
+        getSteps();
     }, []);
 
     const getSteps = () => {
@@ -378,6 +346,7 @@ function SpeechToText(props) {
             },
         });
     }
+
     // set steps as stepOptions for react-select
     useEffect(() => {
         let stepList = []
@@ -387,30 +356,27 @@ function SpeechToText(props) {
                     value: each.id,
                     label: each.name,
                     disabled: true
-                })
+                });
             } else {
                 stepList.push({
                     value: each.id,
                     label: each.name,
-                })
+                });
             }
-            stepOptionsRef.current = stepList
-            setStepOptions(stepList)
+            stepOptionsRef.current = stepList;
+            setStepOptions(stepList);
         })
-    }, [steps])
+    }, [steps]);
 
     // by default post editing is selected and it can't be removed [mandatory step]
     useEffect(() => {
-        setSelectedSteps(stepOptions?.filter(each => each.value === 1))
-    }, [stepOptions])
-
+        setSelectedSteps(stepOptions?.filter(each => each.value === 1));
+    }, [stepOptions]);
 
     // handler for steps selection
     const handleSelectedSteps = (selected) => {
         setSelectedSteps(selected);
     };
-
-
 
     // useEffect(() => {
     //     //Declares the recorder object and stores it in ref
@@ -422,9 +388,9 @@ function SpeechToText(props) {
         setSourceLanguage(value);
         setshowSrcLangModal(false);
         setSourceLabel(name);
-        setSearchInput('')
-        setOnFocusWrap(false)
-        setValidationState({ ...validationState, srcLang: false })
+        setSearchInput('');
+        setOnFocusWrap(false);
+        setValidationState({ ...validationState, srcLang: false });
     };
 
     useEffect(() => {
@@ -437,31 +403,31 @@ function SpeechToText(props) {
             let projectId = URL_SEARCH_PARAMS.get("get-project-info");
             let projectType = URL_SEARCH_PARAMS.get("type");
             let task_id = URL_SEARCH_PARAMS.get("task");
-            setIsEdit(true)
-            setTaskID(task_id)
-            setEditProjectId(projectId)
+            setIsEdit(true);
+            setTaskID(task_id);
+            setEditProjectId(projectId);
             editSpeechToTextProject(projectId, projectType);
         }
     }, [targetLanguageOptionsRef.current, stepOptionsRef.current, tempWriterFile]);
 
     useEffect(() => {
         if (URL_SEARCH_PARAMS.get("get-project-info")) {
-            setIsLoading(true)
+            setIsLoading(true);
         }
-    }, [URL_SEARCH_PARAMS.get("get-project-info")])
+    }, [URL_SEARCH_PARAMS.get("get-project-info")]);
 
     useEffect(() => {
         if (location.state?.prevPageInfo) {
-            prevPageInfo.current = location.state?.prevPageInfo
+            prevPageInfo.current = location.state?.prevPageInfo;
         }
-    }, [location.state])
+    }, [location.state]);
 
     useEffect(() => {
-        setTargetLanguageOptions(targetLanguageOptions?.filter(each => each.id !== sourceLanguage))
+        setTargetLanguageOptions(targetLanguageOptions?.filter(each => each.id !== sourceLanguage));
         if (targetLanguage !== '') {
-            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage))
+            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage));
         }
-    }, [sourceLanguage])
+    }, [sourceLanguage]);
 
     const editSpeechToTextProject = (projectId) => {
         Config.axios({
@@ -469,29 +435,22 @@ function SpeechToText(props) {
             method: "GET",
             auth: true,
             success: (response) => {
-                let {
-                    data,
-                } = response;
+                let { data,} = response;
                 let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                     (element) => element.id == data.jobs[0].source_language
                 );
-
-                projectDataFromApi.current = response.data
+                projectDataFromApi.current = response.data;
                 deletedJobIds.current = [];
                 deletedEditFileIds.current = [];
                 setFiles([]);
-                // console.log(tempWriterFile);
                 if (tempWriterFile !== null) {
                     data.files.push(tempWriterFile)
                 }
-                // console.log(data.files)
                 setEditFiles(data.files);
                 setEditJobs(data.jobs);
-                setIsTranslationTaskAvailable(data.files?.find(each => each?.get_file_name?.includes('.docx')) ? true : false)
-                // console.log(stepOptions)
-                setSelectedSteps(stepOptions?.filter(stepOpt => data?.steps.some(each => stepOpt.value === each.steps)))
-                setstepsFromApi(stepOptions?.filter(stepOpt => data?.steps.some(each => stepOpt.value === each.steps)))
-
+                setIsTranslationTaskAvailable(data.files?.find(each => each?.get_file_name?.includes('.docx')) ? true : false);
+                setSelectedSteps(stepOptions?.filter(stepOpt => data?.steps.some(each => stepOpt.value === each.steps)));
+                setstepsFromApi(stepOptions?.filter(stepOpt => data?.steps.some(each => stepOpt.value === each.steps)));
                 let editTargetLanguages = [];
                 response.data?.jobs?.map((job) => {
                     if (job?.target_language !== null) {
@@ -504,7 +463,6 @@ function SpeechToText(props) {
                 });
                 let tar = [];
                 let tarID = [];
-                // console.log(response.data?.jobs)
                 response.data?.jobs?.map((each) => {
                     let a = each?.source_target_pair_names?.split("->");
                     tar.push({ language: a[1], id: each?.target_language });
@@ -512,38 +470,36 @@ function SpeechToText(props) {
                 });
                 setAlreadySelectedTarLang(tar);
                 setAlreadySelecetedTarLangID(tarID);
-                setIsTargetLangExists(editTargetLanguages?.length === 0 ? false : true)
-                setPreTranslate(data?.pre_translate)
-                setMtEnable(data?.mt_enable)
-                setTranslationByPage(data?.get_mt_by_page)
+                setIsTargetLangExists(editTargetLanguages?.length === 0 ? false : true);
+                setPreTranslate(data?.pre_translate);
+                setMtEnable(data?.mt_enable);
+                setTranslationByPage(data?.get_mt_by_page);
                 setSourceLanguage(editSourceLanguage?.id);
                 setSourceLabel(editSourceLanguage?.language);
                 setSourceLanguageDisable(true);
-                setAdaptiveTransEnable(data?.isAdaptive)
-
+                setAdaptiveTransEnable(data?.isAdaptive);
                 let deadlineLocal = Config.convertUTCToLocal(data?.project_deadline);
                 setDeadline(deadlineLocal);
                 setTimeout(() => {
                     setProjectName(data.project_name);
                     setRevisionStepEdit(data?.revision_step_edit);
-                    setHasTeam(data?.team)
+                    setHasTeam(data?.team);
                     contentprojectNameRef.current.innerText = data.project_name;
                     setTargetLanguage(editTargetLanguages);
-                    setIsLoading(false)
+                    setIsLoading(false);
                 }, 80);
             },
         });
     }
 
     // useEffect(() => {
-    //   console.log(blobURL)
-    // }, [blobURL])
+    // }, [blobURL]);
 
     /* Handling target language selection */
     const handleTargetLangClick = (value, e) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
-            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected");
             targetLanguageTemp = Config.removeItemFromArray(
                 targetLanguageTemp,
                 value
@@ -559,21 +515,20 @@ function SpeechToText(props) {
             targetLanguageTemp.push(value);
         }
         setTargetLanguage([...new Set(targetLanguageTemp)]);
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
         if (targetLanguageTemp.length == 0) {
             setValidationState({
                 ...validationState,
                 tarLang: true
-            })
+            });
         } else {
             setValidationState({
                 ...validationState,
                 tarLang: false
-            })
+            });
         }
     };
-
 
     useEffect(() => {
         alreadySelecetedTarLangID.length !== 0 &&
@@ -603,11 +558,9 @@ function SpeechToText(props) {
                 });
             }
         });
-        // console.log(a)
         let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
         setTargetLangListToRemove(targetLangToRemove);
     }, [targetLanguage]);
-
 
     useEffect(() => {
         if (targetLanguage) {
@@ -616,17 +569,15 @@ function SpeechToText(props) {
                 list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
                     }`;
             });
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current])
-
+    }, [targetLanguage, targetLanguageOptionsRef.current]);
 
     const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
     const niceBytes = (x) => {
         let l = 0;
         let n = parseInt(x, 10) || 0;
-
         while (n >= 1024 && ++l) {
             n = n / 1024;
         }
@@ -641,16 +592,16 @@ function SpeechToText(props) {
         for (let i = 0; i < (filesTemp).length; i++) {
             if (filesTemp[i].name.length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
-                return
+                return;
             }
         }
-        let thisFiles = filesTemp
+        let thisFiles = filesTemp;
         let name = thisFiles[0]?.name;
         let lastDot = name?.lastIndexOf(".");
         let fileName = name?.substring(0, lastDot);
         let ext = "." + name?.substring(lastDot + 1);
         if (ext !== ".mp3") {
-            Config.toast(t("unsupport_file_format"), 'warning')
+            Config.toast(t("unsupport_file_format"), 'warning');
             return;
         }
         let fileList = [...files];
@@ -659,26 +610,25 @@ function SpeechToText(props) {
                 filesTemp[eachKey].size / 1024 / 1024 <=
                 allowedSingleFileSize.current
             )
-                fileList.push(filesTemp[eachKey]);
+            fileList.push(filesTemp[eachKey]);
             else Config.toast(singleFileSizeError.current, "error");
 
         });
         if (fileList.length > 3) {
-            Config.toast(t("max_3_audio_files_uploaded"), 'warning')
-            setFiles(fileList?.slice(0, 3))
+            Config.toast(t("max_3_audio_files_uploaded"), 'warning');
+            setFiles(fileList?.slice(0, 3));
         } else {
-            setFiles(fileList?.slice(0, 3))
+            setFiles(fileList?.slice(0, 3));
         }
-        setValidationState({ ...validationState, files: false })
+        setValidationState({ ...validationState, files: false });
     };
-
 
     /* Handling all the project creation form */
     const handleChange = (e) => {
         for (let i = 0; i < (e.target.files).length; i++) {
             if (e.target.files[i].name.length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
-                return
+                return;
             }
         }
         let thisFiles = e.target.files;
@@ -687,7 +637,7 @@ function SpeechToText(props) {
         let fileName = name?.substring(0, lastDot);
         let ext = "." + name?.substring(lastDot + 1);
         if (ext !== ".mp3") {
-            Config.toast(t("unsupport_file_format"), 'warning')
+            Config.toast(t("unsupport_file_format"), 'warning');
             return;
         }
         let fileList = [...files];
@@ -696,17 +646,16 @@ function SpeechToText(props) {
                 thisFiles[eachKey].size / 1024 / 1024 <=
                 allowedSingleFileSize.current
             )
-                fileList.push(thisFiles[eachKey]);
+            fileList.push(thisFiles[eachKey]);
             else Config.toast(singleFileSizeError.current, "error");
         });
         if (fileList.length > 3) {
-            Config.toast(t("max_3_audio_files_uploaded"), 'warning')
-            setFiles(fileList?.slice(0, 3))
+            Config.toast(t("max_3_audio_files_uploaded"), 'warning');
+            setFiles(fileList?.slice(0, 3));
         } else {
-            setFiles(fileList?.slice(0, 3))
+            setFiles(fileList?.slice(0, 3));
         }
-        // console.log(fileList)
-        setValidationState({ ...validationState, files: false })
+        setValidationState({ ...validationState, files: false });
     }
 
     /* Removed dragged files */
@@ -727,7 +676,6 @@ function SpeechToText(props) {
 
     /* Delete files when editing */
     const deleteEditFile = (e, canDelete = false, editFileId) => {
-        // console.log(editFileId)
         // if (canDelete) {
         /* Config.axios({
                     url: `${Config.BASE_URL}/workspace/project/quick/setup/${editProjectId}/?file_delete_ids=${editFileId}`,
@@ -740,16 +688,13 @@ function SpeechToText(props) {
         let deletedEditFileIdsTemp = deletedEditFileIds.current;
         deletedEditFileIdsTemp.push(editFileId);
         deletedEditFileIds.current = deletedEditFileIdsTemp;
-        // console.log(deletedEditFileIds.current)
         /*}
-            })*/
+        })*/
         // } else Config.toast("File in progress. Cannot be deleted", "warning");
     };
 
     // useEffect(() => {
-    //   console.log(targetLanguage)
-    // }, [targetLanguage])
-
+    // }, [targetLanguage]);
 
     // const isValidate = (operationValue) => {
     //     if(projectName === "" && files.length === 0 && audioData.length === 0 && sourceLanguage == "" && (isEdit && targetLanguage.length == 0)){
@@ -759,28 +704,28 @@ function SpeechToText(props) {
     //             srcLang: true,
     //             recording: speechTextSwitch === 2 ? true : false,
     //             tarLang: true,
-    //         })
-    //         contentprojectNameRef.current.scrollIntoView()
+    //         });
+    //         contentprojectNameRef.current.scrollIntoView();
     //         contentprojectNameRef.current.focus();
     //         setHasFocus(true);
-    //         return false
+    //         return false;
     //     }
     //     if(projectName === ""){
     //         setValidationState({
     //             ...validationState,
     //             projectName: true
-    //         })
-    //         contentprojectNameRef.current.scrollIntoView()
+    //         });
+    //         contentprojectNameRef.current.scrollIntoView();
     //         contentprojectNameRef.current.focus();
     //         setHasFocus(true);
-    //         return false
+    //         return false;
     //     }
     //     if(audioData.length === 0 && speechTextSwitch === 2){
     //         setValidationState({
     //             ...validationState,
     //             recording: true
-    //         })
-    //         return false
+    //         });
+    //         return false;
     //     }
     //     if(files.length === 0 && speechTextSwitch === 1){
     //         if(isEdit){
@@ -788,15 +733,15 @@ function SpeechToText(props) {
     //                 setValidationState({
     //                     ...validationState,
     //                     files: true
-    //                 })
-    //                 return false
+    //                 });
+    //                 return false;
     //             }
     //         }else if(files.length === 0){
     //             setValidationState({
     //                 ...validationState,
     //                 files: true
     //             })
-    //             return false
+    //             return false;
     //         }
     //     }
     //     if(sourceLanguage === ""){
@@ -804,23 +749,20 @@ function SpeechToText(props) {
     //             ...validationState,
     //             srcLang: true
     //         })
-    //         return false
+    //         return false;
     //     }
     //     if(targetLanguage.length == 0 && isEdit){
     //         setValidationState({
     //             ...validationState,
     //             tarLang: true
     //         })
-    //         return false
+    //         return false;
     //     }
-    //     return true
+    //     return true;
     // }
-
-    // console.log(files)
 
     const isValidate = (operationValue) => {
         // if(projectName === "" && files.length === 0 && audioData.length === 0 && sourceLanguage == "" && (isEdit && targetLanguage.length == 0)){
-        // console.log(isTranslationTaskAvailable);
         if (files.length === 0 && audioData.length === 0 && sourceLanguage == "" && (isEdit && (isTranslationTaskAvailable || tempWriterFile) && targetLanguage.length == 0)) {
             setValidationState({
                 // projectName: true,
@@ -828,28 +770,28 @@ function SpeechToText(props) {
                 srcLang: true,
                 recording: speechTextSwitch === 2 ? true : false,
                 tarLang: true,
-            })
-            // contentprojectNameRef.current.scrollIntoView()
+            });
+            // contentprojectNameRef.current.scrollIntoView();
             // contentprojectNameRef.current.focus();
             // setHasFocus(true);
-            // return false
+            // return false;
         }
         // if(projectName === ""){
         //     setValidationState({
         //         ...validationState,
         //         projectName: true
-        //     })
-        //     contentprojectNameRef.current.scrollIntoView()
+        //     });
+        //     contentprojectNameRef.current.scrollIntoView();
         //     contentprojectNameRef.current.focus();
         //     setHasFocus(true);
-        //     return false
+        //     return false;
         // }
         if (audioData.length === 0 && speechTextSwitch === 2) {
             setValidationState({
                 ...validationState,
                 recording: true
-            })
-            return false
+            });
+            return false;
         }
         if (files.length === 0 && speechTextSwitch === 1) {
             if (isEdit) {
@@ -857,32 +799,32 @@ function SpeechToText(props) {
                     setValidationState({
                         ...validationState,
                         files: true
-                    })
-                    return false
+                    });
+                    return false;
                 }
             } else if (files.length === 0) {
                 setValidationState({
                     ...validationState,
                     files: true
-                })
-                return false
+                });
+                return false;
             }
         }
         if (sourceLanguage === "") {
             setValidationState({
                 ...validationState,
                 srcLang: true
-            })
-            return false
+            });
+            return false;
         }
         if (((isTranslationTaskAvailable || tempWriterFile) && targetLanguage.length == 0) && isEdit) {
             setValidationState({
                 ...validationState,
                 tarLang: true
-            })
-            return false
+            });
+            return false;
         }
-        return true
+        return true;
     }
 
     const createSpeechToTextProject = (key) => {
@@ -894,36 +836,26 @@ function SpeechToText(props) {
         formdata.append("source_language", sourceLanguage);
         // formdata.append("project_name", projectName);
         if (projectName !== null && projectName?.trim() !== "") {
-            formdata.append("project_name", projectName);
-        }
+            formdata.append("project_name", projectName);        }
         formdata.append("project_type", "4"); // by default project type if 4 for voice project
         formdata.append("sub_category", "1"); // sub category is 1 for speech to text
-
         if(mtEnable) formdata.append("get_mt_by_page", translationByPage);
-
-        formdata.append("isAdaptiveTranslation", adaptiveTransEnable);
-        
+        formdata.append("isAdaptiveTranslation", adaptiveTransEnable);        
         let deadlineUTC = Config.convertLocalToUTC(deadline);
         deadline && formdata.append("project_deadline", deadlineUTC);
-
         selectedSteps?.map((each) => {
             formdata.append("steps", each.value);
         })
-
         if (speechTextSwitch === 1) {
             for (let x = 0; x < files.length; x++) {
                 if (typeof files[x] != "undefined") formdata.append("audio_file", files[x]);
             }
         }
-
         if (speechTextSwitch === 2) {
             for (let x = 0; x < audioData.length; x++) {
-                // console.log(audioData[x]?.audioFile)
                 if (typeof audioData[x]?.audioFile != "undefined") formdata.append("audio_file", audioData[x]?.audioFile);
             }
         }
-
-
 
         Config.axios({
             headers: {
@@ -937,19 +869,17 @@ function SpeechToText(props) {
             auth: true,
             success: (response) => {
                 setClickedOpenButton(null);
-                // console.log(response.data)
                 // if(operationValue === 'translate'){
                 Config.toast("Project created successfully");
-                history(`/transcriptions?page=1&open-project=${response?.data?.id}`)
+                history(`/transcriptions?page=1&open-project=${response?.data?.id}`);
                 // } 
-                // operationValue === 'download' && downloadSourceAudioFile(response?.data?.id)
+                // operationValue === 'download' && downloadSourceAudioFile(response?.data?.id);
             },
         });
     }
 
     const updateSpeechToTextProject = (key) => {
         let formdata = new FormData();
-
         formdata.append("source_language", sourceLanguage);
         // formdata.append("project_name", projectName);
         if (projectName !== null && projectName?.trim() !== "") {
@@ -957,34 +887,24 @@ function SpeechToText(props) {
         }
         formdata.append("project_type", "4"); // by default project type if 4 for voice project
         formdata.append("sub_category", "1"); // sub category is 1 for speech to text
-
         let deadlineUTC = Config.convertLocalToUTC(deadline);
         deadline && formdata.append("project_deadline", deadlineUTC);
-
         formdata.append("team", hasTeam);
-        formdata.append("mt_enable", mtEnable);
-        
+        formdata.append("mt_enable", mtEnable);        
         formdata.append("isAdaptiveTranslation", adaptiveTransEnable);
-
         if (projectDataFromApi.current?.pre_translate !== preTranslate) {
             formdata.append("pre_translate", preTranslate);
         }
-
         if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
             formdata.append("get_mt_by_page", translationByPage);
         }
         setClickedOpenButton(key);
         selectedSteps?.map((each) => {
             formdata.append("steps", each.value);
-        })
-
+        });
         targetLanguage.map((eachTargetLanguage) => {
-            if (
-                editJobs.find(
-                    (element) => element.target_language == eachTargetLanguage?.id
-                ) == null
-            )
-                formdata.append("target_languages", eachTargetLanguage?.id);
+            if (editJobs.find((element) => element.target_language == eachTargetLanguage?.id) == null)
+            formdata.append("target_languages", eachTargetLanguage?.id);
         });
         if (taskID !== null && !isTempWriterFileDeleted) {
             formdata.append("task_id", parseInt(taskID));
@@ -999,18 +919,16 @@ function SpeechToText(props) {
             list += `${each.id}${index !== targetLangListToRemove.length - 1 ? "," : ""
                 }`;
         });
-
-        let stepsToRemoveList = stepOptions?.filter(stepOpt => selectedSteps?.some(each => stepOpt.value !== each.value))
-
-        let deleteIdList = ""
+        let stepsToRemoveList = stepOptions?.filter(stepOpt => selectedSteps?.some(each => stepOpt.value !== each.value)); 
+        let deleteIdList = "";
         if (stepsFromApi.length > selectedSteps?.length) {
             stepsToRemoveList?.map((each, index) => {
-                deleteIdList += `${each.value}${index !== stepsToRemoveList?.length - 1 ? "," : ""}`
-            })
+                deleteIdList += `${each.value}${index !== stepsToRemoveList?.length - 1 ? "," : ""}`;
+            });
         } else if (stepsFromApi.length < selectedSteps?.length) {
             stepsToRemoveList?.map(each => {
                 formdata.append("steps", each.value);
-            })
+            });
         }
 
         Config.axios({
@@ -1025,76 +943,69 @@ function SpeechToText(props) {
             auth: true,
             success: (response) => {
                 setClickedOpenButton(null);
-                // console.log(response.data)
                 // if(operationValue === 'translate'){
                 Config.toast(t("proj_updated_success"));
-                // history(`/file-upload?page=1&order_by=-id&open-project=${response?.data?.id}`)
+                // history(`/file-upload?page=1&order_by=-id&open-project=${response?.data?.id}`);
                 if (prevPageInfo.current) {
-                    history(`/transcriptions?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`)
+                    history(`/transcriptions?page=${prevPageInfo.current?.pageNo != null ? prevPageInfo.current?.pageNo : 1}&order_by=${prevPageInfo.current?.orderBy != null ? prevPageInfo.current?.orderBy : '-id'}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId != null ? prevPageInfo.current?.projectId : response.data.id}`);
                 } else {
-                    history(`/transcriptions?page=1&order_by=-id$&search=${response.data?.project_name}&open-project=${response.data?.id}`)
+                    history(`/transcriptions?page=1&order_by=-id$&search=${response.data?.project_name}&open-project=${response.data?.id}`);
                 }
                 // } 
-                // operationValue === 'download' && downloadSourceAudioFile(response?.data?.id)
+                // operationValue === 'download' && downloadSourceAudioFile(response?.data?.id);
             },
         });
     }
 
     // create/update button handler function
     const handleCreateUpdateBtn = () => {
-        // console.log('click');
-        console.log(isValidate());
         if (isValidate()) {
-            // console.log('vlaidated');
             if (!isEdit) {
-                // console.log('create');
-                createSpeechToTextProject('key')
+                createSpeechToTextProject('key');
             } else {
-                // console.log('update');
-                updateSpeechToTextProject('key')
+                updateSpeechToTextProject('key');
             }
         }
     }
 
     /* Delete a project by id */
     const deleteProject = (projectId, isConfirmed = false) => {
-        setIsProjectDeleting(true)
+        setIsProjectDeleting(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/project/quick/setup/${projectId}`,
             method: "DELETE",
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_deleted"));
-                setIsProjectDeleting(false)
+                setIsProjectDeleting(false);
                 history("/file-upload?page=1&order_by=-id");
             },
             error: (err) => {
                 if (err?.response?.data?.msg?.includes('assigned')) {
-                    setShowTaskDeleteAlert(true)
-                    setShowDeleteConfirmationModal(false)
-                    setIsProjectDeleting(false)
+                    setShowTaskDeleteAlert(true);
+                    setShowDeleteConfirmationModal(false);
+                    setIsProjectDeleting(false);
                 }
-                setIsProjectDeleting(false)
+                setIsProjectDeleting(false);
             }
         });
     };
 
     const removeTempFile = (id) => {
-        setEditFiles(editFiles.filter(each => each.id !== id))
-        setIsTempWriterFileDeleted(true)
+        setEditFiles(editFiles.filter(each => each.id !== id));
+        setIsTempWriterFileDeleted(true);
     }
 
     useEffect(() => {
         if (audioData.length !== 0) {
-            setValidationState({ ...validationState, recording: false })
+            setValidationState({ ...validationState, recording: false });
         }
-    }, [audioData])
-
+    }, [audioData]);
 
     const removebrtag = () => {
-        let rem = document.querySelector('.project-box')
+        let rem = document.querySelector('.project-box');
         var var1 = rem.getElementsByTagName('br');
-
         for (var i = var1.length; i--;) {
             var1[i].parentNode.removeChild(var1[i]);
         }
@@ -1103,21 +1014,18 @@ function SpeechToText(props) {
     document.querySelector('[contenteditable]')?.addEventListener('paste', function pasteAsPlainText(event) {
         event.preventDefault();
         event.target.innerText = event.clipboardData.getData("text/plain");
-        removebrtag()
+        removebrtag();
     });
-
 
     const executeProposalScroll = () => {
         contentprojectNameRef.current.scrollTo(0, 0);
     }
 
-
     const handleBlockedNavigation = ({nextLocation}) => {
-
         if (files.length <= 0 || audioData.length <= 0 || nextLocation.pathname?.includes('/transcriptions')) {
-            return false
+            return false;
         }
-        return true
+        return true;
     }
 
     const modaloptions = {
@@ -1126,7 +1034,6 @@ function SpeechToText(props) {
         height: navigationModalVisible ? 240 : null,
         onClose: hideSettingsModal,
     };
-
 
     return (
         <React.Fragment>
@@ -1143,8 +1050,7 @@ function SpeechToText(props) {
                             onClick={handleHideIcon}
                             // onBlur={() => {
                             //     setHasFocus(false);
-                            // }}
-                            
+                            // }}                            
                             onBlur={executeProposalScroll}
                             data-placeholder={t("untitled_project")}
                             onKeyUp={(e) => handleProjectNamechange(e)}
@@ -1532,7 +1438,6 @@ function SpeechToText(props) {
                     }
                 </div>
             </div>
-
             <SimpleRodals
                 sourceLanguage={sourceLanguage}
                 showSrcLangModal={showSrcLangModal}

@@ -18,7 +18,6 @@ export default function useRecorder() {
   useEffect(() => {
     const MAX_RECORDER_TIME = 10;
     let recordingInterval = null;
-
     if (recorderState.initRecording)
       recordingInterval = setInterval(() => {
         setRecorderState((prevState) => {
@@ -45,7 +44,6 @@ export default function useRecorder() {
         });
       }, 1000);
     else clearInterval(recordingInterval);
-
     return () => clearInterval(recordingInterval);
   });
 
@@ -62,19 +60,15 @@ export default function useRecorder() {
   useEffect(() => {
     const recorder = recorderState.mediaRecorder;
     let chunks = [];
-
     if (recorder && recorder.state === "inactive") {
       recorder.start();
-
       recorder.ondataavailable = (e) => {
         chunks.push(e.data);
       };
-
       recorder.onstop = () => {
         const blob = new Blob(chunks, { type: "audio/mp3" });
         let file = new File([blob], 'Record.mp3', { type: "audio/mp3" })
         chunks = [];
-
         setRecorderState((prevState) => {
           if (prevState.mediaRecorder)
             return {
@@ -85,7 +79,6 @@ export default function useRecorder() {
             };
           else return initialState;
         });
-        // console.log(recorderState)
       };
     }
 

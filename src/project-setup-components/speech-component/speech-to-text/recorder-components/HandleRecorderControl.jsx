@@ -1,7 +1,6 @@
 export async function startRecording(setRecorderState) {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });  
       setRecorderState((prevState) => {
         return {
           ...prevState,
@@ -10,7 +9,7 @@ export async function startRecording(setRecorderState) {
         };
       });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
   

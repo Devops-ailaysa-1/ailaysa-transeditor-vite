@@ -10,24 +10,14 @@
 // import { AnimatePresence,motion } from "framer-motion";
 // import Select,{ components} from 'react-select';
 
-
-
 // const TextToSpeechLayout = () => {
-
-//     // const LABS_API = Config.LABS_API
+//     const LABS_API = Config.LABS_API;
 //     const [translated, setTranslated] = useState('');
 //     const [speechSourceLanguageOption, setSpeechSourceLanguageOption] = useState('en'); // int
 //     const [speechTargetLanguageOption, setSpeechTargetLanguageOption] = useState(0); // int
-
 //     const [translateContent, setTranslateContent] = useState("");
 //     const [audioUrl, setAudioUrl] = useState(null);
-//     const [audioBlob, setAudioBlob] = useState(null);
-
-
-
-
-   
-
+//     const [audioBlob, setAudioBlob] = useState(null); 
 
 //     // const handleAuthTrue = (authentication) => {
 //     //     let token = Config.userState != null ? Config.userState.token : "";
@@ -36,39 +26,35 @@
 //     // }
 
 //     // const handleSave = () => {
-//     //     const down = translated
-
+//     //     const down = translated;
 //     //     var blob = new Blob([down], {
 //     //       type: "text/plain;charset=utf-8"
 //     //     });
 //     //     FileSaver.saveAs(blob, "YourTranslation.txt");
-
 //     //   };
 
 //     const handleChange = (e) => {
 //         setTranslated(e.target.value);
 //     }
 
-//     const [clickedTranslated, setClickedTranslated] = useState(false)
+//     const [clickedTranslated, setClickedTranslated] = useState(false);
 
 //     // const googleTranslate = async () => {
-//     //     setClickedTranslated(true)
-
+//     //     setClickedTranslated(true);
 //     //     var formdata = new FormData();
 //     //     formdata.append("Input", translateContent);
 //     //     formdata.append("target_language", speechTargetLanguageOption.language);
-
 //     //     var requestOptions = {
 //     //         method: 'POST',
 //     //         headers: handleAuthTrue(new Headers()),
 //     //         body: formdata,
 //     //         redirect: 'follow'
 //     //     };
+//     //     let data = await fetch(LABS_API + "/voice/translate/", requestOptions);
 
-//     //     let data = await fetch(LABS_API + "/voice/translate/", requestOptions)
 //     //     if (data.status === 200) {
-//     //         let response = await data.json()
-//     //         setTranslated(response.text)
+//     //         let response = await data.json();
+//     //         setTranslated(response.text);
 //     //     }
 //     //     else {
 //     //         console.log('error');
@@ -76,49 +62,37 @@
 //     // }
 
 //     // const googleVoice = async () => {
-
 //     //     var formdata = new FormData();
 //     //     formdata.append("translated_text", translated);
 //     //     formdata.append("language", speechTargetLanguageOption.language);
-
 //     //     var requestOptions = {
 //     //         method: 'POST',
 //     //         headers: handleAuthTrue(new Headers()),
 //     //         body: formdata,
 //     //         redirect: 'follow'
 //     //     };
-
-
-//     //     let data = await fetch(LABS_API + "/voice/text_to_speech/", requestOptions)
+//     //     let data = await fetch(LABS_API + "/voice/text_to_speech/", requestOptions);
 //     //     if (data.status === 200) {
 //     //         let response = await data.blob();
 //     //         // FileSaver.saveAs(response, "audio");
 //     //         // setAudioBlob(response)
-//     //         setAudioUrl(URL.createObjectURL(response))
-//     //         setAudioBlob(response)
-//     //         document.getElementById('player').play()
-
+//     //         setAudioUrl(URL.createObjectURL(response));
+//     //         setAudioBlob(response);
+//     //         document.getElementById('player').play();
 //     //     }
-
 //     //     else {
 //     //         console.log('error');
 //     //     }
-
 //     // }
-
 
 //     const handleDown = () => {
 //         // FileSaver.saveAs(audioBlob, "audio");
-//         setTranslateContent("")
-//         setTranslated("")
-//         setAudioUrl("")
-//         setAudioBlob("")
-//         setSpeechTargetLanguageOption([])
+//         setTranslateContent("");
+//         setTranslated("");
+//         setAudioUrl("");
+//         setAudioBlob("");
+//         setSpeechTargetLanguageOption([]);
 //     }
-
-
-
-
 
 //     const customAssignStyles = {
 //         placeholder: (provided, state) => ({
@@ -182,13 +156,7 @@
 //                 <ArrowDropDownIcon className="icon" />
 //             </components.DropdownIndicator>
 //         );
-//     };
-
-
-//     // console.log("sources:", speechSourceLanguageOption)
-//     // console.log("Target:", speechTargetLanguageOption)
-
-    
+//     };   
 
 //     return (
 //         <React.Fragment>

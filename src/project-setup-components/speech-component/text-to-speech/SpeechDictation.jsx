@@ -1,8 +1,9 @@
-import React from 'react'
-import DraftEditor from '../speech-dictation/DraftEditor'
+import React from 'react';
+import DraftEditor from '../speech-dictation/DraftEditor';
 
 export const SpeechDictation = (props) => {
     let {speechSourceLanguageOption, setDictationInput, dictationInput, dictationDataRef} = props;
+    
   return (
     <div>
         <React.Fragment>

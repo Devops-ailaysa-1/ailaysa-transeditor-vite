@@ -20,13 +20,9 @@ import SearchTerms from "../assets-component/glossaries/SearchTerms";
 import CreateWordchoice from "../assets-component/wordchoice/CreateWordchoice";
 
 const AssetsModule = (props) => {
-    const {
-        sidebarActiveTab,
-        setSidebarActiveTab
-    }=props
+    const {sidebarActiveTab, setSidebarActiveTab} = props;
 
     const params = useParams();
-    console.log(params)
 
     if (!params?.menu && !params?.action) {
         <Navigate to="assets/glossaries/create" />;
