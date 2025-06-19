@@ -6,21 +6,20 @@ import Navbar from "../vendor/Navbar";
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import Config from "../vendor/Config";
-import CloseBlack from "../assets/images/new-ui-icons/close_black.svg"
-import ErrorBlackWarn from "../assets/images/new-ui-icons/error_black_warn.svg"
-
+import CloseBlack from "../assets/images/new-ui-icons/close_black.svg";
+import ErrorBlackWarn from "../assets/images/new-ui-icons/error_black_warn.svg";
 
 const ProjectManagement = (props) => {
     let URL_SEARCH_PARAMS = new URLSearchParams(props.history.location.search);
 
-    const [showDurationAlertModal, setShowDurationAlertModal] = useState(false)
-    const [showEditorAlreadyAssignedModal, setShowEditorAlreadyAssignedModal] = useState(false)
-    const [fromEditorOrReviewer, setFromEditorOrReviewer] = useState("")
+    const [showDurationAlertModal, setShowDurationAlertModal] = useState(false);
+    const [showEditorAlreadyAssignedModal, setShowEditorAlreadyAssignedModal] = useState(false);
+    const [fromEditorOrReviewer, setFromEditorOrReviewer] = useState("");
 
-    const isEditable = useRef(null)
+    const isEditable = useRef(null);
     
     const hideAlertModal = () => {
-        setShowDurationAlertModal(false)
+        setShowDurationAlertModal(false);
     }
 
     const modaloption = {
@@ -37,7 +36,6 @@ const ProjectManagement = (props) => {
     isEditable.current = URL_SEARCH_PARAMS.get("_edit");
     const editRole = URL_SEARCH_PARAMS.get("_step");
     const withIn = URL_SEARCH_PARAMS.get("within");
-    // console.log("sarvesh " + typeof editRole);
 
     return (
         <>
