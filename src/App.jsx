@@ -271,7 +271,7 @@ function App() {
                 AppsCardsInfo.push(each.apps_template_cards.data.flat(1));
             });
             dispatch(setIndividualTemplateList({
-                res: AppsCardsInfo?.flat(1);
+                res: AppsCardsInfo?.flat(1)
             }));
             // setDataFilterItem(AppsCardsInfo?.flat(1));
             // DataFilterItem.current = AppsCardsInfo?.flat(1);
