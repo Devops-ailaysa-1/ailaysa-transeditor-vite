@@ -988,7 +988,7 @@ const Writter = (props) => {
                     saveHtmlDataForDocument('article');
                 } else { }
                 let final = text.replace(/\\n/g, "<p><br/></p>");
-                // let final = text.replace(/\\n/g, " ");
+                // let final = text.replace(/\\n/g, " ");   
                 let update = final.replace('/\u200c/g', " ");
                 document.querySelector('.note-editable').innerHTML += final;
                 // placeCaretAtEnd(document.querySelector('.note-editable'));
