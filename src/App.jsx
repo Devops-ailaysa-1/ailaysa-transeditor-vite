@@ -1,8 +1,6 @@
 import "./App.css";
-
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
 // import { BrowserRouter as Router, Route, Switch, Redirect, useLocation, useHistory } from "react-router-dom";
-
 import Config from "./vendor/Config";
 // import Fileupload from "./vendor/Fileupload";
 // import Login from "./vendor/Login";
@@ -41,19 +39,17 @@ import { CookieChecker } from "cookie-validator-check";
 import { PromptLibraryModal } from "./ailaysa-writer/Prompt-library/PromptLibraryModal";
 import { AdaptiveTranslationIntroModal } from "./vendor/model-select/adaptive-mt-intro/AdaptiveTranslationIntroModal";
 
-
 function App() {
     const dispatch = useDispatch();
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const showGlobalTransition = useSelector((state) => state.globalTransition.value)
-    const showAdaptiveTransIntroModal = useSelector(state => state.showAdaptiveTransIntroModal.value)
-    
-    let isEnterprise = userDetails?.is_enterprise 
-
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const showGlobalTransition = useSelector((state) => state.globalTransition.value);
+    const showAdaptiveTransIntroModal = useSelector(state => state.showAdaptiveTransIntroModal.value);    
+    let isEnterprise = userDetails?.is_enterprise;
     const [isCookieAccepted, setIsCookieAccepted] = useState(true); // To check the cookies is accepted or not
     const [cookieShowRoute, setCookieShowRoute] = useState(["/"]); // To show the cookie prompt in specific routes
-    const downloadingFileList = useSelector((state) => state.fileDownloadingList.value)
-    const showCampaignCouponStrip = useSelector((state) => state.campaignCouponStrip.value)
+    const downloadingFileList = useSelector((state) => state.fileDownloadingList.value);
+    const showCampaignCouponStrip = useSelector((state) => state.campaignCouponStrip.value);
+
     // useEffect(() => {
     //     const updateViewport = () => {
     //       const viewportMeta = document.getElementById('viewport-meta');
@@ -78,23 +74,18 @@ function App() {
     //     }else if (viewMode == "mobile"){
     //         viewport.setAttribute('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no');
     //     }
-    // }, [])
-
+    // }, []);
 
     useEffect(() => {
         const errorHandler = (message, source, lineno, colno, error) => {
             // You can log the error or perform any other action here.
-            // console.error(error);
             return true; // Return true to prevent the default browser error handling
         };
-
         window.onerror = errorHandler;
-
         return () => {
             window.onerror = null; // Clean up the event handler when the component unmounts
         };
     }, []);
-
 
     useEffect(() => {
         let details = navigator.userAgent;
@@ -102,35 +93,31 @@ function App() {
         let regexp = /android|iPhone|kindle|iPad/i;
         let isMobileDevice = regexp.test(details);
         if (isMobileDevice) {
-            // console.log("Mobile site")
             Cookies.set("view-mode", "mobile", { domain: import.meta.env.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
         } else {
-            // console.log("desktop site")
             Cookies.set("view-mode", "desktop", { domain: import.meta.env.VITE_APP_COOKIE_DOMAIN, expires: 365 * 5 });
         }
-
         let viewMode = Cookies.get("view-mode");
-        let viewport = document.querySelector('meta[name="viewport"]')
+        let viewport = document.querySelector('meta[name="viewport"]');
         if (viewMode == "desktop") {
             viewport.setAttribute('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no');
         } else if (viewMode == "mobile") {
             viewport.setAttribute('content', 'width=1024');
         }
-    }, [])
-
+    }, []);
 
     useEffect(() => {
         if (typeof Cookies.get("cookieAccepted") == "undefined")
-            // Is already not accepted the cookie
-            setIsCookieAccepted(false); // Cookie is not accepted yet
-        getUserDetails()
-        getSteps()
-        getMtEngines()
-        getLanguages()
-        getCurrencyOptions()
-        getUnitTypeOptions()
-        // getCardContent()
-        // getFilterCardContent()
+        // Is already not accepted the cookie
+        setIsCookieAccepted(false); // Cookie is not accepted yet
+        getUserDetails();
+        getSteps();
+        getMtEngines();
+        getLanguages();
+        getCurrencyOptions();
+        getUnitTypeOptions();
+        // getCardContent();
+        // getFilterCardContent();
     }, []);
 
     const getUserDetails = () => {
@@ -138,18 +125,18 @@ function App() {
             url: `${Config.BASE_URL}/auth/dj-rest-auth/user/`,
             auth: true,
             success: (response) => {
-                dispatch(setUserDetails(response.data))
+                dispatch(setUserDetails(response.data));
                 if(response.data?.is_enterprise && response.data?.enterprise_name === "Enterprise - DIN") {
-                    dispatch(setIsDinamalarNews(true))
+                    dispatch(setIsDinamalarNews(true));
                 }else if(response.data?.is_enterprise && response.data?.enterprise_name === "Enterprise - TFN") {
-                    dispatch(setIsFederalNews(true))
+                    dispatch(setIsFederalNews(true));
                 }
                 if (response.data.is_vendor) {
-                    getEdiorSettingStatus()
+                    getEdiorSettingStatus();
                 }
             },
             error: (err) => {
-                console.log(err)
+                console.error(err);
             }
         });
     }
@@ -159,7 +146,7 @@ function App() {
             url: `${Config.BASE_URL}/vendor/editor_settings_status/`,
             auth: true,
             success: (response) => {
-                dispatch(setEditorSettingStatus(response.data['incomplete status']))
+                dispatch(setEditorSettingStatus(response.data['incomplete status']));
             },
             error: (err) => {
                 if (err.response?.data?.msg === "Unauthorised" || err.response?.data?.code === "bad_authorization_header") {
@@ -169,13 +156,12 @@ function App() {
         });
     }
 
-
     const getSteps = () => {
         Config.axios({
             url: `${Config.BASE_URL}/workspace/steps/`,
             auth: true,
             success: (response) => {
-                dispatch(setSteps(response.data))
+                dispatch(setSteps(response.data));
             },
         });
     }
@@ -185,7 +171,7 @@ function App() {
             url: `${Config.BASE_URL}/app/mt_engines/`,
             auth: true,
             success: (response) => {
-                dispatch(setMtEngineOption(response.data))
+                dispatch(setMtEngineOption(response.data));
             },
         });
     };
@@ -201,7 +187,7 @@ function App() {
                     currencyOptionsTemp.push({ value: value.id, label: `${value.currency_code} - ${value.currency}` });
                 });
                 setTimeout(() => {
-                    dispatch(setCurrencyOptions(currencyOptionsTemp))
+                    dispatch(setCurrencyOptions(currencyOptionsTemp));
                 }, 80);
             },
         });
@@ -218,7 +204,7 @@ function App() {
                     unitTypeOptionsTemp.push({ value: value.id, label: value.unit });
                 });
                 setTimeout(() => {
-                    dispatch(setUnitTypeOptions(unitTypeOptionsTemp))
+                    dispatch(setUnitTypeOptions(unitTypeOptionsTemp));
                 }, 80);
             },
         });
@@ -231,70 +217,65 @@ function App() {
             url: Config.BASE_URL + "/app/language/",
             auth: true,
             success: (response) => {
-                dispatch(setLanguageOptionsList(response.data))
+                dispatch(setLanguageOptionsList(response.data));
             },
         };
         Config.axios(params);
     };
 
     const getCardContent = async() => {
-        // setCardLoaders(true)
+        // setCardLoaders(true);
         var myHeaders = new Headers();
-
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         };
+        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/all-template-app?populate=deep`, requestOptions);
 
-        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/all-template-app?populate=deep`, requestOptions)
         if (data.status === 200) {
-            let response = await data.json()
+            let response = await data.json();
             let {
                 apps_template_cards
-            } = response?.data?.attributes
-
-            let AppsCardsInfo = []
+            } = response?.data?.attributes;
+            let AppsCardsInfo = [];
             apps_template_cards.data?.map((each) => {
-                AppsCardsInfo.push(each)
-            })
-
+                AppsCardsInfo.push(each);
+            });
             dispatch(setAllTemplateList({
-                res: AppsCardsInfo?.flat(1)
-            }))
+                res: AppsCardsInfo?.flat(1);
+            }));
             // setDataItem(AppsCardsInfo?.flat(1));
-            // DataItem.current = AppsCardsInfo?.flat(1)
-            // setCardLoaders(false)
+            // DataItem.current = AppsCardsInfo?.flat(1);
+            // setCardLoaders(false);
         }
     } 
 
     const getFilterCardContent = async() => {
-        // setCardLoaders(true)
+        // setCardLoaders(true);
         var myHeaders = new Headers();
-
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         };
+        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/app-template?populate=deep`, requestOptions);
 
-        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/app-template?populate=deep`, requestOptions)
         if (data.status === 200) {
-            let response = await data.json()
+            let response = await data.json();
             let {
                 Apps_Templates
-            } = response?.data?.attributes
-
-            let AppsCardsInfo = []
+            } = response?.data?.attributes;
+            let AppsCardsInfo = [];
             Apps_Templates?.map((each) => {
-                AppsCardsInfo.push(each.apps_template_cards.data.flat(1))
-            })
+                AppsCardsInfo.push(each.apps_template_cards.data.flat(1));
+            });
             dispatch(setIndividualTemplateList({
-                res: AppsCardsInfo?.flat(1)
-            }))
+                res: AppsCardsInfo?.flat(1);
+            }));
             // setDataFilterItem(AppsCardsInfo?.flat(1));
-            // DataFilterItem.current = AppsCardsInfo?.flat(1)
-            // setCardLoaders(false)
+            // DataFilterItem.current = AppsCardsInfo?.flat(1);
+            // setCardLoaders(false);
         }
     }
 
@@ -311,36 +292,30 @@ function App() {
 
     useEffect(() => {
         if (userDetails !== null) {
-            let editorSettingsCookieData = Cookies.get("editor-settings-alert-modal-shown")
+            let editorSettingsCookieData = Cookies.get("editor-settings-alert-modal-shown");
             if (userDetails?.is_vendor && userDetails?.first_login) {
-                // console.log(editorSettingsCookieData?.id)
-                // console.log(userDetails?.pk)
                 if (editorSettingsCookieData !== undefined) {
-                    let a = JSON.parse(editorSettingsCookieData)
+                    let a = JSON.parse(editorSettingsCookieData);
                     if (a?.id != userDetails?.pk && userDetails?.first_login) {
-                        // console.log(a)
-                        // console.log('inside if')
-                        Cookies.remove("editor-settings-alert-modal-shown", { domain: Config.COOKIE_DOMAIN })
+                        Cookies.remove("editor-settings-alert-modal-shown", { domain: Config.COOKIE_DOMAIN });
                     }
                 }
-
-                // console.log("cookie " + Cookies.get("editor-settings-alert-modal-shown"))
                 if (Cookies.get("editor-settings-alert-modal-shown") === undefined || Cookies.get("editor-settings-alert-modal-shown") === null) {
-                    dispatch(setEditorSettingAlertModal(true))
-                    let cookieValue = { id: userDetails?.pk, show: true }
-                    Cookies.set("editor-settings-alert-modal-shown", JSON.stringify(cookieValue), { domain: Config.COOKIE_DOMAIN })
+                    dispatch(setEditorSettingAlertModal(true));
+                    let cookieValue = { id: userDetails?.pk, show: true };
+                    Cookies.set("editor-settings-alert-modal-shown", JSON.stringify(cookieValue), { domain: Config.COOKIE_DOMAIN });
                     // setTimeout(() => {
-                    //     Cookies.remove("editor-settings-alert-modal-shown", { domain: Config.COOKIE_DOMAIN })
+                    //     Cookies.remove("editor-settings-alert-modal-shown", { domain: Config.COOKIE_DOMAIN });
                     // }, 15000);
                 }
             }
             if (!userDetails?.first_login) {
                 if (Cookies.get("editor-settings-alert-modal-shown") !== undefined) {
-                    Cookies.remove("editor-settings-alert-modal-shown", { domain: Config.COOKIE_DOMAIN })
+                    Cookies.remove("editor-settings-alert-modal-shown", { domain: Config.COOKIE_DOMAIN });
                 }
             }
         }
-    }, [userDetails])
+    }, [userDetails]);
 
     return (
         <>
@@ -374,15 +349,13 @@ function App() {
                             downloadingFileList?.length !== 0 && (
                                 <GlobalDownloadBox />
                             )
-                        }
-                        
+                        }                        
                         <ToastContainer position="top-left" limit={1} icon={false} />
                         <UpdateProfileSettingAlertModal />
 
                         {(showAdaptiveTransIntroModal && !isEnterprise) && (
                             <AdaptiveTranslationIntroModal />
                         )}
-
                         {/* {
                             isCookieAccepted === false && cookieShowRoute.indexOf(window?.location?.pathname) !== -1 && (
                                 <div className="ai-cookie-policy-section cookie-appearance-anim">

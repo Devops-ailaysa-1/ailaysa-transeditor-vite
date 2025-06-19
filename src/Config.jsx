@@ -3,9 +3,9 @@ import { toast, ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Cookies from "js-cookie";
-import CheckCircleSuccess from "./assets/images/new-ui-icons/check_circle_success.svg"
-import ErrorBlackWarn from "./assets/images/new-ui-icons/error_black_warn.svg"
-import RemoveCircleRed from "./assets/images/new-ui-icons/remove_circle_red.svg"
+import CheckCircleSuccess from "./assets/images/new-ui-icons/check_circle_success.svg";
+import ErrorBlackWarn from "./assets/images/new-ui-icons/error_black_warn.svg";
+import RemoveCircleRed from "./assets/images/new-ui-icons/remove_circle_red.svg";
 
 /* userState cookie for authentication */
 export let userState = JSON.parse(
@@ -59,7 +59,6 @@ const Config = {
             toast.dismiss()
             return
         } 
-
         let AlertContent = () => (
             <div className="toast-align">
                 <span className="toast-img">
@@ -148,6 +147,7 @@ const Config = {
             }
         }
     },
+    
     axios: (params) => {
         //Common axios handling
         let userCacheData = JSON.parse(
@@ -155,7 +155,7 @@ const Config = {
         );
         // refresh the page if the access token does not match
         if (userState?.token !== userCacheData?.token) {
-            window.location.reload()
+            window.location.reload();
         }
         let token = userCacheData != null ? userCacheData?.token : "";
         let headers = {
@@ -197,7 +197,6 @@ const Config = {
                         data: formData,
                         auth: true,
                         success: (response) => {
-                            // console.log(response.data)
                             let userData = Config.userState;
                             userData.token = response.data.access;
                             Cookies.remove(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
@@ -208,7 +207,6 @@ const Config = {
                             Config.axios(params);
                         },
                         error: (error) => {
-                            // console.log(error.response.status);
                             if (Config.userState !== null) Cookies.remove(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
                             window.location.href = import.meta.env.VITE_APP_LOGIN_REDIRECT_URL;
                         },
@@ -227,22 +225,25 @@ const Config = {
                 if (params.finally != null) params.finally();
             });
     },
+
     logout: function (props) {
         //Logout the user
         if (Config.userState !== null) Cookies.remove(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
         if (Config.planState !== null) Cookies.remove(import.meta.env.VITE_APP_PLAN_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
-        Cookies.remove("editor-settings-alert-modal-shown", { domain: Config.COOKIE_DOMAIN })
-        Cookies.remove("first-chat-box-open", { domain: Config.COOKIE_DOMAIN })
-        Cookies.remove("hideCampaignStrip", { domain: Config.COOKIE_DOMAIN })
+        Cookies.remove("editor-settings-alert-modal-shown", { domain: Config.COOKIE_DOMAIN });
+        Cookies.remove("first-chat-box-open", { domain: Config.COOKIE_DOMAIN });
+        Cookies.remove("hideCampaignStrip", { domain: Config.COOKIE_DOMAIN });
         if (typeof Cookies.get("redirection_domain") != "undefined") Cookies.remove("redirection_domain", { domain: Config.COOKIE_DOMAIN });
         setTimeout(() => {
             window.location.href = import.meta.env.VITE_APP_LOGIN_URL;
         }, 200);
     },
+
     removeItemFromArray: (arr, item) => {
         //To remove an item the :arr by value
         return arr.filter((f) => f !== item);
     },
+
     confirm: (callback, args = [], alertText = "Are you sure?", buttonText = ["Yes", "No"]) => {
         //Ask confirmation to the user. Common function
         // toast.configure();
@@ -273,6 +274,7 @@ const Config = {
             limit: 1,
         });
     },
+
     convertUTCToLocal: (timestamp, response = "datetime") => {
         //Convert the given :timestamp to local time from UTC
         if (!timestamp) return null;
@@ -287,6 +289,7 @@ const Config = {
                 return convertedDateTime;
         }
     },
+
     convertLocalToUTC: (timestamp, response = "datetime") => {
         //Convert the given :timestamp to UTC
         if (!timestamp) return null;
@@ -301,11 +304,13 @@ const Config = {
                 return convertedDateTime;
         }
     },
+
     getDateObject: (givenDate, format = "yyyy/mm/dd") => {
         let dateObject = {};
         if (!givenDate) return null;
         return (dateObject = { year: givenDate.getFullYear(), month: givenDate.getMonth(), date: givenDate.getDate() });
     },
+
     getDateInUniversalFormat: (givenDate) => {
         if (givenDate) {
             let formatted_date = "";
@@ -327,4 +332,5 @@ const Config = {
         } else return null;
     },
 };
+
 export default Config;
