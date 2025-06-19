@@ -1,16 +1,14 @@
 import React from 'react';
 import packageJson from '../package.json';
-import Config from './vendor/Config'
+import Config from './vendor/Config';
 global.appVersion = packageJson.version;
 
 // version from response - first param, local version second param
 const semverGreaterThan = (versionA, versionB) => {
     const versionsA = versionA.split(/\./g);
-
     const versionsB = versionB.split(/\./g);
     while (versionsA.length || versionsB.length) {
         const a = Number(versionsA.shift());
-
         const b = Number(versionsB.shift());
         // eslint-disable-next-line no-continue
         if (a === b) continue;
@@ -34,7 +32,6 @@ class CacheBusterClass extends React.Component {
                         for (let name of names) caches.delete(name);
                     });
                 }
-
                 // delete browser cache and hard reload
                 window.location.reload(true);
             }
@@ -58,6 +55,7 @@ class CacheBusterClass extends React.Component {
                 }
             });
     }
+    
     render() {
         const { loading, isLatestVersion, refreshCacheAndReload } = this.state;
         return this.props.children({ loading, isLatestVersion, refreshCacheAndReload });
