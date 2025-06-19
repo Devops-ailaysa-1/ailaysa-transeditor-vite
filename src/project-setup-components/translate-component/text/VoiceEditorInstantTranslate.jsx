@@ -7,7 +7,7 @@ import MicOff from "@mui/icons-material/MicOff";
 // import ListenAnimation from "./listen-animation/ListenAnimation";
 import MicOutlinedIcon from '@mui/icons-material/MicOutlined';
 import SquareIcon from '@mui/icons-material/Square';
-// import GraphemeSplitter from 'grapheme-splitter'
+// import GraphemeSplitter from 'grapheme-splitter';
 
 const SpeechRecognition = window.SpeechRecognition
       || window.webkitSpeechRecognition
@@ -16,7 +16,6 @@ const SpeechRecognition = window.SpeechRecognition
       || window.oSpeechRecognition;
 
 var SpeechGrammarList = SpeechGrammarList || window.webkitSpeechGrammarList;
-
   
 const recognition = SpeechRecognition ? new SpeechRecognition() : {};
 const speechRecognitionList = SpeechGrammarList ? new SpeechGrammarList() : {};
