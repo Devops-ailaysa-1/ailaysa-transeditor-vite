@@ -243,7 +243,7 @@ function App() {
                 AppsCardsInfo.push(each);
             });
             dispatch(setAllTemplateList({
-                res: AppsCardsInfo?.flat(1);
+                res: AppsCardsInfo?.flat(1)
             }));
             // setDataItem(AppsCardsInfo?.flat(1));
             // DataItem.current = AppsCardsInfo?.flat(1);
