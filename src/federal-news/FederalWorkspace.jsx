@@ -238,8 +238,6 @@ const FederalWorkspace = (props) => {
     const [pushPinActive, setPushPinActive] = useState(false);
     const [segmentStatusName, setSegmentStatusName] = useState([]);
     const [forceRender, setForceRender] = useState(false);
-    
-    // console.log(translatedResponse)
 
     /*Find and replace - end*/
     const [segmentStatuses, setSegmentStatuses] = useState({
@@ -981,7 +979,6 @@ const FederalWorkspace = (props) => {
     // ============= Voice option selection logic starts =============
 
     useEffect(() => {
-        // console.log(isTranslatedAudioFileAvailable)
         const localeCount = isTranslatedAudioFileAvailable?.reduce((a, { locale }) => (
             Object.assign(a, { [locale]: (a[locale] || 0) + 1 })
         ), {});
@@ -1095,16 +1092,12 @@ const FederalWorkspace = (props) => {
     //                 }
     //                 // if (targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current != null){
     //                 //     let a = document.getElementsByClassName('workspace-editor')[0];
-    //                 //     console.log(a);
     //                 //     a.scroll({
     //                 //         top: 0,
     //                 //         behavior: 'smooth'
     //                 //       });
     //                 //     targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current.scrollTo({top: 0, behavior: 'smooth'});
     //                 //     if(findTerm === ""){
-    //                 //         console.log(isRestoredRef.current);
-    //                 //         console.log(isMergedRef.current);
-    //                 //         console.log(isSplitRef.current);
     //                 //         if(isMergedRef.current || isRestoredRef.current || isSplitRef.current){
     //                 // //         //     // if(isMergedRef.current || isRestoredRef.current){
     //                 // //         //     //     targetContentEditable.current[translatedResponse[0].segment_id].current.focus();
@@ -1500,7 +1493,6 @@ const FederalWorkspace = (props) => {
 
         if (!segmentation) {
             for (let i = 0; i < translatedResponse?.length; i++) {
-                // console.log(cache);
                 if (!cache[translatedResponse[i]?.text_unit]) {
                     cache[translatedResponse[i]?.textUnit] = translatedResponse[i]?.textUnit;
                 } else {
@@ -1765,9 +1757,8 @@ const FederalWorkspace = (props) => {
 
     useEffect(() => {
         if (mergeSelectedSegmentIds?.length !== 0) {
-            let txt_unit = translatedResponse?.find(each => each.segment_id == mergeSelectedSegmentIds[0])?.text_unit
-            let sameTxtUnitSeg = translatedResponse?.filter(each => each.text_unit == txt_unit)
-            // console.log(sameTxtUnitSeg)
+            let txt_unit = translatedResponse?.find(each => each.segment_id == mergeSelectedSegmentIds[0])?.text_unit;
+            let sameTxtUnitSeg = translatedResponse?.filter(each => each.text_unit == txt_unit);
             let newArr = translatedResponse?.map(obj => {
                 if (obj.segment_id == sameTxtUnitSeg?.find(each => each.segment_id == obj.segment_id)?.segment_id) {
                     return {
@@ -1964,7 +1955,6 @@ const FederalWorkspace = (props) => {
 
     /* Save and go to next unconfirmed segment */
     const saveAndNextUnsavedSegment = () => {
-        // console.log(focusedDivIdRef.current);
         if (focusedDivIdRef.current != null) {
             saveBtn.current[focusedDivIdRef.current].current?.click();
             setTimeout(() => {
@@ -2327,7 +2317,6 @@ const FederalWorkspace = (props) => {
                             }
                             // task is assigned to someone (view -> when editor/reviewer sees)
                             // don't show the submit button when work is not started and when work is completed
-                            // console.log(assign_to_data?.assign_to_details?.id)
                             if (assign_to_data?.assign_to_details?.id == userDetails.pk) {
                                 isDocumentOpenerVendorRef.current = true;
                                 if (assign_to_data?.task_assign_detail.task_status !== "Return Request" && assign_to_data?.task_assign_detail.task_status !== "Completed") setShowReturnRequestBtn(true)
@@ -2337,7 +2326,6 @@ const FederalWorkspace = (props) => {
                                     // isEditorSubmittedDocument.current = true;
                                 } else {
                                     // setIsWorkspaceEditable(false);
-                                    // console.log('submitted');
                                     isDocumentSubmittedRef.current = true;
                                 }
                                 if (assign_to_data?.task_assign_detail.task_status === "Completed") {
@@ -2702,7 +2690,6 @@ const FederalWorkspace = (props) => {
                 // this will select the inserted text
                 const rngs = range.createFromNode(node[0]);
                 rngs.select();
-                console.log(rngs.toString());
                 setStorySelectionText(rngs.toString());
             }
         }else{
@@ -3007,12 +2994,12 @@ const FederalWorkspace = (props) => {
     }
     
     window.onerror = function (message, file, line, col, error) {
-        console.log("Error occurred: " + error?.message);
+        console.error("Error occurred: " + error?.message);
         return false;
     };
 
     window.addEventListener("error", function (e) {
-        console.log("Error occurred: " + e?.error?.message);
+        console.error("Error occurred: " + e?.error?.message);
         return false;
     })
 
@@ -3147,14 +3134,12 @@ const FederalWorkspace = (props) => {
                             setIsSegmentConfirming(false);                            
                             // confirm current segment then move to next unconfimed segment
                             let nextSegmentUnsavedId = getUnsavedSegmentData(focusedDivIdRef.current)?.segment_id;
-                            // console.log("unconfirmed segment: " + nextSegmentUnsavedId);
                             if (targetContentEditable.current[nextSegmentUnsavedId]?.current != null) targetContentEditable.current[nextSegmentUnsavedId].current.focus();
 
                             // if no unsaved segment is found then move to next segment
                             if (nextSegmentUnsavedId === undefined) {
                                 // confirm current segment then move to next immediate segment
                                 let nextSegmentId = getNextSegmentData(focusedDivIdRef.current)?.segment_id;
-                                // console.log("immediate next segment: " + nextSegmentId);
 
                                 // if no unopened segment is found or confirmed the last segment then move to next page
                                 if(translatedResponse?.filter(each => each.status === undefined || each.status === null)?.length === 0 || translatedResponse?.slice(-1)[0]?.segment_id == id) {
@@ -3163,7 +3148,6 @@ const FederalWorkspace = (props) => {
                                         // update page and scroll to top 
                                         let pageParam = URL_SEARCH_PARAMS.get("page");
                                         // don't update page beyond the total page
-                                        // console.log(totalPages)
                                         if(totalPages > pageParam){
                                             URL_SEARCH_PARAMS.set("page", parseInt(pageParam) + 1);
                                             history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
@@ -4105,7 +4089,6 @@ const FederalWorkspace = (props) => {
                     // saveBtn.current[segmentId].current.classList.remove("btn-primary", "check-unsaved-circle");
                     // saveBtn.current[segmentId].current.classList.add("unsaved-check-circle");
                     saveBtn.current[segmentId].current.style.color = '#E74C3C';
-                    // console.log(saveBtn.current[segmentId].current);
                     break;
                 }
                 default: {

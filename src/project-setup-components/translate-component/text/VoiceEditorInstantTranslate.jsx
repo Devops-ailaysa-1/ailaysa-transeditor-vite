@@ -98,7 +98,6 @@ export default function VoiceEditorInstantTranslate(props) {
 		const current = e.resultIndex;
 		const transcript = e.results[current][0].transcript;
 		var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'));
-		console.log(caretPosition)
 		if(caretPosition !== 0){
 			editor?.summernote('pasteHTML', "<span>" + transcript +"<span>");
 		}else{

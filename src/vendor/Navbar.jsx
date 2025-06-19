@@ -214,8 +214,6 @@ function Navbar(props) {
                 setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription);
                 setAddonCredit(response?.data?.credits_left?.addon);
                 setSubscriptionCredit(response?.data?.credits_left?.subscription);
-                // console.log(response?.data?.credits_left?.total_buyed)
-                // console.log(progressPercentage)
                 if (response?.data?.credits_left?.total_buyed === 0) {
                     setProgressPercentage(0)
                 } else {
@@ -314,9 +312,8 @@ function Navbar(props) {
             setMyProjectsSelected(false)
             setMyNewsProjectsSelected(false)
         }
-    }, [window.location.pathname])
-    
-    // console.log(myProjectsSelected)
+    }, [window.location.pathname]);
+
     // const OpeningProjectButton = withStyles((theme) => ({
     //     root: {
     //         backgroundColor: "#FFFFFF",
@@ -370,13 +367,12 @@ function Navbar(props) {
     };
 
     const handleYes = () => {
-        downloadFile(downloadParameters.e, downloadParameters.type)
+        downloadFile(downloadParameters.e, downloadParameters.type);
         setDownloadConfirmationModalVisible(false);
     }
 
     const handleAudioAlertModalYes = () => {
-        // console.log()
-        downloadFile(downloadParameters.e, downloadParameters.type)
+        downloadFile(downloadParameters.e, downloadParameters.type);
     }
 
 
@@ -387,7 +383,6 @@ function Navbar(props) {
         //     //Check if came from ailaysa.com
         //     if (Config?.userState.fromAilaysa) setFromAilaysa(Config?.userState.fromAilaysa);
         // }
-
         getUserPlanDetails();
         /* Enable the websocket connection - start */
         let endpoint = `${Config.CHAT_BASE_URL.replace("http", "ws")}/marketplace/messages/?${Config.userState.id}`;
@@ -413,13 +408,12 @@ function Navbar(props) {
     }, [props]);
 
     useEffect(() => {
-        //   console.log()
         if (window.location.href?.includes('file-upload') || window.location.href?.includes('/workspace/')) {
-            setIsHelpVisible(true)
+            setIsHelpVisible(true);
         }
         else {
             if (window.location.href?.includes('documents-list')) {
-                setIsHelpVisible(false)
+                setIsHelpVisible(false);
             }
         }
     })
@@ -433,16 +427,14 @@ function Navbar(props) {
 
     // open the chat notification box if the user signed-in from proz and have chat notifications
     useEffect(() => {
-        // console.log("first-chat-box-open: " +Cookies.get("first-chat-box-open"))
         if (Cookies.get("first-chat-box-open") === undefined || Cookies.get("editor-settings-alert-modal-shown") === null) {
             if(chatNotifications?.length !== 0 && userDetails?.signup_method === 2 && userDetails?.first_login){
-                Cookies.set("first-chat-box-open", "true", { domain: Config.COOKIE_DOMAIN })
-                setChatNotification(true)
+                Cookies.set("first-chat-box-open", "true", { domain: Config.COOKIE_DOMAIN });
+                setChatNotification(true);
             }
         }
-    }, [chatNotifications])
+    }, [chatNotifications]);
     
-
     /* Whenever the socket value changes */
     useEffect(() => {
         if (didMount) {
@@ -459,9 +451,7 @@ function Navbar(props) {
             socket.current.onmessage = function (e) {
                 //When new message arrives
                 getChatNotifications();
-                /* console.log(e)
-                let response = JSON.parse(e.data)
-                console.log(response)
+                /* let response = JSON.parse(e.data)
                 if (response?.notifications) {
                     setChatNotificationsCount(response?.notifications[0]?.total_count)
                     setChatNotifications(response?.notification_details)
@@ -632,12 +622,10 @@ function Navbar(props) {
                 } else {
                     setDownloadpending(false)
                 }
-                // console.log('false')
                 Config.downloadFileInBrowser(response)
                 props.listSegments('mt-raw-download')
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
             let responseObj = JSON.parse(await err.response.data.text())
             if (err.response.status === 400) {
                 if (responseObj?.msg?.includes('Pending')) {
@@ -680,9 +668,7 @@ function Navbar(props) {
                 }
             );
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
-            let responseObj = JSON.parse(await err.response.data.text())
-            console.log(responseObj?.msg)
+            let responseObj = JSON.parse(await err.response.data.text());
             if (err.response.status === 401) {
                 if (responseObj?.msg?.includes('Conversion is going')) {
                     setCeleryId(responseObj?.celery_id);
@@ -705,7 +691,6 @@ function Navbar(props) {
                     // Config.toast('File under process, please wait.', 'warning');
                 }
             } else if (err.response.status === 400) {
-                console.log(responseObj?.msg)
                 // celery for mt-raw file
                 if (responseObj?.celery_id) {
                     mtRawCeleryCheck(responseObj?.celery_id)
@@ -731,7 +716,6 @@ function Navbar(props) {
     };
 
     const downloadFile = async (e, type) => {
-        console.log(type)
         setDownloadpending(true)
         let url = ""
         if(isFederalWorkspace){

@@ -282,8 +282,7 @@ const GenerateArticle = (props) => {
         let keyword_list = '';
         list?.forEach((each, index) => {
             keyword_list += `${each.name}${index !== list?.length - 1 ? "," : ""}`;
-        })
-        // console.log(keyword_list);
+        });
         return keyword_list;
     }
 
@@ -352,8 +351,6 @@ const GenerateArticle = (props) => {
         if (!callAPI) {
             let selected_title_obj = totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field);
             let outline_list = selected_title_obj?.blogoutline_title[0]?.blog_outline_session;
-            console.log(outline_list);
-            console.log(outline_list?.find(each => each.id === itemId));
             const newArr = blogOutlineList?.map(obj => {
                 if (obj.id === itemId) {
                     return {
@@ -414,12 +411,11 @@ const GenerateArticle = (props) => {
 
     const deleteChip = (chip_id) => {
         setChipsArray(prevState => prevState.filter((chip) => chip.id !== chip_id));
-        // let isBlogKeywordChip = blogKeywordsListRef.current?.find(item => item.id === chip_id)
-        // if(isBlogKeywordChip) setBlogKeywordsList(prevState => [...prevState, isBlogKeywordChip])
+        // let isBlogKeywordChip = blogKeywordsListRef.current?.find(item => item.id === chip_id);
+        // if(isBlogKeywordChip) setBlogKeywordsList(prevState => [...prevState, isBlogKeywordChip]);
     }
 
     useEffect(() => {
-        console.log(blogCreationResponseRef.current);
     }, [blogCreationResponseRef.current]);
 
     const updateBlog = (from) => {
@@ -432,9 +428,7 @@ const GenerateArticle = (props) => {
             formdata.append("user_title", blogTopic);
         }
         if (from === 'keyword') {
-            console.log(chipsArray?.length);
             if (chipsArray?.length === 0) {
-                console.log('from keyword inside if');
                 blogKeywordsInputRef.current.style.border = fieldErrorStyle.border;
                 return;
             }
@@ -518,14 +512,13 @@ const GenerateArticle = (props) => {
         //     data: formdata,
         //     auth: true,
         //     success: (response) => {
-        //         console.log(response.data)
-        // 		isNavigatedInternally.current = true
-        // 		handleGenerateArticles()
-        // 		setIsArticleGenerating(false)
-        // 		history(`/word-processor?document-id=${response.data?.document}`)
+        // 		isNavigatedInternally.current = true;
+        // 		handleGenerateArticles();
+        // 		setIsArticleGenerating(false);
+        // 		history(`/word-processor?document-id=${response.data?.document}`);
         //     },
         // 	error: (err) => {
-        // 		setIsArticleGenerating(false)
+        // 		setIsArticleGenerating(false);
         // 	}
         // });
     }

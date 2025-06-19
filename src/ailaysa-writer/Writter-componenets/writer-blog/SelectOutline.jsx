@@ -144,7 +144,6 @@ const SelectOutline = (props) => {
         if(stepWizard === "select-outline"){
             setTimeout(() => {
                 if(URL_SEARCH_PARAMS.get("blog")){
-                    console.log(location.pathname);
                     saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), window.location.pathname);
                 }
             }, 500);
@@ -189,7 +188,6 @@ const SelectOutline = (props) => {
     }, [blogOutlineList]);
     
     useEffect(() => {
-      console.log(blogOutlineGenResponseRef.current);
     }, [blogOutlineGenResponseRef.current]);
         
     const handleIndividualOutlineChange = (e, itemId) => {
@@ -211,8 +209,6 @@ const SelectOutline = (props) => {
         if(!callAPI){
             let selected_title_obj =  totalBlogResponseObj?.blog_title_create?.find(each => each.selected_field);
             let outline_list = selected_title_obj?.blogoutline_title[0]?.blog_outline_session;
-            console.log(outline_list);
-            console.log(outline_list?.find(each => each.id === itemId));
             const newArr = blogOutlineList?.map(obj => {
                 if (obj.id === itemId) {
                     return {
@@ -451,7 +447,6 @@ const SelectOutline = (props) => {
     const updateOutlineOrder = () => {
         let formdata = new FormData();
         let reorder_list = '';
-        // console.log(outlineReorderingRef.current)
         outlineReorderingRef.current?.map((each, index) => {
             reorder_list += `${each.temp_order}${
                 index !== outlineReorderingRef.current.length - 1 ? "," : ""
