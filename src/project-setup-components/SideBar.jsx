@@ -18,14 +18,10 @@ import WriteCollapse from "./collapses/write-collapse/WriteCollapse";
 // import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 // import { Collapse } from "reactstrap";
-import SpeechesMenu from "../assets/images/new-create-hub/speeches-menu.svg"
+import SpeechesMenu from "../assets/images/new-create-hub/speeches-menu.svg";
 
-const SideBar = (props) => {
-    
-    const {
-        setSidebarActiveTab,
-        sidebarActiveTab
-    } = props
+const SideBar = (props) => {    
+    const {setSidebarActiveTab, sidebarActiveTab} = props;
 
     const history = useNavigate();
     const { t } = useTranslation();
@@ -48,23 +44,23 @@ const SideBar = (props) => {
             activeSidebarToggle(4);
         } else if (category === "assets" && menu === "glossaries" && action === "view-list") {
             activeSidebarToggle(8);
-            setShowSidebarCategory(false)
+            setShowSidebarCategory(false);
         }
     }, []);
 
     useEffect(() => {
         if (window.location.pathname.includes("translate")) {
-            setSidebarActiveTab(2)
+            setSidebarActiveTab(2);
         } else if (window.location.pathname.includes("speech")) {
-            setSidebarActiveTab(3)
+            setSidebarActiveTab(3);
         } else if (window.location.pathname.includes("tool-kit")) {
-            setSidebarActiveTab(4)
+            setSidebarActiveTab(4);
         } else if (window.location.pathname.includes("assets")) {
-            setSidebarActiveTab(8)
-            setShowSidebarCategory(false)
+            setSidebarActiveTab(8);
+            setShowSidebarCategory(false);
         }
         else{
-            setShowSidebarCategory(true)
+            setShowSidebarCategory(true);
         }
     }, [window.location.pathname]);
 
@@ -76,7 +72,7 @@ const SideBar = (props) => {
         } else {
             setSpeechCollapse(false);
         }
-    }, [window.location.pathname])
+    }, [window.location.pathname]);
 
     useEffect(() => {
         let pathname = window.location.pathname;
@@ -85,7 +81,7 @@ const SideBar = (props) => {
         } else if((pathname === "/create/all-templates/speech") || (pathname === "/create/all-templates/writing") || (pathname === "/create/all-templates/tool-kit")) {
             setCommonCollapse(false);
         }
-    }, [window.location.pathname])
+    }, [window.location.pathname]);
 
     /* Set tab change if clicked only other tabs */
     const activeSidebarToggle = (tab) => {
@@ -224,9 +220,7 @@ const SideBar = (props) => {
                             <AssetsCollapse />
                         </NavItem>
                     </Nav>
-
-                    :
-                    
+                    :                    
                     <Nav className="project-link-list">
                             {/* <li><NavLink className="projects-link" to="/">
                                 <span></span>
