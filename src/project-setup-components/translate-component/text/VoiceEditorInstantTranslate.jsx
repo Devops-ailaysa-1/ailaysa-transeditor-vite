@@ -23,7 +23,6 @@ const speechRecognitionList = SpeechGrammarList ? new SpeechGrammarList() : {};
 recognition.grammars = speechRecognitionList;
 recognition.continuous = true;
 
-
 export default function VoiceEditorInstantTranslate(props) {
 	let{
 		selectedDictationLang,
@@ -32,41 +31,31 @@ export default function VoiceEditorInstantTranslate(props) {
 		from,
 		summerNoteEditorRef,
 		voiceDictationLangState
-	} = props
+	} = props;
 
 	const [isListening, setIsListening] = useState(false);
+
 	// if(from){
 		useEffect(() => {
 			if(from?.current === 'writter'){
-				// console.log('ran')
-				recognition.lang = document?.querySelector('.note-dictation')?.firstChild?.ariaValueText
-				// console.log("🚀 ~ file: VoiceEditorInstantTranslate.js:41 ~ VoiceEditorInstantTranslate ~ recognition.lang", recognition.lang)
-				// console.log(document?.querySelector('.note-dictation')?.firstChild?.ariaValueText)
-				// console.log(document?.querySelector('.note-dictation')?.firstChild?.ariaValueText)
-		
-		
+				recognition.lang = document?.querySelector('.note-dictation')?.firstChild?.ariaValueText;
 			}
 
-		},[voiceDictationLangState])
-			
+		},[voiceDictationLangState]);			
 	// }
 	
-
 	useEffect(() => {
 		if(from?.current === 'instant'){
 			if(targetLanguageOptionsRef.current !== null && selectedDictationLang !== ''){
-				recognition.lang = targetLanguageOptionsRef?.current?.find(eachlang => eachlang.language === selectedDictationLang?.label)?.locale_code
+				recognition.lang = targetLanguageOptionsRef?.current?.find(eachlang => eachlang.language === selectedDictationLang?.label)?.locale_code;
 			}
 		}
-	}, [targetLanguageOptionsRef?.current,selectedDictationLang])
-
+	}, [targetLanguageOptionsRef?.current,selectedDictationLang]);
 
 	const handleListening = () => {
 		if (!isListening) {
-
 		try{
 		recognition.start();
-
 		document.querySelector('button[aria-label="Dictation"]')?.classList.add('active');
 		setIsListening(true);
 		}
@@ -105,13 +94,11 @@ export default function VoiceEditorInstantTranslate(props) {
 		}
 		return caretOffset;
 	}
-
    
 	recognition.onresult = (e) => {
 		const current = e.resultIndex;
 		const transcript = e.results[current][0].transcript;
-		// console.log(transcript)
-		var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'))
+		var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'));
 		console.log(caretPosition)
 		if(caretPosition !== 0){
 			editor?.summernote('pasteHTML', "<span>" + transcript +"<span>");
@@ -120,16 +107,9 @@ export default function VoiceEditorInstantTranslate(props) {
 			editor?.summernote('restoreRange');
 			editor?.summernote('pasteHTML', "<span>" + transcript +"<span>");
 		}
-		
-		// console.log('ran')
 	};
 
-
-
-
-
   return (
-
     <div className="text-center start-listening-btn" style={{ display: from?.current === 'instant'? 'block' : 'none'}} >
       <ButtonBase className={"listen-button "} onClick={handleListening} id="dictate-btn" type="button">
         <div className="mic-icon">

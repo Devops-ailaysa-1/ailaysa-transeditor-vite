@@ -17,20 +17,20 @@ import Breadcrumbs from "../../Breadcrumbs";
 import Cookies from "js-cookie";
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
-import InsuffientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg"
-import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg"
-import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
-import TranslateGoogleLogo from "../../../assets/images/new-project-setup/translate-google-logo.svg"
-import AmazaonTranslator from "../../../assets/images/new-project-setup/amazon-trans.svg"
-import NewMicrosoftTranslator from "../../../assets/images/new-project-setup/new-microsoft-translator.svg"
+import InsuffientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg";
+import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg";
+import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg";
+import TranslateGoogleLogo from "../../../assets/images/new-project-setup/translate-google-logo.svg";
+import AmazaonTranslator from "../../../assets/images/new-project-setup/amazon-trans.svg";
+import NewMicrosoftTranslator from "../../../assets/images/new-project-setup/new-microsoft-translator.svg";
 // import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 
 const StandardTextTranslate = (props) => {
     const history = useNavigate();
+
     const [didMount, setDidMount] = useState(false);
     const [translateContent, setTranslateContent] = useState("");
     const [recognizedTranscripts, setRecognizedTranscripts] = useState("");
-
     const [sourceLanguage, setSourceLanguage] = useState("");
     const [targetLanguage, setTargetLanguage] = useState("");
     const [sourceLanguageOptions, setSourceLanguageOptions] = useState(null);
@@ -40,37 +40,36 @@ const StandardTextTranslate = (props) => {
     const [showSrcLangModal, setshowSrcLangModal] = useState(false);
     const [showTarLangModal, setshowTarLangModal] = useState(false);
     const [creditsAvailable, setCreditsAvailable] = useState(null);
-    const [finalTargetLang, setFinalTargetLang] = useState(null)
+    const [finalTargetLang, setFinalTargetLang] = useState(null);
     const [subscriptionCredit, setSubscriptionCredit] = useState(0);
     const [addonCredit, setAddonCredit] = useState(0);
     const [mtResponses, setMTResponses] = useState(null);
     const [mtTypeCollapse, setMtTypeCollapse] = useState(false);
     const [mtGlbCollapase, setMtGlbCollapse] = useState(true);
-    const [mtTranslateTextCollapse, setMtTranslateTextCollapse] = useState(false)
+    const [mtTranslateTextCollapse, setMtTranslateTextCollapse] = useState(false);
     const [selectedMtType, setSelectedMtType] = useState("google-translate");
     const [showSettings, setshowSettings] = useState(false);
     const [projectCreationStatus, setProjectCreationStatus] = useState({});
     const [error, setError] = useState({ inputText: "", sourceLanguage: "", targetLanguage: "" });
     const [isProcessing, setProcessing] = useState({ translate: false, edit: false, assign: false });
-    const [projectName, setprojectName] = useState(null)
+    const [projectName, setprojectName] = useState(null);
+    const [hasFocus, setHasFocus] = useState(false);
+    const [filteredResults, setFilteredResults] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
+    const [autoDetectIndication, setAutoDetectIndication] = useState(false);
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+      const [translateTrigger, setTranslateTrigger] = useState(false);
 
     const textareaRef = useRef();
     const targetLanguageOptionsRef = useRef([]);
     const projectQuickSetup = useRef(true);
-    const projectNameRef = useRef()
-    const [hasFocus, setHasFocus] = useState(false)
-    const [filteredResults, setFilteredResults] = useState([]);
-    const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
-    const [autoDetectIndication, setAutoDetectIndication] = useState(false)
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-
-    const [partialCompareMt, setPartialCompareMt] = useState(false)
-
+    const projectNameRef = useRef();   
+    const [partialCompareMt, setPartialCompareMt] = useState(false);
     const typing = useRef(false);
     const typingTimeout = useRef(0);
-
     const searchAreaRef = useRef(null);
+
     // let { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
 
     // useEffect(() => {
@@ -94,20 +93,17 @@ const StandardTextTranslate = (props) => {
         if (projectCreationStatus?.request === "assign") openProjectManagement();
     }, [projectCreationStatus.status]);
 
-
     useEffect(() => {
         projectNameRef.current.focus();
-        setHasFocus(true)
-
+        setHasFocus(true);
     }, [projectNameRef]);
 
     const handleHideIcon = () => {
         projectNameRef.current.focus();
-        setHasFocus(true)
+        setHasFocus(true);
     }
 
     /* API Connections as follows*/
-
     const header = {
         "Access-Control-Allow-Origin": "*",
         Accept: "application/json",
@@ -139,7 +135,6 @@ const StandardTextTranslate = (props) => {
     //     SpeechRecognition.startListening({ continuous: true });
     //     const selectionStart = textareaRef.current.selectionStart;
     //     const selectionEnd = textareaRef.current.selectionEnd;
-
     //     setTranslateContent(addString(translateContent, selectionStart, selectionEnd, transcript));
     // };
 
@@ -191,8 +186,8 @@ const StandardTextTranslate = (props) => {
         setshowSrcLangModal(false);
         setSourceLabel(name);
         setError({ ...error, sourceLanguage: "" });
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     /* Handling target language selection */
@@ -202,8 +197,8 @@ const StandardTextTranslate = (props) => {
             setshowTarLangModal(false);
             setTargetLabel(name);
             setError({ ...error, targetLanguage: "" });
-            setSearchInput('')
-            setOnFocusWrap(false)
+            setSearchInput('');
+            setOnFocusWrap(false);
         } else {
             let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
             if (e.target.classList.contains("selected")) {
@@ -219,8 +214,8 @@ const StandardTextTranslate = (props) => {
             }
             setTargetLanguage(targetLanguageTemp);
             setError({ ...error, targetLanguage: !targetLanguageTemp?.length ? "Required" : "" });
-            setSearchInput('')
-            setOnFocusWrap(false)
+            setSearchInput('');
+            setOnFocusWrap(false);
         }
     };
 
@@ -231,7 +226,7 @@ const StandardTextTranslate = (props) => {
         setTargetLanguageOptions(targetLanguageOptionsRef.current.filter((element) => element.id != sourceLanguage));
     };
 
-       useEffect(() => {
+    useEffect(() => {
         setDidMount(true); //Component mounted
         getSourceLanguages();
         getCreditStatus();
@@ -240,7 +235,7 @@ const StandardTextTranslate = (props) => {
     useEffect(() => {
         removeSelectedSourceFromTarget();
         if(targetLanguage !== ''){
-            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage))
+            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage));
         }
     }, [sourceLanguage]);
 
@@ -275,9 +270,7 @@ const StandardTextTranslate = (props) => {
 
     const createProject = (request) => {
         let formData = new FormData();
-        // console.log(projectName)
         if(projectName !== null && projectName?.trim() !== ""){
-            // console.log(projectName)
             formData.append("project_name", projectName);
         }
         formData.append("text_data", translateContent);
@@ -298,32 +291,28 @@ const StandardTextTranslate = (props) => {
             },
         });
     };
-
-    const [translateTrigger, setTranslateTrigger] = useState(false)
-
+ 
     const handleTranslateBtnClick = () => {
-        // console.log(targetLanguage)
         if(validateForm()){
             setProcessing({ ...isProcessing, translate: true });
-            setTranslateTrigger(!translateTrigger)
-            setFinalTargetLang(targetLanguage)
+            setTranslateTrigger(!translateTrigger);
+            setFinalTargetLang(targetLanguage);
         }
     }
 
     useEffect(() => {
-        setMTResponses(null)
-    }, [targetLanguage])
+        setMTResponses(null);
+    }, [targetLanguage]);
     
-
     useEffect(() => {
         if(finalTargetLang !== null){
             fetchTranslate();
         }
-    }, [finalTargetLang, translateTrigger])    
+    }, [finalTargetLang, translateTrigger])  ;  
 
     const fetchTranslate = async() => {
-        setMTResponses(null)
-        setPartialCompareMt(false)
+        setMTResponses(null);
+        setPartialCompareMt(false);
         // if (validateForm()) {
             // setProcessing({ ...isProcessing, translate: true });
             // Write API to create the project
@@ -336,31 +325,29 @@ const StandardTextTranslate = (props) => {
             formData.append("text", translateContent);
             formData.append("source_language", sourceLanguage);
             formData.append("target_language", JSON.stringify([targetLanguage]));
-            myHeaders.append("Authorization", `Bearer ${token}`);
-    
+            myHeaders.append("Authorization", `Bearer ${token}`);    
             var requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
                 body: formData,
                 redirect: 'follow'
             };
+            let data = await fetch(Config.BASE_URL + "/workspace/mt_samples/", requestOptions);
 
-            let data = await fetch(Config.BASE_URL + "/workspace/mt_samples/", requestOptions)
             if(data.status === 200){
-                let response = await data.json()
-                // console.log(response)
+                let response = await data.json();
                 if(Object.values(response[finalTargetLang])?.filter(each => each.includes('Insufficient Credits'))?.length === Object.keys(response[finalTargetLang])?.length ){
                     setProcessing({ ...isProcessing, translate: false });
-                    setShowCreditAlertModal(true)
+                    setShowCreditAlertModal(true);
                     return;
                 }else if(Object.values(response[finalTargetLang])?.filter(each => each.includes('Insufficient Credits'))?.length > 0){
                     setMTResponses(response);
                     setMtGlbCollapse(true);
                     setMtTranslateTextCollapse(true);
-                    setPartialCompareMt(true)
+                    setPartialCompareMt(true);
                     setProcessing({ ...isProcessing, translate: false });
                     setTimeout(() => {
-                        setShowCreditAlertModal(true)
+                        setShowCreditAlertModal(true);
                     }, 250);
                     return;
                 }
@@ -371,8 +358,7 @@ const StandardTextTranslate = (props) => {
             }
         // }
     } 
-    
-    
+       
     /* Create a project from Edit or Assign click event*/
     const handleEdit = () => {
         setProcessing({ ...isProcessing, edit: true });
@@ -427,7 +413,6 @@ const StandardTextTranslate = (props) => {
         setprojectName(e.target.innerText)
     }
     
-
     const handleProjectEnter = (e) => {
         e.which === 13 ? e.target.blur() : e.target.focus();
     }
@@ -439,24 +424,23 @@ const StandardTextTranslate = (props) => {
                 url: Config.BASE_URL + "/auth/lang_detect/?text=" + translateContent.split(' ').splice(0, 10).join(" "),
                 auth: true,
                 success: (response) => {
-                    setSourceLanguage(response.data?.lang_id)
-                    setSourceLabel(response.data?.language)
-                    setAutoDetectIndication(true)
-                    setTargetLabel("Target language")
-                    setTargetLanguage("")
+                    setSourceLanguage(response.data?.lang_id);
+                    setSourceLabel(response.data?.language);
+                    setAutoDetectIndication(true);
+                    setTargetLabel("Target language");
+                    setTargetLanguage("");
                 },
                 error: (err) => {
-                    setAutoDetectIndication(false)
+                    setAutoDetectIndication(false);
                 }
             });
         }
     } 
-    
-    
+        
     useEffect(() => {
       if(autoDetectIndication){
         setTimeout(() => {
-            setAutoDetectIndication(false)
+            setAutoDetectIndication(false);
         }, 10000);
       }
     }, [autoDetectIndication])
@@ -473,11 +457,10 @@ const StandardTextTranslate = (props) => {
 
     useEffect(() => {
         if(translateContent !== null || translateContent !== ""){
-            debounce(detectSourceLanguage)
+            debounce(detectSourceLanguage);
         }
-    }, [translateContent])
+    }, [translateContent]);
     
-
     // const MTRadiobtn = withStyles({
     //     root: {
     //         color: "#5F6368",
@@ -512,21 +495,19 @@ const StandardTextTranslate = (props) => {
     //     },
     // }))(Button);
 
-
     const removebrtag=()=>{
-        let rem = document.querySelector('.project-box')
+        let rem = document.querySelector('.project-box');
         var var1   = rem.getElementsByTagName('br');
-
             for(var i = var1.length; i--;) {
                 var1[i].parentNode.removeChild(var1[i]);
             }
     }
+
     document.querySelector('[contenteditable]')?.addEventListener('paste', function pasteAsPlainText(event) {
         event.preventDefault();
         event.target.innerText = event.clipboardData.getData("text/plain");
-        removebrtag()
-      });
-
+        removebrtag();
+    });
     
     const executeProposalScroll = () => {
         projectNameRef.current.scrollTo(0, 0);
