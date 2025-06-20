@@ -1267,8 +1267,7 @@ const InstantTextTranslate = (props) => {
         }
         // if(sourceSummernoteRef.current !== null){
         //     if(targetLanguage[0]?.id === 4 || targetLanguage[0]?.id === 31 || targetLanguage[0]?.id === 83 || targetLanguage[0]?.id === 31
-        //         || targetLanguage[0]?.id === 60 || targetLanguage[0]?.id === 101 || targetLanguage[0]?.id === 88 || targetLanguage[0]?.id === 106){
-        //         // console.log(document.querySelector('.ai-text-translate-work-container .source-summernote .note-editor.card .note-editable'))       
+        //         || targetLanguage[0]?.id === 60 || targetLanguage[0]?.id === 101 || targetLanguage[0]?.id === 88 || targetLanguage[0]?.id === 106){      
         //         document.querySelector('.ai-text-translate-work-container .source-summernote .note-editor.card .note-editable')
         //             .style = 'direction: rtl !important; text-align: right !important;' 
         //     } else{
@@ -1314,7 +1313,6 @@ const InstantTextTranslate = (props) => {
         //     // 83 31 60 101 88 106
         //     if(targetLanguage[0]?.id === 4 || targetLanguage[0]?.id === 31 || targetLanguage[0]?.id === 83 || targetLanguage[0]?.id === 31
         //         || targetLanguage[0]?.id === 60 || targetLanguage[0]?.id === 101 || targetLanguage[0]?.id === 88 || targetLanguage[0]?.id === 106){
-        //         // console.log(document.querySelector('.ai-text-translate-work-container .instant-translate-row .target-summernote .note-editor.card .note-editable'))
         //         document.querySelector('.ai-text-translate-work-container .instant-translate-row .target-summernote .note-editor.card .note-editable')
         //             .style = 'direction: rtl !important; text-align: right !important;' 
         //     } else{
@@ -2099,7 +2097,6 @@ const InstantTextTranslate = (props) => {
                     setUnitRate(data?.mtpe_rate);
                     setAssignInstructionText(data?.instruction);
                     setAdditionalFilesFromApi(data?.instruction_files);
-                    // console.log('from info api');
                     setEstimatedHours(data?.estimated_hours);
                 } else {
                     setIsTaskAssigned(false);
@@ -2266,8 +2263,7 @@ const InstantTextTranslate = (props) => {
     //             var mark = document.createElement("mark");
     //             // if(enableSynonym) mark.id = `synonym-${randomNum}`;
     //             // if(enableParaphrase) mark.id = `paraphrase-${randomNum}`;
-    //             if(enableselection) mark.id = `selection-${randomNum}`
-    //             console.log(`selection-${randomNum}`);
+    //             if(enableselection) mark.id = `selection-${randomNum}`;
     //             mark.style.setProperty('background-color', 'transparent', 'important');
     //             mark.appendChild(selectedText);
     //             mark.contentEditable = "true";

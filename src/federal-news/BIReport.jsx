@@ -120,7 +120,6 @@ const BIReport = () => {
 
         try{
             const response = await Config.downloadFileFromApi(url);
-            console.log(response)
             if(response?.status === 200){
                 Config.downloadFileInBrowser(response);
                 setIsReportDownloading(false);

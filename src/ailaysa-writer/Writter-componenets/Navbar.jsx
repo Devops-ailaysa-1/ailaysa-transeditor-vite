@@ -387,13 +387,11 @@ function Navbar(props) {
     }, [])
 
     const handleDownloadCurrentChapter = () => {
-        console.log(document.querySelector('#download-current-chapter'));
         setIsCurrentChaperDownloading(true);
         document.querySelector('#download-current-chapter')?.click();
         setShowDownloadDrpDown(false);
     } 
     const handleDownloadFullBook = () => {
-        console.log(document.querySelector('#download-all-book'));
         setIsFullBookDownloading(true);
         document.querySelector('#download-all-book')?.click();
         setShowDownloadDrpDown(false);

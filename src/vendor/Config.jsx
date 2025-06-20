@@ -84,16 +84,14 @@ const Config = {
         }
     },
     toast: function (alertText = "", type = "success", dismiss=false) {
-        console.log(dismiss,"dismissed")
         //Toast alert
         // toast.configure();
-        toast.clearWaitingQueue()
+        toast.clearWaitingQueue();
         // dismiss/remove all toast
         if(dismiss){
-            toast.dismiss()
-            return
+            toast.dismiss();
+            return;
         } 
-
         let AlertContent = () => (
             <div className="toast-align">
                 <span className="toast-img">
@@ -208,8 +206,6 @@ const Config = {
             headers: headers,
             ...(params.signal !== undefined && {signal: params.signal})
         };
-        // if(params.signal) console.log(axiosObj)
-
         if (params.method == null)
             //Define method
             params["method"] = "GET";
@@ -235,7 +231,6 @@ const Config = {
                         data: formData,
                         auth: true,
                         success: (response) => {
-                            // console.log(response.data)
                             let userData = Config.userState;
                             userData.token = response.data.access;
                             Cookies.remove(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
@@ -246,7 +241,7 @@ const Config = {
                             Config.axios(params);
                         },
                         error: (error) => {
-                            console.log(error.response.status);
+                            console.error(error.response.status);
                             if (Config.userState !== null) Cookies.remove(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
                             window.location.href = import.meta.env.VITE_APP_LOGIN_REDIRECT_URL;
                         },
@@ -488,11 +483,8 @@ const Config = {
         const year = yourDate.getFullYear();
         const month = String(yourDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
         const day = String(yourDate.getDate()).padStart(2, '0');
-
         // Create the formatted date string
         const formattedDate = `${year}-${month}-${day}`;
-
-        // console.log(formattedDate);
         return formattedDate
     },
 
@@ -514,13 +506,10 @@ const Config = {
         const specs = 'width=800,height=600'
         var screenWidth = window.screen.width;
         var screenHeight = window.screen.height;
-
         var windowWidth = parseInt(specs.split(",")[0].split("=")[1]);
         var windowHeight = parseInt(specs.split(",")[1].split("=")[1]);
-
         var left = (screenWidth - windowWidth) / 2;
         var top = (screenHeight - windowHeight) / 2;
-
         var newSpecs = specs + ',top=' + top + ',left=' + left;
         window.open(link, '_blank', newSpecs);
         return false;
@@ -534,10 +523,10 @@ const Config = {
                     [key]: value
                 }
             }else{
-                return obj   
+                return obj;   
             }
         })
-        return newArr
+        return newArr;
     }
 };
 export default Config;

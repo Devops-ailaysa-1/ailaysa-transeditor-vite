@@ -169,7 +169,6 @@ export default function RecordingsList({ audio, audioFile, setAudioData, audioDa
    
 //  useEffect(() => {
 //     if(recordings.length !== 0 || (recordings.length === 0 && audioData.length !== 0)){
-//         console.log(recordings);
 //         setAudioData(recordings);
 //     }
 //   }, [recordings]);
@@ -182,7 +181,6 @@ export default function RecordingsList({ audio, audioFile, setAudioData, audioDa
                 <div className="recordings-container">
                     <div className="rec-audio-file-list-wrapper">
                         {audioData.map((record, index) => {
-                            // console.log(record)
                             return(
                                 <div className="rec-audio-list-item" key={record.key}>
                                     <div className="audio-file-info">

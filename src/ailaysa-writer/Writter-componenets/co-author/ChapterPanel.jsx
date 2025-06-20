@@ -130,7 +130,6 @@ const ChapterPanel = (props) => {
         let book_id = URL_SEARCH_PARAMS.get('book');
         let item_id = URL_SEARCH_PARAMS.get('item');
         if(bookCreationResponseRedux !== null && book_id){
-            // console.log(bookCreationResponseRedux.front_matter)
             bookTitleRef.current.innerText = bookCreationResponseRedux.title;
             setFrontMatterList(bookCreationResponseRedux.front_matter);
             setFrontMatterListCopy(bookCreationResponseRedux.front_matter);
@@ -595,7 +594,6 @@ const ChapterPanel = (props) => {
                 // }, 80);
             },
             error: (err) => {
-                // console.log('inside error')
                 if (err?.response.status === 400) {
                     setShowCreditAlertModal(true);
                     document.querySelector('.note-editable').classList.remove('note-editable-loader');
@@ -637,7 +635,6 @@ const ChapterPanel = (props) => {
                 },
                 onopen(res) {
                     if(res.status == 400){
-                        // console.log('ran erron')
                         setShowCreditAlertModal(true);
                         document.querySelector('.note-editable').classList.remove('note-editable-loader');
                         document.querySelector('.note-editable').classList.remove('cursor-hide');
@@ -652,7 +649,6 @@ const ChapterPanel = (props) => {
                         }, 500);
                     }
                     if (res.ok && res.status === 200) {
-                        // console.log("Connection made ", res);
                         // blogAricleUpdate(createdDocumentId.current, blogCreatedId.current)
                     } else if (
                         res.status >= 400 &&
@@ -683,7 +679,7 @@ const ChapterPanel = (props) => {
                         document.querySelector('.note-editable').classList.remove('cursor-hide');
                         props.closeOverlay();
                     }catch(e){
-                        console.log(e);
+                        console.error(e);
                     }
                 },
                 onerror(err) {
@@ -895,13 +891,11 @@ const ChapterPanel = (props) => {
     const updateFrontOutlineOrder = () => {
         let formdata = new FormData();
         let reorder_list = '';
-        // console.log(outlineReorderingRef.current)
         frontMatterReorderingRef.current?.filter(each => each.temp_order !== undefined)?.map((each, index) => {
             reorder_list += `${each.temp_order}${
                 index !== frontMatterReorderingRef.current.length - 1 ? "," : ""
             }`;
         });
-        // console.log(reorder_list)
         formdata.append("order_list", reorder_list);
 
         Config.axios({
@@ -955,7 +949,6 @@ const ChapterPanel = (props) => {
                 index !== backMatterReorderingRef.current.length - 1 ? "," : ""
             }`;
         });
-        // console.log(reorder_list)
         formdata.append("order_list", reorder_list);
 
         Config.axios({
@@ -1050,10 +1043,6 @@ const ChapterPanel = (props) => {
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    // console.log(attribs)
-
-                    // console.log(attribs.style)
-                    // console.log(attribs.style)
                     let c = attribs?.color ? attribs?.color : '';
                     let s = attribs?.style ? attribs.style : '';
                     return {
@@ -1200,10 +1189,6 @@ const ChapterPanel = (props) => {
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    // console.log(attribs)
-
-                    // console.log(attribs.style)
-                    // console.log(attribs.style)
                     let c = attribs?.color ? attribs?.color : '';
                     let s = attribs?.style ? attribs.style : '';
                     return {
@@ -1274,7 +1259,7 @@ const ChapterPanel = (props) => {
         })
         .catch(function (response) {
             //handle error
-            // console.log(response);
+            // console.error(response);
         });
     } 
     

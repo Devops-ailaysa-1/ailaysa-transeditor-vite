@@ -45,7 +45,6 @@ export const PromptWritingBox = () => {
         const range = selection.getRangeAt(0);
         if (range.startContainer.parentNode.className === 'placeholder') {
           const placeholder = range.startContainer.parentNode;
-          console.log(evt.nativeEvent.data)
           const newText = document.createTextNode(evt.nativeEvent.data);
           range.deleteContents();
           placeholder.replaceWith(newText);
@@ -65,7 +64,6 @@ export const PromptWritingBox = () => {
 
     const handlePlaceholderClick = (evt) => {
         const range = document.createRange();
-        console.log(evt.target);
         range.selectNodeContents(evt.target);
         const selection = window.getSelection();
         selection.removeAllRanges();

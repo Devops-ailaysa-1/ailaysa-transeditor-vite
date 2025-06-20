@@ -1217,7 +1217,6 @@ function GetStories(props) {
         let searchParam = URL_SEARCH_PARAMS.get("search");
         let langParam = URL_SEARCH_PARAMS.get("lang");
         /* ordering param set/get - end */
-        // console.log(projectFilterType)
         let url = `${Config.BASE_URL}/workspace/get_stories/?page=${page}${orderParam != null ? `&ordering=${orderParam}` : ''}`;
         if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
         if (typeParam !== null && typeParam !== undefined && typeParam !== 'all') url += `&type=${typeParam}`

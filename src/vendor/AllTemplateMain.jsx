@@ -60,8 +60,6 @@ const AllTemplateMain = ({ children }) => {
     // }, [window.location.pathname])
 
     // useEffect(() => {
-    //   console.log(location.state?.prevPath)
-    //   console.log(prevPathRef.current)
     // }, [location.state])
     
 

@@ -350,7 +350,6 @@ const ImageGallery = (props) => {
                     <img src={CloseBlack} alt="close_black" />
                 </span>
                 </Tooltip>
-                {console.log(Config.DESIGNER_HOST + `/${dynamicUrl}`)}
                 <IframeComponent src={Config.DESIGNER_HOST + `/${dynamicUrl}`} height="100%" width="100%"/>
             </Rodal>}
         </React.Fragment>
