@@ -39,6 +39,7 @@ export const ImportTerms = (props) => {
     const [openBulkUploadModal, setOpenBulkUploadModal] = useState(true);
     const [filesList, setFilesList] = useState([])
     const [isUploading, setIsUploading] = useState(false)
+    const [isGlossaryLoading, setIsGlossaryLoading] = useState(false);
     
     const [selectedFileIds, setSelectedFileIds] = useState([])
     const [fileError, setFileError] = useState("");
@@ -145,6 +146,7 @@ export const ImportTerms = (props) => {
                 formData.append("glossary", each);
             })
         }
+        setIsGlossaryLoading(true);
         Config.axios({
             url: `${Config.BASE_URL}/glex/glossary_selected/`,
             auth: true,
@@ -156,8 +158,10 @@ export const ImportTerms = (props) => {
                     getSelectedGlossaries()
                 }
                 Config.toast(t("added_success"))
+                setIsGlossaryLoading(false);
             },
             error: (err) => {
+                setIsGlossaryLoading(false);
             }
         });
     };
@@ -172,6 +176,7 @@ export const ImportTerms = (props) => {
             list += `${each.id}${index !== glossaryToRemove.current?.length - 1 ? "," : ""}`;
         });
         // console.log(list);
+        setIsGlossaryLoading(true);
         Config.axios({
             url: `${Config.BASE_URL}/glex/glossary_selected/?to_remove_ids=${list}`,
             auth: true,
@@ -180,8 +185,10 @@ export const ImportTerms = (props) => {
                 Config.toast(t("removed_success"))
                 setIsGlossaryChanged(false)
                 getSelectedGlossaries()
+                setIsGlossaryLoading(false);
             },
             error: (err) => {
+                setIsGlossaryLoading(false);
             }
         });
     };
@@ -575,25 +582,31 @@ export const ImportTerms = (props) => {
                     </>
                 )}
             </div>
-                <button 
-                    className="convert-pdf-list-UploadProjectButton block mt-3 ml-auto" 
-                    onClick={handleActionBtn}
-                >
-                    <span className="fileupload-new-btn bulk-upload-span">
-                        {
-                            isUploading && (
-                                <ButtonLoader />
-                            )
-                        }
-                        
-                        {
-                            activeImportTab === 1 ? t("save") : 
-                            activeImportTab === 2 ? t("extract_term") : 
-                            activeImportTab === 3 && (isUploading ? t("extracting ") : t("extract")) 
-                        }
-                        
-                    </span>
-                </button>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div></div>
+                <Tooltip
+                    title={activeImportTab === 1 && !isGlossaryChanged ? "Please select the any one glossary in the list" : ""}
+                    placement="top-start">
+                        <span style={{ display: 'inline-block' }}>
+                            <button disabled={activeImportTab === 1 && !isGlossaryChanged}
+                                className={`convert-pdf-list-UploadProjectButton block ml-auto ${activeImportTab === 1 && !isGlossaryChanged ? "disable" : ""}`}
+                                onClick={handleActionBtn}>
+                                <span className="fileupload-new-btn bulk-upload-span">
+                                    {
+                                        (isGlossaryLoading || isUploading) && (
+                                            <ButtonLoader />
+                                        )
+                                    }
+                                    {
+                                        activeImportTab === 1 ? (isGlossaryLoading ? t("saving") : t("save")) :
+                                        activeImportTab === 2 ? t("extract_term") :
+                                        activeImportTab === 3 && (isUploading ? t("extracting ") : t("extract"))
+                                    }
+                                </span>
+                            </button>
+                        </span>
+                </Tooltip>
+            </div>
         </>
     )
 }
