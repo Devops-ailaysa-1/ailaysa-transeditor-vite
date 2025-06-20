@@ -1424,7 +1424,6 @@ function Fileupload(props) {
         let searchParam = URL_SEARCH_PARAMS.get("search");
         let typeParam = URL_SEARCH_PARAMS.get("type") ? URL_SEARCH_PARAMS.get("type") : 'glossary';
         /* ordering param set/get - end */
-        // console.log(projectFilterType)
         let url = `${Config.BASE_URL}/workspace/project/quick/setup/?page=${page}${orderParam != null ? `&ordering=${orderParam}` : ''}`;
         if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
         if (activeProjTab === 3) url += `&filter=translation`;
@@ -1471,7 +1470,6 @@ function Fileupload(props) {
     useEffect(() => {
         if (analysisRunningProjectList?.length !== 0) {
             let list = "";
-            // console.log(analysisRunningProjectListRef.current)
             analysisRunningProjectList?.map((each, index) => {
                 if (each?.id !== null || each?.proj) {
                     list += `project_id=${each.id ? each.id : each?.proj}${index !== analysisRunningProjectList?.length - 1 ? "&" : ""
@@ -1486,9 +1484,7 @@ function Fileupload(props) {
                     let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'));
                     let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'));
                     // if(finishedProj?.length !== 0){
-                    //     // console.log(finishedProj)
                     //     finishedProj?.map(each => {
-
                     //     })
                     // }
                     if (runningProj?.length !== 0) {
@@ -1534,7 +1530,7 @@ function Fileupload(props) {
                                 })
                                 setSelectedProjectFiles(newArr);
                             } catch (e) {
-                                console.log(e);
+                                console.error(e);
                             }
                         }
                         setCreatedProjects(newArr);
@@ -1612,7 +1608,6 @@ function Fileupload(props) {
         setSelectedProjectFiles([]);
         // setProjectType(projectType);
         projectObject.current = project;
-        // console.log(openedProjectId)
         if (projectId == openedProjectId) {
             setOpenedProjectId(null);
             selectedProjectIdRef.current = null;
@@ -1738,7 +1733,6 @@ function Fileupload(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
                                 setSelectedProjectFiles(newArr);
                             })
                             setTranscriptionTaskList(response.data.res);
@@ -1762,7 +1756,6 @@ function Fileupload(props) {
     useEffect(() => {
         if (preTranslateAllTask?.length !== 0) {
             let canOpenFiles = preTranslateAllTask?.filter(each => each.open == 'True');
-            // console.log(canOpenFiles)
             if (preTranslateAllTask?.length !== canOpenFiles?.length) {   // if any one of the task is not 
                 myTimeoutFunc.current = setTimeout(() => {
                     Config.axios({
@@ -2457,7 +2450,6 @@ function Fileupload(props) {
             method: "GET",
             success: (response) => {
                 if (response.status === 200) {
-                    // console.log(response.data.url)
                     setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`);
                 } else {
                     Config.toast(`${t("something_went_wrong")}`, 'error');
@@ -2761,7 +2753,7 @@ function Fileupload(props) {
                 dispatch(deleteDownloadingFile({ id: id }));
             }, 8000);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }
 
@@ -2897,7 +2889,6 @@ function Fileupload(props) {
                         //     auth: true,
                         //     success: (voiceStatusResponse) => {
                         //         const newArr = selectedProjectFilesRef.current.data?.map(obj => {
-                        //             // console.log(statusResponse.data.res?.find(each => each.task === obj.id)?.task)
                         //             if (obj.id === voiceStatusResponse.data.res?.find(each => each.task === obj.id)?.task) {
                         //                 return {
                         //                     ...obj, 
@@ -2906,15 +2897,14 @@ function Fileupload(props) {
                         //             }
                         //             return obj;
                         //         });
-                        //         console.log(newArr)
-                        //         setSelectedProjectFiles(newArr)
+                        //         setSelectedProjectFiles(newArr);
                         //         let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True')
                         //         if(voiceStatusResponse.data.res?.length !== canOpenFiles?.length){
-                        //             setTranscriptionTaskList(voiceStatusResponse.data.res)
+                        //             setTranscriptionTaskList(voiceStatusResponse.data.res);
                         //         }
                         //     },
                         //     error: (err) => {
-
+                        //            console.error(err);
                         //     }
                         // });
                     }
@@ -3163,7 +3153,7 @@ function Fileupload(props) {
                 dispatch(deleteDownloadingFile({ id: id }));
             }, 8000);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }
 
@@ -3415,7 +3405,6 @@ function Fileupload(props) {
             auth: true,
             success: (response) => {
                 // const newArr = selectedProjectFiles?.map(obj => {
-                //     // console.log(response.data.res?.find(each => each.task === obj.id)?.task)
                 //     if (obj.id === response.data.res?.find(each => each.task === obj.id)?.task) {
                 //       return {...obj, pre_trans_processing: response.data.res?.find(each => each.task === obj.id)?.open};
                 //     }
@@ -3578,7 +3567,6 @@ function Fileupload(props) {
                 setIsDownloading(false);
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
             let responseObj = JSON.parse(await err.response.data.text());
             if (err.response.status === 400) {
                 if (responseObj?.celery_id) {
@@ -3800,7 +3788,6 @@ function Fileupload(props) {
     }
 
     const sendExtendTaskDeadlineRequest = () => {
-        // console.log(taskDetailsForDeadlineCrossedTask.current);
         let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current;
         var formdata = new FormData();
         formdata.append("task", task_id);
@@ -4620,7 +4607,7 @@ function Fileupload(props) {
                 }
             },
             error: (err) => {
-                console.log(err);
+                console.error(err);
             }
         });
     }
@@ -5897,10 +5884,6 @@ function Fileupload(props) {
                                                                                                                 project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             {/*  Need to destructure this following conditional code and set everything optimised properly */}
                                                                                                             <div className="file-assigned-member-lists">
-                                                                                                                {/* {console.log(userDetails.agency)}
-                                                                                                            {console.log(selectedProjectFile?.task_assign_info)}
-                                                                                                            {console.log(project?.assign_enable)} */}
-                                                                                                                {/* {console.log(userDetails.agency ? (selectedProjectFile?.task_assign_info !== null && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.task_assign_info !== null))} */}
                                                                                                                 {(userDetails.agency ? (selectedProjectFile?.task_assign_info != null && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.task_assign_info != null)) ?
                                                                                                                     (
                                                                                                                         <>
@@ -6689,7 +6672,6 @@ function Fileupload(props) {
                                                                                                             </div>
 
                                                                                                             {/* Task action button logic ---- STARTS HERE */}
-                                                                                                            {/* {console.log(selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))))} */}
                                                                                                             <div className="project-list-action-wrap">
                                                                                                                 {selectedProjectFile?.task_assign_info?.length ? (  // if task is assigned
                                                                                                                     selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))) !== undefined ? (  // if task is assigned to same loged in user (assigned to me)

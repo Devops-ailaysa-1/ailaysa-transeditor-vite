@@ -390,7 +390,6 @@ const MainEditor = (props) => {
                     // // Prevent default paste behavior
                     // e.preventDefault();
                     // setTimeout(() => {
-                    //     // console.log(containsRtlCharacters(plain_text))
                     //     if (containsRtlCharacters(plain_text)) {
                     //         p_tag.classList.add('right-align-lang-style')
                     //     } else {
@@ -407,13 +406,10 @@ const MainEditor = (props) => {
                     //     setTimeout(function () {
                     //         document.execCommand('insertNode', false, div);
                     //     }, 10);
-
                     // } else {
                     //     navigator.clipboard.readText()
                     //         .then(text => {
                     //             setTimeout(function () {
-                    //                 console.log(e.target)
-
                     //                 $('.summernote').summernote('insertText', text)
                     //             }, 10);
                     //         })
@@ -1002,9 +998,8 @@ const MainEditor = (props) => {
                         //   $dropdown.find(".lang-list-writter-voice dropdown-item").click(function (e) {
                         setVoiceDictationStateLabel(e.target.innerText);
                         setVoiceDictationState(e.target.ariaValueText);
-                        // console.log()
-                        // voiceDictationLang.current = e.target.ariaValueText
-                        // voiceDictationLangLabel.current = e.target.innerText
+                        // voiceDictationLang.current = e.target.ariaValueText;
+                        // voiceDictationLangLabel.current = e.target.innerText;
                         if (document?.querySelector('.active-voice')) {
                             document?.querySelector('.active-voice')?.classList.remove('active-voice');
                         }
@@ -1248,7 +1243,6 @@ const MainEditor = (props) => {
     //             node = context.invoke('editor.createRange').nodes();
     //             var div = document.createElement('div');
     //             for (let i = 0; i < node.length; ++i) {
-    //                 // console.log('ran');
     //                 div.appendChild(node[i].cloneNode(true));
     //             }
     //             html = div.innerHTML;
@@ -1391,32 +1385,31 @@ const MainEditor = (props) => {
                     if (event?.target?.firstChild) {
                         // style select drop-down
                         changeParagraphStyleDropDownLabel(event);
-                        // let styleSelect = document.querySelector('.style-select-btn')
-                        // // console.log(document.querySelector('.summernote-style-list'))
+                        // let styleSelect = document.querySelector('.style-select-btn');
                         // if (event?.target.tagName === 'H1') {
-                        //     styleSelect.innerHTML = "Heading 1"
+                        //     styleSelect.innerHTML = "Heading 1";
                         //     if (document?.querySelector('.active-voice')) {
-                        //         document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                        //         document?.querySelector('.active-voice')?.classList.remove('active-voice');
                         //     }
-                        //     document.querySelector('[aria-valuetext="h1"]').classList.add('active-voice')
+                        //     document.querySelector('[aria-valuetext="h1"]').classList.add('active-voice');
                         // } else if (event?.target.tagName === 'H2') {
                         //     styleSelect.innerHTML = "Heading 2"
                         //     if (document?.querySelector('.active-voice')) {
-                        //         document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                        //         document?.querySelector('.active-voice')?.classList.remove('active-voice');
                         //     }
-                        //     document.querySelector('[aria-valuetext="h2"]').classList.add('active-voice')
+                        //     document.querySelector('[aria-valuetext="h2"]').classList.add('active-voice');
                         // } else if (event?.target.tagName === 'H3') {
                         //     styleSelect.innerHTML = "Heading 3"
                         //     if (document?.querySelector('.active-voice')) {
-                        //         document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                        //         document?.querySelector('.active-voice')?.classList.remove('active-voice');
                         //     }
-                        //     document.querySelector('[aria-valuetext="h3"]').classList.add('active-voice')
+                        //     document.querySelector('[aria-valuetext="h3"]').classList.add('active-voice');
                         // } else if (event?.target.tagName === 'P') {
                         //     styleSelect.innerHTML = "Normal"
                         //     if (document?.querySelector('.active-voice')) {
-                        //         document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                        //         document?.querySelector('.active-voice')?.classList.remove('active-voice');
                         //     }
-                        //     document.querySelector('[aria-valuetext="normal"]').classList.add('active-voice')
+                        //     document.querySelector('[aria-valuetext="normal"]').classList.add('active-voice');
                         // }
                         if ((event?.target?.firstChild?.length == getCaretPosition(event?.target)) && (event?.target?.innerText?.length >= 30) && getCaretPosition(event?.target) != 0) {
                             if (window?.getSelection()?.toString()?.length === 0) {
@@ -1877,8 +1870,7 @@ const MainEditor = (props) => {
                 var pattern = new RegExp('\\b(' + wordsToHighlight.map(escapeRegExp).join('|') + ')\\b', 'g');
                 var highlightedHtml = text.replace(
                     pattern, (match) => {
-                        // console.log(match)
-                        let uid = generateKey()
+                        let uid = generateKey();
                         return `<mark data-word=${`"${match}"`} id=${`"spell-check-${uid}"`} class="spellcheck-highlight" >${match}</mark>`
                     }
                 );

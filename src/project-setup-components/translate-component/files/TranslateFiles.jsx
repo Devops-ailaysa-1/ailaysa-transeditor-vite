@@ -1730,7 +1730,6 @@ function TranslateFiles(props) {
                         );
                     }
                 });
-
                 data.subjects?.map((subject) => {
                     editSubjectFields.push(
                         subjectFieldOptionsRef.current?.find(
@@ -1745,7 +1744,6 @@ function TranslateFiles(props) {
                         )
                     );
                 });
-                // console.log(editTargetLanguages)
                 setTimeout(() => {
                     setProjectName(data.project_name);
                     setRevisionStepEdit(data?.revision_step_edit);
@@ -1769,7 +1767,6 @@ function TranslateFiles(props) {
         });
     };
 
-
     // const handleStepSelection = (selectedStepOptions) => {
     //   if (selectedStepOptions?.length === 0) {
     //     setPostEditStep(false);
@@ -1787,9 +1784,7 @@ function TranslateFiles(props) {
     // };
 
     // useEffect(() => {
-    //   console.log(targetLanguage)
-    // }, [targetLanguage])
-
+    // }, [targetLanguage]);
 
     /* Update the edited values */
     const handleUpdate = (e, submission) => {
@@ -1860,10 +1855,7 @@ function TranslateFiles(props) {
                 formData.append("pdf_obj_id", pdfIdFromToolkit)
             }
         }
-
-
         let targetLanguageArr = [];
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
@@ -1872,7 +1864,6 @@ function TranslateFiles(props) {
             )
                 formData.append("target_languages", eachTargetLanguage?.id);
         });
-
         subjectField.map((eachSubjectField) => {
             if (
                 editSubjects.find(
@@ -1881,7 +1872,6 @@ function TranslateFiles(props) {
             )
                 formData.append("subjects", eachSubjectField.id);
         });
-
         contentType.map((eachContentType) => {
             if (
                 editContents.find(
@@ -1890,12 +1880,9 @@ function TranslateFiles(props) {
             )
                 formData.append("contents", eachContentType.id);
         });
-
         let deadlineUTC = Config.convertLocalToUTC(deadline);
-
         deadline && formData.append("project_deadline", deadlineUTC);
-        formData.append("mt_enable", mtEnable);
-        
+        formData.append("mt_enable", mtEnable);        
         formData.append("isAdaptiveTranslation", adaptiveTransEnable);
         formData.append("adaptive_file_translate", adaptiveTransEnable);
 
@@ -2231,13 +2218,11 @@ function TranslateFiles(props) {
         
     };
     const handleKeyDown = (e) => {
-       console.log(e,"checkrd")
         if (e.key === 'Enter') {
             // e.stopProgation();
             e.preventDefault();
         }
     };
-
 
     useEffect(() => {
         if (targetLanguage !== "") {
@@ -2252,57 +2237,52 @@ function TranslateFiles(props) {
                 }
             });
             let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
-            //   console.log(targetLangToRemove)
             setTargetLangListToRemove(targetLangToRemove);
         }
     }, [targetLanguage]);
 
-
     const removebrtag = () => {
-        let rem = document.querySelector('.project-box')
+        let rem = document.querySelector('.project-box');
         var var1 = rem.getElementsByTagName('br');
-
         for (var i = var1.length; i--;) {
             var1[i].parentNode.removeChild(var1[i]);
         }
     }
+
     document.querySelector('[contenteditable]')?.addEventListener('paste', function pasteAsPlainText(event) {
         event.preventDefault();
         event.target.innerText = event.clipboardData.getData("text/plain");
-        removebrtag()
+        removebrtag();
     });
-
 
     const executeProposalScroll = () => {
         contentprojectNameRef?.current?.scrollTo(0, 0);
     }
 
-    const handleBlockedNavigation = ({nextLocation}) => {
-        
+    const handleBlockedNavigation = ({nextLocation}) => {        
         if (
             files.length <= 0 || nextLocation.pathname === "/file-upload" ||
             nextLocation.pathname?.includes('/translations') || nextLocation.pathname?.includes('/workspace')
         ) {
             if(projectTaskList?.find(each => each.isProcessing)) {
-                return true
+                return true;
             }
-            return false
+            return false;
         }
-        return true
+        return true;
     }
 
     useEffect(() => {
         if (confirmedNavigation && lastLocation) {
             // Navigate to the previous blocked location with your navigate function
-            let docParam = URL_SEARCH_PARAMS.get("doc")
+            let docParam = URL_SEARCH_PARAMS.get("doc");
             if (lastLocation.search === '' && docParam) { // redirected from new document 
-                history(lastLocation.pathname + `?document-id=${docParam}`)
+                history(lastLocation.pathname + `?document-id=${docParam}`);
             } else {  //  redirected from already created document - open 
-                history(lastLocation.pathname + lastLocation.search)
+                history(lastLocation.pathname + lastLocation.search);
             }
         }
-    }, [confirmedNavigation, history, lastLocation])
-
+    }, [confirmedNavigation, history, lastLocation]);
 
     const modaloptions = {
         closeMaskOnClick: false,
@@ -2310,7 +2290,6 @@ function TranslateFiles(props) {
         height: navigationModalVisible ? 240 : null,
         onClose: hideSettingsModal,
     };
-
 
     const formatOptionLabel = ({ value, label, customAbbreviation }) => (
         <div style={{ display: "flex" }}>
@@ -2323,43 +2302,37 @@ function TranslateFiles(props) {
         </div>
     );
 
-
     const recentlyUsedLanguage = () => {
         var list;
         Config.axios({
             url: Config.BASE_URL + "/workspace/default_detail/",
             auth: true,
             success: (response) => {
-                let options = []
-                // console.log(response.data?.recent_pairs);
+                let options = [];
                 response.data?.recent_pairs?.map(each => {
                     list = (<span>{targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.src)?.language}</span> + <span>{each.tar?.length > 1 ? each.tar.map(eachTar => targetLanguageOptionsRef.current.find(eachlang => eachlang.id === eachTar)?.language).join(', ') : targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.tar[0])?.language}</span>)
-                    // console.log(list);
                     options.push({
                         value: `${each.src}->${each.tar.join(',')}`,
                         label: `${targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.src)?.language}`,
                         customAbbreviation: `${each.tar?.length > 1 ? each.tar.map(eachTar => targetLanguageOptionsRef.current.find(eachlang => eachlang.id === eachTar)?.language).join(', ') : targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.tar[0])?.language
                             }`
-                    })
-                })
-                setRecentlyUsedLangs(options)
+                    });
+                });
+                setRecentlyUsedLangs(options);
             },
         });
     }
 
-
     const handleRecentLangClick = (clickedLang) => {
-        let src = clickedLang.value.split('->')[0]
-        let tar = clickedLang.value.split('->')[1]?.split(',')
-        setSourceLabel(targetLanguageOptionsRef.current?.find((element) => element.id == src).language)
-        setSourceLanguage(src)
-        // console.log(src)
-        let selectedTar = []
+        let src = clickedLang.value.split('->')[0];
+        let tar = clickedLang.value.split('->')[1]?.split(',');
+        setSourceLabel(targetLanguageOptionsRef.current?.find((element) => element.id == src).language);
+        setSourceLanguage(src);
+        let selectedTar = [];
         tar?.map(eachTar => {
             selectedTar.push(targetLanguageOptionsRef.current?.find((element) => element.id == eachTar))
-        })
+        });
         setTargetLanguage([...new Set(selectedTar)]);
-
         //set error null
         setSourceTargetValidation({
             source: false,
@@ -2376,21 +2349,17 @@ function TranslateFiles(props) {
 
     // .docx, .doc, .xlxs, .pptx, .txt
     const checkForOfficeFiles = (files) => {
-        // console.log(files)
-        let officeFilesExt = ['doc', 'docx', 'pdf', 'pptx', 'xlsx']
-        let uploadedFilesExt = []
+        let officeFilesExt = ['doc', 'docx', 'pdf', 'pptx', 'xlsx'];
+        let uploadedFilesExt = [];
         files.forEach(file => {
             let name = file.name;
             let lastDot = name.lastIndexOf(".");
             let ext = name.substring(lastDot + 1)?.toLowerCase();
-            // console.log(ext)
-            uploadedFilesExt.push(ext)
-        })
-        // console.log(uploadedFilesExt)
-        // console.log(uploadedFilesExt?.filter(each => !officeFilesExt?.some(item => item === each)))
-        let notOfficeListPresent = uploadedFilesExt?.filter(each => !officeFilesExt?.some(item => item === each))?.length !== 0 ? true : false
-        if(notOfficeListPresent) setShowTranslateAndDownloadBtn(false)
-        else setShowTranslateAndDownloadBtn(true)
+            uploadedFilesExt.push(ext);
+        });
+        let notOfficeListPresent = uploadedFilesExt?.filter(each => !officeFilesExt?.some(item => item === each))?.length !== 0 ? true : false;
+        if(notOfficeListPresent) setShowTranslateAndDownloadBtn(false);
+        else setShowTranslateAndDownloadBtn(true);
     } 
 
     // this api will initiate the file translate process and provide the status of each task
@@ -2406,11 +2375,9 @@ function TranslateFiles(props) {
                     }
                 }
                 return obj
-            })
-            // console.log('modified list with isProcessing key')
-            // console.log(newArr)
-            projectTaskListRef.current = newArr 
-            setProjectTaskList(newArr)
+            });
+            projectTaskListRef.current = newArr;
+            setProjectTaskList(newArr);
         }
 
         Config.axios({
@@ -2418,7 +2385,7 @@ function TranslateFiles(props) {
             auth: true,
             success: (response) => {
                 if(response.data?.results !== undefined){
-                    let dataList = response.data?.results
+                    let dataList = response.data?.results;
                     let newArr = projectTaskListRef.current?.map(obj => {
                         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
                             let status = dataList?.find(each => each.task === obj.id)?.status
@@ -2428,23 +2395,16 @@ function TranslateFiles(props) {
                                 status: status
                             }
                         }
-                        return obj
-                    })
-                    // console.log('modified list with isProcessing key')
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
-
-                    // console.log('isAnyTaskIsProcessing')
-                    // console.log(projectTaskListRef.current?.find(each => each.isProcessing === true))
-                    
-                    let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false
-                    
+                        return obj;
+                    });
+                    projectTaskListRef.current = newArr;
+                    setProjectTaskList(newArr);                    
+                    let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false;
+                    let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false;
+                    let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false;                    
                     if(isPageNumNotFound){
-                        // Config.toast(`File couldn't process!`, 'error')
-                        setShowFileErrorModal(true)
+                        // Config.toast(`File couldn't process!`, 'error');
+                        setShowFileErrorModal(true);
                         let newArr = projectTaskListRef.current?.map(obj => {
                                 if(obj.status === 404){
                                 return {
@@ -2453,31 +2413,28 @@ function TranslateFiles(props) {
                                     status: 402
                                 }
                             }
-                            return obj
+                            return obj;
                         })
-                        projectTaskListRef.current = newArr 
-                        setProjectTaskList(newArr)
-                        return
+                        projectTaskListRef.current = newArr ;
+                        setProjectTaskList(newArr);
+                        return;
                     }
-
-                    if(insuffientCredit) setShowCreditAlertModal(true)
-
+                    if(insuffientCredit) setShowCreditAlertModal(true);
                     if(isAnyTaskIsProcessing){
                         setTimeout(() => {
-                            getProjectTransDownloadStatus()
+                            getProjectTransDownloadStatus();
                         }, 5000);
                     }
-                    // translateDownloadCeleryTaskListRef.current = []
+                    // translateDownloadCeleryTaskListRef.current = [];
                 }else if(task_id === undefined){
                     let newArr = projectTaskListRef.current?.map(obj => {
                         return {
                             ...obj,
                             isProcessing: false
                         }
-                    })
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
+                    });
+                    projectTaskListRef.current = newArr ;
+                    setProjectTaskList(newArr);
                 }
             },
             error: (err) => {
@@ -2488,10 +2445,9 @@ function TranslateFiles(props) {
                             isProcessing: false,
                             status: 402
                         }
-                    })
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
+                    });
+                    projectTaskListRef.current = newArr; 
+                    setProjectTaskList(newArr);
                 }
             }
         });
@@ -2500,37 +2456,26 @@ function TranslateFiles(props) {
     // this api will initiate the file translate process and provide the status of each task
     const getTaskTransDownloadStatus = (task_id) => {
         if(createdProjectIdRef.current === null) return;
-
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
-            axiosFileTranslateAbortController.abort()
-        }
-    
+            axiosFileTranslateAbortController.abort();
+        }    
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-
-        let task_list_arr = []
-
-        let alreadyProcessingTask = projectTaskListRef.current?.filter(each => each.isProcessing)
-        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
-        // console.log(alreadyProcessingTaskIds)
+        let task_list_arr = [];
+        let alreadyProcessingTask = projectTaskListRef.current?.filter(each => each.isProcessing);
+        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id);
         if(alreadyProcessingTask?.length !== 0){
-            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
         }else{
-            task_list_arr = [task_id]
+            task_list_arr = [task_id];
         }
-        // console.log("taskList: "+task_list_arr?.toString())
-
-        fileTranslatingTaskListRef.current = task_list_arr
-
+        fileTranslatingTaskListRef.current = task_list_arr;
         // create task list to process
-        let list = ""
+        let list = "";
         fileTranslatingTaskListRef.current?.map((each, index) => {
             list += `task=${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
-
-        // console.log(list)
-
         // display the button loader as soon as the user clicks the TRANSLATE button
         if(task_id !== undefined){
             let newArr = projectTaskListRef.current?.map(obj => {
@@ -2540,10 +2485,10 @@ function TranslateFiles(props) {
                         isProcessing: true,
                     }
                 }
-                return obj
+                return obj;
             })
-            projectTaskListRef.current = newArr 
-            setProjectTaskList(newArr)
+            projectTaskListRef.current = newArr ;
+            setProjectTaskList(newArr);
         }
 
         Config.axios({
@@ -2553,7 +2498,7 @@ function TranslateFiles(props) {
             success: (response) => {
                 // if called with project_id, returns list if task_data
                 if(response.data?.results !== undefined){
-                    let dataList = response.data?.results
+                    let dataList = response.data?.results;
                     let newArr = projectTaskListRef.current?.map(obj => {
                         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
                             let status = dataList?.find(each => each.task === obj.id)?.status
@@ -2563,22 +2508,16 @@ function TranslateFiles(props) {
                                 status: status,
                             }
                         }
-                        return obj
-                    })
-                    // console.log('modified list with isProcessing key')
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
-
-                    // console.log('isAnyTaskIsProcessing')
-                    
-                    let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false
-                    
+                        return obj;
+                    });
+                    projectTaskListRef.current = newArr; 
+                    setProjectTaskList(newArr);                    
+                    let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false;
+                    let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false;
+                    let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false;                    
                     if(isPageNumNotFound){
-                        // Config.toast(`File couldn't process!`, 'error')
-                        setShowFileErrorModal(true)
+                        // Config.toast(`File couldn't process!`, 'error');
+                        setShowFileErrorModal(true);
                         let newArr = projectTaskListRef.current?.map(obj => {
                             if(obj.status === 404){
                                 return {
@@ -2586,15 +2525,13 @@ function TranslateFiles(props) {
                                     isProcessing: false,
                                 }
                             }
-                            return obj
+                            return obj;
                         })
-                        projectTaskListRef.current = newArr 
-                        setProjectTaskList(newArr)
-                        return
+                        projectTaskListRef.current = newArr;
+                        setProjectTaskList(newArr);
+                        return;
                     }
-
-                    if(insuffientCredit) setShowCreditAlertModal(true)
-
+                    if(insuffientCredit) setShowCreditAlertModal(true);
                     if(isAnyTaskIsProcessing){
                         setTimeout(() => {
                             getTaskTransDownloadStatus(task_id)
@@ -2612,36 +2549,29 @@ function TranslateFiles(props) {
                                 status: 402
                             }
                         }
-                        return obj
-                    })
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
+                        return obj;
+                    });
+                    projectTaskListRef.current = newArr ;
+                    setProjectTaskList(newArr);
                 }
             }
         });
     }
 
-
-
     const downloadTaskTargetFile = async(task_id) => {
-        setIsDownloading(task_id)
-        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${task_id}`
+        setIsDownloading(task_id);
+        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${task_id}`;
         const response = await Config.downloadFileFromApi(url);
-        // console.log(response)
-        Config.downloadFileInBrowser(response)
-        setIsDownloading(null)
+        Config.downloadFileInBrowser(response);
+        setIsDownloading(null);
     } 
 
     const downloadAllFiles = async() => {
-
-        let url = `${Config.BASE_URL}/workspace/download/${createdProjectIdRef.current}/`
-
+        let url = `${Config.BASE_URL}/workspace/download/${createdProjectIdRef.current}/`;
         const response = await Config.downloadFileFromApi(url);
-
-        Config.downloadFileInBrowser(response)
-
+        Config.downloadFileInBrowser(response);
     } 
+
     const handleInput = (e) => {
         const div = contentprojectNameRef.current;
         let text = div.innerText.replace(/\n/g, '');
@@ -2651,11 +2581,11 @@ function TranslateFiles(props) {
             placeCaretAtEnd(div);
         }
         const el = e.currentTarget;
-
         if (el.innerText.trim() === '') {
             el.innerHTML = '';
         }
     };
+
      // Helper function to place caret at the end
      const placeCaretAtEnd = (el) => {
         const range = document.createRange();
@@ -2754,8 +2684,7 @@ function TranslateFiles(props) {
         formData.append("notes", "");
         formData.append("usage_permission", "Private");
         formData.append("public_license", "");
-        formData.append("steps", 1);
-    
+        formData.append("steps", 1);    
         let url = Config.BASE_URL + "/workspace/project/quick/setup/";
         let glossaryToast = "Glossary Project created successfully";
         if (isLanguageChanges) {
@@ -3125,7 +3054,6 @@ function TranslateFiles(props) {
                                                             : "col-xs-12"
                                                     }
                                                 >
-                                                    {/* {console.log(editFiles)} */}
                                                     {/* <DragandDrop handleDrop={handleDrop}> */}
                                                     <div className="button-wrap-file-list">
                                                         <div className="file-list-align">

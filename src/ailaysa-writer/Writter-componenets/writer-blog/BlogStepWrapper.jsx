@@ -101,7 +101,6 @@ const BlogStepWrapper = (props) => {
             auth: true,
             success: (response) => {
                 dispatch(setBlogCreationResponse(response.data));
-                // console.log(response.data?.steps)
                 setIsEnableCollapse(true);
                 if(!isNavigatedInternally.current) {
                     if(response.data?.steps?.includes('create-title')) setStepWizard('create-title');

@@ -70,14 +70,11 @@ const CoAuthorWriterFooter = (props) => {
             e.preventDefault();
             if(promptText?.trim()?.length === 0) return;
             // try{
-            //     let capturedWarnings = []
+            //     let capturedWarnings = [];
             //     const rng = $('.summernote').summernote('editor.getLastRange');
-            //     rng.select()
-                
-            //     console.log(rng.isCollapsed())
-            //     console.log(capturedWarnings)
+            //     rng.select();
             // }catch(e){
-            //     console.log(e)
+            //     console.error(e);
             // }
             postAiPrompt();
         }
@@ -193,7 +190,6 @@ const CoAuthorWriterFooter = (props) => {
                     });
                 })
                 let dataList = data[0].data;
-                console.log(dataList);
                 const rng = $('.summernote').summernote('editor.getLastRange');
                 const isCollapsed = rng.isCollapsed();
                 if(!isCollapsed){
@@ -226,7 +222,6 @@ const CoAuthorWriterFooter = (props) => {
             }
             pNode?.addEventListener('click', removeBgColor);
             var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'));
-            console.log("caret position: "+caretPosition);
             if (caretPosition === 0) {
                 document.querySelector('.note-editable').appendChild(pNode)?.scrollIntoView({ behavior: 'smooth', block: 'nearest'});
                 document.querySelector('.note-editable').appendChild(brNode);

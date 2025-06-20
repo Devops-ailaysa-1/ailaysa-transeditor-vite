@@ -61,7 +61,6 @@ const RecordAudio = (props) => {
                         <div className="rec-audio-file-list-wrapper">
                             {
                                 blobURL?.map((blob, index) => {
-                                    // console.log(blob)
                                     return (
                                         <div className="rec-audio-list-item">
                                             <div className="audio-file-info">

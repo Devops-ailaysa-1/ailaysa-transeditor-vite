@@ -239,7 +239,6 @@ const CreateTitle = (props) => {
             if (URL_SEARCH_PARAMS.get("blog")) {
                 setTimeout(() => {
                     if (URL_SEARCH_PARAMS.get("blog")) {
-                        // console.log(location.pathname)
                         saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), window.location.pathname);
                     }
                 }, 500);
@@ -479,17 +478,14 @@ const CreateTitle = (props) => {
 
     const createTitleformValidation = () => {
         if (blogTopic?.trim() === '') {
-            // console.log('both are empty');
             blogTopicInputRef.current.style.border = fieldErrorStyle.border;
             // blogKeywordInputRef.current.style.border = fieldErrorStyle.border
             return true;
         } else if (blogTopic?.trim() === '') {
-            // console.log('topic empty');
             blogTopicInputRef.current.style.border = fieldErrorStyle.border;
             return true;
         }
         // else if(chipsArray?.length === 0){
-        //     // console.log('keyword empty');
         //     blogKeywordInputRef.current.style.border = fieldErrorStyle.border
         //     return true 
         // }

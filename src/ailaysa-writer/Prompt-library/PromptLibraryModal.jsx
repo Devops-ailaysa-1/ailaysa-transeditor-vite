@@ -30,6 +30,16 @@ export const PromptLibraryModal = (props) => {
     const [selectedSubCategory, setselectedSubCategory] = useState(1);
     const [isNewOrEditMode, setIsNewOrEditMode] = useState(false);
     const [searchQueryText, setSearchQueryText] = useState("");
+    const [domainList, setDomainList] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
+    const [subCategoryList, setSubCategoryList] = useState([]);
+    const [promptCardsList, setPromptCardsList] = useState([]);
+    const [promptCardsListCopy, setPromptCardsListCopy] = useState([]);
+    const [promptSearchResList, setPromptSearchResList] = useState(null);
+
+    const promptSystemValueRef = useRef([]);
+    const promptCardsContainerRef = useRef(null);
+    const axiosGetPromptCardsAbortControllerRef = useRef(null);
 
     let promptCardsListInit = [
         {
@@ -45,18 +55,6 @@ export const PromptLibraryModal = (props) => {
             prompt_content: `Create a detailed profile for your character. Include details such as [Name], [Age], [Occupation], [Personality Traits], [Background], and [Goals].`
         },
     ];
-
-    const [domainList, setDomainList] = useState([]);
-    const [categoryList, setCategoryList] = useState([]);
-    const [subCategoryList, setSubCategoryList] = useState([]);
-    const [promptCardsList, setPromptCardsList] = useState([]);
-    const [promptCardsListCopy, setPromptCardsListCopy] = useState([]);
-    const [promptSearchResList, setPromptSearchResList] = useState(null);
-    
-    const promptSystemValueRef = useRef([])
-    const promptCardsContainerRef = useRef(null)
-    const axiosGetPromptCardsAbortControllerRef = useRef(null)
-
 
     // get all system values on component load
     useEffect(() => {
@@ -300,16 +298,15 @@ export const PromptLibraryModal = (props) => {
     } 
 
     const handleInputKeyDown = (e, itemId, list, setList) => {
-        if(e.target.value?.trim() === '') return 
+        if(e.target.value?.trim() === '') return;
         if(e.which === 13){
             handleInputBlur(e, itemId, list, setList);
         }
     }
     
     const handleInputBlur = (e, itemId, list, setList) => {
-        console.log(e.target.value)
         if(e.target.value?.trim() === ''){
-            setList(list.filter(each => each.id !== itemId))
+            setList(list.filter(each => each.id !== itemId));
         }else{
             setList(updateSpecificKeyInList(list, itemId, 'isEditable', false));
         }

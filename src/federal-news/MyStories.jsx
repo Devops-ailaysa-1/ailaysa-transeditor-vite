@@ -1178,7 +1178,6 @@ function MyStories(props) {
                 });
             }
         });
-        // console.log(a)
         let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
         setTargetLangListToRemove(targetLangToRemove);
     }, [targetLanguage]);
@@ -1255,22 +1254,19 @@ function MyStories(props) {
     }
 
     const projectSearchFunctionality = (param) => {
-        let orderby = URL_SEARCH_PARAMS.get("order_by")
-        let filter = URL_SEARCH_PARAMS.get("filter")
-        let url = `/my-stories?page=1`
-
-        let queryParam = new URLSearchParams(window.location.search)
-        queryParam.set('page', 1)
-        
+        let orderby = URL_SEARCH_PARAMS.get("order_by");
+        let filter = URL_SEARCH_PARAMS.get("filter");
+        let url = `/my-stories?page=1`;
+        let queryParam = new URLSearchParams(window.location.search);
+        queryParam.set('page', 1);        
         // if (orderby != null) url += `&order_by=${orderby}`;
         // if (filter != null) url += `&filter=${filter}`;
         // let typeParam = URL_SEARCH_PARAMS.get("type")
         // if (typeParam != null) url += `&type=${typeParam}`;
-
         if (param !== 'clear-search') {
-            queryParam.set('search', projectSearchTerm)
+            queryParam.set('search', projectSearchTerm);
         }else if(param === 'clear-search'){
-            setIsSearchTermDelete(true)
+            setIsSearchTermDelete(true);
         }
         history(window.location.pathname + '?' + queryParam.toString());
     }
@@ -1278,67 +1274,55 @@ function MyStories(props) {
     /* Go to the top of the page when move to another pages */
     useEffect(() => {
         const controller = new AbortController();
-
-        let pageParam = URL_SEARCH_PARAMS.get("page")
-        let editorParam = URL_SEARCH_PARAMS.get("editor")
-        // console.log(editorParam)
-		// console.log(pageParam)
+        let pageParam = URL_SEARCH_PARAMS.get("page");
+        let editorParam = URL_SEARCH_PARAMS.get("editor");
         if (pageParam !== null && pageParam !== undefined) {
-            listProjects()
-            if(editorParam === null) setCheckedEditors([])
-            else {setCheckedEditors(editorParam?.split(',')?.map(each => parseInt(each)))}
+            listProjects();
+            if(editorParam === null) setCheckedEditors([]);
+            else {setCheckedEditors(editorParam?.split(',')?.map(each => parseInt(each)));}
         }else if((pageParam == null || pageParam == undefined)){		// add page param only for my stories list
-			URL_SEARCH_PARAMS.set('page', 1)
+			URL_SEARCH_PARAMS.set('page', 1);
 			history.push(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
 		}
-        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
-
+        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("page"), URL_SEARCH_PARAMS.get("editor")]);    
-
     
     useEffect(() => {
         const controller = new AbortController();
-
-        let refreshParam = URL_SEARCH_PARAMS.get("refresh-proj")
-        let projIdParam = URL_SEARCH_PARAMS.get("open-project")
+        let refreshParam = URL_SEARCH_PARAMS.get("refresh-proj");
+        let projIdParam = URL_SEARCH_PARAMS.get("open-project");
         if (refreshParam !== null && refreshParam !== undefined && projIdParam) {
             if(!createdProjectsList?.find(each => each?.id == projIdParam)) return;
-            let selectedRow = document.querySelector(`div[data-key='${projIdParam}']`)
+            let selectedRow = document.querySelector(`div[data-key='${projIdParam}']`);
             // selectedRow?.scrollIntoView({
             //     behavior: 'smooth',
             //     block: 'center',
             // });
-            setSelectFileRow(true)
-            setOpenedProjectId(projIdParam)
-            selectProjectById(projIdParam, null, true)
-            console.log(openedProjectId)
-            console.log(refreshParam)
-            setRefreshParam(!refreshParam)
-            // listFiles(projIdParam, true)
-        }
-      
-        // mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
-
+            setSelectFileRow(true);
+            setOpenedProjectId(projIdParam);
+            selectProjectById(projIdParam, null, true);
+            setRefreshParam(!refreshParam);
+            // listFiles(projIdParam, true);
+        }      
+        // mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("refresh-proj")]);
 
     /* Go to the top of the page when ordering */
     useEffect(() => {
         const controller = new AbortController();
-
         let order = URL_SEARCH_PARAMS.get("order_by")
         if (order !== null && order !== undefined) {
-            setOrderBySelectedValue(activeProjTab !== 6 ? orderByOptions?.find(each => each?.value == order) : orderByOptionsForAssets?.find(each => each?.value == order))
+            setOrderBySelectedValue(activeProjTab !== 6 ? orderByOptions?.find(each => each?.value == order) : orderByOptionsForAssets?.find(each => each?.value == order));
             listProjects();
         }
-
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("order_by")]);
 
@@ -1357,16 +1341,13 @@ function MyStories(props) {
         if (searchParam !== null && searchParam !== undefined) {
             // didMountRef.current++
             // if(didMountRef.current !== 2){
-            // console.log('from search');
             setProjectSearchTerm(searchParam)
             listProjects();
         } else if (isSearchTermDelete) {
-            // console.log('from search');
             listProjects();
         }
-
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("search"), isSearchTermDelete]);
 
@@ -1374,51 +1355,45 @@ function MyStories(props) {
         let proceedAssignParam = URL_SEARCH_PARAMS.get("proceed-assgin")
         let projectIdParam = URL_SEARCH_PARAMS.get("project")
         if (proceedAssignParam !== null && proceedAssignParam !== undefined && projectIdParam && createdProjectsList?.length !== 0) {
-            let assignIcon = document.querySelector(`#project-assigni-icon-${projectIdParam}`)
-            // console.log(assignIcon);
-            assignIcon?.click()
-
+            let assignIcon = document.querySelector(`#project-assigni-icon-${projectIdParam}`);
+            assignIcon?.click();
         }
     }, [URL_SEARCH_PARAMS.get("proceed-assgin"), createdProjectsList]);
 
 
     // automatically open accordian based on the project ID  
     useEffect(() => {
-        let id = URL_SEARCH_PARAMS.get("open-project")
+        let id = URL_SEARCH_PARAMS.get("open-project");
         if (id !== null) {
             try{
-                // console.log(createdProjectsList?.find(each => each?.id == id))
                 if(!createdProjectsList?.find(each => each?.id == id) && !isProjectListEmptyRef.current) {
                     if(openProjectListCounterRef.current < 2){
-                        listProjects()
-                        openProjectListCounterRef.current += 1
+                        listProjects();
+                        openProjectListCounterRef.current += 1;
                     }
                     
                 }else if(!isProjectListEmptyRef.current){
-                    let selectedRow = document.querySelector(`div[data-key='${id}']`)
-                    setSelectFileRow(true)
-                    selectProjectById(id)
+                    let selectedRow = document.querySelector(`div[data-key='${id}']`);
+                    setSelectFileRow(true);
+                    selectProjectById(id);
                 }
             }catch(e){
-                console.log(e)
+                console.error(e);
             }
         }
 		if(createdProjectsList?.length !== 0 && id === null){
-			selectProjectById(createdProjectsList[0]?.id, 'open')
+			selectProjectById(createdProjectsList[0]?.id, 'open');
 		}
     }, [createdProjectsList, URL_SEARCH_PARAMS.get("open-project")]);
     
 
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
-        console.log(pageSelect)
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        clearTimeout(myTimeoutFunc.current)
-        let queryParam = new URLSearchParams(window.location.search)
-
-        queryParam.set('page', page)
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        clearTimeout(myTimeoutFunc.current);
+        let queryParam = new URLSearchParams(window.location.search);
+        queryParam.set('page', page);
         history(window.location.pathname + '?' + queryParam.toString());
-
         // let orderParam = queryParam.get("order_by");
         // if (orderParam != null) url += `&order_by=${orderParam}`;
         // let projectIdParam = queryParam.get("open-project");
@@ -1430,22 +1405,18 @@ function MyStories(props) {
         // let typeParam = URL_SEARCH_PARAMS.get("type")
         // if (typeParam != null) url += `&type=${typeParam}`;
         // history(url);
-
     };
 
     /* Set order by value and redirect */
     const orderBy = (orderFieldTemp) => {
         clearTimeout(wordCountAnalysisTimeoutRef.current)
-        let page = 1
-        // let url = `/my-stories?page=${page}`
-
-        let queryParam = new URLSearchParams(window.location.search)
-        queryParam.set('page', 1)
-        queryParam.set('order_by', orderFieldTemp)
-        history(window.location.pathname + '?' + queryParam.toString());
-        
+        let page = 1;
+        // let url = `/my-stories?page=${page}`;
+        let queryParam = new URLSearchParams(window.location.search);
+        queryParam.set('page', 1);
+        queryParam.set('order_by', orderFieldTemp);
+        history(window.location.pathname + '?' + queryParam.toString());        
         // if (orderFieldTemp != null) url += `&order_by=${orderFieldTemp}`;
-
         // let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
         // if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
         // let filter = URL_SEARCH_PARAMS.get("filter");
@@ -1469,9 +1440,7 @@ function MyStories(props) {
     const listProjects = (from) => {
         setFileListSearchEnlarge(false);
         setShowListingLoader(true);
-        setCreatedProjects([])
-        
-
+        setCreatedProjects([]) ;
         // setprojectFilterType(null)
         /* Page param set/get - start */
         let page = 1;
@@ -1489,24 +1458,19 @@ function MyStories(props) {
         // orderParam;
         let filterParam = URL_SEARCH_PARAMS.get("filter");
         let searchParam = URL_SEARCH_PARAMS.get("search");
-        let editorParam = URL_SEARCH_PARAMS.get("editor")
-
+        let editorParam = URL_SEARCH_PARAMS.get("editor");
         /* ordering param set/get - end */
-        // console.log(projectFilterType)
         let url = `${Config.BASE_URL}/workspace/project/quick/setup/?page=${page}&filter=news${orderParam != null ? `&ordering=${orderParam}` : ''}`;
         if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
         if (isDinamalar){
             url += `&assign_status=${filterParam ? filterParam : "inprogress"}`
             if(editorParam !== null && editorParam !== undefined) url += `&assign_to=${editorParam}`
         } 
-
         if (axiosListProjectControllerRef.current) {
             axiosListProjectControllerRef.current.abort()
-        }
-    
+        }    
         const controller = new AbortController();
         axiosListProjectControllerRef.current = controller 
-
         let params = {
             url: url,
             auth: true,
@@ -1514,18 +1478,18 @@ function MyStories(props) {
             timeout: 1000 * 15, // Wait for 15 seconds
             success: (response) => {
                 // setOrderField(orderFieldTemp);
-                setSelectedProjectFiles([])
+                setSelectedProjectFiles([]);
                 setCreatedProjects(response.data.results);
                 setCreatedProjectsList(response.data.results)
                 createdProjectsRef.current = response.data.results
                 setShowListingLoader(false);
                 if (response.data.results.length === 0) {
                     setEmptyProjects(true);
-                    isProjectListEmptyRef.current = true
+                    isProjectListEmptyRef.current = true;
                 }
                 else {
                     setEmptyProjects(false);
-                    isProjectListEmptyRef.current = false
+                    isProjectListEmptyRef.current = false;
                 }
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
@@ -1537,7 +1501,6 @@ function MyStories(props) {
                     URL_SEARCH_PARAMS.delete("open-project")
                     history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
                 }
-
             },
             error: (error) => {
                 Config.log(error);
@@ -1552,7 +1515,6 @@ function MyStories(props) {
     useEffect(() => {
         if (analysisRunningProjectList?.length !== 0) {
             let list = "";
-            // console.log(analysisRunningProjectListRef.current)
             analysisRunningProjectList?.map((each, index) => {
                 if (each?.id !== null || each?.proj) {
                     list += `project_id=${each.id ? each.id : each?.proj}${index !== analysisRunningProjectList?.length - 1 ? "&" : ""
@@ -1564,17 +1526,13 @@ function MyStories(props) {
                 url: `${Config.BASE_URL}/workspace/project/word_char/count?${list}`,
                 auth: true,
                 success: (response) => {
-                    let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'))
-                    let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'))
-                    // console.log(analysisRunningProjectListRef.current)
+                    let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'));
+                    let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'));
                     // if(finishedProj?.length !== 0){
-                    //     // console.log(finishedProj)
                     //     finishedProj?.map(each => {
 
                     //     })
                     // }
-                    // console.log(runningProj)
-
                     if (runningProj?.length !== 0) {
                         const newArr = createdProjectsRef.current?.map(obj => {
                             if (obj.id === response.data?.out?.find(each => each.proj === obj.id)?.proj) {
@@ -1585,12 +1543,11 @@ function MyStories(props) {
                             }
                             return obj;
                         });
-                        setCreatedProjects(newArr)
+                        setCreatedProjects(newArr);
                         wordCountAnalysisTimeoutRef.current = setTimeout(() => {
-                            console.log(runningProj)
-                            setAnalysisRunningProjectList(runningProj)
-                            analysisRunningProjectListRef.current = runningProj
-                            wordCountAnalysisTriggerRef.current = !wordCountAnalysisTriggerRef.current
+                            setAnalysisRunningProjectList(runningProj);
+                            analysisRunningProjectListRef.current = runningProj;
+                            wordCountAnalysisTriggerRef.current = !wordCountAnalysisTriggerRef.current;
                         }, 8000);
                     } else {
                         const newArr = createdProjectsRef.current?.map(obj => {
@@ -1603,19 +1560,18 @@ function MyStories(props) {
                             }
                             return obj;
                         });
-                        setCreatedProjects(newArr)
+                        setCreatedProjects(newArr);
                     }
                 },
                 error: (err) => {
-
+                   console.error(err);
                 }
             });
         }
         return () => {
-            clearTimeout(wordCountAnalysisTimeoutRef.current)
+            clearTimeout(wordCountAnalysisTimeoutRef.current);
         }
-    }, [analysisRunningProjectList])
-
+    }, [analysisRunningProjectList]);
 
     /* Reset the project creation form */
     const resetForm = () => {
@@ -1653,13 +1609,13 @@ function MyStories(props) {
         if (shouldListFiles !== "dont-open") setOpenedProjectId(projectId);
         setSelectedProjectId(projectId);
         listFiles(projectId, scrolltoLast);
-        selectedProjectIdRef.current = projectId
-        setTranscriptionTaskList([])
-        setPreTranslateAllTask([])
+        selectedProjectIdRef.current = projectId;
+        setTranscriptionTaskList([]);
+        setPreTranslateAllTask([]);
         // while (id--) {
         //     window.clearTimeout(id); // will do nothing if no timeout with id is present
         // } 
-        clearTimeout(myTimeoutFunc.current)
+        clearTimeout(myTimeoutFunc.current);
         let createdProject = createdProjects.find((element) => element.id == projectId);
 		if (createdProject?.project_name != null) setSelectedProjectName(createdProject.project_name);
         if (createdProject?.project_analysis != null) {
@@ -1671,7 +1627,7 @@ function MyStories(props) {
     };
 
     const handleAnalysisCollapse = (index) => {
-        let collapseByIndex = [...showAnalysisCollapse]
+        let collapseByIndex = [...showAnalysisCollapse];
         collapseByIndex[index] = !collapseByIndex[index];
         setShowAnalysisCollapse(collapseByIndex);
     }
@@ -1684,33 +1640,28 @@ function MyStories(props) {
         if (hasParentThisClass(e?.target, "selected-file-row") || hasParentThisClass(e?.target, "dont-open-files")) return;
 		setSelectedProjectFiles([]);
         // setProjectType(projectType);
-        projectObject.current = project
-        // console.log(openedProjectId)
+        projectObject.current = project;
         if (projectId == openedProjectId) {
             setOpenedProjectId(null);
         } else {
-            setSelectFileRow(true)
+            setSelectFileRow(true);
             selectProjectById(projectId, shouldListFiles);
         }
     };
 
     /* List files for specific project */
     const listFiles = (projectId, scrolltoLast = false) => {
-
         if (axiosVendorDashboardAbortController) {
-            axiosVendorDashboardAbortController.abort()
-        }
-    
+            axiosVendorDashboardAbortController.abort();
+        }    
         const controller = new AbortController();
         setAxiosVendorDashboardAbortController(controller);
         let filterParam = URL_SEARCH_PARAMS.get("filter");
         let editorParam = URL_SEARCH_PARAMS.get("editor")
-
-        let url = Config.BASE_URL + "/workspace/vendor/dashboard/" + projectId
+        let url = Config.BASE_URL + "/workspace/vendor/dashboard/" + projectId;
         if (isDinamalar){
-            url += `?status=${filterParam ? filterParam : "inprogress"}`
-            if(editorParam !== null && editorParam !== undefined) url += `&assign_to=${editorParam}`
-
+            url += `?status=${filterParam ? filterParam : "inprogress"}`;
+            if(editorParam !== null && editorParam !== undefined) url += `&assign_to=${editorParam}`;
         }
 
         Config.axios({
@@ -1718,27 +1669,18 @@ function MyStories(props) {
             auth: true,
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
-
                 if(response.data?.length === 0){
-                    listProjects()
-                    return
-                }
-                
+                    listProjects();
+                    return;
+                }                
                 // let responseTemp = response.data;
-                setPreTranslateAllTask([])
-                selectedProjectFilesRef.current = response.data
-
-                // console.log(createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail);
-                // getVoiceTranscribeTaskStatus(projectId)
-
-                isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate
-                // console.log(isProjectPreTranslate.current);
-                // console.log(isProjectTransciptionRef.current);
-
+                setPreTranslateAllTask([]);
+                selectedProjectFilesRef.current = response.data;
+                // getVoiceTranscribeTaskStatus(projectId);
+                isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate;
                 if (createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail != null) {
                     isProjectTransciptionRef.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail.project_type_sub_category == 1
                 }
-
                 if (isProjectPreTranslate.current || isProjectTransciptionRef.current) {
                     // for transcription projects
                     if (isProjectTransciptionRef.current) {
@@ -1755,28 +1697,24 @@ function MyStories(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                                 let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True')
                                 if (voiceStatusResponse.data.res?.length !== canOpenFiles?.length) {
-                                    setTranscriptionTaskList(voiceStatusResponse.data.res)
+                                    setTranscriptionTaskList(voiceStatusResponse.data.res);
                                 }
                             },
                             error: (err) => {
-
+                                console.error(err);
                             }
                         });
                     }
-
                     // for pre-translate projects
-
                     if (isProjectPreTranslate.current) {
                         Config.axios({
                             url: `${Config.BASE_URL}/workspace/task_status/?project=${selectedProjectIdRef.current}`,
                             auth: true,
                             success: (statusResponse) => {
                                 const newArr = response.data?.map(obj => {
-                                    // console.log(statusResponse.data.res?.find(each => each.task === obj.id)?.task)
                                     if (obj.id === statusResponse.data.res?.find(each => each.task === obj.id)?.task) {
                                         return {
                                             ...obj,
@@ -1790,15 +1728,14 @@ function MyStories(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                                 let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
                                 if (statusResponse.data.res?.length !== canOpenFiles?.length) {
-                                    setPreTranslateAllTask(statusResponse.data.res)
+                                    setPreTranslateAllTask(statusResponse.data.res);
                                 }
                             },
                             error: (err) => {
-
+                                console.error(err);
                             }
                         });
                     }
@@ -1815,9 +1752,9 @@ function MyStories(props) {
 
     useEffect(() => {
         if (transcriptionTaskList?.length !== 0) {
-            let canOpenFiles = transcriptionTaskList?.filter(each => each.open == 'True')
-            // console.log(canOpenFiles)
+            let canOpenFiles = transcriptionTaskList?.filter(each => each.open == 'True');
             if (transcriptionTaskList?.length !== canOpenFiles?.length) {   // if any one of the task is not 
+
                 myTimeoutFunc.current = setTimeout(() => {
                     Config.axios({
                         url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${selectedProjectIdRef.current}`,
@@ -1838,13 +1775,12 @@ function MyStories(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                             })
-                            setTranscriptionTaskList(response.data.res)
+                            setTranscriptionTaskList(response.data.res);
                         },
                         error: (err) => {
-
+                            console.error(err);
                         }
                     });
                 }, 3000);
@@ -1855,8 +1791,7 @@ function MyStories(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr);
-                setSelectedProjectFiles(newArr)
+                setSelectedProjectFiles(newArr);
             }
         }
     }, [transcriptionTaskList])
@@ -1864,10 +1799,10 @@ function MyStories(props) {
 
     useEffect(() => {
         if (preTranslateAllTask?.length !== 0) {
-            let canOpenFiles = preTranslateAllTask?.filter(each => each.open == 'True')
-            // console.log(canOpenFiles)
+            let canOpenFiles = preTranslateAllTask?.filter(each => each.open == 'True');
             if (preTranslateAllTask?.length !== canOpenFiles?.length) {   // if any one of the task is not 
                 myTimeoutFunc.current = setTimeout(() => {
+
                     Config.axios({
                         url: `${Config.BASE_URL}/workspace/task_status/?project=${selectedProjectIdRef.current}`,
                         auth: true,
@@ -1888,13 +1823,12 @@ function MyStories(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                             })
-                            setPreTranslateAllTask(response.data.res)
+                            setPreTranslateAllTask(response.data.res);
                         },
                         error: (err) => {
-
+                           console.error(err);
                         }
                     });
                 }, 3000);
@@ -1905,7 +1839,7 @@ function MyStories(props) {
                     }
                     return obj;
                 });
-                setSelectedProjectFiles(newArr)
+                setSelectedProjectFiles(newArr);
             }
         }
     }, [preTranslateAllTask])
@@ -1923,7 +1857,6 @@ function MyStories(props) {
         
         if(openIn === "Designer"){
             // writer the designer open logic here
-            // console.log('open designer')
             const index = selectedProjectFilesRef.current.findIndex(obj => obj?.design_project?.desg_job === selectedProjectFile?.design_project?.desg_job);
             let subUrl = project?.designer_project_detail?.type == 'image_design' ? `&view=2` : `&code=${selectedProjectFile?.target_language}&view=2`
             let url = `/workspace/${project?.designer_project_detail?.type == 'image_design' ? 'design' : 'image-translate'}/?project=${selectedProjectFile?.design_project?.desg_project}&page=${1}&lang=${index}`
@@ -1934,11 +1867,10 @@ function MyStories(props) {
             history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, {state: { filename: fileName }})
         }else if (openIn === "News") {
             setClickedOpenButton(key);
-
             let formdata = new FormData();
             formdata.append("task", id);
-            // console.log(openIn)
-            let newsUrl = `/workspace/federal_translate/`
+            let newsUrl = `/workspace/federal_translate/`;
+
             Config.axios({
                 url: Config.BASE_URL + newsUrl,
                 method: "POST",
@@ -1946,7 +1878,6 @@ function MyStories(props) {
                 auth: true,
                 success: (response) => {
                     setClickedOpenButton(null);
-                    // console.log(response)
                     setTimeout(() => {
                         // window.location.href = 'workspace/' + response.data.id
                         // window.open('http://localhost:3000/workspace/' + response.data.task, '_blank', 'noopener,noreferrer')
@@ -1973,15 +1904,14 @@ function MyStories(props) {
                         Config.toast('Oops ! The file is empty', 'error');
                     }
                     if (err?.response?.data?.msg?.includes('Mt only Ongoing')) {
-                        setShowProcessingModal(true)
-                        // openFile(null, null, null, url)
+                        setShowProcessingModal(true);
+                        // openFile(null, null, null, url);
                         setTimeout(() => {
-                            setShowProcessingModal(false)
+                            setShowProcessingModal(false);
                         }, 4000);
                     }
                     if (err?.response?.data?.msg?.includes('Pre Translation Ongoing')) {  // this error comes when the pre-translate is enabled in update flow
-                        setShowProcessingModal(true)
-
+                        setShowProcessingModal(true);
                         // pre-translate loader update flow (when the task open is cicked)
                         setPreTranslateAllTask([])
                         isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate
@@ -2004,32 +1934,31 @@ function MyStories(props) {
                                         }
                                         return obj;
                                     });
-                                    // console.log(newArr)
-                                    setSelectedProjectFiles(newArr)
+                                    setSelectedProjectFiles(newArr);
                                     let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
                                     if (statusResponse.data.res?.length !== canOpenFiles?.length) {
                                         setPreTranslateAllTask(statusResponse.data.res)
                                     }
                                 },
                                 error: (err) => {
-
+                                   console.error(err);
                                 }
                             });
                         }
-                        // openFile(null, null, null, url)
+                        // openFile(null, null, null, url);
                         setTimeout(() => {
-                            setShowProcessingModal(false)
+                            setShowProcessingModal(false);
                         }, 4000);
                     }
                     setClickedOpenButton(null);
                 },
             });
-
         }  else {
             if (from !== 'task-download') {
                 setClickedOpenButton(key);
             }
             if (url !== null) {
+
                 Config.axios({
                     url: Config.BASE_URL + url,
                     auth: true,
@@ -2041,8 +1970,8 @@ function MyStories(props) {
                                 downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName, selectedProjectFile)
                             } else {
                                 setTimeout(() => {
-                                    // window.location.href = 'workspace/' + response.data.document_id
-                                    let lastPageAvailable = localStorage.getItem(response.data.document_id)
+                                    // window.location.href = 'workspace/' + response.data.document_id;
+                                    let lastPageAvailable = localStorage.getItem(response.data.document_id);
                                     if (lastPageAvailable) {
                                         history(lastPageAvailable, {state: {
                                             prevPath: location.pathname + location.search,
@@ -2061,8 +1990,8 @@ function MyStories(props) {
                                 downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName, selectedProjectFile)
                             } else {
                                 setTimeout(() => {
-                                    // window.location.href = 'workspace/' + response.data.document_id
-                                    let lastPageAvailable = localStorage.getItem(response.data?.doc_data?.document_id)
+                                    // window.location.href = 'workspace/' + response.data.document_id;
+                                    let lastPageAvailable = localStorage.getItem(response.data?.doc_data?.document_id);
                                     if (lastPageAvailable) {
                                         history(lastPageAvailable, {state: {
                                             prevPath: location.pathname + location.search,
@@ -2084,18 +2013,17 @@ function MyStories(props) {
                             Config.toast('Oops ! The file is empty', 'error');
                         }
                         if (err?.response?.data?.msg?.includes('Mt only Ongoing')) {
-                            setShowProcessingModal(true)
-                            // openFile(null, null, null, url)
+                            setShowProcessingModal(true);
+                            // openFile(null, null, null, url);
                             setTimeout(() => {
-                                setShowProcessingModal(false)
+                                setShowProcessingModal(false);
                             }, 4000);
                         }
                         if (err?.response?.data?.msg?.includes('Pre Translation Ongoing')) {  // this error comes when the pre-translate is enabled in update flow
-                            setShowProcessingModal(true)
-
+                            setShowProcessingModal(true);
                             // pre-translate loader update flow (when the task open is cicked)
-                            setPreTranslateAllTask([])
-                            isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate
+                            setPreTranslateAllTask([]);
+                            isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate;
                             if (isProjectPreTranslate.current) {
                                 Config.axios({
                                     url: `${Config.BASE_URL}/workspace/task_status/?project=${selectedProjectIdRef.current}`,
@@ -2115,21 +2043,20 @@ function MyStories(props) {
                                             }
                                             return obj;
                                         });
-                                        // console.log(newArr)
-                                        setSelectedProjectFiles(newArr)
+                                        setSelectedProjectFiles(newArr);
                                         let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
                                         if (statusResponse.data.res?.length !== canOpenFiles?.length) {
-                                            setPreTranslateAllTask(statusResponse.data.res)
+                                            setPreTranslateAllTask(statusResponse.data.res);
                                         }
                                     },
                                     error: (err) => {
-
+                                      console.error(err);
                                     }
                                 });
                             }
-                            // openFile(null, null, null, url)
+                            // openFile(null, null, null, url);
                             setTimeout(() => {
-                                setShowProcessingModal(false)
+                                setShowProcessingModal(false);
                             }, 4000);
                         }
                         setClickedOpenButton(null);
@@ -2147,7 +2074,6 @@ function MyStories(props) {
                 });
             }
         }
-
         /* From version 3.0 */
         // if (projectType === 1 || projectType === 2) {
         //     Config.axios({
@@ -2192,19 +2118,17 @@ function MyStories(props) {
         setTaskActionAnchorEl(null)
     };
 
-
     /* File upload drag and drop handling */
     const handleDrop = (filesTemp, request = null) => {
         //Also check handleChange
-
         let fileList = [...files];
         Object.keys(filesTemp).map((eachKey) => {
             if (!request && isSupportedFile(filesTemp[eachKey])) {
-                // if (editFiles.length + fileList.length < allowedFileLength.current)
+                // if (editFiles.length + fileList.length < allowedFileLength.current);
                 if (filesTemp[eachKey].size / 1024 / 1024 <= allowedSingleFileSize.current) fileList.push(filesTemp[eachKey]);
                 else Config.toast(singleFileSizeError.current, "error");
                 // else
-                // Config.toast(fileLengthErrMsg.current, 'error')
+                // Config.toast(fileLengthErrMsg.current, 'error');
             } else if (request !== null) {
                 if ((request === "tmx" && isSupportedFile(filesTemp[eachKey], request)) || (request === "tbx" && isSupportedFile(filesTemp[eachKey], request))) {
                     if (filesTemp[eachKey].size / 1024 / 1024 <= allowedSingleFileSize.current) fileList.push(filesTemp[eachKey]);
@@ -2215,9 +2139,8 @@ function MyStories(props) {
         if (request === "tmx") setTMXFiles(fileList);
         else if (request === "tbx") setTBXFiles(fileList);
         else setFiles(fileList);
-
         setShowFileUpload(false);
-        // setFiles(prevState => [...prevState, fileList])
+        // setFiles(prevState => [...prevState, fileList]);
     };
 
     /* Removed dragged files */
@@ -2337,9 +2260,9 @@ function MyStories(props) {
 
    
     const editProject = (e = null, projectId, projectType, project) => {
-        e.stopPropagation()
+        e.stopPropagation();
         // page information for redirecting to same page after updation is done.
-        projectObject.current = project
+        projectObject.current = project;
         let prevPageInfo = {
             pageNo: URL_SEARCH_PARAMS.get("page"),
             orderBy: URL_SEARCH_PARAMS.get("order_by"),
@@ -2347,14 +2270,13 @@ function MyStories(props) {
             search: URL_SEARCH_PARAMS.get("search"),
             projectId: projectId,
             fromProjectList: true
-        }
+        };
         if (projectType === 8) {
-            setEditInstantProjectModal(true)
-            storyProjectIdRef.current = projectId
-            editStoryProject(e, projectId)
+            setEditInstantProjectModal(true);
+            storyProjectIdRef.current = projectId;
+            editStoryProject(e, projectId);
         }
     };
-
 
     useEffect(() => {
         selectedSteps?.map((each) => {
@@ -2378,22 +2300,21 @@ function MyStories(props) {
         }
     };
 
-
     const editStoryProject = (e, projectId) => {
-        e.stopPropagation()
-        setSkeletonLoader(true)
+        e.stopPropagation();
+        setSkeletonLoader(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/files_jobs/${projectId}/`,
             auth: true,
             success: (response) => {
                 let { data } = response;
-                setstoryProjectName(data.project_name)
-                setHasTeam(data.team)
+                setstoryProjectName(data.project_name);
+                setHasTeam(data.team);
                 setEditJobs(data.jobs);
                 let editTargetLanguages = [];
                 let tar = [];
                 let tarID = [];
-
                 response.data?.jobs?.map((each) => {
                     let a = each?.source_target_pair_names?.split("->");
                     tar.push({ language: a[1], id: each?.target_language });
@@ -2413,8 +2334,6 @@ function MyStories(props) {
                 let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                     (element) => element.id == data.jobs[0].source_language
                 );
-                // console.log(targetLanguageOptionsRef.current)
-                // console.log(editSourceLanguage)
                 setTimeout(() => {
                     setSourceLabel(editSourceLanguage?.language);
                     setSourceLanguage(editSourceLanguage?.id)
@@ -2427,19 +2346,14 @@ function MyStories(props) {
 
     const updateStoryProject = () => {
         let formdata = new FormData();
-        setIsStoryProjUpdating(true)
-
+        setIsStoryProjUpdating(true);
         formdata.append("source_language", sourceLanguage);
-
         if (storyProjectName?.trim() === '') {
             Config.toast(t("enter_proj_name"))
             return;
         }
-
         formdata.append("project_name", storyProjectName?.trim());
-
         formdata.append("team", hasTeam);
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
@@ -2448,9 +2362,6 @@ function MyStories(props) {
             )
                 formdata.append("target_languages", eachTargetLanguage?.id);
         });
-
-
-
         let list = "";
         targetLangListToRemove?.map((each, index) => {
             list += `${each.id}${index !== targetLangListToRemove.length - 1 ? "," : ""
@@ -2469,9 +2380,8 @@ function MyStories(props) {
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_updated_success"));
-                setEditInstantProjectModal(false)
-                setIsStoryProjUpdating(false)
-
+                setEditInstantProjectModal(false);
+                setIsStoryProjUpdating(false);
                 // update the word count and project name of the project
                 const newArr = createdProjects?.map(obj => {
                     if (obj.id === storyProjectIdRef.current) {
@@ -2483,44 +2393,44 @@ function MyStories(props) {
                     }
                     return obj;
                 });
-                setCreatedProjects(newArr)
-                setCreatedProjectsList(newArr)
+                setCreatedProjects(newArr);
+                setCreatedProjectsList(newArr);
             },
 			error: (err) => {
-				setIsStoryProjUpdating(false)
+				setIsStoryProjUpdating(false);
+                console.error(err);
 			}
         });
     }
 
-
     /* Delete a project by id */
     const deleteStoryProject = () => {
-        setIsStoryProjectDeleting(true)
+        setIsStoryProjectDeleting(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/project/quick/setup/${storyProjectIdRef.current}`,
             method: "DELETE",
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_deleted"));
-                let filteredArr = createdProjects?.filter(each => each.id !== storyProjectIdRef.current)
-                setShowStoryProjDeleteModal(false)
-                setEditInstantProjectModal(false)
+                let filteredArr = createdProjects?.filter(each => each.id !== storyProjectIdRef.current);
+                setShowStoryProjDeleteModal(false);
+                setEditInstantProjectModal(false);
                 setShowListingLoader(false);
-                setIsStoryProjectDeleting(false)
+                setIsStoryProjectDeleting(false);
                 if (filteredArr?.length === 0) setEmptyProjects(true);
-                setCreatedProjects(filteredArr)
+                setCreatedProjects(filteredArr);
             },
             error: (err) => {
                 if (err?.response?.data?.msg?.includes('assigned')) {
-                    setShowStoryProjDeleteModal(false)
-                    SetShowAssignedProjectDeleteAlert(true)
-                    setIsStoryProjectDeleting(false)
+                    setShowStoryProjDeleteModal(false);
+                    SetShowAssignedProjectDeleteAlert(true);
+                    setIsStoryProjectDeleting(false);
                 }
-                setIsStoryProjectDeleting(false)
+                setIsStoryProjectDeleting(false);
             }
         });
     };
-
 
     /* Handle MT Engine change */
     const handleMTEngineChange = (selectedOption) => {
@@ -2543,18 +2453,15 @@ function MyStories(props) {
         setAnchorEl(null);
     };
 
-
     // unassign editor from task
     const unassignEditor = (e, taskId, stepId, project, is_reassigned) => {
         e.stopPropagation();
-
         // when an unassign api is calling don't let another api request
-        if(editorUnassignData.isUnassigning) return
-
+        if(editorUnassignData.isUnassigning) return;
         setEditorUnassignData({
             task_id: taskId,
             isUnassigning: true
-        })
+        });
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_info/?task=${taskId}&step=${stepId}${is_reassigned !== null ? '&reassigned=True' : ''}`,
@@ -2562,17 +2469,17 @@ function MyStories(props) {
             auth: true,
             success: (response) => {
                 Config.toast(t("task_unassigned"));
-                listFiles(project?.id)
+                listFiles(project?.id);
                 setEditorUnassignData({
                     task_id: null,
                     isUnassigning: false
-                })
+                });
             },
             error: (err) => {
                 setEditorUnassignData({
                     task_id: null,
                     isUnassigning: false
-                })
+                });
             }
         });
     }
@@ -2660,7 +2567,6 @@ function MyStories(props) {
     let role = ""
     let isAssignedProject = null;
 
-
     // get the PO pdf url
     const getPOPdf = (assignmentId) => {
         Config.axios({
@@ -2669,10 +2575,9 @@ function MyStories(props) {
             method: "GET",
             success: (response) => {
                 if (response.status === 200) {
-                    // console.log(response.data.url)
-                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`)
+                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
@@ -2681,16 +2586,12 @@ function MyStories(props) {
     // task accept api 
     const taskAssignUpdate = (targetValue) => {
         // e.stopPropagation(); 
-        // console.log(particularClickedTask)
         var formdata = new FormData();
         formdata.append("task_ven_status ", targetValue);
         formdata.append("task", particularClickedTask);
         formdata.append("step", stepToAccept);
-
-        // console.log(isTaskReassigned.current)
-
         if (isTaskReassigned.current) {
-            formdata.append("reassigned", 'True')
+            formdata.append("reassigned", 'True');
         }
 
         Config.axios({
@@ -2700,73 +2601,49 @@ function MyStories(props) {
             data: formdata,
             success: (response) => {
                 if (response.status === 200) {
-                    // console.log(response.data)
-                    setShowPoModal(false)
-                    listFiles(openedProjectId)
-                    isTaskReassigned.current = false
-                    // setAcceptedRates(response.data["Previously Agreed Rates"])
+                    setShowPoModal(false);
+                    listFiles(openedProjectId);
+                    isTaskReassigned.current = false;
+                    // setAcceptedRates(response.data["Previously Agreed Rates"]);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
     }
 
     const handleAcceptBtn = (assignmentId, taskId, step, is_reassigned) => {
-        setParticularClickedTask(taskId)
-        setStepToAccept(step)
-        getPOPdf(assignmentId)
-        setShowPoModal(true)
-        // console.log(is_reassigned)
-        isTaskReassigned.current = typeof is_reassigned === 'boolean' ? true : false
+        setParticularClickedTask(taskId);
+        setStepToAccept(step);
+        getPOPdf(assignmentId);
+        setShowPoModal(true);
+        isTaskReassigned.current = typeof is_reassigned === 'boolean' ? true : false;
     }
 
     // peoples circle
     const AssignInfoUiBox = (props) => {
         let { project, selectedProjectFile, eachRole } = props;
-        // console.log(selectedProjectFile);
-        // console.log(eachRole?.assigned_by_details?.avatar);
-        // console.log(eachRole);
-
-        // let editorProfile = (Config.userState?.id !== eachRole?.assign_to_details?.id && eachRole?.assign_to_details?.avatar)
-
-        // console.log(eachRole);
+        // let editorProfile = (Config.userState?.id !== eachRole?.assign_to_details?.id && eachRole?.assign_to_details?.avatar);
         // let assigned_by_name = (Config.userState?.id === eachRole?.assigned_by_details?.id ? 
         //                     eachRole?.assigned_by_details?.name : 
-        //                     eachRole?.assign_to_details?.name)
-
+        //                     eachRole?.assign_to_details?.name);
         // let assigned_to_name = (Config.userState?.id === eachRole?.assign_to_details?.id ? 
         //                     eachRole?.assign_to_details?.name :
-        //                     eachRole?.assigned_by_details?.name)  
-
+        //                     eachRole?.assigned_by_details?.name); 
         // let editorEmail = (Config.userState?.id === eachRole?.assign_to_details?.id ? 
         //                     eachRole?.assigned_by_details?.email : 
-        //                     eachRole?.assign_to_details?.email)
-
-
-        let assigned_by_name = eachRole?.assigned_by_details?.name
-        let assigned_to_name = eachRole?.assign_to_details?.name
-        let assigned_to_isExternal = eachRole?.assign_to_details?.external_editor
-
-
-        let assignedByOrAssignedTo = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("assigned_to")}:` : `${t("assigned_by")}:`
-
-        let by_or_to = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("to_sm")}` : `${t("by")}`
-
-        let editorProfile = (by_or_to === 'by' ? eachRole?.assign_to_details?.avatar : eachRole?.assigned_by_details?.avatar)
-
-        // let assignBy = Config.userState?.id === eachRole?.assign_to_details?.id ? true : false
-        let editorRole = eachRole?.task_assign_detail?.step === 1 ? t("editor") : t("reviewer")
-
-        let stepId = eachRole?.task_assign_detail?.step === 1 ? 1 : eachRole?.task_assign_detail?.step === 2 && 2
-
-        let assign_info = selectedProjectFile?.task_assign_info?.find(each => each.task_assign_detail.step === stepId)
-        // console.log(assign_info);
-        // console.log(eachRole);
+        //                     eachRole?.assign_to_details?.email);
+        let assigned_by_name = eachRole?.assigned_by_details?.name;
+        let assigned_to_name = eachRole?.assign_to_details?.name;
+        let assigned_to_isExternal = eachRole?.assign_to_details?.external_editor;
+        let assignedByOrAssignedTo = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("assigned_to")}:` : `${t("assigned_by")}:`;
+        let by_or_to = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("to_sm")}` : `${t("by")}`;
+        let editorProfile = (by_or_to === 'by' ? eachRole?.assign_to_details?.avatar : eachRole?.assigned_by_details?.avatar);
+        // let assignBy = Config.userState?.id === eachRole?.assign_to_details?.id ? true : false;
+        let editorRole = eachRole?.task_assign_detail?.step === 1 ? t("editor") : t("reviewer");
+        let stepId = eachRole?.task_assign_detail?.step === 1 ? 1 : eachRole?.task_assign_detail?.step === 2 && 2;
+        let assign_info = selectedProjectFile?.task_assign_info?.find(each => each.task_assign_detail.step === stepId);
         // && assign_info.task_assign_detail.task_status === "Completed"
-
-        // console.log(assignedByOrAssignedTo)
-        // console.log(by_or_to === 'by' ? assigned_by_name : assigned_to_name)
 
         return (
             <div className="assigned-member-info-wrapper" ref={assignedMemberCardRef}>
@@ -3052,31 +2929,28 @@ function MyStories(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
-                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
+                                setSelectedProjectFiles(newArr);
+                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True');
                                 if (statusResponse.data.res?.length !== canOpenFiles?.length) {
-                                    setTranscriptionTaskList(statusResponse.data.res)
+                                    setTranscriptionTaskList(statusResponse.data.res);
                                 }
                             },
                             error: (err) => {
-
+                                console.error(err);
                             }
                         });
-
                         setTimeout(() => {
-                            setTextToSpeechConvert(false)
-                            setShowProcessingModal(false)
-                            setIsTranscribing(false)
+                            setTextToSpeechConvert(false);
+                            setShowProcessingModal(false);
+                            setIsTranscribing(false);
                         }, 4000);
+                        // setTranscriptionTaskList([]);
 
-                        // setTranscriptionTaskList([])
                         // Config.axios({
                         //     url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${selectedProjectIdRef.current}`,
                         //     auth: true,
                         //     success: (voiceStatusResponse) => {
                         //         const newArr = selectedProjectFilesRef.current.data?.map(obj => {
-                        //             // console.log(statusResponse.data.res?.find(each => each.task === obj.id)?.task)
                         //             if (obj.id === voiceStatusResponse.data.res?.find(each => each.task === obj.id)?.task) {
                         //                 return {
                         //                     ...obj, 
@@ -3085,15 +2959,14 @@ function MyStories(props) {
                         //             }
                         //             return obj;
                         //         });
-                        //         console.log(newArr)
-                        //         setSelectedProjectFiles(newArr)
-                        //         let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True')
+                        //         setSelectedProjectFiles(newArr);
+                        //         let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True');
                         //         if(voiceStatusResponse.data.res?.length !== canOpenFiles?.length){
-                        //             setTranscriptionTaskList(voiceStatusResponse.data.res)
+                        //             setTranscriptionTaskList(voiceStatusResponse.data.res);
                         //         }
                         //     },
                         //     error: (err) => {
-
+                        //        console.error(err);
                         //     }
                         // });
                     }
@@ -3109,45 +2982,43 @@ function MyStories(props) {
             url: `${Config.BASE_URL}/workspace/convert_text_to_speech_source/?task=${taskid}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data?.source_audio_file)
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === taskid) {
                         return { ...obj, audio_file_url: response.data?.source_audio_file };
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                setSelectedProjectFiles(newArr)
-                setClickedOpenButton(null)
+                setSelectedProjectFiles(newArr);
+                setClickedOpenButton(null);
                 getCreditStatus();
             },
             error: (err) => {
                 if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                    setShowCreditAlertModal(true)
-                    setClickedOpenButton(null)
+                    setShowCreditAlertModal(true);
+                    setClickedOpenButton(null);
                 }
                 if (err.response.data?.msg !== undefined && err.response.data?.msg?.includes('Text to Speech conversion ongoing')) {
-                    setShowProcessingModal(true)
-                    setTextToSpeechConvert(true)
-                    setClickedOpenButton(null)
+                    setShowProcessingModal(true);
+                    setTextToSpeechConvert(true);
+                    setClickedOpenButton(null);
                     setTimeout(() => {
-                        setTextToSpeechConvert(false)
-                        setShowProcessingModal(false)
-                        setShowProcessingModal(false)
+                        setTextToSpeechConvert(false);
+                        setShowProcessingModal(false);
+                        setShowProcessingModal(false);
                     }, 4000);
                 } else {
-                    Config.toast('Download failed', 'error')
-                    setClickedOpenButton(null)
+                    Config.toast('Download failed', 'error');
+                    setClickedOpenButton(null);
                 }
                 getCreditStatus();
-                // Config.toast('Download failed', 'error')
+                // Config.toast('Download failed', 'error');
             }
         });
     }
 
     const handlePartialPretranslateClose = () => {
-        setPartialPretranslate(false)
-        let lastPageAvailable = localStorage.getItem(openFileId.current)
+        setPartialPretranslate(false);
+        let lastPageAvailable = localStorage.getItem(openFileId.current);
         if (lastPageAvailable) {
             history(lastPageAvailable);
         } else {
@@ -3159,23 +3030,20 @@ function MyStories(props) {
     // get analysied report for project and its task (project analysis)
     const handleShowAnalysisModal = (e, projectID, callback = false) => {
         e?.stopPropagation();
-        setProjectAnalysisedData(null)
+        setProjectAnalysisedData(null);
         if (!callback) {
-            projectAnalysisTempProjectId.current = projectID
+            projectAnalysisTempProjectId.current = projectID;
         }
-        projectAnalysisApiCounter.current++
-        // console.log(projectID)
+        projectAnalysisApiCounter.current++;
         Config.axios({
             url: `${Config.BASE_URL}/tm/project_analysis/${projectID}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 let {
                     payable_rate,
                     project_wwc,
                     task_wwc
-                } = response.data
-
+                } = response.data;
                 let payable_rates = {
                     info: {
                         id: payable_rate?.id,
@@ -3196,8 +3064,7 @@ function MyStories(props) {
                         key10: payable_rate?.tm_102_percentage,
                     }
                 }
-
-                let project = []
+                let project = [];
                 project_wwc?.map(each => {
                     project.push({
                         projectInfo: {
@@ -3232,9 +3099,7 @@ function MyStories(props) {
                         }
                     })
                 })
-
-
-                let task = []
+                let task = [];
                 task_wwc?.map(each => {
                     let charData = each?.char_detail
                     task.push({
@@ -3271,16 +3136,15 @@ function MyStories(props) {
                         }
                     })
                 })
-                setProjectAnalysisedData({ payable_rates, project, task })
+                setProjectAnalysisedData({ payable_rates, project, task });
             },
             error: (err) => {
                 if (err.response?.status === 401) {
                     setTimeout(() => {
-                        // console.log(projectAnalysisTempProjectId.current)
                         if (projectAnalysisApiCounter.current <= 10) {
-                            handleShowAnalysisModal(e, projectAnalysisTempProjectId.current, true)
+                            handleShowAnalysisModal(e, projectAnalysisTempProjectId.current, true);
                         } else {
-                            setShowProjectAnalysis(false)
+                            setShowProjectAnalysis(false);
                         }
                     }, 6000);
 
@@ -3291,21 +3155,19 @@ function MyStories(props) {
 
     // project analysis whole project excel with task download
     const downloadProjectAnalysisReport = async (e, projectID) => {
-        e.stopPropagation()
-        let url = `${Config.BASE_URL}/tm/get_report/?project_id=${projectID}`
-        // let url = `${Config.BASE_URL}/tm/get_report/?task_id=${taskID}` // project analysis task excel download
+        e.stopPropagation();
+        let url = `${Config.BASE_URL}/tm/get_report/?project_id=${projectID}`;
+        // let url = `${Config.BASE_URL}/tm/get_report/?task_id=${taskID}`; // project analysis task excel download
         const response = await Config.downloadFileFromApi(url);
-        Config.downloadFileInBrowser(response)
+        Config.downloadFileInBrowser(response);
     }
-
 
     // download convert docx file 
     const downloadConvertDocxFile = async (taskID) => {
-        let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?task_id=${taskID}`
+        let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?task_id=${taskID}`;
         const response = await Config.downloadFileFromApi(url);
-        Config.downloadFileInBrowser(response)
+        Config.downloadFileInBrowser(response);
     }
-
 
     const convertPdfToDocxFromTask = (taskId, projectId) => {
         setClickedOpenButton(taskId)
@@ -3314,25 +3176,23 @@ function MyStories(props) {
             method: 'POST',
             auth: true,
             success: (response) => {
-                // console.log(response.data);
-                checkPdfConversionStatus(taskId, projectId, 'first')
+                checkPdfConversionStatus(taskId, projectId, 'first');
                 getCreditStatus();
-                setClickedOpenButton(null)
+                setClickedOpenButton(null);
             },
             error: (err) => {
                 if (err.response?.data?.msg?.includes('Insufficient Credits')) {
-                    setShowCreditAlertModal(true)
-                    setClickedOpenButton(null)
+                    setShowCreditAlertModal(true);
+                    setClickedOpenButton(null);
                 }
                 if (err.response?.data?.msg?.includes('File Cannot be Processed')) {
-                    Config.toast(t("file_is_corrupted"), 'error')
-                    listFiles(projectId)
-                    // console.log(newArr)
+                    Config.toast(t("file_is_corrupted"), 'error');
+                    listFiles(projectId);
                 }
-                setClickedOpenButton(null)
+                setClickedOpenButton(null);
                 // else{
-                //     Config.toast('Conversion failed', 'error')
-                //     setClickedOpenButton(null)
+                //     Config.toast('Conversion failed', 'error');
+                //     setClickedOpenButton(null);
                 // }
                 // getCreditStatus();
             }
@@ -3344,7 +3204,6 @@ function MyStories(props) {
             url: `${Config.BASE_URL}/exportpdf/convertpdftodocx/?task=${taskId}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data);
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === taskId) {
                         return {
@@ -3354,34 +3213,32 @@ function MyStories(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                setSelectedProjectFiles(newArr)
-                setClickedOpenButton(null)
-                
+                setSelectedProjectFiles(newArr);
+                setClickedOpenButton(null);                
                 if(isFrist){
                     if (response.data?.status === '') {
-                        convertPdfToDocxFromTask(taskId, projectId)
+                        convertPdfToDocxFromTask(taskId, projectId);
                     }
                     else if (response.data?.status === 'YET TO START') {
-                        setShowProcessingModal(true)
-                        setTextToSpeechConvert(true)
+                        setShowProcessingModal(true);
+                        setTextToSpeechConvert(true);
                         setTimeout(() => {
-                            setShowProcessingModal(false)
-                            setTextToSpeechConvert(false)
+                            setShowProcessingModal(false);
+                            setTextToSpeechConvert(false);
                         }, 4000);
                         setTimeout(() => {
-                            checkPdfConversionStatus(taskId)
+                            checkPdfConversionStatus(taskId);
                         }, 4000);
                     }
                     else if (response.data?.status == 'PENDING') {
-                        setShowProcessingModal(true)
-                        setTextToSpeechConvert(true)
+                        setShowProcessingModal(true);
+                        setTextToSpeechConvert(true);
                         setTimeout(() => {
-                            setShowProcessingModal(false)
-                            setTextToSpeechConvert(false)
+                            setShowProcessingModal(false);
+                            setTextToSpeechConvert(false);
                         }, 4000);
                         setTimeout(() => {
-                            checkPdfConversionStatus(taskId)
+                            checkPdfConversionStatus(taskId);
                         }, 4000);
                     } else if (response.data?.status == 'ERROR') {
                         const newArr = selectedProjectFiles?.map(obj => {
@@ -3393,9 +3250,8 @@ function MyStories(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
-                        setSelectedProjectFiles(newArr)
-                        setClickedOpenButton(null)
+                        setSelectedProjectFiles(newArr);
+                        setClickedOpenButton(null);
                     } else if (response.data?.status == 'DONE') {
                         const newArr = selectedProjectFiles?.map(obj => {
                             if (obj.id === taskId) {
@@ -3408,19 +3264,18 @@ function MyStories(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
-                        setSelectedProjectFiles(newArr)
-                        setClickedOpenButton(null)
+                        setSelectedProjectFiles(newArr);
+                        setClickedOpenButton(null);
                     }
                 }else{
                     if (response.data?.status === 'YET TO START') {
                         setTimeout(() => {
-                            checkPdfConversionStatus(taskId)
+                            checkPdfConversionStatus(taskId);
                         }, 4000);
                     }
                     else if (response.data?.status == 'PENDING') {
                         setTimeout(() => {
-                            checkPdfConversionStatus(taskId)
+                            checkPdfConversionStatus(taskId);
                         }, 4000);
                     } else if (response.data?.status == 'ERROR') {
                         const newArr = selectedProjectFiles?.map(obj => {
@@ -3432,9 +3287,8 @@ function MyStories(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
-                        setSelectedProjectFiles(newArr)
-                        setClickedOpenButton(null)
+                        setSelectedProjectFiles(newArr);
+                        setClickedOpenButton(null);
                     } else if (response.data?.status == 'DONE') {
                         const newArr = selectedProjectFiles?.map(obj => {
                             if (obj.id === taskId) {
@@ -3447,9 +3301,8 @@ function MyStories(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
-                        setSelectedProjectFiles(newArr)
-                        setClickedOpenButton(null)
+                        setSelectedProjectFiles(newArr);
+                        setClickedOpenButton(null);
                     }
                 }
             }
@@ -3464,19 +3317,18 @@ function MyStories(props) {
             search: URL_SEARCH_PARAMS.get("search"),
             projectId: projectId,
             fromProjectList: true
-        }
+        };
         history(`/word-processor?task=${id}`, {state: {
             docName: name,
             projectId,
             prevPageInfo,
             prevPath: location.pathname + location.search
-        }})
+        }});
     }
 
     const translateFromPdfTask = (taskId, projectId) => {
-        setIsPdfTranslating(true)
+        setIsPdfTranslating(true);
         let formdata = new FormData();
-
         formdata.append("pdf_task_id", taskId);
 
         Config.axios({
@@ -3491,65 +3343,60 @@ function MyStories(props) {
             auth: true,
             success: (response) => {
                 if (response.data?.id) {
-                    Config.toast(t("translation_task_created"))
-                    listFiles(response.data?.id)
-                    setIsPdfTranslating(false)
+                    Config.toast(t("translation_task_created"));
+                    listFiles(response.data?.id);
+                    setIsPdfTranslating(false);
                 }
             },
             error: (err) => {
-                setIsPdfTranslating(false)
+                setIsPdfTranslating(false);
             }
         });
     }
 
     const handleTaskDeleteButton = (e, project_id, taskId, taskAssignInfo) => {
-        e.preventDefault()
-        setMoreEl(false)
-        // e.stopPropagation()
-
-        // console.log(project_id)
-        // console.log(taskId)
-        // console.log(taskAssignInfo)
+        e.preventDefault();
+        setMoreEl(false);
+        // e.stopPropagation();
         taskDeleteParam.current = {
             project_id: project_id,
             taskId: taskId
-        }
+        };
         if (taskAssignInfo !== null) {
-            taskDeleteFunction()
+            taskDeleteFunction();
         } else {
-            setShowTaskDeleteAlert(true)
+            setShowTaskDeleteAlert(true);
         }
-
     }
 
     const taskDeleteFunction = () => {
-        setIsTaskDeleting(true)
+        setIsTaskDeleting(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/tasks/${taskDeleteParam.current?.taskId}/`,
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                setIsTaskDeleting(false)
+                setIsTaskDeleting(false);
                 if (selectedProjectFiles?.length === 1) {
                     Config.toast(t("deleted_success"));
-                    setCreatedProjects(createdProjects?.filter(each => each.id !== taskDeleteParam.current?.project_id))
+                    setCreatedProjects(createdProjects?.filter(each => each.id !== taskDeleteParam.current?.project_id));
                     if (createdProjects?.filter(each => each.id !== taskDeleteParam.current?.project_id)?.length === 0) setEmptyProjects(true);
                 } else {
                     Config.toast(t("task_deleted_success"));
                 }
-                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each.id !== taskDeleteParam.current?.taskId))
-                setShowTaskDeleteAlert(false)
+                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each.id !== taskDeleteParam.current?.taskId));
+                setShowTaskDeleteAlert(false);
             },
             error: (err) => {
                 if (err.response?.status === 400) {
                     if (err.response?.data?.Message?.includes('Unassign')) {
-                        setShowTaskDeleteAlert(true)
-                        setUnassignTaskDeleteAlert(true)
-                        setIsTaskDeleting(false)
+                        setShowTaskDeleteAlert(true);
+                        setUnassignTaskDeleteAlert(true);
+                        setIsTaskDeleting(false);
                     }
                 }
-                setIsTaskDeleting(false)
+                setIsTaskDeleting(false);
             }
         });
     }
@@ -3567,19 +3414,16 @@ function MyStories(props) {
             url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${projectId}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 // const newArr = selectedProjectFiles?.map(obj => {
-                //     // console.log(response.data.res?.find(each => each.task === obj.id)?.task)
                 //     if (obj.id === response.data.res?.find(each => each.task === obj.id)?.task) {
                 //       return {...obj, pre_trans_processing: response.data.res?.find(each => each.task === obj.id)?.open};
                 //     }
                 //     return obj;
                 // });
-                // // console.log(newArr)
-                // setSelectedProjectFiles(newArr)
+                // setSelectedProjectFiles(newArr);
             },
             error: (err) => {
-
+               console.error(err);
             }
         });
     }
@@ -3592,9 +3436,7 @@ function MyStories(props) {
                 typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
             );
             let token = userCacheData != null ? userCacheData?.token : "";
-            
-            console.log("token")
-            console.log(token)
+
             const response = await axios.get(
                 `${Config.BASE_URL}/workspace_okapi/download_mt_file/?celery_id=${celeryId}&document_id=${documentId}`,
                 {
@@ -3606,17 +3448,13 @@ function MyStories(props) {
                 }
             );
             if (response !== undefined) {
-
                 // update the list once download completed
-                dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }))
-
+                dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }));
                 setTimeout(() => {
                     // remove the downloaded file from list
-                    dispatch(deleteDownloadingFile({ id: uniqueKey }))
+                    dispatch(deleteDownloadingFile({ id: uniqueKey }));
                 }, 8000);
-
-                Config.downloadFileInBrowser(response)
-
+                Config.downloadFileInBrowser(response);
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === task_id) {
                         return {
@@ -3626,28 +3464,27 @@ function MyStories(props) {
                     }
                     return obj;
                 });
-                setSelectedProjectFiles(newArr)
-                // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== task_id)
-                setIsDownloading(false)
+                setSelectedProjectFiles(newArr);
+                // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== task_id);
+                setIsDownloading(false);
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
-            let responseObj = JSON.parse(await err.response.data.text())
+            let responseObj = JSON.parse(await err.response.data.text());
             if (err.response.status === 400) {
                 if (responseObj?.msg?.includes('Pending')) {
                     mtRawCeleryTimeOutRef.current = setTimeout(() => {
-                        mtRawCeleryCheck(celeryId, documentId, task_id, uniqueKey)
+                        mtRawCeleryCheck(celeryId, documentId, task_id, uniqueKey);
                     }, 8000);
                 } else {
                     setTimeout(() => {
-                        mtRawDownloadRetryCounter.current++
+                        mtRawDownloadRetryCounter.current++;
                         if (mtRawDownloadRetryCounter.current < mtRawDownloadRetryLimit.current) {
-                            dispatch(deleteDownloadingFile({ id: uniqueKey }))
-                            downloadDifferentFile('MTRAW', documentId, null, null, task_id)
+                            dispatch(deleteDownloadingFile({ id: uniqueKey }));
+                            downloadDifferentFile('MTRAW', documentId, null, null, task_id);
                         } else {
-                            dispatch(deleteDownloadingFile({ id: uniqueKey }))
-                            // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== task_id)
-                            setIsDownloading(false)
+                            dispatch(deleteDownloadingFile({ id: uniqueKey }));
+                            // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== task_id);
+                            setIsDownloading(false);
                         }
                     }, 8000);
                 }
@@ -3655,11 +3492,10 @@ function MyStories(props) {
         }
     }
 
-
     /* Download different type of output files */
     const downloadDifferentFile = async (type, documentId, e, key = null, id = null, url = "", isFirstOpen, openIn, projectName, project_id, projectType, taskFileName, taskData) => {
-        setMoreEl(false)
-        setSubDownloadOption(false)
+        setMoreEl(false);
+        setSubDownloadOption(false);
         // if task is not opened (document id - null)
         if (documentId == null && openIn !== "News") {
             openFile(
@@ -3675,18 +3511,15 @@ function MyStories(props) {
                 "task-download",
                 type,
                 taskFileName
-            )
+            );
             return;
         }
-
         if (docCreditCheckAlertRef.current && type === 'MTRAW') {
-            setShowDocCreditCheckAlert(true)
-            downloadDiffFilesParamRef.current = { type, documentId, e, key, id, url, isFirstOpen, openIn, projectName, project_id, projectType, taskFileName, taskData }
+            setShowDocCreditCheckAlert(true);
+            downloadDiffFilesParamRef.current = { type, documentId, e, key, id, url, isFirstOpen, openIn, projectName, project_id, projectType, taskFileName, taskData };
             return;
         }
-
-        let uniqueKey = generateKey()
-
+        let uniqueKey = generateKey();
         const newArr = selectedProjectFiles?.map(obj => {
             if (obj.id === id) {
                 return {
@@ -3696,10 +3529,9 @@ function MyStories(props) {
             }
             return obj;
         });
-        setSelectedProjectFiles(newArr)
-        setIsDownloading(true)
-        // downloadingFilesList.current.push(id)
-
+        setSelectedProjectFiles(newArr);
+        setIsDownloading(true);
+        // downloadingFilesList.current.push(id);
         // add in download list
         dispatch(addDownloadingFiles(
             {
@@ -3709,24 +3541,20 @@ function MyStories(props) {
                     type === 'BILINGUAL' ? '.xlsx' : type === 'TMX' ? '.tmx' : type === 'XLIFF' ? '.xliff' : '',
                 status: type !== 'MTRAW' ? 1 : 3    // 1 for downloading and 3 for processing
             }
-        ))
+        ));
 
         try {
             let url = openIn !== "News" ? `${Config.BASE_URL}/workspace_okapi/document/to/file/${documentId}?output_type=${type}` :
-            `${Config.BASE_URL}/workspace_okapi/download_federal_file/?task_id=${taskData?.id}&output_type=${type}`
-
+            `${Config.BASE_URL}/workspace_okapi/download_federal_file/?task_id=${taskData?.id}&output_type=${type}`;
             const response = await Config.downloadFileFromApi(url);
-
             if (response !== undefined) {
-
                 // update the list once download completed
-                dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }))
-
-                Config.downloadFileInBrowser(response)
+                dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }));
+                Config.downloadFileInBrowser(response);
 
                 setTimeout(() => {
                     // remove the downloaded file from list
-                    dispatch(deleteDownloadingFile({ id: uniqueKey }))
+                    dispatch(deleteDownloadingFile({ id: uniqueKey }));
                 }, 8000);
 
                 const newArr = selectedProjectFiles?.map(obj => {
@@ -3738,22 +3566,20 @@ function MyStories(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                setSelectedProjectFiles(newArr)
-                // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
-                setIsDownloading(false)
+                setSelectedProjectFiles(newArr);
+                // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id);
+                setIsDownloading(false);
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
-            let responseObj = JSON.parse(await err.response.data.text())
+            let responseObj = JSON.parse(await err.response.data.text());
             if (err.response.status === 400) {
                 if (responseObj?.celery_id) {
-                    mtRawCeleryCheck(responseObj?.celery_id, documentId, id, uniqueKey)
+                    mtRawCeleryCheck(responseObj?.celery_id, documentId, id, uniqueKey);
                 } else {
                     if (responseObj?.msg?.includes('under process')) {
-                        Config.toast(t("file_is_under_process"), 'warning')
+                        Config.toast(t("file_is_under_process"), 'warning');
                     } else {
-                        Config.toast(t("download_failed"), 'error')
+                        Config.toast(t("download_failed"), 'error');
                     }
                     const newArr = selectedProjectFiles?.map(obj => {
                         if (obj.id === id) {
@@ -3764,10 +3590,10 @@ function MyStories(props) {
                         }
                         return obj;
                     });
-                    setSelectedProjectFiles(newArr)
-                    dispatch(deleteDownloadingFile({ id: uniqueKey }))
-                    // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
-                    setIsDownloading(false)
+                    setSelectedProjectFiles(newArr);
+                    dispatch(deleteDownloadingFile({ id: uniqueKey }));
+                    // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id);
+                    setIsDownloading(false);
                 }
             } else if (err.response.status === 409) {
                 const newArr = selectedProjectFiles?.map(obj => {
@@ -3779,12 +3605,11 @@ function MyStories(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                Config.toast(t("something_wrong_file_process"), 'warning')
-                setSelectedProjectFiles(newArr)
-                dispatch(deleteDownloadingFile({ id: uniqueKey }))
-                // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
-                setIsDownloading(false)
+                Config.toast(t("something_wrong_file_process"), 'warning');
+                setSelectedProjectFiles(newArr);
+                dispatch(deleteDownloadingFile({ id: uniqueKey }));
+                // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id);
+                setIsDownloading(false);
             } else {
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === id) {
@@ -3795,47 +3620,46 @@ function MyStories(props) {
                     }
                     return obj;
                 });
-                setSelectedProjectFiles(newArr)
-                dispatch(deleteDownloadingFile({ id: uniqueKey }))
-                setIsDownloading(false)
-                Config.toast(t("download_failed"), 'error')
+                setSelectedProjectFiles(newArr);
+                dispatch(deleteDownloadingFile({ id: uniqueKey }));
+                setIsDownloading(false);
+                Config.toast(t("download_failed"), 'error');
             }
         }
     };
 
     useEffect(() => {
         if (confirmedNavigation && lastLocation) {
-            // clearTimeout(mtRawCeleryTimeOutRef.current)
+            // clearTimeout(mtRawCeleryTimeOutRef.current);
             // Navigate to the previous blocked location with your navigate function
-            history(lastLocation.pathname)
+            history(lastLocation.pathname);
         }
-    }, [confirmedNavigation, lastLocation])
+    }, [confirmedNavigation, lastLocation]);
 
     const handleBlockedNavigation = (nextLocation) => {
-
         if (!confirmedNavigation && window.location.pathname) {
-            setLastLocation(nextLocation)
+            setLastLocation(nextLocation);
             if (nextLocation.hash != "#!" && nextLocation.search == '') {
-                setNavigationModalVisible(true)
-                return false
+                setNavigationModalVisible(true);
+                return false;
             }
             if (nextLocation.state === null && nextLocation.search == '') {
-                setNavigationModalVisible(true)
-                return false
+                setNavigationModalVisible(true);
+                return false;
             }
         }
     }
 
     const handleConfirmNavigationClick = () => {
-        setNavigationModalVisible(false)
-        setConfirmedNavigation(true)
+        setNavigationModalVisible(false);
+        setConfirmedNavigation(true);
     }
 
     const handleMtOnyDownloadYes = () => {
-        let { type, documentId, e, key, id, url, isFirstOpen, openIn, fileName, project_id, projectType, taskFileName } = downloadDiffFilesParamRef.current
+        let { type, documentId, e, key, id, url, isFirstOpen, openIn, fileName, project_id, projectType, taskFileName } = downloadDiffFilesParamRef.current;
         setShowDocCreditCheckAlert(false);
-        docCreditCheckAlertRef.current = null
-        downloadDifferentFile(type, documentId, e, key, id, url, isFirstOpen, openIn, fileName, project_id, projectType, taskFileName)
+        docCreditCheckAlertRef.current = null;
+        downloadDifferentFile(type, documentId, e, key, id, url, isFirstOpen, openIn, fileName, project_id, projectType, taskFileName);
     }
 
     const handleGeneralPurposeOpenBtn = (project, eachRole, task) => {
@@ -3844,12 +3668,12 @@ function MyStories(props) {
                 task_id: task.id,
                 step: eachRole?.task_assign_detail?.step,
                 reassign: task.task_reassign_info !== null ? true : false,
-            }
-            setShowDeadlineCrossedModal(true)
+            };
+            setShowDeadlineCrossedModal(true);
         } else {
-            setShowPOConfirmModal(true)
-            projectIdForPOModal.current = project.id
-            projectTypeForPOModal.current = project.get_project_type
+            setShowPOConfirmModal(true);
+            projectIdForPOModal.current = project.id;
+            projectTypeForPOModal.current = project.get_project_type;
         }
     }
 
@@ -3861,17 +3685,14 @@ function MyStories(props) {
     };
 
     const handleDrpDownToggle = (e) => {
-        e.stopPropagation()
+        e.stopPropagation();
         setDownloadOpen((prevOpen) => !prevOpen);
     };
 
     const handleOpenAsButton = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as, assignInfo, taskData) => {
-        let step = open_as === 'editor' ? 1 : 2
-        let isTaskAccepted = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted") ? true : false
-        let stepData = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted")
-
-        // console.log(assignInfo);
-
+        let step = open_as === 'editor' ? 1 : 2;
+        let isTaskAccepted = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted") ? true : false;
+        let stepData = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted");
         if (isTaskAccepted) {
             // if(!stepData?.task_assign_detail?.can_open){
             //     Config.toast(`${step === 1 ? 'Reviewer' : 'Editor'} is working!!!`, 'warning')
@@ -3891,7 +3712,7 @@ function MyStories(props) {
                 downloadType,
                 taskFileName,
                 open_as
-            )
+            );
         } else {
             let eachRole = assignInfo?.find(each => each.task_assign_detail.step === step)
             if (Config.calculateTimeLeftPercentage(eachRole.created_at, eachRole.deadline) == 0) {
@@ -3900,11 +3721,11 @@ function MyStories(props) {
                     step: step = open_as === 'editor' ? 1 : 2,
                     reassign: taskData.task_reassign_info !== null ? true : false,
                 }
-                setShowDeadlineCrossedModal(true)
+                setShowDeadlineCrossedModal(true);
             } else {
-                setShowPOConfirmModal(true)
-                projectIdForPOModal.current = project_id
-                projectTypeForPOModal.current = projectType
+                setShowPOConfirmModal(true);
+                projectIdForPOModal.current = project_id;
+                projectTypeForPOModal.current = projectType;
             }
         }
     }
@@ -3913,7 +3734,7 @@ function MyStories(props) {
     const clientSideTaskResponseUpdate = () => {
         let { task_id, response, step, reassign, project_id } = clientResponseDataRef.current
         if (response === 2 && customerTaskReworkReasonText?.trim() === '') {
-            setShowTaskReworkReasonModal(true)
+            setShowTaskReworkReasonModal(true);
             return;
         }
         var formdata = new FormData();
@@ -3923,15 +3744,12 @@ function MyStories(props) {
         if (response === 2) {
             formdata.append("client_reason", customerTaskReworkReasonText);
         }
-
         if (reassign) {
-            formdata.append("reassigned", 'True')
+            formdata.append("reassigned", 'True');
         }
+        if (response === 1) setIsApproving(true);
+        setIsReworkSending(true);
 
-        if (response === 1) setIsApproving(true)
-
-        setIsReworkSending(true)
-        // console.log(clientResponseDataRef.current);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_update/`,
             auth: true,
@@ -3939,29 +3757,29 @@ function MyStories(props) {
             data: formdata,
             success: (api_response) => {
                 if (api_response.status === 200) {
-                    clientResponseDataRef.current = null
-                    setIsApproving(false)
+                    clientResponseDataRef.current = null;
+                    setIsApproving(false);
                     if (response === 1) {
-                        Config.toast(`${step === 1 ? t('editing') : t('reviewing')} ${t("step_approved")}`)
+                        Config.toast(`${step === 1 ? t('editing') : t('reviewing')} ${t("step_approved")}`);
                         if(isDinamalar){
-                            // history("/my-stories?page=1&filter=inprogress")
-                            listProjects()
+                            // history("/my-stories?page=1&filter=inprogress");
+                            listProjects();
                         }else{
-                            listFiles(project_id)
+                            listFiles(project_id);
                         }
                     } else if (response === 2) {
-                        Config.toast(`${t("rework_initiate")}`)
-                        listFiles(project_id)
+                        Config.toast(`${t("rework_initiate")}`);
+                        listFiles(project_id);
                     }
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
-                setIsReworkSending(false)
-                setShowTaskReworkReasonModal(false)
+                setIsReworkSending(false);
+                setShowTaskReworkReasonModal(false);
             },
             error: (err) => {
-                setIsApproving(false)
-                setIsReworkSending(false)
+                setIsApproving(false);
+                setIsReworkSending(false);
             }
         });
     }
@@ -3974,8 +3792,8 @@ function MyStories(props) {
             task_id: task.id,
             reassign: task.task_reassign_info !== null ? true : false,
             project_id: projectId
-        }
-        clientSideTaskResponseUpdate()
+        };
+        clientSideTaskResponseUpdate();
     }
 
     const getPODetailsForTask = (task_id) => {
@@ -3984,24 +3802,22 @@ function MyStories(props) {
             url: `${Config.BASE_URL}/aipay/po/?task=${task_id}`,
             auth: true,
             success: (response) => {
-                // console.log(response);
-                setPOFilesDetails(response.data)
-                setShowPOFilesModal(true)
+                setPOFilesDetails(response.data);
+                setShowPOFilesModal(true);
             },
-            error: (err) => { }
+            error: (err) => { 
+                console.error(err);
+            }
         });
     }
 
     const sendExtendTaskDeadlineRequest = () => {
-        // console.log(taskDetailsForDeadlineCrossedTask.current);
-        let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current
-
+        let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current;
         var formdata = new FormData();
         formdata.append("task", task_id);
         formdata.append("step", step);
-        formdata.append("reassigned", reassign ? 'True' : 'False')
-
-        setIsDeadlineExtendReqSending(true)
+        formdata.append("reassigned", reassign ? 'True' : 'False');
+        setIsDeadlineExtendReqSending(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/send_msg_extend_deadline/`,
@@ -4010,21 +3826,21 @@ function MyStories(props) {
             data: formdata,
             success: (api_response) => {
                 if (api_response.status === 200) {
-                    Config.toast(`${t("deadline_req_sent")}`)
+                    Config.toast(`${t("deadline_req_sent")}`);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
-                setIsDeadlineExtendReqSending(false)
-                setShowDeadlineCrossedModal(false)
+                setIsDeadlineExtendReqSending(false);
+                setShowDeadlineCrossedModal(false);
             },
             error: (err) => {
-                setIsDeadlineExtendReqSending(false)
+                setIsDeadlineExtendReqSending(false);
             }
         });
     }
 
     const MoreOptionsIcon = (props) => {
-        let { selectedProjectFile, project, key, onlyDelete, disabled } = props
+        let { selectedProjectFile, project, key, onlyDelete, disabled } = props;
         return (
             <div className="more-options-wrap" style={disabled ? { pointerEvents: 'none', opacity: 0.5 } : {}}>
                 <ButtonBase onClick={(e) => handleMoreVertOption(e, selectedProjectFile?.id)} className="sorting-icon">
@@ -4152,8 +3968,7 @@ function MyStories(props) {
     }
 
     const MoreOptionsIconDesigner = (props) => {
-        let { project, removeDelete, removeEdit, selectedProjectFile, deleteOnly, assigned } = props
-        // console.log(assigned)
+        let { project, removeDelete, removeEdit, selectedProjectFile, deleteOnly, assigned } = props;
         return (
             <div className="more-options-wrap">
                  <ButtonBase onMouseUp={(e) => handleMoreVertOption(e, selectedProjectFile?.id !== undefined ? selectedProjectFile?.id : project.id)} className="sorting-icon">
@@ -4197,12 +4012,12 @@ function MyStories(props) {
     
 
     const handleRetriveDesignProject = (e,proj) => {
-        e.stopPropagation()
-        let url = ''
+        e.stopPropagation();
+        let url = '';
         if (proj.designer_project_detail.type === "image_design") {
-            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj.designer_project_detail.des_proj_id}`
+            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj.designer_project_detail.des_proj_id}`;
         } else {
-            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj.designer_project_detail.des_proj_id}`
+            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj.designer_project_detail.des_proj_id}`;
         }
 
         Config.axios({
@@ -4211,16 +4026,14 @@ function MyStories(props) {
             auth: true,
             success: (response) => {
                 let { data } = response;
-                // console.log(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.project_name)
-                setstoryProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.project_name )
-                // setHasTeam(data.team)
+                setstoryProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.project_name );
+                // setHasTeam(data.team);
                 let editTargetLanguages = [];
                 let tar = [];
                 let tarID = [];
                 if(proj.designer_project_detail.type === "image_design"){
-               setEditJobs(data.canvas_translation);
+                    setEditJobs(data.canvas_translation);
                     response.data?.canvas_translation?.map((each) => {
-
                         tar.push({ language: each?.target_language, id: each?.target_language });
                         tarID.push(each.target_language);
                     });
@@ -4237,18 +4050,16 @@ function MyStories(props) {
                     });
                     let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                         (element) => element.id ==  data?.canvas_translation[0]?.source_language
-                    );
-    
+                    );    
                     setTimeout(() => {
                         setSourceLabel(editSourceLanguage?.language);
-                        setSourceLanguage(data?.canvas_translation[0]?.source_language)
+                        setSourceLanguage(data?.canvas_translation[0]?.source_language);
                         setTargetLanguage(editTargetLanguages);
                         setSkeletonLoader(false)
                     }, 80);
                 }else{
                     setEditJobs(data?.image_inpaint_creation);
                     response.data?.image_inpaint_creation?.map((each) => {
-
                         tar.push({ language: each?.target_language, id: each?.target_language });
                         tarID.push(each.target_language);
                     });
@@ -4265,16 +4076,14 @@ function MyStories(props) {
                     });
                     let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                         (element) => element.id ==  data?.source_language
-                    );
-    
+                    );    
                     setTimeout(() => {
                         setSourceLabel(editSourceLanguage?.language);
-                        setSourceLanguage(data?.source_language)
+                        setSourceLanguage(data?.source_language);
                         setTargetLanguage(editTargetLanguages);
-                        setSkeletonLoader(false)
+                        setSkeletonLoader(false);
                     }, 80);
-                }
-               
+                }               
             },
         });
     }
@@ -4282,84 +4091,67 @@ function MyStories(props) {
 
     // for designer project edit
     const handleEditDesignerProj = (e,proj) => {
-        // console.log('designer edit')
-        handleRetriveDesignProject(e,proj)
+        handleRetriveDesignProject(e,proj);
     } 
     
      // for designer project delete
-     const handleDownloadDesignerProj = async(proj,selectedProjectFile) => {
-       
-        let url
-        let designDownloadUrl
-        let nameofDownload
-        let extention
-
+     const handleDownloadDesignerProj = async(proj,selectedProjectFile) => {       
+        let url;
+        let designDownloadUrl;
+        let nameofDownload;
+        let extention;
         if (proj?.designer_project_detail?.type == "image_translate") {
-            designDownloadUrl = Config.BASE_URL + `/ai-image-translation/image-download?image_id=${proj.designer_project_detail.des_proj_id}&file_format=png&language=${selectedProjectFile.target_language}&export_size=1`
-            // console.log(designDownloadUrl)
-            
-            nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`
+            designDownloadUrl = Config.BASE_URL + `/ai-image-translation/image-download?image_id=${proj.designer_project_detail.des_proj_id}&file_format=png&language=${selectedProjectFile.target_language}&export_size=1`;
+            nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`;
         } else {
             const startNumber = 1;
             const endNumber = proj?.designer_project_detail?.pages;
             const formattedString = Array.from({ length: endNumber - startNumber + 1 }, (_, index) => {
                 const numberToMap = index + startNumber;
                 return `page_number_list=${numberToMap}`;
-            }).join('&');
-           
-            // console.log(formattedString);
+            }).join('&');           
             if(selectedProjectFile == null){
                 designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${proj?.designer_project_detail?.des_proj_id}&file_format=png&export_size=1&` + formattedString
                 nameofDownload = `${proj?.project_name}`
                 if(proj?.designer_project_detail?.pages == 1){
-                    extention = '.png'
+                    extention = '.png';
                 }else{
-                    extention = '.zip'
+                    extention = '.zip';
                 }
             }else{
                 designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${proj?.designer_project_detail?.des_proj_id}&file_format=png&language=${selectedProjectFile?.target_language}&export_size=1&` + formattedString
                 nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`
                 if(proj?.designer_project_detail?.pages == 1){
-                    extention = '.png'
+                    extention = '.png';
                 }else{
-                    extention = '.zip'
+                    extention = '.zip';
                 }
             }
-            // console.log(designDownloadUrl)
         }
         // add in download list
-        dispatch(addDownloadingFiles({ id: id, file_name: nameofDownload, ext: extention, status: 1 }))
-
-        url = designDownloadUrl
+        dispatch(addDownloadingFiles({ id: id, file_name: nameofDownload, ext: extention, status: 1 }));
+        url = designDownloadUrl;
         const response = await Config.downloadFileFromApi(url);
-
         // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
+        dispatch(updateDownloadingFile({ id: id, status: 2 }));
+        Config.downloadFileInBrowser(response);
         setTimeout(() => {
             // remove the downloaded file from list
-            dispatch(deleteDownloadingFile({ id: id }))
+            dispatch(deleteDownloadingFile({ id: id }));
         }, 8000);
     } 
 
     // for designer project delete
-       // for designer project delete
-
        const handleDeleteDesignerProjectHandle = (proj,selectedProj) => {
-        selectedDesignerProject.current = selectedProj
-        projectObject.current = proj
+        selectedDesignerProject.current = selectedProj;
+        projectObject.current = proj;
         if(selectedProj == null){
             setShowStoryProjDeleteModal(true)
         }else{
-            // console.log(selectedProj)
-            // console.log(selectedProjectFilesRef.current)
-
             if(selectedProj.task_assign_info != null){
-                SetShowAssignedProjectDeleteAlert(true)
+                SetShowAssignedProjectDeleteAlert(true);
             }else{
-                setShowTaskDesignIndividualDeleteAlert(true)
+                setShowTaskDesignIndividualDeleteAlert(true);
 
             }
         }
@@ -4367,66 +4159,59 @@ function MyStories(props) {
 
     // for designer project delete
     const handleDeleteDesignerProj = (proj,selectedProjectFile) => {
-
-        // console.log(proj)
-        let url = ''
+        let url = '';
         if (proj?.designer_project_detail?.type === "image_design") {
-            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj?.designer_project_detail?.des_proj_id}/`
+            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj?.designer_project_detail?.des_proj_id}/`;
             if(selectedProjectFile == null){
-                handleDeleteDesignWholeProject(proj,url)
+                handleDeleteDesignWholeProject(proj,url);
             }else{
-                handleDeleteDesignTaskOfProject(proj,url,selectedProjectFile?.design_project?.desg_job)
+                handleDeleteDesignTaskOfProject(proj,url,selectedProjectFile?.design_project?.desg_job);
 
             }
         } else {
-            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj?.designer_project_detail?.des_proj_id}/`
+            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj?.designer_project_detail?.des_proj_id}/`;
              if(selectedProjectFile == null){
-                handleDeleteDesignWholeProject(proj,url)
+                handleDeleteDesignWholeProject(proj,url);
             }else{
-                handleDeleteDesignTaskOfProject(proj,url,selectedProjectFile?.design_project?.desg_job)
+                handleDeleteDesignTaskOfProject(proj,url,selectedProjectFile?.design_project?.desg_job);
             }
         }
-
-        setIsDesignDeleting(true)
-       
+        setIsDesignDeleting(true);       
     } 
 
 
 
     const handleDeleteDesignWholeProject = (proj,url) => {
-        setIsTaskDeleting(true)
+        setIsTaskDeleting(true);
 
         Config.axios({
             url: url,
             method: 'DELETE',
             auth: true,
             success: (response) => {
-
-                setIsTaskDeleting(false)
-                // console.log(response.data)
+                setIsTaskDeleting(false);
                 Config.toast(proj?.designer_project_detail?.type === "image_design" ? 'Design project deleted' : 'Image project deleted');
-                setIsDesignDeleting(false)
+                setIsDesignDeleting(false);
                 const newArr = createdProjects?.filter(obj => obj.id !== proj.id);
-                setCreatedProjects(newArr)
+                setCreatedProjects(newArr);
                 // if(newArr?.length === 15){
-                //     getDocumentList()
+                //     getDocumentList();
                 // }
-                setShowTaskDesignIndividualDeleteAlert(false)
-                setShowStoryProjDeleteModal(false)
-                setEditInstantProjectModal(false)
-                if (newArr?.length == 0) setEmptyProjects(true)
+                setShowTaskDesignIndividualDeleteAlert(false);
+                setShowStoryProjDeleteModal(false);
+                setEditInstantProjectModal(false);
+                if (newArr?.length == 0) setEmptyProjects(true);
             },
             error: (err) => { 
-                setIsTaskDeleting(false)
-                setIsDesignDeleting(false)
+                setIsTaskDeleting(false);
+                setIsDesignDeleting(false);
              }
         });
     }
     const handleDeleteDesignTaskOfProject = (proj,url,id) => {
-        setIsTaskDeleting(true)
-
+        setIsTaskDeleting(true);
         let formdata = new FormData();
-        formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target',id)
+        formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target',id);
 
         Config.axios({
             url: url,
@@ -4434,56 +4219,46 @@ function MyStories(props) {
             formData: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(proj.designer_project_detail.type === "image_design" ? 'Design task deleted' : 'Image task deleted');
-                setIsTaskDeleting(false)
+                setIsTaskDeleting(false);
                 if (selectedProjectFiles?.length === 1) {
                     // Config.toast(t("deleted_success"));
-                    setCreatedProjects(createdProjects?.filter(each => each?.design_project?.desg_job !== id))
+                    setCreatedProjects(createdProjects?.filter(each => each?.design_project?.desg_job !== id));
                     if (createdProjects?.filter(each => each?.design_project?.desg_job !== id)?.length === 0) setEmptyProjects(true);
                 } else {
                     // Config.toast(t("task_deleted_success"));
                 }
-                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each?.design_project?.desg_job !== id))
-                setShowTaskDesignIndividualDeleteAlert(false)
-               
+                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each?.design_project?.desg_job !== id));
+                setShowTaskDesignIndividualDeleteAlert(false);               
             },
             error: (err) => { 
-                setShowTaskDesignIndividualDeleteAlert(true)
-                setIsTaskDeleting(false)
-                setIsDesignDeleting(false)
+                setShowTaskDesignIndividualDeleteAlert(true);
+                setIsTaskDeleting(false);
+                setIsDesignDeleting(false);
              }
         });
     }
 
-
     // for designer project open before translate
     const handleOpenNonTranslatedDesignProject = (project) => {
-        // console.log(project)
-        // console.log('open in designer')
-        let subUrl = project.designer_project_detail.type == 'image_design' ? `&page=${1}` : ''
-        let url = `/editor/${project.designer_project_detail.type == 'image_design' ? 'design' : 'image-translate'}/?project=${project.designer_project_detail.des_proj_id}`
-        // console.log(project.designer_project_detail)
-        // window.open(Config. DESIGNER_HOST+ url)
-        window.open(Config.DESIGNER_HOST+ url+subUrl)
+        let subUrl = project.designer_project_detail.type == 'image_design' ? `&page=${1}` : '';
+        let url = `/editor/${project.designer_project_detail.type == 'image_design' ? 'design' : 'image-translate'}/?project=${project.designer_project_detail.des_proj_id}`;
+        // window.open(Config. DESIGNER_HOST+ url);
+        window.open(Config.DESIGNER_HOST+ url+subUrl);
 
     }
 
     const handleDeleteDesignerProjectUpdate = (proj) => {
-        // console.log(proj)
         let formdata = new FormData();
         setIsStoryProjUpdating(true)
         if(sourceLanguage != ''){
             formdata.append("source_language", sourceLanguage);
         }
-
         if (storyProjectName?.trim() === '') {
             Config.toast(t("enter_proj_name"))
             return;
         }
-
         formdata.append(proj?.designer_project_detail?.type === "image_design" ? "file_name" : "project_name" , storyProjectName?.trim());
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
@@ -4492,30 +4267,19 @@ function MyStories(props) {
             )
                 formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'canvas_translation_tar_lang' : 'inpaint_creation_target_lang', eachTargetLanguage?.id);
         });
-
         editJobs.map((eachTargetLanguage) => {
-            // console.log(eachTargetLanguage?.target_language)
-            // console.log(targetLangListToRemove)
-            // console.log( targetLangListToRemove.find(
-            //     (element) => element.target_language != eachTargetLanguage?.target_language
-            // ))
-            // console.log( targetLangListToRemove.find(
-            //     (element) => element.target_language == eachTargetLanguage?.target_language
-            // ))
             if (
                 targetLangListToRemove.find(
                     (element) => element.target_language == eachTargetLanguage?.target_language
                 ) 
             )
             formdata.append(proj?.designer_project_detail?.type === "image_design" ? 'delete_target_design_lang' : 'image_translate_delete_target', eachTargetLanguage?.id);
-        });
-      
-
-        let url = ''
+        }); 
+        let url = '';
         if (proj.designer_project_detail.type === "image_design") {
-            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj.designer_project_detail.des_proj_id}/`
+            url = `${Config.BASE_URL}/canvas/canvas-designs/${proj.designer_project_detail.des_proj_id}/`;
         } else {
-            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj.designer_project_detail.des_proj_id}/`
+            url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj.designer_project_detail.des_proj_id}/`;
         }
     
         Config.axios({
@@ -4525,8 +4289,8 @@ function MyStories(props) {
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_updated_success"));
-                setEditInstantProjectModal(false)
-                setIsStoryProjUpdating(false)
+                setEditInstantProjectModal(false);
+                setIsStoryProjUpdating(false);
                 // update the word count and project name of the project
                 const newArr = createdProjects?.map(obj => {
                     if (obj.id === proj?.id) {
@@ -4537,77 +4301,61 @@ function MyStories(props) {
                     }
                     return obj;
                 });
-                setCreatedProjects(newArr)
-                listFiles(proj.id)
-
+                setCreatedProjects(newArr);
+                listFiles(proj.id);
             },
             error: (err) => { 
-              
+              console.error(err);
              }
         });
     }
 
     const downloadTaskTargetFile = async(task_data) => {
-        let {id, filename} = task_data
-        let {name, extension} = Config.getNameAndExtension(filename)
+        let {id, filename} = task_data;
+        let {name, extension} = Config.getNameAndExtension(filename);
         
         try{
             // add in download list
-            dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }))
-    
-            let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`
-            const response = await Config.downloadFileFromApi(url);
-    
+            dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }));    
+            let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`;
+            const response = await Config.downloadFileFromApi(url);    
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: id, status: 2 }))
-    
-            Config.downloadFileInBrowser(response)
-    
+            dispatch(updateDownloadingFile({ id: id, status: 2 }));    
+            Config.downloadFileInBrowser(response);    
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: id }))
+                dispatch(deleteDownloadingFile({ id: id }));
             }, 8000);
         } catch (e) {
-            console.log(e)
-            dispatch(deleteDownloadingFile({ id: id }))
-            Config.toast(t("download_failed"), 'error')
+            console.error(e);
+            dispatch(deleteDownloadingFile({ id: id }));
+            Config.toast(t("download_failed"), 'error');
         }
     } 
 
     // this api will initiate the file translate process and provide the status of each task
     const getProjectTransDownloadStatus = (task_id) => {
         if(projectObject.current?.id === undefined) return;
-
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
-            axiosFileTranslateAbortController.abort()
-        }
-    
+            axiosFileTranslateAbortController.abort();
+        }    
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-
-        let task_list_arr = []
-
-        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing)
-        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
-        // console.log(alreadyProcessingTaskIds)
+        let task_list_arr = [];
+        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing);
+        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id);
         if(alreadyProcessingTask?.length !== 0){
-            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
         }else{
-            task_list_arr = [task_id]
+            task_list_arr = [task_id];
         }
-        // console.log("taskList: "+task_list_arr?.toString())
-
-        fileTranslatingTaskListRef.current = task_list_arr
-
+        fileTranslatingTaskListRef.current = task_list_arr;
         // create task list to process
-        let list = ""
+        let list = "";
         fileTranslatingTaskListRef.current?.map((each, index) => {
             list += `task=${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
-
-        // console.log(list)
-
         // display the button loader as soon as the user clicks the TRANSLATE button
         if(task_id !== undefined){
             let newArr = selectedProjectFilesRef.current?.map(obj => {
@@ -4617,10 +4365,10 @@ function MyStories(props) {
                         isProcessing: true,
                     }
                 }
-                return obj
+                return obj;
             })
-            selectedProjectFilesRef.current = newArr 
-            setSelectedProjectFiles(newArr)
+            selectedProjectFilesRef.current = newArr;
+            setSelectedProjectFiles(newArr);
         }
 
         Config.axios({
@@ -4642,20 +4390,14 @@ function MyStories(props) {
                             }
                         }
                         return obj
-                    })
-                    // console.log('modified list with isProcessing key')
-                    // console.log(newArr)
-                    selectedProjectFilesRef.current = newArr 
-                    setSelectedProjectFiles(newArr)
-
-                    // console.log('isAnyTaskIsProcessing')
-                    
-                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false
-                    
+                    });
+                    selectedProjectFilesRef.current = newArr ;
+                    setSelectedProjectFiles(newArr);                    
+                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false;
+                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false;
+                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false;                    
                     if(isPageNumNotFound){
-                        // Config.toast(`File couldn't process!`, 'error')
+                        // Config.toast(`File couldn't process!`, 'error');
                         setShowFileErrorModal(true)
                         let newArr = selectedProjectFilesRef.current?.map(obj => {
                             if(obj.status === 404){
@@ -4664,18 +4406,16 @@ function MyStories(props) {
                                     isProcessing: false,
                                 }
                             }
-                            return obj
+                            return obj;
                         })
-                        selectedProjectFilesRef.current = newArr 
-                        setSelectedProjectFiles(newArr)
-                        return
+                        selectedProjectFilesRef.current = newArr; 
+                        setSelectedProjectFiles(newArr);
+                        return;
                     }
-
-                    if(insuffientCredit) setShowCreditAlertModal(true)
-
+                    if(insuffientCredit) setShowCreditAlertModal(true);
                     if(isAnyTaskIsProcessing){
                         setTimeout(() => {
-                            getProjectTransDownloadStatus(task_id)
+                            getProjectTransDownloadStatus(task_id);
                         }, 5000);
                     }
                 }
@@ -4688,11 +4428,10 @@ function MyStories(props) {
                                 ...obj,
                                 isProcessing: false,
                             }
-                        })
-                        // console.log(newArr)
-                        selectedProjectFilesRef.current = newArr 
-                        setSelectedProjectFiles(newArr)
-                        setShowCreditAlertModal(true)
+                        });
+                        selectedProjectFilesRef.current = newArr ;
+                        setSelectedProjectFiles(newArr);
+                        setShowCreditAlertModal(true);
                     }
                 }
             },
@@ -4706,11 +4445,10 @@ function MyStories(props) {
                                 file_translate_done: false
                             }
                         }
-                        return obj
-                    })
-                    // console.log(newArr)
-                    selectedProjectFilesRef.current = newArr 
-                    setSelectedProjectFiles(newArr)
+                        return obj;
+                    });
+                    selectedProjectFilesRef.current = newArr; 
+                    setSelectedProjectFiles(newArr);
                 }
             }
         });
@@ -4721,7 +4459,7 @@ function MyStories(props) {
     };
 
     const handleViewStoryClick = (e, task, open) => {
-        setIsViewStoryModal(true)
+        setIsViewStoryModal(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/news_detail/?task_id=${task?.id}`,
@@ -4732,75 +4470,68 @@ function MyStories(props) {
                     data: response.data,
                     pair: `${targetLanguageOptionsRef.current?.find(each => each?.id == task?.source_language)?.language}->${targetLanguageOptionsRef.current?.find(each => each?.id == task?.target_language)?.language}`,
                     open: open
-                })
+                });
             },
         });
     } 
 
     const pushStoryToCMS = (e, taskData, project_id) => {
-        // console.log(taskData)
-
         // var formdata = new FormData();
         // formdata.append("task", taskData?.id);
         // formdata.append("step", 1);
-        // formdata.append("client_response", 3);
-        
+        // formdata.append("client_response", 3);        
         // if (reassign) {
         //     formdata.append("reassigned", 'True')
         // }
-        let feedId = taskData?.feed_id
-        setIsStoryIdPushing(taskData?.id)
+        let feedId = taskData?.feed_id;
+        setIsStoryIdPushing(taskData?.id);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/push_story/?task_id=${taskData?.id}${(feedId !== null && feedId !== undefined) ? `&feed_id=${feedId}` : ""}`,
             auth: true,
             method: "POST",  
             // data: formdata,
             success: (api_response) => {
-                Config.toast(t("push_successfully"))
-                listFiles(project_id)
-                setIsStoryIdPushing(null)
+                Config.toast(t("push_successfully"));
+                listFiles(project_id);
+                setIsStoryIdPushing(null);
             },
             error: (err) => {
-                Config.toast(`${t("something_went_wrong")}`, 'error')
-                setIsStoryIdPushing(null)
+                Config.toast(`${t("something_went_wrong")}`, 'error');
+                setIsStoryIdPushing(null);
             }
         });
     } 
 
     const handleCreateStoryBtn = () => {
         if(isFederal){
-            history('/all-stories?page=1')
+            history('/all-stories?page=1');
         }else if(isDinamalar){
-            openAddStoryModal()
+            openAddStoryModal();
         }
     } 
 
-
     const openDefaultGlossary = () => {
-        history(`/default-glossary-workspace/`)
+        history(`/default-glossary-workspace/`);
     } 
-
 
     const handleEditorSelect = (id) => {
         const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-        let filteredEditor = []
-        URL_SEARCH_PARAMS.set('page', 1)
-        URL_SEARCH_PARAMS.delete('open-project')
-        URL_SEARCH_PARAMS.delete('refresh-proj')
-
+        let filteredEditor = [];
+        URL_SEARCH_PARAMS.set('page', 1);
+        URL_SEARCH_PARAMS.delete('open-project');
+        URL_SEARCH_PARAMS.delete('refresh-proj');
         if(checkedEditors?.includes(id)){
-            filteredEditor = checkedEditors?.filter(editor => editor !== id)
-            setCheckedEditors(filteredEditor)
+            filteredEditor = checkedEditors?.filter(editor => editor !== id);
+            setCheckedEditors(filteredEditor);
         }else{
-            filteredEditor = [...checkedEditors, id]
-            setCheckedEditors(filteredEditor)
+            filteredEditor = [...checkedEditors, id];
+            setCheckedEditors(filteredEditor);
         }
-        if(filteredEditor?.length !== 0) URL_SEARCH_PARAMS.set('editor', filteredEditor?.join(','))
-        else URL_SEARCH_PARAMS.delete('editor')
-
+        if(filteredEditor?.length !== 0) URL_SEARCH_PARAMS.set('editor', filteredEditor?.join(','));
+        else URL_SEARCH_PARAMS.delete('editor');
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
     } 
-
 
     return (
         <React.Fragment>
@@ -4858,7 +4589,6 @@ function MyStories(props) {
                             components={{ DropdownIndicator, IndicatorSeparator: () => null }}
                             onChange={handleSelectedOrderItem}
                         />
-
                         {(isDinamalar && !is_internal_meber_editor) && (
                             <div className="editor-filter" >
                                 <ButtonBase 
@@ -5281,7 +5011,6 @@ function MyStories(props) {
                                                                                 openedProjectId == project.id &&
                                                                                 ((selectedProjectFiles?.length > 0) ? (
                                                                                     selectedProjectFiles.map((selectedProjectFile, key) => {
-                                                                                        // console.log(selectedProjectFile)
                                                                                         isAssignedProject = createdProjects.find(
                                                                                             (element) => element.id === openedProjectId
                                                                                         )?.assign_enable;
@@ -6061,7 +5790,6 @@ function MyStories(props) {
                                                                                                         </div>
 
                                                                                                         {/* Task action button logic ---- STARTS HERE */}
-                                                                                                        {/* {console.log(selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))))} */}
                                                                                                         <div className="project-list-action-wrap">
                                                                                                             {selectedProjectFile?.task_assign_info?.length ? (  // if task is assigned
                                                                                                                 selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))) !== undefined ? (  // if task is assigned to same loged in user (assigned to me)

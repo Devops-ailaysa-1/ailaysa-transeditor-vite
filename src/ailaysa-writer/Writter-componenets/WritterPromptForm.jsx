@@ -698,7 +698,6 @@ const WritterPromptForm = (props) => {
 
     // paste on the cursor position
     const pasteTextOnCursor = (text, index, arrLength) => {
-        console.log(text)
         if (document.querySelector('.note-editable')?.innerText?.trim()?.length !== 0) {
             var brNode2 = document.createElement('p');
             brNode2.innerHTML = "<br />";

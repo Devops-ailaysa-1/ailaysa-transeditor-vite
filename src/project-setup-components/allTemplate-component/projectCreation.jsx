@@ -1689,11 +1689,9 @@ function ProjectCreation(props) {
                 }
             });
             let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
-            //   console.log(targetLangToRemove)
             setTargetLangListToRemove(targetLangToRemove);
         }
     }, [targetLanguage]);
-
 
     const removebrtag = () => {
         let rem = document.querySelector('.project-box');
@@ -1703,12 +1701,12 @@ function ProjectCreation(props) {
             var1[i].parentNode.removeChild(var1[i]);
         }
     }
+
     document.querySelector('[contenteditable]')?.addEventListener('paste', function pasteAsPlainText(event) {
         event.preventDefault();
         event.target.innerText = event.clipboardData.getData("text/plain");
         removebrtag();
     });
-
 
     const executeProposalScroll = () => {
         contentprojectNameRef?.current?.scrollTo(0, 0);
