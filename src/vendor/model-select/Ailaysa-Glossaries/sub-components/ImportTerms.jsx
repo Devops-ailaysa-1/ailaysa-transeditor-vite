@@ -585,7 +585,7 @@ export const ImportTerms = (props) => {
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div></div>
                 <Tooltip
-                    title={activeImportTab === 1 && !isGlossaryChanged ? "Please select the any one glossary in the list" : ""}
+                    title={activeImportTab === 1 && !isGlossaryChanged ? "Select at least one glossary to continue." : ""}
                     placement="top-start">
                         <span style={{ display: 'inline-block' }}>
                             <button disabled={activeImportTab === 1 && !isGlossaryChanged}
