@@ -40,7 +40,6 @@ export const CacheBuster = (props) => {
           
           const shouldForceRefresh = isThereNewVersion(metaVersion, currentVersion);
           if (shouldForceRefresh) {
-            console.log(`There is a new version (v${metaVersion}). Should force refresh.`);
             refreshCacheAndReload()
           } else {
           }

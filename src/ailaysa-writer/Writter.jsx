@@ -966,7 +966,6 @@ const Writter = (props) => {
             },
             onopen(res) {
                 if (res.ok && res.status === 200) {
-                    // console.log("Connection made ", res);
                     blogAricleUpdate(createdDocumentId.current, blogCreatedId.current);
                 } else if (
                     res.status >= 400 &&
@@ -1004,7 +1003,6 @@ const Writter = (props) => {
                 document.querySelector('.note-editable').classList.remove('cursor-hide');
             },
             onerror(err) {
-                // console.log("There was an error from server", err);
                 document.querySelector('.note-editable').classList.remove('note-editable-loader');
                 document.querySelector('.note-editable').classList.remove('cursor-hide');
                 setTimeout(() => {
