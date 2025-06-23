@@ -74,14 +74,14 @@ import { setBookCreationResponse } from "../features/writer-slices/BookCreationR
 import generateKey from "../project-setup-components/speech-component/speech-to-text/recorder-components/utils/GenerateKey";
 import { addDownloadingFiles, deleteDownloadingFile, updateDownloadingFile } from "../features/FileDownloadingListSlice";
 import { ButtonLoader } from "../loader/CommonBtnLoader";
-import ArrowRightGreyColor from "../assets/images/new-create-hub/arrow_right_grey_color.svg"
-import CloseBlack from "../assets/images/new-ui-icons/close_black.svg"
-import RemoveCircleRed from "../assets/images/new-ui-icons/remove_circle_red.svg"
-import InsuffientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg"
-import ConfirmIcon from "../assets/images/new-ui-icons/confirm-icon.svg"
+import ArrowRightGreyColor from "../assets/images/new-create-hub/arrow_right_grey_color.svg";
+import CloseBlack from "../assets/images/new-ui-icons/close_black.svg";
+import RemoveCircleRed from "../assets/images/new-ui-icons/remove_circle_red.svg";
+import InsuffientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg";
+import ConfirmIcon from "../assets/images/new-ui-icons/confirm-icon.svg";
 // import CustomBookTooltip from "./CustomBookTooltip";
 import ReferenceModal from "./Writter-componenets/ReferenceModal";
-import ReactRouterPrompt from 'react-router-prompt'
+import ReactRouterPrompt from 'react-router-prompt';
 import { setWriterWordCount } from "../features/writer-slices/WriterWordCountSlice";
 import { AITab } from "../components/AITabs/AITab";
 import { MyStyleBox } from "./my-style-prompt/MyStyleBox";
@@ -280,15 +280,15 @@ const Writter = (props) => {
     // const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
     const [convetedDocsListSearch, setConvertedDocsListSearch] = useState(false);
     const [popupLoading, setPopupLoading] = useState('none');
-    // const [description, setDescription] = useState('')
-    // const [aiWrittingKeywords, setAiWrittingKeywords] = useState('')
-    // const [selectedNumberOfCopies, setSelectedNumberOfCopies] = useState({ label: 1, value: 1 })    // default value
-    // const [isGenerateLoading, setIsGenerateLoading] = useState(false)
-    // const [isGenerateLoadingFreestyle, setIsGenerateLoadingFreestyle] = useState(false)
-    // const [promptResultsList, setPromptResultsList] = useState([])
-    // const [freeStylePromptResultsList, setFreeStylePromptResultsList] = useState([])
-    // const [freeStyleDescription, setFreeStyleDescription] = useState('')
-    // const [aiWrittingProductName, setAiWrittingProductName] = useState('')
+    // const [description, setDescription] = useState('');
+    // const [aiWrittingKeywords, setAiWrittingKeywords] = useState('');
+    // const [selectedNumberOfCopies, setSelectedNumberOfCopies] = useState({ label: 1, value: 1 }) ;   // default value
+    // const [isGenerateLoading, setIsGenerateLoading] = useState(false);
+    // const [isGenerateLoadingFreestyle, setIsGenerateLoadingFreestyle] = useState(false);
+    // const [promptResultsList, setPromptResultsList] = useState([]);
+    // const [freeStylePromptResultsList, setFreeStylePromptResultsList] = useState([]);
+    // const [freeStyleDescription, setFreeStyleDescription] = useState('');
+    // const [aiWrittingProductName, setAiWrittingProductName] = useState('');
     const [popoverContentSwitch, setPopoverContentSwitch] = useState(false);
     const [isMakePopInsideViewPort, setIsMakePopInsideViewPort] = useState(false);
     const [fileListSearchEnlarge, setFileListSearchEnlarge] = useState(false);
@@ -335,6 +335,15 @@ const Writter = (props) => {
     const [writerPageActive, setWriterPageActive] = useState(false);
     const [showWriterPageLeavingAlertModal, setShowWriterPageLeavingAlertModal] = useState(false);
     const [isTranslateProceeding, setIsTranslateProceeding] = useState(false);
+    const [openContentReferenceModal, setOpenContentReferenceModal] = useState(false);
+    const [contentReferenceResult, setContentReferenceResult] = useState(null);   
+    const [myStyleData, setMyStyleData] = useState(null);
+    const [activeCustomizationTab, setActiveCustomizationTab] = useState(1);
+    // const [isPlaying, setIsPlaying] = useState(false);
+    // const [progress, setProgress] = useState(0);
+    // const [currentTime, setCurrentTime] = useState('00:00');
+    // const [duration, setDuration] = useState('00:00');
+    // const [blogCreatedId, setBlogCreatedId] = useState();
 
     // prompt form states
     // let copiesOptions = [
@@ -510,11 +519,7 @@ const Writter = (props) => {
             "thumbnail_url": ""
         }
     ];
-
-    const [openContentReferenceModal, setOpenContentReferenceModal] = useState(false);
-    const [contentReferenceResult, setContentReferenceResult] = useState(null);   
-    const [myStyleData, setMyStyleData] = useState(null);
-    const [activeCustomizationTab, setActiveCustomizationTab] = useState(1);
+    
     const selectedToneRef = useRef(null);
     const documentNameRef = useRef(null);
     const typing = useRef(false);
@@ -549,13 +554,8 @@ const Writter = (props) => {
     const isTaskAssignedToMeRef = useRef(false);
     const isTaskInProgressRef = useRef(false);
     const isCopiedFromSummernoteRef = useRef(null);
-    // const audioRef = useRef(null);
-    // const [isPlaying, setIsPlaying] = useState(false);
-    // const [progress, setProgress] = useState(0);
-    // const [currentTime, setCurrentTime] = useState('00:00');
-    // const [duration, setDuration] = useState('00:00');
-    const convert = new MarkdownIt({ html: true, });
-    // const [blogCreatedId, setBlogCreatedId] = useState();
+    // const audioRef = useRef(null);    
+    const convert = new MarkdownIt({ html: true, });    
     const blogCreatedId = useRef(null);
     const selectedFileRow = useRef(null);
     const selectedCustomizationCategoryRef = useRef(null);    
@@ -1378,7 +1378,6 @@ const Writter = (props) => {
                     summerNoteEditorRef.current.summernote('code', response.data[0]?.html_data);
                     $('.summernote').summernote('commit');
                 } else {
-                    // console.log('indie')
                     summerNoteEditorRef.current.summernote('code', "<p>"+response.data[0]?.transcripted_text+"</p>");
                     $('.summernote').summernote('commit');
                 }
@@ -1589,7 +1588,6 @@ const Writter = (props) => {
             url: `${Config.BASE_URL}/exportpdf/convertpdftodocx/?${target}=${id}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data[0]?.html_data);
                 if (response.data[0]?.html_data !== null) {
                     if (target === 'id') {    // from toolkit
                         if (response.data[0]?.pdf_file) {
@@ -2599,14 +2597,8 @@ const Writter = (props) => {
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    // console.log(attribs)
-
-                    // console.log(attribs.style)
-                    // console.log(attribs.style)
-                    let c = attribs?.color ? attribs?.color : ''
-                    let s = attribs?.style ? attribs.style : ''
-
-
+                    let c = attribs?.color ? attribs?.color : '';
+                    let s = attribs?.style ? attribs.style : '';
                     return {
                         tagName: 'span',
                         //   attribs: {
@@ -2772,7 +2764,6 @@ const Writter = (props) => {
                         // Range.createContextualFragment() would be useful here but is
                         // non-standard and not supported in all browsers (IE9, for one)
                         var el = document.createElement("p");
-                        // console.log(html)
                         el.innerHTML = sanitizeHtml(html);
                         var frag = document.createDocumentFragment(), node, lastNode;
                         while ((node = el.firstChild)) {
@@ -2797,7 +2788,6 @@ const Writter = (props) => {
         if (containsRtlCharacters(customizationResultRef.current)) {
             p_start_tag = `<p class="right-align-lang-style">`;
         }
-        // console.log(p_start_tag)
         document.querySelector('#pop').style.setProperty('min-height', ``, 'important');
         if (selectedCustomizationCategoryRef.current == 'Convert') {
             if (selectedCustomization == 'Paragraph to bullet points') {
@@ -2985,7 +2975,6 @@ const Writter = (props) => {
             success: (response) => {
                 let data = response.data;
                 bookCreationObjRef.current = data;
-                console.log(data);
                 dispatch(setBookCreationResponse(data));
             },
         });
@@ -3443,7 +3432,6 @@ const Writter = (props) => {
             // newRng.select() // display the cursor on DOM
             // let p = document.createElement('span')
             // p.innerHTML = data?.replace(/\n/g, "<br />")
-            // console.log(p)
             // let node = newRng.insertNode(p)    // paste the content in the cursor position
             // selectTheInsertedNodeText(range, node)           
             // let node = newRng.pasteHTML('this is Sarvesh the great')    // paste the content in the cursor position
@@ -3465,7 +3453,6 @@ const Writter = (props) => {
             // const newRng = rng.collapse();  // to end rng
             // newRng.select();
             // const newRng = rng.wrapBodyInlineWithPara();
-            // console.log(newRng);
             // newRng.select();
             // used to delete the delete selected text 
             // const newRng = rng.deleteContents();
@@ -3478,7 +3465,6 @@ const Writter = (props) => {
             // newRng.select();
         }else{
             const rng = summerNoteEditorRef.current.summernote('editor.getLastRange');
-            console.log(rng);
             rng.select();
             // let loaderPTag = document.createElement('p');
             // loaderPTag.id = 'loader-tag';
@@ -3940,9 +3926,7 @@ const Writter = (props) => {
                             }}
                             title={t("show_customize_panel")} placement="top-end">
                             <button className={"ailaysa-writer-prompt-box-open"} onClick={() => {
-                                setRightSideBar(true)
-                                // console.log('clicked');
-                                // console.log(rightSideBar)
+                                setRightSideBar(true);
                             }}>
                                 <ArrowBackIosIcon className="side-bar-arrow-ai-writter" />
                                 <span>{t("customization_tray")}</span>

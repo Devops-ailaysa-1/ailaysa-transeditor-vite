@@ -357,7 +357,6 @@ const PdfConvert = (props) => {
         if (pdffilesList?.length !== 0) {
             if (pdffilesList?.filter(each => each.upload_progress === 0)?.length !== 0) {
                 uploadFile()?.then((response) => {
-                    // console.log([...response.data, ...uploadFileList])
                     setIsUploading(false);
                     clearTimeout(longFileModal.current);
                     clearTimeout(fileCheckTriggerTimeoutRef.current);
@@ -815,8 +814,6 @@ const PdfConvert = (props) => {
                                                 <div className="audio-file-list-wrapper">
                                                     {
                                                         uploadFileList?.map((item) => {
-                                                            console.log(item)
-                                                            console.log(pdfInProcessingList.current.find(each => each === item.id))
                                                             return (
                                                                 <div className="audio-file-list-item" key={item?.id}>
                                                                     <div className="file-info-wrapper">
