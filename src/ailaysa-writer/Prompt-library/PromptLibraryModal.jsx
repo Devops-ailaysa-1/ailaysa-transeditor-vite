@@ -64,7 +64,7 @@ export const PromptLibraryModal = (props) => {
     // based on selected domain set category list and select first category
     useEffect(() => {
         if(selectedDomain && promptSystemValueRef.current?.length !== 0) {
-            let domain = promptSystemValueRef.current?.find(each => each.id === selectedDomain)
+            let domain = promptSystemValueRef.current?.find(each => each.id === selectedDomain);
             let category = domain.domain_category?.map(each => (
                 {id: each.id, name: each.category_name}
             ));
@@ -77,8 +77,8 @@ export const PromptLibraryModal = (props) => {
     // based on selected category set sub-category list and select first sub-category
     useEffect(() => {
         if(selectedCategory && promptSystemValueRef.current?.length !== 0) {
-            let domain = promptSystemValueRef.current?.find(each => each.id === selectedDomain)?.domain_category
-            let category = domain?.find(each => each.id === selectedCategory)
+            let domain = promptSystemValueRef.current?.find(each => each.id === selectedDomain)?.domain_category;
+            let category = domain?.find(each => each.id === selectedCategory);
             let subCategorys = category?.cat_subcategories?.map(each => (
                 {id: each.id, name: each.sub_category_name}
             ));
@@ -122,8 +122,7 @@ export const PromptLibraryModal = (props) => {
                     "prompt-btn",
                     classname
                 ].join(' ')}
-                {...props}
-            >
+                {...props} >
                 {children}
             </button>
         )
@@ -133,16 +132,12 @@ export const PromptLibraryModal = (props) => {
     const PromptTabs = (props) => {
         return (
             <div className="tab-list d-flex">
-                <div 
-                    className={"tab-item " + (activePromptTab === 1 ? 'active' : '')} 
-                    onClick={() => setActivePromptTab(1)}
-                >
+                <div className={"tab-item " + (activePromptTab === 1 ? 'active' : '')} 
+                    onClick={() => setActivePromptTab(1)} >
                     Open prompts
                 </div>
-                <div 
-                    className={"tab-item " + (activePromptTab === 2 ? 'active' : '')} 
-                    onClick={() => setActivePromptTab(2)}
-                >
+                <div className={"tab-item " + (activePromptTab === 2 ? 'active' : '')} 
+                    onClick={() => setActivePromptTab(2)} >
                     My prompts
                 </div>
             </div>
@@ -158,8 +153,7 @@ export const PromptLibraryModal = (props) => {
                     navigation={true}
                     grabCursor={true}
                     modules={[Navigation]}
-                    className="mySwiper"
-                >
+                    className="mySwiper">
                     {domainList?.map(domain => {
                         return (
                             <SwiperSlide key={domain?.id}>
@@ -258,7 +252,7 @@ export const PromptLibraryModal = (props) => {
             axiosGetPromptCardsAbortControllerRef.current.abort();
         }
         const controller = new AbortController();
-        axiosGetPromptCardsAbortControllerRef.current = controller
+        axiosGetPromptCardsAbortControllerRef.current = controller;
 
         Config.axios({
             url: `${Config.BASE_URL}/app/prompt-library?sub_category_id=${id}`,
@@ -387,8 +381,7 @@ export const PromptLibraryModal = (props) => {
         const placeholders = document.querySelectorAll('.placeholder');
         placeholders.forEach((placeholder) => {
           placeholder.addEventListener('click', handlePlaceholderClick);
-        });
-    
+        });    
         // Cleanup event listeners on component unmount
         return () => {
           placeholders.forEach((placeholder) => {
@@ -437,8 +430,7 @@ export const PromptLibraryModal = (props) => {
         <>
             <button 
                 className="prompt-library-btn d-flex items-center"
-                onClick={() => setShowPromptLibrary(!showPromptLibrary)}
-            >
+                onClick={() => setShowPromptLibrary(!showPromptLibrary)}>
                 <LibraryBooksOutlinedIcon style={{color: "#5F6368", fontSize: "22px"}} />
                 Prompt library
             </button>
@@ -447,8 +439,7 @@ export const PromptLibraryModal = (props) => {
                     className="prompt-library-modal" 
                     visible={showPromptLibrary} 
                     onClose={() => setShowPromptLibrary(false)}
-                    showCloseButton={false}
-                >
+                    showCloseButton={false}>
                     <div className="prompt-library-wrapper">
                         <div className="file-list-assign-manage-header d-flex justify-between items-center">
                             <h3 className="title">Prompt library</h3>
@@ -476,16 +467,13 @@ export const PromptLibraryModal = (props) => {
                                 </div>
                             </div>
                             <div className="prompt-container d-flex">
-                                <div 
-                                    className="left-box"
+                                <div className="left-box"
                                     style={
                                         searchQueryText !== "" ? {display: 'none'} : {}
-                                    }
-                                > 
+                                    } > 
                                     {activePromptTab === 1 && (
                                         <DomainCapsuleList />
                                     )}
-
                                     <div className="d-flex category-list-container">
                                         <ul className="category-list custom-scroll-bar">
                                             {categoryList?.map(category => {
@@ -517,8 +505,7 @@ export const PromptLibraryModal = (props) => {
                                                                     item={category} 
                                                                     updateSpecificKeyInList={updateSpecificKeyInList}
                                                                     list={categoryList}
-                                                                    setList={setCategoryList}
-                                                                />
+                                                                    setList={setCategoryList} />
                                                             )}
                                                         </li>
                                                     )
@@ -555,8 +542,7 @@ export const PromptLibraryModal = (props) => {
                                                                 item={subCategory}
                                                                 updateSpecificKeyInList={updateSpecificKeyInList}
                                                                 list={subCategoryList}
-                                                                setList={setSubCategoryList} 
-                                                            />
+                                                                setList={setSubCategoryList}/>
                                                         )}
                                                     </li>
                                                 )
@@ -565,33 +551,23 @@ export const PromptLibraryModal = (props) => {
                                     </div>
                                     {activePromptTab === 2 && (
                                         <div className="d-flex">
-                                            <button
-                                                className="add-prompt-category-btn category-btn"
-                                                onClick={(e) => addNewListItemInList(e, categoryList, setCategoryList, 'isEditable')}
-                                            >
+                                            <button  className="add-prompt-category-btn category-btn"
+                                                onClick={(e) => addNewListItemInList(e, categoryList, setCategoryList, 'isEditable')}>
                                                 <AddOutlinedIcon style={{ color: '#0073DF' }} />
                                                 Add category
                                             </button>
-                                            <button
-                                                className="add-prompt-category-btn sub-category-list"
-                                                onClick={(e) => addNewListItemInList(e, subCategoryList, setSubCategoryList, 'isEditable')}
-                                            >
+                                            <button className="add-prompt-category-btn sub-category-list"
+                                                onClick={(e) => addNewListItemInList(e, subCategoryList, setSubCategoryList, 'isEditable')} >
                                                 <AddOutlinedIcon style={{ color: '#0073DF' }} />
                                                 Add sub-category
                                             </button>
                                         </div>
                                     )}
                                 </div>
-                                <div 
-                                    className="right-box"
-                                    style={
-                                        searchQueryText !== "" ? {width: '100%'} : {}
-                                    } 
-                                >
-                                    <div
-                                        ref={promptCardsContainerRef} 
-                                        className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}
-                                    >
+                                <div  className="right-box"
+                                    style={searchQueryText !== "" ? {width: '100%'} : {} } >
+                                    <div ref={promptCardsContainerRef} 
+                                        className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}>
                                         {promptCardsList.map((each, ind) => {
                                             let prompt = promptCardsListCopy.find(obj => obj.id === each.id)?.prompt_content
                                             return(
@@ -601,15 +577,13 @@ export const PromptLibraryModal = (props) => {
                                                 //     prompt={each.prompt_content} 
                                                 //     isNew={each.isNew}
                                                 // />
-                                                <div 
-                                                    key={each.id}
+                                                <div key={each.id}
                                                     className={[
                                                         "prompt-card",
                                                         (each?.isNew || each?.isEdit) && "active",
                                                         (isNewOrEditMode && !each?.isNew && !each?.isEdit) && "disable"
                                                         
-                                                    ].join(' ')}
-                                                >
+                                                    ].join(' ')}>
                                                     {(each?.isNew || each?.isEdit) ? (
                                                         <textarea 
                                                             name="new-prompt"
@@ -728,11 +702,9 @@ export const PromptLibraryModal = (props) => {
                                         )}
                                     </div>
                                     {(activePromptTab === 2 && searchQueryText === "") && (
-                                        <button
-                                            className="add-prompt-category-btn add-prompt-btn"
+                                        <button className="add-prompt-category-btn add-prompt-btn"
                                             onClick={(e) => addNewListItemInList(e, promptCardsList, setPromptCardsList, 'isNew')}
-                                            style={promptCardsList?.find(each => (each?.isNew || each?.isEdit)) ? {pointerEvents: 'none', opacity: 0.5} : {}}
-                                        >
+                                            style={promptCardsList?.find(each => (each?.isNew || each?.isEdit)) ? {pointerEvents: 'none', opacity: 0.5} : {}}>
                                             <AddOutlinedIcon style={{ color: '#0073DF' }} />
                                             Add prompt
                                         </button>

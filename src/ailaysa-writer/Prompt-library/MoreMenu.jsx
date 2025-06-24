@@ -55,8 +55,7 @@ export const MoreMenu = (props) => {
                 aria-expanded={open ? 'true' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
-                className="p-1"
-            >
+                className="p-1" >
             <MoreHorizRoundedIcon />
             </IconButton>
             <Menu
@@ -73,8 +72,7 @@ export const MoreMenu = (props) => {
                         width: '20ch',
                         boxShadow: '0px 8px 8px 0px rgba(0, 0, 0, 0.16)'
                     },
-                }}
-            >
+                }}>
                 {options.map((option) => (
                     <MenuItem 
                         key={option.id} 
