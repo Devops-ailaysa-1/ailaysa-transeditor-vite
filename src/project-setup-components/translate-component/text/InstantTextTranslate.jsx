@@ -97,7 +97,6 @@ const InstantTextTranslate = (props) => {
     //     browserSupportsSpeechRecognition
     // } = useSpeechRecognition();
     const browserSupportsSpeechRecognition = null;
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
 
     const { t } = useTranslation();
     const history = useNavigate();
@@ -107,6 +106,7 @@ const InstantTextTranslate = (props) => {
     const [historyArrState, setHistoryArrState, { historyArr, pointer, back, forward, go }] = useStateWithHistory("")
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     let userSelectionCallTimer = null;
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
 
     const [navigationModalVisible, setNavigationModalVisible] = useState(false);
     const [lastLocation, setLastLocation] = useState(null);
