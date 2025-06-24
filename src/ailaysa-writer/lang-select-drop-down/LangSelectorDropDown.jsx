@@ -17,8 +17,8 @@ export const LangSelectorDropDown = (props) => {
     useEffect(() => {
         if(open){
             setTimeout(() => {
-                let activeItem = document.querySelector('.lang-list-item.active')
-                activeItem?.scrollIntoView()
+                let activeItem = document.querySelector('.lang-list-item.active');
+                activeItem?.scrollIntoView();
             }, 20);
         }
     }, [open]);
@@ -103,8 +103,7 @@ export const LangSelectorDropDown = (props) => {
                 transformOrigin={{
                     vertical: 'bottom',
                     horizontal: 'left',
-                }}
-            >
+                }}>
                 <div className="lang-drop-down-container d-flex">
                     <div className="lang-search-box d-flex items-center">
                         <SearchIcon style={{color: "#5F6368"}} />

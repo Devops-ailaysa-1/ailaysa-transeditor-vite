@@ -43,10 +43,7 @@ export const MyStyleBox = (props) => {
 
     return (
         <div className="my-style-wrapper px-4 mt-8 ">
-            <label 
-                htmlFor="prompt-box" 
-                className="block font-medium text-base"
-            >
+            <label htmlFor="prompt-box"  className="block font-medium text-base">
                 {t("prompt")}
             </label>
             <span className='block text-right text-[#B2B2B2] text-sm'>
@@ -60,14 +57,10 @@ export const MyStyleBox = (props) => {
                 className="block"
                 value={myStylePrompt}
                 onChange={(e) => setMyStylePrompt(e.target.value)}
-                maxLength={500}
-            ></textarea>
+                maxLength={500} ></textarea>
             <div className="footer-area-wrapper justify-content-end mt-8" style={{ padding: '0px 0px 15px 30px' }}>
                 <div className="term-edit-btn-row">
-                    <button
-                        className="uploadProjectButton-writter"
-                        onClick={createUpdatePrompt}
-                    >
+                    <button className="uploadProjectButton-writter" onClick={createUpdatePrompt} >
                         <span className="fileupload-new-btn">
                             {isSaving ? `${t("saving")}...` : `${t("save_style")}`}
                         </span>

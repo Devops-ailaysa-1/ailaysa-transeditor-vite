@@ -105,8 +105,7 @@ const WriterBlog = (props) => {
                 showTarLangModal={showTarLangModal}
                 setshowTarLangModal={setshowTarLangModal}
                 targetLabel={targetLabel}
-                setTargetLabel={setTargetLabel}
-            />
+                setTargetLabel={setTargetLabel}/>
         </section>
     </>
   )
