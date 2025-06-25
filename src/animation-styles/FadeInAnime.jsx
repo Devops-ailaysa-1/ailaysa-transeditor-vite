@@ -12,8 +12,7 @@ function FadeInAnime ({ children }) {
         variants={{
           visible: { opacity: 1},
           hidden: { opacity: 0}
-        }}
-      >
+        }} >
         {children}
       </motion.div>
     );

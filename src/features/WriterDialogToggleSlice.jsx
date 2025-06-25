@@ -8,9 +8,7 @@ export const symbolDialogSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
-
+});
 
 export const {toggleDialogDisplay} = symbolDialogSlice.actions;
-
 export default symbolDialogSlice.reducer;

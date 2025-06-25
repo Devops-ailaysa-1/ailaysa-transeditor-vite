@@ -8,7 +8,7 @@ export const ModalConfirmationUserDecisionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setModalConfirmationUserDecision} = ModalConfirmationUserDecisionSlice.actions;
 export default ModalConfirmationUserDecisionSlice.reducer;

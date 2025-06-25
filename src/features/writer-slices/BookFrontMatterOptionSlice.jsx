@@ -8,7 +8,7 @@ export const BookFrontMatterOptionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setBookFrontMatterOption} = BookFrontMatterOptionSlice.actions;
 export default BookFrontMatterOptionSlice.reducer;

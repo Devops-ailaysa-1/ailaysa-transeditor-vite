@@ -8,7 +8,7 @@ export const BookGenreOptionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setGenreOption} = BookGenreOptionSlice.actions;
 export default BookGenreOptionSlice.reducer;

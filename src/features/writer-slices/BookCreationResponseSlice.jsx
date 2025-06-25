@@ -8,7 +8,7 @@ export const BookCreationResponseSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setBookCreationResponse} = BookCreationResponseSlice.actions;
 export default BookCreationResponseSlice.reducer;

@@ -8,7 +8,7 @@ export const ShowAilaysaGlossaryModalSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setShowAilaysaGlossaryModal} = ShowAilaysaGlossaryModalSlice.actions;
 export default ShowAilaysaGlossaryModalSlice.reducer;

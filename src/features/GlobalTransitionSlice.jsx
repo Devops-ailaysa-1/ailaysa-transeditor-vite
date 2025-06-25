@@ -8,7 +8,7 @@ export const GlobalTransitionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setShowGlobalTransition} = GlobalTransitionSlice.actions;
 export default GlobalTransitionSlice.reducer;

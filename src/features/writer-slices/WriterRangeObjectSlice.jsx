@@ -8,7 +8,7 @@ export const WriterRangeObjectSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setWriterRangeObject} = WriterRangeObjectSlice.actions;
 export default WriterRangeObjectSlice.reducer;

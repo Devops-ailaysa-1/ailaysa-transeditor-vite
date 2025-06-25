@@ -8,7 +8,7 @@ export const UnitTypeOptionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setUnitTypeOptions} = UnitTypeOptionSlice.actions;
 export default UnitTypeOptionSlice.reducer;

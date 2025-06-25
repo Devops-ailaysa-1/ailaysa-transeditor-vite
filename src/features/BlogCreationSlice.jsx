@@ -8,7 +8,7 @@ export const BlogCreationSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setBlogCreationResponse} = BlogCreationSlice.actions;
 export default BlogCreationSlice.reducer;

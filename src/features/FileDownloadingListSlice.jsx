@@ -21,7 +21,7 @@ export const FileDownloadingListSlice = createSlice({
             state.value = [];
         }
     }
-})
+});
 
 export const { addDownloadingFiles, updateDownloadingFile, deleteDownloadingFile, clearAllFiles } = FileDownloadingListSlice.actions;
 export default FileDownloadingListSlice.reducer; 

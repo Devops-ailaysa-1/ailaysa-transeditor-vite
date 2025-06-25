@@ -8,7 +8,7 @@ export const ShowTranslateDocumentModalSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setShowTranslateDocumentModal} = ShowTranslateDocumentModalSlice.actions;
 export default ShowTranslateDocumentModalSlice.reducer;

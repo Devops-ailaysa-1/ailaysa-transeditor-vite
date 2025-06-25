@@ -8,8 +8,7 @@ function FadeInLeft ({ children, props }) {
         initial={{ opacity: 0, x: 30 }}
         exit={{ opacity: 0, x: -30 }}
         transition={{ duration: 0.4 }}
-        className="advanced-section-wrapper"
-      >
+        className="advanced-section-wrapper">
         {children}
       </motion.div>
     );

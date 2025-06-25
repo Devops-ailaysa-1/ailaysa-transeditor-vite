@@ -8,7 +8,7 @@ export const BookBackMatterOptionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setBookBackMatterOption} = BookBackMatterOptionSlice.actions;
 export default BookBackMatterOptionSlice.reducer;

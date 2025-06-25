@@ -8,8 +8,7 @@ function FadeInRight ({ children, props }) {
         initial={{ opacity: 0, x: -30 }}
         exit={{ opacity: 0, x: 30 }}
         transition={{ duration: 0.4 }}
-        className="term-edit-form-wrapper"
-      >
+        className="term-edit-form-wrapper">
         {children}
       </motion.div>
     );

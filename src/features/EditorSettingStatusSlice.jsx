@@ -8,7 +8,7 @@ export const EditorSettingStatusSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setEditorSettingStatus} = EditorSettingStatusSlice.actions;
 export default EditorSettingStatusSlice.reducer;

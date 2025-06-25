@@ -8,7 +8,7 @@ export const AllTempateListSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setAllTemplateList} = AllTempateListSlice.actions;
 export default AllTempateListSlice.reducer;

@@ -8,8 +8,7 @@ function FadeInRight ({ children, props }) {
         initial={{ opacity: 0, x: -30 }}
         exit={{ opacity: 0, x: 30 }}
         transition={{ duration: 0.4 }}
-        className="term-edit-suggestion-part"
-      >
+        className="term-edit-suggestion-part">
         {children}
       </motion.div>
     );

@@ -87,8 +87,7 @@ const EditorRolesList = (props) => {
                         )}
                     </div>
                 </div>
-            )}
-            
+            )}            
         </section> 
     )
 }

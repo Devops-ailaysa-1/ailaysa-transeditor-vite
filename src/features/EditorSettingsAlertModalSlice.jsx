@@ -8,7 +8,7 @@ export const EditorSettingsAlertModalSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setEditorSettingAlertModal} = EditorSettingsAlertModalSlice.actions;
 export default EditorSettingsAlertModalSlice.reducer;

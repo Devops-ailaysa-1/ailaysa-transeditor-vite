@@ -12,8 +12,7 @@ function FadeInUp ({ children }) {
           visible: {y: 0, opacity: 1},
           hidden: {y: 10, opacity: 0}
         }}
-        exit={{ y: -10, opacity: 0 }}
-      >
+        exit={{ y: -10, opacity: 0 }}>
         {children}
       </motion.div>
     );

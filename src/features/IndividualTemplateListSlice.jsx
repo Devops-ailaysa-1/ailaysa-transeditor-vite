@@ -8,7 +8,7 @@ export const IndividualTemplateListSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setIndividualTemplateList} = IndividualTemplateListSlice.actions;
 export default IndividualTemplateListSlice.reducer;
