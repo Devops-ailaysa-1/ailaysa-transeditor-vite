@@ -8,7 +8,7 @@ export const UserDetailsSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setUserDetails} = UserDetailsSlice.actions;
 export default UserDetailsSlice.reducer;

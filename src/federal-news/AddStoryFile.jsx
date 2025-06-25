@@ -32,19 +32,16 @@ const AddStoryFile = (props) => {
             let name = e.target.files[i].name;
             let lastDot = name.lastIndexOf(".");
             let fileName = name.substring(0, lastDot);
-            let ext = "." + name.substring(lastDot + 1);
-            
+            let ext = "." + name.substring(lastDot + 1);            
             if (supportFileExtensions?.find(each => each === ext?.toLowerCase()) === undefined) {
                 Config.toast(t("file_format_not_support"), 'warning');
                 return false;
             }
-
             if ((e.target.files[i]?.name).length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
                 return;
             }
         }
-
         switch (e.target.name) {
             case "files": {
                 let thisFiles = e.target.files;                
@@ -72,8 +69,7 @@ const AddStoryFile = (props) => {
             let name = filesTemp[i].name;
             let lastDot = name.lastIndexOf(".");
             let fileName = name.substring(0, lastDot);
-            let ext = "." + name.substring(lastDot + 1);
-            
+            let ext = "." + name.substring(lastDot + 1);            
             if (supportFileExtensions?.find(each => each === ext?.toLowerCase()) === undefined) {
                 Config.toast(t("file_format_not_support"), 'warning');
                 return false;
@@ -193,10 +189,7 @@ const AddStoryFile = (props) => {
                                     <div className="file-list">
                                         {Object.keys(files).map((eachKey) => {
                                             return (
-                                                <div
-                                                    key={eachKey + files[eachKey].name}
-                                                    className="file-name-list"
-                                                >
+                                                <div key={eachKey + files[eachKey].name}  className="file-name-list" >
                                                     <div className="filename" style={{ width: '90%' }}>
                                                         {
                                                             <img
@@ -206,8 +199,7 @@ const AddStoryFile = (props) => {
                                                                         .split(".")
                                                                         .pop()
                                                                 }
-                                                                alt="document"
-                                                            />
+                                                                alt="document"/>
                                                         }
                                                         <span className="filename-length">
                                                             {files[eachKey].name
@@ -227,12 +219,8 @@ const AddStoryFile = (props) => {
                                                         data-file-index={eachKey}
                                                         onClick={(e) =>
                                                             removeFile(e, eachKey)
-                                                        }
-                                                    >
-                                                        <img
-                                                            src={BlackClose}
-                                                            alt="delete"
-                                                        />
+                                                        }>
+                                                        <img src={BlackClose} alt="delete"  />
                                                     </span>
                                                 </div>
                                             );

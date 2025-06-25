@@ -8,7 +8,7 @@ export const BookLevelOptionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setLevelOption} = BookLevelOptionSlice.actions;
 export default BookLevelOptionSlice.reducer;

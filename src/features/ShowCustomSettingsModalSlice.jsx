@@ -8,7 +8,7 @@ export const ShowCustomSettingsModalSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setShowCustomSettingsModal} = ShowCustomSettingsModalSlice.actions;
 export default ShowCustomSettingsModalSlice.reducer;

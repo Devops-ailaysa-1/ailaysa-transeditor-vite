@@ -70,7 +70,6 @@ import RemoveCircleRed from "../assets/images/new-ui-icons/remove_circle_red.svg
 import ErrorBlackWarn from "../assets/images/new-ui-icons/error_black_warn.svg";
 import WikipediaIcon from "../assets/images/new-ui-icons/wiki-new-img.svg";
 import WikitionaryIcon from "../assets/images/new-ui-icons/wikitionary-new-img.png";
-
 // import { getTransliterateSuggestions } from "react-transliterate";
 
 // const useStyles = makeStyles((theme) => ({
@@ -133,7 +132,6 @@ import WikitionaryIcon from "../assets/images/new-ui-icons/wikitionary-new-img.p
 //     }
 // }));
 
-
 const filterMenuProps = {
     getContentAnchorEl: null,
     anchorOrigin: {
@@ -171,14 +169,11 @@ const FederalWorkspace = (props) => {
         Config.userState = JSON.parse(Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME));
     } else Config.redirectIfNotLoggedIn(props);
     /* If coming with token from some other app like ailaysa.com. No longer used - start */
-
     const location = useLocation();
     const history = useNavigate();
     const params = useParams();
-
     // const classes = useStyles();
-    const userDetails = useSelector((state) => state.userDetails.value)
-
+    const userDetails = useSelector((state) => state.userDetails.value);
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const [didMount, setDidMount] = useState(false); // To verify the app loaded
@@ -195,11 +190,6 @@ const FederalWorkspace = (props) => {
     const [documentId, setDocumentId] = useState(0);
     const [translatedResponse, setTranslatedResponse] = useState([]);
     const [translatedFullResponse, setTranslatedFullResponse] = useState(null);
-    const translatedFullResponseref = useRef(null);
-    const translatedDataResponseref = useRef(null);
-    const tarLangRef = useRef(null);
-    const sourceLangRef = useRef(null);
-
     const [outputFileName, setOutputFileName] = useState("");
     const [totalPages, setTotalPages] = useState(0);
     const [segmentsPerPage, setSegmentsPerPage] = useState(20);
@@ -228,7 +218,6 @@ const FederalWorkspace = (props) => {
     const [showSpecialCharacters, setShowSpecialCharacters] = useState(false);
     const [showFormatSize, setShowFormatSize] = useState(false);
     const [showGlossary, setShowGlossary] = useState(false);
-
     const [findTerm, setFindTerm] = useState("");
     const [findSelectedSegmentId, setFindSelectedSegmentId] = useState(null);
     const [replaceTerm, setReplaceTerm] = useState("");
@@ -237,8 +226,7 @@ const FederalWorkspace = (props) => {
     const [wholeWordMatch, setWholeWordMatch] = useState(false);
     const [pushPinActive, setPushPinActive] = useState(false);
     const [segmentStatusName, setSegmentStatusName] = useState([]);
-    const [forceRender, setForceRender] = useState(false);
-
+    const [forceRender, setForceRender] = useState(false);  
     /*Find and replace - end*/
     const [segmentStatuses, setSegmentStatuses] = useState({
         0: t("un_opened"),
@@ -352,7 +340,6 @@ const FederalWorkspace = (props) => {
     const [paraphraseText, setParaphraseText] = useState("");
     const [paraphraseTrigger, setparaphraseTrigger] = useState(false);
     const [synonymText, setSynonymText] = useState("");
-
     const [grammarPopoverOpen, setGrammarPopoverOpen] = useState(false);
     const [paraphrasePopoverOpen, setParaphrasePopoverOpen] = useState(false);
     const [paraPhraseResList, setParaPhraseResList] = useState([]);
@@ -374,7 +361,6 @@ const FederalWorkspace = (props) => {
     const [stepOptions, setStepOptions] = useState([]);
     const [audioFileAlreadyExist, setAudioFileAlreadyExist] = useState(false);
     const [disbaleSplitIcon, setDisbaleSplitIcon] = useState(true);
-
     // Auido Download States
     const [showAudioOptionsModal, setShowAudioOptionsModal] = useState(false);
     const [localeOptions, setLocaleOptions] = useState([]);
@@ -383,7 +369,6 @@ const FederalWorkspace = (props) => {
     const [audioGender, setAudioGender] = useState(null);
     const [voiceType, setVoiceType] = useState(null);
     const [partialPretranslate, setPartialPretranslate] = useState(false);
-
     const [splitLoader, setSplitLoader] = useState(false);
     const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
     const [showMtDisabledModal, setShowMtDisabledModal] = useState(false);
@@ -391,68 +376,44 @@ const FederalWorkspace = (props) => {
     const [imeTextObjectTarget, setTextImeObjectTarget] = useState('');
     const [isConfirmBtnClicked, setIsConfirmBtnClicked] = useState(false);
     const [selectedPageSize, setSelectedPageSize] = useState(null);
-
     const [showInsufficientConfirmAllModal, setShowInsufficientConfirmAllModal] = useState(false);
     const [showAiLoader, setShowAiLoader] = useState(false);
     const [mtEnable, setMtEnable] = useState(false);
-
     const [isWorkspaceEditable, setIsWorkspaceEditable] = useState(true);
     const [showDocumentSubmitButton, setShowDocumentSubmitButton] = useState(false);
     const [enableDocumentSubmitBtn, setEnableDocumentSubmitBtn] = useState(false);
     const [showVendorComplaintReasonModal, setShowVendorComplaintReasonModal] = useState(false);
     const [vendorReturnRequestReasonText, setVendorReturnRequestReasonText] = useState('');
     const [showReturnRequestBtn, setShowReturnRequestBtn] = useState(false);
-
     const [showDontHaveEditingAccessAlertModal, setShowDontHaveEditingAccessAlertModal] = useState(false);
     const [showSubmitConfirmModal, setShowSubmitConfirmModal] = useState(false);
     const [segmentDifference, setSegmentDifference] = useState([]);
-
     const [scrollPosition, setScrollPosition] = useState(0);
     const [selectedParaphrase, setSelectedParaphrase] = useState(null);
     const [isParaphrasing, setIsParaphrasing] = useState(false);
-
     const [isListening, setIsListening] = useState(false);
     const [recognizedText, setRecognizedText] = useState('');
-
     const [commentsDataCopy, setCommentsDataCopy] = useState([]);
     const [isDocumentSubmitting, setIsDocumentSubmitting] = useState(false);
     const [isAssignEnable, setIsAssignEnable] = useState(true);
-
     const [transphrasePopoverOpen, setTransphrasePopoverOpen] = useState(false);
     const [transphrasePopoverTarget, setTransphrasePopoverTarget] = useState(null);    
-    const [spellCheckWordsOptions, setSpellCheckWordsOptions] = useState([]);
-    
+    const [spellCheckWordsOptions, setSpellCheckWordsOptions] = useState([]);    
     const [isSegmentConfirming, setIsSegmentConfirming] = useState(false);    
     const [isSegmentPageLoading, setIsSegmentPageLoading] = useState(false);
     const [spellCheckSuggestion, setSpellCheckSuggestion] = useState([]);
     const [isCopied, setIsCopied] = useState(false);
     const [storySelectionText, setStorySelectionText] = useState("");
-    // const [selectionObject, setselectionObject] = useState(null);
-
-    const axiosTransliterationAbortControllerRef = useRef(null);
-    const isDocumentOpenerVendorRef = useRef(false);
-    const documentProgressRef = useRef(null);
-    const isAssignEnableRef = useRef(true);
-    const documentTaskIdRef = useRef(null);
-    const isTaskReassignedRef = useRef(false);
-    const documentSubmitStepRef = useRef(null);
-    const isDocumentSubmittedRef = useRef(false);
-    const docCreditCheckAlertRef = useRef(false);
-    const translatedResponseRef = useRef([]);
-    const translatedResponseDisableEditRef = useRef([]);
-    const isEditorSubmittedDocument = useRef(false);
-    const isWorkspaceEditableRef = useRef(true);
-    const documentRestrictionReasonRef = useRef(null);
+    // const [selectionObject, setselectionObject] = useState(null);    
+    /* State constants - end */
 
     const pageSizeOption = [
         { value: 10, label: '10' },
         { value: 20, label: '20' },
         { value: 30, label: '30' },
         { value: 50, label: '50' },
-    ]
-
-    /* State constants - end */
-
+    ];
+    
     /*useRef() constants - start*/
     let scrl = useRef(null);
     const imeTextObjectTargetRef = useRef('');
@@ -520,6 +481,24 @@ const FederalWorkspace = (props) => {
     const errorNoteCount = useRef(0);
     const didMountRef = useRef(false);
     const prevPageInfo = useRef(null);
+    const axiosTransliterationAbortControllerRef = useRef(null);
+    const isDocumentOpenerVendorRef = useRef(false);
+    const documentProgressRef = useRef(null);
+    const isAssignEnableRef = useRef(true);
+    const documentTaskIdRef = useRef(null);
+    const isTaskReassignedRef = useRef(false);
+    const documentSubmitStepRef = useRef(null);
+    const isDocumentSubmittedRef = useRef(false);
+    const docCreditCheckAlertRef = useRef(false);
+    const translatedResponseRef = useRef([]);
+    const translatedResponseDisableEditRef = useRef([]);
+    const isEditorSubmittedDocument = useRef(false);
+    const isWorkspaceEditableRef = useRef(true);
+    const documentRestrictionReasonRef = useRef(null);
+    const translatedFullResponseref = useRef(null);
+    const translatedDataResponseref = useRef(null);
+    const tarLangRef = useRef(null);
+    const sourceLangRef = useRef(null);
     /*useRef() constants - end*/
 
     /* createRef() constants - start */
@@ -560,7 +539,6 @@ const FederalWorkspace = (props) => {
     const commentScrollingDivRef = useRef(null);    
     const istargetSegmentOnBlurTriggeredRef = useRef(false);
     const isMovedFromLastSegmentConfirmRef = useRef(false);
-
     // new spell-check modal implementation states
     const [rectElement, setRectElement] = useState(null);
     const clickedMarkEleRef = useRef(null);
@@ -667,7 +645,6 @@ const FederalWorkspace = (props) => {
             },
         }),
     };
-
     
     useEffect(() => {
         if (location.state?.partial) {
@@ -840,7 +817,6 @@ const FederalWorkspace = (props) => {
     //     }
     // }, [documentId, new URLSearchParams(history.location.search).get("page")]);
 
-
     useEffect(() => {
         if (didMount) {
             if (targetLanguageCode != "") {
@@ -927,7 +903,6 @@ const FederalWorkspace = (props) => {
                 try{
                     // show the button to editor if the user has permission to edit the document
                     setShowDocumentSubmitButton(true);
-
                 }catch (e) {
                     console.error(e);
                 }
@@ -1061,7 +1036,6 @@ const FederalWorkspace = (props) => {
         }
     }, [audioLocale, audioGender]);
 
-
     // ============= Voice option selection logic ends =============
     // useEffect(() => {
     //     findTriggerCount.current = 0; // Initial find and replace trigger
@@ -1088,7 +1062,7 @@ const FederalWorkspace = (props) => {
     //                             targetContentEditable.current[translatedResponse[0]?.segment_id]?.current?.focus();
     //                         }
     //                     }
-    //                     // didMountRef.current = false
+    //                     // didMountRef.current = false;
     //                 }
     //                 // if (targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current != null){
     //                 //     let a = document.getElementsByClassName('workspace-editor')[0];
@@ -1119,9 +1093,7 @@ const FederalWorkspace = (props) => {
     //             /*Trigger focus on the first segment - end*/
     //         }
     //     }
-
     // }, [translatedResponse, allSegmentStatusState]);
-
 
     useEffect(() => {
         if (didMount) {
@@ -1162,7 +1134,6 @@ const FederalWorkspace = (props) => {
                 setSynonymPopoverTarget("synonym-" + randomNum);
             }
         }
-
         if (enableIME && imeTextObject.length) {
             var selection = window.getSelection().getRangeAt(0);
             if (window.getSelection().toString().length && imeTextObjectTarget.length != "") {
@@ -1224,27 +1195,23 @@ const FederalWorkspace = (props) => {
         }
     }, [isWordsCorrected, isWordsCorrectedTrigger]);
 
-
     // close the popover and remove the mark tag when clicked outside of the popover
     // useEffect(() => {
     //     if (grammarCheckPopoverTarget !== "") {
     //         document.addEventListener('click', (e) => {
     //             let popoverDiv = document.getElementsByClassName('popover')[0];
     //             if (!e.target.classList.contains('popover') && popoverDiv) {
-    //                 // setParaphraseText("");
+    //                 setParaphraseText("");
     //                 setGrammarPopoverOpen(false);
     //                 setgrammarCheckPopoverTarget("");
     //                 setGrammarCheckResponse([]);
-    //                 // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
-    //                 //     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
-    //                 //     "mark"
-    //                 // );
-    //                 // updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", targetContentEditable.current[focusedDivIdRef.current].current.innerHTML);
-    //                 // updateSegmentStatus(focusedDivIdRef.current, 103);
-    //                 // changeEditedStatus(focusedDivIdRef.current, "unsaved");
+    //                 targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
+    //                 targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,"mark");
+    //                 updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", targetContentEditable.current[focusedDivIdRef.current].current.innerHTML);
+    //                 updateSegmentStatus(focusedDivIdRef.current, 103);
+    //                 changeEditedStatus(focusedDivIdRef.current, "unsaved");
     //             }
     //         })
-
     //     }
     // }, [grammarCheckPopoverTarget]);
 
@@ -1279,11 +1246,7 @@ const FederalWorkspace = (props) => {
                     setgrammarCheckPopoverTarget("grammar-check-" + randomNum);
                     // let grammarList = [];
                     // grammarList.push(
-                    //     <p
-                    //         key={value.corrected_sentence}
-                    //         className="corrected-word"
-                    //         onClick={(event) => replaceWithCorrectGrammarSentence(event, value.corrected_sentence)}
-                    //         >
+                    //     <p key={value.corrected_sentence}  className="corrected-word"  onClick={(event) => replaceWithCorrectGrammarSentence(event, value.corrected_sentence)} >
                     //         {value.corrected_sentence}
                     //     </p>
                     // );
@@ -1298,11 +1261,7 @@ const FederalWorkspace = (props) => {
             if (index === 0) {
                 let grammarList = [];
                 grammarList.push(
-                    <p
-                        key={value.corrected_sentence}
-                        className="corrected-word"
-                        onClick={(event, grammarCheckPopoverTarget) => replaceWithCorrectGrammarSentence(event, value.corrected_sentence, grammarCheckPopoverTarget)}
-                    >
+                    <p key={value.corrected_sentence}  className="corrected-word" onClick={(event, grammarCheckPopoverTarget) => replaceWithCorrectGrammarSentence(event, value.corrected_sentence, grammarCheckPopoverTarget)}>
                         {value.corrected_sentence}
                     </p>
                 );
@@ -1355,7 +1314,6 @@ const FederalWorkspace = (props) => {
         }
     }, [totalPages, currentPage]);
 
-
     useEffect(() => {
         let pageParam = URL_SEARCH_PARAMS.get("page");
         let statusParam = URL_SEARCH_PARAMS.get("status");
@@ -1390,7 +1348,6 @@ const FederalWorkspace = (props) => {
         }
     }, [URL_SEARCH_PARAMS.get("status"), documentId, segmentStatusOptionsRef.current]);
 
-
     useEffect(() => {
         if (didMount && translationMatches?.length !== 0) {
             tmTabButton.current?.click();
@@ -1407,7 +1364,6 @@ const FederalWorkspace = (props) => {
                 });
         }
     }, [specialCharSectionRef]);
-
 
     /* Make the find and replace icon active when select that */
     useEffect(() => {
@@ -1433,8 +1389,8 @@ const FederalWorkspace = (props) => {
         }
     }, [showFormatSize]);
 
-      /* Make the size selection icon active when select that */
-      useEffect(() => {
+    /* Make the size selection icon active when select that */
+    useEffect(() => {
         if (didMount) {
             showGlossaryRef.current.classList.remove("toolbar-list-icons-active");
             if (showGlossary) showGlossaryRef.current.classList.add("toolbar-list-icons-active");
@@ -1490,7 +1446,6 @@ const FederalWorkspace = (props) => {
             temp_target: "",
             text_unit: null,
         };
-
         if (!segmentation) {
             for (let i = 0; i < translatedResponse?.length; i++) {
                 if (!cache[translatedResponse[i]?.text_unit]) {
@@ -1620,7 +1575,6 @@ const FederalWorkspace = (props) => {
             }, 100);
         }
     }, [qaData]);
-
 
     useEffect(() => {
         if (selectedPageSize) {
@@ -1803,13 +1757,13 @@ const FederalWorkspace = (props) => {
     if (showFindReplace && advancedOptionVisibility) workspaceAreaClassName = "workspace-editor-show-tm-comments-add-top";
     if (!showFindReplace && !advancedOptionVisibility) workspaceAreaClassName = "";
     /* Class name for top div based on advancedOption and find and replace visibility - start*/
-    /* let toolbarClassName = ''
+    /* let toolbarClassName = '';
     if (showTmSection)
-        toolbarClassName = 'toolbar-parts-padd-top-remove'
+        toolbarClassName = 'toolbar-parts-padd-top-remove';
     if (!showTmSection)
        toolbarClassName = 'toolbar-parts-padd-top-add toolbar-parts-padd-new-height'
     if (showToolbarSection && showTmSection)
-        toolbarClassName = 'toolbar-parts-padd-both-show' */
+        toolbarClassName = 'toolbar-parts-padd-both-show'; */
       
     // Handle keyboard key press on target segment
     const handleKeyDown = (e) => {       
@@ -1976,8 +1930,8 @@ const FederalWorkspace = (props) => {
             }
         }
     };
-
     // ==========================================================================================
+
     const getCaretIndexWithinContenteditable = (element) => {
         const selection = window.getSelection();
         if (selection.rangeCount === 0) return 0;
@@ -2012,7 +1966,6 @@ const FederalWorkspace = (props) => {
         const nodes = element.childNodes;
         let currentIndex = 0;
         let foundNode = null;
-
         for (const node of nodes) {
             const nodeLength = node.textContent.length;
             if (currentIndex + nodeLength >= caretIndex) {
@@ -2131,8 +2084,7 @@ const FederalWorkspace = (props) => {
             "segment_count": 1,
             'segment_id': 10,
             type: "Caption (media)"
-        }]
-
+        }];
         return segmentData;
     } 
 
@@ -2164,8 +2116,7 @@ const FederalWorkspace = (props) => {
                 setIsWorkspaceEditable(responseTemp.edit_allowed);
                 isWorkspaceEditableRef.current = responseTemp.edit_allowed;            
                 if (responseTemp.edit_allowed) { isEditorSubmittedDocument.current = false }
-                else { isEditorSubmittedDocument.current = true }
-
+                else { isEditorSubmittedDocument.current = true };
                 documentTaskIdRef.current = responseTemp.task;
                 setAudioFileAlreadyExist(responseTemp.converted_audio_file_exists);
                 setTotalCharCount(responseTemp.total_char_count);
@@ -2435,9 +2386,8 @@ const FederalWorkspace = (props) => {
         });
     }
 
-    /*
-        - Remove the suggestion div -start
-    */
+    // Remove the suggestion div -start
+    
     const removeIMESuggestion = () => {
         let inputSuggestionElements = document.querySelectorAll("div.ks-input-suggestions:not(.hidden)");
         if (inputSuggestionElements[0] != null) inputSuggestionElements[0].classList.add("hidden");
@@ -2565,9 +2515,6 @@ const FederalWorkspace = (props) => {
         replaceNodeWithReactComponent(markElement, mark);
         return true;
     };
-
-
-
 
     /* Enable the spellcheck after checking the availability of the target language */
     const toggleSpellcheck = (e = null) => {
@@ -2714,10 +2661,7 @@ const FederalWorkspace = (props) => {
         setSynonymPopoverOpen(false);
         setSynonymPopoverTarget("");
         setSynonymsResList([]);
-        // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
-        //     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
-        //     "mark"
-        // );
+        // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag( targetContentEditable.current[focusedDivIdRef.current].current.innerHTML, "mark");
         const selection = window.getSelection();
         const range = document.createRange();
         selection.removeAllRanges();
@@ -2737,10 +2681,7 @@ const FederalWorkspace = (props) => {
             let markTag = document.getElementById(synonymPopoverTarget);
             if (markTag !== undefined && synonymPopoverOpen && synonymsResList.length) {
                 resetSynonymStates();
-                targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
-                    targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
-                    "mark"
-                );
+                targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML, "mark" );
             }
         }
     }
@@ -2787,7 +2728,6 @@ const FederalWorkspace = (props) => {
         setParaPhraseResList([]);
         // itemToParaphraseRef.current = null;
     }
-
 
     const getParaphrases = async (option, item) => {
         setIsParaphrasing(true);
@@ -2879,9 +2819,7 @@ const FederalWorkspace = (props) => {
     // Get Synonym for selected word
     const fetchSynonym = async () => {
         // get token from cache
-        let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
-        );
+        let userCacheData = JSON.parse( typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null);
         let token = userCacheData != null ? userCacheData?.token : "";
         var formdata = new FormData();
         let myHeaders = new Headers();
@@ -2905,11 +2843,7 @@ const FederalWorkspace = (props) => {
             if (typeof response.context == "object") {
                 response.context?.map((value) => {
                     synonymList.push(
-                        <p
-                            key={value}
-                            className="corrected-word"
-                            onClick={(event) => repalceWithNewSynonym(event, value)}
-                        >
+                        <p key={value} className="corrected-word"  onClick={(event) => repalceWithNewSynonym(event, value)}>
                             {value}
                         </p>
                     );
@@ -2918,10 +2852,7 @@ const FederalWorkspace = (props) => {
                 setParaphrasePopoverOpen(true);
             } else {
                 Config.toast(t("no_synonym_found"), 'warning')
-                targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
-                    targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
-                    "mark"
-                );
+                targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML, "mark" );
                 setSynonymPopoverOpen(false);
                 setSynonymPopoverTarget("");
                 setSynonymsResList([]);
@@ -3038,8 +2969,8 @@ const FederalWorkspace = (props) => {
             let textWithoutTags = removeAllTags(replaceTagsWithText(translatedText !== undefined ? translatedText : '')  ? replaceTagsWithText(translatedText !== undefined ? translatedText : '') : '')
             if (textWithoutTags?.trim()?.length === 0) {
                 if (!isTemp)
-                    // Don't check empty for temp
-                    Config.toast(t("add_trans_working"), "warning");
+                // Don't check empty for temp
+                Config.toast(t("add_trans_working"), "warning");
                 return;
             }
             if (!translatedText) return;
@@ -3118,9 +3049,9 @@ const FederalWorkspace = (props) => {
                     if (response.data.id) {
                         if (targetContentEditable?.current[id]?.current != null)
                             targetContentEditable.current[id].current.setAttribute("data-translated-text", response.data.target == '' ? "" : response.data.target);
-                        updateTranslatedResponseSegment(id, "temp_target", response.data.temp_target == null ? "" : response.data.temp_target);
-                        updateTranslatedResponseSegment(id, "target", response.data.target);
-                        updateTranslatedResponseSegment(id, "status", changeStatusTo);
+                            updateTranslatedResponseSegment(id, "temp_target", response.data.temp_target == null ? "" : response.data.temp_target);
+                            updateTranslatedResponseSegment(id, "target", response.data.target);
+                            updateTranslatedResponseSegment(id, "status", changeStatusTo);
                         if (targetContentEditable?.current[id]?.current != null) {
                             // if the element is no there. Can't update.
                             if (isTemp) changeEditedStatus(id, "unsaved");
@@ -3135,12 +3066,10 @@ const FederalWorkspace = (props) => {
                             // confirm current segment then move to next unconfimed segment
                             let nextSegmentUnsavedId = getUnsavedSegmentData(focusedDivIdRef.current)?.segment_id;
                             if (targetContentEditable.current[nextSegmentUnsavedId]?.current != null) targetContentEditable.current[nextSegmentUnsavedId].current.focus();
-
                             // if no unsaved segment is found then move to next segment
                             if (nextSegmentUnsavedId === undefined) {
                                 // confirm current segment then move to next immediate segment
                                 let nextSegmentId = getNextSegmentData(focusedDivIdRef.current)?.segment_id;
-
                                 // if no unopened segment is found or confirmed the last segment then move to next page
                                 if(translatedResponse?.filter(each => each.status === undefined || each.status === null)?.length === 0 || translatedResponse?.slice(-1)[0]?.segment_id == id) {
                                     // move to next page when last segment is confirmed
@@ -3151,8 +3080,7 @@ const FederalWorkspace = (props) => {
                                         if(totalPages > pageParam){
                                             URL_SEARCH_PARAMS.set("page", parseInt(pageParam) + 1);
                                             history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-                                            isMovedFromLastSegmentConfirmRef.current = true
-    
+                                            isMovedFromLastSegmentConfirmRef.current = true;
                                             let workspaceContainer = document.getElementsByClassName('workspace-editor')[0];
                                             workspaceContainer.scroll({ top: 0, behavior: 'smooth' });
                                         }
@@ -3320,7 +3248,6 @@ const FederalWorkspace = (props) => {
         }, 100);
     };
 
-
     /* The :copyText will be copied to the clipboard */
     const copyText = (copyText = null) => {
         if (copyText != null) {
@@ -3410,7 +3337,6 @@ const FederalWorkspace = (props) => {
                 sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit');
                 setDisbaleSplitIcon(false);
             }
-
         }
     }
 
@@ -3432,10 +3358,7 @@ const FederalWorkspace = (props) => {
             setSynonymPopoverOpen(false);
             setSynonymPopoverTarget("");
             setSynonymText("");
-            targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
-                targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
-                "mark"
-            );
+            targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML, "mark");
         }
         setEnableSynonym(!enableSynonym);
     }
@@ -3649,7 +3572,6 @@ const FederalWorkspace = (props) => {
         //     });
         // }
     };
-
     
     /* Update the segment status in the front-end itself  */
     const updateSegmentStatus = (segmentId = null, status = null) => {
@@ -3699,7 +3621,6 @@ const FederalWorkspace = (props) => {
             dictionaryTabButton.current.click();
         }
     }, [wikipediaData, wiktionaryData, posData]); */
-
 
     /* Show the dictionary tab on the footer toolbar */
     const showDictionaryTab = () => {
@@ -3780,7 +3701,6 @@ const FederalWorkspace = (props) => {
         }
     };
 
-
     /* Insert the special characters on the current focused contenteditable */
     const insertSpecialCharacter = (e) => {
         let specialCharacter = e.target.innerHTML;
@@ -3789,9 +3709,7 @@ const FederalWorkspace = (props) => {
             document.execCommand("insertText", false /*no UI*/, specialCharacter);
         }
     };
-
-    
-
+  
     /* For select2 changing the format with value and label */
     const makeSegmentStatusOptions = () => {
         let segmentStatusOptions = [];
@@ -3930,7 +3848,6 @@ const FederalWorkspace = (props) => {
         setFocusedDivId(segmentId);
         ctrlAClicked.current = false;
         focusedDivIdRef.current = segmentId;
-
         let newArr = translatedResponse?.map(obj => {
             if (obj.segment_id == segmentId) {
                 return {
@@ -4162,11 +4079,9 @@ const FederalWorkspace = (props) => {
         // top.innerHTML = 'Top Lorem Ipsum'
         top.addEventListener("mousedown", resizeYNegative());
         element.appendChild(top);
-
         function get_int_style(key) {
             return parseInt(window.getComputedStyle(element).getPropertyValue(key));
         }
-
         function resizeYNegative() {
             let offsetY;
             let startY;
@@ -4184,7 +4099,6 @@ const FederalWorkspace = (props) => {
                 document.addEventListener("mouseup", closeDragElement, false);
                 document.addEventListener("mousemove", elementDrag, false);
             }
-
         function elementDrag(e) {
             const { clientY } = e;
             let y = clientY - offsetY;
@@ -4202,7 +4116,6 @@ const FederalWorkspace = (props) => {
                   setAdvancedOptionVisibility(false);
                 }
             }
-
         function closeDragElement() {
             document.removeEventListener("mouseup", closeDragElement);
             document.removeEventListener("mousemove", elementDrag);
@@ -4319,8 +4232,8 @@ const FederalWorkspace = (props) => {
             });
         }
     };
-
     //===================================================================================================================
+
     const shouldShowInsufficientModal = (bool = true) => {
         setShowCreditAlert(false);
     };
@@ -4520,7 +4433,7 @@ const FederalWorkspace = (props) => {
             x = 0;
         else if (x + document.querySelector('#pop')?.clientWidth > document.querySelector(`.workspace-editor`)?.clientWidth)
             x = document.querySelector(`.workspace-editor`)?.clientWidth - document.querySelector('#pop')?.clientWidth;
-        let y, dir;
+            let y, dir;
         if (rect.top > window.innerHeight - rect.bottom) {
             y = rect.bottom - document.querySelector(`.workspace-editor`)?.getBoundingClientRect().top + document.querySelector(`.workspace-editor`).scrollTop + 8;
             dir = 'down';
@@ -4542,14 +4455,10 @@ const FederalWorkspace = (props) => {
             try{
                 let options_list = suggestions?.map((value, ind) => {
                     return (
-                        <p
-                            key={value}
-                            className={"corrected-word "}
-                            onClick={(e) => repalceWithSelectedSpellCheckSuggestedWord(value, segment_id, element)}
-                        >
+                        <p key={value} className={"corrected-word "}  onClick={(e) => repalceWithSelectedSpellCheckSuggestedWord(value, segment_id, element)}>
                             {value}
                         </p>
-                    )
+                    );
                 })
                 setSpellCheckSuggestion(options_list);
             }catch(e){
@@ -4582,7 +4491,6 @@ const FederalWorkspace = (props) => {
             showDictionaryRef.current?.classList.remove("toolbar-list-icons-active");
         }
     }
-
     // ================================================================================================================
     // Transliteration
      const supportedImeLanguage = [
@@ -4688,14 +4596,12 @@ const FederalWorkspace = (props) => {
                 document.execCommand("insertText", false, text + (space ? " " : ""));
             }else{
                 document.execCommand("insertText", false, text + expression + (space ? " " : ""));
-            }          
-
+            } 
         } else {
             if(expression == null){
                 document.execCommand("insertText", false, text + (space ? " " : ""));
             }else{
                 document.execCommand("insertText", false, text + expression + (space ? " " : ""));
-
             }
         }
         document.querySelector('.input-box-transliterate').innerHTML = '';
@@ -4703,9 +4609,7 @@ const FederalWorkspace = (props) => {
         setOptions([]);
         setShowImeSugessiton(false);
         // sel.removeAllRanges();
-
     }
-
 
     function isPrecedingCharacterSpace() {
         var sel = window.getSelection();
@@ -4721,7 +4625,6 @@ const FederalWorkspace = (props) => {
                 return /\s$/.test(precedingText);
             }
         }
-
         return false; // Return false if no space or no selection
     }
 
@@ -4733,8 +4636,6 @@ const FederalWorkspace = (props) => {
         if(isStory){
             if(editorRef.current?.summernote("code") === translatedFullResponseref.current?.target_json?.story) return;
         }
-
-
         if(translatedFullResponseref.current != null){
             // let translatedJson = {
             //     "url":translatedFullResponseref.current?.target_json?.url,
@@ -4767,7 +4668,7 @@ const FederalWorkspace = (props) => {
             //     "is_live_article": translatedFullResponseref.current.target_json.is_live_article,
             //     "article_template": translatedFullResponseref.current.target_json.article_template,
             //     "show_authors_block": translatedFullResponseref.current.target_json.show_authors_block,
-            // }
+            // 
 
             let translatedJson = {
                 ...translatedFullResponseref.current?.target_json,
@@ -4786,7 +4687,7 @@ const FederalWorkspace = (props) => {
                         "caption": document.querySelector('#workspace-textarea-10')?.innerText
                     }
                 ]
-            }
+            };
             let formData = new FormData();
             formData.append("target_json", JSON.stringify(translatedJson));
 
@@ -4805,8 +4706,7 @@ const FederalWorkspace = (props) => {
                     }
                 }
             });
-        }
-        
+        }        
     }
 
    let textRef = useRef('');
@@ -5564,38 +5464,24 @@ const FederalWorkspace = (props) => {
                                 <NavigateBeforeSharpIcon className="navigate-icon" />
                             </div>
                             <div ref={scrl} className="workspace-tool-bar-links-wrap">
-                                <ul
-                                    className="nav nav-pills"
-                                    id="pills-tab"
-                                    role="tablist"
-                                >
+                                <ul  className="nav nav-pills"  id="pills-tab"  role="tablist" >
                                     <li className="nav-item" role="presentation">
-                                        <a
-                                            ref={tmTabButton}
-                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
-                                            className="nav-link"
-                                            id="pills-tm-tb-tab"
+                                        <a ref={tmTabButton}  onClick={(e) => e.isTrusted && handleToggleVisibility(true)}  className="nav-link"  id="pills-tm-tb-tab"
                                             data-toggle="pill"
                                             href="#pills-tm-tb"
                                             role="tab"
                                             aria-controls="pills-tm-tb"
-                                            aria-selected="true"
-                                        >
+                                            aria-selected="true" >
                                             {t("tm_and_glossary")}
                                         </a>
                                     </li>
                                     <li className="nav-item" role="presentation">
-                                        <a
-                                            ref={dictionaryTabButton}
-                                            onClick={(e) => e.isTrusted && handleToggleVisibility(true)}
-                                            className="nav-link"
-                                            id="pills-dictionary-tab"
+                                        <a ref={dictionaryTabButton}  onClick={(e) => e.isTrusted && handleToggleVisibility(true)}  className="nav-link"  id="pills-dictionary-tab"
                                             data-toggle="pill"
                                             href="#pills-dictionary"
                                             role="tab"
                                             aria-controls="pills-dictionary"
-                                            aria-selected="false"
-                                        >
+                                            aria-selected="false" >
                                             {t("dictionary")}
                                         </a>
                                     </li>
@@ -5606,8 +5492,7 @@ const FederalWorkspace = (props) => {
                             </div>
                         </div>
                         <div className="workspace-tools-bar-right-sec">
-                            {
-                                advancedOptionVisibility &&
+                            { advancedOptionVisibility &&
                                 <div className="workspace-page-pinned">
                                     <span onClick={() => handlePushPinActive(!pushPinActive)} className={"workspace-pin " + (pushPinActive ? "active" : "")}>
                                         <img src={PushPin} alt="push_pin" />
@@ -5677,21 +5562,12 @@ const FederalWorkspace = (props) => {
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="translation-list-value-copy-btn">
-                                                                                        <button
-                                                                                            type="button"
-                                                                                            className="workspace-feature-btn-new"
-                                                                                            data-key={key}
+                                                                                        <button  type="button"  className="workspace-feature-btn-new" data-key={key}
                                                                                             data-match-percentage={value.percentage}
                                                                                             onClick={(e) => getTranslationMatch(e)}
                                                                                             data-toggle="tooltip"
-                                                                                            title="Use"
-                                                                                        >
-                                                                                            <img
-                                                                                                data-key={key}
-                                                                                                src={NorCopyContent}
-                                                                                                className="content-copy"
-                                                                                                alt="copy text"
-                                                                                            />
+                                                                                            title="Use" >
+                                                                                            <img  data-key={key} src={NorCopyContent} className="content-copy" alt="copy text" />
                                                                                         </button>
                                                                                     </div>
                                                                                 </div>
@@ -5755,17 +5631,9 @@ const FederalWorkspace = (props) => {
                                                                                                     </div>
                                                                                                     <div className="translation-list-value-copy-btn">
                                                                                                         <Tooltip title={isCopied ? t("txt_copied") : t("copy")} placement="top" > 
-                                                                                                            <button
-                                                                                                                type="button"
-                                                                                                                className="workspace-feature-btn-new"
-                                                                                                                onMouseUp={(e) => copyText(value.target)}
-                                                                                                                onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 500)}
-                                                                                                            >
-                                                                                                                <img
-                                                                                                                    src={NorCopyContent}
-                                                                                                                    className="content-copy"
-                                                                                                                    alt="copy text"
-                                                                                                                />
+                                                                                                            <button type="button"  className="workspace-feature-btn-new"  onMouseUp={(e) => copyText(value.target)}
+                                                                                                                onMouseLeave={() => setTimeout(() => { setIsCopied(false) }, 500)}  >
+                                                                                                                <img  src={NorCopyContent} className="content-copy" alt="copy text"  />
                                                                                                             </button>
                                                                                                         </Tooltip>
                                                                                                     </div>
@@ -5799,16 +5667,8 @@ const FederalWorkspace = (props) => {
                                                                                     <p className="settings-file-names-new target-tb-lang-part">{value.target}</p>
                                                                                 </div>
                                                                                 <div className="translation-list-value-copy-btn">
-                                                                                    <button
-                                                                                        type="button"
-                                                                                        className="workspace-feature-btn-new"
-                                                                                        onClick={(e) => copyText(value.target)}
-                                                                                    >
-                                                                                        <img
-                                                                                            src={NorCopyContent}
-                                                                                            className="content-copy"
-                                                                                            alt="copy text"
-                                                                                        />
+                                                                                    <button  type="button"  className="workspace-feature-btn-new" onClick={(e) => copyText(value.target)}  >
+                                                                                        <img src={NorCopyContent}  className="content-copy"  alt="copy text"  />
                                                                                     </button>
                                                                                 </div>
                                                                             </div>
@@ -5850,12 +5710,11 @@ const FederalWorkspace = (props) => {
                                                         </a>
                                                     )}
                                                 </li>
-                                                {
-                                                    (wikipediaData.source != "" && wikipediaData.target != "") &&
+                                                { (wikipediaData.source != "" && wikipediaData.target != "") &&
                                                     <li><img src={ArrowRightAltColor} /></li>
                                                 }
                                                 <li>
-                                                    {wikipediaData.target != "" && (
+                                                    { wikipediaData.target != "" && (
                                                         <a href={wikipediaData.targetUrl} target="_blank">
                                                             {wikipediaData.target}
                                                             <span>
@@ -5892,11 +5751,10 @@ const FederalWorkspace = (props) => {
                                                         ""
                                                     )}
                                                 </li>
-                                                {
-                                                    (wiktionaryData.source != "" && wiktionaryData.targets.length !== 0) &&
+                                                { (wiktionaryData.source != "" && wiktionaryData.targets.length !== 0) &&
                                                     <li><img src={ArrowRightAltColor} /></li>
                                                 }
-                                                {wiktionaryData.targets.map((value, key) => (
+                                                { wiktionaryData.targets.map((value, key) => (
                                                     <React.Fragment key={value}>
                                                         <li key={key}>
                                                             <a href={wiktionaryData.targetUrls[key]} target="_blank">
@@ -5929,7 +5787,6 @@ const FederalWorkspace = (props) => {
                     </div>
                 </div>
             </section>
-
             {popoverTarget != null && (
                 <div>
                     <Popover
@@ -5941,8 +5798,7 @@ const FederalWorkspace = (props) => {
                         <PopoverHeader>{spellCheckPopoverContent}</PopoverHeader>
                     </Popover>
                 </div>
-            )}
-           
+            )}           
             {/* Synonym popover */}
             {
                 (synonymPopoverTarget?.length && synonymPopoverOpen) ? (
@@ -5960,7 +5816,6 @@ const FederalWorkspace = (props) => {
                     </div>
                 ) : null
             }
-
             {transphrasePopoverTarget !== null && (
                 <MUIPopover
                     id={transphraseId}
@@ -5974,8 +5829,7 @@ const FederalWorkspace = (props) => {
                     transformOrigin={{
                         vertical: 'top',
                         horizontal: 'left',
-                    }}
-                >
+                    }} >
                     <div className="transphraseing-popover-box">
                         <div className="header-wrapper">
                             <span className="header-text d-flex">
@@ -5987,13 +5841,9 @@ const FederalWorkspace = (props) => {
                                     </span>
                                 )}
                             </span>
-                            <span
-                                onClick={handleTransphrasePopoverClose}
-                                className="transphrasing-popover-close-icon"
-                            >
+                            <span onClick={handleTransphrasePopoverClose} className="transphrasing-popover-close-icon"  >
                                 <img src={BlackCloseIcon} alt="close_black" />
                             </span>
-
                         </div>
                         {(paraphraseTrigger && paraPhraseResList?.length !== 0) ? (
                             <div className="paraphrase-result-div">
@@ -6021,21 +5871,18 @@ const FederalWorkspace = (props) => {
                 </MUIPopover>
 
             )}
-
             {showCreditAlert && (
                 <div className="credit-alert-box">
                     <div className="credit-alert-bg"></div>
                     <div className={(showCreditAlertRedirection || true) ? "credit-alert-content-container-with-redirection" : "credit-alert-content-container"}>
                         <div className="credits-head">
-                            <span
+                            <span className="credits-close-btn"
                                 onClick={() => {
                                     setCreditAlertTxt("");
                                     setShowCreditAlert(false)
                                     shouldShowInsufficientModal(false);
                                     setPartialPretranslate(false)
-                                }}
-                                className="credits-close-btn"
-                            >
+                                }} >
                                 <img src={BlackCloseIcon} alt="close_black" />
                             </span>
                         </div>
@@ -6073,18 +5920,13 @@ const FederalWorkspace = (props) => {
                                 </React.Fragment>
                             ) : (
                                 <React.Fragment>
-                                    <img
-                                        className="credits-alert-warn-icon"
-                                        src={ErrorBlackWarn}
-                                        alt="error_yellow_warn"
-                                    />
+                                    <img className="credits-alert-warn-icon"  src={ErrorBlackWarn}  alt="error_yellow_warn"  />
                                     {
                                         partialPretranslate ?
                                             <p className="credits-text-cont-txt text-center">{t("pre-translation_modal_text")}</p>
                                             :
                                             <p className="credits-text-cont-txt text-center" dangerouslySetInnerHTML={{ __html: creditAlertTxt }}></p>
                                     }
-
                                     {(!Config.userState?.is_internal_member && enableFileDownload && isAssignEnable) && (
                                         <div className="credits-button-align">
                                             <ButtonBase>
@@ -6104,8 +5946,7 @@ const FederalWorkspace = (props) => {
                         </div>
                     </div>
                 </div>
-            )}
-            
+            )}            
             <SimpleRodals
                 showMtDisabledModal={showMtDisabledModal}
                 setShowMtDisabledModal={setShowMtDisabledModal}

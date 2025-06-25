@@ -15,7 +15,7 @@ export const AdvanceTranslateGlossaryModalSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setAdvanceTranslateGlossaryModal} = AdvanceTranslateGlossaryModalSlice.actions;
 export default AdvanceTranslateGlossaryModalSlice.reducer;

@@ -8,7 +8,7 @@ export const CurrencyOptionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setCurrencyOptions} = CurrencyOptionSlice.actions;
 export default CurrencyOptionSlice.reducer;

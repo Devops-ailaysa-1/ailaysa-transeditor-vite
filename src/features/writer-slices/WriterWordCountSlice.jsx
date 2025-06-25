@@ -8,7 +8,7 @@ export const WriterWordCountSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setWriterWordCount} = WriterWordCountSlice.actions;
 export default WriterWordCountSlice.reducer;

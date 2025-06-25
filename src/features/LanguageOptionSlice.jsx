@@ -8,7 +8,7 @@ export const LanguageOptionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setLanguageOptionsList} = LanguageOptionSlice.actions;
 export default LanguageOptionSlice.reducer;
