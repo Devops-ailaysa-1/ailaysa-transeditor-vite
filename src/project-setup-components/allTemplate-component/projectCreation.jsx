@@ -289,6 +289,7 @@ function ProjectCreation(props) {
             setCheckchangenav(false);
         }
     }, [files])
+    console.log(files,"checkfiles")
 
     useEffect(() => {
         if (
@@ -1965,6 +1966,7 @@ function ProjectCreation(props) {
                 }
             },
             error: (err) => {
+                Config.toast("","",true)
                 if(err?.response?.status === 500){
                     let newArr = projectTaskListRef.current?.map(obj => {
                         if(fileTranslatingTaskListRef.current?.find(each => each === obj.id)){
@@ -1976,6 +1978,20 @@ function ProjectCreation(props) {
                         }
                         return obj;
                     })
+                    projectTaskListRef.current = newArr;
+                    setProjectTaskList([...newArr]);
+                }
+                if(err?.response?.data?.msg.includes("Something went wrong in re-initiation, contact admin")){
+ Config.toast("Contact support",'support',false,"Translation Failed","We couldn’t process that file right now.");
+  let newArr = projectTaskListRef.current?.map(obj => {
+                        if(fileTranslatingTaskListRef.current?.find(each => each === obj.id)){
+                            return {
+                                ...obj,
+                                isProcessing: false,
+                            }
+                        }
+                        return obj;
+                    }) 
                     projectTaskListRef.current = newArr;
                     setProjectTaskList([...newArr]);
                 }
