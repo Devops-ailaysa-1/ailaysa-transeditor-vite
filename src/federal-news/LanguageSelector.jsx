@@ -80,7 +80,6 @@ const LanguageSelector = (props) => {
         }
     }, [sourceLanguage]);
 
-
     useEffect(() => {
         let langParam = URL_SEARCH_PARAMS.get('lang') ? URL_SEARCH_PARAMS.get('lang') : "English";
         let langParamId = targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.id;       
@@ -119,8 +118,7 @@ const LanguageSelector = (props) => {
         // }
         setshowTarLangModal(false); 
         setSearchInput(''); 
-        setOnFocusWrap(false);
-        
+        setOnFocusWrap(false);        
     }
 
     /* Selected source language should not display on the target language options */
@@ -255,41 +253,25 @@ const LanguageSelector = (props) => {
     return (
         <>
             <AnimatePresence>
-                <motion.div 
-                    key="language"
-                    animate={{ opacity: 1, y: 0 }}
-                    initial={{ opacity: 0, y: 50 }}
-                    exit={{ opacity: 0, y: -50, transition: { duration: 0.25 } }}
-                    transition={{ duration: 0.25 }}
-                    className="language-selector-wrapper"
-                >
+                <motion.div   key="language" animate={{ opacity: 1, y: 0 }} initial={{ opacity: 0, y: 50 }}  exit={{ opacity: 0, y: -50, transition: { duration: 0.25 } }}
+                    transition={{ duration: 0.25 }} className="language-selector-wrapper" >
                     <div className="selected-value-wrapper">
                         <p>(<span>{newsId?.length}</span>) selected</p>
                     </div>  
                     <Tooltip title={`${t("source_language")}: ${sourceLabel}`} placement="top" arrow>
-                        <div 
-                            ref={sourceLangSelectBoxRef} 
-                            className={sourceLanguageDisable ? 'src-language-selector disable' : 'src-language-selector'}
-                            onClick={() => { sourceLanguageDisable ? setshowSrcLangModal(false) : setshowSrcLangModal(true) }}
-                        >
+                        <div   ref={sourceLangSelectBoxRef}  className={sourceLanguageDisable ? 'src-language-selector disable' : 'src-language-selector'}
+                            onClick={() => { sourceLanguageDisable ? setshowSrcLangModal(false) : setshowSrcLangModal(true) }}  >
                             {(sourceLabel === "") ? (
                                 <span className="placeholder">{t("source_language")}</span>
                             ) : (
                                 <span className="value">{sourceLabel}</span>
                             )}
-                            <i
-                                style={{ color: "#ffffff" }}
-                                className="fas fa-caret-down"
-                            />
+                            <i style={{ color: "#ffffff" }}  className="fas fa-caret-down" />
                         </div>   
                     </Tooltip>
                     <Tooltip title={`${t("target_language")}: ${targetLanguage?.map(each => each?.language)?.join(', ')}`} placement="top" arrow>
-                        <div 
-                            style={{ opacity: (sourceLanguage === '' ? 0.5 : 1) }}
-                            className='target-language-selector'
-                            ref={targetLangSelectBoxRef}
-                            onClick={() => { sourceLanguage !== '' ? setshowTarLangModal(true) : focusSourceLangDiv() }}
-                        >
+                        <div  style={{ opacity: (sourceLanguage === '' ? 0.5 : 1) }} className='target-language-selector'  ref={targetLangSelectBoxRef}
+                            onClick={() => { sourceLanguage !== '' ? setshowTarLangModal(true) : focusSourceLangDiv() }}  >
                             {targetLanguage == "" ? (
                                 <span className="placeholder">
                                     {t("target_language")}
@@ -302,18 +284,12 @@ const LanguageSelector = (props) => {
                                         " " + t("selected")}
                                 </span>
                             )}
-                            <i
-                                style={{ color: "#ffffff" }}
-                                className="fas fa-caret-down"
-                            />
+                            <i style={{ color: "#ffffff" }} className="fas fa-caret-down" />
                         </div>  
                     </Tooltip>
                     <div className='add-to-translate-wrapper'>
-                        <ButtonBase 
-                            className='add-to-translate-btn'
-                            disabled={isStoryIdTranslating !== null}
-                            onClick={(e) => {!isStoryTranslating && handleClaimStoriesBtnClick(e, null, true)}}
-                        >
+                        <ButtonBase   className='add-to-translate-btn'  disabled={isStoryIdTranslating !== null}
+                            onClick={(e) => {!isStoryTranslating && handleClaimStoriesBtnClick(e, null, true)}}  >
                             <span>
                                 {isStoryTranslating && <BlueButtonLoader />}
                                 Claim
@@ -323,20 +299,13 @@ const LanguageSelector = (props) => {
                 </motion.div>
             </AnimatePresence>
             {showSrcLangModal && (
-                <Rodal
-                    visible={showSrcLangModal}
-                    {...modaloption}
-                    showCloseButton={false}
-                    className="ai-lang-select-modal"
-                >
+                <Rodal  visible={showSrcLangModal}
+                    {...modaloption} showCloseButton={false} className="ai-lang-select-modal" >
                     <div className="lang-modal-wrapper">
-                        <span
-                            className="modal-close-btn lang-close"
-                            onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false) }}
-                        >
-                             <img src={BlackClose} alt="close_black" />
+                        <span  className="modal-close-btn lang-close"  onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false) }} >
+                            <img src={BlackClose} alt="close_black" />
                         </span>
-                        {showSrcLangModal &&
+                        { showSrcLangModal &&
                             <Sourcelanguage
                                 sourceLanguage={sourceLanguage}
                                 showSrcLangModal={showSrcLangModal}
@@ -359,17 +328,10 @@ const LanguageSelector = (props) => {
                     visible={showTarLangModal}
                     {...modaloption}
                     showCloseButton={false}
-                    className="ai-tar-lang-select-modal"
-                >
+                    className="ai-tar-lang-select-modal" >
                     <div className="lang-modal-wrapper">
-                        <span
-                            className="modal-close-btn lang-close"
-                            onClick={(e) => handleTargetModalCloseBtn()}
-                        >
-                            <img 
-                                src={BlackClose} 
-                                alt="close_black" 
-                            />
+                        <span className="modal-close-btn lang-close" onClick={(e) => handleTargetModalCloseBtn()} >
+                            <img  src={BlackClose}  alt="close_black" />
                         </span>
                         <Targetlanguage
                             targetLanguage={targetLanguage}
@@ -389,8 +351,7 @@ const LanguageSelector = (props) => {
                             onFocusWrap={onFocusWrap}
                             setOnFocusWrap={setOnFocusWrap}
                             searchAreaRef={searchAreaRef}
-                            handleTargetModalCloseBtn={handleTargetModalCloseBtn}
-                        />
+                            handleTargetModalCloseBtn={handleTargetModalCloseBtn} />
                     </div>
                 </Rodal>
             )}
@@ -398,4 +359,4 @@ const LanguageSelector = (props) => {
     )
 }
 
-export default LanguageSelector
+export default LanguageSelector;

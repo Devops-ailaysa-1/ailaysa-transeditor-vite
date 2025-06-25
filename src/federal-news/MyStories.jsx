@@ -361,13 +361,7 @@ function MyStories(props) {
         task_id: null,
         isUnassigning: false
     });
-    const [myStoriesSettingsBox, setMyStoriesSettingsBox] = useState(false)
-
-    const downloadAnchorRef = useRef(null);
-    const projectIdForPOModal = useRef(null)
-    const projectTypeForPOModal = useRef(null);
-    const clientResponseDataRef = useRef(null);    
-    const myStoriesSettingsBoxRef = useRef();
+    const [myStoriesSettingsBox, setMyStoriesSettingsBox] = useState(false);   
     /* State constants - end */
 
     /* Ref constants - start */
@@ -439,6 +433,11 @@ function MyStories(props) {
     const isProjectListEmptyRef = useRef(false);
     const editorDropDownBoxRef = useRef(null);
     const openProjectListCounterRef = useRef(0);
+    const downloadAnchorRef = useRef(null);
+    const projectIdForPOModal = useRef(null)
+    const projectTypeForPOModal = useRef(null);
+    const clientResponseDataRef = useRef(null);    
+    const myStoriesSettingsBoxRef = useRef();
     /* Ref constants - end */
     let paginationTimeOut = null;
     var id = window.setTimeout(function () { }, 0);
@@ -453,11 +452,7 @@ function MyStories(props) {
         return (
             <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                 <CircularProgress variant="determinate" {...props} className={"circular-foreground"} />
-                <CircularProgress
-                    variant="determinate"
-                    value={100}
-                    className={"circular-background"}
-                />
+                <CircularProgress variant="determinate"  value={100}  className={"circular-background"} />
                 <Box
                     sx={{
                         top: 0,
@@ -468,8 +463,7 @@ function MyStories(props) {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                    }}
-                >
+                    }} >
                     <div className="progress-inner-label">
                         {!props.hideLabel ? `${Math.round(props.value)}%` : 'R'}
                     </div>
@@ -482,7 +476,6 @@ function MyStories(props) {
         let timeOut = setTimeout(function () {
             setShowElement(false);
         }, 10000);
-
         return () => {
             clearTimeout(timeOut);
         }
@@ -564,7 +557,6 @@ function MyStories(props) {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
 
     const handleIndividualTaskAssignManage = (e, selectedStep, task, project) => {
         e.stopPropagation();
@@ -676,7 +668,6 @@ function MyStories(props) {
             icon: <DeleteIcon style="delete" />,
             label: t("delete"),
         },
-
     ];
 
     const subDownloadOptions = [
@@ -1145,15 +1136,13 @@ function MyStories(props) {
             targetLanguageTemp.push(value);
         }
         setTargetLanguage([...new Set(targetLanguageTemp)]);
-        setSearchInput('')
-        setOnFocusWrap(false)
-
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     useEffect(() => {
         removeSelectedSourceFromTarget();
     }, [sourceLanguage]);
-
 
     useEffect(() => {
         if (targetLanguage) {
@@ -1162,10 +1151,9 @@ function MyStories(props) {
                 list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
                 }`;
             });
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current])
-
+    }, [targetLanguage, targetLanguageOptionsRef.current]);
 
     useEffect(() => {
         let a = [];
@@ -1186,10 +1174,9 @@ function MyStories(props) {
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (myStoriesSettingsBoxRef.current && !myStoriesSettingsBoxRef.current.contains(e.target)) {
-                handleMyStoriesSettingsVisibility(false)
+                handleMyStoriesSettingsVisibility(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
         document.addEventListener("scroll", handleClickOutside);
         return () => {
@@ -1207,16 +1194,16 @@ function MyStories(props) {
         // props.history(url);
         projectSearchFunctionality('clear-search')
         setFileListSearchEnlarge(false);
-        setIsSearchTermDelete(true)
+        setIsSearchTermDelete(true);
     }    
 
     useEffect(() => {
         if (projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
-            projectSearchFunctionality('clear-search')
+            projectSearchFunctionality('clear-search');
         }else if(projectSearchTerm == "" && searchTermRef.current !== "" && searchTermRef.current !== null){
-            projectSearchFunctionality('clear-search')
+            projectSearchFunctionality('clear-search');
         }
-    }, [projectSearchTerm])
+    }, [projectSearchTerm]);
 
     /* Throw errors when there's no target language selected */
     useEffect(() => {
@@ -1228,29 +1215,26 @@ function MyStories(props) {
 
     /* Show the pagination content a the bottom */
     useEffect(() => {
-        if (didMount) paginationContentFunction(currentPage);
-        
+        if (didMount) paginationContentFunction(currentPage);        
         return () => {
             if(paginationTimeOut) clearTimeout(paginationTimeOut);
         }
     }, [totalPages, currentPage]);
 
-
     const SearchTermFilterEnter = (e) => {
         if (e.which === 13 && projectSearchTerm == "") {
-            setFileListSearchEnlarge(false)
-            e.target.blur()
+            setFileListSearchEnlarge(false);
+            e.target.blur();
         } else if (e.which === 13) {
-            projectSearchFunctionality()
-
-            setFileListSearchEnlarge(false)
-            searchTermRef.current = projectSearchTerm
-            e.target.blur()
+            projectSearchFunctionality();
+            setFileListSearchEnlarge(false);
+            searchTermRef.current = projectSearchTerm;
+            e.target.blur();
         }
     }
 
     const handleSearchDropDownClick = (e) => {
-        projectSearchFunctionality()
+        projectSearchFunctionality();
     }
 
     const projectSearchFunctionality = (param) => {
@@ -1316,7 +1300,7 @@ function MyStories(props) {
     /* Go to the top of the page when ordering */
     useEffect(() => {
         const controller = new AbortController();
-        let order = URL_SEARCH_PARAMS.get("order_by")
+        let order = URL_SEARCH_PARAMS.get("order_by");
         if (order !== null && order !== undefined) {
             setOrderBySelectedValue(activeProjTab !== 6 ? orderByOptions?.find(each => each?.value == order) : orderByOptionsForAssets?.find(each => each?.value == order));
             listProjects();
@@ -1327,21 +1311,19 @@ function MyStories(props) {
     }, [URL_SEARCH_PARAMS.get("order_by")]);
 
     useEffect(() => {
-        let filterParam = URL_SEARCH_PARAMS.get("filter")
+        let filterParam = URL_SEARCH_PARAMS.get("filter");
         if (filterParam !== null && filterParam !== undefined) {
-            listProjects()
+            listProjects();
         }
     }, [URL_SEARCH_PARAMS.get("filter")]);
 
-
     useEffect(() => {
         const controller = new AbortController();
-
-        let searchParam = URL_SEARCH_PARAMS.get("search")
+        let searchParam = URL_SEARCH_PARAMS.get("search");
         if (searchParam !== null && searchParam !== undefined) {
-            // didMountRef.current++
+            // didMountRef.current++;
             // if(didMountRef.current !== 2){
-            setProjectSearchTerm(searchParam)
+            setProjectSearchTerm(searchParam);
             listProjects();
         } else if (isSearchTermDelete) {
             listProjects();
@@ -1352,14 +1334,13 @@ function MyStories(props) {
     }, [URL_SEARCH_PARAMS.get("search"), isSearchTermDelete]);
 
     useEffect(() => {
-        let proceedAssignParam = URL_SEARCH_PARAMS.get("proceed-assgin")
-        let projectIdParam = URL_SEARCH_PARAMS.get("project")
+        let proceedAssignParam = URL_SEARCH_PARAMS.get("proceed-assgin");
+        let projectIdParam = URL_SEARCH_PARAMS.get("project");
         if (proceedAssignParam !== null && proceedAssignParam !== undefined && projectIdParam && createdProjectsList?.length !== 0) {
             let assignIcon = document.querySelector(`#project-assigni-icon-${projectIdParam}`);
             assignIcon?.click();
         }
     }, [URL_SEARCH_PARAMS.get("proceed-assgin"), createdProjectsList]);
-
 
     // automatically open accordian based on the project ID  
     useEffect(() => {
@@ -1370,8 +1351,7 @@ function MyStories(props) {
                     if(openProjectListCounterRef.current < 2){
                         listProjects();
                         openProjectListCounterRef.current += 1;
-                    }
-                    
+                    }                    
                 }else if(!isProjectListEmptyRef.current){
                     let selectedRow = document.querySelector(`div[data-key='${id}']`);
                     setSelectFileRow(true);
@@ -1386,7 +1366,6 @@ function MyStories(props) {
 		}
     }, [createdProjectsList, URL_SEARCH_PARAMS.get("open-project")]);
     
-
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
         clearTimeout(wordCountAnalysisTimeoutRef.current);
@@ -1409,7 +1388,7 @@ function MyStories(props) {
 
     /* Set order by value and redirect */
     const orderBy = (orderFieldTemp) => {
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
         let page = 1;
         // let url = `/my-stories?page=${page}`;
         let queryParam = new URLSearchParams(window.location.search);
@@ -1430,9 +1409,9 @@ function MyStories(props) {
 
     // set the selected editor id in the url param for later retrival
     const assignEditorFilter = () => {
-        URL_SEARCH_PARAMS.set('page', 1)
-        if(checkedEditors?.length !== 0) URL_SEARCH_PARAMS.set('editor', checkedEditors?.join(','))
-		else URL_SEARCH_PARAMS.delete('editor')
+        URL_SEARCH_PARAMS.set('page', 1);
+        if(checkedEditors?.length !== 0) URL_SEARCH_PARAMS.set('editor', checkedEditors?.join(','));
+		else URL_SEARCH_PARAMS.delete('editor');
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
     } 
 
@@ -1441,7 +1420,7 @@ function MyStories(props) {
         setFileListSearchEnlarge(false);
         setShowListingLoader(true);
         setCreatedProjects([]) ;
-        // setprojectFilterType(null)
+        // setprojectFilterType(null);
         /* Page param set/get - start */
         let page = 1;
         let pageParam = URL_SEARCH_PARAMS.get("page");
@@ -1449,7 +1428,6 @@ function MyStories(props) {
             setCurrentPage(pageParam);
             page = pageParam;
         } else setCurrentPage(pageParam);
-
         /* Page param set/get - start */
         /* ordering param set/get - start */
         // let orderFieldTemp = "";
@@ -1463,14 +1441,15 @@ function MyStories(props) {
         let url = `${Config.BASE_URL}/workspace/project/quick/setup/?page=${page}&filter=news${orderParam != null ? `&ordering=${orderParam}` : ''}`;
         if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
         if (isDinamalar){
-            url += `&assign_status=${filterParam ? filterParam : "inprogress"}`
-            if(editorParam !== null && editorParam !== undefined) url += `&assign_to=${editorParam}`
+            url += `&assign_status=${filterParam ? filterParam : "inprogress"}`;
+            if(editorParam !== null && editorParam !== undefined) url += `&assign_to=${editorParam}`;
         } 
         if (axiosListProjectControllerRef.current) {
-            axiosListProjectControllerRef.current.abort()
+            axiosListProjectControllerRef.current.abort();
         }    
         const controller = new AbortController();
-        axiosListProjectControllerRef.current = controller 
+        axiosListProjectControllerRef.current = controller;
+
         let params = {
             url: url,
             auth: true,
@@ -1480,8 +1459,8 @@ function MyStories(props) {
                 // setOrderField(orderFieldTemp);
                 setSelectedProjectFiles([]);
                 setCreatedProjects(response.data.results);
-                setCreatedProjectsList(response.data.results)
-                createdProjectsRef.current = response.data.results
+                setCreatedProjectsList(response.data.results);
+                createdProjectsRef.current = response.data.results;
                 setShowListingLoader(false);
                 if (response.data.results.length === 0) {
                     setEmptyProjects(true);
@@ -1494,11 +1473,11 @@ function MyStories(props) {
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
                 if (response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))?.length !== 0) {
-                    setAnalysisRunningProjectList(response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id')))
-                    analysisRunningProjectListRef.current = response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))
+                    setAnalysisRunningProjectList(response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id')));
+                    analysisRunningProjectListRef.current = response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'));
                 }
                 if(from === "open-project"){
-                    URL_SEARCH_PARAMS.delete("open-project")
+                    URL_SEARCH_PARAMS.delete("open-project");
                     history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
                 }
             },
@@ -1508,7 +1487,6 @@ function MyStories(props) {
         };
         Config.axios(params);
     };
-
    
     // need to put in useeffect instead of a function because new need to clear the timeout when the component is unmounted (so, we clear the settimout in return of useeffect)
     // otherwise if written as function the settimout will be called in every component until the page is reloaded
@@ -1529,9 +1507,7 @@ function MyStories(props) {
                     let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'));
                     let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'));
                     // if(finishedProj?.length !== 0){
-                    //     finishedProj?.map(each => {
-
-                    //     })
+                    //     finishedProj?.map(each => { })
                     // }
                     if (runningProj?.length !== 0) {
                         const newArr = createdProjectsRef.current?.map(obj => {
@@ -1602,8 +1578,6 @@ function MyStories(props) {
         }
     };
 
-
-
     /* Select a particular project by id */
     const selectProjectById = (projectId, shouldListFiles, scrolltoLast = false) => {
         if (shouldListFiles !== "dont-open") setOpenedProjectId(projectId);
@@ -1634,9 +1608,7 @@ function MyStories(props) {
 
     /* Collapse the project selection */
     const selectProject = (e, projectId, project) => {
-
         let shouldListFiles = e?.target.getAttribute("should-open-files");
-
         if (hasParentThisClass(e?.target, "selected-file-row") || hasParentThisClass(e?.target, "dont-open-files")) return;
 		setSelectedProjectFiles([]);
         // setProjectType(projectType);
@@ -1684,6 +1656,7 @@ function MyStories(props) {
                 if (isProjectPreTranslate.current || isProjectTransciptionRef.current) {
                     // for transcription projects
                     if (isProjectTransciptionRef.current) {
+
                         Config.axios({
                             url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${projectId}`,
                             auth: true,
@@ -1747,15 +1720,13 @@ function MyStories(props) {
             },
         });
     };
-
-
-
+    
     useEffect(() => {
         if (transcriptionTaskList?.length !== 0) {
             let canOpenFiles = transcriptionTaskList?.filter(each => each.open == 'True');
             if (transcriptionTaskList?.length !== canOpenFiles?.length) {   // if any one of the task is not 
-
                 myTimeoutFunc.current = setTimeout(() => {
+
                     Config.axios({
                         url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${selectedProjectIdRef.current}`,
                         auth: true,
@@ -1771,7 +1742,6 @@ function MyStories(props) {
                                             //     total_segments: response.data.res?.find(each => each.task === obj.id)?.open === 'True' ? response.data.res?.find(each => each.task === obj.id)?.progress?.total_segments : 0
                                             // }
                                         };
-
                                     }
                                     return obj;
                                 });
@@ -1794,11 +1764,10 @@ function MyStories(props) {
                 setSelectedProjectFiles(newArr);
             }
         }
-    }, [transcriptionTaskList])
-
+    }, [transcriptionTaskList]);
 
     useEffect(() => {
-        if (preTranslateAllTask?.length !== 0) {
+        if ( preTranslateAllTask?.length !== 0) {
             let canOpenFiles = preTranslateAllTask?.filter(each => each.open == 'True');
             if (preTranslateAllTask?.length !== canOpenFiles?.length) {   // if any one of the task is not 
                 myTimeoutFunc.current = setTimeout(() => {
@@ -1819,7 +1788,6 @@ function MyStories(props) {
                                                 total_segments: response.data.res?.find(each => each.task === obj.id)?.open === 'True' ? response.data.res?.find(each => each.task === obj.id)?.progress?.total_segments : 0
                                             }
                                         };
-
                                     }
                                     return obj;
                                 });
@@ -1842,8 +1810,7 @@ function MyStories(props) {
                 setSelectedProjectFiles(newArr);
             }
         }
-    }, [preTranslateAllTask])
-
+    }, [preTranslateAllTask]);
 
     const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as,selectedProjectFile,project) => {
         let prevPageInfo = {
@@ -1853,18 +1820,15 @@ function MyStories(props) {
             search: URL_SEARCH_PARAMS.get("search"),
             projectId: project_id,
             fromProjectList: true
-        }
-        
+        };        
         if(openIn === "Designer"){
             // writer the designer open logic here
             const index = selectedProjectFilesRef.current.findIndex(obj => obj?.design_project?.desg_job === selectedProjectFile?.design_project?.desg_job);
-            let subUrl = project?.designer_project_detail?.type == 'image_design' ? `&view=2` : `&code=${selectedProjectFile?.target_language}&view=2`
-            let url = `/workspace/${project?.designer_project_detail?.type == 'image_design' ? 'design' : 'image-translate'}/?project=${selectedProjectFile?.design_project?.desg_project}&page=${1}&lang=${index}`
-            window.open(Config. DESIGNER_HOST+ url + subUrl)
-
-
+            let subUrl = project?.designer_project_detail?.type == 'image_design' ? `&view=2` : `&code=${selectedProjectFile?.target_language}&view=2`;
+            let url = `/workspace/${project?.designer_project_detail?.type == 'image_design' ? 'design' : 'image-translate'}/?project=${selectedProjectFile?.design_project?.desg_project}&page=${1}&lang=${index}`;
+            window.open(Config. DESIGNER_HOST+ url + subUrl);
         }else if (openIn === "ExpressEditor") {
-            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, {state: { filename: fileName }})
+            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, {state: { filename: fileName }});
         }else if (openIn === "News") {
             setClickedOpenButton(key);
             let formdata = new FormData();
@@ -1879,9 +1843,9 @@ function MyStories(props) {
                 success: (response) => {
                     setClickedOpenButton(null);
                     setTimeout(() => {
-                        // window.location.href = 'workspace/' + response.data.id
-                        // window.open('http://localhost:3000/workspace/' + response.data.task, '_blank', 'noopener,noreferrer')
-                        // let lastPageAvailable = localStorage.getItem(response.data.document_id)
+                        // window.location.href = 'workspace/' + response.data.id;
+                        // window.open('http://localhost:3000/workspace/' + response.data.task, '_blank', 'noopener,noreferrer');
+                        // let lastPageAvailable = localStorage.getItem(response.data.document_id);
                         // if (lastPageAvailable) {
                         //     history(lastPageAvailable, {
                         //         prevPath: location.pathname + location.search,
@@ -1935,9 +1899,9 @@ function MyStories(props) {
                                         return obj;
                                     });
                                     setSelectedProjectFiles(newArr);
-                                    let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
+                                    let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True');
                                     if (statusResponse.data.res?.length !== canOpenFiles?.length) {
-                                        setPreTranslateAllTask(statusResponse.data.res)
+                                        setPreTranslateAllTask(statusResponse.data.res);
                                     }
                                 },
                                 error: (err) => {
@@ -1965,9 +1929,9 @@ function MyStories(props) {
                     success: (response) => {
                         setClickedOpenButton(null);
                         if (response?.data?.msg === undefined) {
-                            docCreditCheckAlertRef.current = response.data.doc_credit_check_open_alert
+                            docCreditCheckAlertRef.current = response.data.doc_credit_check_open_alert;
                             if (from === 'task-download') {
-                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName, selectedProjectFile)
+                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName, selectedProjectFile);
                             } else {
                                 setTimeout(() => {
                                     // window.location.href = 'workspace/' + response.data.document_id;
@@ -1987,7 +1951,7 @@ function MyStories(props) {
                             }
                         } else {
                             if (from === 'task-download') {
-                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName, selectedProjectFile)
+                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName, selectedProjectFile);
                             } else {
                                 setTimeout(() => {
                                     // window.location.href = 'workspace/' + response.data.document_id;
@@ -2088,7 +2052,6 @@ function MyStories(props) {
         //         },
         //     });
         // } 
-
     };
 
     const ValueContainer = ({ children, ...props }) => {
@@ -2115,7 +2078,7 @@ function MyStories(props) {
     };
 
     const handleDropDownClose = (event) => {
-        setTaskActionAnchorEl(null)
+        setTaskActionAnchorEl(null);
     };
 
     /* File upload drag and drop handling */
@@ -2189,7 +2152,6 @@ function MyStories(props) {
         onClose: () => console.log(),
     };
 
-
     const assignmanagemodaloption = {
         closeMaskOnClick: false,
         width: 560,
@@ -2257,7 +2219,6 @@ function MyStories(props) {
             setPaginationContent(content);
         }, 100);
     };
-
    
     const editProject = (e = null, projectId, projectType, project) => {
         e.stopPropagation();
@@ -2336,9 +2297,9 @@ function MyStories(props) {
                 );
                 setTimeout(() => {
                     setSourceLabel(editSourceLanguage?.language);
-                    setSourceLanguage(editSourceLanguage?.id)
+                    setSourceLanguage(editSourceLanguage?.id);
                     setTargetLanguage(editTargetLanguages);
-                    setSkeletonLoader(false)
+                    setSkeletonLoader(false);
                 }, 80);
             },
         });
@@ -2349,7 +2310,7 @@ function MyStories(props) {
         setIsStoryProjUpdating(true);
         formdata.append("source_language", sourceLanguage);
         if (storyProjectName?.trim() === '') {
-            Config.toast(t("enter_proj_name"))
+            Config.toast(t("enter_proj_name"));
             return;
         }
         formdata.append("project_name", storyProjectName?.trim());
@@ -2444,7 +2405,7 @@ function MyStories(props) {
 
     /* Handling the instruction popup */
     const handleInstructionModal = (e, taskId, eachRole) => {
-        // e.stopPropagation()
+        // e.stopPropagation();
         let selectedTask = selectedProjectFiles.find((element) => element.id === taskId);
         setInstructionText(eachRole?.instruction);
         setInstructionFile(eachRole?.instruction_files);
@@ -2486,7 +2447,7 @@ function MyStories(props) {
 
     /* Assinged details if assigned */
     const assignToProject = (e, projectId) => {
-        e.stopPropagation()
+        e.stopPropagation();
         setAssignProjectId(projectId);
         history(`/collaborate?project=${projectId}`);
         // activeToggle(3);
@@ -2643,7 +2604,7 @@ function MyStories(props) {
         let editorRole = eachRole?.task_assign_detail?.step === 1 ? t("editor") : t("reviewer");
         let stepId = eachRole?.task_assign_detail?.step === 1 ? 1 : eachRole?.task_assign_detail?.step === 2 && 2;
         let assign_info = selectedProjectFile?.task_assign_info?.find(each => each.task_assign_detail.step === stepId);
-        // && assign_info.task_assign_detail.task_status === "Completed"
+        // && assign_info.task_assign_detail.task_status === "Completed";
 
         return (
             <div className="assigned-member-info-wrapper" ref={assignedMemberCardRef}>
@@ -2759,7 +2720,6 @@ function MyStories(props) {
                                 </div>
                             </div>
                         </div>
-
                         {/* condition for not showing the work status to editors  */}
                         {/* && Config.userState?.id !== eachRole?.assign_to_details?.id */}
                         {(eachRole?.task_assign_detail?.client_response && Config.userState?.id !== eachRole?.assign_to_details?.id) && (
@@ -2790,8 +2750,7 @@ function MyStories(props) {
                         
                             Config.userState?.id === eachRole?.assign_to_details?.id && (
                             (eachRole?.instruction !== "" || eachRole?.instruction_files.length !== 0) && */}
-                        {
-                            (eachRole?.instruction !== "" || eachRole?.instruction_files.length !== 0) && (
+                        { (eachRole?.instruction !== "" || eachRole?.instruction_files.length !== 0) && (
                                 <div className="more-info-item">
                                     <div className="assigned-title-area">
                                         <p>{t("instruction")}</p>
@@ -2811,9 +2770,9 @@ function MyStories(props) {
 
     // download source audo file 
     const downloadSourceAudioFile = async (taskID) => {
-        let url = `${Config.BASE_URL}/workspace/download_text_to_speech_source/?task=${taskID}`
+        let url = `${Config.BASE_URL}/workspace/download_text_to_speech_source/?task=${taskID}`;
         const response = await Config.downloadFileFromApi(url);
-        Config.downloadFileInBrowser(response)
+        Config.downloadFileInBrowser(response);
     }
 
     const openAilaysaWriter = (projectID, taskID, assignToMe = false) => {
@@ -2838,7 +2797,7 @@ function MyStories(props) {
         formData.append("status", "3"); // submit: 3, in-progress: 2
 
         if (documentSubmitParameters?.isTaskReassigned) {
-            formData.append("reassigned", 'True')
+            formData.append("reassigned", 'True');
         }
 
         Config.axios({
@@ -2847,19 +2806,19 @@ function MyStories(props) {
             data: formData,
             auth: true,
             success: (response) => {
-                listFiles(openedProjectId)
-                setShowSubmitDocumentAlertModal(false)
-                setDocumentSubmitParameters({ ...documentSubmitParameters, isTaskReassigned: false })
-                Config.toast(t("document_submitted"))
+                listFiles(openedProjectId);
+                setShowSubmitDocumentAlertModal(false);
+                setDocumentSubmitParameters({ ...documentSubmitParameters, isTaskReassigned: false });
+                Config.toast(t("document_submitted"));
             }
         });
     }
 
     useEffect(() => {
         if (documentSubmitParameters?.taskid !== null) {
-            getDocumentProgress(documentSubmitParameters?.confirm, documentSubmitParameters?.total)
+            getDocumentProgress(documentSubmitParameters?.confirm, documentSubmitParameters?.total);
         }
-    }, [documentSubmitParameters])
+    }, [documentSubmitParameters]);
 
 
     const getDocumentProgress = (confirmed, total) => {
@@ -2867,26 +2826,26 @@ function MyStories(props) {
             handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step)
         }
         else {
-            setShowSubmitDocumentAlertModal(true)
+            setShowSubmitDocumentAlertModal(true);
         }
     }
 
     const handleDocuemtSubmitConfirmation = () => {
-        handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step)
+        handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step);
     }
 
     useEffect(() => {
         if (location.state?.documentLock !== undefined) {
-            let documentLockReason = location?.state?.documentLock
-            Config.toast(`${documentLockReason}`, 'warning')
+            let documentLockReason = location?.state?.documentLock;
+            Config.toast(`${documentLockReason}`, 'warning');
         }
-    }, [location.state?.documentLock])
-
+    }, [location.state?.documentLock]);
 
     const transcribeAudioFile = (projectID, taskID, key) => {
         let formdata = new FormData();
         formdata.append("task", taskID);
         setClickedOpenButton(key);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/transcribe_file/`,
             method: "POST",
@@ -2894,24 +2853,24 @@ function MyStories(props) {
             auth: true,
             success: (response) => {
                 if (response.status === 200) {
-                    Config.toast(t("audio_file_transcribed"))
-                    setClickedOpenButton(null)
-                    listFiles(projectID)
+                    Config.toast(t("audio_file_transcribed"));
+                    setClickedOpenButton(null);
+                    listFiles(projectID);
                 }
                 getCreditStatus();
             },
             error: (err) => {
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                        setShowCreditAlertModal(true)
-                        setClickedOpenButton(null)
+                        setShowCreditAlertModal(true);
+                        setClickedOpenButton(null);
                     }
                     if (err.response.data?.msg?.includes('Transcription is ongoing.')) {
-                        setShowProcessingModal(true)
-                        setIsTranscribing(true)
-                        setClickedOpenButton(null)
+                        setShowProcessingModal(true);
+                        setIsTranscribing(true);
+                        setClickedOpenButton(null);
+                        setTranscriptionTaskList([]);
 
-                        setTranscriptionTaskList([])
                         Config.axios({
                             url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${selectedProjectIdRef.current}`,
                             auth: true,
@@ -2945,7 +2904,6 @@ function MyStories(props) {
                             setIsTranscribing(false);
                         }, 4000);
                         // setTranscriptionTaskList([]);
-
                         // Config.axios({
                         //     url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${selectedProjectIdRef.current}`,
                         //     auth: true,
@@ -3026,7 +2984,6 @@ function MyStories(props) {
         }
     }
 
-
     // get analysied report for project and its task (project analysis)
     const handleShowAnalysisModal = (e, projectID, callback = false) => {
         e?.stopPropagation();
@@ -3035,6 +2992,7 @@ function MyStories(props) {
             projectAnalysisTempProjectId.current = projectID;
         }
         projectAnalysisApiCounter.current++;
+
         Config.axios({
             url: `${Config.BASE_URL}/tm/project_analysis/${projectID}`,
             auth: true,
@@ -3170,7 +3128,8 @@ function MyStories(props) {
     }
 
     const convertPdfToDocxFromTask = (taskId, projectId) => {
-        setClickedOpenButton(taskId)
+        setClickedOpenButton(taskId);
+
         Config.axios({
             url: `${Config.BASE_URL}/exportpdf/convert_pdf_from_task/${taskId}/`,
             method: 'POST',
@@ -3401,7 +3360,6 @@ function MyStories(props) {
         });
     }
 
-
     const focusTargetLangDiv = () => {
         if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #E74C3C;'
         setTimeout(() => {
@@ -3551,12 +3509,10 @@ function MyStories(props) {
                 // update the list once download completed
                 dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }));
                 Config.downloadFileInBrowser(response);
-
                 setTimeout(() => {
                     // remove the downloaded file from list
                     dispatch(deleteDownloadingFile({ id: uniqueKey }));
                 }, 8000);
-
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === id) {
                         return {
@@ -3861,14 +3817,12 @@ function MyStories(props) {
                                                         item?.label === 'View PO' && getPODetailsForTask(selectedProjectFile.id)
                                                 }
                                                 style={selectedProjectFile?.pre_trans_processing ? { opacity: 0.7, pointerEvents: 'none' } : {}}
-                                                onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))}
-                                            >
+                                                onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))}>
                                                 <div className="item-wrap">
                                                     <span className="icon">{item.icon}</span>
                                                     <span className="text">{item.label}</span>
                                                 </div>
-                                                {
-                                                    item.arrow_icon &&
+                                                { item.arrow_icon &&
                                                     <>
                                                         {item.arrow_icon}
                                                     </>
@@ -3878,8 +3832,7 @@ function MyStories(props) {
                                     })
                                 }
                             </ul>
-                            {
-                                subDownloadOption &&
+                            { subDownloadOption &&
                                 <>
                                     <div className="download-sub-menu" onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
                                         <ul>
@@ -3911,8 +3864,7 @@ function MyStories(props) {
                                                                         selectedProjectFile?.filename,
                                                                         selectedProjectFile
                                                                     )
-                                                            }}
-                                                        >
+                                                            }}>
                                                             {item.label}
                                                         </li>
                                                     )
@@ -3978,8 +3930,7 @@ function MyStories(props) {
                     <>
                         <div className="menu-wrapper" ref={moreOptionOutside}>
                             <ul>
-                                {
-                                    moreOptionsForDesigner?.filter(each => removeEdit ? (assigned ? each.id !== 1 : (each.id !== 1 && each.id !== 4)) : (removeDelete ? each.id === 3 : (assigned ? each.id !== 1 : (each.id !== 1 && each.id !== 4))))?.map((item) => {
+                                { moreOptionsForDesigner?.filter(each => removeEdit ? (assigned ? each.id !== 1 : (each.id !== 1 && each.id !== 4)) : (removeDelete ? each.id === 3 : (assigned ? each.id !== 1 : (each.id !== 1 && each.id !== 4))))?.map((item) => {
                                         return (
                                             <li
                                                 key={item.id}
@@ -4006,10 +3957,6 @@ function MyStories(props) {
             </div>
         )
     }
-
-
-
-    
 
     const handleRetriveDesignProject = (e,proj) => {
         e.stopPropagation();
@@ -4055,7 +4002,7 @@ function MyStories(props) {
                         setSourceLabel(editSourceLanguage?.language);
                         setSourceLanguage(data?.canvas_translation[0]?.source_language);
                         setTargetLanguage(editTargetLanguages);
-                        setSkeletonLoader(false)
+                        setSkeletonLoader(false);
                     }, 80);
                 }else{
                     setEditJobs(data?.image_inpaint_creation);
@@ -4087,7 +4034,6 @@ function MyStories(props) {
             },
         });
     }
-
 
     // for designer project edit
     const handleEditDesignerProj = (e,proj) => {
@@ -4142,7 +4088,7 @@ function MyStories(props) {
     } 
 
     // for designer project delete
-       const handleDeleteDesignerProjectHandle = (proj,selectedProj) => {
+    const handleDeleteDesignerProjectHandle = (proj,selectedProj) => {
         selectedDesignerProject.current = selectedProj;
         projectObject.current = proj;
         if(selectedProj == null){
@@ -4166,7 +4112,6 @@ function MyStories(props) {
                 handleDeleteDesignWholeProject(proj,url);
             }else{
                 handleDeleteDesignTaskOfProject(proj,url,selectedProjectFile?.design_project?.desg_job);
-
             }
         } else {
             url = `${Config.BASE_URL}/ai-image-translation/imagetranslate/${proj?.designer_project_detail?.des_proj_id}/`;
@@ -4178,8 +4123,6 @@ function MyStories(props) {
         }
         setIsDesignDeleting(true);       
     } 
-
-
 
     const handleDeleteDesignWholeProject = (proj,url) => {
         setIsTaskDeleting(true);
@@ -4245,17 +4188,16 @@ function MyStories(props) {
         let url = `/editor/${project.designer_project_detail.type == 'image_design' ? 'design' : 'image-translate'}/?project=${project.designer_project_detail.des_proj_id}`;
         // window.open(Config. DESIGNER_HOST+ url);
         window.open(Config.DESIGNER_HOST+ url+subUrl);
-
     }
 
     const handleDeleteDesignerProjectUpdate = (proj) => {
         let formdata = new FormData();
-        setIsStoryProjUpdating(true)
+        setIsStoryProjUpdating(true);
         if(sourceLanguage != ''){
             formdata.append("source_language", sourceLanguage);
         }
         if (storyProjectName?.trim() === '') {
-            Config.toast(t("enter_proj_name"))
+            Config.toast(t("enter_proj_name"));
             return;
         }
         formdata.append(proj?.designer_project_detail?.type === "image_design" ? "file_name" : "project_name" , storyProjectName?.trim());
@@ -4378,7 +4320,7 @@ function MyStories(props) {
             success: (response) => {
                 // if called with project_id, returns list if task_data
                 if(response.data?.results !== undefined){
-                    let dataList = response.data?.results
+                    let dataList = response.data?.results;
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
                         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
                             let status = dataList?.find(each => each.task === obj.id)?.status
@@ -4389,7 +4331,7 @@ function MyStories(props) {
                                 file_translate_done: status === 200 ? true : obj.file_translate_done
                             }
                         }
-                        return obj
+                        return obj;
                     });
                     selectedProjectFilesRef.current = newArr ;
                     setSelectedProjectFiles(newArr);                    
@@ -4558,8 +4500,7 @@ function MyStories(props) {
                                 // }}
                                 />
                                 <span className={"close " + ((fileListSearchEnlarge || projectSearchTerm !== "") ? "show " : " ")}
-                                    onClick={() => handleCloseSearchBox()}
-                                >
+                                    onClick={() => handleCloseSearchBox()}  >
                                     <img src={SearchBarIcon} alt="search-bar-close" />
                                 </span>
                             </div>
@@ -4595,8 +4536,7 @@ function MyStories(props) {
                                     className="add-btn-wrapper filter-button" 
                                     onClick={() => setIsEditorFilterDropDownOpen(!isEditorFilterDropDownOpen)}
                                     disableRipple={true}
-                                    style={checkedEditors?.length !== 0 ? {fontWeight: 600} : {}}
-                                >
+                                    style={checkedEditors?.length !== 0 ? {fontWeight: 600} : {}} >
                                     {
                                         checkedEditors?.length !== 0 ? checkedEditors?.length === 1 ? 
                                         `${editorsListOption?.find(editor => editor?.internal_member === checkedEditors[0])?.internal_member_detail.name}` : 
@@ -4604,8 +4544,7 @@ function MyStories(props) {
                                     } 
                                     <span id="triangle-down" className="ml-3"></span>
                                 </ButtonBase>
-
-                                {isEditorFilterDropDownOpen && (
+                                { isEditorFilterDropDownOpen && (
                                     <div className="editor-filter-drop-down" ref={editorDropDownBoxRef}>
                                         <div className="editor-filter-drop-down-wrapper">
                                             {editorsListOption?.map(editor => {
@@ -4648,13 +4587,11 @@ function MyStories(props) {
                                 </ButtonBase>
                             </>
                         )}
-
                         {isDinamalar && (
                             <ButtonBase className="add-btn-wrapper" onClick={openDefaultGlossary}>
                                 {t("my_glossary")}
                             </ButtonBase>
                         )}
-
                         {/* <div className="ai-projects-main-wrapper__header__dropdown-wrapper">
                             <ButtonBase 
                                 className="ai-projects-main-wrapper__header__button" 
@@ -5036,12 +4973,7 @@ function MyStories(props) {
                                                                                                 Config.userState?.id
                                                                                                 ? "Assigner" : "Editor"
                                                                                         }
-
-                                                                                        // New logic
-                                                                                        if (selectedProjectFile?.task_assign_info?.length === 2) {
-
-                                                                                        }
-
+                                                                                        if (selectedProjectFile?.task_assign_info?.length === 2) {}
                                                                                         if (selectedProjectFile?.task_assign_info?.length === 2) {
                                                                                             editorAssignmentDetails =
                                                                                                 selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
@@ -5055,10 +4987,8 @@ function MyStories(props) {
                                                                                                     ? selectedProjectFile?.task_assign_info[1]?.assigned_by_details
                                                                                                     : selectedProjectFile?.task_assign_info[1]?.assign_to_details;
                                                                                         }
-
-                                                                                        let taskAssignStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.task_status
-                                                                                        let taskClientStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.client_response
-
+                                                                                        let taskAssignStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.task_status;
+                                                                                        let taskClientStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.client_response;
                                                                                         selectedFilesData = (
                                                                                             <div 
                                                                                                 className={
@@ -5080,28 +5010,15 @@ function MyStories(props) {
                                                                                                         ) : ""
                                                                                                     ) 
                                                                                                 } 
-                                                                                                key={selectedProjectFile?.id}
-                                                                                            >
+                                                                                                key={selectedProjectFile?.id} >
                                                                                                 <div className="file-edit-list-inner-table-row">
                                                                                                     {/* <div className="file-edit-list-inner-table-cell">
                                                                                                         <div className="file-edit-translation-txt">
-                                                                                                            <img
-                                                                                                                className="translation-pair-L"
-                                                                                                                src={
-                                                                                                                    Config.HOST_URL +
-                                                                                                                    "assets/images/new-ui-icons/translation-pair-L.svg"
-                                                                                                                }
-                                                                                                            />
+                                                                                                            <img className="translation-pair-L" src={ Config.HOST_URL +  "assets/images/new-ui-icons/translation-pair-L.svg" } />
                                                                                                             <span>{targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}</span>
-                                                                                                            <img
-                                                                                                                src={
-                                                                                                                    Config.HOST_URL +
-                                                                                                                    "assets/images/new-ui-icons/arrow_right_alt_color.svg"
-                                                                                                                }
-                                                                                                            />
+                                                                                                            <img src={Config.HOST_URL +"assets/images/new-ui-icons/arrow_right_alt_color.svg" }/>
                                                                                                             <span>
-                                                                                                                {
-                                                                                                                    (targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) !== undefined &&
+                                                                                                                {(targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) !== undefined &&
                                                                                                                         targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) != null) ?
                                                                                                                         targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language :
                                                                                                                         targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language
@@ -5120,15 +5037,12 @@ function MyStories(props) {
                                                                                                         <div className="my-stories-doc-info-wrapper dinamalar-info-wrap">
                                                                                                             <div className="doc-icon-wrapper">
                                                                                                                 <span className="doc-icon">
-                                                                                                                    <img
-                                                                                                                        src={
+                                                                                                                    <img src={
                                                                                                                             selectedProjectFile?.news_detail?.thumbUrl ?
                                                                                                                             selectedProjectFile?.news_detail?.thumbUrl :
                                                                                                                             isFederal ? FederalImgPlaceholder :
                                                                                                                             isDinamalar ? DinamalarImgPlaceholder :
-                                                                                                                            NoImgPlaceholder
-                                                                                                                            
-                                                                                                                        }
+                                                                                                                            NoImgPlaceholder }
                                                                                                                         onError={({ currentTarget }) => { 
                                                                                                                             currentTarget.onerror = null; // prevents looping
                                                                                                                             currentTarget.src = isFederal ?
@@ -5136,8 +5050,7 @@ function MyStories(props) {
                                                                                                                             isDinamalar ? DinamalarImgPlaceholder :
                                                                                                                             NoImgPlaceholder;
                                                                                                                         }}
-                                                                                                                        alt="new-img"
-                                                                                                                    />
+                                                                                                                        alt="new-img" />
                                                                                                                 </span>
                                                                                                             </div>
                                                                                                             <div className="story-info-wrap">
@@ -5189,8 +5102,7 @@ function MyStories(props) {
                                                                                                                             } W
                                                                                                                         </span>}
                                                                                                                     </span>
-                                                                                                                )} */}
-                                                                                                            
+                                                                                                                )} */}                                                                                                            
                                                                                                         </div>
                                                                                                         <div className="file-edit-translation-txt">
                                                                                                             <span onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "src")}>
@@ -5208,8 +5120,7 @@ function MyStories(props) {
                                                                                                         {isFederal ? (  // task status without calculating segment progress
                                                                                                             <div className="status-conditions-part dont-open-list">
                                                                                                                 <span className="file-edit-proj-status-txt">
-                                                                                                                    <div
-                                                                                                                        className={
+                                                                                                                    <div className={
                                                                                                                             (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.push_detail && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed" && userDetails?.pk !== each?.assign_to_details?.id)) ? "status-indicator-approved" :
                                                                                                                             (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? "status-indicator-completed" :
                                                                                                                             (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? "status-indicator-created" :
@@ -5219,8 +5130,8 @@ function MyStories(props) {
                                                                                                                             (selectedProjectFile?.news_detail?.tar_json_exists) ? "status-indicator-in-progress-color" : "status-indicator-created"
                                                                                                                             // (selectedProjectFile?.progress?.total_segments === 0) ?  : ""
                                                                                                                         }
-                                                                                                                        should-open-files="dont-open"
-                                                                                                                    ></div>
+                                                                                                                        should-open-files="dont-open" >
+                                                                                                                    </div>
                                                                                                                     {
                                                                                                                         (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.push_detail && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed" && userDetails?.pk !== each?.assign_to_details?.id)) ? t("pushed") :
                                                                                                                         (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? t("submitted") :
@@ -5237,8 +5148,7 @@ function MyStories(props) {
                                                                                                         ) : (
                                                                                                             <div className="status-conditions-part dont-open-list">
                                                                                                                 <span className="file-edit-proj-status-txt">
-                                                                                                                    <div
-                                                                                                                        className={
+                                                                                                                    <div className={
                                                                                                                             (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.client_response?.toLowerCase() == "approved")) ? "status-indicator-approved" :
                                                                                                                             (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? "status-indicator-completed" :
                                                                                                                             (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Yet to start")) ? "status-indicator-created" :
@@ -5248,8 +5158,8 @@ function MyStories(props) {
                                                                                                                             (selectedProjectFile?.progress?.total_segments !== 0) ? "status-indicator-in-progress-color" :
                                                                                                                             (selectedProjectFile?.progress?.total_segments === 0) ? "status-indicator-created" : ""
                                                                                                                         }
-                                                                                                                        should-open-files="dont-open"
-                                                                                                                    ></div>
+                                                                                                                        should-open-files="dont-open">
+                                                                                                                    </div>
                                                                                                                     {
                                                                                                                         (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.client_response?.toLowerCase() == "approved")) ? t("approved") :
                                                                                                                         (selectedProjectFile?.task_assign_info !== null && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === "Completed")) ? t("completed_&_submit") :
@@ -5265,7 +5175,6 @@ function MyStories(props) {
                                                                                                             </div>
                                                                                                         )}
                                                                                                     </div>
-
                                                                                                     <div className="file-edit-list-inner-table-cell">
                                                                                                         {/*  Need to destructure this following conditional code and set everything optimised properly */}
                                                                                                         <div className="file-assigned-member-lists">
@@ -5478,8 +5387,7 @@ function MyStories(props) {
                                                                                                                                     if (eachRole.task_assign_detail.step === 2) {
                                                                                                                                         return (
                                                                                                                                             <>
-                                                                                                                                                {
-                                                                                                                                                    (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
+                                                                                                                                                { (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
                                                                                                                                                         <div className="unassigned-members-wrapper">
                                                                                                                                                             <Tooltip title={t("assign_editor")} placement="top" arrow>
                                                                                                                                                                 <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
@@ -5531,14 +5439,12 @@ function MyStories(props) {
                                                                                                                     </>
                                                                                                                 )
                                                                                                             }
-
                                                                                                             {/* Re-assign task info for agency/LSP it will show the assigned info card - shows for LSP only */}
                                                                                                             {(typeof selectedProjectFile?.task_reassign_info !== 'boolean' && selectedProjectFile?.task_reassign_info?.length) ?
                                                                                                                 (
                                                                                                                     <>
                                                                                                                         {selectedProjectFile?.task_reassign_info?.sort((a, b) => a.task_assign_detail.step - b.task_assign_detail.step)?.map(each => console.log())}
-                                                                                                                        {
-                                                                                                                            (selectedProjectFile?.task_reassign_info?.find(each => (Config.userState?.id === each?.assign_to_details?.id)) !== undefined ||
+                                                                                                                        { (selectedProjectFile?.task_reassign_info?.find(each => (Config.userState?.id === each?.assign_to_details?.id)) !== undefined ||
                                                                                                                                 selectedProjectFile?.task_reassign_info?.find(each => Config.userState?.id === each.assigned_by_details.id) !== undefined) ? (
                                                                                                                                 selectedProjectFile?.task_reassign_info?.map((eachRole) => {
                                                                                                                                     if (Config.userState?.id === eachRole?.assign_to_details.id || eachRole?.assign_to_details?.managers?.find(user => user === userDetails.pk)) {    // task is assigned to me
@@ -5658,8 +5564,7 @@ function MyStories(props) {
                                                                                                                                         if (eachRole.task_assign_detail.step === 2) {
                                                                                                                                             return (
                                                                                                                                                 <>
-                                                                                                                                                    {
-                                                                                                                                                        (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
+                                                                                                                                                    { (selectedProjectFile?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
                                                                                                                                                             <div className="unassigned-members-wrapper">
                                                                                                                                                                 <Tooltip title={t("assign_editor")} placement="top" arrow>
                                                                                                                                                                     <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
@@ -5677,7 +5582,6 @@ function MyStories(props) {
                                                                                                                                                                         ?.charAt(0)?.toUpperCase()
                                                                                                                                                                 }
                                                                                                                                                             </span>
-
                                                                                                                                                             <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                                 <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                             </div>
@@ -5725,8 +5629,7 @@ function MyStories(props) {
                                                                                                                                     if (eachRole.task_assign_detail.step === 2) {
                                                                                                                                         return (
                                                                                                                                             <>
-                                                                                                                                                {
-                                                                                                                                                    (selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each?.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request')) && selectedFileRow?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
+                                                                                                                                                { (selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each?.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request')) && selectedFileRow?.task_assign_info?.length === 1 && !is_internal_meber_editor) && (
                                                                                                                                                         <div className="unassigned-members-wrapper">
                                                                                                                                                             <Tooltip title={t("assign_editor")} placement="top" arrow>
                                                                                                                                                                 <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 1, selectedProjectFile, project) }}>
@@ -5744,7 +5647,6 @@ function MyStories(props) {
                                                                                                                                                                     ?.charAt(0)?.toUpperCase()
                                                                                                                                                             }
                                                                                                                                                         </span>
-
                                                                                                                                                         <div className="assigned-task-info-box-main-wrapper">
                                                                                                                                                             <AssignInfoUiBox name={editorAssignmentDetails?.name} project={project} selectedProjectFile={selectedProjectFile} eachRole={eachRole} reviewer={role} />
                                                                                                                                                         </div>
@@ -5773,8 +5675,7 @@ function MyStories(props) {
                                                                                                                                 )
                                                                                                                             }
                                                                                                                             {   // show assign reviewer button only if project has reviewer step
-                                                                                                                                (
-                                                                                                                                    selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request'))
+                                                                                                                                ( selectedProjectFile?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request'))
                                                                                                                                 ) && (
                                                                                                                                     <Tooltip title={t("assign_reviewer")} placement="top" arrow>
                                                                                                                                         <button className="workspace-files-OpenProjectButton" type="button" onClick={(e) => { handleIndividualTaskAssignManage(e, 2, selectedProjectFile, project) }}>
@@ -5788,7 +5689,6 @@ function MyStories(props) {
                                                                                                                 )
                                                                                                             }
                                                                                                         </div>
-
                                                                                                         {/* Task action button logic ---- STARTS HERE */}
                                                                                                         <div className="project-list-action-wrap">
                                                                                                             {selectedProjectFile?.task_assign_info?.length ? (  // if task is assigned
@@ -5846,14 +5746,12 @@ function MyStories(props) {
                                                                                                                                                                                         selectedProjectFile?.task_assign_info,
                                                                                                                                                                                         selectedProjectFile
                                                                                                                                                                                     )
-                                                                                                                                                                                }}
-                                                                                                                                                                            >
+                                                                                                                                                                                }} >
                                                                                                                                                                                 <div className="item-wrap">
                                                                                                                                                                                     <span className="text">{t("editor")}</span>
                                                                                                                                                                                 </div>
                                                                                                                                                                             </li>
-                                                                                                                                                                            <li
-                                                                                                                                                                                className="list-item"
+                                                                                                                                                                            <li className="list-item"
                                                                                                                                                                                 onClick={() => {
                                                                                                                                                                                     handleOpenAsButton(
                                                                                                                                                                                         null,
@@ -5872,8 +5770,7 @@ function MyStories(props) {
                                                                                                                                                                                         selectedProjectFile?.task_assign_info,
                                                                                                                                                                                         selectedProjectFile
                                                                                                                                                                                     )
-                                                                                                                                                                                }}
-                                                                                                                                                                            >
+                                                                                                                                                                                }}  >
                                                                                                                                                                                 <div className="item-wrap">
                                                                                                                                                                                     <span className="text">{t("reviewer")}</span>
                                                                                                                                                                                 </div>
@@ -5902,8 +5799,7 @@ function MyStories(props) {
                                                                                                                                                                 backgroundColor: '#cccccc', color: '#666666', paddingLeft: "15px",
                                                                                                                                                                 paddingRight: "15px"
                                                                                                                                                             }}
-                                                                                                                                                            disabled={true}
-                                                                                                                                                        >
+                                                                                                                                                            disabled={true}>
                                                                                                                                                             <span className="fileopen-new-btn">{t("request_sent")}</span>
                                                                                                                                                         </button>
                                                                                                                                                     ) : (
@@ -5943,14 +5839,12 @@ function MyStories(props) {
                                                                                                                                                                                         selectedProjectFile?.task_assign_info,
                                                                                                                                                                                         selectedProjectFile
                                                                                                                                                                                     )
-                                                                                                                                                                                }}
-                                                                                                                                                                            >
+                                                                                                                                                                                }}>
                                                                                                                                                                                 <div className="item-wrap">
                                                                                                                                                                                     <span className="text">{t("editor")}</span>
                                                                                                                                                                                 </div>
                                                                                                                                                                             </li>
-                                                                                                                                                                            <li
-                                                                                                                                                                                className="list-item"
+                                                                                                                                                                            <li className="list-item"
                                                                                                                                                                                 onClick={() => {
                                                                                                                                                                                     handleOpenAsButton(
                                                                                                                                                                                         null,
@@ -5969,8 +5863,7 @@ function MyStories(props) {
                                                                                                                                                                                         selectedProjectFile?.task_assign_info,
                                                                                                                                                                                         selectedProjectFile
                                                                                                                                                                                     )
-                                                                                                                                                                                }}
-                                                                                                                                                                            >
+                                                                                                                                                                                }} >
                                                                                                                                                                                 <div className="item-wrap">
                                                                                                                                                                                     <span className="text">{t("reviewer")}</span>
                                                                                                                                                                                 </div>
@@ -6060,8 +5953,7 @@ function MyStories(props) {
                                                                                                                                                                         <>
                                                                                                                                                                             <div className="menu-wrapper" ref={showOpenasOutside}>
                                                                                                                                                                                 <ul>
-                                                                                                                                                                                    <li
-                                                                                                                                                                                        className="list-item"
+                                                                                                                                                                                    <li className="list-item"
                                                                                                                                                                                         onClick={() => {
                                                                                                                                                                                             handleOpenAsButton(
                                                                                                                                                                                                 null,
@@ -6080,14 +5972,12 @@ function MyStories(props) {
                                                                                                                                                                                                 selectedProjectFile?.task_assign_info,
                                                                                                                                                                                                 selectedProjectFile
                                                                                                                                                                                             )
-                                                                                                                                                                                        }}
-                                                                                                                                                                                    >
+                                                                                                                                                                                        }}  >
                                                                                                                                                                                         <div className="item-wrap">
                                                                                                                                                                                             <span className="text">{t("editor")}</span>
                                                                                                                                                                                         </div>
                                                                                                                                                                                     </li>
-                                                                                                                                                                                    <li
-                                                                                                                                                                                        className="list-item"
+                                                                                                                                                                                    <li className="list-item"
                                                                                                                                                                                         onClick={() => {
                                                                                                                                                                                             handleOpenAsButton(
                                                                                                                                                                                                 null,
@@ -6106,8 +5996,7 @@ function MyStories(props) {
                                                                                                                                                                                                 selectedProjectFile?.task_assign_info,
                                                                                                                                                                                                 selectedProjectFile
                                                                                                                                                                                             )
-                                                                                                                                                                                        }}
-                                                                                                                                                                                    >
+                                                                                                                                                                                        }} >
                                                                                                                                                                                         <div className="item-wrap">
                                                                                                                                                                                             <span className="text">{t("reviewer")}</span>
                                                                                                                                                                                         </div>
@@ -6139,8 +6028,7 @@ function MyStories(props) {
                                                                                                                                                                                 selectedProjectFile,
                                                                                                                                                                                 project
                                                                                                                                                                             )
-                                                                                                                                                                        }
-                                                                                                                                                                    >
+                                                                                                                                                                        } >
                                                                                                                                                                         <span className="fileopen-new-btn">{t("open")}</span>
                                                                                                                                                                     </button>
                                                                                                                                                                 )
@@ -6149,8 +6037,7 @@ function MyStories(props) {
                                                                                                                                                     )
                                                                                                                                                 ) : null
                                                                                                                                             }
-                                                                                                                                            {
-                                                                                                                                                (index === 0) &&
+                                                                                                                                            { (index === 0) &&
                                                                                                                                                 <div className="more-options-wrap">
                                                                                                                                                     <ButtonBase onClick={(e) => handleMoreVertOption(e, selectedProjectFile?.id)} className="sorting-icon">
                                                                                                                                                         <MoreVertIcon className="more-icon" />
@@ -6194,7 +6081,6 @@ function MyStories(props) {
                                                                                                                                         </>
                                                                                                                                     }
                                                                                                                                 </>
-
                                                                                                                             )
                                                                                                                         }
                                                                                                                         else if (!eachRole?.assign_to_details?.external_editor && Config.userState?.id === eachRole?.assign_to_details.id) {  // condition if editor is not external editor (user is internal editor)
@@ -6266,8 +6152,7 @@ function MyStories(props) {
                                                                                                                                                 </span>
                                                                                                                                             </button>
                                                                                                                                         ) : (
-                                                                                                                                            <button className="workspace-files-OpenProjectButton"        
-                                                                                                                                                type="button"
+                                                                                                                                            <button className="workspace-files-OpenProjectButton"  type="button"
                                                                                                                                                 // disabled={!eachRole?.task_assign_detail?.can_open}
                                                                                                                                                 onMouseUp={(e) =>
                                                                                                                                                     openFile(
@@ -6287,8 +6172,7 @@ function MyStories(props) {
                                                                                                                                                         selectedProjectFile,
                                                                                                                                                         project
                                                                                                                                                     )
-                                                                                                                                                }
-                                                                                                                                            >
+                                                                                                                                                } >
                                                                                                                                                 <span className="fileopen-new-btn">{t("open")}</span>
                                                                                                                                             </button>
                                                                                                                                         )
@@ -6312,14 +6196,7 @@ function MyStories(props) {
                                                                                                                             </Tooltip>
                                                                                                                         )
                                                                                                                     } */}
-                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                type="button"
-                                                                                                                                style={{
-                                                                                                                                    paddingLeft: "16px",
-                                                                                                                                    paddingRight: "16px"
-                                                                                                                                }}
-                                                                                                                                onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                            >
+                                                                                                                            <button className="workspace-files-OpenProjectButton"  type="button"  style={{  paddingLeft: "16px", paddingRight: "16px" }} onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}>
                                                                                                                                 <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                             </button>
                                                                                                                             <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
@@ -6338,14 +6215,7 @@ function MyStories(props) {
                                                                                                                             </Tooltip>
                                                                                                                         )
                                                                                                                     } */}
-                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                type="button"
-                                                                                                                                style={{
-                                                                                                                                    paddingLeft: "22px",
-                                                                                                                                    paddingRight: "22px"
-                                                                                                                                }}
-                                                                                                                                onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                            >
+                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button"  style={{ paddingLeft: "22px", paddingRight: "22px"  }}  onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}  >
                                                                                                                                 <span className="fileopen-new-btn">{t("convert")}</span>
                                                                                                                             </button>
                                                                                                                             <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
@@ -6366,12 +6236,7 @@ function MyStories(props) {
                                                                                                                                 <ProgressAnimateButton />
                                                                                                                             ) : (
                                                                                                                                 <>
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
-                                                                                                                                        disabled={selectedProjectFile?.pre_trans_processing}
-                                                                                                                                        style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
-                                                                                                                                    >
+                                                                                                                                    <button className="workspace-files-OpenProjectButton"  type="button"  onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}  disabled={selectedProjectFile?.pre_trans_processing}  style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }} >
                                                                                                                                         <span className="fileopen-new-btn">{t("transcribe")}</span>
                                                                                                                                     </button>
                                                                                                                                     <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
@@ -6381,14 +6246,7 @@ function MyStories(props) {
                                                                                                                     ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (
                                                                                                                         <>
                                                                                                                             <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                    type="button"
-                                                                                                                                    style={{
-                                                                                                                                        paddingLeft: "30px",
-                                                                                                                                        paddingRight: "30px"
-                                                                                                                                    }}
-                                                                                                                                    onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}
-                                                                                                                                >
+                                                                                                                                <button className="workspace-files-OpenProjectButton"  type="button"  style={{ paddingLeft: "30px", paddingRight: "30px"  }}  onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)} >
                                                                                                                                     <span className="fileopen-new-btn">{t("view")}</span>
                                                                                                                                 </button>
                                                                                                                             </Tooltip>
@@ -6399,8 +6257,7 @@ function MyStories(props) {
                                                                                                                             <ProgressAnimateButton />
                                                                                                                         ) : (
                                                                                                                             <>
-                                                                                                                                {
-                                                                                                                                    clickedOpenButton == key ? (
+                                                                                                                                { clickedOpenButton == key ? (
                                                                                                                                         <button className="workspace-files-OpeningProjectButton" type="button">
                                                                                                                                             <span className="fileopen-new-btn">
                                                                                                                                                 <ButtonLoader />
@@ -6408,8 +6265,7 @@ function MyStories(props) {
                                                                                                                                             </span>
                                                                                                                                         </button>
                                                                                                                                     ) : (
-                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                            type="button"
+                                                                                                                                        <button className="workspace-files-OpenProjectButton"  type="button"
                                                                                                                                             onMouseUp={(e) =>
                                                                                                                                                 openFile(
                                                                                                                                                     e,
@@ -6428,24 +6284,17 @@ function MyStories(props) {
                                                                                                                                                     selectedProjectFile,
                                                                                                                                                     project
                                                                                                                                                 )
-                                                                                                                                            }
-                                                                                                                                        >
+                                                                                                                                            } >
                                                                                                                                             <span className="fileopen-new-btn">{t("open")}</span>
                                                                                                                                         </button>
                                                                                                                                     )
                                                                                                                                 }
-                                                                                                                                {isFederal && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === 'Completed') && (
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        style={
-                                                                                                                                            selectedProjectFile?.push_detail ? 
-                                                                                                                                            {backgroundColor: "#9d9db1"} : {}
-                                                                                                                                        }
+                                                                                                                                { isFederal && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === 'Completed') && (
+                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button"  style={  selectedProjectFile?.push_detail ?  {backgroundColor: "#9d9db1"} : {}  }
                                                                                                                                         onClick={(e) => {
                                                                                                                                             selectedProjectFile?.push_detail ?
                                                                                                                                             Config.toast("Story already has been pushed") : pushStoryToCMS(e, selectedProjectFile, project?.id)
-                                                                                                                                        }}
-                                                                                                                                    >
+                                                                                                                                        }} >
                                                                                                                                         <span className="fileopen-new-btn">
                                                                                                                                             {isStoryIdPushing === selectedProjectFile?.id && (
                                                                                                                                                 <ButtonLoader />
@@ -6466,29 +6315,24 @@ function MyStories(props) {
                                                                                                                                                 <>
                                                                                                                                                     <div className="menu-wrapper" ref={moreOptionOutside} onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
                                                                                                                                                         <ul>
-                                                                                                                                                            {
-                                                                                                                                                                moreOptions?.filter(item => (
+                                                                                                                                                            { moreOptions?.filter(item => (
                                                                                                                                                                     (project?.get_project_type !== 5 && project?.get_project_type !== 3) ?
                                                                                                                                                                         (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? item.id !== 3 : item.id
                                                                                                                                                                         : (project?.assign_enable ? selectedProjectFile.task_assign_info == null : (userDetails?.agency && !project?.assign_enable) && (selectedProjectFile.task_reassign_info == null || selectedProjectFile.task_assign_info == null)) ? (item.id !== 3 && item.id !== 1) : item.id !== 1
                                                                                                                                                                 ))?.map((item) => {
                                                                                                                                                                     return (
-                                                                                                                                                                        <li
-                                                                                                                                                                            key={item.id}
-                                                                                                                                                                            className="list-item"
+                                                                                                                                                                        <li  key={item.id} className="list-item"
                                                                                                                                                                             onClick={(e) =>
                                                                                                                                                                                 item?.label === 'Delete' ? handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info) :
                                                                                                                                                                                     item?.label === 'View PO' && getPODetailsForTask(selectedProjectFile.id)
                                                                                                                                                                             }
                                                                                                                                                                             style={selectedProjectFile?.pre_trans_processing ? { opacity: 0.7, pointerEvents: 'none' } : {}}
-                                                                                                                                                                            onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))}
-                                                                                                                                                                        >
+                                                                                                                                                                            onMouseEnter={item.arrow_icon ? ((e) => handleSubDownloadOption(e)) : ((e) => handleSubDownloadOptioHide(e))} >
                                                                                                                                                                             <div className="item-wrap">
                                                                                                                                                                                 <span className="icon">{item.icon}</span>
                                                                                                                                                                                 <span className="text">{item.label}</span>
                                                                                                                                                                             </div>
-                                                                                                                                                                            {
-                                                                                                                                                                                item.arrow_icon &&
+                                                                                                                                                                            { item.arrow_icon &&
                                                                                                                                                                                 <>
                                                                                                                                                                                     {item.arrow_icon}
                                                                                                                                                                                 </>
@@ -6498,21 +6342,14 @@ function MyStories(props) {
                                                                                                                                                                 })
                                                                                                                                                             }
                                                                                                                                                         </ul>
-                                                                                                                                                        {
-                                                                                                                                                            subDownloadOption &&
+                                                                                                                                                        { subDownloadOption &&
                                                                                                                                                             <>
                                                                                                                                                                 <div className="download-sub-menu" onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
                                                                                                                                                                     <ul>
                                                                                                                                                                         {
                                                                                                                                                                             subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
                                                                                                                                                                                 return (
-                                                                                                                                                                                    <li
-                                                                                                                                                                                        key={item.id}
-                                                                                                                                                                                        className="list-inner-item"
-                                                                                                                                                                                        style={
-                                                                                                                                                                                            (selectedProjectFile?.isTaskDownloading != item?.value) ?
-                                                                                                                                                                                                {} : { opacity: 0.7 }
-                                                                                                                                                                                        }
+                                                                                                                                                                                    <li key={item.id} className="list-inner-item"  style={  (selectedProjectFile?.isTaskDownloading != item?.value) ?  {} : { opacity: 0.7 }  }
                                                                                                                                                                                         onClick={(e) => {
                                                                                                                                                                                             docCreditCheckAlertRef.current = selectedProjectFile.mt_only_credit_check;
                                                                                                                                                                                             (selectedProjectFile?.isTaskDownloading != item?.value) &&
@@ -6531,8 +6368,7 @@ function MyStories(props) {
                                                                                                                                                                                                     selectedProjectFile?.filename,
                                                                                                                                                                                                     selectedProjectFile
                                                                                                                                                                                                 )
-                                                                                                                                                                                        }}
-                                                                                                                                                                                    >
+                                                                                                                                                                                        }} >
                                                                                                                                                                                         {item.label}
                                                                                                                                                                                     </li>
                                                                                                                                                                                 )
@@ -6567,14 +6403,7 @@ function MyStories(props) {
                                                                                                                             </Tooltip>
                                                                                                                         )
                                                                                                                     } */}
-                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                style={{
-                                                                                                                                    paddingLeft: "16px",
-                                                                                                                                    paddingRight: "16px"
-                                                                                                                                }}
-                                                                                                                                type="button"
-                                                                                                                                onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                            >
+                                                                                                                            <button className="workspace-files-OpenProjectButton" style={{ paddingLeft: "16px",paddingRight: "16px" }} type="button" onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)} >
                                                                                                                                 <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                             </button>
                                                                                                                             <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
@@ -6593,14 +6422,7 @@ function MyStories(props) {
                                                                                                                             </Tooltip>
                                                                                                                         )
                                                                                                                     } */}
-                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                type="button"
-                                                                                                                                style={{
-                                                                                                                                    paddingLeft: "22px",
-                                                                                                                                    paddingRight: "22px"
-                                                                                                                                }}
-                                                                                                                                onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                            >
+                                                                                                                            <button className="workspace-files-OpenProjectButton"  type="button"  style={{ paddingLeft: "22px",  paddingRight: "22px" }} onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)} >
                                                                                                                                 <span className="fileopen-new-btn">{t("convert")}</span>
                                                                                                                             </button>
                                                                                                                             <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
@@ -6624,12 +6446,7 @@ function MyStories(props) {
                                                                                                                                 </>
                                                                                                                             ) : (
                                                                                                                                 <>
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
-                                                                                                                                        disabled={selectedProjectFile?.pre_trans_processing}
-                                                                                                                                        style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
-                                                                                                                                    >
+                                                                                                                                    <button className="workspace-files-OpenProjectButton" type="button" onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}  disabled={selectedProjectFile?.pre_trans_processing} style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }} >
                                                                                                                                         <span className="fileopen-new-btn">{t("transcribe")}</span>
                                                                                                                                     </button>
                                                                                                                                     <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
@@ -6639,14 +6456,7 @@ function MyStories(props) {
                                                                                                                     ) : selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed ? (
                                                                                                                         <>
                                                                                                                             <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
-                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                    type="button"
-                                                                                                                                    style={{
-                                                                                                                                        paddingLeft: "30px",
-                                                                                                                                        paddingRight: "30px"
-                                                                                                                                    }}
-                                                                                                                                    onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}
-                                                                                                                                >
+                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" style={{paddingLeft: "30px",paddingRight: "30px"}} onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)} >
                                                                                                                                     <span className="fileopen-new-btn">{t("view")}</span>
                                                                                                                                 </button>
                                                                                                                             </Tooltip>
@@ -6657,8 +6467,7 @@ function MyStories(props) {
                                                                                                                             <ProgressAnimateButton />
                                                                                                                         ) : (
                                                                                                                             <>
-                                                                                                                                {
-                                                                                                                                    clickedOpenButton == key ? (
+                                                                                                                                { clickedOpenButton == key ? (
                                                                                                                                         <button className="workspace-files-OpeningProjectButton" type="button">
                                                                                                                                             <span className="fileopen-new-btn">
                                                                                                                                                 <ButtonLoader />
@@ -6666,8 +6475,7 @@ function MyStories(props) {
                                                                                                                                             </span>
                                                                                                                                         </button>
                                                                                                                                     ) : (
-                                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                                            type="button"
+                                                                                                                                        <button className="workspace-files-OpenProjectButton" type="button"
                                                                                                                                             onMouseUp={(e) =>
                                                                                                                                                 openFile(
                                                                                                                                                     e,
@@ -6686,13 +6494,12 @@ function MyStories(props) {
                                                                                                                                                     selectedProjectFile,
                                                                                                                                                     project
                                                                                                                                                 )
-                                                                                                                                            }
-                                                                                                                                        >
+                                                                                                                                            } >
                                                                                                                                             <span className="fileopen-new-btn">{t("open")}</span>
                                                                                                                                         </button>
                                                                                                                                     )
                                                                                                                                 }
-                                                                                                                                {isFederal && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === 'Completed') && (
+                                                                                                                                { isFederal && selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status === 'Completed') && (
                                                                                                                                     <button className="workspace-files-OpenProjectButton"
                                                                                                                                         type="button"
                                                                                                                                         style={
@@ -6702,8 +6509,7 @@ function MyStories(props) {
                                                                                                                                         onClick={(e) => {
                                                                                                                                             selectedProjectFile?.push_detail ?
                                                                                                                                             Config.toast("Story already has been pushed") : pushStoryToCMS(e, selectedProjectFile, project?.id)
-                                                                                                                                        }}
-                                                                                                                                    >
+                                                                                                                                        }} >
                                                                                                                                         <span className="fileopen-new-btn">
                                                                                                                                             {isStoryIdPushing === selectedProjectFile?.id && (
                                                                                                                                                 <ButtonLoader />
@@ -6756,8 +6562,7 @@ function MyStories(props) {
                                                                                                                                                                 })
                                                                                                                                                             }
                                                                                                                                                         </ul>
-                                                                                                                                                        {
-                                                                                                                                                            subDownloadOption &&
+                                                                                                                                                        { subDownloadOption &&
                                                                                                                                                             <>
                                                                                                                                                                 <div className="download-sub-menu" onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
                                                                                                                                                                     <ul>
@@ -6789,8 +6594,7 @@ function MyStories(props) {
                                                                                                                                                                                                     selectedProjectFile?.filename,
                                                                                                                                                                                                     selectedProjectFile
                                                                                                                                                                                                 )
-                                                                                                                                                                                        }}
-                                                                                                                                                                                    >
+                                                                                                                                                                                        }}>
                                                                                                                                                                                         {item.label}
                                                                                                                                                                                     </li>
                                                                                                                                                                                 )
@@ -6815,8 +6619,7 @@ function MyStories(props) {
                                                                                                                 (selectedProjectFile?.converted != null && (project?.get_project_type == 1 || project?.get_project_type == 2)) ? (   // pdf convert logic 
                                                                                                                     selectedProjectFile?.converted ? (    // if pdf is converted
                                                                                                                         <>
-                                                                                                                            {
-                                                                                                                                selectedProjectFile?.open_in === 'google-ocr' ? (
+                                                                                                                            { selectedProjectFile?.open_in === 'google-ocr' ? (
                                                                                                                                     <>
                                                                                                                                         {/* {
                                                                                                                                             !selectedProjectFile?.pre_trans_processing && (
@@ -6856,21 +6659,14 @@ function MyStories(props) {
                                                                                                                                                         !selectedProjectFile?.pre_trans_processing && (
                                                                                                                                                             <Tooltip TransitionComponent={Zoom} title={t("delete")} placement="top">
                                                                                                                                                                 <span className="file-edit-proj-status-txt docs-delete glossary-status d-inline" onMouseUp={(e) => handleTaskDeleteButton(e, project?.id, selectedProjectFile?.id, selectedProjectFile?.task_assign_info)}>
-                                                                                                                                                                    <img
-                                                                                                                                                                        src={DeleteBinIcon}
-                                                                                                                                                                        alt="close_black"
-                                                                                                                                                                    />
+                                                                                                                                                                    <img  src={DeleteBinIcon}  alt="close_black"  />
                                                                                                                                                                 </span>
                                                                                                                                                             </Tooltip>
                                                                                                                                                         )
                                                                                                                                                     }
                                                                                                                                                     <Tooltip className="dont-open-list" title={t("download")} placement="top">
                                                                                                                                                         <span className="mr-4" onMouseUp={() => downloadConvertDocxFile(selectedProjectFile?.id)}>
-                                                                                                                                                            <img
-                                                                                                                                                                src={DownloadIcon}
-                                                                                                                                                                alt="bulk download"
-                                                                                                                                                                should-open-files="dont-open"
-                                                                                                                                                            />
+                                                                                                                                                            <img  src={DownloadIcon} alt="bulk download" should-open-files="dont-open" />
                                                                                                                                                         </span>
                                                                                                                                                     </Tooltip>
                                                                                                                                                     <Tooltip title={t("create_trans_text")} TransitionComponent={Zoom} placement="top">
@@ -6882,12 +6678,7 @@ function MyStories(props) {
                                                                                                                                             ) : (   // the task is translated (translation task has been created)
                                                                                                                                                 <>
                                                                                                                                                     <Tooltip className="dont-open-list" title={t("download")} placement="top">
-                                                                                                                                                        <button
-                                                                                                                                                            style={{
-                                                                                                                                                                paddingLeft: "16px",
-                                                                                                                                                                paddingRight: "16px"
-                                                                                                                                                            }}
-                                                                                                                                                            className="workspace-files-OpenProjectButton" type="button" onMouseUp={() => downloadConvertDocxFile(selectedProjectFile?.id)}>
+                                                                                                                                                        <button style={{  paddingLeft: "16px", paddingRight: "16px"  }} className="workspace-files-OpenProjectButton" type="button" onMouseUp={() => downloadConvertDocxFile(selectedProjectFile?.id)}>
                                                                                                                                                             <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                                                         </button>
                                                                                                                                                     </Tooltip>
@@ -6929,14 +6720,7 @@ function MyStories(props) {
                                                                                                                                 {selectedProjectFile?.isPDFConverting ? (
                                                                                                                                     <ProgressAnimateButton name={"Converting"} />
                                                                                                                                 ) : (
-                                                                                                                                    <button className="workspace-files-OpenProjectButton"
-                                                                                                                                        type="button"
-                                                                                                                                        style={{
-                                                                                                                                            paddingLeft: "22px",
-                                                                                                                                            paddingRight: "22px"
-                                                                                                                                        }}
-                                                                                                                                        onMouseUp={(e) => checkPdfConversionStatus(selectedProjectFile?.id, project?.id, 'first')}
-                                                                                                                                    >
+                                                                                                                                    <button className="workspace-files-OpenProjectButton"  type="button"  style={{ paddingLeft: "22px", paddingRight: "22px" }}  onMouseUp={(e) => checkPdfConversionStatus(selectedProjectFile?.id, project?.id, 'first')}  >
                                                                                                                                         <span className="fileopen-new-btn">{t("convert")}</span>
                                                                                                                                     </button>
                                                                                                                                 )}
@@ -6946,14 +6730,7 @@ function MyStories(props) {
                                                                                                                     )
                                                                                                                 ) : (project?.get_project_type === 4 && ((selectedProjectFile?.open_in === 'Download' && !selectedProjectFile?.text_to_speech_convert_enable) || selectedProjectFile?.audio_file_url != undefined)) ? (
                                                                                                                     <>
-                                                                                                                        <button className="workspace-files-OpenProjectButton"
-                                                                                                                            type="button"
-                                                                                                                            style={{
-                                                                                                                                paddingLeft: "16px",
-                                                                                                                                paddingRight: "16px"
-                                                                                                                            }}
-                                                                                                                            onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}
-                                                                                                                        >
+                                                                                                                        <button className="workspace-files-OpenProjectButton" type="button" style={{paddingLeft: "16px",paddingRight: "16px" }} onMouseUp={(e) => downloadSourceAudioFile(selectedProjectFile?.id)}  >
                                                                                                                             <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                         </button>
                                                                                                                         <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
@@ -6971,14 +6748,7 @@ function MyStories(props) {
                                                                                                                         </>
                                                                                                                     ) : (
                                                                                                                         <>
-                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                style={{
-                                                                                                                                    paddingLeft: "22px",
-                                                                                                                                    paddingRight: "22px"
-                                                                                                                                }}
-                                                                                                                                type="button"
-                                                                                                                                onMouseUp={(e) => convertSourceFileToAudio(selectedProjectFile?.id)}
-                                                                                                                            >
+                                                                                                                            <button className="workspace-files-OpenProjectButton" style={{ paddingLeft: "22px", paddingRight: "22px" }} type="button" onMouseUp={(e) => convertSourceFileToAudio(selectedProjectFile?.id)} >
                                                                                                                                 <span className="fileopen-new-btn">{t("convert")}</span>
                                                                                                                             </button>
                                                                                                                             <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
@@ -6987,14 +6757,7 @@ function MyStories(props) {
                                                                                                                 ) : (selectedProjectFile?.open_in === 'Ailaysa Writer or Text Editor' && selectedProjectFile?.transcribed) ? (
                                                                                                                     <>
                                                                                                                         <Tooltip title={t("view_transcription")} TransitionComponent={Zoom} placement="top">
-                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                type="button"
-                                                                                                                                style={{
-                                                                                                                                    paddingLeft: "30px",
-                                                                                                                                    paddingRight: "30px"
-                                                                                                                                }}
-                                                                                                                                onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}
-                                                                                                                            >
+                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" style={{  paddingLeft: "30px",  paddingRight: "30px"  }} onMouseUp={(e) => openAilaysaWriter(project?.id, selectedProjectFile?.id)}>
                                                                                                                                 <span className="fileopen-new-btn">{t("view")}</span>
                                                                                                                             </button>
                                                                                                                         </Tooltip>
@@ -7019,12 +6782,9 @@ function MyStories(props) {
                                                                                                                             </>
                                                                                                                         ) : (
                                                                                                                             <>
-                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                    type="button"
-                                                                                                                                    onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}
-                                                                                                                                    disabled={selectedProjectFile?.pre_trans_processing}
-                                                                                                                                    style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}
-                                                                                                                                >
+                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button"
+                                                                                                                                    onMouseUp={(e) => transcribeAudioFile(project?.id, selectedProjectFile?.id, key)}  disabled={selectedProjectFile?.pre_trans_processing}
+                                                                                                                                    style={selectedProjectFile?.pre_trans_processing ? { opacity: '0.6' } : { opacity: 1 }}  >
                                                                                                                                     <span className="fileopen-new-btn">{t("transcribe")}</span>
                                                                                                                                 </button>
                                                                                                                                 <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
@@ -7034,28 +6794,14 @@ function MyStories(props) {
                                                                                                                 ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (
                                                                                                                     <>
                                                                                                                         {selectedProjectFile?.file_translate_done ? (   // if file is translated show download btn
-                                                                                                                            <button className="workspace-files-OpenProjectButton"
-                                                                                                                                type="button"
-                                                                                                                                style={{
-                                                                                                                                    paddingLeft: "16px",
-                                                                                                                                    paddingRight: "16px"
-                                                                                                                                }}
-                                                                                                                                onMouseUp={(e) => downloadTaskTargetFile(selectedProjectFile)}
-                                                                                                                            >
+                                                                                                                            <button className="workspace-files-OpenProjectButton" type="button" style={{paddingLeft: "16px", paddingRight: "16px" }} onMouseUp={(e) => downloadTaskTargetFile(selectedProjectFile)}>
                                                                                                                                 <span className="fileopen-new-btn">{t("download")}</span>
                                                                                                                             </button>
                                                                                                                         ) : (   // not translated then show translate btn
                                                                                                                             selectedProjectFile?.isProcessing ? (
                                                                                                                                 <ProgressAnimateButton />
                                                                                                                             ) : (
-                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                    type="button"
-                                                                                                                                    style={{
-                                                                                                                                        paddingLeft: "16px",
-                                                                                                                                        paddingRight: "16px"
-                                                                                                                                    }}
-                                                                                                                                    onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)}
-                                                                                                                                >
+                                                                                                                                <button className="workspace-files-OpenProjectButton"  type="button"  style={{ paddingLeft: "16px",paddingRight: "16px" }}  onMouseUp={(e) => getProjectTransDownloadStatus(selectedProjectFile?.id)} >
                                                                                                                                     <span className="fileopen-new-btn">{t("translate")}</span>
                                                                                                                                 </button>
                                                                                                                             )
@@ -7096,8 +6842,7 @@ function MyStories(props) {
                                                                                                                                                 selectedProjectFile,
                                                                                                                                                 project
                                                                                                                                             )
-                                                                                                                                        }
-                                                                                                                                    >
+                                                                                                                                        } >
                                                                                                                                         <span className="fileopen-new-btn">{t("open")}</span>
                                                                                                                                     </button>
                                                                                                                                 )
@@ -7110,26 +6855,18 @@ function MyStories(props) {
                                                                                                                             style={{backgroundColor: "#9d9db1"}}
                                                                                                                             onClick={(e) => {
                                                                                                                                 (Config.toast('Story already has been pushed'))
-                                                                                                                            }}
-                                                                                                                        >
+                                                                                                                            }} >
                                                                                                                             <span className="fileopen-new-btn">
                                                                                                                                 {t("pushed")}
                                                                                                                             </span>
                                                                                                                         </button>
-                                                                                                                        ) : (
-                                                                                                                            isFederal && (
-                                                                                                                                <button className="workspace-files-OpenProjectButton"
-                                                                                                                                    type="button"
-                                                                                                                                    style={
-                                                                                                                                        (selectedProjectFile?.news_detail?.tar_json_exists) ? 
-                                                                                                                                        {} : {backgroundColor: "#9d9db1"}
-                                                                                                                                    }
+                                                                                                                        ) : ( isFederal && (
+                                                                                                                                <button className="workspace-files-OpenProjectButton" type="button" style={ (selectedProjectFile?.news_detail?.tar_json_exists) ?  {} : {backgroundColor: "#9d9db1"} }
                                                                                                                                     onClick={(e) => {
                                                                                                                                         (selectedProjectFile?.news_detail?.tar_json_exists) ? 
                                                                                                                                         (isStoryIdPushing !== selectedProjectFile?.id) && pushStoryToCMS(e, selectedProjectFile, project?.id) :
                                                                                                                                         (Config.toast('Task is not yet started', 'warning'))
-                                                                                                                                    }}
-                                                                                                                                >
+                                                                                                                                    }} >
                                                                                                                                     <span className="fileopen-new-btn">
                                                                                                                                         {isStoryIdPushing === selectedProjectFile?.id && (
                                                                                                                                             <ButtonLoader />
@@ -7138,8 +6875,7 @@ function MyStories(props) {
                                                                                                                                     </span>
                                                                                                                                 </button>
                                                                                                                             )
-                                                                                                                        )}
-                                                                                                                        
+                                                                                                                        )}                                                                                                                        
                                                                                                                         <div className="more-options-wrap">
                                                                                                                             {project.get_project_type === 6 ? (
                                                                                                                                 <MoreOptionsIconDesigner project={project} removeDelete={false} assigned={selectedProjectFile.task_assign_info == null ? false : true} removeEdit={true} selectedProjectFile={selectedProjectFile} />
@@ -7185,21 +6921,13 @@ function MyStories(props) {
                                                                                                                                                         })
                                                                                                                                                     }
                                                                                                                                                 </ul>
-                                                                                                                                                {
-                                                                                                                                                    subDownloadOption &&
+                                                                                                                                                { subDownloadOption &&
                                                                                                                                                     <>
                                                                                                                                                         <div className="download-sub-menu" onMouseLeave={((e) => handleSubDownloadOptioHide(e))}>
                                                                                                                                                             <ul>
-                                                                                                                                                                {
-                                                                                                                                                                    subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
+                                                                                                                                                                { subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
                                                                                                                                                                         return (
-                                                                                                                                                                            <li
-                                                                                                                                                                                key={item.id}
-                                                                                                                                                                                className="list-inner-item"
-                                                                                                                                                                                style={
-                                                                                                                                                                                    (selectedProjectFile?.isTaskDownloading != item?.value) ?
-                                                                                                                                                                                        {} : { opacity: 0.7 }
-                                                                                                                                                                                }
+                                                                                                                                                                            <li key={item.id} className="list-inner-item" style={(selectedProjectFile?.isTaskDownloading != item?.value) ? {} : { opacity: 0.7 } }
                                                                                                                                                                                 onClick={(e) => {
                                                                                                                                                                                     docCreditCheckAlertRef.current = selectedProjectFile.mt_only_credit_check;
                                                                                                                                                                                     (selectedProjectFile?.isTaskDownloading != item?.value) &&
@@ -7218,8 +6946,7 @@ function MyStories(props) {
                                                                                                                                                                                             selectedProjectFile?.filename,
                                                                                                                                                                                             selectedProjectFile
                                                                                                                                                                                         )
-                                                                                                                                                                                }}
-                                                                                                                                                                            >
+                                                                                                                                                                                }} >
                                                                                                                                                                                 {item.label}
                                                                                                                                                                             </li>
                                                                                                                                                                         )
@@ -7265,71 +6992,27 @@ function MyStories(props) {
                                                                                                             <div className="my-stories-doc-info-wrapper">
                                                                                                                 <div className="doc-icon-wrapper">
                                                                                                                     <span className="doc-icon">
-                                                                                                                        <Skeleton
-                                                                                                                            animation="wave"
-                                                                                                                            variant="rounded"
-                                                                                                                            style={{ width: "100%", height: "100%" }}
-                                                                                                                        />
+                                                                                                                        <Skeleton  animation="wave"  variant="rounded"  style={{ width: "100%", height: "100%" }} />
                                                                                                                     </span>
                                                                                                                 </div>
                                                                                                                 <div className="story-info-wrap">
-                                                                                                                    <Skeleton
-                                                                                                                        animation="wave"
-                                                                                                                        style={{ marginBottom: "15px" }}
-                                                                                                                        variant="rounded"
-                                                                                                                        width={80}
-                                                                                                                        height={10}
-                                                                                                                    />
+                                                                                                                    <Skeleton animation="wave" style={{ marginBottom: "15px" }}  variant="rounded" width={80} height={10} />
                                                                                                                     <div className="d-flex flex-column">
-                                                                                                                        <Skeleton
-                                                                                                                            animation="wave"
-                                                                                                                            variant="rounded"
-                                                                                                                            width={200}
-                                                                                                                            height={15}
-                                                                                                                        />
-                                                                                                                        <Skeleton
-                                                                                                                            animation="wave"
-                                                                                                                            style={{ marginTop: "0.5rem" }}
-                                                                                                                            variant="rounded"
-                                                                                                                            width={100}
-                                                                                                                            height={15}
-                                                                                                                        />
+                                                                                                                        <Skeleton  animation="wave"  variant="rounded"  width={200}  height={15}  />
+                                                                                                                        <Skeleton animation="wave" style={{ marginTop: "0.5rem" }} variant="rounded" width={100} height={15} />
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                             <div style={{ marginTop: "10px" }} className="d-flex align-items-center">
-                                                                                                                <Skeleton
-                                                                                                                    animation="wave"
-                                                                                                                    style={{ marginLeft: "0.2rem" }}
-                                                                                                                    variant="rounded"
-                                                                                                                    width={20}
-                                                                                                                    height={10}
-                                                                                                                />
-                                                                                                                <Skeleton
-                                                                                                                    animation="wave"
-                                                                                                                    style={{ marginLeft: "0.2rem" }}
-                                                                                                                    variant="rounded"
-                                                                                                                    width={20}
-                                                                                                                    height={10}
-                                                                                                                />
-                                                                                                                <Skeleton
-                                                                                                                    animation="wave"
-                                                                                                                    style={{ marginLeft: "0.2rem" }}
-                                                                                                                    variant="rounded"
-                                                                                                                    width={20}
-                                                                                                                    height={10}
-                                                                                                                />
+                                                                                                                <Skeleton animation="wave" style={{ marginLeft: "0.2rem" }}  variant="rounded"  width={20}  height={10}  />
+                                                                                                                <Skeleton animation="wave"  style={{ marginLeft: "0.2rem" }}  variant="rounded" width={20}  height={10}  />
+                                                                                                                <Skeleton animation="wave"  style={{ marginLeft: "0.2rem" }}  variant="rounded"  width={20}  height={10}  />
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div className="file-edit-list-inner-table-cell">
                                                                                                             <div className="status-conditions-part">
                                                                                                                 <div className="d-flex align-items-center">
-                                                                                                                    <Skeleton
-                                                                                                                        animation="wave"
-                                                                                                                        style={{ marginRight: "1rem" }}
-                                                                                                                        variant="text"
-                                                                                                                        width={20}
-                                                                                                                    />
+                                                                                                                    <Skeleton animation="wave" style={{ marginRight: "1rem" }} variant="text"  width={20} />
                                                                                                                     <Skeleton animation="wave" variant="text" width={55} />
                                                                                                                 </div>
                                                                                                             </div>
@@ -7337,33 +7020,10 @@ function MyStories(props) {
                                                                                                         <div className="file-edit-list-inner-table-cell">
                                                                                                             <div className="d-flex align-items-center justify-content-end w-100">
                                                                                                                 <div className="d-flex align-items-center">
-                                                                                                                    <Skeleton
-                                                                                                                        animation="wave"
-                                                                                                                        style={{ marginRight: "14px" }}
-                                                                                                                        variant="rounded"
-                                                                                                                        width={80}
-                                                                                                                        height={28}
-                                                                                                                    />
-                                                                                                                    <Skeleton
-                                                                                                                        animation="wave"
-                                                                                                                        style={{ marginRight: "14px" }}
-                                                                                                                        variant="rounded"
-                                                                                                                        width={80}
-                                                                                                                        height={28}
-                                                                                                                    />
-                                                                                                                    <Skeleton
-                                                                                                                        animation="wave"
-                                                                                                                        style={{ marginRight: "14px" }}
-                                                                                                                        variant="rounded"
-                                                                                                                        width={80}
-                                                                                                                        height={28}
-                                                                                                                    />
-                                                                                                                    <Skeleton
-                                                                                                                        animation="wave"
-                                                                                                                        variant="circular"
-                                                                                                                        width={25}
-                                                                                                                        height={25}
-                                                                                                                    />
+                                                                                                                    <Skeleton animation="wave" style={{ marginRight: "14px" }}  variant="rounded"  width={80}  height={28}  />
+                                                                                                                    <Skeleton  animation="wave"  style={{ marginRight: "14px" }} variant="rounded" width={80}  height={28}  />
+                                                                                                                    <Skeleton animation="wave" style={{ marginRight: "14px" }}  variant="rounded" width={80} height={28}  />
+                                                                                                                    <Skeleton  animation="wave"  variant="circular"  width={25}  height={25} />
                                                                                                                 </div>
                                                                                                             </div>    
                                                                                                         </div>
@@ -7383,25 +7043,13 @@ function MyStories(props) {
                                                     <React.Fragment>
                                                         <section className="ai-no-project-found">
                                                             <div className="ai-no-project-cont">
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={NoEditorIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                { projectSearchTerm ?
+                                                                        <img className="empty-folder-img" src={NoEditorIcon}  alt="empty-folder-open" />
                                                                         :
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={EmptyProjectIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                        <img className="empty-folder-img" src={EmptyProjectIcon} alt="empty-folder-open" />
                                                                 }
                                                                 <h2>{t("no_story_found")}</h2>
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        null
-                                                                        :
+                                                                { projectSearchTerm ? null :
                                                                         <>
                                                                             {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
                                                                                 <button className="workspace-files-AddNewProjectButton"
@@ -7420,8 +7068,7 @@ function MyStories(props) {
                                                     </React.Fragment>
                                             )
                                             :
-                                            (
-                                                !showEmptyProjects ? (
+                                            ( !showEmptyProjects ? (
                                                     <React.Fragment>
                                                         {Array(projectsPerPage?.current)
                                                             .fill(null)
@@ -7469,30 +7116,16 @@ function MyStories(props) {
                                                     <React.Fragment>
                                                         <section className="ai-no-project-found">
                                                             <div className="ai-no-project-cont">
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={NoEditorIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                { projectSearchTerm ?
+                                                                        <img className="empty-folder-img" src={NoEditorIcon}  alt="empty-folder-open"  />
                                                                         :
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={EmptyProjectIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                        <img className="empty-folder-img"  src={EmptyProjectIcon} alt="empty-folder-open"  />
                                                                 }
                                                                 <h2>{t("no_story_found")}</h2>
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        null
-                                                                        :
+                                                                { projectSearchTerm ?   null  :
                                                                         <>
                                                                             {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
-                                                                                <button className="workspace-files-AddNewProjectButton"
-                                                                                    onClick={() => handleCreateStoryBtn()}
-                                                                                >
+                                                                                <button className="workspace-files-AddNewProjectButton" onClick={() => handleCreateStoryBtn()}  >
                                                                                     <span className="add-new-project-btn">
                                                                                         <img src={PlusIcon} alt="plus" />
                                                                                         {t("create_new_story")}
@@ -7567,7 +7200,6 @@ function MyStories(props) {
                     </div>
                 </div>
             </>
-
             {showVersionControlModal && (<Rodal visible={showVersionControlModal} {...versioncontrolmodaloption} showCloseButton={false} className="version-control-integration">
                 <VersionControlModal
                     onClick={hideVersionControlModal}
@@ -7579,7 +7211,6 @@ function MyStories(props) {
                     fileUploadTabToggle={fileUploadTabToggle}
                 />
             </Rodal>)}
-
             {showAssignManageModal && (<Rodal visible={showAssignManageModal} {...assignmanagemodaloption} showCloseButton={false} className="ailaysa-manage-modal">
                 <div className="assign-manage-cont">
                     <span className="assign-manage-close-btn" onClick={hideAssignManageModal}>
@@ -7588,7 +7219,6 @@ function MyStories(props) {
                     <InstructionModal instructionText={instructionText} instructionFile={instructionFile} taskAssignInfoId={taskAssignInfoId} />
                 </div>
             </Rodal>)}
-
             {showSettings && (<Rodal visible={showSettings} {...modaloption} showCloseButton={false} className="ailaysa-setup-settings-modal">
                 {showSettings &&
                     <Settings
@@ -7606,7 +7236,6 @@ function MyStories(props) {
                     />
                 }
             </Rodal>)}
-
             {showWordCount && (<Rodal visible={showWordCount} {...modaloption} showCloseButton={false} className="ailaysa-wordcount-modal">
                 {showWordCountLoader ? (
                     <React.Fragment>
@@ -7682,24 +7311,11 @@ function MyStories(props) {
                     />
                 </div>
             </Rodal>)}
-
-
-            {showSrcLangModal && (<Rodal
-                visible={showSrcLangModal}
-                {...modaloption}
-                showCloseButton={false}
-                className="ai-lang-select-modal"
-            >
+            {showSrcLangModal && (<Rodal visible={showSrcLangModal} {...modaloption}  showCloseButton={false} className="ai-lang-select-modal" >
                 <div className="lang-modal-wrapper">
                     {/* <h1>Select a source language</h1> */}
-                    <span
-                        className="modal-close-btn lang-close"
-                        onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false) }}
-                    >
-                        <img
-                            src={BlackCloseIcon}
-                            alt="close_black"
-                        />
+                    <span className="modal-close-btn lang-close" onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false) }}>
+                        <img src={BlackCloseIcon} alt="close_black"/>
                     </span>
                     {showSrcLangModal &&
                         <SourceLanguage
@@ -7740,7 +7356,6 @@ function MyStories(props) {
                     searchAreaRef={searchAreaRef}
                 />
             </Rodal>)} */}
-
             {showDurationAlertModal && (<Rodal visible={showDurationAlertModal} {...modaloption} showCloseButton={false} className="ai-large-file-alert-modal">
                 <span className="prompt-close-btn" onClick={() => setShowDurationAlertModal(false)}>
                     <img src={BlackCloseIcon} alt="close_black" />
@@ -7785,11 +7400,8 @@ function MyStories(props) {
                 taskAssignUpdate={taskAssignUpdate}
                 showSubmitDocumentAlertModal={showSubmitDocumentAlertModal}
                 setShowSubmitDocumentAlertModal={setShowSubmitDocumentAlertModal}
-                handleDocuemtSubmitConfirmation={handleDocuemtSubmitConfirmation}
-            />
-
+                handleDocuemtSubmitConfirmation={handleDocuemtSubmitConfirmation} />
             <a href={hiddenLinkUrl} download={downloadedFileName.current} className="hidden" ref={downloadref} />
-
             {showCreditAlertModal && (<Rodal className="ts-rodal-mask" visible={showCreditAlertModal} {...convertmodaloption} showCloseButton={false}>
                 <span className="modal-close-btn lang-close" onClick={(e) => { setShowCreditAlertModal(false) }}>
                     <img src={BlackCloseIcon} alt="close_black" />
@@ -7816,12 +7428,7 @@ function MyStories(props) {
                     </React.Fragment>
                 </div>
             </Rodal>)}
-            {showProjectAnalysis && (<Rodal
-                visible={showProjectAnalysis}
-                {...modaloption}
-                showCloseButton={false}
-                className="ai-project-analysis-modal-wrapper"
-            >
+            {showProjectAnalysis && (<Rodal  visible={showProjectAnalysis} {...modaloption} showCloseButton={false} className="ai-project-analysis-modal-wrapper" >
                 <div className="ai-project-analysis-wrapper">
                     <div className="analysis-header-wrapper">
                         <div className="analysis-header-txt">
@@ -7839,8 +7446,7 @@ function MyStories(props) {
                     {/* if projectAnalysisUnitSwitch is false: word and projectAnalysisUnitSwitch is true: character */}
                     {(projectAnalysisedData != null && Object.keys(projectAnalysisedData)?.length !== 0) ?
                         <div className="analysis-body-wrapper">
-                            {
-                                projectAnalysisedData?.project?.map(each => (
+                            {  projectAnalysisedData?.project?.map(each => (
                                     <>
                                         <div className="analysis-proj-name-wrapper">
                                             <h4 className="proj-name">{t("project_c")}: {each.projectInfo?.project_name}</h4>
@@ -7859,7 +7465,6 @@ function MyStories(props) {
                                                 }
                                             </div>
                                         </div>
-
                                         <div className="analysis-table-wrapper">
                                             <table>
                                                 <tr className="main-header">
@@ -7899,8 +7504,7 @@ function MyStories(props) {
                                 ))
                             }
                             <div className="analysis-lang-pair-collapse-wrapper">
-                                {
-                                    projectAnalysisedData?.task?.map((each, index) => {
+                                { projectAnalysisedData?.task?.map((each, index) => {
                                         return (
                                             <div key={each?.taskInfo.task_id} className="analysis-lang-pair-item">
                                                 <div className={"analysis-lang-wrapper " + (showAnalysisCollapse[index] && "marg-add")} onClick={(e) => handleAnalysisCollapse(index)}>
@@ -7946,8 +7550,7 @@ function MyStories(props) {
                                                                 <th>102%</th>
                                                             </tr>
                                                             <tr className="sub-header">
-                                                                {
-                                                                    Object.values(projectAnalysisedData?.payable_rates?.rateData)?.map((item, ind) => {
+                                                                { Object.values(projectAnalysisedData?.payable_rates?.rateData)?.map((item, ind) => {
                                                                         return (
                                                                             <th key={ind}>{item}{ind !== 0 ? '%' : ''}</th>
                                                                         )
@@ -7955,8 +7558,7 @@ function MyStories(props) {
                                                                 }
                                                             </tr>
                                                             <tr className="body-row">
-                                                                {
-                                                                    Object.values(!projectAnalysisUnitSwitch ? each?.taskWordData : each?.taskCharData)?.map((item, ind) => {
+                                                                { Object.values(!projectAnalysisUnitSwitch ? each?.taskWordData : each?.taskCharData)?.map((item, ind) => {
                                                                         return (
                                                                             <td key={ind}>{item}</td>
                                                                         )
@@ -7985,12 +7587,7 @@ function MyStories(props) {
             </Rodal>)}
 
             {/* modal for file processing */}
-            {showProcessingModal && (<Rodal
-                visible={showProcessingModal}
-                {...modaloption}
-                showCloseButton={false}
-                className="ai-mark-confirm-box"
-            >
+            {showProcessingModal && (<Rodal  visible={showProcessingModal}  {...modaloption}  showCloseButton={false}  className="ai-mark-confirm-box" >
                 <span className="modal-close-btn lang-close" onClick={(e) => { setShowProcessingModal(false); setTextToSpeechConvert(false); setIsTranscribing(false); partialPretranslate && handlePartialPretranslateClose() }}>
                     <img src={BlackCloseIcon} alt="close_black" />
                 </span>
@@ -8008,18 +7605,9 @@ function MyStories(props) {
                     }
                 </div>
             </Rodal>)}
-
             {/* modal for last task delete */}
-            {showTaskDeleteAlert && (<Rodal
-                visible={showTaskDeleteAlert}
-                {...modaloptions}
-                showCloseButton={false}
-                className={unassignTaskDeleteAlert ? "ai-mark-confirm-box Assign-task-deletion-rodal " : 'ai-mark-confirm-box '}
-            >
-                <div
-                    style={isTaskDeleting ? { pointerEvents: 'none' } : {}}
-                    className={unassignTaskDeleteAlert ? " Assign-task-deletion-model confirmation-warning-wrapper" : "confirmation-warning-wrapper "}
-                >
+            { showTaskDeleteAlert && (<Rodal visible={showTaskDeleteAlert} {...modaloptions}  showCloseButton={false} className={unassignTaskDeleteAlert ? "ai-mark-confirm-box Assign-task-deletion-rodal " : 'ai-mark-confirm-box '} >
+                <div style={isTaskDeleting ? { pointerEvents: 'none' } : {}} className={unassignTaskDeleteAlert ? " Assign-task-deletion-model confirmation-warning-wrapper" : "confirmation-warning-wrapper "}>
                     <div className="confirm-top">
                         <div><span onClick={() => { setShowTaskDeleteAlert(false) }}><CloseIcon /></span></div>
                         {
@@ -8063,22 +7651,16 @@ function MyStories(props) {
                     </div>
                 </div>
             </Rodal>)}
-
                 {/* modal for task delete */}
                 {showTaskDesignIndividualDeleteAlert && (<Rodal
                 visible={showTaskDesignIndividualDeleteAlert}
                 {...modaloptions}
                 showCloseButton={false}
-                className={unassignTaskDeleteAlert ? "ai-mark-confirm-box Assign-task-deletion-rodal " : 'ai-mark-confirm-box '}
-            >
-                <div
-                    style={isTaskDeleting ? { pointerEvents: 'none' } : {}}
-                    className={unassignTaskDeleteAlert ? " Assign-task-deletion-model confirmation-warning-wrapper" : "confirmation-warning-wrapper "}
-                >
+                className={unassignTaskDeleteAlert ? "ai-mark-confirm-box Assign-task-deletion-rodal " : 'ai-mark-confirm-box '} >
+                <div style={isTaskDeleting ? { pointerEvents: 'none' } : {}} className={unassignTaskDeleteAlert ? " Assign-task-deletion-model confirmation-warning-wrapper" : "confirmation-warning-wrapper "}>
                     <div className="confirm-top">
                         <div><span onClick={() => { setShowTaskDesignIndividualDeleteAlert(false) }}><CloseIcon /></span></div>
-                        {
-                            unassignTaskDeleteAlert ?
+                        { unassignTaskDeleteAlert ?
                                 <>
                                     <div className="model_title_"><span className="indicate_icon__rodal"></span>{t("task_assigned")}!</div>
                                     <div className="model_discription_">{t("task_assigned_note_1")}</div>
@@ -8120,15 +7702,13 @@ function MyStories(props) {
                     </div>
                 </div>
             </Rodal>)}
-
             {/* modal for express project delete */}
             {showStoryProjDeleteModal && (
                 <Rodal
                     visible={showStoryProjDeleteModal}
                     {...modaloptions}
                     showCloseButton={false}
-                    className="ai-mark-confirm-box"
-                >
+                    className="ai-mark-confirm-box" >
                     <div className="confirmation-warning-wrapper">
                         <div className="confirm-top">
                             <div><span onClick={() => { setShowStoryProjDeleteModal(false) }}><CloseIcon /></span></div>
@@ -8157,14 +7737,12 @@ function MyStories(props) {
                     </div>
                 </Rodal>
             )}
-
             {/* modal for instant tranlation project edit */}
             {editInstantProjectModal && (
                 <Rodal
                     visible={editInstantProjectModal}
                     showCloseButton={false}
-                    className={"edit-instant-project-box " + ((showTarLangModal || showStoryProjDeleteModal) ? "z-index-reduce" : "z-index-increase")}
-                >
+                    className={"edit-instant-project-box " + ((showTarLangModal || showStoryProjDeleteModal) ? "z-index-reduce" : "z-index-increase")}>
                     <div className="header-wrapper">
                         <div className="header-text">
                             <EditOutlinedIcon style={{ fontSize: 22, color: "#5F6368" }} />
@@ -8175,8 +7753,7 @@ function MyStories(props) {
                         </span>
                     </div>
                     <div className="body-wrapper">
-                        {/* <div className="details-cont">
-                            
+                        {/* <div className="details-cont">                            
                         </div> */}
                         <div className="language-details mb-3">
                             <h2>{t("project_name")}</h2>
@@ -8214,8 +7791,7 @@ function MyStories(props) {
                         </div>
                         <div className="language-details">
                             <h2>{t("target_language")} <span className="asterik-symbol">*</span></h2>
-                            {
-                                skeletonLoader ?
+                            { skeletonLoader ?
                                     <Skeleton animation="wave" variant="text" width={"100%"} height={40} />
                                     :
                                     <>
@@ -8231,8 +7807,7 @@ function MyStories(props) {
                                                     },
                                                 },
                                             }}
-                                            title={`${targetLanguageListTooltip}`} placement="top"
-                                        >
+                                            title={`${targetLanguageListTooltip}`} placement="top" >
                                             <ButtonBase onClick={() => { setshowTarLangModal(true); }} ref={targetLangDivRef}>
                                                 <div className="ai-sl-tl-btn">
                                                     <span className="text">
@@ -8272,8 +7847,7 @@ function MyStories(props) {
                 visible={showAssignedProjectDeleteAlert}
                 {...modaloptions}
                 showCloseButton={false}
-                className="ai-mark-confirm-box Assign-task-deletion-rodal"
-            >
+                className="ai-mark-confirm-box Assign-task-deletion-rodal">
                 <div className="confirmation-warning-wrapper Assign-task-deletion-model">
                     <div className="confirm-top">
                         <div><span onClick={() => { SetShowAssignedProjectDeleteAlert(false); }}><CloseIcon /></span></div>
@@ -8287,8 +7861,7 @@ function MyStories(props) {
                         </div>
                     </div>
                 </div>
-            </Rodal>)}
-            
+            </Rodal>)}            
             {/* <Prompt
                 when={isDownloading}
                 message={handleBlockedNavigation}
@@ -8319,13 +7892,11 @@ function MyStories(props) {
                 )
             }}
             </ReactRouterPrompt>
-
             {showdocCreditCheckAlert && (<Rodal
                 visible={showdocCreditCheckAlert}
                 showCloseButton={false}
                 onclose={() => console.log()}
-                className="ai-mark-confirm-box"
-            >
+                className="ai-mark-confirm-box" >
                 <div className="confirmation-warning-wrapper">
                     <div className="confirm-top">
                         <div><span onClick={() => { setShowDocCreditCheckAlert(false) }}><CloseIcon /></span></div>
@@ -8347,8 +7918,7 @@ function MyStories(props) {
                     assignStep={assignStep}
                     selectedFileRow={selectedFileRow}
                     targetLanguageOptionsRef={targetLanguageOptionsRef}
-                    listFiles={listFiles}
-                />
+                    listFiles={listFiles}/>
             }
             {showLSPAssignManage &&
                 <LSPAssignManage
@@ -8356,8 +7926,7 @@ function MyStories(props) {
                     setShowLSPAssignManage={setShowLSPAssignManage}
                     selectedFileRow={selectedFileRow}
                     targetLanguageOptionsRef={targetLanguageOptionsRef}
-                    listFiles={listFiles}
-                />
+                    listFiles={listFiles} />
             }
             {showPOConfirmModal &&
                 <ConformPOModal
@@ -8366,23 +7935,20 @@ function MyStories(props) {
                     projectIdForPOModal={projectIdForPOModal}
                     targetLanguageOptionsRef={targetLanguageOptionsRef}
                     listFiles={listFiles}
-                    projectTypeForPOModal={projectTypeForPOModal}
-                />
+                    projectTypeForPOModal={projectTypeForPOModal}/>
             }
             {showPOFilesModal && (
                 <POFilesModal
                     showPOFilesModal={showPOFilesModal}
                     setShowPOFilesModal={setShowPOFilesModal}
-                    POFilesDetails={POFilesDetails}
-                />
+                    POFilesDetails={POFilesDetails}/>
             )}
             {showTaskReworkReasonModal && (
                 <Rodal
                     visible={showTaskReworkReasonModal}
                     showCloseButton={false}
                     onclose={() => setShowTaskReworkReasonModal(false)}
-                    className="reason-modal-wrapper"
-                >
+                    className="reason-modal-wrapper">
                     <div className="reason-modal-inner-wrapper">
                         <span className="modal-close-btn lang-close" onClick={() => { setShowTaskReworkReasonModal(false) }}>
                             <img src={BlackCloseIcon} alt="close_black" />
@@ -8417,8 +7983,7 @@ function MyStories(props) {
                     visible={showDeadlineCrossedModal}
                     showCloseButton={false}
                     onclose={() => setShowDeadlineCrossedModal(false)}
-                    className="reason-modal-wrapper info-modal"
-                >
+                    className="reason-modal-wrapper info-modal">
                     <div className="reason-modal-inner-wrapper">
                         <span className="modal-close-btn lang-close" onClick={() => { setShowDeadlineCrossedModal(false) }}>
                             <img src={BlackCloseIcon} alt="close_black" />
@@ -8444,8 +8009,7 @@ function MyStories(props) {
                     visible={showVendorChangeRequestModal}
                     showCloseButton={false}
                     onClose={() => setShowVendorChangeRequestModal(false)}
-                    className="reason-modal-wrapper"
-                >
+                    className="reason-modal-wrapper">
                     <div className="reason-modal-inner-wrapper">
                         <span className="modal-close-btn lang-close" onClick={() => { setShowVendorChangeRequestModal(false) }}>
                             <img src={BlackCloseIcon} alt="close_black" />
@@ -8465,8 +8029,7 @@ function MyStories(props) {
                         </div>
                     </div>
                 </Rodal>
-            )}
-            
+            )}            
             {showFileErrorModal && (
                 <Rodal 
                     className="ts-rodal-mask" 
@@ -8475,8 +8038,7 @@ function MyStories(props) {
                     width={528}
                     height="auto"
                     onClose={() => console.log()} 
-                    showCloseButton={false}
-                >
+                    showCloseButton={false} >
                     <span className="modal-close-btn lang-close" onClick={(e) => { setShowFileErrorModal(false) }}>
                         <img src={BlackCloseIcon} alt="close_black" />
                     </span>
