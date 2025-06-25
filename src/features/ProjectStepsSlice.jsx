@@ -8,7 +8,7 @@ export const ProjectStepsSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setSteps} = ProjectStepsSlice.actions;
 export default ProjectStepsSlice.reducer;

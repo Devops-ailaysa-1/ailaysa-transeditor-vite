@@ -8,9 +8,7 @@ export const SpellCheckHtmlDataSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
-
+});
 
 export const {setSpellCheckHtmlData} = SpellCheckHtmlDataSlice.actions;
-
 export default SpellCheckHtmlDataSlice.reducer;

@@ -8,7 +8,7 @@ export const BookContentLossAlertModalSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setShowBookContentLossAlertModal} = BookContentLossAlertModalSlice.actions;
 export default BookContentLossAlertModalSlice.reducer;

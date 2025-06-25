@@ -8,7 +8,7 @@ export const IsDinamalarNewsSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setIsDinamalarNews} = IsDinamalarNewsSlice.actions;
 export default IsDinamalarNewsSlice.reducer;

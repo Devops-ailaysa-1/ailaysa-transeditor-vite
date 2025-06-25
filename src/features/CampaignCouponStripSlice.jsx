@@ -11,7 +11,7 @@ export const CampaignCouponStripSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const { setShowCampaignStrip } = CampaignCouponStripSlice.actions;
 export default CampaignCouponStripSlice.reducer;

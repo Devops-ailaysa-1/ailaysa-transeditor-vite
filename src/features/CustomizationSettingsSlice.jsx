@@ -8,7 +8,7 @@ export const customizationSettingsSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setDefaultSettings} = customizationSettingsSlice.actions;
 export default customizationSettingsSlice.reducer;

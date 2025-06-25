@@ -10,19 +10,13 @@ export const AITab = ({
     customClass,
     innerTabClass,
     ...props
-}) => {
-    
+}) => {    
     const changeTab = (item) => {
         onChange(item);
     }
 
     return (
-        <div 
-            className={[
-                "ai-tabs",
-                customClass,
-            ].join(' ')}
-        >
+        <div className={[ "ai-tabs", customClass,  ].join(' ')} >
             {
                 variant === 'contained' ? (
                     <div className="contained-tab-wrapper" {...props}>
@@ -75,24 +69,16 @@ export const AITab = ({
 }
 
 AITab.propTypes = {
-    /**
-     * List of items in tab
-     */
+    //List of items in tab
     dataList: propTypes.arrayOf(propTypes.shape({
         label: propTypes.string,
         value: propTypes.number
     })),
-    /**
-     * Tab style variant 
-     */
+    //Tab style variant 
     variant: propTypes.oneOf([ 'contained', 'with-bg', 'without-bg']),
-    /**
-     * Control the current active tab
-     */
+    // Control the current active tab
     activeTab: propTypes.number,
-    /**
-     * onChange handler to change the active tab
-     */
+    // onChange handler to change the active tab
     onChange: propTypes.func
 }
 

@@ -8,7 +8,7 @@ export const ShowAdaptiveTransIntroModalSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setShowAdaptiveMTIntroModal} = ShowAdaptiveTransIntroModalSlice.actions;
 export default ShowAdaptiveTransIntroModalSlice.reducer;

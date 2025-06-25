@@ -27,7 +27,7 @@ const AddStoryModal = (props) => {
     const [files, setFiles] = useState([]);
     const [fileError, setFileError] = useState("");
 
-    const editorRef = useRef(null)
+    const editorRef = useRef(null);
 
     const cleanEditorData = () => {
         // Take value of summernote editor
@@ -156,8 +156,7 @@ const AddStoryModal = (props) => {
                                 files={files}
                                 setFiles={setFiles}
                                 fileError={fileError}
-                                setFileError={setFileError}
-                            />
+                                setFileError={setFileError}/>
                         )
                     }
                 </div>

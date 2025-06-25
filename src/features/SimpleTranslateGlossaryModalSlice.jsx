@@ -15,7 +15,7 @@ export const SimpleTranslateGlossaryModalSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setSimpleTranslateGlossaryModal} = SimpleTranslateGlossaryModalSlice.actions;
 export default SimpleTranslateGlossaryModalSlice.reducer;

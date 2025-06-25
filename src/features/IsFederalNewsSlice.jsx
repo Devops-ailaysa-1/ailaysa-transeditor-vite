@@ -8,7 +8,7 @@ export const IsFederalNewsSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setIsFederalNews} = IsFederalNewsSlice.actions;
 export default IsFederalNewsSlice.reducer;

@@ -192,8 +192,7 @@ const BIReport = () => {
                                     <ButtonBase 
                                         className="report-down-btn"
                                         style={isReportDownloading ? {padding: '10px'} : {}}
-                                        onClick={() => !isReportDownloading && downloadBIReport()}
-                                    >
+                                        onClick={() => !isReportDownloading && downloadBIReport()}>
                                         {isReportDownloading && <ButtonLoader />}
                                         <span className={isReportDownloading ? 'ml-2' : ''}>
                                             {isReportDownloading ? ("downloading") : ("download")}
@@ -224,8 +223,7 @@ const BIReport = () => {
                         />
                         {(!showEditorReportModal && workReport?.userData?.length !== undefined) ? (
                             <EditorRolesList workReport={workReport} activeTab={activeTab} />
-                        ) : ""}
-                        
+                        ) : ""}                        
                     </div>
                 </TabContent>
             </section>

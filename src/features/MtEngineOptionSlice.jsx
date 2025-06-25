@@ -8,7 +8,7 @@ export const MtEngineOptionSlice = createSlice({
             state.value = action.payload;
         }
     }
-})
+});
 
 export const {setMtEngineOption} = MtEngineOptionSlice.actions;
 export default MtEngineOptionSlice.reducer;
