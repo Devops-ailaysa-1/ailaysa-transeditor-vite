@@ -7,7 +7,7 @@ export const Prompt = () => {
     const [processStep,setProcessstep] = useState(1);
 
     const prevstep =()=>{
-        if(step > 1 )setStep(current=>current-1) ;
+        if(step > 1 )setStep(current=>current-1);
     }
     const nextstep =()=>{ 
         if(step < processStep ) setStep(current=>current+1) ;
@@ -44,8 +44,7 @@ export const Prompt = () => {
             {step == 4 && <div className="blog_stage  stage_four">
                 {t("blog")}
                 <span onClick={()=>{setProcessstep(4)}}>{t("click")}</span>
-            </div>}
-            
+            </div>}            
             <p className="stage_change_step_btn_parent">
                 <span className="stage_change_step_btn" style={{opacity:step == 1 ? 0.5 : 1 }} onClick={prevstep}>{t("prev")}</span>
                 <span className="stage_change_step_btn" onClick={nextstep} style={{opacity:step == 4 ? 0.5 : 1 }}>{t("next")}</span>

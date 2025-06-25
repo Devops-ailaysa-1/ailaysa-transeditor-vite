@@ -7,7 +7,7 @@ import { useRef } from 'react';
 import './prompt_writing_box.css';
 
 export const PromptWritingBox = () => {
-    const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
+    const languageOptionsList = useSelector((state) => state.languageOptionsList.value);
     const [toggler, setToggler] = useState(false);
 
     const contenteditableRef = useRef(null);
@@ -19,8 +19,7 @@ export const PromptWritingBox = () => {
     of our <span class="placeholder" >[product/service]</span> and explains how these
     <span class="placeholder" >[advantages]</span> can be helpful to
     <span class="placeholder" >[ideal customer persona]</span>.
-    Elaborate on the <span class="placeholder" >[benefits]</span> of our product and how it can positively impact the reader.
-    `;
+    Elaborate on the <span class="placeholder" >[benefits]</span> of our product and how it can positively impact the reader. `;
 
     useEffect(() => {
         // Add click event listener to placeholders

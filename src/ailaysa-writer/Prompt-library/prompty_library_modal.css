@@ -66,6 +66,7 @@
     margin-right: 18px;
     border-right: 1px solid #DFDFDF;
 }
+
 .prompt-lib-modal-body .prompt-container .right-box {
     width: 60%;
 }
@@ -170,7 +171,6 @@
 }
 
 .category-list .list-item .more-icon {
-
 }
 
 .sub-category-list{
@@ -283,6 +283,7 @@
 .add-prompt-category-btn.category-btn {
     margin-right: 14px;
 }
+
 .add-prompt-category-btn {
     margin-top: 10px;
     text-align: left;

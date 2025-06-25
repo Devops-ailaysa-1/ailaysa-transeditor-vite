@@ -587,7 +587,7 @@ const Writter = (props) => {
             // dismiss all writer toasts when component unmount
             Config.toast('','', true);
         }
-    }, [])
+    }, []);
 
     const getLevelOptions = () => {
         Config.axios({
@@ -601,7 +601,7 @@ const Writter = (props) => {
                         value: each.id,
                         label: each.level
                     });
-                })
+                });
                 dispatch(setLevelOption(options));
             },
         });
@@ -887,6 +887,7 @@ const Writter = (props) => {
             behavior: 'smooth'
         });
     };
+
     const scrollToTop = () => {
         const element = document.querySelector('.note-editable');
         element.scrollTo({
@@ -894,6 +895,7 @@ const Writter = (props) => {
             behavior: 'smooth'
         });
     };
+
     function placeCaretAtEnd(el) {
         el.focus();
         if (typeof window.getSelection != "undefined"
@@ -1117,7 +1119,6 @@ const Writter = (props) => {
         }
     }, [URL_SEARCH_PARAMS.get("pdf-id"), location.state]);
 
-    // 
     useEffect(() => {
         let docParam = URL_SEARCH_PARAMS.get("document-id");
         if (docParam) {
@@ -1386,7 +1387,6 @@ const Writter = (props) => {
         });
     }
 
-
     const getHtmlToDocxFileBlob = async (target) => {
         var summerNoteData = document.querySelector('.note-editable').innerHTML;
         if($('.summernote').summernote('isEmpty')) {
@@ -1604,7 +1604,7 @@ const Writter = (props) => {
                             document.querySelector('.note-editable').style.setProperty('padding-right', '20%', 'important');
                         }
                         if (document.querySelector('.temp-color')) {
-                            document.querySelector('.temp-color').classList.remove('temp-color')
+                            document.querySelector('.temp-color').classList.remove('temp-color');
                         }
                     } else {  // from task
                         if (response.data?.pdf_file) {
@@ -1621,7 +1621,7 @@ const Writter = (props) => {
                             document.querySelector('.note-editable').style.setProperty('padding-right', '20%', 'important');
                         }
                         if (document.querySelector('.temp-color')) {
-                            document.querySelector('.temp-color').classList.remove('temp-color')
+                            document.querySelector('.temp-color').classList.remove('temp-color');
                         }
                     }
                     isInitialHtmlDataLoaded.current = false;
@@ -1855,7 +1855,6 @@ const Writter = (props) => {
         }
     }
 
-
     const createNewDocument = async (from, files) => {
         var textData = document.querySelector('.note-editable')?.innerText;
         // let wordCount2 = count(document?.querySelector('.note-editable')?.innerText?.replace(/\n/g, '')).words;
@@ -1897,6 +1896,7 @@ const Writter = (props) => {
                         headers: myHeaders,
                     };
                     let data = await fetch(Config.BASE_URL + "/workspace/doc_image/", requestOptions);
+
                     if (data.status === 200) {
                         let response = await data.json();
                         summerNoteEditorRef.current?.summernote("insertImage", `${Config.BASE_URL}${response.image}`);
@@ -1966,9 +1966,9 @@ const Writter = (props) => {
             auth: true,
             success: (response) => {
                 // setTimeout(() => {
-                //     // setIsSaved(true)
+                //     // setIsSaved(true);
                 // }, 1800);
-                // setContinueWritingEnable(true)
+                // setContinueWritingEnable(true);
                 enableTabFunctionRef.current = true;
                 if (target === 'translate') {
                     translateDocument();
@@ -1986,7 +1986,7 @@ const Writter = (props) => {
         formdata.append("edited_text", htmlData);
         formdata.append("task_id", transcripParam);
         if (target === 'translate') {
-            formdata.append("file", await getHtmlToDocxFile())
+            formdata.append("file", await getHtmlToDocxFile());
         }
 
         Config.axios({
@@ -2107,7 +2107,6 @@ const Writter = (props) => {
         if (document.querySelector('.tab-to-write-more-tooltip') && window.getSelection()?.toString() !== 0) {
             // document.querySelector('.tab-to-write-more-tooltip').style.setProperty('display', "hidden", 'important');
             document.querySelector('.tab-to-write-more-tooltip').style.visibility = "hidden";
-
         }
         // let x = rect.left + (rect.width) / 2 - document.querySelector('#pop').clientWidth / 2 + document.querySelector('.ailaysa-writter-working-col-wrapper').scrollLeft;
         let x = rect.left - document.querySelector('.ailaysa-writter-working-col-wrapper')?.getBoundingClientRect().left + (rect.width) / 2 - document.querySelector('#pop')?.clientWidth / 2 + document.querySelector('.ailaysa-writter-working-col-wrapper').scrollLeft;
@@ -2177,7 +2176,7 @@ const Writter = (props) => {
                     // document.querySelector('#pop').style.opacity = '0';
                     // setTimeout(()=>
                     // ,20);
-                    // document.querySelector('#pop').style.visibility = 'hidden'
+                    // document.querySelector('#pop').style.visibility = 'hidden';
                     // document.querySelector('#pop').style.left = x + 'px';
                     // document.querySelector('#pop').style.top = y + 'px';
                     if (document.querySelector('.word-count-number2')) {
@@ -2201,7 +2200,7 @@ const Writter = (props) => {
                         char: count(window.getSelection()?.toString().replace(/\n/g, '')).chars,
                         word: window.getSelection()?.toString()?.trim()?.split(/\s+/)?.length !== undefined ? window.getSelection()?.toString()?.trim()?.split(/\s+/)?.length : 0
                     }))
-                    document.querySelector('.word-count-number2').innerHTML = count(window.getSelection()?.toString().replace(/\n/g, '')).chars + " of " + count(document?.querySelector('.note-editable')?.innerText?.replace(/\n/g, '')).chars
+                    document.querySelector('.word-count-number2').innerHTML = count(window.getSelection()?.toString().replace(/\n/g, '')).chars + " of " + count(document?.querySelector('.note-editable')?.innerText?.replace(/\n/g, '')).chars;
                 }  
                 let pos = decidePopPosition(rect);
                 let top = pos.y - document.querySelector('.ailaysa-writter-working-col-wrapper').scrollTop;
@@ -2241,7 +2240,6 @@ const Writter = (props) => {
                 //     }
                 // }
             }
-
         // }, 100);
     }
 
@@ -2323,7 +2321,6 @@ const Writter = (props) => {
                 setSynonymsList(response.context);
             } else {
                 Config.toast(t("no_output_diff_text_note"), 'warning');
-
             }
         }
     }
@@ -2541,7 +2538,6 @@ const Writter = (props) => {
                         if (err?.response?.data?.msg == 'Insufficient Credits') {
                             // Config.toast('Insufficient Credits', 'warning');
                             setShowCreditAlertModal(true);
-
                         } else if(err?.response?.data?.msg?.includes('voice style')) {
                             dispatch(setShowCustomSettingsModal(true));
                             setActiveCustomizationTab(2);
@@ -2802,7 +2798,6 @@ const Writter = (props) => {
                         node = document.createElement('span');
                         window.getSelection().deleteFromDocument();
                         node.innerHTML = sanitizeHtml(`<p>` + customizationResultRef.current?.replace(/\n/g, "<br />") + '</p> ');
-
                     }
                     insertHtmlAfterSelection(node.innerHTML);
                     globalSaveLogic();
@@ -3019,8 +3014,7 @@ const Writter = (props) => {
     const downloadFileFromApi = (url) => {
         // throw new Error("uncomment this line to mock failure of API");
         let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
-        );
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null);
         let token = userCacheData != null ? userCacheData?.token : "";
         return axios.get(
             url,
@@ -3127,8 +3121,8 @@ const Writter = (props) => {
     // my new text insertion logic for summernote
     const insertResultInEditor = (e, selectedCustomization) => {
         const range = $.summernote.range;  // range utility
-        const rng = range.create() //  is equals range.createFromSelection()
-        // const rng = range.create() //  is equals range.createFromSelection()
+        const rng = range.create(); //  is equals range.createFromSelection()
+        // const rng = range.create(); //  is equals range.createFromSelection()
         let isCollapsed = rng?.isCollapsed();        
         let p_start_tag = '<p>';
         let p_end_tag = '</p>';
@@ -3399,8 +3393,7 @@ const Writter = (props) => {
         // $('.summernote').summernote('focus');
         const range = $.summernote.range;
         const rng = range.create(); //  is equals range.createFromSelection()
-        const isCollapsed = rng.isCollapsed();
-        
+        const isCollapsed = rng.isCollapsed();        
         if (!isCollapsed){            
             let Imgsrc = 'https://aidev4.ailaysa.com/media/u756436/MyDocImages/Screenshot_from_2023-09-12_11-00-32_1Hcctfl.png';
             let imgNode = document.createElement('img');
@@ -3565,7 +3558,7 @@ const Writter = (props) => {
                 //     each.removeAttribute('style');
                 //     each.removeAttribute('class');
                 //     each.removeAttribute('id');
-                // })    
+                // });    
                 // let imgNode = document.createElement('img');
                 // imgNode.src = `${Config.BASE_URL}${response.image}`;    
                 // loaderPtag.appendChild(imgNode);    
@@ -3657,8 +3650,7 @@ const Writter = (props) => {
                     <div 
                         className={"ailaysa-writter-sidebar-col-wrapper panel-adjust-poc " + (mobLeftSideBar ? "show " : "hide ") + (deskLeftSideBar ? "sidebar-show " : "sidebar-hide ")} 
                         // style={{ zIndex: (showSrcLangModal || showTarLangModal || mobLeftSideBar) ? 100 : 10 }}
-                        style={{ zIndex: (showCustomSrcLangModal || showCustomTarLangModal || showDesigner) ? 0 : 110 }}
-                    >
+                        style={{ zIndex: (showCustomSrcLangModal || showCustomTarLangModal || showDesigner) ? 0 : 110 }}>
                         <div className="ailaysa-mask" ref={leftSidebarRef}></div>
                         {/* <ResizePanel direction="e" style={{ minWidth: "400px", width: "530px", maxWidth: "530px" }}> */}
                         <WritterPromptForm
@@ -3716,8 +3708,7 @@ const Writter = (props) => {
                             showOverlay={showOverlay}
                             confirmedNavigation={confirmedNavigation}
                             setConfirmedNavigation={setConfirmedNavigation}
-                            lastLocation={lastLocation}
-                        />
+                            lastLocation={lastLocation}/>
                         {/* </ResizePanel> */}
                         {(leftSideBar && !historyTab) &&
                             <>
@@ -3854,8 +3845,7 @@ const Writter = (props) => {
                                 bookMatterItemSaveLogic={bookMatterItemSaveLogic}
                                 isCopiedFromSummernoteRef={isCopiedFromSummernoteRef}
                                 selectedCustomizationCategoryRef={selectedCustomizationCategoryRef}
-                                moveToEditor={moveToEditor}
-                            />
+                                moveToEditor={moveToEditor}/>
                         }
                         {(isAudioOrPdf === 'audio' || splitViewTab) &&
                             <>
@@ -3910,7 +3900,6 @@ const Writter = (props) => {
                         </div>
                     </div>
                 </div>
-
                 <div className={"ailaysa-writter-sidebar-col-wrapper-right " + (rightSideBar ? "show " : "hide ") + ((splitViewTab || (!leftSideBar && !rightSideBar && !historyTab && !splitViewTab)) && "d-none")} ref={rightSidebar}>
                     {(!rightSideBar && !historyTab && leftSideBar) &&
                         <Tooltip 
@@ -3962,8 +3951,7 @@ const Writter = (props) => {
                                 onImageClick={onImageClick}
                                 promptMainWrapper={promptMainWrapper} 
                                 setPromptMainWrapper={setPromptMainWrapper}
-                                showPlaceHolderDivForBook={showPlaceHolderDivForBook}
-                            />
+                                showPlaceHolderDivForBook={showPlaceHolderDivForBook}/>
                         </div>
                 </div>
             </div>
@@ -4009,8 +3997,7 @@ const Writter = (props) => {
                 showSetAsTranslationBtn={showSetAsTranslationBtn}
                 mobLeftSideBar={mobLeftSideBar}
                 showPlaceHolderDivForBook={showPlaceHolderDivForBook}
-                isTranslateProceeding={isTranslateProceeding}
-            />
+                isTranslateProceeding={isTranslateProceeding}/>
             {/* <WritterToolbar 
             editor={editor}
             /> */}
@@ -4039,10 +4026,7 @@ const Writter = (props) => {
                     </SplitPane>
                 </div>
             </div>
-            
-            
             {/* <WriterCharacterCountFooter currentSummerNoteTextData={currentSummerNoteTextData} /> */}
-
             <PromptHistory
                 mainCategoryRef={mainCategoryRef}
                 subCategoryRef={subCategoryRef}
@@ -4057,8 +4041,7 @@ const Writter = (props) => {
                 summerNoteEditorRef={summerNoteEditorRef}
                 setHistoryTab={setHistoryTab}
                 saveHtmlDataForDocument={saveHtmlDataForDocument}
-                isCopiedFromSummernoteRef={isCopiedFromSummernoteRef}
-            />
+                isCopiedFromSummernoteRef={isCopiedFromSummernoteRef} />
             {
                 (!historyTab && leftSideBar) &&
                 <Tooltip
@@ -4148,8 +4131,7 @@ const Writter = (props) => {
                                 isSearchable={true}
                                 additional={{
                                     page: 1,
-                                }}
-                            />
+                                }} />
                         </div>
                     }
                 </div>
@@ -4182,16 +4164,12 @@ const Writter = (props) => {
                 {...modaloption}
                 showCloseButton={false}
                 className="ai-mark-confirm-box"
-                onClose={() => console.log()}
-            >
+                onClose={() => console.log()} >
                 <span className="modal-close-btn lang-close" onClick={(e) => { setShowPunctuationModal(false); setPunctuationValidation(false) }}>
                     <img src={CloseBlack} alt="close_black" />
                 </span>
                 <div className="confirmation-wrapper" style={{ padding: '20px' }}>
-                    <img
-                        src={ConfirmIcon}
-                        alt="confirm-icon"
-                    />
+                    <img src={ConfirmIcon} alt="confirm-icon"/>
                     {
                         punctuationValidation ?
                             <h6 className="text-center">{t("punc_validation_note_1")}</h6>
@@ -4405,9 +4383,7 @@ const Writter = (props) => {
                 // setSearchInput={setSearchInput}
                 // onFocusWrap={onFocusWrap}
                 // setOnFocusWrap={setOnFocusWrap}
-                searchAreaRef={searchAreaRef}
-            />
-            
+                searchAreaRef={searchAreaRef} />
             {showTarLangModal && (
                 <Rodal visible={showTarLangModal} {...modaloption} onClose={() => console.log()} showCloseButton={false} className="ai-tar-lang-select-modal">
                     <div className="lang-modal-wrapper">
@@ -4439,8 +4415,7 @@ const Writter = (props) => {
             {showDocumentListModal && (
                 <DocumentListModal 
                     showDocumentListModal={showDocumentListModal}
-                    setShowDocumentListModal={setShowDocumentListModal}
-                />
+                    setShowDocumentListModal={setShowDocumentListModal}/>
             )}
 
             {/* open content reference modal */}
@@ -4448,10 +4423,8 @@ const Writter = (props) => {
                 <ReferenceModal 
                     openContentReferenceModal={openContentReferenceModal}
                     setOpenContentReferenceModal={setOpenContentReferenceModal}
-                    contentReferenceResult={contentReferenceResult}
-                />
+                    contentReferenceResult={contentReferenceResult}/>
             )}
-
             {showBookContentLossAlertModal && (
                 <Rodal
                     // visible={navigationModalVisible}
@@ -4477,7 +4450,6 @@ const Writter = (props) => {
                     </div>
                 </Rodal>
             )}
-
             {/* book page leaving confirmation modal */}
             {showBookPageLeavingAlertModal && (
                 <Rodal
@@ -4502,9 +4474,7 @@ const Writter = (props) => {
                         </div>
                     </div>
                 </Rodal>
-            )}
-
-          
+            )}          
             <ReactRouterPrompt when={handleBlockedNavigationForWriter}>
             {({ isActive, onConfirm, onCancel }) => {
                 return (
@@ -4533,7 +4503,6 @@ const Writter = (props) => {
                 )
             }}
             </ReactRouterPrompt>
-
             {/* writer page leaving confirmation modal */}
             {showWriterPageLeavingAlertModal && (
                 <Rodal
@@ -4542,8 +4511,7 @@ const Writter = (props) => {
                     height={240}
                     onClose={() => {}}
                     showCloseButton={false}
-                    className="ai-mark-confirm-box"
-                >
+                    className="ai-mark-confirm-box">
                     <div className="confirmation-warning-wrapper">
                         <div className="confirm-top">
                             <div><span onClick={() => { setShowWriterPageLeavingAlertModal(false) }}><CloseIcon /></span></div>
