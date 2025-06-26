@@ -84,7 +84,7 @@ const Config = {
             window.location.href = import.meta.env.VITE_APP_LOGIN_URL;
         }
     },
-    toast: function (alertText = "", type = "success", dismiss=false,alertheadtext="",alertsubheadtext="",onClick = null) {
+    toast: function (alertText = "", type = "success", dismiss=false, alertheadtext="", alertsubheadtext="", onClick = null) {
         //Toast alert
         // toast.configure();
         toast.clearWaitingQueue();
@@ -175,9 +175,9 @@ const Config = {
                             <img src={ErrorBlackWarn} />
                         </span>
                         <div>
-                        <div className="head_classWithFontStyleOrWhatever">{alertheadtext}</div>
-                        <div className="desc_classWithFontStyleOrWhatever">{alertsubheadtext}</div>
-                        <div className="subhead_classWithFontStyleOrWhatever" onClick={onClick}>{alertText}</div>
+                        <div className="head_toast_container">{alertheadtext}</div>
+                        <div className="desc_toast_container">{alertsubheadtext}</div>
+                        <div className="subhead_toast_container" onClick={onClick}>{alertText}</div>
                         </div>
                     </div>
                 );

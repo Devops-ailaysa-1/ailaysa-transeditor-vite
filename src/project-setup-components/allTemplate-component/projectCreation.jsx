@@ -289,7 +289,7 @@ function ProjectCreation(props) {
             setCheckchangenav(false);
         }
     }, [files])
-    console.log(files,"checkfiles")
+    
 
     useEffect(() => {
         if (

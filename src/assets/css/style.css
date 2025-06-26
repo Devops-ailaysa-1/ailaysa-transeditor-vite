@@ -7953,7 +7953,7 @@ ul.qa-list li:last-child {
 .toast-img {
     margin-left: 8px;
 }
-.head_classWithFontStyleOrWhatever{
+.head_toast_container{
 color: #000;
 font-size: 12px;
 font-style: normal;
@@ -7961,7 +7961,7 @@ font-weight: 600;
 line-height: normal;
 font-family: Inter;
 }
-.subhead_classWithFontStyleOrWhatever{
+.subhead_toast_container{
 color: #0073DF;
 font-family: Inter;
 font-size: 12px;
@@ -7975,7 +7975,7 @@ text-decoration-thickness: auto;
 text-underline-offset: auto;
 text-underline-position: from-font;
 }
-.desc_classWithFontStyleOrWhatever{
+.desc_toast_container{
     color: #000;
 font-size: 12px;
 font-style: normal;

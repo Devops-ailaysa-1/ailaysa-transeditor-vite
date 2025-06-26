@@ -163,7 +163,7 @@ export const ImportTerms = (props) => {
             error: (err) => {
                 
                  Config.toast("","",true)
-                if (err?.response?.data?.msg.includes("Terms upload limit reached for this glossary (1000 terms max)")) {
+                if (isFrom === 'simpleGlossary' && err?.response?.data?.msg.includes("Terms upload limit reached for this glossary (1000 terms max)")) {
                     Config.toast("",'support',false,"Glossary term limit reached","You’ve reached the maximum of 1000 glossary terms. Please remove some terms to add new ones.");
                 } 
                 setIsGlossaryLoading(false);
@@ -231,7 +231,7 @@ export const ImportTerms = (props) => {
             },
             error: (err) => {
                 Config.toast("","",true)
-                if (err?.response?.data?.msg.includes("Terms upload limit reached for this glossary (1000 terms max)")) {
+                if (isFrom === 'simpleGlossary' && err?.response?.data?.msg.includes("Terms upload limit reached for this glossary (1000 terms max)")) {
                     Config.toast("",'support',false,"Glossary term limit reached","You’ve reached the maximum of 1000 glossary terms. Please remove some terms to add new ones.");
                 } 
                 else if (err?.response?.status == 400) {
