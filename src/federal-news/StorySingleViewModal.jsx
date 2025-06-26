@@ -91,7 +91,7 @@ const StorySingleViewModal = (props) => {
                 Object?.keys(selectedStoryDetails?.data?.target_json)?.length === 0 &&
                 selectedStoryDetails?.data?.target_file_path !== null
             ){
-                setIsFileDisplay(true);
+               setIsFileDisplay(true);
             }else setIsFileDisplay(false);
         }
     }
@@ -126,12 +126,7 @@ const StorySingleViewModal = (props) => {
                                 <>
                                     {storyDetails?.mediaId && (
                                         <div className={"story-img-wrapper " + (!imageLoaded ? "skeleton-box" : "")}>
-                                            <img 
-                                                src={storyDetails?.mediaId} 
-                                                style={{display: imageLoaded ? 'block' : 'none' }}
-                                                onLoad={(e) => setImageLoaded(true)} 
-                                                alt="story-imh"
-                                            />
+                                            <img src={storyDetails?.mediaId} style={{display: imageLoaded ? 'block' : 'none' }} onLoad={(e) => setImageLoaded(true)} alt="story-imh" />
                                         </div>
                                     )}
                                     <div className="story-main-content">
@@ -142,8 +137,7 @@ const StorySingleViewModal = (props) => {
                                             <ul className='story-category-list'>
                                                 <li className="cate-item">{storyDetails?.maincat_name}</li>
                                             </ul>
-                                        )}
-                                        
+                                        )}                                        
                                         <div className='story-title-wrap'>
                                             <h1 className='title'>{storyDetails?.heading}</h1>
                                             <p className='main-excerpt'>{storyDetails?.description}</p>
