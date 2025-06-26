@@ -77,13 +77,14 @@ const Config = {
     STRAPI_BASE_URL: import.meta.env.VITE_APP_STRAPI_BASE_URL, //Card Content API BASE_URL
     IS_MAINTANCE: import.meta.env.VITE_APP_MAINTANCE,
     AI_GEN_URL: import.meta.env.VITE_APP_AI_GEN_URL,
+    STATIC_URL:import.meta.env.VITE_APP_STATIC_URL,
     redirectIfNotLoggedIn: function (props) {
         //Redirect to specified page if not logged in
         if (Config.userState === null) {
             window.location.href = import.meta.env.VITE_APP_LOGIN_URL;
         }
     },
-    toast: function (alertText = "", type = "success", dismiss=false) {
+    toast: function (alertText = "", type = "success", dismiss=false, alertheadtext="", alertsubheadtext="", onClick = null) {
         //Toast alert
         // toast.configure();
         toast.clearWaitingQueue();
@@ -114,7 +115,7 @@ const Config = {
                 return toast.warn(<AlertContent />, {
                     transition: Slide,
                     position: "top-center",
-                    autoClose: 8000,
+                     autoClose: 8000,
                     hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -163,6 +164,32 @@ const Config = {
                     draggable: true,
                     progress: undefined,
                     limit: 1,
+                });
+            }
+            case "support":{
+                // To show warnings
+                AlertContent = () => (
+                    <div className="toast-align">
+                        
+                        <span className="toast-img">
+                            <img src={ErrorBlackWarn} />
+                        </span>
+                        <div>
+                        <div className="head_toast_container">{alertheadtext}</div>
+                        <div className="desc_toast_container">{alertsubheadtext}</div>
+                        <div className="subhead_toast_container" onClick={onClick}>{alertText}</div>
+                        </div>
+                    </div>
+                );
+                return toast.warn(<AlertContent />, {
+                    transition: Slide,
+                    position: "top-center",
+                     autoClose: 8000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
                 });
             }
             default: {
