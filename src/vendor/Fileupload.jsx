@@ -4670,6 +4670,7 @@ function Fileupload(props) {
                 }
             },
             error: (err) => {
+                Config.toast("","",true)
                 if (err?.response?.status === 500) {
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
                         if (obj.id === task_id) {
@@ -4685,7 +4686,21 @@ function Fileupload(props) {
                     setSelectedProjectFiles(newArr);
                 }
                 if (err?.response?.status === 400) {
-                    if (err?.response?.data?.msg === 'Insufficient Credits') {
+                     if(err?.response?.data?.msg.includes("Something went wrong in re-initiation, contact admin")){
+                 Config.toast("Contact support",'support',false,"Translation Failed","We couldn’t process that file right now.",() => window.open(Config.STATIC_URL + "/support"));
+                 let newArr = selectedProjectFilesRef.current?.map(obj => {
+                            if (obj.id === task_id) {
+                                return {
+                                    ...obj,
+                                    isProcessing: false
+                                }
+                            }
+                            return obj;
+                        })
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles([...newArr]);
+                                }
+                    else if (err?.response?.data?.msg === 'Insufficient Credits') {
                         setShowCreditAlertModal(true);
                         let newArr = selectedProjectFilesRef.current?.map(obj => {
                             if (obj.id === task_id) {

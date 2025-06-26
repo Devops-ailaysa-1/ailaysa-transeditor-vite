@@ -7953,6 +7953,36 @@ ul.qa-list li:last-child {
 .toast-img {
     margin-left: 8px;
 }
+.head_toast_container{
+color: #000;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+font-family: Inter;
+}
+.subhead_toast_container{
+color: #0073DF;
+font-family: Inter;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+text-decoration-line: underline;
+text-decoration-style: solid;
+text-decoration-skip-ink: auto;
+text-decoration-thickness: auto;
+text-underline-offset: auto;
+text-underline-position: from-font;
+}
+.desc_toast_container{
+    color: #000;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+    padding: 4px 0px 10px;
+}
 
 .classWithFontStyleOrWhatever {
     font-family: 'roboto';
