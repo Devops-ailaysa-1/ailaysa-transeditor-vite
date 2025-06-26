@@ -1331,6 +1331,7 @@ function ProjectCreation(props) {
         formData.append("public_license", "");
         formData.append("steps", 1);
         formData.append("adaptive_simple", "true");
+        if (projectName) formData.append("project_name", projectName);
         let url = Config.BASE_URL + "/workspace/project/quick/setup/";
         let glossaryToast = "Your glossary is created.";
         if (isLanguageChanges) {
