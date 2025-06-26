@@ -23,7 +23,7 @@ const ModifiedStoriesFilter = (props) => {
     const DataFilterOptions = [
         { value: 'today', label: "Today" },
         { value: '30days', label: "Last month" }
-    ]
+    ];
     
     /* Check for clicing outside of the New project Dropdown */
     // useEffect(() => {
@@ -81,15 +81,12 @@ const ModifiedStoriesFilter = (props) => {
     return (
         <>
             <div className="modified-stories-dropdown-wrapper">
-                <div
-                    className="modified-stories-dropdown-wrapper___button-wrap"
-                    onClick={() => handleModifiedDatepickerVisibility(!modifiedDateSelectBox)}
-                >
+                <div className="modified-stories-dropdown-wrapper___button-wrap" onClick={() => handleModifiedDatepickerVisibility(!modifiedDateSelectBox)}  >
                     {userReportFilterSelectedValue?.label}
                     <i style={{ color: "#8c8c8c" }} className="fas fa-caret-down"/>
                 </div>
                 <AnimatePresence initial={false}>
-                    {modifiedDateSelectBox && (
+                    { modifiedDateSelectBox && (
                         <ClickAwayListener onClickAway={handleClickAway} >
                             <motion.div
                                 key="content"
@@ -98,11 +95,9 @@ const ModifiedStoriesFilter = (props) => {
                                 exit={{ height: 0, opacity: 0, transition: { duration: 0.15 }}}
                                 transition={{ duration: 0.15 }} 
                                 ref={modifiedDateSelectBoxRef}
-                                className="ai-projects-main-wrapper__header__dropdown-wrapper__dropdown-box"
-                            >
+                                className="ai-projects-main-wrapper__header__dropdown-wrapper__dropdown-box" >
                                 <div className="modified-stories-dropdown-wrapper___options-list">
-                                    {
-                                        DataFilterOptions?.map((item, index) => {
+                                    { DataFilterOptions?.map((item, index) => {
                                             return(
                                                 <div 
                                                     key={index} 
@@ -124,16 +119,14 @@ const ModifiedStoriesFilter = (props) => {
                                                 placeholder="From"
                                                 sourceTxt="modified-stories"
                                                 disablePast 
-                                                minDate={null}
-                                            />
+                                                minDate={null}  />
                                             <DatePicker 
                                                 value={toDate}
                                                 minDate={fromDate}
                                                 onChange={handleToDateChange} 
                                                 placeholder="To"
                                                 sourceTxt="modified-stories"
-                                                disablePast 
-                                            />
+                                                disablePast />
                                         </div>
                                     </div>
                                 </div>

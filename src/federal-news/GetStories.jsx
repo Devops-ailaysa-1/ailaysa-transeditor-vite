@@ -98,16 +98,16 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import { data } from "jquery";
 import LanguageSelector from "./LanguageSelector";
 import RefreshIcon from '@mui/icons-material/Refresh';
-import SearchBarIcon from "../assets/images/chat/chat-search.svg"
-import BlackClose from '../assets/images/assign-page/search-bar-close.svg'
-import NoEditors from "../assets/images/no-editors-found-2.svg"
-import EmptyProjectIcon from "../assets/images/empty-projects-folder.svg"
-import PlusIcon from "../assets/images/new-ui-icons/plus.svg"
-import FederalImgPlaceholder from '../assets/images/federal-news/federal_placeholder.png'
-import BlueRightArrow from '../assets/images/new-ui-icons/arrow_right_alt_color.svg'
-import InsuffientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg"
-import RedCircleIcon from "../assets/images/new-ui-icons/remove_circle_red.svg"
-import FileErrorIcon from "../assets/images/new-ui-icons/file-error.png"
+import SearchBarIcon from "../assets/images/chat/chat-search.svg";
+import BlackClose from '../assets/images/assign-page/search-bar-close.svg';
+import NoEditors from "../assets/images/no-editors-found-2.svg";
+import EmptyProjectIcon from "../assets/images/empty-projects-folder.svg";
+import PlusIcon from "../assets/images/new-ui-icons/plus.svg";
+import FederalImgPlaceholder from '../assets/images/federal-news/federal_placeholder.png';
+import BlueRightArrow from '../assets/images/new-ui-icons/arrow_right_alt_color.svg';
+import InsuffientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg";
+import RedCircleIcon from "../assets/images/new-ui-icons/remove_circle_red.svg";
+import FileErrorIcon from "../assets/images/new-ui-icons/file-error.png";
 
 function GetStories(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -267,10 +267,9 @@ function GetStories(props) {
         confirm: null,
         total: null,
         isTaskReassigned: false
-    })
+    });
     const [showSubmitDocumentAlertModal, setShowSubmitDocumentAlertModal] = useState(false);
     const [showElement, setShowElement] = useState(true);
-
     // Glossary project states
     const [primaryGlossarySourceName, setPrimaryGlossarySourceName] = useState("");
     const [glossaryCopyrightOwner, setGlossaryCopyrightOwner] = useState("");
@@ -348,11 +347,7 @@ function GetStories(props) {
     const [defaultPair , setDefaultPair] = useState([]);
     const [restrictedTargetLang , setRestrictedTargetLang] = useState([]);
     const [newsId, setNewsId] = useState([]);
-    const [selectedLanguageCMS, setSelectedLanguageCMS] = useState({value: 1, label: 'English'});
-    const downloadAnchorRef = useRef(null);
-    const projectIdForPOModal = useRef(null);
-    const projectTypeForPOModal = useRef(null);
-    const clientResponseDataRef = useRef(null);
+    const [selectedLanguageCMS, setSelectedLanguageCMS] = useState({value: 1, label: 'English'});    
     /* State constants - end */
 
     /* Ref constants - start */
@@ -371,6 +366,10 @@ function GetStories(props) {
     const deletedContentIds = useRef([]);
     const projectTypeRef = useRef(null);
     const assignedMemberCardRef = useRef(null);
+    const downloadAnchorRef = useRef(null);
+    const projectIdForPOModal = useRef(null);
+    const projectTypeForPOModal = useRef(null);
+    const clientResponseDataRef = useRef(null);
     // const allowedFileLength = useRef(10);
     // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`);
     // const allowedTargetLanguageLength = useRef(20);
@@ -554,7 +553,7 @@ function GetStories(props) {
         { value: 4, label: 'Hindi' },
         { value: 3, label: 'Kannada' },
         { value: 2, label: 'Telugu' },
-    ]
+    ];
 
     const projectTypes = [
         { value: 'all', label: t("all_proj") },
@@ -566,7 +565,7 @@ function GetStories(props) {
         { value: 'text_to_speech', label: t("ai_voice_proj") },
         { value: 'express', label: t("instant_trans_proj") },
         { value: 'assigned', label: t("assign_proj") },
-    ]
+    ];
 
     useEffect(() => {
         let engines = [];
@@ -697,7 +696,7 @@ function GetStories(props) {
     /* Go to the top of the page when move to another pages */
     useEffect(() => {
         const controller = new AbortController();
-        let pageParam = URL_SEARCH_PARAMS.get("page")
+        let pageParam = URL_SEARCH_PARAMS.get("page");
         if (pageParam !== null && pageParam !== undefined) {
             getStories(controller);
         }
@@ -727,12 +726,7 @@ function GetStories(props) {
                 label: filtered?.label?.charAt(0)?.toUpperCase() + filtered?.label?.slice(1)
             });
         }
-        // fileUploadTop.current.scrollIntoView(
-        //     {
-        //         behavior: "smooth",
-        //     },
-        //     100
-        // );
+        // fileUploadTop.current.scrollIntoView({ behavior: "smooth", }, 100 );
     }, [URL_SEARCH_PARAMS.get("filter")]);
 
     useEffect(() => {
@@ -748,7 +742,6 @@ function GetStories(props) {
             controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("search"), isSearchTermDelete]);
-
 
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
@@ -1353,8 +1346,7 @@ function GetStories(props) {
                                 // }}
                                 />
                                 <span className={"close " + ((fileListSearchEnlarge || projectSearchTerm !== "") ? "show " : " ")}
-                                    onClick={() => handleCloseSearchBox()}
-                                >
+                                    onClick={() => handleCloseSearchBox()} >
                                     <img src={BlackClose} alt="search-bar-close" />
                                 </span>
                             </div>
@@ -1363,11 +1355,10 @@ function GetStories(props) {
                                     <SearchIcon className="search-icon" name="search-dropdown" />
                                     <div className="searched-results-info" name="search-dropdown">
                                         <p className="searched-term" name="search-dropdown">{projectSearchTerm}</p>
-                                        {
-                                            projectSearchTerm !== "" ?
-                                                <p className="results-link" name="search-dropdown">{t("search_results_1")} <span>{t("search_results_2")}</span></p>
-                                                :
-                                                <p className="results-link">{t("search_results_proj_list_1")} <span>{t("story_search_help_text")}</span></p>
+                                        { projectSearchTerm !== "" ?
+                                            <p className="results-link" name="search-dropdown">{t("search_results_1")} <span>{t("search_results_2")}</span></p>
+                                            :
+                                            <p className="results-link">{t("search_results_proj_list_1")} <span>{t("story_search_help_text")}</span></p>
                                         }
                                     </div>
                                 </div>
@@ -1381,8 +1372,7 @@ function GetStories(props) {
                             classNamePrefix="project-type-list"
                             placeholder={'Language'}
                             components={{ DropdownIndicator, IndicatorSeparator: () => null }}
-                            onChange={handleCMSLangChange}
-                        />
+                            onChange={handleCMSLangChange} />
                     </div>
                     <div className="get-stories-btn-wrapper">
                         <ButtonBase className="refresh-btn-wrapper" onClick={getStories}>
@@ -1400,86 +1390,58 @@ function GetStories(props) {
                         <div className="file-edit-heading-row project-list-main">
                             <div className="file-edit-heading-table">
                                 <>
-                                    {
-                                        createdProjects.length != 0 || !showListingLoader ? (
+                                    { createdProjects.length != 0 || !showListingLoader ? (
                                         (createdProjects?.length != 0 || projectFilterType !== null || projectSearchTerm != "") ?
                                             (
                                                 (createdProjects?.length == 0 && projectSearchTerm != "") ? 
                                                 (<React.Fragment>
                                                         <section className="ai-no-project-found">
                                                             <div className="ai-no-project-cont">
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={NoEditors}
-                                                                            alt="empty-folder-open"
-                                                                        />
-                                                                        :
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={EmptyProjectIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                { projectSearchTerm ?
+                                                                    <img  className="empty-folder-img" src={NoEditors}  alt="empty-folder-open" />
+                                                                    :
+                                                                    <img className="empty-folder-img" src={EmptyProjectIcon}  alt="empty-folder-open"  />
                                                                 }
-
                                                                 <h2>{t("no_story_found")}</h2>
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        null
-                                                                        :
-                                                                        <>
-                                                                            {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
-                                                                                <button className="workspace-files-AddNewProjectButton"
-                                                                                    onClick={() => {
-                                                                                        handleCreateNewProjectBtnClick()
-                                                                                    }}
-                                                                                >
-                                                                                    <span className="add-new-project-btn">
-                                                                                    <img src={PlusIcon} alt="plus" />
-                                                                                        {t("create_new_project")}
-                                                                                    </span>
-                                                                                </button>
-                                                                            )}
-                                                                        </>
+                                                                { projectSearchTerm ? null :
+                                                                    <>
+                                                                    {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
+                                                                        <button className="workspace-files-AddNewProjectButton"
+                                                                            onClick={() => { handleCreateNewProjectBtnClick() }} >
+                                                                            <span className="add-new-project-btn">
+                                                                            <img src={PlusIcon} alt="plus" />
+                                                                            {t("create_new_project")}
+                                                                             </span>
+                                                                            </button>
+                                                                    )}
+                                                                    </>
                                                                 }
                                                             </div>
                                                         </section>
-                                                    </React.Fragment>) 
-                                                
+                                                    </React.Fragment>)                                                 
                                                 :
                                                 (createdProjects?.length !== 0) ?
                                                     <React.Fragment>
                                                         {createdProjects?.map((each,index) => {
                                                             return(
                                                                 // file deepcode ignore ReactMissingArrayKeys: <please specify a reason of ignoring this>
-                                                                <div 
-                                                                    className={"file-edit-list-table-row focused-proj-row federal-news " + (newsId.includes(each.newsId) ? "selected" : "" )}
-                                                                    onClick={(e) => handleStoryClick(e, each)}
-                                                                >
+                                                                <div className={"file-edit-list-table-row focused-proj-row federal-news " + (newsId.includes(each.newsId) ? "selected" : "" )} onClick={(e) => handleStoryClick(e, each)} >
                                                                     <div className="selected-file-row">
                                                                         <div  className="file-edit-inner-table" >
                                                                             <div className="file-edit-list-inner-table-row">
                                                                                 <div className="file-edit-list-inner-table-cell">
                                                                                     <div className='check-box-wrap'>
-                                                                                        <Checkbox 
-                                                                                            size="small"
-                                                                                            checked={newsId.includes(each.newsId) ? true : false} 
-                                                                                            onClick={(e) => handleSelectedcard(e, each.newsId)}
-                                                                                        />
+                                                                                        <Checkbox  size="small" checked={newsId.includes(each.newsId) ? true : false} nClick={(e) => handleSelectedcard(e, each.newsId)}/>
                                                                                     </div>
                                                                                     <div className="d-flex flex-column w-100">
                                                                                         <div className="my-stories-doc-info-wrapper">
                                                                                             <div className="doc-icon-wrapper">
-                                                                                                <span className="doc-icon">
-                                                                                                    <img
-                                                                                                        src={each.thumbUrl}
+                                                                                                <span className="doc-icon"> 
+                                                                                                    <img src={each.thumbUrl}  alt="new-img"
                                                                                                         onError={({ currentTarget }) => {
                                                                                                             currentTarget.onerror = null; // prevents looping
                                                                                                             currentTarget.src= FederalImgPlaceholder;
-                                                                                                        }}
-                                                                                                        alt="new-img"
-                                                                                                    />
+                                                                                                        }}  />
                                                                                                 </span>
                                                                                             </div>
                                                                                             <div className="story-info-wrap">
@@ -1503,8 +1465,7 @@ function GetStories(props) {
                                                                                                 </span>
                                                                                                 <img src={BlueRightArrow} />
                                                                                                 <span>
-                                                                                                    {
-                                                                                                        targetLanguageOptionsRef.current?.filter(item => each?.tar_code?.some(obj => obj === item?.id))?.map(each => {
+                                                                                                    { targetLanguageOptionsRef.current?.filter(item => each?.tar_code?.some(obj => obj === item?.id))?.map(each => {
                                                                                                             return each?.language
                                                                                                         })?.join(', ')
                                                                                                     }
@@ -1513,12 +1474,8 @@ function GetStories(props) {
                                                                                         )}
                                                                                         <>
                                                                                             {!newsId.includes(each.newsId) ? (
-                                                                                                <button 
-                                                                                                    className="workspace-files-OpenProjectButton"
-                                                                                                    type="button"
-                                                                                                    disabled={isStoryIdTranslating !== null || isStoryTranslating}
-                                                                                                    onClick={(e) =>{!isStoryIdTranslating !== each.newsId && handleSelectedcard(e, each.newsId)}}
-                                                                                                >
+                                                                                                <button className="workspace-files-OpenProjectButton" type="button" disabled={isStoryIdTranslating !== null || isStoryTranslating}
+                                                                                                    onClick={(e) =>{!isStoryIdTranslating !== each.newsId && handleSelectedcard(e, each.newsId)}} >
                                                                                                     <span className="fileopen-new-btn">
                                                                                                         {isStoryIdTranslating === each.newsId && (
                                                                                                             <ButtonLoader />
@@ -1527,13 +1484,9 @@ function GetStories(props) {
                                                                                                     </span>
                                                                                                 </button>
                                                                                             ) : (
-                                                                                                <button 
-                                                                                                    className="workspace-files-OpenProjectButton"
-                                                                                                    type="button"
-                                                                                                    style={{backgroundColor: "#9d9db1"}}
+                                                                                                <button  className="workspace-files-OpenProjectButton" type="button" style={{backgroundColor: "#9d9db1"}}
                                                                                                     disabled={isStoryIdTranslating !== null || isStoryTranslating}
-                                                                                                    onClick={(e) =>{!isStoryIdTranslating !== each.newsId && handleSelectedcard(e, each.newsId)}}
-                                                                                                >
+                                                                                                    onClick={(e) =>{!isStoryIdTranslating !== each.newsId && handleSelectedcard(e, each.newsId)}} >
                                                                                                     <span className="fileopen-new-btn">
                                                                                                         {isStoryIdTranslating === each.newsId && (
                                                                                                             <ButtonLoader />
@@ -1556,47 +1509,31 @@ function GetStories(props) {
                                                     <React.Fragment>
                                                         <section className="ai-no-project-found">
                                                             <div className="ai-no-project-cont">
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={NoEditors}
-                                                                            alt="empty-folder-open"
-                                                                        />
-                                                                        :
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={EmptyProjectIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                { projectSearchTerm ?
+                                                                    <img className="empty-folder-img" src={NoEditors}  alt="empty-folder-open" />
+                                                                    :
+                                                                    <img  className="empty-folder-img"  src={EmptyProjectIcon}  alt="empty-folder-open" />
                                                                 }
                                                                 <h2>{t("no_project_found")}</h2>
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        null
-                                                                        :
-                                                                        <>
-                                                                            {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
-                                                                                <button className="workspace-files-AddNewProjectButton"
-                                                                                    onClick={() => {
-                                                                                        handleCreateNewProjectBtnClick()
-                                                                                    }}
-                                                                                >
-                                                                                    <span className="add-new-project-btn">
-                                                                                    <img src={PlusIcon} alt="plus" />
-                                                                                        {t("create_new_project")}
-                                                                                    </span>
-                                                                                </button>
-                                                                            )}
-                                                                        </>
+                                                                { projectSearchTerm ?  null  :
+                                                                    <>
+                                                                    {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
+                                                                    <button className="workspace-files-AddNewProjectButton"
+                                                                        onClick={() => {handleCreateNewProjectBtnClick() }}>
+                                                                    <span className="add-new-project-btn">
+                                                                    <img src={PlusIcon} alt="plus" />
+                                                                    {t("create_new_project")}
+                                                                    </span>
+                                                                    </button>
+                                                                    )}
+                                                                    </>
                                                                 }
                                                             </div>
                                                         </section>
                                                     </React.Fragment>
                                             ) 
                                             :
-                                            (
-                                                !showEmptyProjects ? (
+                                            ( !showEmptyProjects ? (
                                                     <React.Fragment>
                                                         {Array(projectsPerPage?.current)
                                                             .fill(null)
@@ -1607,20 +1544,11 @@ function GetStories(props) {
                                                                             <div className="file-edit-list-inner-table-row">
                                                                                 <div className="file-edit-list-inner-table-cell">
                                                                                     <div className='check-box-wrap'>
-                                                                                        <Skeleton
-                                                                                            animation="wave"
-                                                                                            variant="circular"
-                                                                                            width={25}
-                                                                                            height={25}
-                                                                                        />
+                                                                                        <Skeleton animation="wave"  variant="circular" width={25} height={25} />
                                                                                     </div>
                                                                                     <div className="doc-icon-wrapper">
                                                                                         <span className="doc-icon">
-                                                                                            <Skeleton
-                                                                                                animation="wave"
-                                                                                                variant="rounded"
-                                                                                                style={{ width: "100%", height: "100%" }}
-                                                                                            />
+                                                                                            <Skeleton animation="wave" variant="rounded" style={{ width: "100%", height: "100%" }}  />
                                                                                         </span>
                                                                                         {/* <div style={{ marginTop: "10px" }} className="d-flex align-items-center">
                                                                                             <Skeleton
@@ -1647,60 +1575,36 @@ function GetStories(props) {
                                                                                         </div> */}
                                                                                     </div>
                                                                                     <div className="story-info-wrap">
-                                                                                        <Skeleton
-                                                                                            animation="wave"
-                                                                                            style={{ marginBottom: "15px" }}
-                                                                                            variant="rounded"
-                                                                                            width={80}
-                                                                                            height={10}
-                                                                                        />
+                                                                                        <Skeleton  animation="wave"  style={{ marginBottom: "15px" }} variant="rounded"  width={80}  height={10}  />
                                                                                         <div className="d-flex flex-column">
-                                                                                            <Skeleton
-                                                                                                animation="wave"
-                                                                                                variant="rounded"
-                                                                                                width={200}
-                                                                                                height={15}
-                                                                                            />
-                                                                                            <Skeleton
-                                                                                                animation="wave"
-                                                                                                style={{ marginTop: "0.5rem" }}
-                                                                                                variant="rounded"
-                                                                                                width={100}
-                                                                                                height={15}
-                                                                                            />
+                                                                                            <Skeleton animation="wave"  variant="rounded" width={200}  height={15} />
+                                                                                            <Skeleton  animation="wave"  style={{ marginTop: "0.5rem" }} variant="rounded" width={100}  height={15} />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="file-edit-list-inner-table-cell">
                                                                                     <div className="d-flex align-items-center justify-content-end w-100">
                                                                                         <div className="d-flex align-items-center">
-                                                                                            <Skeleton
-                                                                                                animation="wave"
+                                                                                            <Skeleton animation="wave"  variant="rounded"  width={80}  height={28}
                                                                                                 // style={{ marginRight: "14px" }}
-                                                                                                variant="rounded"
-                                                                                                width={80}
-                                                                                                height={28}
                                                                                             />
                                                                                             {/* <Skeleton
                                                                                                 animation="wave"
                                                                                                 style={{ marginRight: "14px" }}
                                                                                                 variant="rounded"
                                                                                                 width={80}
-                                                                                                height={28}
-                                                                                            />
+                                                                                                height={28}/>
                                                                                             <Skeleton
                                                                                                 animation="wave"
                                                                                                 style={{ marginRight: "14px" }}
                                                                                                 variant="rounded"
                                                                                                 width={80}
-                                                                                                height={28}
-                                                                                            />
+                                                                                                height={28} />
                                                                                             <Skeleton
                                                                                                 animation="wave"
                                                                                                 variant="circular"
                                                                                                 width={25}
-                                                                                                height={25}
-                                                                                            /> */}
+                                                                                                height={25} /> */}
                                                                                         </div>
                                                                                     </div>    
                                                                                 </div>
@@ -1720,25 +1624,13 @@ function GetStories(props) {
                                                     <React.Fragment>
                                                         <section className="ai-no-project-found">
                                                             <div className="ai-no-project-cont">
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={NoEditors}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                { projectSearchTerm ?
+                                                                        <img className="empty-folder-img" src={NoEditors}  alt="empty-folder-open"  />
                                                                         :
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={EmptyProjectIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                        <img className="empty-folder-img" src={EmptyProjectIcon}  alt="empty-folder-open" />
                                                                 }
                                                                 <h2>{t("no_project_found")}</h2>
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        null
-                                                                        :
+                                                                { projectSearchTerm ?  null  :
                                                                         <>
                                                                             {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
                                                                                 <button className="workspace-files-AddNewProjectButton"
@@ -1750,8 +1642,7 @@ function GetStories(props) {
                                                                                         //             activeProjTab === 5 ? "/create/speech/text-to-speech" :
                                                                                         //                 activeProjTab === 6 && "/create/assets/glossaries/create"
                                                                                         // );
-                                                                                    }}
-                                                                                >
+                                                                                    }}  >
                                                                                     <span className="add-new-project-btn">
                                                                                     <img src={PlusIcon} alt="plus" />
                                                                                         {t("create_new_project")}
@@ -1777,20 +1668,11 @@ function GetStories(props) {
                                                                     <div className="file-edit-list-inner-table-row">
                                                                         <div className="file-edit-list-inner-table-cell">
                                                                             <div className='check-box-wrap'>
-                                                                                <Skeleton
-                                                                                    animation="wave"
-                                                                                    variant="circular"
-                                                                                    width={25}
-                                                                                    height={25}
-                                                                                />
+                                                                                <Skeleton animation="wave"  variant="circular"  width={25}  height={25} />
                                                                             </div>
                                                                             <div className="doc-icon-wrapper">
                                                                                 <span className="doc-icon">
-                                                                                    <Skeleton
-                                                                                        animation="wave"
-                                                                                        variant="rounded"
-                                                                                        style={{ width: "100%", height: "100%" }}
-                                                                                    />
+                                                                                    <Skeleton animation="wave" variant="rounded" style={{ width: "100%", height: "100%" }}/>
                                                                                 </span>
                                                                                 {/* <div style={{ marginTop: "10px" }} className="d-flex align-items-center">
                                                                                     <Skeleton
@@ -1798,79 +1680,52 @@ function GetStories(props) {
                                                                                         style={{ marginLeft: "0.2rem" }}
                                                                                         variant="rounded"
                                                                                         width={20}
-                                                                                        height={10}
-                                                                                    />
+                                                                                        height={10} />
                                                                                     <Skeleton
                                                                                         animation="wave"
                                                                                         style={{ marginLeft: "0.2rem" }}
                                                                                         variant="rounded"
                                                                                         width={20}
-                                                                                        height={10}
-                                                                                    />
+                                                                                        height={10} />
                                                                                     <Skeleton
                                                                                         animation="wave"
                                                                                         style={{ marginLeft: "0.2rem" }}
                                                                                         variant="rounded"
                                                                                         width={20}
-                                                                                        height={10}
-                                                                                    />
+                                                                                        height={10}/>
                                                                                 </div> */}
                                                                             </div>
                                                                             <div className="story-info-wrap">
-                                                                                <Skeleton
-                                                                                    animation="wave"
-                                                                                    style={{ marginBottom: "15px" }}
-                                                                                    variant="rounded"
-                                                                                    width={80}
-                                                                                    height={10}
-                                                                                />
+                                                                                <Skeleton animation="wave"  style={{ marginBottom: "15px" }}  variant="rounded"  width={80} height={10} />
                                                                                 <div className="d-flex flex-column">
-                                                                                    <Skeleton
-                                                                                        animation="wave"
-                                                                                        variant="rounded"
-                                                                                        width={200}
-                                                                                        height={15}
-                                                                                    />
-                                                                                    <Skeleton
-                                                                                        animation="wave"
-                                                                                        style={{ marginTop: "0.5rem" }}
-                                                                                        variant="rounded"
-                                                                                        width={100}
-                                                                                        height={15}
-                                                                                    />
+                                                                                    <Skeleton  animation="wave"  variant="rounded"  width={200} height={15}  />
+                                                                                    <Skeleton animation="wave" style={{ marginTop: "0.5rem" }}  variant="rounded" width={100} height={15}  />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div className="file-edit-list-inner-table-cell">
                                                                             <div className="d-flex align-items-center justify-content-end w-100">
                                                                                 <div className="d-flex align-items-center">
-                                                                                    <Skeleton
-                                                                                        animation="wave"
-                                                                                        // style={{ marginRight: "14px" }}
-                                                                                        variant="rounded"
-                                                                                        width={80}
-                                                                                        height={28}
+                                                                                    <Skeleton  animation="wave" variant="rounded" width={80} height={28}
+                                                                                        // style={{ marginRight: "14px" }} 
                                                                                     />
                                                                                     {/* <Skeleton
                                                                                         animation="wave"
                                                                                         style={{ marginRight: "14px" }}
                                                                                         variant="rounded"
                                                                                         width={80}
-                                                                                        height={28}
-                                                                                    />
+                                                                                        height={28}/>
                                                                                     <Skeleton
                                                                                         animation="wave"
                                                                                         style={{ marginRight: "14px" }}
                                                                                         variant="rounded"
                                                                                         width={80}
-                                                                                        height={28}
-                                                                                    />
+                                                                                        height={28}/>
                                                                                     <Skeleton
                                                                                         animation="wave"
                                                                                         variant="circular"
                                                                                         width={25}
-                                                                                        height={25}
-                                                                                    /> */}
+                                                                                        height={25}/> */}
                                                                                 </div>
                                                                             </div>    
                                                                         </div>
@@ -1895,19 +1750,12 @@ function GetStories(props) {
                             <div className="project-setup-pagination">
                                 <div className="story-pagin-wrapper">
                                     {currentPage > 1 && (
-                                        <ButtonBase 
-                                            style={{ marginLeft: 0 }} 
-                                            className="add-btn-wrapper"
-                                            onClick={() => pageSelect(parseInt(currentPage) - 1)} 
-                                        >
+                                        <ButtonBase   style={{ marginLeft: 0 }}   className="add-btn-wrapper"  onClick={() => pageSelect(parseInt(currentPage) - 1)}  >
                                             <KeyboardArrowLeftOutlinedIcon className="ref-icon" />
                                             {t("previous")}
                                         </ButtonBase>
                                     )}
-                                    <ButtonBase 
-                                        className="add-btn-wrapper"
-                                        onClick={() => {pageSelect(parseInt(currentPage) + 1); console.log(currentPage)}}
-                                    >
+                                    <ButtonBase  className="add-btn-wrapper" onClick={() => {pageSelect(parseInt(currentPage) + 1); console.log(currentPage)}}  >
                                         {t("next")}
                                         <KeyboardArrowRightOutlinedIcon className="ref-icon" />
                                     </ButtonBase>
@@ -1917,24 +1765,15 @@ function GetStories(props) {
                     </div>
                 </div>
             </>
-
-
-            {showSrcLangModal && (<Rodal
+            { showSrcLangModal && (<Rodal
                 visible={showSrcLangModal}
                 {...modaloption}
                 showCloseButton={false}
-                className="ai-lang-select-modal"
-            >
+                className="ai-lang-select-modal"  >
                 <div className="lang-modal-wrapper">
                     {/* <h1>Select a source language</h1> */}
-                    <span
-                        className="modal-close-btn lang-close"
-                        onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false) }}
-                    >
-                        <img
-                            src={BlackClose}
-                            alt="close_black"
-                        />
+                    <span  className="modal-close-btn lang-close" onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false) }}  >
+                        <img src={BlackClose}  alt="close_black"/>
                     </span>
                     {showSrcLangModal &&
                         <Sourcelanguage
@@ -1953,7 +1792,6 @@ function GetStories(props) {
                         />}
                 </div>
             </Rodal>)}
-
             {/* {showSrcLangModal && (<Rodal visible={showSrcLangModal} {...modaloption} showCloseButton={false} className="ai-lang-select-modal">
                 <div className="lang-modal-header">
                     <h1>{t("select_source_language")}</h1>
@@ -1975,8 +1813,7 @@ function GetStories(props) {
                     searchAreaRef={searchAreaRef}
                 />
             </Rodal>)} */}
-
-            {showDurationAlertModal && (<Rodal visible={showDurationAlertModal} {...modaloption} showCloseButton={false} className="ai-large-file-alert-modal">
+            { showDurationAlertModal && (<Rodal visible={showDurationAlertModal} {...modaloption} showCloseButton={false} className="ai-large-file-alert-modal">
                 <span className="prompt-close-btn" onClick={() => setShowDurationAlertModal(false)}>
                 <img src={BlackClose} alt="close_black" />
                 </span>
@@ -2020,9 +1857,7 @@ function GetStories(props) {
                 setShowSubmitDocumentAlertModal={setShowSubmitDocumentAlertModal}
                 handleDocuemtSubmitConfirmation={handleDocuemtSubmitConfirmation}
             />
-
             <a href={hiddenLinkUrl} download={downloadedFileName.current} className="hidden" ref={downloadref} />
-
             {showCreditAlertModal && (<Rodal className="ts-rodal-mask" visible={showCreditAlertModal} {...convertmodaloption} showCloseButton={false}>
                 <span className="modal-close-btn lang-close" onClick={(e) => { setShowCreditAlertModal(false) }}>
                     <img src={BlackClose} alt="close_black" />
@@ -2048,22 +1883,12 @@ function GetStories(props) {
                         )}
                     </React.Fragment>
                 </div>
-            </Rodal>)}
-           
-
-            
-
-            
-
-                
-
-            
-            {showAssignedProjectDeleteAlert && (<Rodal
+            </Rodal>)}  
+            { showAssignedProjectDeleteAlert && (<Rodal
                 visible={showAssignedProjectDeleteAlert}
                 {...modaloptions}
                 showCloseButton={false}
-                className="ai-mark-confirm-box Assign-task-deletion-rodal"
-            >
+                className="ai-mark-confirm-box Assign-task-deletion-rodal" >
                 <div className="confirmation-warning-wrapper Assign-task-deletion-model">
                     <div className="confirm-top">
                         <div><span onClick={() => { SetShowAssignedProjectDeleteAlert(false); }}><CloseIcon /></span></div>
@@ -2077,8 +1902,7 @@ function GetStories(props) {
                         </div>
                     </div>
                 </div>
-            </Rodal>)}
-            
+            </Rodal>)}            
             {/* language selection box */}
             {newsId?.length > 0 && (
                 <LanguageSelector 
@@ -2093,10 +1917,8 @@ function GetStories(props) {
                     restrictedTargetLang={restrictedTargetLang}
                     handleClaimStoriesBtnClick={handleClaimStoriesBtnClick}
                     sourceLangSelectBoxRef={sourceLangSelectBoxRef}
-                    targetLangSelectBoxRef={targetLangSelectBoxRef}
-                />
+                    targetLangSelectBoxRef={targetLangSelectBoxRef} />
             )}
-            
             {showFileErrorModal && (
                 <Rodal 
                     className="ts-rodal-mask" 
@@ -2105,8 +1927,7 @@ function GetStories(props) {
                     width={528}
                     height="auto"
                     onClose={() => console.log()} 
-                    showCloseButton={false}
-                >
+                    showCloseButton={false}>
                     <span className="modal-close-btn lang-close" onClick={(e) => { setShowFileErrorModal(false) }}>
                         <img src={BlackClose} alt="close_black" />
                     </span>

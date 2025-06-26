@@ -82,7 +82,7 @@ const NewsProjects = () => {
             let browserUrl = `/all-stories?page=1`;
             history(browserUrl);
         }
-        getLanguagesList()
+        getLanguagesList();
         if (userDetails?.is_vendor) {
             getEdiorSettingStatus();
         }        
@@ -188,7 +188,7 @@ const NewsProjects = () => {
         URL_SEARCH_PARAMS.set('page', 1);
         URL_SEARCH_PARAMS.set('filter', filter);
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-        // history("/my-stories?page=1&filter=inprogress")
+        // history("/my-stories?page=1&filter=inprogress");
     } 
 
     return (
@@ -216,8 +216,7 @@ const NewsProjects = () => {
                                         onClick={() => {
                                             setActiveProjTab(1);
                                             history("/all-stories?page=1")
-                                        }}
-                                    >
+                                        }}>
                                         <NavLink className={"project-setup-btn " + (activeProjTab == 1 ? 'active' : '')}>{t("all_stories")}</NavLink>
                                     </NavItem>
                                 )}
@@ -230,8 +229,7 @@ const NewsProjects = () => {
                                             className={"setup-button-global " + classnames({ active: activeProjTab == 2 })}
                                             onClick={() => {
                                                 handlePorjectListSwitch(2, 'inprogress')
-                                            }}
-                                        >
+                                            }}>
                                             <NavLink className={"project-setup-btn " + (activeProjTab == 2 ? 'active' : '')}>{t("in_progress")}</NavLink>
                                         </NavItem>
                                         <NavItem
@@ -240,8 +238,7 @@ const NewsProjects = () => {
                                                 handlePorjectListSwitch(3, 'submitted')
                                                 // setActiveProjTab(3);
                                                 // history("/my-stories?page=1&filter=submitted")
-                                            }}
-                                        >
+                                            }}>
                                             <NavLink className={"project-setup-btn " + (activeProjTab == 3 ? 'active' : '')}>{t("submitted")}</NavLink>
                                         </NavItem>
                                         <NavItem
@@ -250,8 +247,7 @@ const NewsProjects = () => {
                                                 handlePorjectListSwitch(4, 'approved')
                                                 // setActiveProjTab(4);
                                                 // history("/my-stories?page=1&filter=approved")
-                                            }}
-                                        >
+                                            }} >
                                             <NavLink className={"project-setup-btn " + (activeProjTab == 4 ? 'active' : '')}>{t("approved")}</NavLink>
                                         </NavItem>
                                     </>
@@ -261,8 +257,7 @@ const NewsProjects = () => {
                                         onClick={() => {
                                             setActiveProjTab(2);
                                             history("/my-stories?page=1")
-                                        }}
-                                    >
+                                        }}>
                                         <NavLink className={"project-setup-btn " + (activeProjTab == 2 ? 'active' : '')}>{t("my_stories")}</NavLink>
                                     </NavItem>
                                 )} 
@@ -283,8 +278,7 @@ const NewsProjects = () => {
                                 setSelectedStoryDetails={setSelectedStoryDetails}
                                 setIsViewStoryModal={setIsViewStoryModal}
                                 openAddStoryModal={openAddStoryModal}
-                                editorsListOption={editorsListOption}
-                            />
+                                editorsListOption={editorsListOption}/>
                         </TabPane>
                     )}
 
@@ -300,8 +294,7 @@ const NewsProjects = () => {
                                 setIsViewStoryModal={setIsViewStoryModal}
                                 setSelectedStoryDetails={setSelectedStoryDetails}
                                 openAddStoryModal={openAddStoryModal}
-                                editorsListOption={editorsListOption}
-							/>
+                                editorsListOption={editorsListOption}/>
                         </TabPane>
                     )}
                     {activeProjTab === 3 && (
@@ -315,8 +308,7 @@ const NewsProjects = () => {
                                 setIsViewStoryModal={setIsViewStoryModal}
                                 setSelectedStoryDetails={setSelectedStoryDetails}
                                 openAddStoryModal={openAddStoryModal}
-                                editorsListOption={editorsListOption}
-							/>
+                                editorsListOption={editorsListOption}/>
                         </TabPane>
                     )}
                     {activeProjTab === 4 && (
@@ -330,8 +322,7 @@ const NewsProjects = () => {
                                 setIsViewStoryModal={setIsViewStoryModal}
                                 setSelectedStoryDetails={setSelectedStoryDetails}
                                 openAddStoryModal={openAddStoryModal}
-                                editorsListOption={editorsListOption}
-							/>
+                                editorsListOption={editorsListOption}/>
                         </TabPane>
                     )}
                 </TabContent>
@@ -349,17 +340,14 @@ const NewsProjects = () => {
                 stepIndex={tourStepIndex}
                 disableCloseOnEsc={true}
                 beaconComponent={BeaconComponent}
-                run={!isProductTourSeen}
-            />
+                run={!isProductTourSeen} />
             {isViewStoryModal &&
                 <StorySingleViewModal
                     isViewStoryModal={isViewStoryModal}
                     setIsViewStoryModal={setIsViewStoryModal}
                     selectedStoryDetails={selectedStoryDetails}
-                    setSelectedStoryDetails={setSelectedStoryDetails}
-                />
+                    setSelectedStoryDetails={setSelectedStoryDetails} />
             }
-
             {showAddStoryModal && (
                 <AddStoryModal 
                     showAddStoryModal={showAddStoryModal}
