@@ -29732,6 +29732,16 @@ h4.history-seconday-wrap-header {
     min-width: 100px;
     margin-right: 0px !important;
 }
+.workspace-files-OpenProjectButton-modify{
+    background-color: #0074d3;
+    box-shadow: none !important;
+    border-radius: 3px !important;
+    text-transform: none !important;
+    padding: 7px 15px;
+    border: none !important;
+    min-width: fit-content;
+    margin-right: 0px !important;
+}
 
 .workspace-files-OpenProjectButton:hover {
     background-color: #0074d3;

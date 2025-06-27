@@ -189,7 +189,7 @@ function ProjectCreation(props) {
     const [axiosFileTranslateAbortController, setAxiosFileTranslateAbortController] = useState(null);
     const [isDownloading, setIsDownloading] = useState(null);
     const [showFileErrorModal, setShowFileErrorModal] = useState(false);
-    
+    const [showretryloader,setShowRetryLoader]=useState(false)
     // adaptive translation state
     const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
     const [projectId, setProjectId] = useState("");
@@ -1918,6 +1918,7 @@ function ProjectCreation(props) {
      * @since Apr 08 2025
      */
     const getTaskTransDownloadStatus = (task_id) => {
+        setShowRetryLoader(true)
         if(createdProjectIdRef.current === null) return;
        // Abort only if this task already has a pending request
         if (taskControllersRef.current[task_id]) {
@@ -1964,6 +1965,7 @@ function ProjectCreation(props) {
             success: (response) => {
                 if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
                     getTaskTranslationProgress(response.data.endpoint, task_id);
+                    setShowRetryLoader(false)
                 }
             },
             error: (err) => {
@@ -1981,6 +1983,7 @@ function ProjectCreation(props) {
                     })
                     projectTaskListRef.current = newArr;
                     setProjectTaskList([...newArr]);
+                    setShowRetryLoader(false)
                 }
                 if(err?.response?.data?.msg.includes("Something went wrong in re-initiation, contact admin")){
  Config.toast("Contact support",'support',false,"Translation Failed","We couldn’t process that file right now.");
@@ -1995,6 +1998,7 @@ function ProjectCreation(props) {
                     }) 
                     projectTaskListRef.current = newArr;
                     setProjectTaskList([...newArr]);
+                    setShowRetryLoader(false)
                 }
                 if(err?.response?.status === 400){
                     if(err?.response?.data?.msg === 'Insufficient Credits'){
@@ -2011,6 +2015,7 @@ function ProjectCreation(props) {
                         }) 
                         projectTaskListRef.current = newArr;
                         setProjectTaskList([...newArr]);
+                        setShowRetryLoader(false)
                     }
                 }
                 if(err?.response?.data?.msg === 'File is Empty'){
@@ -2026,6 +2031,7 @@ function ProjectCreation(props) {
                     }) 
                     projectTaskListRef.current = newArr;
                     setProjectTaskList([...newArr]);
+                    setShowRetryLoader(false)
                 }
             }
         });
@@ -3095,12 +3101,13 @@ function ProjectCreation(props) {
                                                                                 ) : task?.insuffientCredit ?(
                                                                                     <>
                                                                                     <button
-                                                                                        className="workspace-files-OpenProjectButton"
+                                                                                        className="workspace-files-OpenProjectButton-modify"
                                                                                         type="button"
-                                                                                        style={{ paddingLeft: "16px", paddingRight: "16px" }}
-                                                                                        onClick={() => window.open(Config.USER_PORTAL_HOST + "/add-ons", "_blank")}
-                                                                                    >
-                                                                                    <span className="fileopen-new-btn">{t("buy_credits")}</span>
+                                                                                        style={{ paddingLeft: "16px", paddingRight: "16px" ,display:'flex'}}
+                                                                                        onMouseUp={(e) => getTaskTransDownloadStatus(task?.id)}
+                                                                                        disabled={showretryloader}>
+                                                                                        {showretryloader && <SaveButtonLoader />}
+                                                                                    <span className="fileopen-new-btn">Translate</span>
                                                                                     </button>
                                                                                    </>
                                                                                 ) : task.percentage >= 0 && (
