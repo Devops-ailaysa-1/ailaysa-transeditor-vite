@@ -142,9 +142,6 @@ const DefaultGlossaryWorkspace = (props) => {
             setTermsList([...termsList, ...response?.data?.results]);
             setTermsListCopy([...termsList, ...response?.data?.results])
         };
-        // console.log("totalPages: "+totalPages)
-        // console.log("prevPage: "+prevPage)
-        // console.log("lastPageRef.current: "+lastPageRef.current)
         if (currPage <= totalPages && prevPage !== currPage && lastPageRef.current !== currPage) {
             fetchData();
         }
@@ -205,47 +202,43 @@ const DefaultGlossaryWorkspace = (props) => {
             auth: true,
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
-                // console.log(response.data)
-                setTermsList(response.data.results)
-                setTermsListCopy(response.data.results)
-                setTotalPages(Math.ceil(response?.data.count / 20))
-                setCurrPage(1)
-                setPrevPage(0)
-                setTotalTerms(response.data.count)
-                lastPageRef.current = null
+                setTermsList(response.data.results);
+                setTermsListCopy(response.data.results);
+                setTotalPages(Math.ceil(response?.data.count / 20));
+                setCurrPage(1);
+                setPrevPage(0);
+                setTotalTerms(response.data.count);
+                lastPageRef.current = null;
                 if(orderBySrcToggle){
-                    srcSortUp.current.classList.add("arrow-up-inactive")
-                    srcSortUp.current.classList.remove("arrow-up-active")
-                    srcSortDown.current.classList.add("arrow-down-active")
-                    srcSortDown.current.classList.remove("arrow-down-inactive")
+                    srcSortUp.current.classList.add("arrow-up-inactive");
+                    srcSortUp.current.classList.remove("arrow-up-active");
+                    srcSortDown.current.classList.add("arrow-down-active");
+                    srcSortDown.current.classList.remove("arrow-down-inactive");
                 }
                 if(orderBySrcToggle === false){
-                    srcSortUp.current.classList.add("arrow-up-active")
-                    srcSortUp.current.classList.remove("arrow-up-inactive")
-                    srcSortDown.current.classList.add("arrow-down-inactive")
-                    srcSortDown.current.classList.remove("arrow-down-active")
+                    srcSortUp.current.classList.add("arrow-up-active");
+                    srcSortUp.current.classList.remove("arrow-up-inactive");
+                    srcSortDown.current.classList.add("arrow-down-inactive");
+                    srcSortDown.current.classList.remove("arrow-down-active");
                 }
                 if(orderByTarToggle){
-                    tarSortUp.current.classList.add("arrow-up-inactive")
-                    tarSortUp.current.classList.remove("arrow-up-active")
-                    tarSortDown.current.classList.add("arrow-down-active")
-                    tarSortDown.current.classList.remove("arrow-down-inactive")
+                    tarSortUp.current.classList.add("arrow-up-inactive");
+                    tarSortUp.current.classList.remove("arrow-up-active");
+                    tarSortDown.current.classList.add("arrow-down-active");
+                    tarSortDown.current.classList.remove("arrow-down-inactive");
                 }
                 if(orderByTarToggle === false){
-                    tarSortUp.current.classList.add("arrow-up-active")
-                    tarSortUp.current.classList.remove("arrow-up-inactive")
-                    tarSortDown.current.classList.add("arrow-down-inactive")
-                    tarSortDown.current.classList.remove("arrow-down-active")
+                    tarSortUp.current.classList.add("arrow-up-active");
+                    tarSortUp.current.classList.remove("arrow-up-inactive");
+                    tarSortDown.current.classList.add("arrow-down-inactive");
+                    tarSortDown.current.classList.remove("arrow-down-active");
                 }
             },
         });
-    }
-
-    
+    }    
 
     const toggleEditMode = (term_id, action, isFromEdit) => {
-        let termCopy = termsListCopy?.find(each => each.id === term_id)
-
+        let termCopy = termsListCopy?.find(each => each.id === term_id);
         let newArr = termsList.map(obj => {
             if (obj.id === term_id) {
                 return {
@@ -255,17 +248,16 @@ const DefaultGlossaryWorkspace = (props) => {
                     ...(isFromEdit && { tl_term: termCopy?.tl_term?.trim() })
                 }
             }
-            return obj
+            return obj;
         })
-        setTermsList(newArr)
-        if (isFromEdit) setTermsListCopy(newArr)
-        if (action === 'close') setIsEditMode(false)
-        else setIsEditMode(true)
+        setTermsList(newArr);
+        if (isFromEdit) setTermsListCopy(newArr);
+        if (action === 'close') setIsEditMode(false);
+        else setIsEditMode(true);
     }
 
     const handleTermEdit = (e, term_id) => {
-        let { name, value } = e.target
-
+        let { name, value } = e.target;
         let newArr = termsListCopy.map(obj => {
             if (obj.id === term_id) {
                 return {
@@ -273,18 +265,15 @@ const DefaultGlossaryWorkspace = (props) => {
                     [name]: value
                 }
             }
-            return obj
-        })
-
-        if (name === "sl_term" && value?.trim() !== '') editSourceTermRef.current.style.border = defaultFieldStyle.border
-        if (name === "tl_term" && value?.trim() !== '') editReplaceTermRef.current.style.border = defaultFieldStyle.border
-        // console.log(newArr);
-        setTermsListCopy(newArr)
+            return obj;
+        });
+        if (name === "sl_term" && value?.trim() !== '') editSourceTermRef.current.style.border = defaultFieldStyle.border;
+        if (name === "tl_term" && value?.trim() !== '') editReplaceTermRef.current.style.border = defaultFieldStyle.border;
+        setTermsListCopy(newArr);
     }
 
     const handleTermDelete = (term_id) => {
-        termIdToDeleteRef.current = term_id
-
+        termIdToDeleteRef.current = term_id;
         if (!showTermDeletModal) {
             setShowTermDeletModal(true)
             return;
@@ -295,14 +284,13 @@ const DefaultGlossaryWorkspace = (props) => {
             method: "DELETE",
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-                let listAfterDeletion = termsList?.filter(each => each.id !== term_id)
-                setTermsList(listAfterDeletion)
-                setTermsListCopy(listAfterDeletion)
-                setShowTermDeletModal(false)
-                setTotalTerms(totalTerms - 1)
+                let listAfterDeletion = termsList?.filter(each => each.id !== term_id);
+                setTermsList(listAfterDeletion);
+                setTermsListCopy(listAfterDeletion);
+                setShowTermDeletModal(false);
+                setTotalTerms(totalTerms - 1);
             },
-            error: (err) => { setShowTermDeletModal(false) }
+            error: (err) => { setShowTermDeletModal(false); }
         });
     }
 
@@ -324,39 +312,32 @@ const DefaultGlossaryWorkspace = (props) => {
         if (term?.tl_term !== termCopy?.tl_term?.trim()) {
             formData.append('tl_term', termCopy?.tl_term?.trim());
         }
-
-
         Config.axios({
             url: `${Config.BASE_URL}/glex/default_glossary/${term_id}/`,
             method: "PUT",
             data: formData,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-                toggleEditMode(term.id, 'close', true)
+                toggleEditMode(term.id, 'close', true);
             },
             error: (err) => {
                 if(err?.response?.status == 400){
                     Config.toast(t("term_already_exist"),'warning');
-
                 }else{
-                    Config.toast("Failed to add term!", "error")
-
+                    Config.toast("Failed to add term!", "error");
                 }
             }
         });
     }
 
-
     const handleNewTermOnChange = (e) => {
-        let { name, value } = e.target
-        if (name === 'sl_term' && e.target.value?.trim() !== '') newSourceTermRef.current.style.border = defaultFieldStyle.border
-        if (name === 'tl_term' && e.target.value?.trim() !== '') newReplaceTermRef.current.style.border = defaultFieldStyle.border
-
+        let { name, value } = e.target;
+        if (name === 'sl_term' && e.target.value?.trim() !== '') newSourceTermRef.current.style.border = defaultFieldStyle.border;
+        if (name === 'tl_term' && e.target.value?.trim() !== '') newReplaceTermRef.current.style.border = defaultFieldStyle.border;
         setNewTerm({
             ...newTerm,
             [name]: value
-        })
+        });
     }
 
     const addNewTerm = () => {
@@ -433,12 +414,6 @@ const DefaultGlossaryWorkspace = (props) => {
     const handleOnScroll = () => {
         if (scrollingDivRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = scrollingDivRef.current;
-            // console.log("scrollTop: "+Math.round(scrollTop))
-            // console.log("clientHeight: "+Math.round(clientHeight))
-            // console.log("scrollHeight: "+Math.round(scrollHeight))
-            // console.log("=====addition:=========")
-            // console.log(Math.round(scrollTop) + Math.round(clientHeight))
-            // console.log(Math.round(scrollTop) + Math.round(clientHeight) === Math.round(scrollHeight))
             if (Math.abs((Math.round(scrollTop) + Math.round(clientHeight)) - Math.round(scrollHeight)) <= 4) {
                 // This will be triggered after hitting the last element.
                 // API call should be made here while implementing pagination.
@@ -450,10 +425,8 @@ const DefaultGlossaryWorkspace = (props) => {
     }
 
     // useEffect(() => {
-    //   console.log("currPage: "+currPage)
     // }, [currPage])
     
-
     const handleEditTermEnter = (e, term_id) => {
         if (e.which === 13) {
             handleTermUpdate(term_id)
@@ -481,7 +454,7 @@ const DefaultGlossaryWorkspace = (props) => {
             }, 8000);
             
         }catch(e) {
-            console.log(e)
+            console.error(e);
             Config.toast(t("no_terms_gloss"), 'warning');
             dispatch(deleteDownloadingFile({ id: uniqueId }))
         }
@@ -685,8 +658,7 @@ const DefaultGlossaryWorkspace = (props) => {
                     visible={showTermDeletModal}
                     showCloseButton={false}
                     onClose={() => console.log()}
-                    className="ai-mark-confirm-box"
-                >
+                    className="ai-mark-confirm-box">
                     <div className="confirmation-wrapper">
                         <img
                             src={WarningIcon}

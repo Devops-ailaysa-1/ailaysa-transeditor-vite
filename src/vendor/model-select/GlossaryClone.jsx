@@ -178,7 +178,6 @@ function GlossaryClone(props) {
     };
 
     const MultipleOption = (props) => {
-        // console.log(multipleTermPairSelected)
         // let isSelected = multipleTermPairSelected?.find(each => each.label === props.label)
         return (
             <div>
@@ -263,7 +262,6 @@ function GlossaryClone(props) {
                 // let toList = fromTaskList?.filter(each => each.value !== singleTermPairSelected.value)
                 // setToTaskList(toList)
                 setToTaskList(toTaskListRef.current?.filter(each => each.value !== singleTermPairSelected.value))
-                console.log('totasklist changed')
             }
         }
     }, [singleTermPairSelected])
@@ -271,7 +269,6 @@ function GlossaryClone(props) {
     useEffect(() => {
       if(sourceTermSelect.multipleToSingle){
         // let toList = fromTaskList.filter(o1 => !multipleTermPairSelected.some(o2 => o1.value === o2.value))
-        // console.log(fromTaskList.filter(o1 => !multipleTermPairSelected.some(o2 => o1.value === o2.value)))
         let toList = toTaskListRef.current?.filter(o1 => !multipleTermPairSelected.some(o2 => o1.value === o2.value))
         setToTaskList(toList)
       }
@@ -301,12 +298,10 @@ function GlossaryClone(props) {
             toIdsParams += `&copy_to_ids=${each.value}`
         })
         setIsTransferring(true)
-        // console.log(toIdsParams)
         let params = {
             url: `${Config.BASE_URL}/glex/clone_source_terms_from_single_to_multiple_task/?copy_from_task_id=${singleTermPairSelected.value}${toIdsParams}`,
             auth: true,
             success: (response) => {
-                // console.log(response)
                 Config.toast(t("src_terms_cloned"));
                 setIsTransferring(false)
                 setShowCloneModal(false)
@@ -330,7 +325,6 @@ function GlossaryClone(props) {
             url: `${Config.BASE_URL}/glex/clone_source_terms_from_multiple_to_single_task/?task_id=${singleTermPairSelected.value}${fromIdsParams}`,
             auth: true,
             success: (response) => {
-                // console.log(response)
                 Config.toast(t("src_terms_cloned_success"));
                 setShowCloneModal(false)
                 setIsTransferring(false)
@@ -358,8 +352,6 @@ function GlossaryClone(props) {
     } 
 
     const isCloneFormValid = () => {
-        // console.log(Object.keys(singleTermPairSelected).length === 0)
-        // console.log(multipleTermPairSelected?.length === 0)
         if(Object.keys(singleTermPairSelected).length === 0 && multipleTermPairSelected?.length === 0){
             setCloneFormValidation({single: true, multiple: true})
             return false
@@ -497,7 +489,6 @@ function GlossaryClone(props) {
                             />
                         </div>
                         {(cloneFormValidation.multiple || cloneFormValidation.single) && <small style={{color: 'red'}}>{t('required')}</small>}
-                        {/* {console.log(sourceTermSelect.multipleToSingle)} */}
                         {
                             sourceTermSelect.multipleToSingle ?
                                 (

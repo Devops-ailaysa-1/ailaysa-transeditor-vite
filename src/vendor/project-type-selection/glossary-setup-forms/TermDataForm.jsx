@@ -97,7 +97,6 @@ const TermDataForm = (props) => {
 
     useEffect(() => {
         if (glossaryProjectCreationResponse && Object.keys(glossaryProjectCreationResponse)?.length) {
-            console.log(glossaryProjectCreationResponse)
             Config.axios({
                 url: `${Config.BASE_URL}/workspace/files_jobs/${glossaryProjectCreationResponse?.id}/`,
                 method: "GET",
@@ -181,7 +180,6 @@ const TermDataForm = (props) => {
 
         changingIndex = uploadList?.findIndex((list) => list.thisJobId === jobId);
         uploadList?.map((bucket) => bucket?.thisJobId === jobId && includeCheck(bucket?.thisJobsFileList, fileList) && bucket?.thisJobsFileList?.push(fileList[0]));
-        // console.log(uploadList);
         setTimeout(() => {
             setUploadBucket(uploadList);
         }, 200);
@@ -230,7 +228,6 @@ const TermDataForm = (props) => {
     };
 
     const deleteFileFromJob = (file) => {
-        // console.log(file)
         let params = {
             url: `${Config.BASE_URL}/glex/glossary_file_upload/?file_delete_ids=${file.id}&job=${file.job}`,
             method: 'DELETE',
@@ -241,14 +238,12 @@ const TermDataForm = (props) => {
                         return files.id !== file.id;
                     })
                 );
-                Config.toast(t("file_deleted_success"))
+                Config.toast(t("file_deleted_success"));
             },
         };
         Config.axios(params);
     }
     
-
-
     return (
         <React.Fragment>
             <div className="term-data-setup-wrapper">

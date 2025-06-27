@@ -22,7 +22,6 @@ const SpeechRecognitionToggle = (props) => {
     const handleRecognitionResult = (event) => {
         const result = event.results[event.results.length - 1];
         const transcript = result[0].transcript;
-        console.log(transcript)
         if (result.isFinal) {
             const selection = window.getSelection();
             const range = selection.getRangeAt(0);
@@ -58,15 +57,8 @@ const SpeechRecognitionToggle = (props) => {
     const initializeRecognition = () => {
         if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
             recognition.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-
-            // console.log(targetLanguage);
-            // console.log(webSpeechLang);
             let a = webSpeechLang?.find(each => each.name?.toLowerCase() === targetLanguage?.toLowerCase())
-            // console.log(a);
-
             recognition.current.lang = fromWriter ? targetLanguage : `${a?.code}`;
-
-            console.log(recognition.current);
             recognition.current.continuous = true;
             recognition.current.interimResults = true;
             recognition.current.onstart = handleRecognitionStart;

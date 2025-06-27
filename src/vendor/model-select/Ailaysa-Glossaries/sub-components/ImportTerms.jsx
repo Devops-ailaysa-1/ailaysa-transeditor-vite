@@ -69,22 +69,19 @@ export const ImportTerms = (props) => {
      
     // check the already added glossaries
     useEffect(() => {
-        // console.log("checked list changed")
         if (glossaryList?.length !== 0 && selectedGlossaryList?.length !== 0) {
             let a = glossaryList.filter(item => selectedGlossaryList.some(each => item.glossary_id == each.glossary))
             let list = []
             a?.map(each => {
-                list.push(each.glossary_id)
-            })
-            // console.log(list)
-            setCheckedGlossary(list)
+                list.push(each.glossary_id);
+            });
+            setCheckedGlossary(list);
         }
-    }, [selectedGlossaryList, glossaryList])
+    }, [selectedGlossaryList, glossaryList]);
 
     // store the glossary which are removed
     useEffect(() => {
-        let list = selectedGlossaryList?.filter(o1 => !checkedGlossary.some(o2 => o1.glossary == o2))
-        // console.log(list)
+        let list = selectedGlossaryList?.filter(o1 => !checkedGlossary.some(o2 => o1.glossary == o2));
         glossaryToRemove.current = list
         if (glossaryToRemove.current?.length !== 0 || checkedGlossary?.filter(item => !selectedGlossaryList?.some(each => each.glossary == item))?.length !== 0) {
             setIsGlossaryChanged(true)
@@ -140,8 +137,7 @@ export const ImportTerms = (props) => {
                 formData.append("glossary", each);
             })
         } else {
-            let listToUpdate = checkedGlossary?.filter(item => !selectedGlossaryList?.some(each => each.glossary == item))
-            // console.log(listToUpdate);
+            let listToUpdate = checkedGlossary?.filter(item => !selectedGlossaryList?.some(each => each.glossary == item));
             listToUpdate?.map(each => {
                 formData.append("glossary", each);
             })
@@ -174,14 +170,11 @@ export const ImportTerms = (props) => {
     // remove glossary
     const removeGlossaryFromProject = () => {
         let list = "";
-
-        console.log(glossaryToRemove.current)
-
         glossaryToRemove.current?.map((each, index) => {
             list += `${each.id}${index !== glossaryToRemove.current?.length - 1 ? "," : ""}`;
         });
-        // console.log(list);
         setIsGlossaryLoading(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/glex/glossary_selected/?to_remove_ids=${list}`,
             auth: true,
@@ -323,7 +316,7 @@ export const ImportTerms = (props) => {
                         checkExtractionFileStatus()
                     }, 1500);
                 }catch(e) {
-                    console.log(e)
+                    console.error(e);
                 }
             },
             error: (err) => {

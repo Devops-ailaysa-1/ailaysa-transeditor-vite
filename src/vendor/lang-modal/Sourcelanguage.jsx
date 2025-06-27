@@ -38,7 +38,7 @@ function SourceLanguage(props) {
                 })
                 setFilteredResults(filteredData)
             }catch(e){
-                // console.log(e)
+                console.error(e);
             }
         }
         else{
@@ -67,8 +67,6 @@ function SourceLanguage(props) {
 
     useEffect(() => {
         // if(modalOpened){
-            // console.log("pass")
-            // console.log(searchAreaRef.current)
             setTimeout(() => {
                 searchAreaRef.current?.focus();
                 setOnFocusWrap(true)

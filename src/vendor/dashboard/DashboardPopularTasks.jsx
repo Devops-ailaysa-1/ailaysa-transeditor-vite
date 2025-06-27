@@ -40,14 +40,12 @@ const DashboardPopularTasks = () => {
                 }
             })
             setPopularDataItem(AppsCardsInfo?.flat(1));
-            // console.log(AppsCardsInfo?.flat(1))
             setCardLoaders(false)
         }
     } 
 
     useEffect(() => {
         getCardContent();
-        // console.log(popularDataItem)
     }, [])
 
     const handleAllTemplateCardClick = () => {

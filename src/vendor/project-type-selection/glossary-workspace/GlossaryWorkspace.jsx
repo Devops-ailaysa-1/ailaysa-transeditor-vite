@@ -530,10 +530,8 @@ function GlossaryWorkspace(props) {
     };
 
     // useEffect(() => {
-    //   console.log(geographyUsage)
     // }, [geographyUsage])
     
-
     const handleSaveButton = () => {
         let term = -1;
         let url = "";
@@ -646,10 +644,10 @@ function GlossaryWorkspace(props) {
             }, 8000);
             
         }catch(e) {
-            console.log(e)
+            console.error(e);
             Config.toast(t("no_terms_gloss"), 'warning');
-            dispatch(deleteDownloadingFile({ id: documentId.current }))
-            setisTbxDownloading(false)
+            dispatch(deleteDownloadingFile({ id: documentId.current }));
+            setisTbxDownloading(false);
         }
     }
     
@@ -660,8 +658,7 @@ function GlossaryWorkspace(props) {
                 method: "GET",
                 auth: true,
                 success: (response) => {
-                    // console.log(response.data);
-                    setWikipediaData(response.data.out)
+                    setWikipediaData(response.data.out);
                 },
             });
         } 
@@ -674,8 +671,7 @@ function GlossaryWorkspace(props) {
                 method: "GET",
                 auth: true,
                 success: (response) => {
-                    // console.log(response.data);
-                    setWiktionaryData(response.data.out)
+                    setWiktionaryData(response.data.out);
                 },
             });
         }
@@ -737,29 +733,27 @@ function GlossaryWorkspace(props) {
         if(termNote !== ""){
             setTermAdvBox({...termAdvBox, 
                 note: true,
-            })
-            // console.log(termNote)
+            });
         }else if(termContext !== ""){
             setTermAdvBox({...termAdvBox, 
                 context: true,
-            })
-            // console.log(termContext)
+            });
         }else if(sourceLanguageDefinition !== ""){
             setTermAdvBox({...termAdvBox, 
                 sl_definition: true,
-            })
+            });
         }else if(targetLanguageDefinition !== ""){
             setTermAdvBox({...termAdvBox, 
                 tl_definition: true,
-            })
+            });
         }else if(sourceOfSourceLanguageTerm !== ""){
             setTermAdvBox({...termAdvBox, 
                 src_sl_term: true,
-            })
+            });
         }else if(sourceOfTargetLanguageTerm !== ""){
             setTermAdvBox({...termAdvBox, 
                 src_tl_term: true,
-            })
+            });
         }else{
             setTermAdvBox({...termAdvBox, 
                 note: false,
@@ -768,10 +762,10 @@ function GlossaryWorkspace(props) {
                 tl_definition: false,
                 src_sl_term: false,
                 src_tl_term: false
-            })
+            });
         }
 
-    }, [termNote, termContext, sourceLanguageDefinition, targetLanguageDefinition, sourceOfSourceLanguageTerm, sourceOfTargetLanguageTerm])
+    }, [termNote, termContext, sourceLanguageDefinition, targetLanguageDefinition, sourceOfSourceLanguageTerm, sourceOfTargetLanguageTerm]);
     
     // const CustomCellCheckbox = withStyles({
     //     root: {
@@ -865,36 +859,33 @@ function GlossaryWorkspace(props) {
     const [selectAllCheckbox, setSelectAllCheckbox] = useState(false)
 
     const handleSelectAllTerms = (e) => {
-        // console.log(e.target.checked)
         if(e.target.checked){
-            let allTermList = []
-            glexTerms?.map(each => allTermList.push(each?.id))
-            // console.log(allTermList)
-            setCheckedTerms(allTermList)
-            setSelectAllCheckbox(true)
+            let allTermList = [];
+            glexTerms?.map(each => allTermList.push(each?.id));
+            setCheckedTerms(allTermList);
+            setSelectAllCheckbox(true);
         }else if(e.target.checked === false){
-            setCheckedTerms([])
-            setSelectAllCheckbox(false)
+            setCheckedTerms([]);
+            setSelectAllCheckbox(false);
         }
     } 
 
     const handleGlossaryTermSelect = (event, termIDs) => {
         if(event.target.checked){
-            setCheckedTerms([...checkedTerms, termIDs])        
+            setCheckedTerms([...checkedTerms, termIDs]);       
         }else if(event.target.checked === false){
             let newCheckedTerms = checkedTerms.filter(id => id !== termIDs)
-            setCheckedTerms(newCheckedTerms)
+            setCheckedTerms(newCheckedTerms);
         }
     } 
 
     useEffect(() => {
         if(checkedTerms?.length === glexTerms?.length){
-            setSelectAllCheckbox(true)
+            setSelectAllCheckbox(true);
         }else{
-            setSelectAllCheckbox(false)
+            setSelectAllCheckbox(false);
         }
-    }, [checkedTerms, glexTerms])
-    
+    }, [checkedTerms, glexTerms]);    
 
     const SearchTermFilterEnter = (e) => {
         if(e.which === 13 && searchTerm == ""){
@@ -902,24 +893,24 @@ function GlossaryWorkspace(props) {
             e.target.blur() 
         }else if(e.which === 13){
             searchTermRef.current = searchTerm
-            searchFunctionality()
+            searchFunctionality();
             setSearchBox(false);
-            e.target.blur() 
+            e.target.blur();
         }
     }
     
     useEffect(() => {
         if(searchTerm == "" && isSearchTermDelete) {
-            getGlexTerms()
-            searchTermRef.current = null
-            setIsSearchTermDelete(false)
+            getGlexTerms();
+            searchTermRef.current = null;
+            setIsSearchTermDelete(false);
         }
-    }, [searchTerm, isSearchTermDelete])
+    }, [searchTerm, isSearchTermDelete]);
 
     const handleCloseSearchBox = () => {
-        setSearchTerm("")
-        setSearchBox(false)
-        setIsSearchTermDelete(true)
+        setSearchTerm("");
+        setSearchBox(false);
+        setIsSearchTermDelete(true);
     }
 
     const handleOnScroll = () => {
@@ -932,7 +923,7 @@ function GlossaryWorkspace(props) {
                     setCurrPage(currPage + 1);
                 }, 80);
             }
-          }
+        }
     } 
     
     useEffect(() => {
@@ -957,7 +948,7 @@ function GlossaryWorkspace(props) {
         if (currPage <= totalPages && prevPage !== currPage && lastPageRef.current !== currPage) {
           fetchData();
         }
-      }, [currPage]);
+    }, [currPage]);
 
     return (
         <React.Fragment>
@@ -969,8 +960,7 @@ function GlossaryWorkspace(props) {
                 termdownload={termdownload} 
                 handleDownloadFile={handleDownloadFile}
                 prevPathRef={prevPathRef}
-                isTbxDownloading={isTbxDownloading}
-            />
+                isTbxDownloading={isTbxDownloading}/>
             <section className="padding-correction">
                 <div className="glossary-workspace-wrapper">
                     <div className="glossary-workspace-container">

@@ -34,7 +34,6 @@ function TargetLanguage(props) {
     const [filteredResults, setFilteredResults] = useState([]);
 
     useEffect(() => {
-        // console.log("target", modalTarOpened)
     }, [modalTarOpened])
 
     useEffect(() => {
@@ -48,7 +47,7 @@ function TargetLanguage(props) {
                 })
                 setFilteredResults(filteredData)
             }catch(e){
-                // console.log(e)
+                console.error(e);
             }
         }
         else{
