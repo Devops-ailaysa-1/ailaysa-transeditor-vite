@@ -10,7 +10,6 @@ export default function useStateWithHistory(
 	const pointerRef = useRef(0)
 	
 	useEffect(() => {
-	  console.log(historyRef.current)
 	}, [historyRef.current])
 	
 	const set = useCallback(

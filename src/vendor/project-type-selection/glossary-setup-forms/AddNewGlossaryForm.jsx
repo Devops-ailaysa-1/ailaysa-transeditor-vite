@@ -303,7 +303,6 @@ const AddNewGlossaryForm = (props) => {
     //       url: Config.BASE_URL + "/app/language/",
     //       auth: true,
     //       success: (response) => {
-    //         console.log(response.data);
     //         targetLanguageOptionsRef.current = response.data;
     //         setSourceLanguageOptions(response.data);
     //         setTargetLanguageOptions(response.data);
@@ -326,15 +325,14 @@ const AddNewGlossaryForm = (props) => {
    
     const recentlyUsedLanguage = () => {
         var list;
-      Config.axios({
+
+        Config.axios({
           url: Config.BASE_URL + "/workspace/default_detail/",
           auth: true,
           success: (response) => {
               let options = []
-                // console.log(response.data?.recent_pairs);
               response.data?.recent_pairs?.map(each => {
                   list = (<span>{targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.src)?.language}</span> + <span>{each.tar?.length > 1 ? each.tar.map(eachTar => targetLanguageOptionsRef.current.find(eachlang => eachlang.id === eachTar)?.language).join(', ') : targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.tar[0])?.language}</span>)
-                  // console.log(list);
                   options.push({
                         value: `${each.src}->${each.tar.join(',')}`,
                         label: `${targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.src)?.language}`,

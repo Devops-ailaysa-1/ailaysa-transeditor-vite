@@ -31,8 +31,6 @@ export const AssignmentReferenceInfo = (props) => {
     const [eachStepData, setEachStepData] = useState(null)
     
     useEffect(() => {
-        console.log(allTaskListRef.current);
-        console.log(allTaskList);
         if(allTaskList){
             let data = allTaskList[0].list[0]?.task_assign_info[0]
             setEachStepData(data)
@@ -46,7 +44,6 @@ export const AssignmentReferenceInfo = (props) => {
         dispatch(addDownloadingFiles({id: uniqueKey, file_name: file_name, ext: ext, status: 1}))
         
         const response = await Config.downloadFileFromApi(url);
-        // console.log(response);
         if(response !== undefined){
             // update the list once download completed
             dispatch(updateDownloadingFile({id: uniqueKey, status: 2}))
@@ -61,8 +58,6 @@ export const AssignmentReferenceInfo = (props) => {
     } 
 
     const selectedTaskRole = (task_id, role) => {
-        console.log(task_id);
-        console.log(role);
         setEachStepData(role)
     } 
 

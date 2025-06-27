@@ -34,7 +34,6 @@ const PDFViewer = (props) => {
     //     pageRefs.current[pageNumber].scrollIntoView({ behavior: 'smooth' });
     // }
     const onDocumentLoadSuccess = (numPages) => {
-        console.log(numPages._pdfInfo.numPages)
         setNumPages(numPages._pdfInfo.numPages);
     }
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -61,7 +60,6 @@ const PDFViewer = (props) => {
 
     const handleDownloadTemplate = async () => {
         let url = pdf
-        console.log(url)
         const response = await downloadFileFromApi(url);
         const filename = response.headers['content-disposition']?.split('filename=')[1];
         const blob_url = URL.createObjectURL(new Blob([response.data]));
@@ -117,11 +115,7 @@ const PDFViewer = (props) => {
         }
         return false;
     };
-
     const hasScrollBarX = hasScrollBar(document.querySelector('.pdf-page'), 'horizontal');
-    console.log(hasScrollBarX)
-
-
 
     return (
         <section className="pdf-view-main-wrapper">

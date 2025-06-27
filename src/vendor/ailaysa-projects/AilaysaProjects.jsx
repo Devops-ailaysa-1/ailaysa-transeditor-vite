@@ -166,7 +166,6 @@ const AilaysaProjects = () => {
         Config.axios(params);
     };
 
-    // console.log(activeProjTab)
     return (
         <React.Fragment>
             <Navbar showHowToTour={showHowToTour} showTourOption={activeTab == 1} />

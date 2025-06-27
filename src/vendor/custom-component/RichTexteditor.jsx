@@ -33,12 +33,10 @@ const RichTexteditor = (props) => {
             callbacks: {
                 onPaste: async function (e) {
                     e.preventDefault()
-
                     // Get the pasted content as HTML
                     // below two line are very important it gets the clipboard value from noramlly and manually copied data
                     var clipboardData = e.originalEvent.clipboardData || window.clipboardData;
                     var pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
-                    // console.log(pastedData)
                     // var pastedHTML = (e.originalEvent || e).clipboardData.getData('text/html');
 
                     // Create a temporary div to parse and clean the pasted content
@@ -53,9 +51,7 @@ const RichTexteditor = (props) => {
 
                     // Insert the cleaned HTML into the contenteditable div
                     var cleanedHTML = tempDiv.innerHTML;
-                    // console.log(cleanedHTML)
                     document.execCommand('insertHTML', false, cleanedHTML);
-
 
                     // var clipboardData = e.originalEvent.clipboardData || window.clipboardData;
                     // var pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
@@ -63,8 +59,6 @@ const RichTexteditor = (props) => {
                     // // Remove unwanted styles and retain basic formatting
                     // var tempDiv = document.createElement('div');
                     // tempDiv.innerHTML = pastedData;
-
-                    // // console.log(plain_text)
 
                     // // Change <pre> tags to <p> tags
                     // var preTags = tempDiv.querySelectorAll('pre');
@@ -86,7 +80,6 @@ const RichTexteditor = (props) => {
                     // e.preventDefault();
 
                     // setTimeout(() => {
-                    //     // console.log(containsRtlCharacters(plain_text))
                     //     if (containsRtlCharacters(plain_text)) {
                     //         p_tag.classList.add('right-align-lang-style')
                     //     } else {
@@ -99,13 +92,11 @@ const RichTexteditor = (props) => {
 
                     // var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData || window.clipboard).getData('text/html');
                     // var plain_text = ((e.originalEvent || e).clipboardData || window.clipboardData || window.clipboard).getData('text/plain');
-                    // console.log(bufferText)
                     // e.preventDefault();
                     // if (bufferText !== '') {
                     //     var div = $('<p />');
                     //     div.append(bufferText);
                     //     div.find('*').removeAttr('style');
-                    //     console.log(div)
                     //     setTimeout(function () {
                     //         document.execCommand('insertNode', false, div);
                     //     }, 10);
@@ -114,8 +105,6 @@ const RichTexteditor = (props) => {
                     //     navigator.clipboard.readText()
                     //         .then(text => {
                     //             setTimeout(function () {
-                    //                 console.log(e.target)
-
                     //                 $('.summernote').summernote('insertText', text)
                     //             }, 10);
                     //         })
@@ -128,7 +117,6 @@ const RichTexteditor = (props) => {
                     if (document.querySelector('.temp-color')) {
                         document.querySelector('.temp-color').classList.remove('temp-color')
                     }
-                 
                     if (document.querySelector('.tab-to-write-more-tooltip')) {
                         document.querySelector('.tab-to-write-more-tooltip').style.visibility = "hidden"
 
@@ -140,27 +128,19 @@ const RichTexteditor = (props) => {
                         handleChangeUpdate(true)
                     }
                     // currentSummerNoteTextData.current = count(document?.querySelector('.note-editable')?.innerText.replace(/\n/g, '')).chars
-                    // // console.log("char: "+currentSummerNoteTextData.current)
-                    // // console.log(document?.querySelector('.note-editable')?.innerText?.trim()?.split(/\s+/)?.filter(each => each?.trim() !== ''))
-                    // // console.log("word: "+document?.querySelector('.note-editable')?.innerText?.trim()?.split(/\s+/)?.filter(each => each?.trim() !== '')?.length)
                     // dispatch(setWriterWordCount({
                     //     char: (currentSummerNoteTextData.current !== null && currentSummerNoteTextData.current !== undefined) ? currentSummerNoteTextData.current : 0,
                     //     word: document?.querySelector('.note-editable')?.innerText?.trim()?.split(/\s+/)?.filter(each => each?.trim() !== '')?.length !== undefined ? document?.querySelector('.note-editable')?.innerText?.trim()?.split(/\s+/)?.filter(each => each?.trim() !== '')?.length : 0
                     // }))
-                    // // console.log(currentSummerNoteTextData.current)
                     // const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-
                     // let isCoAuthor = window.location.pathname.includes('book-writing')
                     // let item_id = URL_SEARCH_PARAMS.get('item')
                     // let matter = URL_SEARCH_PARAMS.get('matter')
                     // let isStreaming = URL_SEARCH_PARAMS.get('streaming') ? true : false
-
                     // if(isCoAuthor && item_id && matter && !isStreaming){
                     //     debounce(bookMatterItemSaveLogic)
                     // }
                     // if (!isInitialHtmlDataLoaded.current && !isCoAuthor) {
-                    //     // console.log(createdDocumentId.current);
-                    //     console.log(window.location.pathname)
                     //     if ((window.location.pathname != '/word-processor/article/') && (window.location.pathname != '/book-writing')) {
                     //         if (URL_SEARCH_PARAMS.get("pdf-id") || URL_SEARCH_PARAMS.get("task")) {
                     //             debounce(saveHtmlDataForPdf)
@@ -186,12 +166,9 @@ const RichTexteditor = (props) => {
                     const pTags = Array.from(parentDiv.children).filter(function (element) {
                         return element.tagName.toLowerCase() === 'p';
                     });
-                    // console.log(pTags)
                     // Loop through the selected p tags and perform actions
                     pTags.forEach(function (pTag) {
                         // Access each p tag and perform actions
-                        // console.log(pTag.textContent);
-                        // console.log(pTag);
                         if (containsRtlCharacters(pTag.textContent)) {
                             pTag.classList.add('right-align-lang-style')
                         }
@@ -265,9 +242,6 @@ const RichTexteditor = (props) => {
                     //         loaderPTag.style.setProperty('width', img.width)
                     //         loaderPTag.style.setProperty('height', img.height)
                     //     }
-
-
-                    //     // console.log(img.width, img.height)
                     //     $('.summernote').summernote("insertNode", loaderPTag);
                     // }
                     // let lastDot = name?.lastIndexOf(".");
@@ -486,7 +460,6 @@ const RichTexteditor = (props) => {
                         } else if (e.target.ariaValueText === 'h3') {
                             $('.summernote').summernote('formatH3');
                         }
-                        // console.log(document?.querySelector('.active-voice'))
                         if (document?.querySelector('.active-voice')) {
                             document?.querySelector('.active-voice')?.classList.remove('active-voice')
                         }
@@ -498,10 +471,8 @@ const RichTexteditor = (props) => {
                         }
                         
                     } catch (e) {
-                        console.log(e)
+                        console.error(e);
                     }
-
-
                 },
             }),
         ]);
@@ -519,15 +490,10 @@ const RichTexteditor = (props) => {
     const changeParagraphStyleDropDownLabel = (event) => {
         // style select drop-down
         let styleSelect = document.querySelector('.style-select-btn')
-        // console.log(document.querySelector('.summernote-style-list'))
-        // console.log(window.getSelection())
         directChildRef.current = null
         const selection = window.getSelection();
         const parentElement = searchParent(selection.anchorNode.parentElement);
-
         let tag = directChildRef.current?.tagName
-        // console.log(tag)
-
         if (tag === 'H1') {
             styleSelect.innerHTML = "Heading 1"
             if (document?.querySelector('.active-voice')) {
@@ -564,9 +530,6 @@ const RichTexteditor = (props) => {
     // Function to check if a string contains RTL characters
     const containsRtlCharacters = (text) => {
         var rtlCharacters = /[\u0600-\u06FF\u0590-\u05FF\uFE70-\uFEFF]/;
-
-        // console.log('text : ' + text)
-        // console.log('rtl : ' + rtlCharacters.test(text))
         // return rtlCharacters.test(text);
         // Count the number of RTL characters and non-RTL characters
         let rtlCount = 0;

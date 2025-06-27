@@ -60,8 +60,6 @@ export const ChipInputField = (props) => {
             e.preventDefault();
             const tagsCopy = [...chipsArray];
             const poppedTag = tagsCopy.pop();
-            // console.log(poppedTag);
-
             setChipsArray(tagsCopy);
             setInput(poppedTag.name);
         }
@@ -115,8 +113,7 @@ export const ChipInputField = (props) => {
 
     useEffect(() => {
         setChipsCopyArray(chipsArray)
-        // console.log(chipsArray); 
-    }, [chipsArray])
+    }, [chipsArray]);
 
     return (
         <div className="blog-suggestion-inputs" ref={refs} >

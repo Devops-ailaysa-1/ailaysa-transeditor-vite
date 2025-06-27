@@ -397,7 +397,6 @@ function Chat(props) {
     /* Send a new message */
     const sendMessage = () => {
         let message = messageInput.current?.value?.trim();
-        console.log(message)
         if (message && selectedThread && receiverId) {
             let htmlEncodedMessage = message.replace(/[\u00A0-\u9999<>\&]/g, function (i) {
                 return "&#" + i.charCodeAt(0) + ";";
@@ -911,7 +910,6 @@ function Chat(props) {
                                                                                         }
                                                                                     >
                                                                                         <div className="sender-msgs-cont">
-                                                                                            {/* {console.log(linkPreviews)} */}
                                                                                             {sameTimeThread ? (
                                                                                                 <div className="sender-msg-with-sender-details">
                                                                                                     <span className="msgs"

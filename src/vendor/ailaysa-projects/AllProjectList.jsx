@@ -1558,7 +1558,7 @@ function AllProjectList(props) {
                                 })
                                 setSelectedProjectFiles(newArr);
                             }catch(e) {
-                                console.log(e);
+                                console.error(e);
                             }
                         }
                         setCreatedProjects(newArr);

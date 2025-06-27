@@ -69,7 +69,6 @@ export const CustomTimePicker = (props) => {
         time.setMinutes(minutes);
         time.setSeconds('00');
         return time;
-        // console.log(time); // log selected time as a Date object
     }
 
     const getTimeStringFromDate = (date) => {
@@ -83,7 +82,6 @@ export const CustomTimePicker = (props) => {
     const handleTimeSelect = (event) => {
         event.stopPropagation()
         let selectedTime = event.target.textContent;
-        // console.log(selectedTime)
         if (validateTime(selectedTime)) {
             let timeObj = convertTimeStringToTimeObject(selectedTime)
             props.setValue(timeObj)
@@ -101,7 +99,6 @@ export const CustomTimePicker = (props) => {
 
     const validateOnBlur = (e) => {
         const enteredTime = e.target.value;
-        // console.log(enteredTime)
         if (validateTime(enteredTime)) {
             let timeObj = convertTimeStringToTimeObject(enteredTime)
             props.setValue(timeObj)
