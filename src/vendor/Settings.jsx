@@ -217,83 +217,75 @@ const Settings = (props) => {
     
     useEffect(() => {
         if(activeTab === "3"){
-            glossaryToRemove.current = null
-            setGlossaryList(glossaryListRef.current)
-            // console.log(glossarySelectedListRef.current)
-            setGlossarySelectedList(glossarySelectedListRef.current)
-            setCheckedGlossary(prevState => [])
-            setIsGlossaryChanged(false)
-        }else if(activeTab === "6"){
-            glossaryToRemove.current = null
-            setGlossaryList(wordChoiceListRef.current)
-            setGlossarySelectedList(wordChoiceSelectedListRef.current)
-            setIsGlossaryChanged(false)
-            setCheckedGlossary(prevState => [])
+            glossaryToRemove.current = null;
+            setGlossaryList(glossaryListRef.current);
+            setGlossarySelectedList(glossarySelectedListRef.current);
+            setCheckedGlossary(prevState => []);
+            setIsGlossaryChanged(false);
+             }else if(activeTab === "6"){
+            glossaryToRemove.current = null;
+            setGlossaryList(wordChoiceListRef.current);
+            setGlossarySelectedList(wordChoiceSelectedListRef.current);
+            setIsGlossaryChanged(false);
+            setCheckedGlossary(prevState => []);
         }
-    }, [activeTab])
-
+    }, [activeTab]);
     
     // store the glossary which are removed
     useEffect(() => {
-        let list = glossarySelectedList?.filter(o1 => !checkedGlossary.some(o2 => o1.glossary == o2))
-        // console.log(list)
+        let list = glossarySelectedList?.filter(o1 => !checkedGlossary.some(o2 => o1.glossary == o2));
         glossaryToRemove.current = list
         if (glossaryToRemove.current?.length !== 0 || checkedGlossary?.filter(item => !glossarySelectedList?.some(each => each.glossary == item))?.length !== 0) {
-            setIsGlossaryChanged(true)
+            setIsGlossaryChanged(true);
         } else {
-            setIsGlossaryChanged(false)
+            setIsGlossaryChanged(false);
         }
     }, [checkedGlossary]);
 
 
     // check the already added glossaries
     useEffect(() => {
-        // console.log("checked list changed")
         if (glossaryList?.length !== 0 && glossarySelectedList?.length !== 0) {
             let a = glossaryList.filter(item => glossarySelectedList.some(each => item.glossary_id == each.glossary))
             let list = []
             a?.map(each => {
-                list.push(each.glossary_id)
+                list.push(each.glossary_id);
             })
-            // console.log(list)
-            setCheckedGlossary(list)
+            setCheckedGlossary(list);
         }
-    }, [glossarySelectedList, glossaryList])
+    }, [glossarySelectedList, glossaryList]);
 
     
     const handleGlossaryCheckbox = (e, glossaryId) => {
-        // console.log(checkedGlossary)
         if(checkedGlossary?.includes(glossaryId)){
             let newCheckedTerms = checkedGlossary?.filter(id => id !== glossaryId)
             glossaryToRemove.current = glossaryId
-            setCheckedGlossary(newCheckedTerms)
+            setCheckedGlossary(newCheckedTerms);
         }else{
             setCheckedGlossary(oldArray => [...oldArray, glossaryId]);
         }
     }
 
-
-
     /* Get all the store previous values and load*/
     const loadAllValues = () => {
         if(!isNewsProject){
-            setChecked(false)
-            setShowTmSection(true)
-            setShowToolbarSection(true)
-            setMatchThreshold(85)
-            setStepValue(5)
-            setReferenceFiles([])
-            setTmxFiles([])
-            setTbxFiles([])
-            setGlossaryList([])
-            setGlossarySelectedList([])
-            // setJobsOptions([])
-            setJobsOnlyOptions([])
-            setUploadedTbxFile(null)
-            setSelectedTbxJob("")
-            setSelectedTbxConvertJob("")
-            setUploadedTbxConvertFile(null)
-            setUploadedTbxConvertFileName("")
+            setChecked(false);
+            setShowTmSection(true);
+            setShowToolbarSection(true);
+            setMatchThreshold(85);
+            setStepValue(5);
+            setReferenceFiles([]);
+            setTmxFiles([]);
+            setTbxFiles([]);
+            setGlossaryList([]);
+            setGlossarySelectedList([]);
+            // setJobsOptions([]);
+            setJobsOnlyOptions([]);
+            setUploadedTbxFile(null);
+            setSelectedTbxJob("");
+            setSelectedTbxConvertJob("");
+            setUploadedTbxConvertFile(null);
+            setUploadedTbxConvertFileName("");
             getJobsByProjectId();
             getTmxFiles();
             getGlossaryList();
@@ -301,11 +293,11 @@ const Settings = (props) => {
             getTbxFiles();
             getThresholdValues();
             getReferenceFiles();
-            getUntranslatableFiles()
-            getForbiddenFiles()
-        }else{
-            setGlossaryList([])
-            setGlossarySelectedList([])
+            getUntranslatableFiles();
+            getForbiddenFiles();
+            }else{
+            setGlossaryList([]);
+            setGlossarySelectedList([]);
             getGlossaryList();
             // getSelectedGlossaries();
         }
@@ -531,7 +523,6 @@ const Settings = (props) => {
         uniqueList?.map((eachJob, index) => {
             counter++
             if (eachJob?.id === undefined || eachJob?.id === null) {
-                // console.log(counter);
                 let formData = new FormData();
                 tmxTempFiles?.map(eachFile => {
                     if (eachJob?.id === undefined && eachJob.job === eachFile.job && eachFile?.file !== undefined) {
@@ -553,8 +544,6 @@ const Settings = (props) => {
                     data: formData,
                     success: (response) => {
                         if (response.status == 201) {
-                            // console.log(counter);
-                            // console.log(uniqueList?.length);
                             if (counter === uniqueList?.length) {
                                 counter++
                                 Config.toast(t("successfully_uploaded"));
@@ -577,8 +566,7 @@ const Settings = (props) => {
                 return { ...obj, ['job']: selectedValue };
             }
             return obj;
-        })
-        // console.log(selectedFileRow);
+        });
         setTmxTempFiles(selectedFileRow)
     }
 
@@ -591,7 +579,6 @@ const Settings = (props) => {
             auth: true,
             data: formData,
             success: (response) => {
-                // console.log(response.data);
                 Config.toast(t("changes_saved"));
                 let selectedFileRow = tmxTempFiles?.map((obj, index) => {
                     if (obj?.id === objId) {
@@ -599,7 +586,6 @@ const Settings = (props) => {
                     }
                     return obj;
                 })
-                // console.log(selectedFileRow);
                 setTmxTempFiles(selectedFileRow)
                 setIsTMXFilesChanged(true)
                 // setIsQaChanged(true)
@@ -623,7 +609,6 @@ const Settings = (props) => {
     const downloadTMXFile = async (e, objId) => {
         let url = `${Config.BASE_URL}/tm/download_tmx/${objId}/`
         const response = await downloadFileFromApi(url);
-        // console.log(response);
         Config.downloadFileInBrowser(response)
     }
 
@@ -631,10 +616,8 @@ const Settings = (props) => {
     const getFilteredGlossaryList = () => {
         let result = [];
         let tempList = glossaryList;
-        // console.log(this.state.glossarySelectedList)
         let a = tempList?.filter((value) => glossarySelectedList?.map((selected) => (parseInt(value?.glossary_id) != selected?.glossary ? result.push(value) : null)));
         // let b = this.state.glossaryList?.filter((each) => this.state.glossarySelectedList);
-        // console.log(result)
     };
 
     const getGlossaryList = () => {
@@ -644,10 +627,6 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/glex/glossaries/${projectId}/?option=glossary`,
             auth: true,
             success: (response) => {
-                console.log("glossary")
-                console.log(response.data)
-                console.log(response.data.find(each => each.glossary_id == 1110))
-                console.log(response.data.find(each => each.glossary_id == 1113))
                 setGlossaryList(response.data)
                 // if(activeTabRef.current === "3"){
                 // }
@@ -668,11 +647,8 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/glex/glossaries/${projectId}/?option=word_choices`,
             auth: true,
             success: (response) => {
-                // console.log("glossary")
-                // console.log(response.data)
                 setGlossaryList(response.data)
                 if(activeTabRef.current === "6"){
-                    // console.log('inside wc')
                 }
                 wordChoiceListRef.current = response.data
                 setIsWordchoiceListLoading(false)
@@ -690,8 +666,6 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/glex/glossary_selected/?project=${projectId}&option=glossary`,
             auth: true,
             success: (response) => {
-                console.log("selected glossary")
-                console.log(response.data)
                 glossarySelectedListRef.current = response.data
                 if(activeTabRef.current === "3"){
                     setGlossarySelectedList(response.data)
@@ -725,12 +699,12 @@ const Settings = (props) => {
                 formData.append("glossary", each);
             })
         } else {
-            let listToUpdate = checkedGlossary?.filter(item => !glossarySelectedList?.some(each => each.glossary == item))
-            // console.log(listToUpdate);
+            let listToUpdate = checkedGlossary?.filter(item => !glossarySelectedList?.some(each => each.glossary == item));
             listToUpdate?.map(each => {
                 formData.append("glossary", each);
-            })
+            });
         }
+
         Config.axios({
             url: `${Config.BASE_URL}/glex/glossary_selected/`,
             auth: true,
@@ -738,13 +712,13 @@ const Settings = (props) => {
             data: formData,
             success: (response) => {
                 if(response?.status === 201) {
-                    if(activeTab === "3") getSelectedGlossaries()
-                    else if(activeTab === "6") getSelectedWordChoice()
+                    if(activeTab === "3") getSelectedGlossaries();
+                    else if(activeTab === "6") getSelectedWordChoice();
                 }
-                Config.toast(t("added_success"))
+                Config.toast(t("added_success"));
             },
             error: (err) => {
-                setIsLoadingButton(false)
+                setIsLoadingButton(false);
             }
         });
     };
@@ -755,28 +729,27 @@ const Settings = (props) => {
         glossaryToRemove.current?.map((each, index) => {
             list += `${each.id}${index !== glossaryToRemove.current?.length - 1 ? "," : ""}`;
         });
-        // console.log(list);
+
         Config.axios({
             url: `${Config.BASE_URL}/glex/glossary_selected/?to_remove_ids=${list}`,
             auth: true,
             method: "DELETE",
             success: (response) => {
-                Config.toast(t("removed_success"))
-                glossaryToRemove.current = null
-                setIsGlossaryChanged(false)
-                setIsLoadingButton(false)
+                Config.toast(t("removed_success"));
+                glossaryToRemove.current = null;
+                setIsGlossaryChanged(false);
+                setIsLoadingButton(false);
                 if(response?.status === 204) {
-                    if(activeTab === "3") getSelectedGlossaries()
-                    else if(activeTab === "6") getSelectedWordChoice()
+                    if(activeTab === "3") getSelectedGlossaries();
+                    else if(activeTab === "6") getSelectedWordChoice();
                 }
             },
             error: (err) => {
-                setIsLoadingButton(false)
+                setIsLoadingButton(false);
             }
         });
     };
     
-
     /* Upload new TMX files */
     // const tmxFileUpload = (fileInput, e) => {
     //     let validExtensions = ["tmx"];
@@ -793,6 +766,7 @@ const Settings = (props) => {
     //         let formData = new FormData();
     //         formData.append("project", projectId);
     //         formData.append("tmx_files", file);
+
     //         Config.axios({
     //             url: Config.BASE_URL + "/workspace/tmx_file/",
     //             method: "POST",
@@ -811,12 +785,10 @@ const Settings = (props) => {
         let validExtensions = ["tbx"];
         let file = e.target.files[0];
         let fileName = file.name;
-        // console.log(fileName);
         let extension = fileName.substring(fileName.lastIndexOf(".") + 1);
         if (validExtensions.indexOf(extension) > -1) {
             //Check for file type i,e .tbx
-            // console.log(file)
-            setUploadedTbxFile(file)
+            setUploadedTbxFile(file);
         } else Config.toast(t("upload_tbx_file"), "error");
     };
 
@@ -826,14 +798,14 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/workspace/tbx_list_create/${projectId}`,
             auth: true,
             success: (response) => {
-                setTbxFiles(response.data)
+                setTbxFiles(response.data);
             },
         });
     };
 
     useEffect(() => {
         tbxJobOptionChange(jobsOptions[0]?.value);
-    }, [jobsOptions, jobsOnlyOptions])
+    }, [jobsOptions, jobsOnlyOptions]);
 
     /* Get all the jobs by project id */
     const getJobsByProjectId = () => {
@@ -853,7 +825,6 @@ const Settings = (props) => {
                     }
                 });
                 /* Set for dropdown options */
-                // console.log(response);
                 jobsOptionsRef.current = jobsOptionsTemp
                 setJobsOptions(jobsOptionsTemp)
                 setJobsOnlyOptions(jobsOnlyOptionsTemp)
@@ -948,7 +919,6 @@ const Settings = (props) => {
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
         return axios.get(
             url,
@@ -1021,7 +991,6 @@ const Settings = (props) => {
         let extension = fileName.substring(fileName.lastIndexOf(".") + 1);
         if (validExtensions.indexOf(extension) > -1) {
             // Check for file type
-            // console.log(file)
             setUploadedTbxConvertFile(file)
             if (!tbxFileConvertShow) {
                 setTbxFileConvertShow(true)
@@ -1232,8 +1201,6 @@ const Settings = (props) => {
     };
 
     const handleChange = (e, target) => {
-        // console.log(target)
-
         for (let i = 0; i < (e.target.files).length; i++) {
             if (e.target.files[i].name.length >= 201) {
                 Config.toast(t("filename_value_too_long_char_varying"), "warning");
@@ -1324,7 +1291,6 @@ const Settings = (props) => {
                 }
                 return obj;
             })
-            // console.log(selectedFileRow);
             setUntranslatableFiles(selectedFileRow)
         } else {
             let selectedFileRow = forbiddenWordsFiles?.map((obj, index) => {
@@ -1333,7 +1299,6 @@ const Settings = (props) => {
                 }
                 return obj;
             })
-            // console.log(selectedFileRow);
             setForbiddenWordsFiles(selectedFileRow)
         }
     }
@@ -1395,7 +1360,6 @@ const Settings = (props) => {
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
         return axios.get(
             target === 'untranslatable' ?
@@ -1422,8 +1386,6 @@ const Settings = (props) => {
                 let formData = new FormData();
                 untranslatableFiles?.map(eachFile => {
                     if (eachJob?.id === undefined && eachJob.job === eachFile.job) {
-                        // console.log(new Blob([JSON.stringify(eachFile)],{type:'text/plain'}))
-                        // console.log(eachFile.name)
                         formData.append("untranslatable_files", eachFile.file);
                     }
                 })
@@ -1466,7 +1428,6 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/qa/untranslatable_file/?project=${projectId}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 // setUploadedUntranslatableFile(response.data)
                 setUntranslatableFiles(response.data)
             },
@@ -1478,7 +1439,6 @@ const Settings = (props) => {
             url: `${Config.BASE_URL}/qa/forbidden_file/?project=${projectId}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 // setUploadedForbiddenFile(response.data)
                 setForbiddenWordsFiles(response.data)
             },
@@ -1544,7 +1504,6 @@ const Settings = (props) => {
             auth: true,
             data: formData,
             success: (response) => {
-                // console.log(response.data);
                 Config.toast('Changes saved');
                 if (target === 'untranslatable') {
                     let selectedFileRow = untranslatableFiles?.map((obj, index) => {
@@ -1553,7 +1512,6 @@ const Settings = (props) => {
                         }
                         return obj;
                     })
-                    // console.log(selectedFileRow);
                     setUntranslatableFiles(selectedFileRow)
                     setIsQaChanged(true)
                 } else {
@@ -1563,7 +1521,6 @@ const Settings = (props) => {
                         }
                         return obj;
                     })
-                    // console.log(selectedFileRow);
                     setForbiddenWordsFiles(selectedFileRow)
                     setIsQaChanged(true)
                 }
@@ -1580,7 +1537,6 @@ const Settings = (props) => {
             return result;
         }, {});
     }
-
 
     return (
         <React.Fragment>
@@ -1739,7 +1695,6 @@ const Settings = (props) => {
                                         <div className="tab-working-cont">
                                             <TabContent activeTab={this.state.activeInnerTab}>
                                         <TabPane tabId="1"> */}
-                                        {/* {console.log(jobsOptionsRef.current)} */}
                                         {
                                             isLoading ?
                                                 <React.Fragment>
@@ -2584,7 +2539,6 @@ const Settings = (props) => {
                                                                         ) : (
                                                                             <div className="settings-job-select">
                                                                                 <FormControl className="select-root-container">
-                                                                                    {/* {console.log(jobsOptions?.find(obj => obj.value == each.job)} */}
                                                                                     <Select
                                                                                         // classes={{ root: classes.input }}
                                                                                         name="name"
