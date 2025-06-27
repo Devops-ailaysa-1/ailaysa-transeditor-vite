@@ -445,7 +445,6 @@ const MainAssignManage = (props) => {
             const divElement = assignManageWrapRef.current;
             if (divElement) {
                 const hasScrollbar = divElement.clientHeight < divElement.scrollHeight;
-                // console.log(hasScrollbar)
                 setAssignManageHasScrollbar(hasScrollbar);
             }
         };
@@ -492,7 +491,6 @@ const MainAssignManage = (props) => {
             url: `${Config.BASE_URL}/auth/check-subscription/`,
             auth: true,
             success: (response) => {
-                // console.log(response.data.subscription_name)
                 setUserSubscriptionName(response.data.subscription_name)
             },
         });
@@ -730,9 +728,6 @@ const MainAssignManage = (props) => {
             success: (response) => {
                 let list = response.data
                 let assign_info_of_editor = taskAssignmentInfo.current?.find(each => each.task_assign_detail.step !== assignStep)
-                // console.log(list)
-                // console.log(assign_info_of_editor);
-
                 for (const key in list) {
                     if (key !== 'agencies') {
                         if (Object.hasOwnProperty.call(list, key)) {
@@ -777,12 +772,7 @@ const MainAssignManage = (props) => {
                 formData.append("instruction_file", file);
             })
         }
-
-        // console.log(arrDict)
-        // console.log(JSON.stringify(arrDict))
-
         formData.append("task_assign_detail", JSON.stringify(arrDict))
-
         if (userDetails?.agency && isProjectAssignedRef.current) {
             formData.append("reassigned", true)
         }
@@ -793,7 +783,6 @@ const MainAssignManage = (props) => {
             data: formData,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("task_assigned_success"))
                 setShowIndividualAssignManage(false)
                 listFiles(selectedFileRow.current.project)
@@ -862,13 +851,9 @@ const MainAssignManage = (props) => {
 
         if (instructionLocalFiles?.length !== 0) {
             instructionLocalFiles?.map(file => {
-                // console.log(file)
                 formData.append("instruction_file", file);
             })
         }
-
-        // console.log(userDetails?.agency);
-        // console.log(isProjectAssignedRef.current);
 
         if (userDetails?.agency && isProjectAssignedRef.current) {
             formData.append("reassigned", "True")
@@ -881,7 +866,6 @@ const MainAssignManage = (props) => {
             data: formData,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("task_updated_success"))
                 setShowIndividualAssignManage(false)
                 listFiles(selectedFileRow.current.project)
@@ -904,11 +888,9 @@ const MainAssignManage = (props) => {
             url: `${Config.BASE_URL}/workspace/task_assign_info/?tasks=${selectedFileRow.current.task}${(userDetails?.agency && isProjectAssignedRef.current) ? '&reassigned=True' : ''}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data);
                 taskAssignmentInfo.current = response.data
                 if (response.data?.length !== 0) {
                     response?.data?.map((eachRole) => {
-                        // console.log(eachRole?.task_assign_detail.step == assignStep)
                         if (eachRole?.task_assign_detail.step == assignStep) {
                             setIsTaskAssigned(true)
 
@@ -935,8 +917,6 @@ const MainAssignManage = (props) => {
                             // setAssignToDetails(eachRole?.assign_to_details);
                             // setAssignedByDetails(eachRole?.assigned_by_details)
                             // if (eachRole?.instruction_files) setReferenceFile({ name: eachRole?.instruction_files[0]?.filename, id: eachRole?.instruction_files[0]?.id });
-                            // console.log(currencyOptionsRef.current)
-
                             // setBilableChoice(eachRole?.account_raw_count == true ? "raw" : 'weighted')
                             setTaskDetailsFromApi({
                                 assignTo: eachRole?.assign_to_details,
@@ -947,25 +927,16 @@ const MainAssignManage = (props) => {
                                 mtpeCountUnit: eachRole?.mtpe_count_unit,
                                 estimatedHours: eachRole?.estimated_hours,
                                 accountRawCount: eachRole?.account_raw_count
-                            })
-                            console.log({
-                                assignTo: eachRole?.assign_to_details,
-                                instruction: eachRole?.instruction,
-                                deadline: eachRole?.deadline,
-                                currency: eachRole?.currency,
-                                mtpeRate: eachRole?.mtpe_rate,
-                                mtpeCountUnit: eachRole?.mtpe_count_unit,
-                                estimatedHours: eachRole?.estimated_hours
                             });
                         }
                     })
                 } else {
-                    setIsTaskAssigned(false)
+                    setIsTaskAssigned(false);
                 }
-                getAllEditorsList()
+                getAllEditorsList();
             },
             error: (err) => {
-
+                console.error(err);
             }
         });
     }
@@ -1115,7 +1086,6 @@ const MainAssignManage = (props) => {
     }
 
     useEffect(() => {
-        // console.log(selectedFileRow.current)
         if (selectedFileRow.current) {
             let sourceData = getLanguageNameFromId(selectedFileRow.current?.task_data?.source_language);
             let targetData = getLanguageNameFromId(selectedFileRow.current?.task_data?.target_language);
@@ -1131,7 +1101,6 @@ const MainAssignManage = (props) => {
         dispatch(addDownloadingFiles({ id: uniqueKey, file_name: file_name, ext: ext, status: 1 }))
 
         const response = await Config.downloadFileFromApi(url);
-        // console.log(response);
         if (response !== undefined) {
             // update the list once download completed
             dispatch(updateDownloadingFile({ id: uniqueKey, status: 2 }))

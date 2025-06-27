@@ -234,14 +234,13 @@ function AdvancedProjectType(props) {
             url: `${Config.BASE_URL}/workspace/task_status/?project=${URL_SEARCH_PARAMS.get("get-project-info")}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-                let canOpenFiles = response.data.res?.filter(each => each.open == 'True')
+                let canOpenFiles = response.data.res?.filter(each => each.open == 'True');
                 if(response.data.res?.length !== canOpenFiles?.length){
-                    setDisablePreTranslate(true)
+                    setDisablePreTranslate(true);
                 }
             },
             error: (err) => {
-               
+               console.error(err);
             }
         });
     }
@@ -419,8 +418,6 @@ function AdvancedProjectType(props) {
                                     </div>
                                 </div>
                                 <div className={"form-wrapper pt-0 "}>
-                                    {console.log(isTranslationTaskAvailable)}
-                                    {console.log(tempWriterFile)}
                                     {(isTranslationTaskAvailable || (tempWriterFile !== null && tempWriterFile !== undefined) || flowSwitch == 2) &&
 
                                     

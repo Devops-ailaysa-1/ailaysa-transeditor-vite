@@ -268,8 +268,6 @@ const AddGlossaryTermModal = (props) => {
     // output => if target given => source is output
     const getTermMT = (source, target) => {
         let formData = new FormData();
-        // console.log(documentTaskIdRef.current)
-
         formData.append("task_id", documentTaskIdRef.current);
         if(source !== "") formData.append("source", source);
         else if(target !== "") formData.append("target", target);
@@ -281,8 +279,6 @@ const AddGlossaryTermModal = (props) => {
             data: formData,
             success: (response) => {
                 let data = response.data
-                // console.log('source: '+source)
-                // console.log('target: '+target)
                 if(source !== ""){
                     setInputData({
                         source: source,
@@ -304,9 +300,7 @@ const AddGlossaryTermModal = (props) => {
     } 
     
     useEffect(() => {
-      console.log(selectedWordChoiceItem)
     }, [selectedWordChoiceItem])
-    
 
     return (
         <Draggable onDrag={(e) => e.preventDefault()} positionOffset={termAddModalPositionRef.current} enableUserSelectHack={false} cancel={"input, button"}>

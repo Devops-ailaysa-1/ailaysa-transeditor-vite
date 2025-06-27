@@ -179,7 +179,6 @@
 //                             tarID.push(each.target_language);
 //                         }
 //                     });
-//                     // console.log(tarID)
 //                     setAlreadySelectedTarLang(tar);
 //                     setAlreadySelecetedTarLangID(tarID);
 //                     setIsTargetLangExists(editTargetLanguages?.length === 0 ? false : true)

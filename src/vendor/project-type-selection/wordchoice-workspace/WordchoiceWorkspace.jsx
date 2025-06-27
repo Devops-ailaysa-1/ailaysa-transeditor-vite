@@ -24,26 +24,21 @@ const WordchoiceWorkspace = (props) => {
 
     const handleTermsDownload = async() => {
         try{
-            let taskItem = newGlossEditingImperativeRef.current.getSelectedTaskItem()
-            console.log(taskItem)
+            let taskItem = newGlossEditingImperativeRef.current.getSelectedTaskItem();
             // add in download list
-            dispatch(addDownloadingFiles({ id: taskItem?.value, file_name: languagePairObject?.project_name, ext: '.xlxs', status: 1 }))
-
-            let url = `${Config.BASE_URL}/glex/terms_simple_download/?task=${taskItem?.value}`
-            const response = await Config.downloadFileFromApi(url);
-            
+            dispatch(addDownloadingFiles({ id: taskItem?.value, file_name: languagePairObject?.project_name, ext: '.xlxs', status: 1 }));
+            let url = `${Config.BASE_URL}/glex/terms_simple_download/?task=${taskItem?.value}`;
+            const response = await Config.downloadFileFromApi(url);            
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: taskItem?.value, status: 2 }))
-
-            Config.downloadFileInBrowser(response)
-
+            dispatch(updateDownloadingFile({ id: taskItem?.value, status: 2 }));
+            Config.downloadFileInBrowser(response);
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: taskItem?.value }))
+                dispatch(deleteDownloadingFile({ id: taskItem?.value }));
             }, 8000);
             
         }catch(e) {
-            console.log(e)
+            console.error(e);
         }
     } 
 
@@ -54,13 +49,9 @@ const WordchoiceWorkspace = (props) => {
                 prevPathRef={prevPathRef}
                 languagePairObject={languagePairObject}
                 termdownload={true}
-                handleDownloadFile={handleTermsDownload}
-            />
+                handleDownloadFile={handleTermsDownload}/>
             <section className="padding-correction wordchoice-workspace-container">
-                <AilaysaNewGlossEditingArea 
-                    setLanguagePairObject={setLanguagePairObject}
-                    newGlossEditingImperativeRef={newGlossEditingImperativeRef}
-                />
+                <AilaysaNewGlossEditingArea  setLanguagePairObject={setLanguagePairObject}   newGlossEditingImperativeRef={newGlossEditingImperativeRef}  />
             </section>
            
         </React.Fragment>

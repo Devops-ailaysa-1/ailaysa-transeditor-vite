@@ -24,19 +24,16 @@ export const BulkFileUploadModal = (props) => {
     } = props
 
     const { t } = useTranslation();
-    const inputFileUploadRef = useRef(null)
-
+    const inputFileUploadRef = useRef(null);
 
     const downloadTemplate = async() => {
-        try{
-           
+        try{           
             let url = `${Config.BASE_URL}/glex/word-choice-template/`
-            const response = await Config.downloadFileFromApi(url);
-            
-            Config.downloadFileInBrowser(response)
+            const response = await Config.downloadFileFromApi(url);            
+            Config.downloadFileInBrowser(response);
             
         }catch(e) {
-            console.log(e)
+            console.error(e);
         }
     } 
 
@@ -59,7 +56,7 @@ export const BulkFileUploadModal = (props) => {
         for (let i = 0; i < (filesTemp).length; i++) {
             if (filesTemp[i].name.length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
-                return
+                return;
             }
         }
         let fileList = [...filesList];
@@ -72,7 +69,6 @@ export const BulkFileUploadModal = (props) => {
             }
         });
         setFilesList(fileList);
-
         // setShowFileUpload(false);
     };
 
@@ -90,13 +86,12 @@ export const BulkFileUploadModal = (props) => {
         });
         if (isFilesEmpty) filesTemp = [];
         setFilesList(finalFiles);
-        inputFileUploadRef.current.value = ''
+        inputFileUploadRef.current.value = '';
     };
 
     /* Handling all the project creation form */
     const handleChange = (e) => {
         // e.target.files[0].name.length
-        // console.log(e.target.files);
         for (let i = 0; i < (e.target.files).length; i++) {
             if ((e.target.files[i]?.name).length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");

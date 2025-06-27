@@ -48,8 +48,7 @@ const DashboardNewProjDrpDown = () => {
 
     useEffect(() => {
         getCardContent();
-        // console.log(popularDataItem)
-    }, [])
+    }, []);
 
     const handleOpenAllTemplates = () => {
         dispatch(setShowGlobalTransition(true))

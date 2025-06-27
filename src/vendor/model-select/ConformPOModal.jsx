@@ -109,7 +109,6 @@ const ConformPOModal = (props) => {
                     assign_status: each?.assign_status
                 }
             })
-            console.log(filter_accpeted_and_change_req);
             setCheckedTaskPos([...checkedTaskPos, ...list])
         } else if (event.target.checked === false) {
             setCheckedTaskPos(checkedTaskPos.filter(item => item.job_id !== job_id))
@@ -128,7 +127,6 @@ const ConformPOModal = (props) => {
                     assign_status: each?.assign_status
                 }
             })
-            console.log(list);
             setCheckedTaskPos([...list])
         } else if (event.target.checked === false) {
             setCheckedTaskPos([])
@@ -191,7 +189,6 @@ const ConformPOModal = (props) => {
             }
             return obj;
         });
-        // console.log(newArr)
         setConfirmPoData(newArr)
         setIsAccepting(true)
 
@@ -219,7 +216,6 @@ const ConformPOModal = (props) => {
                     }
                     return obj;
                 });
-                console.log(newArr)
                 setConfirmPoData(newArr)
                 listFiles(projectIdForPOModal.current)
                 setIsChangeRequestSending(false)
@@ -273,7 +269,6 @@ const ConformPOModal = (props) => {
 
 
     useEffect(() => {
-        console.log(checkedTaskPos);
         acceptAllDict.current = checkedTaskPos?.map(each => {
             return {
                 task: each?.task_id,

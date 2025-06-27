@@ -25,7 +25,6 @@ function InstructionModal(props) {
         dispatch(addDownloadingFiles({id: uniqueKey, file_name: file_name, ext: ext, status: 1}))
         
         const response = await Config.downloadFileFromApi(url);
-        // console.log(response);
         if(response !== undefined){
             // update the list once download completed
             dispatch(updateDownloadingFile({id: uniqueKey, status: 2}))

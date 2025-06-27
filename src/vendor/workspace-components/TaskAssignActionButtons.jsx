@@ -11,16 +11,14 @@ import { toast } from 'react-toastify';
 import BlackCloseIcon from '../../assets/images/new-ui-icons/close_black.svg'
 
 const TaskAssignActionButtons = (props) => {
-    let {clientResponseDataRef, setShowTaskAssignActionBtn, prevPathRef} = props
-    const history = useNavigate()
-
+    let {clientResponseDataRef, setShowTaskAssignActionBtn, prevPathRef} = props;
+    const history = useNavigate();
     const { t } = useTranslation();
-    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('')
-    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false)
-    const [isApproving, setIsApproving] = useState(false)
-    const [isReworkSending, setIsReworkSending] = useState(false)
-    console.log(prevPathRef)
-    console.log(prevPathRef.current)
+    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('');
+    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false);
+    const [isApproving, setIsApproving] = useState(false);
+    const [isReworkSending, setIsReworkSending] = useState(false);
+    
     // function for customer side so that customer can approve or reject the task
     const clientSideTaskResponseUpdate = (response) => {
         let { task_id, step, reassign } = clientResponseDataRef.current
@@ -35,15 +33,12 @@ const TaskAssignActionButtons = (props) => {
         if (response === 2) {
             formdata.append("client_reason", customerTaskReworkReasonText);
         }
-
         if (reassign) {
-            formdata.append("reassigned", 'True')
+            formdata.append("reassigned", 'True');
         }
+        if (response === 1) setIsApproving(true);
+        setIsReworkSending(true);
 
-        if (response === 1) setIsApproving(true)
-
-        setIsReworkSending(true)
-        // console.log(clientResponseDataRef.current);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_update/`,
             auth: true,
@@ -59,14 +54,12 @@ const TaskAssignActionButtons = (props) => {
                             toast.dismiss();
                             try{
                                 const URL_SEARCH_PARAMS = new URLSearchParams(`?${prevPathRef.current?.split('?')[1]}`);
-                                URL_SEARCH_PARAMS.set('filter', 'submitted')
-                                prevPathRef.current = prevPathRef.current?.split('?')[0] + '?' + URL_SEARCH_PARAMS.toString()
-                                console.log(prevPathRef.current)
-                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted")
+                                URL_SEARCH_PARAMS.set('filter', 'submitted');
+                                prevPathRef.current = prevPathRef.current?.split('?')[0] + '?' + URL_SEARCH_PARAMS.toString();
+                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted");
                             }catch(e) {
-                                console.log(prevPathRef.current)
-                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted")
-                                console.log(e)
+                                history(prevPathRef.current ? prevPathRef.current : "/my-stories?page=1&filter=submitted");
+                                console.error(e);
                             }
 
                         }, 900);
