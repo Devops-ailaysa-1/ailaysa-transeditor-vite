@@ -406,7 +406,6 @@ const CreateWordchoice = (props) => {
                 setSourceLanguageDisable(true);
                 let deadlineLocal = Config.convertUTCToLocal(data?.project_deadline);
                 setDeadline(deadlineLocal);
-                console.log(languageOptionsList);
                 let editTargetLanguages = [];
                 data?.jobs?.map((job) => {
                     if (job?.target_language !== null) {
