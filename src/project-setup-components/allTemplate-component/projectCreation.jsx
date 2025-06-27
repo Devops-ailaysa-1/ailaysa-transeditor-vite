@@ -1767,10 +1767,8 @@ function ProjectCreation(props) {
             auth: true,
             success: (response) => {
                 let options = [];
-                // console.log(response.data?.recent_pairs);
                 response.data?.recent_pairs?.map(each => {
                     list = (<span>{targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.src)?.language}</span> + <span>{each.tar?.length > 1 ? each.tar.map(eachTar => targetLanguageOptionsRef.current.find(eachlang => eachlang.id === eachTar)?.language).join(', ') : targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.tar[0])?.language}</span>)
-                    // console.log(list);
                     options.push({
                         value: `${each.src}->${each.tar.join(',')}`,
                         label: `${targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.src)?.language}`,
@@ -1789,7 +1787,6 @@ function ProjectCreation(props) {
         let tar = clickedLang.value.split('->')[1]?.split(',');
         setSourceLabel(targetLanguageOptionsRef.current?.find((element) => element.id == src).language);
         setSourceLanguage(src);
-        // console.log(src)
         let selectedTar = [];
         tar?.map(eachTar => {
             selectedTar.push(targetLanguageOptionsRef.current?.find((element) => element.id == eachTar))
@@ -1806,7 +1803,6 @@ function ProjectCreation(props) {
 
     // .docx, .doc, .xlxs, .pptx, .txt
     const checkForOfficeFiles = (files) => {
-        // console.log(files)
         let officeFilesExt = ['doc', 'docx', 'pdf', 'pptx', 'xlsx'];
         let uploadedFilesExt = [];
         files.forEach(file => {
@@ -2159,7 +2155,7 @@ function ProjectCreation(props) {
                 }
             },
             error: (err) => {
-                console.log(err);
+                console.error(err);
             }
        });
     }

@@ -3577,7 +3577,6 @@ const InstantTextTranslate = (props) => {
         copyTarDivRef.current.innerHTML = translateResultText;
         setSpellCheckWordsOptions([]);
         setIsSpellCheckEnable(!isSpellCheckEnable);
-        console.log(isSpellCheckEnable);
         if(isSpellCheckEnable === false) symSpellCheck(true) ;
     } 
 

@@ -1755,7 +1755,7 @@ function GetStories(props) {
                                             {t("previous")}
                                         </ButtonBase>
                                     )}
-                                    <ButtonBase  className="add-btn-wrapper" onClick={() => {pageSelect(parseInt(currentPage) + 1); console.log(currentPage)}}  >
+                                    <ButtonBase  className="add-btn-wrapper" onClick={() => {pageSelect(parseInt(currentPage) + 1);}}  >
                                         {t("next")}
                                         <KeyboardArrowRightOutlinedIcon className="ref-icon" />
                                     </ButtonBase>

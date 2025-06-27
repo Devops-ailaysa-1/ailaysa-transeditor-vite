@@ -1406,7 +1406,6 @@ const ViewGlossariesList = (props) => {
                                                                     openedProjectId == project.id &&
                                                                         (selectedProjectFiles?.length > 0 ? (
                                                                             selectedProjectFiles.map((selectedProjectFile, key) => {
-                                                                                // console.log(selectedProjectFile)
                                                                                 isAssignedProject = glossaryProjectList.find(
                                                                                     (element) => element.id === openedProjectId
                                                                                 )?.assign_enable;

@@ -5834,7 +5834,6 @@ const FederalWorkspace = (props) => {
                         <div className="header-wrapper">
                             <span className="header-text d-flex">
                                 {selectedParaphrase}
-                                {console.log(paraPhraseResList)}
                                 {paraPhraseResList?.length !== 0 && (
                                     <span className="transphrase-reload-icon" onClick={() => getParaphrases(selectedParaphrase)}>
                                         <ReplayIcon style={{ fontSize: '18px' }} />
