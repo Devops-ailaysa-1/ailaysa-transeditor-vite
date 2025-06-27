@@ -44,7 +44,7 @@ export const CacheBuster = (props) => {
           } else {
           }
         } catch (error) {
-          console.error(error, true);
+          // console.error(error, true);
         }
     };
 
