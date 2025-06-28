@@ -116,19 +116,16 @@ const GlossaryGlobalForm = (props) => {
         e.preventDefault();
         if (page !== 1) {
             if (sourceLanguage === "" || targetLanguage == "") {
-                setrequired(true)
+                setrequired(true);
             }
             else {
-                setrequired(false)
+                setrequired(false);
             }
             let processNext = validateAddGlossaryForm();
-
             if (processNext) {
                 if (isEditable || goBackCreateBtn) {
-                    // console.log('update')
                     handleUpdate(e, "glossary-submission");
                 } else {
-                    // console.log('create')
                     handleSubmit(e, "glossary-submission");
                 }
             }
@@ -137,23 +134,21 @@ const GlossaryGlobalForm = (props) => {
     };
 
     const listGlossaryProjects = () => {
-        let list = []
+        let list = [];
+        
         Config.axios({
             url: `${Config.BASE_URL}/workspace/project/quick/setup/?filter=glossary`,
             auth: true,
             success: (response) => {
-                list = response?.data?.results?.filter((each) => each?.assign_enable === true)
-                // console.log(list?.length)
-                setGlossaryProjectCount(list?.length)
-
+                list = response?.data?.results?.filter((each) => each?.assign_enable === true);
+                setGlossaryProjectCount(list?.length);
             },
         });
     }
 
-
     useEffect(() => {
-        listGlossaryProjects()
-    }, [])
+        listGlossaryProjects();
+    }, []);
 
     const handleGlossaryFileUpload = (e, params) => {
         // Add an API call to save glossary files
@@ -166,13 +161,13 @@ const GlossaryGlobalForm = (props) => {
         setIsUpdating(true)
         glossaryBucket?.map((each, index) => {
             if (each?.thisJobsFileList?.length !== 0) {
-                // console.log(each)
                 let formData = new FormData();
                 bucketLength++
                 each.thisJobsFileList.map((eachFile) => {
                     formData.append("glossary_file", eachFile);
                 });
                 formData.append("job", each.thisJobId);
+                
                 Config.axios({
                     headers: {
                         "Access-Control-Allow-Origin": "*",
@@ -184,10 +179,7 @@ const GlossaryGlobalForm = (props) => {
                     data: formData,
                     auth: true,
                     success: (response) => {
-                        ++successCounter
-                        console.log(response.data)
-                        console.log(glossaryProjectCreationResponse)
-                        // console.log(successCounter)
+                        ++successCounter;
                         if (successCounter == bucketLength) {
                             setCreatedGlossaryProjects(!createdGlossaryProject);
                             activeToggle(1);

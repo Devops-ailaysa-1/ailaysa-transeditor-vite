@@ -35,31 +35,32 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import AppsIcon from "./styles-svg/AppsIcon";
 import StartUpTNCampaignOffer from "./model-select/StartUpTNCampaignOffer";
-import WorkspaceLogo from "../assets/images/new-ui-icons/new-ailyasa-wrkspace-logo.svg"
-import ChatBookLogo from "../assets/images/ailaysa-chat-books.svg"
-import ProjectsLogo from "../assets/images/new_projects_logo_new.svg"
-import ChevronLeftBlack from "../assets/images/new-ui-icons/chevron_left_black.svg"
-import ArrowRightAltColor from "../assets/images/new-ui-icons/arrow_right_alt_color.svg"
-import HelpOutlineGrey from "../assets/images/new-ui-icons/help_outline_grey.svg"
-import HelpOutline from "../assets/images/new-ui-icons/help_outline.svg"
-import FileDownload from "../assets/images/new-ui-icons/file_download.svg"
-import ProjectsIcon from "../assets/images/ai-projects.svg"
-import WriterIcon from "../assets/images/ai-writer.svg"
-import TranseditorIcon from "../assets/images/ai-transeditor.svg"
-import DesignerIcon from "../assets/images/ai-designer.svg"
-import TranscribeIcon from "../assets/images/ai-transcribe.svg"
-import VoiceIcon from "../assets/images/ai-voice.svg"
-import ChatbookIcon from "../assets/images/ai-chatbook.svg"
-import MarketplaceIcon from "../assets/images/ai-marketplace.svg"
+import WorkspaceLogo from "../assets/images/new-ui-icons/new-ailyasa-wrkspace-logo.svg";
+import ChatBookLogo from "../assets/images/ailaysa-chat-books.svg";
+import AiTranslatorimg from '../assets/images/AiTranslatorimg.svg';
+import ProjectsLogo from "../assets/images/new_projects_logo_new.svg";
+import AiTransEditorImg from "../assets/images/ailaysa _transeditor_navbar_logo.svg";
+import ChevronLeftBlack from "../assets/images/new-ui-icons/chevron_left_black.svg";
+import ArrowRightAltColor from "../assets/images/new-ui-icons/arrow_right_alt_color.svg";
+import HelpOutlineGrey from "../assets/images/new-ui-icons/help_outline_grey.svg";
+import HelpOutline from "../assets/images/new-ui-icons/help_outline.svg";
+import FileDownload from "../assets/images/new-ui-icons/file_download.svg";
+import ProjectsIcon from "../assets/images/ai-projects.svg";
+import WriterIcon from "../assets/images/ai-writer.svg";
+import TranseditorIcon from "../assets/images/ai-transeditor.svg";
+import DesignerIcon from "../assets/images/ai-designer.svg";
+import TranscribeIcon from "../assets/images/ai-transcribe.svg";
+import VoiceIcon from "../assets/images/ai-voice.svg";
+import ChatbookIcon from "../assets/images/ai-chatbook.svg";
+import MarketplaceIcon from "../assets/images/ai-marketplace.svg";
 import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TaskAssignActionButtons from "./workspace-components/TaskAssignActionButtons";
-import ReactRouterPrompt from 'react-router-prompt'
+import ReactRouterPrompt from 'react-router-prompt';
 import { GlossaryMenuDrpDown } from "./model-select/Ailaysa-Glossaries/glossary-menu/GlossaryMenuDrpDown";
 import { Badge } from "@mui/material";
 import { setShowAdaptiveMTIntroModal } from "../features/ShowAdaptiveTransIntroModalSlice";
 
 function Navbar(props) {
-
     const {
         showDocumentSubmitButton,
         enableDocumentSubmitBtn,
@@ -73,22 +74,20 @@ function Navbar(props) {
         aiChatMobileTab,
         handlePreviousPage,
         showTaskAssignActionBtn,
-        showViewOnlyTag
-    } = props
-
+        showViewOnlyTag,
+        check_is_adaptive
+    } = props;
     const { t } = useTranslation();
-    const queryParams = new URLSearchParams(window.location)
-    const history = useNavigate()
-    const dispatch = useDispatch()
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const showCampaignCouponStrip = useSelector((state) => state.campaignCouponStrip.value)
+    const queryParams = new URLSearchParams(window.location);
+    const history = useNavigate();
+    const dispatch = useDispatch();
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const showCampaignCouponStrip = useSelector((state) => state.campaignCouponStrip.value);
 
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
-    let isEnterprise = userDetails?.is_enterprise 
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
+    let isEnterprise = userDetails?.is_enterprise ;
     // && userSubscriptionDetails?.subscription_name === "Enterprise - TFN"
-    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
-
-
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
     const [didMount, setDidMount] = useState(false);
     // const [fromAilaysa, setFromAilaysa] = useState(false);
     const [myProjectsSelected, setMyProjectsSelected] = useState(false);
@@ -102,7 +101,7 @@ function Navbar(props) {
     const [projectName, setProjectName] = useState(null);
     const [fileName, setFileName] = useState(null);
     const [currentPlan, setCurrentPlan] = useState(null);
-    const [isPlanCancelled, setIsPlanCancelled] = useState(false)
+    const [isPlanCancelled, setIsPlanCancelled] = useState(false);
     const [planExpireDays, setPlanExpireDays] = useState(null);
     const [planExpireHours, setPlanExpireHours] = useState(null);
     const [subcription_status, setSubcription_status] = useState("");
@@ -110,32 +109,43 @@ function Navbar(props) {
     const [chatNotificationsCount, setChatNotificationsCount] = useState(0);
     const [chatNotifications, setChatNotifications] = useState([]);
     const [selectedTab, setSelectedTab] = useState(1);
-    const [isDownloadCondition, setIsDownloadCondition] = useState(false)
-    const [downloadParameters, setDownloadParameters] = useState({})
-    const [assetsBtnHide, setAssetsBtnHide] = useState(false)
-    const [hideburgaricon, setHideburgaricon] = useState(false)
+    const [isDownloadCondition, setIsDownloadCondition] = useState(false);
+    const [downloadParameters, setDownloadParameters] = useState({});
+    const [assetsBtnHide, setAssetsBtnHide] = useState(false);
+    const [hideburgaricon, setHideburgaricon] = useState(false);
     const outsideClick = useRef();
     const [downloadOpen, setDownloadOpen] = useState(false);
     // const [downloadSelectedIndex, setDownloadSelectedIndex] = useState(1);
 
     const [playNotificationSound] = useSound(notificationSound);
-
-    const [translatedAudioAlertModal, setTranslatedAudioAlertModal] = useState(false)
-    const [downloadConfirmationModalVisible, setDownloadConfirmationModalVisible] = useState(false)
-    const [isAnySegmentConfirmed, setIsAnySegmentConfirmed] = useState(false)
-    const [showZeroSegmentAlertModal, setShowZeroSegmentAlertModal] = useState(false)
-    const [isHelpVisible, setIsHelpVisible] = useState(false)
-    const [showDownloadingModal, setShowDownloadingModal] = useState(false)
-    const [downloadTrigger, setDownloadTrigger] = useState(false)
+    const [translatedAudioAlertModal, setTranslatedAudioAlertModal] = useState(false);
+    const [downloadConfirmationModalVisible, setDownloadConfirmationModalVisible] = useState(false);
+    const [isAnySegmentConfirmed, setIsAnySegmentConfirmed] = useState(false);
+    const [showZeroSegmentAlertModal, setShowZeroSegmentAlertModal] = useState(false);
+    const [isHelpVisible, setIsHelpVisible] = useState(false);
+    const [showDownloadingModal, setShowDownloadingModal] = useState(false);
+    const [downloadTrigger, setDownloadTrigger] = useState(false);
     const [myNewsProjectsSelected, setMyNewsProjectsSelected] = useState(false);
-
-    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null)
-
-    const [celeryId, setCeleryId] = useState(null)
-
-    const [isFileUnderProcess, setIsFileUnderProcess] = useState(false)
-    const [isAudioConverting, setIsAudioConverting] = useState(false)
-    const [animateDownloding, setAnimateDownloding] = useState(null)
+    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
+    const [celeryId, setCeleryId] = useState(null);
+    const [isFileUnderProcess, setIsFileUnderProcess] = useState(false);
+    const [isAudioConverting, setIsAudioConverting] = useState(false);
+    const [animateDownloding, setAnimateDownloding] = useState(null);
+    const [downloadpending, setDownloadpending] = useState(false);
+    const { pathname } = useLocation();
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
+    const [lastLocation, setLastLocation] = useState(null);
+    const [confirmedNavigation, setConfirmedNavigation] = useState(false);
+    const [creditsAvailable, setCreditsAvailable] = useState(null);
+    const [progressPercentage, setProgressPercentage] = useState(0);
+    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null)
+    const [availCredits, setAvailCredits] = useState(false);
+    const [subscriptionCredit, setSubscriptionCredit] = useState(0);
+    const [addonCredit, setAddonCredit] = useState(0);
+    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false);
+    const [isEmailTextHovered, setIsEmailTextHovered] = useState(false);
+    const [isFullnameTextHovered, setIsFullnameTextHovered] = useState(false);
+    const spellCheckData = useSelector((state) => state.spellCheckData.value);
 
     const socket = useRef(null);
     const chatNotificationsCountRef = useRef(null);
@@ -144,40 +154,16 @@ function Navbar(props) {
     const downloadedFileName = useRef(null)
     const downloadAnchorRef = useRef(null);
     const userEmailRef = useRef(null);
-    const userFullnameRef = useRef(null);
-
-    const [downloadpending, setDownloadpending] = useState(false)
-
-    const { pathname } = useLocation()
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-    const [lastLocation, setLastLocation] = useState(null)
-    const [confirmedNavigation, setConfirmedNavigation] = useState(false)
-
-
-
+    const userFullnameRef = useRef(null); 
     const availCreditOutside = useRef();
     const chatOutside = useRef();
     const AppDropOutside = useRef();
     const HelpOutside = useRef();
     const logoutDropOutside = useRef();
-    const [creditsAvailable, setCreditsAvailable] = useState(null);
-    const [progressPercentage, setProgressPercentage] = useState(0);
-    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null)
-    const [availCredits, setAvailCredits] = useState(false);
-    const [subscriptionCredit, setSubscriptionCredit] = useState(0);
-    const [addonCredit, setAddonCredit] = useState(0);
-
-    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false)
-
     const mtRawDownloadRetryLimit = useRef(2)
     const mtRawDownloadRetryCounter = useRef(0)
-    const newProjectBoxRef = useRef()
-
-    const [isEmailTextHovered, setIsEmailTextHovered] = useState(false);
-    const [isFullnameTextHovered, setIsFullnameTextHovered] = useState(false);
-
-    const spellCheckData = useSelector((state) => state.spellCheckData.value)
-
+    const newProjectBoxRef = useRef();
+   
     const handleEmailTextMouseEnter = () => {
         setIsEmailTextHovered(true);
     };
@@ -212,42 +198,36 @@ function Navbar(props) {
                 setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription);
                 setAddonCredit(response?.data?.credits_left?.addon);
                 setSubscriptionCredit(response?.data?.credits_left?.subscription);
-                // console.log(response?.data?.credits_left?.total_buyed)
-                // console.log(progressPercentage)
                 if (response?.data?.credits_left?.total_buyed === 0) {
-                    setProgressPercentage(0)
+                    setProgressPercentage(0);
                 } else {
                     setProgressPercentage(
                         (((response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription) / response?.data?.credits_left?.total_buyed) * 100).toFixed(2)
-                    )
+                    );
                 }
-
             },
         });
     };
 
     // const hideAvailCredits = () => {
     //     if (AppsDrpVisibility || chatNotification || logoutDrpVisibility) {
-    //         handleAppsDrpVisibility(false)
-    //         handleChatNotificationVisibility(false)
-    //         handleLogoutDrpVisibility(false)
+    //         handleAppsDrpVisibility(false);
+    //         handleChatNotificationVisibility(false);
+    //         handleLogoutDrpVisibility(false);
     //     }
     // }
 
     // useEffect(() => {
     //     const handleClickOutside = (e) => {
     //         if (AppDropOutside.current && !AppDropOutside.current.contains(e.target)) {
-    //             handleAppsDrpVisibility(false)
+    //             handleAppsDrpVisibility(false);
     //         }
     //     };
-
     //     document.addEventListener("mousedown", handleClickOutside);
-
     //     return () => {
     //         document.removeEventListener("mousedown", handleClickOutside);
     //     };
     // });
-
 
     // useEffect(() => {
     //     const handleClickOutside = (e) => {
@@ -255,14 +235,11 @@ function Navbar(props) {
     //             handleHelpDrpVisibility(false)
     //         }
     //     };
-
     //     document.addEventListener("mousedown", handleClickOutside);
-
     //     return () => {
     //         document.removeEventListener("mousedown", handleClickOutside);
     //     };
     // });
-
 
     // useEffect(() => {
     //     const handleClickOutside = (e) => {
@@ -270,9 +247,7 @@ function Navbar(props) {
     //             handleChatNotificationVisibility(false);
     //         }
     //     };
-
     //     document.addEventListener("mousedown", handleClickOutside);
-
     //     return () => {
     //         document.removeEventListener("mousedown", handleClickOutside);
     //     };
@@ -280,16 +255,16 @@ function Navbar(props) {
 
     useEffect(() => {
         if (logoutDrpVisibility) {
-            getCreditStatus()
+            getCreditStatus();
         }
-    }, [logoutDrpVisibility])
+    }, [logoutDrpVisibility]);
 
     useEffect(() => {
-        getCreditStatus()
-    }, [])
+        getCreditStatus();
+    }, []);
 
     const getcreditstoggle = () => {
-        setAvailCredits(!availCredits)
+        setAvailCredits(!availCredits);
     }
 
     useEffect(() => {
@@ -302,19 +277,18 @@ function Navbar(props) {
             (window.location.pathname.includes("assets") && !window.location.pathname.includes('all-templates/assets')) ||
             (window.location.pathname.includes("toolkit") && !window.location.pathname.includes('all-templates/toolkit'))
         ) {
-                setMyProjectsSelected(true)
+                setMyProjectsSelected(true);
         }
         else if(window.location.pathname.includes("all-stories") ||
         window.location.pathname.includes("my-stories") ||
         window.location.pathname.includes("add-stories") ){
-            setMyNewsProjectsSelected(true)
+            setMyNewsProjectsSelected(true);
         } else{
-            setMyProjectsSelected(false)
-            setMyNewsProjectsSelected(false)
+            setMyProjectsSelected(false);
+            setMyNewsProjectsSelected(false);
         }
-    }, [window.location.pathname])
-    
-    // console.log(myProjectsSelected)
+    }, [window.location.pathname]);
+
     // const OpeningProjectButton = withStyles((theme) => ({
     //     root: {
     //         backgroundColor: "#FFFFFF",
@@ -359,7 +333,6 @@ function Navbar(props) {
         setDownloadOpen((prevOpen) => !prevOpen);
     };
 
-
     const handleDrpDownClose = (event) => {
         if (downloadAnchorRef.current && downloadAnchorRef.current.contains(event.target)) {
             return;
@@ -368,15 +341,13 @@ function Navbar(props) {
     };
 
     const handleYes = () => {
-        downloadFile(downloadParameters.e, downloadParameters.type)
+        downloadFile(downloadParameters.e, downloadParameters.type);
         setDownloadConfirmationModalVisible(false);
     }
 
     const handleAudioAlertModalYes = () => {
-        // console.log()
-        downloadFile(downloadParameters.e, downloadParameters.type)
+        downloadFile(downloadParameters.e, downloadParameters.type);
     }
-
 
     useEffect(() => {
         setDidMount(true); //Make component mounted
@@ -385,7 +356,6 @@ function Navbar(props) {
         //     //Check if came from ailaysa.com
         //     if (Config?.userState.fromAilaysa) setFromAilaysa(Config?.userState.fromAilaysa);
         // }
-
         getUserPlanDetails();
         /* Enable the websocket connection - start */
         let endpoint = `${Config.CHAT_BASE_URL.replace("http", "ws")}/marketplace/messages/?${Config.userState.id}`;
@@ -411,13 +381,12 @@ function Navbar(props) {
     }, [props]);
 
     useEffect(() => {
-        //   console.log()
         if (window.location.href?.includes('file-upload') || window.location.href?.includes('/workspace/')) {
-            setIsHelpVisible(true)
+            setIsHelpVisible(true);
         }
         else {
             if (window.location.href?.includes('documents-list')) {
-                setIsHelpVisible(false)
+                setIsHelpVisible(false);
             }
         }
     })
@@ -425,22 +394,20 @@ function Navbar(props) {
     useEffect(() => {
         if (confirmedNavigation && lastLocation) {
             // Navigate to the previous blocked location with your navigate function
-            history(lastLocation.pathname + lastLocation?.search)
+            history(lastLocation.pathname + lastLocation?.search);
         }
-    }, [confirmedNavigation, history, lastLocation])
+    }, [confirmedNavigation, history, lastLocation]);
 
     // open the chat notification box if the user signed-in from proz and have chat notifications
     useEffect(() => {
-        // console.log("first-chat-box-open: " +Cookies.get("first-chat-box-open"))
         if (Cookies.get("first-chat-box-open") === undefined || Cookies.get("editor-settings-alert-modal-shown") === null) {
             if(chatNotifications?.length !== 0 && userDetails?.signup_method === 2 && userDetails?.first_login){
-                Cookies.set("first-chat-box-open", "true", { domain: Config.COOKIE_DOMAIN })
-                setChatNotification(true)
+                Cookies.set("first-chat-box-open", "true", { domain: Config.COOKIE_DOMAIN });
+                setChatNotification(true);
             }
         }
-    }, [chatNotifications])
+    }, [chatNotifications]);
     
-
     /* Whenever the socket value changes */
     useEffect(() => {
         if (didMount) {
@@ -453,25 +420,20 @@ function Navbar(props) {
                 socket.current.send(data);
                 getChatNotifications();
             };
-
             socket.current.onmessage = function (e) {
                 //When new message arrives
                 getChatNotifications();
-                /* console.log(e)
-                let response = JSON.parse(e.data)
-                console.log(response)
+                /* let response = JSON.parse(e.data)
                 if (response?.notifications) {
                     setChatNotificationsCount(response?.notifications[0]?.total_count)
                     setChatNotifications(response?.notification_details)
                 } */
             };
-
             socket.current.onerror = function (e) {
                 //When error occurs
                 Config.log("On Error");
                 Config.log(e);
             };
-
             socket.current.onclose = function (e) {
                 //When closing the websocket connection
                 Config.log("On Close");
@@ -496,12 +458,10 @@ function Navbar(props) {
                 }
                 setLogoutDrpVisibility(false);
                 setAppsDrpVisibility(false);
-                setHelpDrpVisibility(false)
+                setHelpDrpVisibility(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -514,14 +474,11 @@ function Navbar(props) {
     //             handleLogoutDrpVisibility(false)
     //         }
     //     };
-
     //     document.addEventListener("mousedown", handleClickOutside);
-
     //     return () => {
     //         document.removeEventListener("mousedown", handleClickOutside);
     //     };
     // });
-
 
     // const Tooltip = withStyles({
     //     tooltip: {
@@ -566,11 +523,11 @@ function Navbar(props) {
             success: (response) => {
                 let todaysDate = new Date();
                 let planExpiry = new Date(response.data.sub_period_end);
-                // let planExpiry = new Date('2021-11-23 16:00') // For testing
+                // let planExpiry = new Date('2021-11-23 16:00'); // For testing
                 let timeDifference = planExpiry.getTime() - todaysDate.getTime();
                 let dateDifference = timeDifference / (1000 * 3600 * 24);
                 let hoursDifference = Math.abs(timeDifference) / 36e5;
-                setIsPlanCancelled(response.data?.sub_status === 'canceled' ? true : false)
+                setIsPlanCancelled(response.data?.sub_status === 'canceled' ? true : false);
                 setCurrentPlan(response.data?.subscription_name?.toUpperCase());
                 setPlanExpireDays(Math.ceil(dateDifference));
                 setPlanExpireHours(Math.floor(hoursDifference));
@@ -607,7 +564,7 @@ function Navbar(props) {
 
     // MT-Raw file download celery status check function
     const mtRawCeleryCheck = async (celeryId) => {
-        setAnimateDownloding('MTRAW')
+        setAnimateDownloding('MTRAW');
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
@@ -625,31 +582,29 @@ function Navbar(props) {
             );
             if (response !== undefined) {
                 if (response.status === 200) {
-                    setAnimateDownloding(null)
-                    setDownloadpending(false)
+                    setAnimateDownloding(null);
+                    setDownloadpending(false);
                 } else {
-                    setDownloadpending(false)
+                    setDownloadpending(false);
                 }
-                // console.log('false')
-                Config.downloadFileInBrowser(response)
-                props.listSegments('mt-raw-download')
+                Config.downloadFileInBrowser(response);
+                props.listSegments('mt-raw-download');
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
-            let responseObj = JSON.parse(await err.response.data.text())
+            let responseObj = JSON.parse(await err.response.data.text());
             if (err.response.status === 400) {
                 if (responseObj?.msg?.includes('Pending')) {
                     setTimeout(() => {
-                        mtRawCeleryCheck(celeryId)
+                        mtRawCeleryCheck(celeryId);
                     }, 5000);
                 } else {
                     setTimeout(() => {
                         mtRawDownloadRetryCounter.current++
                         if (mtRawDownloadRetryCounter.current < mtRawDownloadRetryLimit.current) {
-                            downloadFile(null, 'MTRAW')
+                            downloadFile(null, 'MTRAW');
                         } else {
-                            setAnimateDownloding(null)
-                            setDownloadpending(false)
+                            setAnimateDownloding(null);
+                            setDownloadpending(false);
                         }
                     }, 5000);
                 }
@@ -678,9 +633,7 @@ function Navbar(props) {
                 }
             );
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
-            let responseObj = JSON.parse(await err.response.data.text())
-            console.log(responseObj?.msg)
+            let responseObj = JSON.parse(await err.response.data.text());
             if (err.response.status === 401) {
                 if (responseObj?.msg?.includes('Conversion is going')) {
                     setCeleryId(responseObj?.celery_id);
@@ -693,95 +646,87 @@ function Navbar(props) {
                         { domain: Config.COOKIE_DOMAIN }
                     );
                     // Config.toast('Conversion under process, please wait.', 'warning');
-                    // setIsAudioConverting(true)
-                    // setShowZeroSegmentAlertModal(true)
-                    setIsFileUnderProcess(false)
+                    // setIsAudioConverting(true);
+                    // setShowZeroSegmentAlertModal(true);
+                    setIsFileUnderProcess(false);
                 } else {
-                    setIsFileUnderProcess(true)
-                    setShowZeroSegmentAlertModal(true)
-                    setIsAudioConverting(false)
+                    setIsFileUnderProcess(true);
+                    setShowZeroSegmentAlertModal(true);
+                    setIsAudioConverting(false);
                     // Config.toast('File under process, please wait.', 'warning');
                 }
             } else if (err.response.status === 400) {
-                console.log(responseObj?.msg)
                 // celery for mt-raw file
                 if (responseObj?.celery_id) {
-                    mtRawCeleryCheck(responseObj?.celery_id)
+                    mtRawCeleryCheck(responseObj?.celery_id);
                 } else {
                     if (responseObj?.msg?.includes('under process')) {
-                        Config.toast('File is under process, please try again after sometime', 'warning')
+                        Config.toast('File is under process, please try again after sometime', 'warning');
                     } else {
-                        Config.toast('Download failed', 'error')
+                        Config.toast('Download failed', 'error');
                     }
-                    setIsFileUnderProcess(false)
-                    setAnimateDownloding(null)
-                    setDownloadpending(false)
+                    setIsFileUnderProcess(false);
+                    setAnimateDownloding(null);
+                    setDownloadpending(false);
                 }
             } else if (err.response.status === 409) {
-                setIsFileUnderProcess(false)
-                setAnimateDownloding(null)
-                setDownloadpending(false)
-                Config.toast('Something went wrong with file processing', 'warning')
+                setIsFileUnderProcess(false);
+                setAnimateDownloding(null);
+                setDownloadpending(false);
+                Config.toast('Something went wrong with file processing', 'warning');
             }
             setShowDownloadingModal(false);
-            // setAnimateDownloding(null)
+            // setAnimateDownloding(null);
         }
     };
 
     const downloadFile = async (e, type) => {
-        console.log(type)
-        setDownloadpending(true)
-        let url = ""
+        setDownloadpending(true);
+        let url = "";
         if(isFederalWorkspace){
             url = Config.BASE_URL + "/workspace_okapi/download_federal_file/" + `?task_id=${documentTaskIdRef.current}`;
             url = url + "&output_type=" + type;
-            if (type == "AUDIO") url += `&locale=${props?.audioLocale?.label}&voice_gender=${props?.audioGender?.label?.toUpperCase()}&voice_name=${props.voiceType}`
+            if (type == "AUDIO") url += `&locale=${props?.audioLocale?.label}&voice_gender=${props?.audioGender?.label?.toUpperCase()}&voice_name=${props.voiceType}`;
         }else{
             url = Config.BASE_URL + "/workspace_okapi/document/to/file/" + props.documentId;
             url = url + "?output_type=" + type;
-            if (type == "AUDIO") url += `&locale=${props?.audioLocale?.label}&voice_gender=${props?.audioGender?.label?.toUpperCase()}&voice_name=${props.voiceType}`
+            if (type == "AUDIO") url += `&locale=${props?.audioLocale?.label}&voice_gender=${props?.audioGender?.label?.toUpperCase()}&voice_name=${props.voiceType}`;
         }
-
-        setAnimateDownloding(type)
-        // console.log(type);
+        setAnimateDownloding(type);
         const response = await downloadDifferentFile(url, type);
-        // console.log(response);
         if (response !== undefined) {
             if (response.status === 200) {
-                // setShowDownloadingModal(false)
-                setAnimateDownloding(null)
-                setDownloadpending(false)
+                // setShowDownloadingModal(false);
+                setAnimateDownloding(null);
+                setDownloadpending(false);
             } else {
-                setDownloadpending(false)
+                setDownloadpending(false);
             }
-            // console.log('false')
             Config.downloadFileInBrowser(response)
-            if (type == 'MTRAW') props.listSegments('mt-raw-download')
+            if (type == 'MTRAW') props.listSegments('mt-raw-download');
         }
     };
 
     /* Getting and setting the document status data */
     const getDocumentProgress = (e, type) => {
-        // setIsDownloadCondition(false)
+        // setIsDownloadCondition(false);
         Config.axios({
             url: Config.BASE_URL + "/workspace_okapi/progress/" + props.documentId,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-
                 if (response.data.segments_confirmed_count === response.data.total_segment_count) {
-                    setIsDownloadCondition(true)
-                    downloadFile(e, type)
-                    props.setShowAudioOptionsModal(false)
-                    // setDownloadTrigger(!downloadTrigger)
+                    setIsDownloadCondition(true);
+                    downloadFile(e, type);
+                    props.setShowAudioOptionsModal(false);
+                    // setDownloadTrigger(!downloadTrigger);
                 } else {
                     if (response.data.segments_confirmed_count === 0 && type === 'AUDIO') {
-                        setIsAnySegmentConfirmed(false)
+                        setIsAnySegmentConfirmed(false);
                     } else {
-                        setIsAnySegmentConfirmed(true)
+                        setIsAnySegmentConfirmed(true);
                     }
-                    setIsDownloadCondition(false)
-                    setDownloadTrigger(!downloadTrigger)
+                    setIsDownloadCondition(false);
+                    setDownloadTrigger(!downloadTrigger);
                 }
             },
         });
@@ -797,8 +742,7 @@ function Navbar(props) {
                 `${Config.BASE_URL}/workspace_okapi/download_audio_file/?celery_id=${celery_id}&document_id=${props.documentId}`,
                 {
                     responseType: "blob",
-                    /*
-                    */
+                    /**/
                     headers: {
                         "Access-Control-Expose-Headers": "Content-Disposition",
                         "Authorization": `Bearer ${token}`, // add authentication information as required by the backend APIs.
@@ -806,31 +750,28 @@ function Navbar(props) {
                 }
             );
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
             let responseObj = JSON.parse(await err.response.data.text())
             if (err.response.status === 400) {
-                // console.log(responseObj);
                 if (responseObj?.msg === 'Failure') {
-                    Cookies.remove("audio_celery_data", { domain: Config.COOKIE_DOMAIN })
-                    setAnimateDownloding(null)
-                    Config.toast('Download failed, please try again', 'error')
+                    Cookies.remove("audio_celery_data", { domain: Config.COOKIE_DOMAIN });
+                    setAnimateDownloding(null);
+                    Config.toast('Download failed, please try again', 'error');
                 } else if (responseObj?.msg === 'Pending') {
-                    setAnimateDownloding('AUDIO')
-                    setIsFileUnderProcess(false)
+                    setAnimateDownloding('AUDIO');
+                    setIsFileUnderProcess(false);
                     setTimeout(async () => {
                         const response = await downloadAudioFileWithCeleryId(celeryId)
                         if (response !== undefined) {
                             if (response.status === 200) {
-                                setShowDownloadingModal(false)
+                                setShowDownloadingModal(false);
                                 setTimeout(() => {
-                                    props.getDocumentDetailsById(props.documentId)
+                                    props.getDocumentDetailsById(props.documentId);
                                 }, 300);
-                                Cookies.remove("audio_celery_data", { domain: Config.COOKIE_DOMAIN })
-                                setCeleryId(null)
-                                setAnimateDownloding(null)
+                                Cookies.remove("audio_celery_data", { domain: Config.COOKIE_DOMAIN });
+                                setCeleryId(null);
+                                setAnimateDownloding(null);
                             }
-                            // console.log(response);
-                            Config.downloadFileInBrowser(response)
+                            Config.downloadFileInBrowser(response);
                         }
                     }, 8000);
                 }
@@ -843,54 +784,47 @@ function Navbar(props) {
         if (celeryId !== null) {
             downloadAudioFileWithCeleryId(celeryId);
         }
-    }, [celeryId])
-
+    }, [celeryId]);
 
     const handleDownloadCheck = async (e, type = "ORIGINAL") => {
-        setDownloadOpen(false)
+        setDownloadOpen(false);
         if (type === "SOURCE" || type === "MTRAW") {
-            downloadFile(e, type)
+            downloadFile(e, type);
         } else {
-            props.setShowAudioOptionsModal(false)
+            props.setShowAudioOptionsModal(false);
             if (Cookies.get('audio_celery_data') != undefined && Cookies.get('audio_celery_data') != null && type === 'AUDIO' && (JSON.parse(Cookies.get('audio_celery_data'))?.document_id == props.documentId)) {
                 const response = await downloadAudioFileWithCeleryId(JSON.parse(Cookies.get('audio_celery_data')));
                 if (response !== undefined) {
                     if (response.status === 200) {
-                        setShowDownloadingModal(false)
-                        // console.log(props.documentId);
-                        props.getDocumentDetailsById(props.documentId)
-                        Cookies.remove("audio_celery_data", { domain: Config.COOKIE_DOMAIN })
+                        setShowDownloadingModal(false);
+                        props.getDocumentDetailsById(props.documentId);
+                        Cookies.remove("audio_celery_data", { domain: Config.COOKIE_DOMAIN });
                     }
-                    // console.log(response);
-                    Config.downloadFileInBrowser(response)
+                    Config.downloadFileInBrowser(response);
                 }
             } else {
-                downloadFile(e, type)
+                downloadFile(e, type);
                 // getDocumentProgress(e, type);
             }
         }
-        setDownloadParameters({ e, type })
+        setDownloadParameters({ e, type });
     }
 
     useEffect(() => {
         if (Object.keys(downloadParameters).length !== 0) {
-            if (isDownloadCondition) {
-                // console.log('modal not show')
-            }
+            if (isDownloadCondition) { }
             else {
                 if (isAnySegmentConfirmed) {
-                    setTranslatedAudioAlertModal(true)
-                    setDownloadConfirmationModalVisible(true)
-                    props.setShowAudioOptionsModal(false)
+                    setTranslatedAudioAlertModal(true);
+                    setDownloadConfirmationModalVisible(true);
+                    props.setShowAudioOptionsModal(false);
                 } else {
-                    props.setShowAudioOptionsModal(false)
-                    setShowZeroSegmentAlertModal(true)
+                    props.setShowAudioOptionsModal(false);
+                    setShowZeroSegmentAlertModal(true);
                 }
             }
         }
-    }, [isDownloadCondition, downloadTrigger])
-
-
+    }, [isDownloadCondition, downloadTrigger]);
 
     /* Get and set the chat notifications */
     const getChatNotifications = () => {
@@ -938,7 +872,7 @@ function Navbar(props) {
                     }
                 }
             }catch (err) {
-                console.log(err)
+                console.error(err);
             }
         }
     }, [chatNotifications]);
@@ -952,66 +886,57 @@ function Navbar(props) {
         let pathname = window.location.pathname;
         setAssetsBtnHide(pathname?.includes("assets") ? true : false)
         if (pathname?.includes("file-upload")) {
-            setHideburgaricon(true)
+            setHideburgaricon(true);
         }
         else if (pathname?.includes("documents-list")) {
-            setHideburgaricon(true)
+            setHideburgaricon(true);
         }
         else if (pathname?.includes("collaborate")) {
-            setHideburgaricon(true)
+            setHideburgaricon(true);
         }
         else if (pathname?.includes("workspace")) {
-            setHideburgaricon(true)
+            setHideburgaricon(true);
         }
         else {
-            setHideburgaricon(false)
+            setHideburgaricon(false);
         }
-    }, [window.location.pathname])
+    }, [window.location.pathname]);
 
     const handlePreviousAudioDownload = async (type) => {
         let url = `${Config.BASE_URL}/workspace_okapi/download_converted_audio_file/?document_id=${props.documentId}`;
         const response = await downloadDifferentFile(url);
-        // console.log(response);
         if (response !== undefined) {
             if (response.status === 200) {
-                setShowDownloadingModal(false)
+                setShowDownloadingModal(false);
             }
-            Config.downloadFileInBrowser(response)
+            Config.downloadFileInBrowser(response);
         }
     }
-
     // let navbarOptionSelectionEffect = "nav-assign-manage-link " + selectedTab ? selected : "";
-    // console.log(Config.userState)
-
-
 
     const handleBlockedNavigation = nextLocation => {
         if (!confirmedNavigation && pathname) {
-            setLastLocation(nextLocation)
-            setNavigationModalVisible(true)
-            return false
+            setLastLocation(nextLocation);
+            setNavigationModalVisible(true);
+            return false;
         }
-        return true
+        return true;
     }
 
-
-
     const handleConfirmNavigationClick = () => {
-        setNavigationModalVisible(false)
-        setConfirmedNavigation(true)
+        setNavigationModalVisible(false);
+        setConfirmedNavigation(true);
     }
 
     const convertNewlinesToBr = (text) => {
         const htmlText = text?.split('\n')?.map(line => `<p>${line.trim()}</p>`)?.join('');
         return htmlText;
-      }
-
+    }
 
     const handleSpellCheckWordDownload = () => {
         let formData = new FormData();
-        console.log(spellCheckData)
-        formData.append("html", convertNewlinesToBr(spellCheckData))
-        formData.append("name", "name")
+        formData.append("html", convertNewlinesToBr(spellCheckData));
+        formData.append("name", "name");
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
@@ -1027,12 +952,12 @@ function Navbar(props) {
         })
         .then(function (response) {
             //handle success
-            downloadHtmlToDocx(response.data)
+            downloadHtmlToDocx(response.data);
 
         })
         .catch(function (response) {
             //handle error
-            Config.toast("Failed to download file", 'error')
+            Config.toast("Failed to download file", 'error');
       
         });
     }
@@ -1047,13 +972,27 @@ function Navbar(props) {
         // update the list once download completed
     }
 
+    /**
+     * This methos used to return the navbar logo based on the selected menu.
+     * @returns ProjectsLogo
+     * 
+     * @author Padmabharahti Subiramanian 
+     * @since 29 APR 2025
+     */
+    const getLogo = () => {
+        if (props.isWhite) return WorkspaceLogo;
+        if (props.istranseditor) return AiTransEditorImg;
+        if (props.istranslator) return AiTranslatorimg;
+        if (isAiChatBook) return ChatBookLogo;
+        return ProjectsLogo;
+    };
+
     return (
         <React.Fragment>
             <div className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "navbar-stripe-wrapper stick-top" : "navbar-stripe-wrapper"}>
                 {/* {(userDetails?.is_campaign && showCampaignCouponStrip) && (
                     <StartUpTNCampaignOffer />
                 )} */}
-
                 <nav
                     id="navbar"
                     className={
@@ -1061,10 +1000,8 @@ function Navbar(props) {
                             ? "navbar navbar-expand-lg navbar-light ail-work-nav ail-workspace-white-nav "
                             : "navbar navbar-expand-lg navbar-light ail-work-nav ail-workspace-blue-nav ") + (!(userDetails?.is_campaign && showCampaignCouponStrip) ? "fixed-top" : "") 
                     }
-                    style={{ zIndex: props.isWhite ? 100 : 1030 }}
-                >
+                    style={{ zIndex: props.isWhite ? 100 : 1030 }}>
                     <a href={hiddenLinkUrl} download={downloadedFileName.current} style={{ display: 'none' }} className="hidden" ref={downloadref} />
-
                     {/* burger icon in nav bar*/}
                     {/* { !hideburgaricon && 
                     <button id="hamburger" className="hamburger" onClick={(e)=>{setsidebartoggle(current=>!current)}}>
@@ -1080,29 +1017,15 @@ function Navbar(props) {
                             </div>
                         }
                         <Link className="navbar-display-logo" to={"/file-upload?page=1&order_by=-id"}>
-                            <img
-                                src={
-                                    props.isWhite ? 
-                                        WorkspaceLogo
-                                    : isAiChatBook ?
-                                        ChatBookLogo
-                                    :
-                                        ProjectsLogo
-                                }
-                                alt="logo"
-                            />
+                            <img src={getLogo()}   alt="logo" />
                         </Link>
-                        <div
-                            onClick={() => props.prevPathRef.current ? history(props.prevPathRef.current) : history('/file-upload?page=1')}
-                            className={props.isWhite ? "navbar-display-show" : "navbar-display-hide"}
-                        >
+                        <div onClick={() => props.prevPathRef.current ? history(props.prevPathRef.current) : history('/file-upload?page=1')}
+                            className={props.isWhite ? "navbar-display-show" : "navbar-display-hide"} >
                             <div className="nav-projects-link ">
                                 <img src={ChevronLeftBlack} /> <span>{!props.isGlossary ? t("my_projects") : "My glossaries"}</span>
                             </div>
                         </div>
                     </div>
-
-
                     {/* !props.isGlossary ? history.goBack() */}
                     <div className={"common-navbar-wrap " + (isAiChatBook ? "justify-content-end" : "")}>
                         {(!props.isWhite && !props.isGlossary && !isAiChatBook) &&
@@ -1117,44 +1040,28 @@ function Navbar(props) {
                                             <div className="nav-assign-manage-link">
                                                 <span>{t("news_projects")}</span>
                                             </div>
-                                        </NavLink>
-                                        
+                                        </NavLink>                                        
 
                                         {/* {!is_internal_meber_editor && (
                                         )} */}
-                                        <NavLink 
-                                            to="/file-upload?page=1&order_by=-id" 
-                                            // activeClassName="selected" 
-                                            className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}
-                                        >
+                                        <NavLink  to="/file-upload?page=1&order_by=-id" // activeClassName="selected" 
+                                            className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}>
                                             <div className="nav-assign-manage-link">
                                                 <span>{t("standard_project")}</span>
                                             </div>
                                         </NavLink>
-
                                         {isDinamalar && (
-                                            <ButtonBase       
-                                                className={props.isWhite ? "d-none" : "ml-3"}
-                                                onClick={() => history('/report')}
-                                            >
+                                            <ButtonBase   className={props.isWhite ? "d-none" : "ml-3"} onClick={() => history('/report')} >
                                                 <div className="btn-text">
-                                                    <InsertChartOutlinedIcon
-                                                        style={{
-                                                            width: 20,
-                                                            color: "#3C4043",
-                                                        }}
-                                                    />
+                                                    <InsertChartOutlinedIcon style={{ width: 20,   color: "#3C4043", }}/>
                                                     <span style={{height: '20px'}}>{t("report")}</span>
                                                 </div>
                                             </ButtonBase>
                                         )}
                                     </>
                                 ) : (   // for global users
-                                    <NavLink 
-                                        to="/file-upload?page=1&order_by=-id" 
-                                        // activeClassName="selected" 
-                                        className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}
-                                    >
+                                    <NavLink to="/file-upload?page=1&order_by=-id"  // activeClassName="selected" 
+                                        className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}>
                                         <div className="nav-assign-manage-link">
                                             <span>{t("my_projects")}</span>
                                         </div>
@@ -1162,18 +1069,9 @@ function Navbar(props) {
                                 )}
 
                                 {(Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected) ? (
-                                    <ButtonBase       
-                                        component={Link}
-                                        to="/create/all-templates/" 
-                                        className={props.isWhite ? "d-none" : "ml-4"}
-                                    >
+                                    <ButtonBase component={Link} to="/create/all-templates/" className={props.isWhite ? "d-none" : "ml-4"}>
                                         <div className="btn-text">
-                                            <AddIcon
-                                                style={{
-                                                    width: 20,
-                                                    color: "#3C4043"
-                                                }}
-                                            />
+                                            <AddIcon style={{ width: 20,color: "#3C4043"  }} />
                                             <span>{t("new_project")}</span>
                                         </div>
                                     </ButtonBase>
@@ -1260,8 +1158,7 @@ function Navbar(props) {
                                     )}
                                 </li>
                             </ul>
-                            <ul className="navbar-nav-right-links" ref={outsideClick}>
-                                
+                            <ul className="navbar-nav-right-links" ref={outsideClick}>                                
                                 {showTaskAssignActionBtn && (
                                     <TaskAssignActionButtons 
                                         setShowTaskAssignActionBtn={props.setShowTaskAssignActionBtn}
@@ -1269,7 +1166,6 @@ function Navbar(props) {
                                         prevPathRef={props.prevPathRef}
                                     />
                                 )}
-
                                 {/* {showDocumentSubmitButton && (
                                     <Tooltip title={t("submit_tooltip_note")} arrow placement="bottom">
                                         <button 
@@ -1296,7 +1192,6 @@ function Navbar(props) {
                                         </button>
                                     </Tooltip>
                                 )}
-
                                 {window.location.pathname.includes('spell-check') && (
                                     <Tooltip  arrow placement="bottom">
                                         <button className="workspace-files-nav-OpenProjectButton" style={{ marginRight: !showReturnRequestBtn ? '18px' : '8px' }} onClick={() => handleSpellCheckWordDownload()}>
@@ -1311,8 +1206,6 @@ function Navbar(props) {
                                         </button>
                                     </Tooltip>
                                 )}
-
-
                                 {/* default glossary download icon for dinamalar */}
                                 {(props?.defaultGlossDownload && !is_internal_meber_editor) && (
                                     <Tooltip title={t('download')} arrow placement="bottom">
@@ -1323,7 +1216,6 @@ function Navbar(props) {
                                         </li>
                                     </Tooltip>
                                 )}
-
                                 <Tooltip title={props.isTbxDownloading ? t('downloading') : t('download')} arrow placement="bottom">
                                     <li className={props.isWhite ? "nav-item nav-drp-down active" : "navbar-display-hide"} onClick={() => !props.isTbxDownloading && props.handleDownloadFile()}>
                                         {
@@ -1343,20 +1235,17 @@ function Navbar(props) {
                                     }
 
                                 </li>
-
                                 {animateDownloding !== null &&
                                     <li className="mr-2 d-flex align-items-center">
                                         <DownloadAnimation />
                                         <small className="ml-1">{t("downloading")}...</small>
                                     </li>
-                                }
-                                
+                                }                                
                                 <li id="download-dropdown-wrapper" className={props.isWhite ? "nav-item nav-drp-down active mr-3" : "navbar-display-hide mr-3"}>
                                     {(props.updatedFileDownload && !isEnterprise && !is_internal_meber_editor) && (
                                         <GlossaryMenuDrpDown />
                                     )}
                                 </li>
-
                                 <li id="download-dropdown-wrapper" className={props.isWhite ? "nav-item nav-drp-down active" : "navbar-display-hide"}>
                                     {props.updatedFileDownload && (
                                         <>
@@ -1373,7 +1262,6 @@ function Navbar(props) {
                                                     </ButtonBase>
                                                 </Tooltip>
                                                 <span className="border-line"></span>
-
                                                 <button className="navbar-DrpDownArrowButton"
                                                     size="small"
                                                     aria-controls={downloadOpen ? 'download-dropdown' : undefined}
@@ -1387,8 +1275,7 @@ function Navbar(props) {
                                                         handleChatNotificationVisibility(false);
                                                         handleHelpDrpVisibility(false);
                                                     }
-                                                    }
-                                                >   <span className="arrow-wrap">
+                                                    }>   <span className="arrow-wrap">
                                                         <KeyboardArrowDownOutlinedIcon className="workspace-arrow-dwnload" />
                                                     </span>
                                                 </button>
@@ -1397,13 +1284,11 @@ function Navbar(props) {
                                                 {({ TransitionProps, placement }) => (
                                                     <Grow
                                                         {...TransitionProps}
-                                                        style={{ transformOrigin: placement === 'bottom' ? 'right top' : 'right bottom', }}
-                                                    >
+                                                        style={{ transformOrigin: placement === 'bottom' ? 'right top' : 'right bottom', }}>
+                                                        {/* new changes */}
                                                         <Paper>
                                                             <ClickAwayListener onClickAway={handleDrpDownClose}>
-                                                                <MenuList
-                                                                    className="menu-list-wrapper"
-                                                                >
+                                                                <MenuList className="menu-list-wrapper">
                                                                     {
                                                                         props.isTranslatedAudioFileAvailable !== null &&
                                                                         <MenuItem className={"menu-list-item " + (animateDownloding === 'AUDIO' ? "download-option-disable" : "")} onClick={(e) => { Cookies.get('audio_celery_data') != undefined ? handleDownloadCheck(e, "AUDIO") : props.setShowAudioOptionsModal(true) }}>
@@ -1425,6 +1310,9 @@ function Navbar(props) {
                                                                         {t("bilingual_excel")}
                                                                         {animateDownloding === 'BILINGUAL' && <DownloadAnimation />}
                                                                     </MenuItem>
+
+                                                                    {/* {!check_is_adaptive && */}
+                                                                    <>
                                                                     {
                                                                         props.mtEnable && (
                                                                             <MenuItem className={"menu-list-item " + (animateDownloding === 'MTRAW' ? "download-option-disable" : "")} onClick={(e) => props.docCreditCheckAlertRef.current ? setShowDocCreditCheckAlert(true) : handleDownloadCheck(e, "MTRAW")}>
@@ -1433,6 +1321,8 @@ function Navbar(props) {
                                                                             </MenuItem>
                                                                         )
                                                                     }
+                                                                    </>
+                                                                {/* } */}
                                                                     {!props?.prevPathRef?.current?.includes('my-stories') && (
                                                                         <>
                                                                             <MenuItem className={"menu-list-item " + (animateDownloding === 'SOURCE' ? "download-option-disable" : "")} onClick={(e) => handleDownloadCheck(e, "SOURCE")}>
@@ -1472,8 +1362,7 @@ function Navbar(props) {
                                                     }
                                                   }}
                                                 variant="dot"
-                                                invisible={isEnterprise ? true : false}
-                                            >
+                                                invisible={isEnterprise ? true : false} >
                                                 <div
                                                     className="nav-icon-bg"
                                                     // onMouseEnter={() => hideAvailCredits()}
@@ -1528,23 +1417,19 @@ function Navbar(props) {
                                                 handleHelpDrpVisibility(false);
                                                 handleChatNotificationVisibility(!chatNotification);
                                             }}
-                                            className="nav-icon-bg"
-                                        >
+                                            className="nav-icon-bg">
                                             <span>
                                                 <ChatBubbleOutlineIcon className={props.isWhite ? "black" : "white"} />
                                                 {chatNotificationsCount > 0 && <span className="badge">{chatNotificationsCount}</span>}
                                             </span>
                                         </div>
                                     </Tooltip>
-
-                                    <div
-                                        className={
+                                    <div className={
                                             chatNotification
                                                 ? "chat-notification-box chat-notification-box-show chat-notification-box-animated chat-notification-box-fade-in"
                                                 : "chat-notification-box chat-notification-box-animated chat-notification-box-fade-in"
                                         }
-                                        ref={chatOutside}
-                                    >
+                                        ref={chatOutside} >
                                         <div className="chat-notification-header">
                                             <p>{t("chat")}</p>
                                         </div>
@@ -1617,11 +1502,9 @@ function Navbar(props) {
                                                     ? "apps-dropdown-wrapper show"
                                                     : "apps-dropdown-wrapper hide"
                                             }
-                                            ref={AppDropOutside}
-                                        >
+                                            ref={AppDropOutside}>
                                             <p className="title">{t("apps")}</p>
-                                            <ul className="apps-ui-list">
-                                                
+                                            <ul className="apps-ui-list">                                                
                                                 { !window.location.pathname.includes("file-upload") &&
                                                     <li>
                                                         <a className="nav-link" target="_blank" href={'/file-upload?page=1&order_by=-id'} onClick={() => handleAppsDrpVisibility(false)}>
@@ -1697,8 +1580,7 @@ function Navbar(props) {
                                             handleLogoutDrpVisibility(!logoutDrpVisibility);
                                             handleHelpDrpVisibility(false);
                                         }}
-                                        className="nav-icon-bg"
-                                    >
+                                        className="nav-icon-bg">
                                         {(Config?.userState?.image_url != null && Config?.userState?.image_url !== undefined) ? (
                                             <>
                                                 <img
@@ -1718,8 +1600,7 @@ function Navbar(props) {
                                                         props.isWhite
                                                             ? "ailays-wp-avatar-blue ailays-wp-avatar-bg-grey-color"
                                                             : "ailays-wp-avatar ailays-wp-avatar-bg-blue-color"
-                                                    }
-                                                >
+                                                    } >
                                                     {
                                                         Config.userState?.name?.charAt(0)?.toUpperCase() !== '' ?
                                                             Config.userState?.name?.charAt(0)?.toUpperCase() :
@@ -1733,8 +1614,7 @@ function Navbar(props) {
                                         className={
                                             logoutDrpVisibility ? "submenu-1 submenu-1-active submenu-animated submenu_fadeIn" : "submenu-1 submenu-animated submenu_fadeIn"
                                         }
-                                        ref={logoutDropOutside}
-                                    >
+                                        ref={logoutDropOutside}>
                                         <li className="acc-details">
                                             <div className="acc-details-profile">
                                                 {(Config?.userState?.image_url != null && Config?.userState?.image_url !== undefined) ? (
@@ -1755,22 +1635,12 @@ function Navbar(props) {
                                             </div>
                                             <div className="acc-member-info">
                                                 <Tooltip open={isFullnameTextHovered && userFullnameRef?.current?.clientWidth >= 285} title={Config.userState?.name} arrow placement="top">
-                                                    <p
-                                                        ref={userFullnameRef}
-                                                        onMouseEnter={handleFullnameTextMouseEnter}
-                                                        onMouseLeave={handleFullnameTextMouseLeave}
-                                                        className="name"
-                                                    >
+                                                    <p ref={userFullnameRef}onMouseEnter={handleFullnameTextMouseEnter} onMouseLeave={handleFullnameTextMouseLeave} className="name">
                                                         {Config.userState?.name}
                                                     </p>
                                                 </Tooltip>
                                                 <Tooltip open={isEmailTextHovered && userEmailRef?.current?.clientWidth >= 285} title={Config.userState?.email} arrow placement="top">
-                                                    <p
-                                                        ref={userEmailRef}
-                                                        onMouseEnter={handleEmailTextMouseEnter}
-                                                        onMouseLeave={handleEmailTextMouseLeave}
-                                                        className="email"
-                                                    >
+                                                    <p ref={userEmailRef} onMouseEnter={handleEmailTextMouseEnter}  onMouseLeave={handleEmailTextMouseLeave} className="email"  >
                                                         {Config.userState?.email}
                                                     </p>
                                                 </Tooltip>
@@ -1977,8 +1847,7 @@ function Navbar(props) {
                 isAudioConverting={isAudioConverting}
                 setIsAudioConverting={setIsAudioConverting}
                 isFileUnderProcess={isFileUnderProcess}
-                setIsFileUnderProcess={setIsFileUnderProcess}
-            />
+                setIsFileUnderProcess={setIsFileUnderProcess} />
             {/* <Prompt
                 when={downloadpending == true}
                 message={handleBlockedNavigation}
@@ -1988,11 +1857,7 @@ function Navbar(props) {
                 return (
                     <Rodal
                         // visible={navigationModalVisible}
-                        visible={isActive}
-                        showCloseButton={false}
-                        className="ai-mark-confirm-box"
-                        onClose={() => console.log()}
-                    >
+                        visible={isActive} showCloseButton={false} className="ai-mark-confirm-box" onClose={() => console.log()} >
                         <div className="confirmation-warning-wrapper">
                             <div className="confirm-top">
                                 <div><span onClick={onCancel}><CloseIcon /></span></div>
@@ -2009,14 +1874,9 @@ function Navbar(props) {
                     </Rodal>
                 )
             }}
-            </ReactRouterPrompt>
-           
-            {showdocCreditCheckAlert && (<Rodal
-                visible={showdocCreditCheckAlert}
-                showCloseButton={false}
-                onClose={() => { console.log() }}
-                className="ai-mark-confirm-box"
-            >
+            </ReactRouterPrompt>           
+            {showdocCreditCheckAlert &&
+             (<Rodal visible={showdocCreditCheckAlert}  showCloseButton={false}  onClose={() => { console.log() }}  className="ai-mark-confirm-box"  >
                 <div className="confirmation-warning-wrapper">
                     <div className="confirm-top">
                         <div><span onClick={() => { setShowDocCreditCheckAlert(false) }}><CloseIcon /></span></div>

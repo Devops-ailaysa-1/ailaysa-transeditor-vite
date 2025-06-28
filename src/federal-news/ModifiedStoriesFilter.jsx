@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion';
 import DatePicker from "../vendor/date-time-picker/DatePicker";
 import DatePickerNewIcon from "../vendor/styles-svg/DatePickerNewIcon";
 import Config from "../vendor/Config";
@@ -14,56 +14,49 @@ const ModifiedStoriesFilter = (props) => {
         setToDate,
         fromDate,
         setFromDate
-    } = props
+    } = props;
 
     const { t } = useTranslation();
-    const [modifiedDateSelectBox, setModifiedDateSelectBox] = useState(false)
-
-    const modifiedDateSelectBoxRef = useRef()
-
+    const [modifiedDateSelectBox, setModifiedDateSelectBox] = useState(false);
+    const modifiedDateSelectBoxRef = useRef();
     
     const DataFilterOptions = [
         { value: 'today', label: "Today" },
         { value: '30days', label: "Last month" }
-    ]
+    ];
     
     /* Check for clicing outside of the New project Dropdown */
     // useEffect(() => {
     //     const handleClickOutside = (e) => {
-    //         let isDatePickerBox = e.target.closest('.MuiDateCalendar-root') ? true : false
-    //         let filterBtn = document.querySelector('.modified-stories-dropdown-wrapper___button-wrap')
-
+    //         let isDatePickerBox = e.target.closest('.MuiDateCalendar-root') ? true : false;
+    //         let filterBtn = document.querySelector('.modified-stories-dropdown-wrapper___button-wrap');
     //         if (modifiedDateSelectBoxRef.current && !modifiedDateSelectBoxRef.current.contains(e.target) && !isDatePickerBox) {
-    //             // handleModifiedDatepickerVisibility(false)
-    //             // setModifiedDateSelectBox(false)
+    //             // handleModifiedDatepickerVisibility(false);
+    //             // setModifiedDateSelectBox(false);
     //         }
     //     };
-
     //     document.addEventListener("mousedown", handleClickOutside);
-
     //     return () => {
     //         document.removeEventListener("mousedown", handleClickOutside);
     //     };
     // }, []);
 
-
     useEffect(() => {
         if(fromDate !== null){
             if(fromDate <= toDate) {
-                handleModifiedDatepickerVisibility(false)
-                return
+                handleModifiedDatepickerVisibility(false);
+                return;
             }
-            setToDate(null)
+            setToDate(null);
         }
-    }, [fromDate])
+    }, [fromDate]);
 
     useEffect(() => {
         if(toDate !== null) {
-            handleModifiedDatepickerVisibility(false)
+            handleModifiedDatepickerVisibility(false);
         }
-    }, [toDate])
-    
-  
+    }, [toDate]);
+      
     const handleModifiedDatepickerVisibility = (show = true) => {
         setModifiedDateSelectBox(show);
     };
@@ -77,26 +70,23 @@ const ModifiedStoriesFilter = (props) => {
     };
 
     const handleMenuItemClick = (item) => {
-        setUserReportFilterSelectedValue(item)
-        handleModifiedDatepickerVisibility(false)
+        setUserReportFilterSelectedValue(item);
+        handleModifiedDatepickerVisibility(false);
     } 
 
     const handleClickAway = () => {
-        setModifiedDateSelectBox(false)
+        setModifiedDateSelectBox(false);
     } 
 
     return (
         <>
             <div className="modified-stories-dropdown-wrapper">
-                <div
-                    className="modified-stories-dropdown-wrapper___button-wrap"
-                    onClick={() => handleModifiedDatepickerVisibility(!modifiedDateSelectBox)}
-                >
+                <div className="modified-stories-dropdown-wrapper___button-wrap" onClick={() => handleModifiedDatepickerVisibility(!modifiedDateSelectBox)}  >
                     {userReportFilterSelectedValue?.label}
                     <i style={{ color: "#8c8c8c" }} className="fas fa-caret-down"/>
                 </div>
                 <AnimatePresence initial={false}>
-                    {modifiedDateSelectBox && (
+                    { modifiedDateSelectBox && (
                         <ClickAwayListener onClickAway={handleClickAway} >
                             <motion.div
                                 key="content"
@@ -105,11 +95,9 @@ const ModifiedStoriesFilter = (props) => {
                                 exit={{ height: 0, opacity: 0, transition: { duration: 0.15 }}}
                                 transition={{ duration: 0.15 }} 
                                 ref={modifiedDateSelectBoxRef}
-                                className="ai-projects-main-wrapper__header__dropdown-wrapper__dropdown-box"
-                            >
+                                className="ai-projects-main-wrapper__header__dropdown-wrapper__dropdown-box" >
                                 <div className="modified-stories-dropdown-wrapper___options-list">
-                                    {
-                                        DataFilterOptions?.map((item, index) => {
+                                    { DataFilterOptions?.map((item, index) => {
                                             return(
                                                 <div 
                                                     key={index} 
@@ -131,16 +119,14 @@ const ModifiedStoriesFilter = (props) => {
                                                 placeholder="From"
                                                 sourceTxt="modified-stories"
                                                 disablePast 
-                                                minDate={null}
-                                            />
+                                                minDate={null}  />
                                             <DatePicker 
                                                 value={toDate}
                                                 minDate={fromDate}
                                                 onChange={handleToDateChange} 
                                                 placeholder="To"
                                                 sourceTxt="modified-stories"
-                                                disablePast 
-                                            />
+                                                disablePast />
                                         </div>
                                     </div>
                                 </div>
@@ -153,4 +139,4 @@ const ModifiedStoriesFilter = (props) => {
     )
 }
 
-export default ModifiedStoriesFilter
+export default ModifiedStoriesFilter;

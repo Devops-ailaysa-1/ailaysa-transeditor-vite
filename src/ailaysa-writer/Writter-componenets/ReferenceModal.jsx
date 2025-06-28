@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import { useTranslation } from 'react-i18next';
@@ -7,41 +7,37 @@ import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import NewspaperRoundedIcon from '@mui/icons-material/NewspaperRounded';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import FilterNoneRoundedIcon from '@mui/icons-material/FilterNoneRounded';
-import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
-import WiktionaryIcon from "../../assets/images/new-ui-icons/Wiktionary-logo.svg"
-import WikipediaIcon from "../../assets/images/new-ui-icons/Wikipedia-logo.svg"
-import NoImgPlaceholder from "../../assets/images/no-img-found.png"
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
+import WiktionaryIcon from "../../assets/images/new-ui-icons/Wiktionary-logo.svg";
+import WikipediaIcon from "../../assets/images/new-ui-icons/Wikipedia-logo.svg";
+import NoImgPlaceholder from "../../assets/images/no-img-found.png";
 
 const ReferenceModal = (props) => {
     let {
         openContentReferenceModal,
         setOpenContentReferenceModal,
         contentReferenceResult
-    } = props
-
+    } = props;
     const { t } = useTranslation();
-    const [isModalMinimized, setIsModalMinimized] = useState(false)
-    const minimizedModalRef = useRef(null)
-    
-    const isDragging = useRef(false)
-    const offset = useRef(0)
-
+    const [isModalMinimized, setIsModalMinimized] = useState(false);
+    const minimizedModalRef = useRef(null);
+        const isDragging = useRef(false);
+    const offset = useRef(0);
 
     useEffect(() => {
         if(contentReferenceResult !== null){
-            setIsModalMinimized(false)
+            setIsModalMinimized(false);
         }
-    }, [contentReferenceResult])
+    }, [contentReferenceResult]);
     
     useEffect(() => {
-        document.addEventListener('mousemove', handleMouseMove)
-        document.addEventListener('mouseup', handleMouseUp)
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
         return () => {
-            document.removeEventListener('mousemove', handleMouseMove)
-            document.removeEventListener('mouseup', handleMouseUp)
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
         }
-    }, [])
-
+    }, []);
 
     const handleMouseUp = (e) => {
         isDragging.current = false;
@@ -259,4 +255,4 @@ const ReferenceModal = (props) => {
     )
 }
 
-export default ReferenceModal
+export default ReferenceModal;

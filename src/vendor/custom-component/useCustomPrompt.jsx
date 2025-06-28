@@ -6,12 +6,10 @@ const useCustomPrompt = ({ title, contnet }, shouldPrompt) => {
     const retryFn = useRef(() => {});
 
     const handleBlockNavigation = ({ retry }) => {
-
         const shouldDisplayPrompt = typeof shouldPrompt === 'boolean' ? shouldPrompt : shouldPrompt();
-        console.log("shouldDisplayPrompt: "+shouldDisplayPrompt)
+
         if (shouldDisplayPrompt) {
             // confirmation modal opens here
-            console.log('open modal')
             // Modal.confirm({
             //     title: 'some title',
             //     content: 'this is the contnet',

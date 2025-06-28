@@ -72,37 +72,35 @@ export const POFilesModal = (props) => {
             }else if(POFilesDetails?.receivable?.length === 0){
                 setTabValue(1)
             }
-            setPayableData(POFilesDetails?.payable)
-            setReceivableData(POFilesDetails?.receivable)
+            setPayableData(POFilesDetails?.payable);
+            setReceivableData(POFilesDetails?.receivable);
             if(POFilesDetails?.payable?.length === 1){
-                if(POFilesDetails?.payable?.find(each => each.assignment.step === 2)) setAssignStep(2)
+                if(POFilesDetails?.payable?.find(each => each.assignment.step === 2)) setAssignStep(2);
             }
             if(POFilesDetails?.receivable?.length === 1){
-                if(POFilesDetails?.receivable?.find(each => each.assignment.step === 2)) setAssignStep(2)
+                if(POFilesDetails?.receivable?.find(each => each.assignment.step === 2)) setAssignStep(2);
             }
         }
-    }, [POFilesDetails, tabValue])
+    }, [POFilesDetails, tabValue]);
 
     useEffect(() => {
       if(payableData){
         if(payableData?.find(each => each.assignment.step === assignStep)?.po_file){
-            getPayablePdf()
+            getPayablePdf();
         }
       }
-    }, [payableData, assignStep])
+    }, [payableData, assignStep]);
     
     useEffect(() => {
         if(receivableData){
           if(receivableData?.find(each => each.assignment.step === assignStep)?.po_file){
-            getReceivablePdf()
+            getReceivablePdf();
           }
         }
-      }, [receivableData, assignStep])
+      }, [receivableData, assignStep]);
 
     useEffect(() => {
-      console.log(payablePdf)
-    }, [payablePdf, assignStep])
-    
+    }, [payablePdf, assignStep]);   
 
     const getPayablePdf = async(value) => {
         var requestOptions = {
@@ -110,13 +108,10 @@ export const POFilesModal = (props) => {
             redirect: 'follow'
         };
         try{
-            let url = `${Config.BASE_URL}${payableData?.find(each => each.assignment.step === assignStep)?.po_file}`
-            
-            let data = await fetch(url, requestOptions)
+            let url = `${Config.BASE_URL}${payableData?.find(each => each.assignment.step === assignStep)?.po_file}`;            
+            let data = await fetch(url, requestOptions);
             if (data.status === 200) {
-                console.log(data)
-                let response = await data.blob()
-                console.log(response)
+                let response = await data.blob();
                 const blob = new Blob([response], {type: "application/pdf"});
                 const file = new File([blob], 'example.pdf', { type: 'application/pdf' });
 
@@ -129,7 +124,7 @@ export const POFilesModal = (props) => {
                 return null;
             }
         }catch(e) {
-            console.log(e)
+            console.error(e);
         }
     } 
 
@@ -139,33 +134,24 @@ export const POFilesModal = (props) => {
             redirect: 'follow'
         };
         try{ 
-            let url = `${Config.BASE_URL}${receivableData?.find(each => each.assignment.step === assignStep)?.po_file}`
-            console.log(url)
-            let data = await fetch(url, requestOptions)
+            let url = `${Config.BASE_URL}${receivableData?.find(each => each.assignment.step === assignStep)?.po_file}`;
+            let data = await fetch(url, requestOptions);
             if (data.status === 200) {
-                console.log(data)
-                let response = await data.blob()
-                console.log(response)
+                let response = await data.blob();
                 const blob = new Blob([response], {type: "application/pdf"});
                 const file = new File([blob], 'example.pdf', { type: 'application/pdf' });
-
                 // Creating a URL from the File object
                 const fileURL = URL.createObjectURL(file);
-                console.log(fileURL)
-                setReceivablePdf(fileURL)
+                setReceivablePdf(fileURL);
             }else {
                 console.error('Failed to download file');
                 return null;
             }
         }catch(e) {
-            console.log(e)
+            console.error(e);
         }
     } 
-
-
-
-    
-
+   
     return (
         <>
             { showPOFilesModal &&

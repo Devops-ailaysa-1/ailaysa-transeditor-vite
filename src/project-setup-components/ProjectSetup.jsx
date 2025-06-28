@@ -12,28 +12,26 @@ import Config from "../Config";
 import { setEditorSettingStatus } from "../features/EditorSettingStatusSlice";
 
 const ProjectSetup = () => {
-
     let params = useParams();
-    const dispatch = useDispatch()
-    const isIncompleteEditorSettings = useSelector((state) => state.editorSettingStatus.value)
-    const userDetails = useSelector((state) => state.userDetails.value)
+    const dispatch = useDispatch();
+    const isIncompleteEditorSettings = useSelector((state) => state.editorSettingStatus.value);
+    const userDetails = useSelector((state) => state.userDetails.value);
 
     const [sidebarActiveTab, setSidebarActiveTab] = useState(2);
-    const [sidebartoggle ,setsidebartoggle] = useState(false)
+    const [sidebartoggle ,setsidebartoggle] = useState(false);
 
     useEffect(() => {
         if(userDetails?.is_vendor){
-            getEdiorSettingStatus()
+            getEdiorSettingStatus();
         }
-    }, [])
+    }, []);
     
-
     const getEdiorSettingStatus = () => {
         Config.axios({
 			url: `${Config.BASE_URL}/vendor/editor_settings_status/`,
 			auth: true,
 			success: (response) => {
-                dispatch(setEditorSettingStatus(response.data['incomplete status']))
+                dispatch(setEditorSettingStatus(response.data['incomplete status']));
 			},
             error: (err) => {
                 if(err.response?.data?.msg === "Unauthorised" || err.response?.data?.code === "bad_authorization_header"){
@@ -42,6 +40,13 @@ const ProjectSetup = () => {
             }
 		});
     } 
+
+    const navbarProps = {};
+    if (params?.category === "translate" && params?.menu === "files") {
+        navbarProps.istranseditor = true;
+    } else if (params?.category === "translate" && params?.menu === "translate-files") {
+        navbarProps.istranslator = true;
+    }
 
     return (
         <>
@@ -52,7 +57,7 @@ const ProjectSetup = () => {
                 </>
                 :
                 <>
-                    <Navbar />
+                    <Navbar {...navbarProps}/>
                     <div className="ai-new-project-setup-wrapper">
                         <div className="ai-working-col-wrapper">
                             {/* {isIncompleteEditorSettings && (

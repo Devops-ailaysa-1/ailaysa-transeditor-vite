@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react"
-import { motion } from "framer-motion"
+import React, { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 function ZoomInAnime ({ children }) {
     return (
@@ -14,12 +14,10 @@ function ZoomInAnime ({ children }) {
         variants={{
           visible: { opacity: 1, scale: 1 },
           hidden: { opacity: 0, scale: 0.75}
-        }}
-      >
+        }}>
         {children}
       </motion.div>
     );
   }
 
-
-  export default ZoomInAnime
+  export default ZoomInAnime;

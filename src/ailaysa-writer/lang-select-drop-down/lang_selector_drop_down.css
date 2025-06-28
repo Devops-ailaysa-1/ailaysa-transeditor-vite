@@ -5,6 +5,7 @@
     border-radius: 5px;
     background-color: #FFF;
 }
+
 .lang-select-drop-down-btn.active,
 .lang-select-drop-down-btn:hover{
     background-color: #F3F3F3;
@@ -13,7 +14,6 @@
 /* lang drop down styling */
 .lang-drop-down-container{
     height: 287px;
-    /* min-height: ; */
     padding: 14px;
     padding-right: 0px;
     flex-direction: column;
@@ -24,6 +24,7 @@
     background: #FFF;
     box-shadow: 0px 3px 16px 0px rgba(0, 0, 0, 0.16);
 }
+
 .lang-drop-down-container .lang-search-box{
     padding: 10px 14px;
     margin-right: 14px;
@@ -31,6 +32,7 @@
     border: 1px solid #DADADA;
     background: rgba(255, 255, 255, 0.20);
 }
+
 .lang-search-box input {
     margin-left: 6px;
     border: none;
@@ -47,6 +49,7 @@
     overflow-y: auto;
     scrollbar-width: thin;
 }
+
 .lang-list-wrapper .lang-list{
     padding: 0;
     padding-right: 8px;
@@ -62,17 +65,21 @@
     border-radius: 3px;
     margin-bottom: 2px;
 }
+
 .lang-list-wrapper .lang-list .lang-list-item:hover{
     background-color: #F3F3F3;
 }
+
 .lang-list-wrapper .lang-list .lang-list-item.active{
     border-radius: 3px;
     background: rgba(0, 115, 223, 0.06);
     color: #0073DF;
 }
+
 .lang-list-wrapper .lang-list .lang-list-item .item-select-icon{
     opacity: 0;
 }
+
 .lang-list-wrapper .lang-list .lang-list-item.active .item-select-icon{
     opacity: 1;
 }

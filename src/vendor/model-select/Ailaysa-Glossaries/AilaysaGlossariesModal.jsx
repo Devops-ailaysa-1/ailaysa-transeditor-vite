@@ -36,12 +36,12 @@ export const AilaysaGlossariesModal = (props) => {
 
     useEffect(() => {
         if(showAilaysaGlossaryModal){
-            setDefaultGlossDetails(defaultGlossDetailsRef.current)
+            setDefaultGlossDetails(defaultGlossDetailsRef?.current)
             getGlossaryList()
             getSelectedGlossaries()
             getProjectFiles()
         }
-    }, [defaultGlossDetailsRef.current, showAilaysaGlossaryModal])
+    }, [defaultGlossDetailsRef?.current, showAilaysaGlossaryModal])
     
     useEffect(() => {
         if(showAilaysaGlossaryModal){
@@ -61,7 +61,7 @@ export const AilaysaGlossariesModal = (props) => {
             url: `${Config.BASE_URL}/glex/glossaries/${documentDetails.project}/?option=glossary&task=${documentDetails.task_id}`,
             auth: true,
             success: (response) => {
-                let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef.current.gloss_id)
+                let res = response.data?.filter(each => each.glossary_id != defaultGlossDetailsRef?.current?.gloss_id)
                 setGlossaryList(res)
             },
             error: (err) => {
@@ -75,14 +75,8 @@ export const AilaysaGlossariesModal = (props) => {
             url: `${Config.BASE_URL}/glex/glossary_selected/?project=${documentDetails.project}&option=glossary`,
             auth: true,
             success: (response) => {
-                console.log("selected gloss")
-                console.log(response.data)
-                console.log("default gloss")
-                console.log(defaultGlossDetailsRef.current)
-                let res = response.data?.filter(each => each.glossary != defaultGlossDetailsRef.current.gloss_id)
-                console.log("default gloss removed")
-                console.log(res)
-                setSelectedGlossaryList(res)
+                let res = response.data?.filter(each => each.glossary != defaultGlossDetailsRef?.current?.gloss_id);
+                setSelectedGlossaryList(res);
             },
         });
     };
@@ -94,10 +88,10 @@ export const AilaysaGlossariesModal = (props) => {
             success: (response) => {
                 try {
                     // exclude the pdf files from the list - pdf files can't be used for term extraction
-                    let list = response.data.files.filter(each => each.filename.split('.')[1].toLowerCase() !== 'pdf')
-                    projectFilesListRef.current = list
+                    let list = response.data.files.filter(each => each.filename.split('.')[1].toLowerCase() !== 'pdf');
+                    projectFilesListRef.current = list;
                 } catch(e) {
-                    console.log(e)
+                    console.error(e);
                 }
             },
         });
@@ -160,6 +154,7 @@ export const AilaysaGlossariesModal = (props) => {
                                     getSelectedGlossaries={getSelectedGlossaries}
                                     setActiveScreen={setActiveScreen}
                                     defaultGlossDetailsRef={defaultGlossDetailsRef}
+                                    excludedTermsOption={[[17]?.includes(documentDetails.source_language_id )  ? 0 : 2]}
                                 />
                             )}
                         </div>

@@ -41,6 +41,7 @@
     "markdown-it": "^14.1.0",
     "mic-recorder-to-mp3": "^2.2.2",
     "popper.js": "^1.16.1",
+    "postcss-selector-parser": "^7.1.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",

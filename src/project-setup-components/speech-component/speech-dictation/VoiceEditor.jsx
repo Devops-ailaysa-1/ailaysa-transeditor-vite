@@ -9,31 +9,22 @@ import MicOutlinedIcon from '@mui/icons-material/MicOutlined';
 import SquareIcon from '@mui/icons-material/Square';
 import { useTranslation } from "react-i18next";
 
-
 const SpeechRecognition = window.SpeechRecognition
       || window.webkitSpeechRecognition
       || window.mozSpeechRecognition
       || window.msSpeechRecognition
       || window.oSpeechRecognition;
-
-      
 const recognition = SpeechRecognition ? new SpeechRecognition() : {};
 recognition.continuous = true;
 
 export default function VoiceEditor(props) {
   const { t } = useTranslation();
-
-
-  let{speechSourceLanguageOption,editorState,dictationInput, onEditorStateChange, isListening, setIsListening, dictationDataRef} = props
-
+  let{speechSourceLanguageOption,editorState,dictationInput, onEditorStateChange, isListening, setIsListening, dictationDataRef} = props;
   // const [isListening, setIsListening] = useState(false);
   recognition.lang = speechSourceLanguageOption;
 
-  // console.log(speechSourceLanguageOption);
-
   const handleListening = () => {
     if (!isListening) {
-
       try{
       recognition.start();
       setIsListening(true);
@@ -51,14 +42,13 @@ export default function VoiceEditor(props) {
   recognition.onresult = (e) => {
     const current = e.resultIndex;
     const transcript = e.results[current][0].transcript;
-    // console.log(transcript);
     const contentState = Modifier.replaceText(
       editorState.getCurrentContent(),
       editorState.getSelection(),
       transcript,
       editorState.getCurrentInlineStyle()
     );
-    onEditorStateChange(EditorState?.push(editorState, contentState, "insert-characters"))
+    onEditorStateChange(EditorState?.push(editorState, contentState, "insert-characters"));
   };
 
 

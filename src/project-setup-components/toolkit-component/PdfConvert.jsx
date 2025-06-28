@@ -20,20 +20,17 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import SimpleRodals from "../rodals/SimpleRodals";
 import Tooltip from '@mui/material/Tooltip';
-
 // mui icon
 import CloseIcon from '@mui/icons-material/Close';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
-import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
-import InsuffientIcon from "../../assets/images/new-ui-icons/insuffient-icon.svg"
-import RemoveCircleRed from "../../assets/images/new-ui-icons/remove_circle_red.svg"
-import PdfIcon from "../../assets/images/pdf-icon.svg"
-import ReactRouterPrompt from 'react-router-prompt'
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
+import InsuffientIcon from "../../assets/images/new-ui-icons/insuffient-icon.svg";
+import RemoveCircleRed from "../../assets/images/new-ui-icons/remove_circle_red.svg";
+import PdfIcon from "../../assets/images/pdf-icon.svg";
+import ReactRouterPrompt from 'react-router-prompt';
 
 const PdfConvert = (props) => {
-    const {
-        setSidebarActiveTab
-    } = props
+    const { setSidebarActiveTab } = props;
 
     const history = useNavigate();
     const location = useLocation();
@@ -68,26 +65,22 @@ const PdfConvert = (props) => {
     const [showErrorStatus, setShowErrorStatus] = useState(false);
     const [pdfDownloadUrl, setPdfDownloadUrl] = useState("");
     const [pdfConvertedListWrapper, setPdfConvertedListWrapper] = useState(false);
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-    const [lastLocation, setLastLocation] = useState(null)
-    const [confirmedNavigation, setConfirmedNavigation] = useState(false)
-
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
+    const [lastLocation, setLastLocation] = useState(null);
+    const [confirmedNavigation, setConfirmedNavigation] = useState(false);
     const [validationState, setValidationState] = useState({
         projectName: false,
         files: true
-    })
+    });
     const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
-
-    const [fileCheckTrigger, setFileCheckTrigger] = useState(false)
-    const [isFileConverting, setIsFileConverting] = useState(false)
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-
-    const [pdfUploadPercentage, setpdfUploadPercentage] = useState(0)
-
-    const [isUploading, setIsUploading] = useState(null)
-
-    const [uploadedFileList, setuploadedFileList] = useState([])
-    const [selectedPdfObj, setSelectedPdfObj] = useState(null)
+    const [fileCheckTrigger, setFileCheckTrigger] = useState(false);
+    const [isFileConverting, setIsFileConverting] = useState(false);
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const [pdfUploadPercentage, setpdfUploadPercentage] = useState(0);
+    const [isUploading, setIsUploading] = useState(null);
+    const [uploadedFileList, setuploadedFileList] = useState([]);
+    const [selectedPdfObj, setSelectedPdfObj] = useState(null);
+    const [pdffilesList, setPdfFilesList] = useState([]);
 
     const searchAreaRef = useRef(null);
     const targetLanguageOptionsRef = useRef([]);
@@ -98,24 +91,18 @@ const PdfConvert = (props) => {
     const allowedSingleFileSize = useRef(100); // in MB
     const singleFileSizeError = useRef(t("file_size_exceeds"));
     const deletedEditFileIds = useRef([]);
-
-    const downloadref = useRef(null)
-    const downloadedFileName = useRef(null)
-
-    const pdfIdListRef = useRef(null)
-    const longFileModal = useRef(null)
-    const pdfFileBrowserRef = useRef(null)
-
-    const allPDFList = useRef(null)
-    const fileListId = useRef([])
-    const calledFunction = useRef(null)
-    const checkFileStatusTimeoutRef = useRef(null)
-
-    const fileCheckTriggerTimeoutRef = useRef(null)
-    const pdfInProcessingList = useRef([])
-
-    const [pdffilesList, setPdfFilesList] = useState([])
-
+    const downloadref = useRef(null);
+    const downloadedFileName = useRef(null);
+    const pdfIdListRef = useRef(null);
+    const longFileModal = useRef(null);
+    const pdfFileBrowserRef = useRef(null);
+    const allPDFList = useRef(null);
+    const fileListId = useRef([]);
+    const calledFunction = useRef(null);
+    const checkFileStatusTimeoutRef = useRef(null);
+    const fileCheckTriggerTimeoutRef = useRef(null);
+    const pdfInProcessingList = useRef([]);
+    
     const customMtSelectStyles = {
         placeholder: (provided, state) => ({
             ...provided,
@@ -213,17 +200,17 @@ const PdfConvert = (props) => {
     useEffect(() => {
         if (confirmedNavigation && lastLocation) {
             // Navigate to the previous blocked location with your navigate function
-            history(lastLocation.pathname)
+            history(lastLocation.pathname);
         }
-    }, [confirmedNavigation, history, lastLocation])
+    }, [confirmedNavigation, history, lastLocation]);
 
 
     const handleBlockedNavigation = nextLocation => {
         if (!confirmedNavigation && location.pathname) {
             if (nextLocation.hash != "#!") {
-                setNavigationModalVisible(true)
-                setLastLocation(nextLocation)
-                setSidebarActiveTab(4)
+                setNavigationModalVisible(true);
+                setLastLocation(nextLocation);
+                setSidebarActiveTab(4);
                 return false;
             }
         }
@@ -231,32 +218,32 @@ const PdfConvert = (props) => {
     }
 
     const handleConfirmNavigationClick = () => {
-        setNavigationModalVisible(false)
-        setConfirmedNavigation(true)
+        setNavigationModalVisible(false);
+        setConfirmedNavigation(true);
     }
 
     /* Handling source language selection */
     const handleSourceLangClick = (value, name, e) => {
-        let elements = document.getElementsByClassName('list selected')
+        let elements = document.getElementsByClassName('list selected');
         for (let i = 0; i < elements.length; i++) {
-            elements[i].classList.remove('selected')
+            elements[i].classList.remove('selected');
         }
-        e.target.classList.add("selected")
+        e.target.classList.add("selected");
         setSourceLanguage(value);
         setshowSrcLangModal(false);
         setSourceLabel(name);
         setError({ ...error, sourceLanguage: "" });
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     const handleProjectNamechange = (e) => {
         setProjectName(e.target.innerText);
-        setValidationState({ ...validationState, projectName: false })
+        setValidationState({ ...validationState, projectName: false });
     };
 
     const removeTempFile = (id) => {
-        setEditFiles(editFiles.filter(each => each.id !== id))
+        setEditFiles(editFiles.filter(each => each.id !== id));
     }
 
     useEffect(() => {
@@ -278,25 +265,22 @@ const PdfConvert = (props) => {
     const niceBytes = (x) => {
         let l = 0;
         let n = parseInt(x, 10) || 0;
-
         while (n >= 1024 && ++l) {
             n = n / 1024;
         }
-        return (
-            n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]
-        );
+        return ( n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l] );
     }
 
     /* File upload drag and drop handling */
     const handleDrop = (filesTemp) => {
         //Also check handleChange
-        let thisFiles = filesTemp
+        let thisFiles = filesTemp;
         let name = thisFiles[0]?.name;
         let lastDot = name?.lastIndexOf(".");
         let fileName = name?.substring(0, lastDot);
         let ext = "." + name?.substring(lastDot + 1);
         if (ext !== ".pdf") {
-            Config.toast(t("unsupport_file_format"), 'warning')
+            Config.toast(t("unsupport_file_format"), 'warning');
             return;
         }
         let fileList = [...files];
@@ -306,21 +290,20 @@ const PdfConvert = (props) => {
                 allowedSingleFileSize.current
             ) {
                 fileList.push(filesTemp[eachKey]);
-                setSettingsFileUploadLoading(false)
+                setSettingsFileUploadLoading(false);
             }
             else Config.toast(singleFileSizeError.current, "error");
 
         });
-        setFiles(fileList)
-        let list = []
+        setFiles(fileList);
+        let list = [];
         fileList?.map(each => {
             list.push({
                 name: each.name,
-            })
-        })
-        setValidationState({ ...validationState, files: false })
+            });
+        });
+        setValidationState({ ...validationState, files: false });
     };
-
 
     const handleChange = (e) => {
         let thisFiles = e.target.files;
@@ -329,35 +312,32 @@ const PdfConvert = (props) => {
         let fileName = name?.substring(0, lastDot);
         let ext = "." + name?.substring(lastDot + 1);
         if (ext !== ".pdf") {
-            Config.toast(t("unsupport_file_format"), 'warning')
+            Config.toast(t("unsupport_file_format"), 'warning');
             return;
         }
         let fileList = [...files];
         Object.keys(thisFiles).map((eachKey) => {
-            // console.log(thisFiles[eachKey].size / 1024 / 1024)
             if (
                 thisFiles[eachKey].size / 1024 / 1024 <=
                 allowedSingleFileSize.current
             ) {
                 fileList.push(thisFiles[eachKey]);
-                setSettingsFileUploadLoading(false)
+                setSettingsFileUploadLoading(false);
             } else Config.toast(singleFileSizeError.current, "error");
         });
-        setFiles(fileList)
-        let list = []
+        setFiles(fileList);
+        let list = [];
         fileList?.map(each => {
             list.push({
                 name: each.name,
-            })
-        })
-        pdfFileBrowserRef.current.value = null
-        setValidationState({ ...validationState, files: false })
+            });
+        });
+        pdfFileBrowserRef.current.value = null;
+        setValidationState({ ...validationState, files: false });
     }
-
 
     // destructure and store desired values as key value pair (object)
     useEffect(() => {
-        // console.log(files)
         if (files?.length !== 0) {
             let newArr = files?.map(each => {
                 return {
@@ -366,39 +346,34 @@ const PdfConvert = (props) => {
                     actual_file: each,
                     upload_progress: 0
                 }
-            })
-            // console.log(newArr)
-            setFiles([])
-            let a = pdffilesList.concat(newArr)
-            setPdfFilesList(a)
+            });
+            setFiles([]);
+            let a = pdffilesList.concat(newArr);
+            setPdfFilesList(a);
         }
-    }, [files])
+    }, [files]);
 
     useEffect(() => {
         if (pdffilesList?.length !== 0) {
-            // console.log(pdffilesList)
             if (pdffilesList?.filter(each => each.upload_progress === 0)?.length !== 0) {
                 uploadFile()?.then((response) => {
-                    // console.log([...response.data, ...uploadFileList])
-                    setIsUploading(false)
-                    clearTimeout(longFileModal.current)
-                    clearTimeout(fileCheckTriggerTimeoutRef.current)
-                    clearTimeout(checkFileStatusTimeoutRef.current)
-                    setUploadFileList([...response.data, ...uploadFileList])
+                    setIsUploading(false);
+                    clearTimeout(longFileModal.current);
+                    clearTimeout(fileCheckTriggerTimeoutRef.current);
+                    clearTimeout(checkFileStatusTimeoutRef.current);
+                    setUploadFileList([...response.data, ...uploadFileList]);
                 }).catch((err) => {
-                    setIsUploading(false)
+                    setIsUploading(false);
                 })
             }
         }
-    }, [pdffilesList])
-
+    }, [pdffilesList]);
 
     useEffect(() => {
         if (uploadFileList?.length !== 0) {
-            setPdfFilesList([])
+            setPdfFilesList([]);
         }
-    }, [uploadFileList])
-
+    }, [uploadFileList]);
 
     /* Delete files when editing */
     const deleteEditFile = (e, canDelete = false, editFileId) => {
@@ -409,7 +384,6 @@ const PdfConvert = (props) => {
         deletedEditFileIdsTemp.push(editFileId);
         deletedEditFileIds.current = deletedEditFileIdsTemp;
     };
-
 
     const onUploadProgress = (progressEvent) => {
         const { loaded, total } = progressEvent;
@@ -423,26 +397,22 @@ const PdfConvert = (props) => {
             }
             return obj;
         })
-        // console.log(newArr)
-        setPdfFilesList(newArr)
+        setPdfFilesList(newArr);
     };
 
     const uploadFile = (file) => {
-        setIsUploading(true)
+        setIsUploading(true);
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
         let token = userCacheData != null ? userCacheData?.token : "";
-
         const url = `${Config.BASE_URL}/exportpdf/convertpdftodocx/`;
-
         const formData = new FormData();
-
         pdffilesList?.map(each => {
             if (each?.upload_progress === 0) {
                 formData.append("pdf_request_file", each?.actual_file);
             }
-        })
+        });
 
         return axios.post(url, formData, {
             headers: {
@@ -455,13 +425,11 @@ const PdfConvert = (props) => {
 
 
     const convertAll = () => {
-        let fileIdList = ""
-        let remainingFiles = uploadFileList?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status !== "PENDING")
-        // console.log(remainingFiles);
+        let fileIdList = "";
+        let remainingFiles = uploadFileList?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status !== "PENDING");
         remainingFiles?.map((each, index) => {
             fileIdList += `${each?.id}${index !== remainingFiles?.length - 1 ? "&id=" : ""}`
-        })
-
+        });
         const newArr = uploadFileList?.map(obj => {
             if (obj.id === remainingFiles?.find(each => each.id == obj.id)?.id) {
                 return {
@@ -473,32 +441,26 @@ const PdfConvert = (props) => {
             return obj;
         });
         setUploadFileList(newArr);
-        // console.log(remainingFiles);
-        // console.log(fileListId.current);
+        let UpdatedIdList = [];
 
-        let UpdatedIdList = []
         Config.axios({
             url: Config.BASE_URL + "/exportpdf/convert?id=" + fileIdList,
             auth: true,
             success: (response) => {
-                // console.log(Object.keys(response.data));
-                // console.log(Object.keys(response.data)?.map(Number));
-
-                fileListId.current = Object.keys(response.data)?.map(Number)
-                // console.log(fileListId.current);
-                calledFunction.current = 'convert-all'
-                setIsFileConverting(true)
+                fileListId.current = Object.keys(response.data)?.map(Number);
+                calledFunction.current = 'convert-all';
+                setIsFileConverting(true);
                 setTimeout(() => {
-                    checkFileStatus()
+                    checkFileStatus();
                 }, 2800);
                 // longFileModal.current = setTimeout(() => {
-                //     setShowLongFileAlertModal(true)
+                //     setShowLongFileAlertModal(true);
                 // }, 70000);
             },
             error: (err) => {
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('pdf_corrupted')) {
-                        setIsFileConverting(false)
+                        setIsFileConverting(false);
                         const newArr = uploadFileList?.map(obj => {
                             if (obj.id === remainingFiles?.find(each => each.id == obj.id)?.id) {
                                 return {
@@ -512,7 +474,7 @@ const PdfConvert = (props) => {
                         setUploadFileList(newArr);
                     }
                     if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                        setShowCreditAlertModal(true)
+                        setShowCreditAlertModal(true);
                         const newArr = uploadFileList?.map(obj => {
                             if (obj.id === remainingFiles?.find(each => each.id == obj.id)?.id) {
                                 return {
@@ -531,11 +493,10 @@ const PdfConvert = (props) => {
     }
 
     const SingleConvert = async (id) => {
-        setConvertLoading(true)
-        setConvertSingle(id)
-        converStatus.current = "Single"
-        let UpdatedIdList = ""
-
+        setConvertLoading(true);
+        setConvertSingle(id);
+        converStatus.current = "Single";
+        let UpdatedIdList = "";
         const newArr = uploadFileList?.map(obj => {
             if (obj.id === id) {
                 return {
@@ -547,17 +508,15 @@ const PdfConvert = (props) => {
             return obj;
         });
         setUploadFileList(newArr);
-        setIsFileConverting(true)
-
-        pdfInProcessingList.current.push(id)
+        setIsFileConverting(true);
+        pdfInProcessingList.current.push(id);
 
         Config.axios({
             url: Config.BASE_URL + "/exportpdf/convert?id=" + id,
             auth: true,
             success: (response) => {
                 if (response.data[id]?.includes('pdf corrupted')) {
-                    console.log(uploadFileList)
-                    pdfInProcessingList.current = pdfInProcessingList.current.filter(each => each !== id)
+                    pdfInProcessingList.current = pdfInProcessingList.current.filter(each => each !== id);
                     const newArr = uploadFileList?.map(obj => {
                         if (obj.id === id) {
                             return {
@@ -568,28 +527,27 @@ const PdfConvert = (props) => {
                         }
                         return obj;
                     });
-                    // console.log(newArr)
                     setUploadFileList(newArr);
                     return;
                 }
-                UpdatedIdList = Object.keys(response.data)
-                // getUploadFileList(parseInt(UpdatedIdList))
-                idResponseData.current = parseInt(UpdatedIdList)
-                // fileListId.current = id
-                fileListId.current?.push(id)
-                calledFunction.current = 'single'
+                UpdatedIdList = Object.keys(response.data);
+                // getUploadFileList(parseInt(UpdatedIdList));
+                idResponseData.current = parseInt(UpdatedIdList);
+                // fileListId.current = id;
+                fileListId.current?.push(id);
+                calledFunction.current = 'single';
                 setTimeout(() => {
-                    checkFileStatus()
+                    checkFileStatus();
                 }, 2800);
                 // longFileModal.current = setTimeout(() => {
-                //     setShowLongFileAlertModal(true)
+                //     setShowLongFileAlertModal(true);
                 // }, 30000);
             },
             error: (err) => {
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('pdf_corrupted')) {
-                        setShowCreditAlertModal(true)
-                        pdfInProcessingList.current = pdfInProcessingList.current.filter(each => each !== id)
+                        setShowCreditAlertModal(true);
+                        pdfInProcessingList.current = pdfInProcessingList.current.filter(each => each !== id);
                         const newArr = uploadFileList?.map(obj => {
                             if (obj.id === id) {
                                 return {
@@ -603,8 +561,8 @@ const PdfConvert = (props) => {
                         setUploadFileList(newArr);
                     }
                     if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                        setShowCreditAlertModal(true)
-                        pdfInProcessingList.current = pdfInProcessingList.current.filter(each => each !== id)
+                        setShowCreditAlertModal(true);
+                        pdfInProcessingList.current = pdfInProcessingList.current.filter(each => each !== id);
                         const newArr = uploadFileList?.map(obj => {
                             if (obj.id === id) {
                                 return {
@@ -616,7 +574,7 @@ const PdfConvert = (props) => {
                             return obj;
                         });
                         setUploadFileList(newArr);
-                        setIsFileConverting(false)
+                        setIsFileConverting(false);
                     }
                 }
             }
@@ -624,20 +582,17 @@ const PdfConvert = (props) => {
     }
 
     const checkFileStatus = (fileId, param) => {
-        let idList = ''
+        let idList = '';
         fileListId.current?.map((each, index) => {
             idList += `${each}${index !== fileListId.current?.length - 1 ? "&id=" : ""}`
-        })
+        });
+
         Config.axios({
             url: `${Config.BASE_URL}/exportpdf/convertpdftodocx?id=${idList}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data);
-                // console.log(fileListId.current);
-
                 const newArr = uploadFileList?.map(obj => {
                     if (obj.id == response.data?.find(each => each?.id === obj?.id)?.id) {
-                        // console.log("pass")
                         return {
                             ...obj,
                             status: response.data?.find(each => each?.id === obj?.id)?.status != null ? response.data?.find(each => each?.id === obj?.id)?.status : 'PENDING',
@@ -649,10 +604,9 @@ const PdfConvert = (props) => {
                     }
                     return obj;
                 });
-                // console.log(newArr)
                 setUploadFileList(newArr);
                 fileCheckTriggerTimeoutRef.current = setTimeout(() => {
-                    setFileCheckTrigger(!fileCheckTrigger)
+                    setFileCheckTrigger(!fileCheckTrigger);
                 }, 20);
             },
         });
@@ -660,29 +614,28 @@ const PdfConvert = (props) => {
 
     useEffect(() => {
         if (uploadFileList?.length !== 0) {
-            let remainingFiles = uploadFileList?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status != null)
-            // console.log(remainingFiles)
+            let remainingFiles = uploadFileList?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status != null);
             pdfInProcessingList.current = remainingFiles.filter(o1 => pdfInProcessingList.current.some(o2 => o1.id === o2));
             if (remainingFiles?.length !== 0) {
-                // setTimeout(longFileModal.current)
-                setConversionPendingState(true)
+                // setTimeout(longFileModal.current);
+                setConversionPendingState(true);
                 checkFileStatusTimeoutRef.current = setTimeout(() => {
-                    checkFileStatus()
+                    checkFileStatus();
                 }, 5000);
             } else {
-                clearTimeout(longFileModal.current)
-                setConversionPendingState(false)
-                setIsFileConverting(false)
-                // Config.toast('Conversion completed')
+                clearTimeout(longFileModal.current);
+                setConversionPendingState(false);
+                setIsFileConverting(false);
+                // Config.toast('Conversion completed');
             }
         }
-    }, [fileCheckTrigger])
+    }, [fileCheckTrigger]);
 
     const handleReset = () => {
-        setUploadFileList([])
-        setFiles([])
-        setSourceLanguage("")
-        setSourceLabel(t("file_language"))
+        setUploadFileList([]);
+        setFiles([]);
+        setSourceLanguage("");
+        setSourceLabel(t("file_language"));
         setPdfConvertedListWrapper(false);
     }
 
@@ -692,7 +645,6 @@ const PdfConvert = (props) => {
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
         return axios.get(
             url,
@@ -710,26 +662,26 @@ const PdfConvert = (props) => {
 
     // download convert docx file 
     const downloadConvertDocxFile = async (taskID) => {
-        let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?id=${taskID}`
+        let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?id=${taskID}`;
         const response = await downloadFileFromApi(url);
-        Config.downloadFileInBrowser(response)
+        Config.downloadFileInBrowser(response);
     }
 
     const openWriter = (id, name) => {
         if (id !== undefined) {
-            history(`/word-processor?pdf-id=${id}`, {state: { docName: name, from: "My PDF", prevPath: location.pathname + location.search }})
+            history(`/word-processor?pdf-id=${id}`, {state: { docName: name, from: "My PDF", prevPath: location.pathname + location.search }});
         } else {
-            Config.toast(t("file_view_again_wrap"))
+            Config.toast(t("file_view_again_wrap"));
         }
     }
 
     const handlePdfTranslateBtn = (id, docx_file_name) => {
-        setSelectedPdfObj({ id, filename: docx_file_name })
-        // setProjectUpdateModal(true)
+        setSelectedPdfObj({ id, filename: docx_file_name });
+        // setProjectUpdateModal(true);
     }
 
     const handlePdfFileUpload = async () => {
-        setIsLoading(true)
+        setIsLoading(true);
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
@@ -737,41 +689,36 @@ const PdfConvert = (props) => {
         let formdata = new FormData();
         let myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${token}`);
-
         for (let x = 0; x < files.length; x++) {
             if (typeof files[x] != "undefined")
                 formdata.append("pdf_request_file", files[x]);
         }
         // formdata.append("file_language", sourceLanguage);
-
         // uploadFile().then((response) => {
-        //     console.log(response.data);
         // });
-
         var requestOptions = {
             method: 'POST',
             body: formdata,
             redirect: 'follow',
             headers: myHeaders,
         };
-        let IdList = []
-        let data = await fetch(`${Config.BASE_URL}/exportpdf/convertpdftodocx/`, requestOptions)
+        let IdList = [];
+        let data = await fetch(`${Config.BASE_URL}/exportpdf/convertpdftodocx/`, requestOptions);
+
         if (data.status === 200) {
-            let response = await data.json()
+            let response = await data.json();
             setIsLoading(false);
             setUploadFileList(response);
             response?.map(each => {
-                IdList.push(each?.id)
+                IdList.push(each?.id);
             })
-            // multipleFileIdList.current = IdList
+            // multipleFileIdList.current = IdList;
             setPdfConvertedListWrapper(true);
         }
     }
 
     // useEffect(() => {
-    //   console.log(pdfInProcessingList.current)
-    // }, [pdfInProcessingList.current])
-
+    // }, [pdfInProcessingList.current]);
 
     return (
         <React.Fragment>
@@ -867,8 +814,6 @@ const PdfConvert = (props) => {
                                                 <div className="audio-file-list-wrapper">
                                                     {
                                                         uploadFileList?.map((item) => {
-                                                            console.log(item)
-                                                            console.log(pdfInProcessingList.current.find(each => each === item.id))
                                                             return (
                                                                 <div className="audio-file-list-item" key={item?.id}>
                                                                     <div className="file-info-wrapper">
@@ -1014,7 +959,6 @@ const PdfConvert = (props) => {
                                                                             alt="document"
                                                                         />
                                                                 }
-
                                                                 <div className="file-name-wrap">
                                                                     <span className="title">
                                                                         {
@@ -1176,7 +1120,6 @@ const PdfConvert = (props) => {
                             alt="close_black"
                         />
                     </span>
-
                     <Sourcelanguage
                         sourceLanguage={sourceLanguage}
                         showSrcLangModal={showSrcLangModal}
@@ -1224,7 +1167,6 @@ const PdfConvert = (props) => {
                 )
             }}
             </ReactRouterPrompt>
-
             {showCreditAlertModal && (<Rodal className="ts-rodal-mask" visible={showCreditAlertModal} {...convertmodaloption} showCloseButton={false}>
                 <span className="modal-close-btn lang-close" onClick={(e) => { setShowCreditAlertModal(false) }}>
                     <img src={CloseBlack} alt="close_black" />

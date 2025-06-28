@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import Config from "../vendor/Config";
-import { ButtonBase } from '@mui/material'
+import { ButtonBase } from '@mui/material';
 import { useTranslation } from "react-i18next";
 import { ButtonLoader } from '../loader/CommonBtnLoader';
 import CircularProgress from '@mui/material/CircularProgress';
 // import { IOSSwitch } from '../vendor/custom-component/IOSSwitch';
 import DocViewer , { DocViewerRenderers }from "@cyntler/react-doc-viewer";
-import BlackCloseIcon from "../assets/images/new-ui-icons/close_black.svg"
+import BlackCloseIcon from "../assets/images/new-ui-icons/close_black.svg";
 
 const StorySingleViewModal = (props) => {
     let { 
@@ -16,22 +16,21 @@ const StorySingleViewModal = (props) => {
         setIsViewStoryModal,
         selectedStoryDetails,
         setSelectedStoryDetails
-    } = props
+    } = props;
     const { t } = useTranslation();
-    // const history = useHistory()
-    const [storyDetails, setStoryDetails] = useState(null)
-    const [langtoggle, setLangtoggle] = useState('src')
+    // const history = useHistory();
+    const [storyDetails, setStoryDetails] = useState(null);
+    const [langtoggle, setLangtoggle] = useState('src');
     const [imageLoaded, setImageLoaded] = useState(false);
-    const [isFileDisplay, setIsFileDisplay] = useState(false)
+    const [isFileDisplay, setIsFileDisplay] = useState(false);
 
     const changeDateFormat = (date) => {
-        if(date === null || date === undefined) return ""
+        if(date === null || date === undefined) return "";
         let dateObj = new Date(date);
-        return dateObj.toDateString() + ", " + dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+        return dateObj.toDateString() + ", " + dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     } 
 
     useEffect(() => {
-
         let storyData = selectedStoryDetails?.data !== undefined ? 
         (
             selectedStoryDetails?.open === 'src' ? 
@@ -46,58 +45,54 @@ const StorySingleViewModal = (props) => {
             )
         ) :
         selectedStoryDetails
-
         if(selectedStoryDetails?.open === 'src'){
             if(
                 selectedStoryDetails?.data !== undefined && 
                 Object?.keys(selectedStoryDetails?.data?.source_json)?.length === 0 &&
                 selectedStoryDetails?.data?.source_file_path !== null
             ){
-                setIsFileDisplay(true)
-            }else setIsFileDisplay(false)
+                setIsFileDisplay(true);
+            }else setIsFileDisplay(false);
         }else{
             if(
                 selectedStoryDetails?.data !== undefined && 
                 Object?.keys(selectedStoryDetails?.data?.target_json)?.length === 0 &&
                 selectedStoryDetails?.data?.target_file_path !== null
             ){
-                setIsFileDisplay(true)
-            }else setIsFileDisplay(false)
-        }
-        
-        setStoryDetails(storyData)
-
-        setLangtoggle(selectedStoryDetails?.open)
-    }, [selectedStoryDetails])
-    
+                setIsFileDisplay(true);
+            }else setIsFileDisplay(false);
+        }        
+        setStoryDetails(storyData);
+        setLangtoggle(selectedStoryDetails?.open);
+    }, [selectedStoryDetails]);    
 
     const switchLang = (value) => {
-        setLangtoggle(value)
-        let storyData = null
+        setLangtoggle(value);
+        let storyData = null;
         if(value === 'src'){
             storyData = Object?.keys(selectedStoryDetails?.data?.source_json)?.length !== 0 ? 
             selectedStoryDetails?.data?.source_json :
             (selectedStoryDetails?.data?.source_file_path !== null ? selectedStoryDetails?.data?.source_file_path : {})
-            setStoryDetails(storyData)
+            setStoryDetails(storyData);
             if(
                 selectedStoryDetails?.data !== undefined && 
                 Object?.keys(selectedStoryDetails?.data?.source_json)?.length === 0 &&
                 selectedStoryDetails?.data?.source_file_path !== null
             ){
-                setIsFileDisplay(true)
-            }else setIsFileDisplay(false)
+                setIsFileDisplay(true);
+            }else setIsFileDisplay(false);
         }else{
             storyData = Object?.keys(selectedStoryDetails?.data?.target_json)?.length !== 0 ? 
             selectedStoryDetails?.data?.target_json :
             (selectedStoryDetails?.data?.target_file_path !== null ? selectedStoryDetails?.data?.target_file_path : {})
-            setStoryDetails(storyData)
+            setStoryDetails(storyData);
             if(
                 selectedStoryDetails?.data !== undefined && 
                 Object?.keys(selectedStoryDetails?.data?.target_json)?.length === 0 &&
                 selectedStoryDetails?.data?.target_file_path !== null
             ){
-                setIsFileDisplay(true)
-            }else setIsFileDisplay(false)
+               setIsFileDisplay(true);
+            }else setIsFileDisplay(false);
         }
     }
 
@@ -131,12 +126,7 @@ const StorySingleViewModal = (props) => {
                                 <>
                                     {storyDetails?.mediaId && (
                                         <div className={"story-img-wrapper " + (!imageLoaded ? "skeleton-box" : "")}>
-                                            <img 
-                                                src={storyDetails?.mediaId} 
-                                                style={{display: imageLoaded ? 'block' : 'none' }}
-                                                onLoad={(e) => setImageLoaded(true)} 
-                                                alt="story-imh"
-                                            />
+                                            <img src={storyDetails?.mediaId} style={{display: imageLoaded ? 'block' : 'none' }} onLoad={(e) => setImageLoaded(true)} alt="story-imh" />
                                         </div>
                                     )}
                                     <div className="story-main-content">
@@ -147,8 +137,7 @@ const StorySingleViewModal = (props) => {
                                             <ul className='story-category-list'>
                                                 <li className="cate-item">{storyDetails?.maincat_name}</li>
                                             </ul>
-                                        )}
-                                        
+                                        )}                                        
                                         <div className='story-title-wrap'>
                                             <h1 className='title'>{storyDetails?.heading}</h1>
                                             <p className='main-excerpt'>{storyDetails?.description}</p>
@@ -187,4 +176,4 @@ const StorySingleViewModal = (props) => {
     )
 }
 
-export default StorySingleViewModal
+export default StorySingleViewModal;

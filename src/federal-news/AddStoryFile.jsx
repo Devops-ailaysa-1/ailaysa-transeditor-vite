@@ -2,9 +2,9 @@ import React, { useState, useEffect, createRef, useRef } from "react";
 import Config from "../vendor/Config";
 import { useTranslation } from 'react-i18next';
 import DragandDrop from "../vendor/DragandDrop";
-import FilesUpload from "../assets/images/new-ui-icons/upload-folder.svg"
-import infoIcon from "../assets/images/new-ui-icons/imp-icon-file.svg"
-import BlackClose from "../assets/images/new-ui-icons/close_black.svg"
+import FilesUpload from "../assets/images/new-ui-icons/upload-folder.svg";
+import infoIcon from "../assets/images/new-ui-icons/imp-icon-file.svg";
+import BlackClose from "../assets/images/new-ui-icons/close_black.svg";
 
 const AddStoryFile = (props) => {
     let {
@@ -12,7 +12,7 @@ const AddStoryFile = (props) => {
         setFiles,
         fileError,
         setFileError
-    } = props
+    } = props;
 
     const { t } = useTranslation();
     const [showFileUpload, setShowFileUpload] = useState(false);
@@ -20,36 +20,32 @@ const AddStoryFile = (props) => {
 
     const allowedSingleFileSize = useRef(100); // in MB
     const singleFileSizeError = useRef(t("file_size_exceeds"));
-    const inputFileUploadRef = useRef(null)
+    const inputFileUploadRef = useRef(null);
 
     useEffect(() => {
-        getSupportFileExtensions()
-    }, [])
+        getSupportFileExtensions();
+    }, []);
     
-
     /* Handling all the project creation form */
     const handleChange = (e) => {
         for (let i = 0; i < (e.target.files).length; i++) {
             let name = e.target.files[i].name;
             let lastDot = name.lastIndexOf(".");
             let fileName = name.substring(0, lastDot);
-            let ext = "." + name.substring(lastDot + 1);
-            
+            let ext = "." + name.substring(lastDot + 1);            
             if (supportFileExtensions?.find(each => each === ext?.toLowerCase()) === undefined) {
                 Config.toast(t("file_format_not_support"), 'warning');
                 return false;
             }
-
             if ((e.target.files[i]?.name).length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
-                return
+                return;
             }
         }
         switch (e.target.name) {
             case "files": {
-                let thisFiles = e.target.files;
-                
-                // let fileList = JSON.parse(JSON.stringify(files))
+                let thisFiles = e.target.files;                
+                // let fileList = JSON.parse(JSON.stringify(files));
                 let fileList = [...files];
                 Object.keys(thisFiles).map((eachKey) => {
                         if (thisFiles[eachKey].size / 1024 / 1024 <= allowedSingleFileSize.current)
@@ -57,7 +53,7 @@ const AddStoryFile = (props) => {
                         else Config.toast(singleFileSizeError.current, "error");
                     });
                 setFiles(fileList);
-                setFileError("")
+                setFileError("");
                 break;
             }
             default: {
@@ -73,13 +69,11 @@ const AddStoryFile = (props) => {
             let name = filesTemp[i].name;
             let lastDot = name.lastIndexOf(".");
             let fileName = name.substring(0, lastDot);
-            let ext = "." + name.substring(lastDot + 1);
-            
+            let ext = "." + name.substring(lastDot + 1);            
             if (supportFileExtensions?.find(each => each === ext?.toLowerCase()) === undefined) {
                 Config.toast(t("file_format_not_support"), 'warning');
                 return false;
             }
-
             if (filesTemp[i].name.length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
                 return
@@ -93,7 +87,7 @@ const AddStoryFile = (props) => {
         });
         setFiles(fileList);
         setShowFileUpload(false);
-        setFileError("")
+        setFileError("");
     };
 
     /* Removed dragged files */
@@ -110,7 +104,7 @@ const AddStoryFile = (props) => {
         });
         if (isFilesEmpty) filesTemp = [];
         setFiles(finalFiles);
-        inputFileUploadRef.current.value = ''
+        inputFileUploadRef.current.value = '';
     };
 
     /* Get support file types labels */
@@ -195,10 +189,7 @@ const AddStoryFile = (props) => {
                                     <div className="file-list">
                                         {Object.keys(files).map((eachKey) => {
                                             return (
-                                                <div
-                                                    key={eachKey + files[eachKey].name}
-                                                    className="file-name-list"
-                                                >
+                                                <div key={eachKey + files[eachKey].name}  className="file-name-list" >
                                                     <div className="filename" style={{ width: '90%' }}>
                                                         {
                                                             <img
@@ -208,8 +199,7 @@ const AddStoryFile = (props) => {
                                                                         .split(".")
                                                                         .pop()
                                                                 }
-                                                                alt="document"
-                                                            />
+                                                                alt="document"/>
                                                         }
                                                         <span className="filename-length">
                                                             {files[eachKey].name
@@ -229,12 +219,8 @@ const AddStoryFile = (props) => {
                                                         data-file-index={eachKey}
                                                         onClick={(e) =>
                                                             removeFile(e, eachKey)
-                                                        }
-                                                    >
-                                                        <img
-                                                            src={BlackClose}
-                                                            alt="delete"
-                                                        />
+                                                        }>
+                                                        <img src={BlackClose} alt="delete"  />
                                                     </span>
                                                 </div>
                                             );
@@ -250,4 +236,4 @@ const AddStoryFile = (props) => {
     )
 }
 
-export default AddStoryFile
+export default AddStoryFile;

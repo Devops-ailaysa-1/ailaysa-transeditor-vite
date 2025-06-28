@@ -118,6 +118,8 @@ import EmptyProjectsFolder from "../../assets/images/empty-projects-folder.svg"
 import HowToRegister from "../../assets/images/new-ui-icons/how_to_register.svg"
 import ReactRouterPrompt from 'react-router-prompt'
 import WordchoiceIcon from "../../assets/images/choicelist.svg"
+import ProgressBar from "../../project-setup-components/allTemplate-component/ProgressBar";
+import { SaveButtonLoader } from "../../loader/CommonSaveBtnLoader";
 
 function AllProjectList(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -127,15 +129,14 @@ function AllProjectList(props) {
         setTargetLanguageOptions,
         targetLanguageOptionsRef,
         mainContainerRef
-    } = props
+    } = props;
     const location = useLocation();
     const { t } = useTranslation();
     const history = useNavigate();
-    const dispatch = useDispatch()
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
-
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
+    const dispatch = useDispatch();
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
     
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -158,8 +159,7 @@ function AllProjectList(props) {
     const [subjectFieldOptions, setSubjectFieldOptions] = useState(null);
     const [contentTypeOptions, setContentTypeOptions] = useState(null);
     const [projectName, setProjectName] = useState("");
-    // const [projectObject, setProjectObject] = useState(null);
-    const [projectTypeOptions, setProjectTypeOptions] = useState([])
+    const [projectTypeOptions, setProjectTypeOptions] = useState([]);
     const [mtpeEngines, setMtpeEngines] = useState([]);
     const [mtpeEngineOptions, setMtpeEngineOptions] = useState([]);
     const [selectedMTEngine, setSelectedMTEngine] = useState({ value: 1, label: "Google" });
@@ -172,8 +172,6 @@ function AllProjectList(props) {
     const [showIndividualAssignManage, setShowIndividualAssignManage] = useState(false);
     const [showLSPAssignManage, setShowLSPAssignManage] = useState(false);
     const [assignStep, setAssignStep] = useState(null);
-
-    // const [preTranslate, setPreTranslate] = useState(false)
     const [createdProjects, setCreatedProjects] = useState([]);
     const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
@@ -264,26 +262,23 @@ function AllProjectList(props) {
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
     const [onFocusWrap, setOnFocusWrap] = useState(false)
-    const [poPDFUrl, setPoPDFUrl] = useState(null)
-    const [particularClickedTask, setParticularClickedTask] = useState(null)
-    const [stepToAccept, setStepToAccept] = useState(null)
+    const [poPDFUrl, setPoPDFUrl] = useState(null);
+    const [particularClickedTask, setParticularClickedTask] = useState(null);
+    const [stepToAccept, setStepToAccept] = useState(null);
     const searchAreaRef = useRef(null);
     const [selectFileRow, setSelectFileRow] = useState(false);
     const [availCredits, setAvailCredits] = useState(false);
-    const [projectFilterType, setprojectFilterType] = useState(null)
-    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null)
-
+    const [projectFilterType, setprojectFilterType] = useState(null);
+    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null);
     const [documentSubmitParameters, setDocumentSubmitParameters] = useState({
         taskid: null,
         step: null,
         confirm: null,
         total: null,
         isTaskReassigned: false
-    })
-    const [showSubmitDocumentAlertModal, setShowSubmitDocumentAlertModal] = useState(false)
-
+    });
+    const [showSubmitDocumentAlertModal, setShowSubmitDocumentAlertModal] = useState(false);
     const [showElement, setShowElement] = useState(true);
-
     // Glossary project states
     const [primaryGlossarySourceName, setPrimaryGlossarySourceName] = useState("");
     const [glossaryCopyrightOwner, setGlossaryCopyrightOwner] = useState("");
@@ -292,120 +287,102 @@ function AllProjectList(props) {
     const [glossaryLicense, setGlossaryLicense] = useState("");
     const [selectedUsagePermission, setSelectedUsagePermission] = useState({ value: 1, label: "Private" });
     const [glossaryProjectCreationResponse, setGlossaryProjectCreationResponse] = useState(null);
-    const [selectedGlossaryProject, setSelectedGlossaryProject] = useState(null)
-    const [orderByValue, setOrderByValue] = useState(null)
+    const [selectedGlossaryProject, setSelectedGlossaryProject] = useState(null);
+    const [orderByValue, setOrderByValue] = useState(null);
     const [sortEl, setSortEl] = useState(null);
     const [moreEl, setMoreEl] = useState(null);
     const [openEl, setOpenEl] = useState(null);
-    const [subDownloadOption, setSubDownloadOption] = useState(null)
+    const [subDownloadOption, setSubDownloadOption] = useState(null);
     const [openedMoreOption, setOpenedMoreOption] = useState(null);
     const [showOpenAs, setShowOpenAs] = useState(null);
     const [selectedValue, setSelectedValue] = useState(2);
     const sortOpen = Boolean(sortEl);
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-
-    const [showProcessingModal, setShowProcessingModal] = useState(false)
-    const [editInstantProjectModal, setEditInstantProjectModal] = useState(false)
-    const [textToSpeechConvert, setTextToSpeechConvert] = useState(false)
-    const [isTranscribing, setIsTranscribing] = useState(false)
-    const [partialPretranslate, setPartialPretranslate] = useState(false)
-    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
-    const [unassignTaskDeleteAlert, setUnassignTaskDeleteAlert] = useState(false)
-
-    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null)
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const [showProcessingModal, setShowProcessingModal] = useState(false);
+    const [editInstantProjectModal, setEditInstantProjectModal] = useState(false);
+    const [textToSpeechConvert, setTextToSpeechConvert] = useState(false);
+    const [isTranscribing, setIsTranscribing] = useState(false);
+    const [partialPretranslate, setPartialPretranslate] = useState(false);
+    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false);
+    const [unassignTaskDeleteAlert, setUnassignTaskDeleteAlert] = useState(false);
+    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
     const [taskActionOpen, setTaskActionOpen] = useState(false);
-    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null)
-
-    const [expressProjectName, setExpressProjectName] = useState('')
-
+    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null);
+    const [expressProjectName, setExpressProjectName] = useState('');
     // project analysis states
-    const [payableRatesAPI, setPayableRatesAPI] = useState(null)
-    const [payablRateValueAPI, setPayablRateValueAPI] = useState(null)
-    const [projectAnalysisedData, setProjectAnalysisedData] = useState(null)
-    const [projectAnalysisUnitSwitch, setProjectAnalysisUnitSwitch] = useState(false)
-
-
+    const [payableRatesAPI, setPayableRatesAPI] = useState(null);
+    const [payablRateValueAPI, setPayablRateValueAPI] = useState(null);
+    const [projectAnalysisedData, setProjectAnalysisedData] = useState(null);
+    const [projectAnalysisUnitSwitch, setProjectAnalysisUnitSwitch] = useState(false);
     const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
     const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState([]);
-    const [hasTeam, setHasTeam] = useState(false)
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
+    const [hasTeam, setHasTeam] = useState(false);
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
     const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
-    const [isExpressUpdating, setIsExpressUpdating] = useState(false)
-    const [showExpressDeleteModal, setShowExpressDeleteModal] = useState(false) // state to show confirmation modal for express project
-
-    const [preTranslateAllTask, setPreTranslateAllTask] = useState([])
-    const [createdProjectsList, setCreatedProjectsList] = useState([])
-
-    const [isPdfTranslating, setIsPdfTranslating] = useState(false)
-
-    const [transcriptionTaskList, setTranscriptionTaskList] = useState([])
-
-    const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([])
-
-    const [isDownloading, setIsDownloading] = useState(false)
-    const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false)
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-    const [confirmedNavigation, setConfirmedNavigation] = useState(false)
-    const [lastLocation, setLastLocation] = useState(null)
-    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false)
-
-    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false)
-    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('')
-
+    const [isExpressUpdating, setIsExpressUpdating] = useState(false);
+    const [showExpressDeleteModal, setShowExpressDeleteModal] = useState(false); // state to show confirmation modal for express project
+    const [preTranslateAllTask, setPreTranslateAllTask] = useState([]);
+    const [createdProjectsList, setCreatedProjectsList] = useState([]);
+    const [isPdfTranslating, setIsPdfTranslating] = useState(false);
+    const [transcriptionTaskList, setTranscriptionTaskList] = useState([]);
+    const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([]);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false);
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
+    const [confirmedNavigation, setConfirmedNavigation] = useState(false);
+    const [lastLocation, setLastLocation] = useState(null);
+    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false);
+    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false);
+    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('');
     // states for Open as button
     const [downloadOpen, setDownloadOpen] = useState(false);
-
     // const [anchorEl, setAnchorEl] = useState(null); // This is the common anchor element for all poppers
     const [popperAnchorEl, setPopperAnchorEl] = useState({}); // Separate anchor element for each popper
-    const [showPOFilesModal, setShowPOFilesModal] = useState(false)
-    const [POFilesDetails, setPOFilesDetails] = useState(null)
-
-    const [showPDFFileDeleteAlertModal, setShowPDFFileDeleteAlertModal] = useState(false)
-    const [fileCheckTrigger, setFileCheckTrigger] = useState(false)
-    const [selectedPdfObj, setSelectedPdfObj] = useState(null)
-    const [projectUpdateModal, setProjectUpdateModal] = useState(false)
-    const [userTranslateChoice, setUserTranslateChoice] = useState('new')
-    const [selectedProjectToUpdate, setSelectedProjectToUpdate] = useState(null)
+    const [showPOFilesModal, setShowPOFilesModal] = useState(false);
+    const [POFilesDetails, setPOFilesDetails] = useState(null);
+    const [showPDFFileDeleteAlertModal, setShowPDFFileDeleteAlertModal] = useState(false);
+    const [fileCheckTrigger, setFileCheckTrigger] = useState(false);
+    const [selectedPdfObj, setSelectedPdfObj] = useState(null);
+    const [projectUpdateModal, setProjectUpdateModal] = useState(false);
+    const [userTranslateChoice, setUserTranslateChoice] = useState('new');
+    const [selectedProjectToUpdate, setSelectedProjectToUpdate] = useState(null);
     const [showDeleteFileModal, setShowDeleteFileModal] = useState(false);
     const [selectedDocumntId, setSelectedDocumntId] = useState(null);
-
-    const [isReworkSending, setIsReworkSending] = useState(false)
-    const [showDeadlineCrossedModal, setShowDeadlineCrossedModal] = useState(false)
-    const [isDeadlineExtendReqSending, setIsDeadlineExtendReqSending] = useState(false)
-
-    const [vendorChangeRequestReason, setVendorChangeRequestReason] = useState("")
-    const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false)
-
-    const [isApproving, setIsApproving] = useState(false)
+    const [isReworkSending, setIsReworkSending] = useState(false);
+    const [showDeadlineCrossedModal, setShowDeadlineCrossedModal] = useState(false);
+    const [isDeadlineExtendReqSending, setIsDeadlineExtendReqSending] = useState(false);
+    const [vendorChangeRequestReason, setVendorChangeRequestReason] = useState("");
+    const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false);
+    const [isApproving, setIsApproving] = useState(false);
     const [orderBySelectedValue, setOrderBySelectedValue] = useState(2);
-
-
-    const [isTaskDeleting, setIsTaskDeleting] = useState(false)
-    const [isExpressProjectDeleting, setIsExpressProjectDeleting] = useState(false)
+    const [isTaskDeleting, setIsTaskDeleting] = useState(false);
+    const [isExpressProjectDeleting, setIsExpressProjectDeleting] = useState(false);
     const [isDocumentDeleting, setIsDocumentDeleting] = useState(false);
     const [isDesignDeleting, setIsDesignDeleting] = useState(false);
     const [isPDFFileDeleting, setIsPDFFileDeleting] = useState(false);
     const [axiosVendorDashboardAbortController, setAxiosVendorDashboardAbortController] = useState(null);
     const [axiosFileTranslateAbortController, setAxiosFileTranslateAbortController] = useState(null);
     const [showFileErrorModal, setShowFileErrorModal] = useState(false);
-    const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false)
-
-
-    const downloadAnchorRef = useRef(null);
-    const projectIdForPOModal = useRef(null)
-    const projectTypeForPOModal = useRef(null)
-
-    const clientResponseDataRef = useRef(null)
-
-    const deletingPDFFileIdRef = useRef(null)
-    const fileIdList = useRef([])
-    const statusCheckTimeoutRef = useRef(null)
-    const triggerTimeoutRef = useRef(null)
-    const deleteFromDocOrBlog = useRef(null);
-
+    const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false);
+    const [downloadTaskFile, setDownloadTaskTargetFile] =  useState({});
+    const progressMap = [
+        { min: 0, max: 15, message: "Reading source content" },
+        { min: 15, max: 25, message: "Deciding on style" },
+        { min: 25, max: 70, message: "Translating" },
+        { min: 70, max: 99, message: "Enhancing Translation" },
+        { min: 99, max: 100, message: "Finishing"}
+    ];
     /* State constants - end */
-
     /* Ref constants - start */
+    const downloadAnchorRef = useRef(null);
+    const projectIdForPOModal = useRef(null);
+    const projectTypeForPOModal = useRef(null);
+    const clientResponseDataRef = useRef(null);
+    const deletingPDFFileIdRef = useRef(null);
+    const fileIdList = useRef([]);
+    const statusCheckTimeoutRef = useRef(null);
+    const triggerTimeoutRef = useRef(null);
+    const deleteFromDocOrBlog = useRef(null);
     const fileUploadTop = createRef();
     const sourceLanguageLabel = createRef();
     const targetLanguageLabel = createRef();
@@ -419,14 +396,9 @@ function AllProjectList(props) {
     const deletedJobIds = useRef([]);
     const deletedSubjectIds = useRef([]);
     const deletedContentIds = useRef([]);
-    const projectTypeRef = useRef(null)
-    const assignedMemberCardRef = useRef(null)
-    const projectObject = useRef(null)
-    // const allowedFileLength = useRef(10)
-    // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`)
-    // const allowedTargetLanguageLength = useRef(20)
-    // const allowedFileSize = useRef(100) //In MB
-    // const fileSizeErrMsg = useRef(`Exceeds the file(s) size limit of ${allowedFileSize.current} MB`)
+    const projectTypeRef = useRef(null);
+    const assignedMemberCardRef = useRef(null);
+    const projectObject = useRef(null);
     const allowedSingleFileSize = useRef(100); // in MB
     const singleFileSizeError = useRef(t("file_size_exceeds"));
     const projectIdToSelect = useRef(null);
@@ -435,73 +407,56 @@ function AllProjectList(props) {
     const typing = useRef(false);
     const typingTimeout = useRef(0);
     const projectEditable = useRef(false);
-
-    const downloadref = useRef(null)
-    const downloadedFileName = useRef(null)
+    const downloadref = useRef(null);
+    const downloadedFileName = useRef(null);
     const searchTermCloseOutside = useRef();
-    const didMountRef = useRef(0)
-
-    const searchTermRef = useRef(null)
-    const openFileId = useRef(null)
-    const projectAnalysisTempProjectId = useRef(null)
-    const projectAnalysisApiCounter = useRef(0)
-    const isPdfConversionPostCalled = useRef(false)
+    const didMountRef = useRef(0);
+    const searchTermRef = useRef(null);
+    const openFileId = useRef(null);
+    const projectAnalysisTempProjectId = useRef(null);
+    const projectAnalysisApiCounter = useRef(0);
+    const isPdfConversionPostCalled = useRef(false);
     const taskActionAnchorRef = useRef(null);
-    const taskDeleteParam = useRef(null)
-    const expressProjectIdRef = useRef(null)
-    const targetLangDivRef = useRef(null)
-    const isProjectPreTranslate = useRef(false)
-    const createdProjectsRef = useRef([])
-    const selectedProjectFilesRef = useRef([])
-    const myTimeoutFunc = useRef(null)
-    const selectedProjectIdRef = useRef(null)
-    const selectedDesignerProject = useRef(null)
-
-    const isProjectTransciptionRef = useRef(false)
-
-    const analysisRunningProjectListRef = useRef(null)
-    const wordCountAnalysisTimeoutRef = useRef(null)
-    const wordCountAnalysisTriggerRef = useRef(false)
-
-    const mtRawDownloadRetryLimit = useRef(2)
-    const mtRawDownloadRetryCounter = useRef(0)
-
-    const downloadingFilesList = useRef([])
-
-    const mtRawCeleryTimeOutRef = useRef(null)
-
-    const downloadDiffFilesParamRef = useRef(null)
-    const docCreditCheckAlertRef = useRef(null)
-
+    const taskDeleteParam = useRef(null);
+    const expressProjectIdRef = useRef(null);
+    const targetLangDivRef = useRef(null);
+    const isProjectPreTranslate = useRef(false);
+    const createdProjectsRef = useRef([]);
+    const selectedProjectFilesRef = useRef([]);
+    const myTimeoutFunc = useRef(null);
+    const selectedProjectIdRef = useRef(null);
+    const selectedDesignerProject = useRef(null);
+    const isProjectTransciptionRef = useRef(false);
+    const analysisRunningProjectListRef = useRef(null);
+    const wordCountAnalysisTimeoutRef = useRef(null);
+    const wordCountAnalysisTriggerRef = useRef(false);
+    const mtRawDownloadRetryLimit = useRef(2);
+    const mtRawDownloadRetryCounter = useRef(0);
+    const downloadingFilesList = useRef([]);
+    const mtRawCeleryTimeOutRef = useRef(null);
+    const downloadDiffFilesParamRef = useRef(null);
+    const docCreditCheckAlertRef = useRef(null);
     // userefs for collaborate section (assign & manage)
-    const selectedFileRow = useRef(null)
-
-    const stepOptionsRef = useRef(null)
-    const isTaskReassigned = useRef(false)
-
-    const taskDetailsForDeadlineCrossedTask = useRef(null)
-
-
-    const lspViewPoButtonDiplayed = useRef(false)
-    
-    const fileTranslatingTaskListRef = useRef([])
+    const selectedFileRow = useRef(null);
+    const stepOptionsRef = useRef(null);
+    const isTaskReassigned = useRef(false);
+    const taskDetailsForDeadlineCrossedTask = useRef(null);
+    const lspViewPoButtonDiplayed = useRef(false);
+    const fileTranslatingTaskListRef = useRef([]);
     const allDownloadedFilesArrRef = useRef([]);
     const bookCreationRef = useRef(null);
-
-    let paginationTimeOut = null
-
     /* Ref constants - end */
 
+    let paginationTimeOut = null
     var id = window.setTimeout(function () { }, 0);
 
     useEffect(() => {
         if(window.innerWidth === 991){
-            setIsMobileWidth(true)
+            setIsMobileWidth(true);
         }else{
-            setIsMobileWidth(false)
+            setIsMobileWidth(false);
         }
     }, [window.innerWidth])
-
 
     const open = Boolean(anchorEl); //Assigned task open
 
@@ -595,7 +550,6 @@ function AllProjectList(props) {
         let timeOut = setTimeout(function () {
             setShowElement(false);
         }, 10000);
-
         return () => {
             clearTimeout(timeOut)    
         }
@@ -607,9 +561,7 @@ function AllProjectList(props) {
                 setFileListSearchEnlarge(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -621,9 +573,7 @@ function AllProjectList(props) {
                 setFileListSearchEnlarge(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -635,7 +585,6 @@ function AllProjectList(props) {
         // set browser tab title as "Projects"
     }, []);
 
-
     /* Check for clicing outside of the dropdown */
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -643,9 +592,7 @@ function AllProjectList(props) {
                 setMoreEl(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -658,9 +605,7 @@ function AllProjectList(props) {
                 setOpenEl(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -673,9 +618,7 @@ function AllProjectList(props) {
                 setShowAssignMemberInfobox(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -691,7 +634,6 @@ function AllProjectList(props) {
 
     const handleIndividualTaskAssignManage = (e, selectedStep, task, project) => {
         e.stopPropagation();
-        // console.log(task);
         selectedFileRow.current = {
             task: task.id,
             job: task.job,
@@ -702,27 +644,24 @@ function AllProjectList(props) {
             bid_info: task.bid_job_detail_info,
             task_data: task,
             project_data: project
-        }
-
-        setAssignStep(selectedStep)
-        setShowIndividualAssignManage(true)
+        };
+        setAssignStep(selectedStep);
+        setShowIndividualAssignManage(true);
     }
 
     const handleShowLSPAssignManage = (e, project) => {
         e.stopPropagation();
-        // console.log(assign_enable)
         selectedFileRow.current = {
             project: project?.id,
             steps: project?.steps,
             assign_enable: project?.assign_enable,
             project_data: project
-        }
-        setShowLSPAssignManage(true)
+        };
+        setShowLSPAssignManage(true);
     }
 
     /* Edit task assignment by id */
     const editAssignedTask = (e, project, task, jobId, stepId) => {
-        // console.log(taskId)
         // e.stopPropagation()
         selectedFileRow.current = {
             task: task.id,
@@ -731,9 +670,9 @@ function AllProjectList(props) {
             assign_enable: project?.assign_enable,
             task_data: task,
             project_data: project
-        }
-        setAssignStep(stepId)
-        setShowIndividualAssignManage(true)
+        };
+        setAssignStep(stepId);
+        setShowIndividualAssignManage(true);
         setAssignedTaskId(task.id);
     };
 
@@ -744,29 +683,29 @@ function AllProjectList(props) {
     const handleShowAssignMemberInfo = (e, id) => {
         e.stopPropagation();
         setShowAssignMemberInfobox(true);
-        setAssignSelectedProject(id)
+        setAssignSelectedProject(id);
     };
 
     const handleMoreVertOption = (e, id) => {
         e.stopPropagation();
-        setOpenedMoreOption(id)
+        setOpenedMoreOption(id);
         setMoreEl(true);
     };
 
     const handleOpenAsOption = (e, id) => {
         e.stopPropagation();
         setOpenEl(true);
-        setShowOpenAs(id)
+        setShowOpenAs(id);
     };
 
     const handleSubDownloadOption = (e, id) => {
         e.stopPropagation();
-        setSubDownloadOption(true)
+        setSubDownloadOption(true);
     }
 
     const handleSubDownloadOptioHide = (e, id) => {
         e.stopPropagation();
-        setSubDownloadOption(false)
+        setSubDownloadOption(false);
     }
 
     const moreOptions = [
@@ -826,9 +765,6 @@ function AllProjectList(props) {
         }
     ]
 
- 
- 
-
     const subDownloadOptions = [
         {
             id: 1,
@@ -860,11 +796,11 @@ function AllProjectList(props) {
             value: 'XLIFF',
             label: "XLIFF",
         },
-    ]
+    ];
 
     const handleSelectedOrderItem = (selected_option) => {
-        setOrderBySelectedValue(selected_option)
-        orderBy(selected_option.value)
+        setOrderBySelectedValue(selected_option);
+        orderBy(selected_option.value);
         setSortEl(null);
     };
 
@@ -872,35 +808,28 @@ function AllProjectList(props) {
         setSortEl(null);
     };
 
-
     const openAddOn = () => {
-        window.open(Config.USER_PORTAL_HOST + "/add-ons")
-        setAvailCredits(false)
+        window.open(Config.USER_PORTAL_HOST + "/add-ons");
+        setAvailCredits(false);
     }
 
     const openSubcription = () => {
-        window.open(Config.USER_PORTAL_HOST + "/subscription-plans")
-        setAvailCredits(false)
+        window.open(Config.USER_PORTAL_HOST + "/subscription-plans");
+        setAvailCredits(false);
     }
-
 
     const hideSettingsModal = () => {
         setshowSettings(false);
         document.querySelector('.padding-correction').style.overflow = 'unset';
-
     }
-
     const hideAssignManageModal = () => setShowAssignManageModal(false);
-
     const hideVersionControlModal = () => setShowVersionControlModal(false);
-
     const modaloptions = {
         closeMaskOnClick: false,
         width: showTaskDeleteAlert ? 520 : null,
         height: showTaskDeleteAlert ? 240 : null,
         onClose: console.log(),
     };
-
     const customProjectTypeSelectStyles = {
         placeholder: (provided, state) => ({
             ...provided,
@@ -969,19 +898,19 @@ function AllProjectList(props) {
         { value: 'text_to_speech', label: "AI voice projects" },
         { value: 'express', label: "Instant translation projects" },
         { value: 'assigned', label: "Assigned projects" },
-    ]
+    ];
 
     const orderByOptions = [
         { value: 'pdf_file_name', label: 'A-Z' },
         { value: '-pdf_file_name', label: 'Z-A' },
         { value: '-id', label: t("most_recent") },
         { value: 'id', label: t("least_recent") },
-    ]
+    ];
 
     const openAsOption = [
         { value: 'editor', label: 'Editor' },
         { value: 'reviewer', label: 'Reviewer' }
-    ]
+    ];
 
     // const handleSelectOrderBy = (selected) => {
     //     orderBy(selected)
@@ -989,15 +918,13 @@ function AllProjectList(props) {
 
     /* Set order by value and redirect */
     const orderBy = (orderFieldTemp) => {
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        let page = 1
-        let url = ''
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        let page = 1;
+        let url = '';
         if (activeProjTab === 7) {
             url = `/toolkit?page=${page}`;
         }
-
         if (orderFieldTemp != null) url += `&order_by=${orderFieldTemp}`;
-
         let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
         if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
         let filter = URL_SEARCH_PARAMS.get("filter");
@@ -1023,27 +950,24 @@ function AllProjectList(props) {
                 setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription);
                 setAddonCredit(response?.data?.credits_left?.addon);
                 setSubscriptionCredit(response?.data?.credits_left?.subscription);
-                // console.log(response?.data?.credits_left?.total_buyed)
-                // console.log(progressPercentage)
                 if (response?.data?.credits_left?.total_buyed === 0) {
-                    setProgressPercentage(0)
+                    setProgressPercentage(0);
                 } else {
                     setProgressPercentage(
                         (((response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription) / response?.data?.credits_left?.total_buyed) * 100).toFixed(2)
-                    )
+                    );
                 }
 
             },
         });
     };
 
-
     const getSteps = () => {
         Config.axios({
             url: `${Config.BASE_URL}/workspace/steps/`,
             auth: true,
             success: (response) => {
-                stepOptionsRef.current = response.data
+                stepOptionsRef.current = response.data;
                 // setStep(response.data);
             },
         });
@@ -1076,18 +1000,17 @@ function AllProjectList(props) {
     };
 
     const showSettingsModal = (e, project_id) => {
-        e.stopPropagation()
+        e.stopPropagation();
         setSelectedProjectId(project_id);
         setshowSettings(true);
         // document.querySelector('.padding-correction').style.overflow = 'hidden';
     }
 
-
     /* 
         - Get the analysis data if it's not counted already
     */
     const showWordCountModal = (e = null, projectId = 0, isProjectAnalyzed = true) => {
-        e.stopPropagation()
+        e.stopPropagation();
         if (projectId && !isProjectAnalyzed) {
             setShowWordCountLoader(true);
 
@@ -1110,7 +1033,6 @@ function AllProjectList(props) {
     };
 
     const hideWordCountModal = () => setshowWordCount(false);
-
 
     /* Set tab change if clicked only other tabs */
     const activeToggle = (tab) => {
@@ -1198,8 +1120,6 @@ function AllProjectList(props) {
         return true
     } */
 
-
-
     /* Switch to file upload view */
     const switchFileUpload = (e, value) => {
         setShowFileUpload(value);
@@ -1267,7 +1187,7 @@ function AllProjectList(props) {
     const handleTargetLangClick = (value, e) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
-            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected");
             targetLanguageTemp = Config.removeItemFromArray(
                 targetLanguageTemp,
                 value
@@ -1277,8 +1197,8 @@ function AllProjectList(props) {
             targetLanguageTemp.push(value);
         }
         setTargetLanguage([...new Set(targetLanguageTemp)]);
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
 
     };
 
@@ -1294,7 +1214,7 @@ function AllProjectList(props) {
                 list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
                     }`;
             });
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
     }, [targetLanguage, targetLanguageOptionsRef.current])
 
@@ -1310,23 +1230,22 @@ function AllProjectList(props) {
                 });
             }
         });
-        // console.log(a)
         let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
         setTargetLangListToRemove(targetLangToRemove);
     }, [targetLanguage]);
 
     const handleCloseSearchBox = () => {
         setProjectSearchTerm("");
-        projectSearchFunctionality('clear-search')
+        projectSearchFunctionality('clear-search');
         setFileListSearchEnlarge(false);
-        setIsSearchTermDelete(true)
+        setIsSearchTermDelete(true);
     }
 
     useEffect(() => {
         if (projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
-            projectSearchFunctionality('clear-search')
+            projectSearchFunctionality('clear-search');
         }else if(projectSearchTerm == "" && searchTermRef.current !== "" && searchTermRef.current !== null){
-            projectSearchFunctionality('clear-search')
+            projectSearchFunctionality('clear-search');
         }
     }, [projectSearchTerm])
 
@@ -1341,7 +1260,6 @@ function AllProjectList(props) {
     /* Show the pagination content a the bottom */
     useEffect(() => {
         if (didMount) paginationContentFunction(currentPage);
-
         return () => {
             if(paginationTimeOut) clearTimeout(paginationTimeOut);
         }
@@ -1349,23 +1267,22 @@ function AllProjectList(props) {
 
     const SearchTermFilterEnter = (e) => {
         if (e.which === 13 && projectSearchTerm == "") {
-            setFileListSearchEnlarge(false)
-            e.target.blur()
+            setFileListSearchEnlarge(false);
+            e.target.blur();
         } else if (e.which === 13) {
-            projectSearchFunctionality()
-            setFileListSearchEnlarge(false)
-            searchTermRef.current = projectSearchTerm
-            e.target.blur()
+            projectSearchFunctionality();
+            setFileListSearchEnlarge(false);
+            searchTermRef.current = projectSearchTerm;
+            e.target.blur();
         }
     }
 
     const handleSearchDropDownClick = (e) => {
-        projectSearchFunctionality()
+        projectSearchFunctionality();
     }
 
     const projectSearchFunctionality = (param) => {
-
-        let url = ''
+        let url = '';
         if (activeProjTab === 1) {
             url = `/file-upload?page=1`;
         } else if (activeProjTab === 7) {
@@ -1374,7 +1291,7 @@ function AllProjectList(props) {
         if (param !== 'clear-search') {
             if (projectSearchTerm != null) url += `&search=${projectSearchTerm}`;
         }else if(param === 'clear-search'){
-            setIsSearchTermDelete(true)
+            setIsSearchTermDelete(true);
         }
         history(url);
     }
@@ -1382,97 +1299,91 @@ function AllProjectList(props) {
     /* Go to the top of the page when move to another pages */
     useEffect(() => {
         const controller = new AbortController();
-        let pageParam = URL_SEARCH_PARAMS.get("page")
+        let pageParam = URL_SEARCH_PARAMS.get("page");
         if (pageParam !== null && pageParam !== undefined) {
-            
-
             if (activeProjTab === 1) {
-                listAllProjects(controller)
+                listAllProjects(controller);
             } else {
-                listToolkitProjects(controller)
+                listToolkitProjects(controller);
             }
         }
-        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
+        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
         // Clean-up:
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("page"), activeProjTab]);
 
     /* Go to the top of the page when ordering */
     useEffect(() => {
         const controller = new AbortController();
-        let order = URL_SEARCH_PARAMS.get("order_by")
+        let order = URL_SEARCH_PARAMS.get("order_by");
         if (order !== null && order !== undefined) {
-            setSelectedValue(orderByOptions?.find(each => each?.value == order)?.value)
+            setSelectedValue(orderByOptions?.find(each => each?.value == order)?.value);
             if (activeProjTab === 7) {
                 listToolkitProjects(controller);
             }
         }
         // Clean-up:
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("order_by"), activeProjTab]);
 
     useEffect(() => {
         const controller = new AbortController();
-        let searchParam = URL_SEARCH_PARAMS.get("search")
+        let searchParam = URL_SEARCH_PARAMS.get("search");
         if (searchParam !== null && searchParam !== undefined) {
-            setProjectSearchTerm(searchParam)
+            setProjectSearchTerm(searchParam);
             if (activeProjTab === 1) {
-                listAllProjects(controller)
+                listAllProjects(controller);
             } else {
-                listToolkitProjects(controller)
+                listToolkitProjects(controller);
             }
         } else if (isSearchTermDelete) {
             if (activeProjTab === 1) {
-                listAllProjects(controller)
+                listAllProjects(controller);
             } else {
-                listToolkitProjects(controller)
+                listToolkitProjects(controller);
             }
         }
-
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        clearTimeout(myTimeoutFunc.current)
-        clearTimeout(statusCheckTimeoutRef.current)
-        clearTimeout(triggerTimeoutRef.current)
-
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        clearTimeout(myTimeoutFunc.current);
+        clearTimeout(statusCheckTimeoutRef.current);
+        clearTimeout(triggerTimeoutRef.current);
         // Clean-up:
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("search"), activeProjTab, isSearchTermDelete]);
 
     useEffect(() => {
-        let proceedAssignParam = URL_SEARCH_PARAMS.get("proceed-assgin")
-        let projectIdParam = URL_SEARCH_PARAMS.get("project")
+        let proceedAssignParam = URL_SEARCH_PARAMS.get("proceed-assgin");
+        let projectIdParam = URL_SEARCH_PARAMS.get("project");
         if (proceedAssignParam !== null && proceedAssignParam !== undefined && projectIdParam && createdProjectsList?.length !== 0) {
-            let assignIcon = document.querySelector(`#project-assigni-icon-${projectIdParam}`)
-            // console.log(assignIcon);
-            assignIcon?.click()
-
+            let assignIcon = document.querySelector(`#project-assigni-icon-${projectIdParam}`);
+            assignIcon?.click();
         }
     }, [URL_SEARCH_PARAMS.get("proceed-assgin"), createdProjectsList]);
 
     // automatically open accordian based on the project ID  
     useEffect(() => {
-        let id = URL_SEARCH_PARAMS.get("open-project")
+        let id = URL_SEARCH_PARAMS.get("open-project");
         if (id !== null && createdProjectsList?.length !== 0) {
             if(!createdProjectsList?.find(each => each?.id == id)) return;
-            let selectedRow = document.querySelector(`div[data-key='${id}']`)
+            let selectedRow = document.querySelector(`div[data-key='${id}']`);
             selectedRow?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'center',
             });
-            setSelectFileRow(true)
-            selectProjectById(id)
+            setSelectFileRow(true);
+            selectProjectById(id);
         }
     }, [createdProjectsList, URL_SEARCH_PARAMS.get("open-project")]);
 
     useEffect(() => {
       if(!showDeleteFileModal){
-        setIsDocumentDeleting(false)
+        setIsDocumentDeleting(false);
       }
     }, [showDeleteFileModal])
     
@@ -1486,18 +1397,17 @@ function AllProjectList(props) {
 
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        clearTimeout(myTimeoutFunc.current)
-        clearTimeout(statusCheckTimeoutRef.current)
-        clearTimeout(triggerTimeoutRef.current)
-        let url = ''
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        clearTimeout(myTimeoutFunc.current);
+        clearTimeout(statusCheckTimeoutRef.current);
+        clearTimeout(triggerTimeoutRef.current);
+        let url = '';
         if (activeProjTab === 1) {
             url = `/file-upload?page=${page}`;
         } else {
-            url = `/toolkit?page=${page}`
+            url = `/toolkit?page=${page}`;
         }
-
-        let queryParam = new URLSearchParams(window.location.search)
+        let queryParam = new URLSearchParams(window.location.search);
         let projectIdParam = queryParam.get("open-project");
         if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
         let searchParam = queryParam.get("search");
@@ -1506,11 +1416,9 @@ function AllProjectList(props) {
     };
 
     const listAllProjects = (controller) => {
-
         setFileListSearchEnlarge(false);
         setShowListingLoader(true);
-        setCreatedProjects([])
-
+        setCreatedProjects([]);
         let page = 1;
         let pageParam = URL_SEARCH_PARAMS.get("page");
         if (pageParam != null) {
@@ -1518,9 +1426,7 @@ function AllProjectList(props) {
             page = pageParam;
         } else setCurrentPage(pageParam);
         let searchParam = URL_SEARCH_PARAMS.get("search");
-
-        let url = `${Config.BASE_URL}/workspace/all_proj_lists/?page=${page}`
-
+        let url = `${Config.BASE_URL}/workspace/all_proj_lists/?page=${page}`;
         if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
 
         Config.axios({
@@ -1530,8 +1436,8 @@ function AllProjectList(props) {
             timeout: 1000 * 15, // Wait for 15 seconds
             success: (response) => {
                 setCreatedProjects(response.data.results);
-                setCreatedProjectsList(response.data.results)
-                createdProjectsRef.current = response.data.results
+                setCreatedProjectsList(response.data.results);
+                createdProjectsRef.current = response.data.results;
                 setShowListingLoader(false);
                 if (response.data.results.length === 0) {
                     setEmptyProjects(true);
@@ -1541,8 +1447,8 @@ function AllProjectList(props) {
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
                 if (response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))?.length !== 0) {
-                    setAnalysisRunningProjectList(response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id')))
-                    analysisRunningProjectListRef.current = response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))
+                    setAnalysisRunningProjectList(response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id')));
+                    analysisRunningProjectListRef.current = response.data.results?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'));
                 }
             },
             error: (err) => { Config.log(err); }
@@ -1552,8 +1458,7 @@ function AllProjectList(props) {
     const listToolkitProjects = (controller) => {
         setFileListSearchEnlarge(false);
         setShowListingLoader(true);
-        setCreatedProjects([])
-
+        setCreatedProjects([]);
         let page = 1;
         let pageParam = URL_SEARCH_PARAMS.get("page");
         if (pageParam != null) {
@@ -1562,11 +1467,10 @@ function AllProjectList(props) {
         } else setCurrentPage(pageParam);
         let searchParam = URL_SEARCH_PARAMS.get("search");
         let orderParam = URL_SEARCH_PARAMS.get("order_by");
-
         // let url = `${Config.BASE_URL}/workspace/toolkit_lists/?page=${page}${orderParam != null ? `&ordering=${orderParam}` : ''}`
         let url = `${Config.BASE_URL}/exportpdf/convertpdftodocx?page=${page}`;
         if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
-        if(orderParam) url += `&ordering=${orderParam}`
+        if(orderParam) url += `&ordering=${orderParam}`;
 
         Config.axios({
             url: url,
@@ -1574,8 +1478,8 @@ function AllProjectList(props) {
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
                 setCreatedProjects(response.data.results);
-                setCreatedProjectsList(response.data.results)
-                createdProjectsRef.current = response.data.results
+                setCreatedProjectsList(response.data.results);
+                createdProjectsRef.current = response.data.results;
                 setShowListingLoader(false);
                 if (response.data.results.length == 0) setEmptyProjects(true);
                 else setEmptyProjects(false);
@@ -1593,10 +1497,8 @@ function AllProjectList(props) {
     // need to put in useeffect instead of a function because new need to clear the timeout when the component is unmounted (so, we clear the settimout in return of useeffect)
     // otherwise if written as function the settimout will be called in every component until the page is reloaded
     useEffect(() => {
-        // console.log(analysisRunningProjectList);
         if (analysisRunningProjectList?.length !== 0) {
             let list = "";
-            // console.log(analysisRunningProjectListRef.current)
             analysisRunningProjectList?.map((each, index) => {
                 if (each?.id !== null || each?.proj) {
                     list += `project_id=${each.id ? each.id : each?.proj}${index !== analysisRunningProjectList?.length - 1 ? "&" : ""
@@ -1608,17 +1510,12 @@ function AllProjectList(props) {
                 url: `${Config.BASE_URL}/workspace/project/word_char/count?${list}`,
                 auth: true,
                 success: (response) => {
-                    let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'))
-                    let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'))
-                    // console.log(analysisRunningProjectListRef.current)
+                    let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'));
+                    let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'));
                     // if(finishedProj?.length !== 0){
-                    //     // console.log(finishedProj)
                     //     finishedProj?.map(each => {
-
                     //     })
                     // }
-                    // console.log(runningProj)
-
                     if (runningProj?.length !== 0) {
                         const newArr = createdProjectsRef.current?.map(obj => {
                             if (obj.id === response.data?.out?.find(each => each.proj === obj.id)?.proj) {
@@ -1629,10 +1526,8 @@ function AllProjectList(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr);
-                        setCreatedProjects(newArr)
+                        setCreatedProjects(newArr);
                         wordCountAnalysisTimeoutRef.current = setTimeout(() => {
-                            // console.log(runningProj)
                             setAnalysisRunningProjectList(runningProj)
                             analysisRunningProjectListRef.current = runningProj
                             wordCountAnalysisTriggerRef.current = !wordCountAnalysisTriggerRef.current
@@ -1648,40 +1543,34 @@ function AllProjectList(props) {
                             }
                             return obj;
                         });
-                        
                         // update the new task word count in the task list 
                         if(openedProjectId){
                             try{
-                                let projTaskWordData = response.data?.out?.find(each => each.proj == openedProjectId)?.task_words
+                                let projTaskWordData = response.data?.out?.find(each => each.proj == openedProjectId)?.task_words;
                                 let newArr = selectedProjectFiles.map(obj => {
                                     if(projTaskWordData.find(each => each[obj.id])){
                                         return {
                                             ...obj,
                                             task_word_count: projTaskWordData.find(each => each[obj.id])[obj.id]
-                                        }
+                                        };
                                     }
-                                    return obj
+                                    return obj;
                                 })
-                                console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                             }catch(e) {
-                                console.log(e)
+                                console.error(e);
                             }
                         }
-
-                        setCreatedProjects(newArr)
+                        setCreatedProjects(newArr);
                     }
                 },
-                error: (err) => {
-
-                }
+                error: (err) => {}
             });
         }
         return () => {
-            clearTimeout(wordCountAnalysisTimeoutRef.current)
+            clearTimeout(wordCountAnalysisTimeoutRef.current);
         }
     }, [analysisRunningProjectList])
-
 
     /* Reset the project creation form */
     const resetForm = () => {
@@ -1712,20 +1601,18 @@ function AllProjectList(props) {
         }
     };
 
-
-
     /* Select a particular project by id */
     const selectProjectById = (projectId, shouldListFiles) => {
         if (shouldListFiles !== "dont-open") setOpenedProjectId(projectId);
         setSelectedProjectId(projectId);
         listFiles(projectId);
-        selectedProjectIdRef.current = projectId
-        setTranscriptionTaskList([])
-        setPreTranslateAllTask([])
+        selectedProjectIdRef.current = projectId;
+        setTranscriptionTaskList([]);
+        setPreTranslateAllTask([]);
         // while (id--) {
         //     window.clearTimeout(id); // will do nothing if no timeout with id is present
         // } 
-        clearTimeout(myTimeoutFunc.current)
+        clearTimeout(myTimeoutFunc.current);
         let createdProject = createdProjects.find((element) => element.id == projectId);
         if (createdProject?.project_name != null) setSelectedProjectName(createdProject.project_name);
         if (createdProject?.project_analysis != null) {
@@ -1737,7 +1624,7 @@ function AllProjectList(props) {
     };
 
     const handleAnalysisCollapse = (index) => {
-        let collapseByIndex = [...showAnalysisCollapse]
+        let collapseByIndex = [...showAnalysisCollapse];
         collapseByIndex[index] = !collapseByIndex[index];
         setShowAnalysisCollapse(collapseByIndex);
     }
@@ -1745,27 +1632,24 @@ function AllProjectList(props) {
     /* Collapse the project selection */
     const selectProject = (e, projectId, project) => {
         let shouldListFiles = e.target.getAttribute("should-open-files");
-
         if (hasParentThisClass(e?.target, "selected-file-row") || hasParentThisClass(e?.target, "dont-open-files")) return;
         setSelectedProjectFiles([]);
-        projectObject.current = project
-        // console.log(openedProjectId)
+        projectObject.current = project;
         if (projectId == openedProjectId) {
             setOpenedProjectId(null);
+            selectedProjectIdRef.current = null;
         } else {
-            setSelectFileRow(true)
+            setSelectFileRow(true);
             selectProjectById(projectId, shouldListFiles);
         }
     };
 
     /* List files for specific project */
     const listFiles = (projectId) => {
-
         // it will abort/cancel the ongoing api request
         if (axiosVendorDashboardAbortController) {
-            axiosVendorDashboardAbortController.abort()
+            axiosVendorDashboardAbortController.abort();
         }
-    
         const controller = new AbortController();
         setAxiosVendorDashboardAbortController(controller);
 
@@ -1775,20 +1659,13 @@ function AllProjectList(props) {
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
                 // let responseTemp = response.data;
-                setPreTranslateAllTask([])
-                selectedProjectFilesRef.current = response.data
-
-                // console.log(createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail);
+                setPreTranslateAllTask([]);
+                selectedProjectFilesRef.current = response.data;
                 // getVoiceTranscribeTaskStatus(projectId)
-
-                isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate
-                // console.log(isProjectPreTranslate.current);
-                // console.log(isProjectTransciptionRef.current);
-
+                isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate;
                 if (createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail != null) {
-                    isProjectTransciptionRef.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail.project_type_sub_category == 1
+                    isProjectTransciptionRef.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail.project_type_sub_category == 1;
                 }
-
                 if (isProjectPreTranslate.current || isProjectTransciptionRef.current) {
                     // for transcription projects
                     if (isProjectTransciptionRef.current) {
@@ -1805,28 +1682,22 @@ function AllProjectList(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
-                                let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True')
+                                setSelectedProjectFiles(newArr);
+                                let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True');
                                 if (voiceStatusResponse.data.res?.length !== canOpenFiles?.length) {
-                                    setTranscriptionTaskList(voiceStatusResponse.data.res)
+                                    setTranscriptionTaskList(voiceStatusResponse.data.res);
                                 }
                             },
-                            error: (err) => {
-
-                            }
+                            error: (err) => { }
                         });
                     }
-
                     // for pre-translate projects
-
                     if (isProjectPreTranslate.current) {
                         Config.axios({
                             url: `${Config.BASE_URL}/workspace/task_status/?project=${selectedProjectIdRef.current}`,
                             auth: true,
                             success: (statusResponse) => {
                                 const newArr = response.data?.map(obj => {
-                                    // console.log(statusResponse.data.res?.find(each => each.task === obj.id)?.task)
                                     if (obj.id === statusResponse.data.res?.find(each => each.task === obj.id)?.task) {
                                         return {
                                             ...obj,
@@ -1840,34 +1711,34 @@ function AllProjectList(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
-                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
+                                setSelectedProjectFiles(newArr);
+                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True');
                                 if (statusResponse.data.res?.length !== canOpenFiles?.length) {
-                                    setPreTranslateAllTask(statusResponse.data.res)
+                                    setPreTranslateAllTask(statusResponse.data.res);
                                 }
                             },
-                            error: (err) => {
-
-                            }
+                            error: (err) => {  }
                         });
                     }
                 }
                 else {
                     setSelectedProjectFiles(response.data);
                     setSelectedProjectAnalysis(createdProjects.find((element) => element.id == projectId)?.project_analysis);
+                    if (response.data != null && response.data.length > 0) {
+                        response.data.map(task => {
+                            if (task.adaptive_file_translate_status === 'ONGOING')
+                                getTaskTranslationProgress('', task.id, projectId);
+                        })
+                    }
                 }
             },
         });
 
     };
 
-
-
     useEffect(() => {
         if (transcriptionTaskList?.length !== 0) {
-            let canOpenFiles = transcriptionTaskList?.filter(each => each.open == 'True')
-            // console.log(canOpenFiles)
+            let canOpenFiles = transcriptionTaskList?.filter(each => each.open == 'True');
             if (transcriptionTaskList?.length !== canOpenFiles?.length) {   // if any one of the task is not 
                 myTimeoutFunc.current = setTimeout(() => {
                     Config.axios({
@@ -1885,18 +1756,14 @@ function AllProjectList(props) {
                                             //     total_segments: response.data.res?.find(each => each.task === obj.id)?.open === 'True' ? response.data.res?.find(each => each.task === obj.id)?.progress?.total_segments : 0
                                             // }
                                         };
-
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                             })
-                            setTranscriptionTaskList(response.data.res)
+                            setTranscriptionTaskList(response.data.res);
                         },
-                        error: (err) => {
-
-                        }
+                        error: (err) => { }
                     });
                 }, 3000);
             } else {
@@ -1906,17 +1773,14 @@ function AllProjectList(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr);
-                setSelectedProjectFiles(newArr)
+                setSelectedProjectFiles(newArr);
             }
         }
     }, [transcriptionTaskList])
 
-
     useEffect(() => {
         if (preTranslateAllTask?.length !== 0) {
-            let canOpenFiles = preTranslateAllTask?.filter(each => each.open == 'True')
-            // console.log(canOpenFiles)
+            let canOpenFiles = preTranslateAllTask?.filter(each => each.open == 'True');
             if (preTranslateAllTask?.length !== canOpenFiles?.length) {   // if any one of the task is not 
                 myTimeoutFunc.current = setTimeout(() => {
                     Config.axios({
@@ -1935,18 +1799,14 @@ function AllProjectList(props) {
                                                 total_segments: response.data.res?.find(each => each.task === obj.id)?.open === 'True' ? response.data.res?.find(each => each.task === obj.id)?.progress?.total_segments : 0
                                             }
                                         };
-
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
+                                setSelectedProjectFiles(newArr);
                             })
-                            setPreTranslateAllTask(response.data.res)
+                            setPreTranslateAllTask(response.data.res);
                         },
-                        error: (err) => {
-
-                        }
+                        error: (err) => { }
                     });
                 }, 3000);
             } else {
@@ -1956,11 +1816,14 @@ function AllProjectList(props) {
                     }
                     return obj;
                 });
-                setSelectedProjectFiles(newArr)
+                setSelectedProjectFiles(newArr);
             }
         }
     }, [preTranslateAllTask])
 
+    const filter_isadaptive = createdProjectsList?.find(
+        (dat) => String(dat?.id) === String(openedProjectId)
+    );
 
     const openFile = (e, key = null, id = null, url = "", isFirstOpen, openIn, fileName, project_id, projectType, from, downloadType, taskFileName, open_as,selectedProjectFile,project) => {
         let prevPageInfo = {
@@ -1970,20 +1833,19 @@ function AllProjectList(props) {
             search: URL_SEARCH_PARAMS.get("search"),
             projectId: project_id,
             fromProjectList: true
-        }
+        };
         if(openIn === "Designer"){
             // writer the designer open logic here
-            // console.log('open designer')
             const index = selectedProjectFilesRef?.current.findIndex(obj => obj?.design_project?.desg_job === selectedProjectFile?.design_project?.desg_job);
-            let subUrl = project?.designer_project_detail?.type == 'image_design' ? `&view=2` : `&code=${selectedProjectFile?.target_language}&view=2`
-            let url = `/workspace/${project?.designer_project_detail?.type == 'image_design' ? 'design' : 'image-translate'}/?project=${selectedProjectFile?.design_project?.desg_project}&page=${1}&lang=${index}`
-            window.open(Config. DESIGNER_HOST+ url + subUrl)
+            let subUrl = project?.designer_project_detail?.type == 'image_design' ? `&view=2` : `&code=${selectedProjectFile?.target_language}&view=2`;
+            let url = `/workspace/${project?.designer_project_detail?.type == 'image_design' ? 'design' : 'image-translate'}/?project=${selectedProjectFile?.design_project?.desg_project}&page=${1}&lang=${index}`;
+            window.open(Config. DESIGNER_HOST+ url + subUrl);
             // window.location.href = Config. DESIGNER_HOST+ url + subUrl
 
         }else if (openIn === "ExpressEditor") {
-            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, {state: { filename: fileName }})
+            history(`/create/translate/text/instant-text/?project=${project_id}&task=${id}`, {state: { filename: fileName }});
         } else {
-            if (from !== 'task-download') {
+            if (from !== 'taskdownload-') {
                 setClickedOpenButton(key);
             }
             if (url != null) {
@@ -1993,13 +1855,13 @@ function AllProjectList(props) {
                     success: (response) => {
                         setClickedOpenButton(null);
                         if (response?.data?.msg === undefined) {
-                            docCreditCheckAlertRef.current = response.data.doc_credit_check_open_alert
+                            docCreditCheckAlertRef.current = response.data.doc_credit_check_open_alert;
                             if (from === 'task-download') {
-                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName)
+                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName);
                             } else {
                                 setTimeout(() => {
                                     // window.location.href = 'workspace/' + response.data.document_id
-                                    let lastPageAvailable = localStorage.getItem(response.data.document_id)
+                                    let lastPageAvailable = localStorage.getItem(response.data.document_id);
                                     if (lastPageAvailable) {
                                         history(lastPageAvailable, {state: {
                                             prevPath: location.pathname + location.search,
@@ -2008,18 +1870,19 @@ function AllProjectList(props) {
                                     } else {
                                         history(`/workspace/${response.data?.document_id}?page=1`, {state: {
                                             prevPath: location.pathname + location.search,
-                                            open_as
+                                            open_as,
+                                            is_adaptive:filter_isadaptive
                                         }});
                                     }
                                 });
                             }
                         } else {
                             if (from === 'task-download') {
-                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName)
+                                downloadDifferentFile(downloadType, response.data?.document_id, null, null, id, null, null, null, null, null, null, taskFileName);
                             } else {
                                 setTimeout(() => {
                                     // window.location.href = 'workspace/' + response.data.document_id
-                                    let lastPageAvailable = localStorage.getItem(response.data?.doc_data?.document_id)
+                                    let lastPageAvailable = localStorage.getItem(response.data?.doc_data?.document_id);
                                     if (lastPageAvailable) {
                                         history(lastPageAvailable, {state: {
                                             prevPath: location.pathname + location.search,
@@ -2041,18 +1904,17 @@ function AllProjectList(props) {
                             Config.toast(t("oops_file_empty"), 'error');
                         }
                         if (err?.response?.data?.msg?.includes('Mt only Ongoing')) {
-                            setShowProcessingModal(true)
+                            setShowProcessingModal(true);
                             // openFile(null, null, null, url)
                             setTimeout(() => {
-                                setShowProcessingModal(false)
+                                setShowProcessingModal(false);
                             }, 4000);
                         }
                         if (err?.response?.data?.msg?.includes('Pre Translation Ongoing')) {  // this error comes when the pre-translate is enabled in update flow
-                            setShowProcessingModal(true)
-
+                            setShowProcessingModal(true);
                             // pre-translate loader update flow (when the task open is cicked)
-                            setPreTranslateAllTask([])
-                            isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate
+                            setPreTranslateAllTask([]);
+                            isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate;
                             if (isProjectPreTranslate.current) {
                                 Config.axios({
                                     url: `${Config.BASE_URL}/workspace/task_status/?project=${selectedProjectIdRef.current}`,
@@ -2072,21 +1934,18 @@ function AllProjectList(props) {
                                             }
                                             return obj;
                                         });
-                                        // console.log(newArr)
-                                        setSelectedProjectFiles(newArr)
+                                        setSelectedProjectFiles(newArr);
                                         let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
                                         if (statusResponse.data.res?.length !== canOpenFiles?.length) {
-                                            setPreTranslateAllTask(statusResponse.data.res)
+                                            setPreTranslateAllTask(statusResponse.data.res);
                                         }
                                     },
-                                    error: (err) => {
-
-                                    }
+                                    error: (err) => {  }
                                 });
                             }
                             // openFile(null, null, null, url)
                             setTimeout(() => {
-                                setShowProcessingModal(false)
+                                setShowProcessingModal(false);
                             }, 4000);
                         }
                         setClickedOpenButton(null);
@@ -2121,7 +1980,7 @@ function AllProjectList(props) {
     };
 
     const Option = (props) => {
-        let list = ""
+        let list = "";
         props.data?.jobs?.target?.map((eachLang, index) => {
             list += `${targetLanguageOptionsRef.current?.find(each => each.id === eachLang)?.language}${index !== props.data?.jobs?.target?.length - 1 ? ", " : ""}`;
         });
@@ -2143,7 +2002,7 @@ function AllProjectList(props) {
 
     const ValueContainerPDF = ({ children, ...props }) => {
         const { getValue, hasValue } = props;
-        let list = ""
+        let list = "";
         children[0]?.props.data?.jobs?.target?.map((eachLang, index) => {
             list += `${targetLanguageOptionsRef.current?.find(each => each.id === eachLang)?.language}${index !== children[0]?.props.data?.jobs?.target?.length - 1 ? ", " : ""}`;
         });
@@ -2201,7 +2060,6 @@ function AllProjectList(props) {
     /* File upload drag and drop handling */
     const handleDrop = (filesTemp, request = null) => {
         //Also check handleChange
-
         let fileList = [...files];
         Object.keys(filesTemp).map((eachKey) => {
             if (!request && isSupportedFile(filesTemp[eachKey])) {
@@ -2220,7 +2078,6 @@ function AllProjectList(props) {
         if (request === "tmx") setTMXFiles(fileList);
         else if (request === "tbx") setTBXFiles(fileList);
         else setFiles(fileList);
-
         setShowFileUpload(false);
         // setFiles(prevState => [...prevState, fileList])
     };
@@ -2270,7 +2127,6 @@ function AllProjectList(props) {
         height: 'auto',
         onClose: console.log(),
     };
-
 
     const assignmanagemodaloption = {
         closeMaskOnClick: false,
@@ -2341,9 +2197,9 @@ function AllProjectList(props) {
     };
 
     const editProject = (e = null, projectId, projectType, project) => {
-        e.stopPropagation()
+        e.stopPropagation();
         // page information for redirecting to same page after updation is done.
-        projectObject.current = project
+        projectObject.current = project;
         let prevPageInfo = {
             pageNo: URL_SEARCH_PARAMS.get("page"),
             // orderBy: URL_SEARCH_PARAMS.get("order_by"),
@@ -2351,7 +2207,7 @@ function AllProjectList(props) {
             search: URL_SEARCH_PARAMS.get("search"),
             projectId: projectId,
             fromProjectList: true
-        }
+        };
         if (projectType === 1 || projectType === 2) {
             history("/create/translate/files/translate-files?get-project-info=" + projectId + "&type=" + projectType, {state: prevPageInfo });
         } else if (projectType === 3) {
@@ -2365,20 +2221,18 @@ function AllProjectList(props) {
                 history("/create/speech/text-to-speech?get-project-info=" + projectId + "&type=" + projectType, {state: prevPageInfo });
             }
         } else if (projectType === 5) {
-            setEditInstantProjectModal(true)
-            expressProjectIdRef.current = projectId
-            editExpressProject(e, projectId)
+            setEditInstantProjectModal(true);
+            expressProjectIdRef.current = projectId;
+            editExpressProject(e, projectId);
             // props.history("/create/translate/text/instant-text?get-project-info=" + projectId + "&type=" + projectType, {filename: project?.project_name, prevPageInfo})
         } else if (projectType === 6) {
-            setEditInstantProjectModal(true)
+            setEditInstantProjectModal(true);
             // deisgner project edit code here'
-            handleRetriveDesignProject(e,project)
-            // console.log('designer project edit')
+            handleRetriveDesignProject(e,project);
         } else if (projectType === 10) {
             history(`/create/assets/wordchoice?project=${projectId}`, { prevPageInfo });
         }
     };
-
 
     useEffect(() => {
         selectedSteps?.map((each) => {
@@ -2402,23 +2256,21 @@ function AllProjectList(props) {
         }
     };
 
-
     const editExpressProject = (e, projectId) => {
-        e.stopPropagation()
-        setSkeletonLoader(true)
+        e.stopPropagation();
+        setSkeletonLoader(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/express_project_detail/${projectId}`,
             auth: true,
             success: (response) => {
-                // console.log(mtpeEngineRef.current);
                 let { data } = response;
-                setExpressProjectName(data.project_name)
-                setHasTeam(data.team)
+                setExpressProjectName(data.project_name);
+                setHasTeam(data.team);
                 setEditJobs(data.jobs);
                 let editTargetLanguages = [];
                 let tar = [];
                 let tarID = [];
-
                 response.data?.jobs?.map((each) => {
                     let a = each?.source_target_pair_names?.split("->");
                     tar.push({ language: a[1], id: each?.target_language });
@@ -2438,12 +2290,11 @@ function AllProjectList(props) {
                 let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                     (element) => element.id == data?.source_lang
                 );
-
                 setTimeout(() => {
                     setSourceLabel(editSourceLanguage?.language);
-                    setSourceLanguage(data?.source_lang)
+                    setSourceLanguage(data?.source_lang);
                     setTargetLanguage(editTargetLanguages);
-                    setSkeletonLoader(false)
+                    setSkeletonLoader(false);
                 }, 80);
             },
         });
@@ -2451,19 +2302,14 @@ function AllProjectList(props) {
 
     const updateExpressProject = () => {
         let formdata = new FormData();
-        setIsExpressUpdating(true)
-
+        setIsExpressUpdating(true);
         formdata.append("source_language", sourceLanguage);
-
         if (expressProjectName?.trim() === '') {
             Config.toast(t("enter_proj_name"))
             return;
         }
-
         formdata.append("project_name", expressProjectName?.trim());
-
         formdata.append("team", hasTeam);
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
@@ -2472,9 +2318,6 @@ function AllProjectList(props) {
             )
                 formdata.append("target_languages", eachTargetLanguage?.id);
         });
-
-
-
         let list = "";
         targetLangListToRemove?.map((each, index) => {
             list += `${each.id}${index !== targetLangListToRemove.length - 1 ? "," : ""
@@ -2493,9 +2336,8 @@ function AllProjectList(props) {
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_updated_success"));
-                setEditInstantProjectModal(false)
-                setIsExpressUpdating(false)
-
+                setEditInstantProjectModal(false);
+                setIsExpressUpdating(false);
                 // update the word count and project name of the project
                 const newArr = createdProjects?.map(obj => {
                     if (obj.id === expressProjectIdRef.current) {
@@ -2507,40 +2349,39 @@ function AllProjectList(props) {
                     }
                     return obj;
                 });
-                setCreatedProjects(newArr)
+                setCreatedProjects(newArr);
             },
         });
     }
 
-
     /* Delete a project by id */
     const deleteExpressProject = () => {
-        setIsExpressProjectDeleting(true)
+        setIsExpressProjectDeleting(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/project/quick/setup/${expressProjectIdRef.current}`,
             method: "DELETE",
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_deleted"));
-                let filteredArr = createdProjects?.filter(each => each.id !== expressProjectIdRef.current)
-                setShowExpressDeleteModal(false)
-                setEditInstantProjectModal(false)
+                let filteredArr = createdProjects?.filter(each => each.id !== expressProjectIdRef.current);
+                setShowExpressDeleteModal(false);
+                setEditInstantProjectModal(false);
                 setShowListingLoader(false);
-                setIsExpressProjectDeleting(false)
+                setIsExpressProjectDeleting(false);
                 if (filteredArr?.length === 0) setEmptyProjects(true);
-                setCreatedProjects(filteredArr)
+                setCreatedProjects(filteredArr);
             },
             error: (err) => {
                 if (err?.response?.data?.msg?.includes('assigned')) {
-                    setShowExpressDeleteModal(false)
-                    setIsExpressProjectDeleting(false)
-                    SetShowAssignedProjectDeleteAlert(true)
+                    setShowExpressDeleteModal(false);
+                    setIsExpressProjectDeleting(false);
+                    SetShowAssignedProjectDeleteAlert(true);
                 }
-                setIsExpressProjectDeleting(false)
+                setIsExpressProjectDeleting(false);
             }
         });
     };
-
 
     /* Handle MT Engine change */
     const handleMTEngineChange = (selectedOption) => {
@@ -2567,14 +2408,14 @@ function AllProjectList(props) {
     // unassign editor from task
     const unassignEditor = (e, taskId, stepId, project, is_reassigned) => {
         e.stopPropagation();
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_info/?task=${taskId}&step=${stepId}${is_reassigned !== null ? '&reassigned=True' : ''}`,
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("task_unassigned"));
-                listFiles(project?.id)
+                listFiles(project?.id);
                 // props.history(`/file-upload?page=1&order_by=-id&open-project=${projectID}`)
                 // setAnchorEl(null);
                 // listProjects(openedProjectId); 
@@ -2584,7 +2425,7 @@ function AllProjectList(props) {
 
     /* Assinged details if assigned */
     const assignToProject = (e, projectId) => {
-        e.stopPropagation()
+        e.stopPropagation();
         setAssignProjectId(projectId);
         history(`/collaborate?project=${projectId}`);
         // activeToggle(3);
@@ -2654,7 +2495,6 @@ function AllProjectList(props) {
         }
     };
 
-
     /* Show the tour */
     const showHowToTour = () => {
         setTourStepIndex(0);
@@ -2669,7 +2509,6 @@ function AllProjectList(props) {
     let role = ""
     let isAssignedProject = null;
 
-
     // get the PO pdf url
     const getPOPdf = (assignmentId) => {
         Config.axios({
@@ -2678,10 +2517,9 @@ function AllProjectList(props) {
             method: "GET",
             success: (response) => {
                 if (response.status === 200) {
-                    // console.log(response.data.url)
-                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`)
+                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
@@ -2690,16 +2528,12 @@ function AllProjectList(props) {
     // task accept api 
     const taskAssignUpdate = (targetValue) => {
         // e.stopPropagation(); 
-        // console.log(particularClickedTask)
         var formdata = new FormData();
         formdata.append("task_ven_status ", targetValue);
         formdata.append("task", particularClickedTask);
         formdata.append("step", stepToAccept);
-
-        // console.log(isTaskReassigned.current)
-
         if (isTaskReassigned.current) {
-            formdata.append("reassigned", 'True')
+            formdata.append("reassigned", 'True');
         }
 
         Config.axios({
@@ -2709,76 +2543,49 @@ function AllProjectList(props) {
             data: formdata,
             success: (response) => {
                 if (response.status === 200) {
-                    // console.log(response.data)
-                    setShowPoModal(false)
-                    listFiles(openedProjectId)
-                    isTaskReassigned.current = false
+                    setShowPoModal(false);
+                    listFiles(openedProjectId);
+                    isTaskReassigned.current = false;
                     // setAcceptedRates(response.data["Previously Agreed Rates"])
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
     }
 
     const handleAcceptBtn = (assignmentId, taskId, step, is_reassigned) => {
-        setParticularClickedTask(taskId)
-        setStepToAccept(step)
-        getPOPdf(assignmentId)
-        setShowPoModal(true)
-        // console.log(is_reassigned)
-        isTaskReassigned.current = typeof is_reassigned === 'boolean' ? true : false
+        setParticularClickedTask(taskId);
+        setStepToAccept(step);
+        getPOPdf(assignmentId);
+        setShowPoModal(true);
+        isTaskReassigned.current = typeof is_reassigned === 'boolean' ? true : false;
     }
 
     // peoples circle
     const AssignInfoUiBox = (props) => {
         let { project, selectedProjectFile, eachRole } = props;
-        // console.log(selectedProjectFile);
-        // console.log(eachRole?.assigned_by_details?.avatar);
-        // console.log(eachRole);
-
         // let editorProfile = (Config.userState?.id !== eachRole?.assign_to_details?.id && eachRole?.assign_to_details?.avatar)
-
-        // console.log(eachRole);
         // let assigned_by_name = (Config.userState?.id === eachRole?.assigned_by_details?.id ? 
         //                     eachRole?.assigned_by_details?.name : 
         //                     eachRole?.assign_to_details?.name)
-
         // let assigned_to_name = (Config.userState?.id === eachRole?.assign_to_details?.id ? 
         //                     eachRole?.assign_to_details?.name :
         //                     eachRole?.assigned_by_details?.name)  
-
         // let editorEmail = (Config.userState?.id === eachRole?.assign_to_details?.id ? 
         //                     eachRole?.assigned_by_details?.email : 
         //                     eachRole?.assign_to_details?.email)
-
-
-        let assigned_by_name = eachRole?.assigned_by_details?.name
-        let assigned_to_name = eachRole?.assign_to_details?.name
-        let assigned_to_isExternal = eachRole?.assign_to_details?.external_editor
-
-
-        let assignedByOrAssignedTo = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("assigned_to")}:` : `${t("assigned_by")}:`
-
-        let by_or_to = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("to_sm")}` : `${t("by")}`
-
-        let editorProfile = (by_or_to === 'by' ? eachRole?.assign_to_details?.avatar : eachRole?.assigned_by_details?.avatar)
-
+        let assigned_by_name = eachRole?.assigned_by_details?.name;
+        let assigned_to_name = eachRole?.assign_to_details?.name;
+        let assigned_to_isExternal = eachRole?.assign_to_details?.external_editor;
+        let assignedByOrAssignedTo = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("assigned_to")}:` : `${t("assigned_by")}:`;
+        let by_or_to = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("to_sm")}` : `${t("by")}`;
+        let editorProfile = (by_or_to === 'by' ? eachRole?.assign_to_details?.avatar : eachRole?.assigned_by_details?.avatar);
         // let assignBy = Config.userState?.id === eachRole?.assign_to_details?.id ? true : false
-        let editorRole = eachRole?.task_assign_detail?.step === 1 ? t("editor") : t("reviewer")
-
-        let stepId = eachRole?.task_assign_detail?.step === 1 ? 1 : eachRole?.task_assign_detail?.step === 2 && 2
-
-        let assign_info = selectedProjectFile?.task_assign_info?.find(each => each.task_assign_detail.step === stepId)
-
-
-        // console.log(eachRole?.change_request_reason);
-        // console.log(eachRole);
+        let editorRole = eachRole?.task_assign_detail?.step === 1 ? t("editor") : t("reviewer");
+        let stepId = eachRole?.task_assign_detail?.step === 1 ? 1 : eachRole?.task_assign_detail?.step === 2 && 2;
+        let assign_info = selectedProjectFile?.task_assign_info?.find(each => each.task_assign_detail.step === stepId);
         // && assign_info.task_assign_detail.task_status === "Completed"
-
-        // console.log(assignedByOrAssignedTo)
-        // console.log(by_or_to === 'by' ? assigned_by_name : assigned_to_name)
-
         return (
             // <div className="custom-assign-box-wrapper">
             //     <div className="assign-ui-header-box">
@@ -2998,27 +2805,21 @@ function AllProjectList(props) {
 
     // download source audo file 
     const downloadSourceAudioFile = async (taskData) => {
-        let {id, filename} = taskData
+        let {id, filename} = taskData;
         try{
             // add in download list
-            dispatch(addDownloadingFiles({ id: id, file_name: filename?.split('.')[0], ext: '.mp3', status: 1 }))
-            
-            let url = `${Config.BASE_URL}/workspace/download_text_to_speech_source/?task=${id}`
+            dispatch(addDownloadingFiles({ id: id, file_name: filename?.split('.')[0], ext: '.mp3', status: 1 }));
+            let url = `${Config.BASE_URL}/workspace/download_text_to_speech_source/?task=${id}`;
             const response = await Config.downloadFileFromApi(url);
-            
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-            Config.downloadFileInBrowser(response)
-            
-
+            dispatch(updateDownloadingFile({ id: id, status: 2 }));
+            Config.downloadFileInBrowser(response);          
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: id }))
+                dispatch(deleteDownloadingFile({ id: id }));
             }, 8000);
-            
         }catch(e) {
-            console.log(e)
+            console.log(e);
         }
     }
 
@@ -3042,9 +2843,8 @@ function AllProjectList(props) {
         formData.append("task", taskID);
         formData.append("step", step);
         formData.append("status", "3"); // submit: 3, in-progress: 2
-
         if (documentSubmitParameters?.isTaskReassigned) {
-            formData.append("reassigned", 'True')
+            formData.append("reassigned", 'True');
         }
 
         Config.axios({
@@ -3053,38 +2853,38 @@ function AllProjectList(props) {
             data: formData,
             auth: true,
             success: (response) => {
-                listFiles(openedProjectId)
-                setShowSubmitDocumentAlertModal(false)
-                setDocumentSubmitParameters({ ...documentSubmitParameters, isTaskReassigned: false })
-                Config.toast(t("document_submitted"))
+                listFiles(openedProjectId);
+                setShowSubmitDocumentAlertModal(false);
+                setDocumentSubmitParameters({ ...documentSubmitParameters, isTaskReassigned: false });
+                Config.toast(t("document_submitted"));
             }
         });
     }
 
     useEffect(() => {
         if (documentSubmitParameters?.taskid !== null) {
-            getDocumentProgress(documentSubmitParameters?.confirm, documentSubmitParameters?.total)
+            getDocumentProgress(documentSubmitParameters?.confirm, documentSubmitParameters?.total);
         }
     }, [documentSubmitParameters])
 
 
     const getDocumentProgress = (confirmed, total) => {
         if (confirmed == total) {
-            handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step)
+            handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step);
         }
         else {
-            setShowSubmitDocumentAlertModal(true)
+            setShowSubmitDocumentAlertModal(true);
         }
     }
 
     const handleDocuemtSubmitConfirmation = () => {
-        handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step)
+        handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step);
     }
 
     useEffect(() => {
         if (location.state?.documentLock !== undefined) {
-            let documentLockReason = location?.state?.documentLock
-            Config.toast(`${documentLockReason}`, 'warning')
+            let documentLockReason = location?.state?.documentLock;
+            Config.toast(`${documentLockReason}`, 'warning');
         }
     }, [location.state?.documentLock])
 
@@ -3093,6 +2893,7 @@ function AllProjectList(props) {
         let formdata = new FormData();
         formdata.append("task", taskID);
         setClickedOpenButton(key);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/transcribe_file/`,
             method: "POST",
@@ -3100,24 +2901,24 @@ function AllProjectList(props) {
             auth: true,
             success: (response) => {
                 if (response.status === 200) {
-                    Config.toast(t("audio_file_transcribed"))
-                    setClickedOpenButton(null)
-                    listFiles(projectID)
+                    Config.toast(t("audio_file_transcribed"));
+                    setClickedOpenButton(null);
+                    listFiles(projectID);
                 }
                 getCreditStatus();
             },
             error: (err) => {
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                        setShowCreditAlertModal(true)
-                        setClickedOpenButton(null)
+                        setShowCreditAlertModal(true);
+                        setClickedOpenButton(null);
                     }
                     if (err.response.data?.msg?.includes('Transcription is ongoing.')) {
-                        setShowProcessingModal(true)
-                        setIsTranscribing(true)
-                        setClickedOpenButton(null)
+                        setShowProcessingModal(true);
+                        setIsTranscribing(true);
+                        setClickedOpenButton(null);
+                        setTranscriptionTaskList([]);
 
-                        setTranscriptionTaskList([])
                         Config.axios({
                             url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${selectedProjectIdRef.current}`,
                             auth: true,
@@ -3135,15 +2936,14 @@ function AllProjectList(props) {
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
-                                setSelectedProjectFiles(newArr)
-                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
+                                setSelectedProjectFiles(newArr);
+                                let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True');
                                 if (statusResponse.data.res?.length !== canOpenFiles?.length) {
                                     setTranscriptionTaskList(statusResponse.data.res)
                                 }
                             },
                             error: (err) => {
-
+                                
                             }
                         });
 
@@ -3159,7 +2959,6 @@ function AllProjectList(props) {
                         //     auth: true,
                         //     success: (voiceStatusResponse) => {
                         //         const newArr = selectedProjectFilesRef.current.data?.map(obj => {
-                        //             // console.log(statusResponse.data.res?.find(each => each.task === obj.id)?.task)
                         //             if (obj.id === voiceStatusResponse.data.res?.find(each => each.task === obj.id)?.task) {
                         //                 return {
                         //                     ...obj, 
@@ -3168,7 +2967,6 @@ function AllProjectList(props) {
                         //             }
                         //             return obj;
                         //         });
-                        //         console.log(newArr)
                         //         setSelectedProjectFiles(newArr)
                         //         let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True')
                         //         if(voiceStatusResponse.data.res?.length !== canOpenFiles?.length){
@@ -3195,8 +2993,6 @@ function AllProjectList(props) {
         if(get_project_type === 6) {
             // writer designer project zip download code here 
             // remove the below return statement after done coding
-            // console.log('designer project zip download')
-            // console.log(project) 
             if(project.designer_project_detail.type == "image_translate"){
                 designDownloadUrl =  Config.BASE_URL + `/ai-image-translation/image-download?image_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1`
             }else{
@@ -3206,10 +3002,7 @@ function AllProjectList(props) {
                   const numberToMap = index + startNumber;
                   return `page_number_list=${numberToMap}`;
                 }).join('&');
-                
-                // console.log(formattedString);
                  designDownloadUrl =  Config.BASE_URL + `/canvas/design-download?canvas_id=${project.designer_project_detail.des_proj_id}&file_format=png&language=0&export_size=1&`+formattedString
-                // console.log(url)
             }
         }
 
@@ -3241,14 +3034,12 @@ function AllProjectList(props) {
             url: `${Config.BASE_URL}/workspace/convert_text_to_speech_source/?task=${taskid}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data?.source_audio_file)
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === taskid) {
                         return { ...obj, audio_file_url: response.data?.source_audio_file };
                     }
                     return obj;
                 });
-                // console.log(newArr)
                 setSelectedProjectFiles(newArr)
                 setClickedOpenButton(null)
                 getCreditStatus();
@@ -3295,13 +3086,11 @@ function AllProjectList(props) {
         if (!callback) {
             projectAnalysisTempProjectId.current = projectID
         }
-        projectAnalysisApiCounter.current++
-        // console.log(projectID)
+        projectAnalysisApiCounter.current++;
         Config.axios({
             url: `${Config.BASE_URL}/tm/project_analysis/${projectID}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 let {
                     payable_rate,
                     project_wwc,
@@ -3408,7 +3197,6 @@ function AllProjectList(props) {
             error: (err) => {
                 if (err.response?.status === 401) {
                     setTimeout(() => {
-                        // console.log(projectAnalysisTempProjectId.current)
                         if (projectAnalysisApiCounter.current <= 10) {
                             handleShowAnalysisModal(e, projectAnalysisTempProjectId.current, true)
                         } else {
@@ -3463,7 +3251,6 @@ function AllProjectList(props) {
             method: 'POST',
             auth: true,
             success: (response) => {
-                // console.log(response.data);
                 checkPdfConversionStatus(taskId, projectId, 'first')
                 getCreditStatus();
                 setClickedOpenButton(null)
@@ -3476,7 +3263,6 @@ function AllProjectList(props) {
                 if (err.response?.data?.msg?.includes('File Cannot be Processed')) {
                     Config.toast(t("file_is_corrupted"), 'error')
                     listFiles(projectId)
-                    // console.log(newArr)
                 }
                 setClickedOpenButton(null)
                 // else{
@@ -3493,7 +3279,6 @@ function AllProjectList(props) {
             url: `${Config.BASE_URL}/exportpdf/convertpdftodocx/?task=${taskId}`,
             auth: true,
             success: (response) => {
-                console.log(response.data);
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === taskId) {
                         return {
@@ -3503,7 +3288,6 @@ function AllProjectList(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
                 setSelectedProjectFiles(newArr)
                 setClickedOpenButton(null)
                 
@@ -3542,7 +3326,6 @@ function AllProjectList(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
                         setSelectedProjectFiles(newArr)
                         setClickedOpenButton(null)
                     } else if (response.data?.status == 'DONE') {
@@ -3557,7 +3340,6 @@ function AllProjectList(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
                         setSelectedProjectFiles(newArr)
                         setClickedOpenButton(null)
                     }
@@ -3581,7 +3363,6 @@ function AllProjectList(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
                         setSelectedProjectFiles(newArr)
                         setClickedOpenButton(null)
                     } else if (response.data?.status == 'DONE') {
@@ -3596,7 +3377,6 @@ function AllProjectList(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr)
                         setSelectedProjectFiles(newArr)
                         setClickedOpenButton(null)
                     }
@@ -3655,10 +3435,6 @@ function AllProjectList(props) {
         e.preventDefault()
         setMoreEl(false)
         // e.stopPropagation()
-
-        // console.log(project_id)
-        // console.log(taskId)
-        // console.log(taskAssignInfo)
         taskDeleteParam.current = {
             project_id: project_id,
             taskId: taskId
@@ -3715,15 +3491,6 @@ function AllProjectList(props) {
             url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${projectId}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-                // const newArr = selectedProjectFiles?.map(obj => {
-                //     // console.log(response.data.res?.find(each => each.task === obj.id)?.task)
-                //     if (obj.id === response.data.res?.find(each => each.task === obj.id)?.task) {
-                //       return {...obj, pre_trans_processing: response.data.res?.find(each => each.task === obj.id)?.open};
-                //     }
-                //     return obj;
-                // });
-                // // console.log(newArr)
                 // setSelectedProjectFiles(newArr)
             },
             error: (err) => {
@@ -3776,7 +3543,6 @@ function AllProjectList(props) {
                 setIsDownloading(false)
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
             let responseObj = JSON.parse(await err.response.data.text())
             if (err.response.status === 400) {
                 if (responseObj?.msg?.includes('Pending')) {
@@ -3799,7 +3565,6 @@ function AllProjectList(props) {
             }
         }
     }
-
 
     /* Download different type of output files */
     const downloadDifferentFile = async (type, documentId, e, key = null, id = null, url = "", isFirstOpen, openIn, projectName, project_id, projectType, taskFileName) => {
@@ -3894,13 +3659,11 @@ function AllProjectList(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
                 setSelectedProjectFiles(newArr)
                 // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
                 setIsDownloading(false)
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
             let responseObj = JSON.parse(await err.response.data.text())
             if (err.response.status === 400) {
                 if (responseObj?.celery_id) {
@@ -3935,7 +3698,6 @@ function AllProjectList(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
                 Config.toast(t("something_wrong_file_process"), 'warning')
                 setSelectedProjectFiles(newArr)
                 dispatch(deleteDownloadingFile({ id: uniqueKey }))
@@ -4006,9 +3768,6 @@ function AllProjectList(props) {
         let step = open_as === 'editor' ? 1 : 2
         let isTaskAccepted = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted") ? true : false
         let stepData = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted")
-
-        // console.log(stepData);
-
         if (isTaskAccepted) {
             // if(!stepData?.task_assign_detail?.can_open){
             //     Config.toast(`${step === 1 ? 'Reviewer' : 'Editor'} is working!!!`, 'warning')
@@ -4068,9 +3827,8 @@ function AllProjectList(props) {
         }
 
         if (response === 1) setIsApproving(true)
+        setIsReworkSending(true);
 
-        setIsReworkSending(true)
-        // console.log(clientResponseDataRef.current);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_update/`,
             auth: true,
@@ -4090,12 +3848,12 @@ function AllProjectList(props) {
                 } else {
                     Config.toast(`${t("something_went_wrong")}`, 'error')
                 }
-                setIsReworkSending(false)
-                setShowTaskReworkReasonModal(false)
+                setIsReworkSending(false);
+                setShowTaskReworkReasonModal(false);
             },
             error: (err) => {
-                setIsApproving(false)
-                setIsReworkSending(false)
+                setIsApproving(false);
+                setIsReworkSending(false);
             }
         });
     }
@@ -4113,15 +3871,12 @@ function AllProjectList(props) {
     }
 
     const sendExtendTaskDeadlineRequest = () => {
-        // console.log(taskDetailsForDeadlineCrossedTask.current);
-        let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current
-
+        let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current;
         var formdata = new FormData();
         formdata.append("task", task_id);
         formdata.append("step", step);
         formdata.append("reassigned", reassign ? 'True' : 'False')
-
-        setIsDeadlineExtendReqSending(true)
+        setIsDeadlineExtendReqSending(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/send_msg_extend_deadline/`,
@@ -4130,15 +3885,15 @@ function AllProjectList(props) {
             data: formdata,
             success: (api_response) => {
                 if (api_response.status === 200) {
-                    Config.toast(`${t("deadline_req_sent")}`)
+                    Config.toast(`${t("deadline_req_sent")}`);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
-                setIsDeadlineExtendReqSending(false)
-                setShowDeadlineCrossedModal(false)
+                setIsDeadlineExtendReqSending(false);
+                setShowDeadlineCrossedModal(false);
             },
             error: (err) => {
-                setIsDeadlineExtendReqSending(false)
+                setIsDeadlineExtendReqSending(false);
             }
         });
     }
@@ -4149,7 +3904,6 @@ function AllProjectList(props) {
             url: `${Config.BASE_URL}/aipay/po/?task=${task_id}`,
             auth: true,
             success: (response) => {
-                // console.log(response);
                 setPOFilesDetails(response.data)
                 setShowPOFilesModal(true)
             },
@@ -4388,7 +4142,6 @@ function AllProjectList(props) {
             }
             return obj;
         });
-        // console.log(newArr);
         setCreatedProjects(newArr);
 
         Config.axios({
@@ -4399,7 +4152,6 @@ function AllProjectList(props) {
                 setTimeout(() => {
                     checkFileStatus()
                 }, 3500);
-                // console.log(fileIdList.current);
             },
             error: (err) => {
                 if (err.response.status === 400) {
@@ -4415,7 +4167,6 @@ function AllProjectList(props) {
                             }
                             return obj;
                         });
-                        // console.log(newArr);
                         setCreatedProjects(newArr);
                     }
                 }
@@ -4428,21 +4179,13 @@ function AllProjectList(props) {
         fileIdList.current?.map((each, index) => {
             idList += `${each}${index !== fileIdList.current?.length - 1 ? "&id=" : ""}`
         })
-        // console.log(idList);
-
         if (idList !== '') {
             Config.axios({
                 url: `${Config.BASE_URL}/exportpdf/convertpdftodocx?id=${idList}`,
                 auth: true,
                 success: (response) => {
-                    // console.log(response.data);
-                    // console.log(fileIdList.current);
-
                     const newArr = createdProjects?.map(obj => {
-                        // console.log(response.data?.find(each => each?.id === obj?.id));
-                        // console.log(obj.id == response.data?.find(each => each?.id === obj?.id)?.id);
                         if (obj.id == response.data?.find(each => each?.id === obj?.id)?.id) {
-                            // console.log("pass")
                             return {
                                 ...obj,
                                 status: response.data?.find(each => each?.id === obj?.id)?.status != null ? response.data?.find(each => each?.id === obj?.id)?.status : 'PENDING',
@@ -4455,7 +4198,6 @@ function AllProjectList(props) {
                         }
                         return obj;
                     });
-                    // console.log(newArr);
                     setCreatedProjects(newArr);
                     triggerTimeoutRef.current = setTimeout(() => {
                         setFileCheckTrigger(!fileCheckTrigger)
@@ -4468,7 +4210,6 @@ function AllProjectList(props) {
     useEffect(() => {
         if (createdProjects?.length !== 0 && fileIdList.current?.length !== 0) {
             let remainingFiles = createdProjects?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status != 'YET TO START' && each?.status != null)
-            // console.log(remainingFiles)
             if (remainingFiles?.length !== 0) {
                 statusCheckTimeoutRef.current = setTimeout(() => {
                     checkFileStatus()
@@ -4481,11 +4222,8 @@ function AllProjectList(props) {
     }, [fileCheckTrigger])
 
     const handleOpenNonTranslatedDesignProject = (project) => {
-        // console.log(project)
-        // console.log('open in designer')
         let subUrl = project.designer_project_detail.type == 'image_design' ? `&page=${1}` : ''
         let url = `/editor/${project.designer_project_detail.type == 'image_design' ? 'design' : 'image-translate'}/?project=${project.designer_project_detail.des_proj_id}`
-        // console.log(project.designer_project_detail)
         // window.open(Config. DESIGNER_HOST+ url)
         window.open(Config.DESIGNER_HOST+ url+subUrl)
 
@@ -4550,7 +4288,7 @@ function AllProjectList(props) {
         if (deleteFromDocOrBlog.current === 'doc') {
             url = `${Config.BASE_URL}/workspace/mydocuments/${documentId}`
         } else {
-            url = `${Config.BASE_URL}/openai/blogcreation/${documentId}`
+            url = `${Config.BASE_URL}/writer/blogcreation/${documentId}`
         }
 
         setIsDocumentDeleting(true)
@@ -4560,7 +4298,6 @@ function AllProjectList(props) {
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("document_deleted_success"));
                 setIsDocumentDeleting(false)
                 const newArr = createdProjects?.filter(obj => obj.id !== documentId);
@@ -4591,7 +4328,6 @@ function AllProjectList(props) {
             auth: true,
             success: (response) => {
                 let { data } = response;
-                // console.log(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.project_name)
                 setExpressProjectName(proj?.designer_project_detail?.type === "image_design" ? data?.file_name : data?.file_name )
                 // setHasTeam(data.team)
                 let editTargetLanguages = [];
@@ -4662,7 +4398,6 @@ function AllProjectList(props) {
    
     // for designer project edit
     const handleEditDesignerProj = (e,proj) => {
-        // console.log('designer edit')
         handleRetriveDesignProject(e,proj)
 
     } 
@@ -4677,8 +4412,6 @@ function AllProjectList(props) {
 
         if (proj?.designer_project_detail?.type == "image_translate") {
             designDownloadUrl = Config.BASE_URL + `/ai-image-translation/image-download?image_id=${proj.designer_project_detail.des_proj_id}&file_format=png&language=${selectedProjectFile.target_language}&export_size=1`
-            // console.log(designDownloadUrl)
-            
             nameofDownload = `${proj?.project_name}_${targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}`
         } else {
             const startNumber = 1;
@@ -4687,8 +4420,6 @@ function AllProjectList(props) {
                 const numberToMap = index + startNumber;
                 return `page_number_list=${numberToMap}`;
             }).join('&');
-           
-            // console.log(formattedString);
             if(selectedProjectFile == null){
                 designDownloadUrl = Config.BASE_URL + `/canvas/design-download?canvas_id=${proj?.designer_project_detail?.des_proj_id}&file_format=png&export_size=1&` + formattedString
                 nameofDownload = `${proj?.project_name}`
@@ -4706,7 +4437,6 @@ function AllProjectList(props) {
                     extention = '.zip'
                 }
             }
-            // console.log(designDownloadUrl)
         }
         // add in download list
         dispatch(addDownloadingFiles({ id: id, file_name: nameofDownload, ext: extention, status: 1 }))
@@ -4734,9 +4464,6 @@ function AllProjectList(props) {
         if(selectedProj == null){
             setShowExpressDeleteModal(true)
         }else{
-            // console.log(selectedProj)
-            // console.log(selectedProjectFilesRef.current)
-
             if(selectedProj.task_assign_info != null){
                 SetShowAssignedProjectDeleteAlert(true)
             }else{
@@ -4748,17 +4475,15 @@ function AllProjectList(props) {
     
 
     const handleBookProjDelete = (proj,selectedProjectFile) => {
-        // console.log(proj)
         if(proj?.book_project_id === undefined && proj?.book_project_id === null) return
 
-        let url = `${Config.BASE_URL}/openai/bookcreation/${proj?.book_project_id}`
+        let url = `${Config.BASE_URL}/writer/bookcreation/${proj?.book_project_id}`
         setIsExpressUpdating(true)
         Config.axios({
             url: url,
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast("Book deleted successfully");
                 setIsDesignDeleting(false)
                 const newArr = createdProjects?.filter(obj => obj.id !== proj.id);
@@ -4773,7 +4498,6 @@ function AllProjectList(props) {
     }
 
     const handleDeleteDesignerProj = (proj,selectedProjectFile) => {
-        // console.log(proj)
         let url = ''
         if (proj?.designer_project_detail?.type === "image_design") {
             url = `${Config.BASE_URL}/canvas/canvas-designs/${proj?.designer_project_detail?.des_proj_id}/`
@@ -4806,7 +4530,6 @@ function AllProjectList(props) {
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 setIsTaskDeleting(false)
                 Config.toast(proj?.designer_project_detail?.type === "image_design" ? 'Design project deleted' : 'Image project deleted');
                 setIsDesignDeleting(false)
@@ -4820,7 +4543,6 @@ function AllProjectList(props) {
                 setShowExpressDeleteModal(false)
                 setEditInstantProjectModal(false)
                 if (newArr?.length == 0) setEmptyProjects(true)
-            // console.log('done')
             },
             error: (err) => { 
                 setIsTaskDeleting(false)
@@ -4842,7 +4564,6 @@ function AllProjectList(props) {
             formData: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(proj.designer_project_detail.type === "image_design" ? 'Design task deleted' : 'Image task deleted');
                 setIsTaskDeleting(false)
                 if (selectedProjectFiles?.length === 1) {
@@ -4865,7 +4586,6 @@ function AllProjectList(props) {
     }
 
     const handleDeleteDesignerProjectUpdate = (proj) => {
-        // console.log(proj)
         let formdata = new FormData();
         setIsExpressUpdating(true)
         if(sourceLanguage != ''){
@@ -4876,10 +4596,7 @@ function AllProjectList(props) {
             Config.toast(t("enter_proj_name"))
             return;
         }
-
         formdata.append(proj?.designer_project_detail?.type === "image_design" ? "file_name" : "project_name" , expressProjectName?.trim());
-        // console.log(editJobs)
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
@@ -4890,14 +4607,6 @@ function AllProjectList(props) {
         });
 
         editJobs?.map((eachTargetLanguage) => {
-            // console.log(eachTargetLanguage?.target_language)
-            // console.log(targetLangListToRemove)
-            // console.log( targetLangListToRemove.find(
-            //     (element) => element.target_language != eachTargetLanguage?.target_language
-            // ))
-            // console.log( targetLangListToRemove.find(
-            //     (element) => element.target_language == eachTargetLanguage?.target_language
-            // ))
             if (
                 targetLangListToRemove.find(
                     (element) => element.target_language == eachTargetLanguage?.target_language
@@ -4921,9 +4630,8 @@ function AllProjectList(props) {
             auth: true,
             success: (response) => {
                 Config.toast(t("proj_updated_success"));
-                setEditInstantProjectModal(false)
-                setIsExpressUpdating(false)
-                // console.log(response)
+                setEditInstantProjectModal(false);
+                setIsExpressUpdating(false);
                 // update the word count and project name of the project
                 const newArr = createdProjects?.map(obj => {
                     if (obj.id === proj?.id) {
@@ -4934,72 +4642,83 @@ function AllProjectList(props) {
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                setCreatedProjects(newArr)
+                setCreatedProjects(newArr);
             },
-            error: (err) => { 
-              
-             }
+            error: (err) => { }
         });
     }
 
     const downloadTaskTargetFile = async(task_data) => {
-        let {id, filename} = task_data
-        let {name, extension} = Config.getNameAndExtension(filename)
-        
+        let {id, filename} = task_data;
+        let {name, extension} = Config.getNameAndExtension(filename);
         // add in download list
-        dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }))
-
-        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`
+        dispatch(addDownloadingFiles({ id: id, file_name: name, ext: extension, status: 1 }));
+        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${id}`;
         const response = await Config.downloadFileFromApi(url);
-
         // update the list once download completed
-        dispatch(updateDownloadingFile({ id: id, status: 2 }))
-
-        Config.downloadFileInBrowser(response)
-
+        dispatch(updateDownloadingFile({ id: id, status: 2 }));
+        Config.downloadFileInBrowser(response);
         setTimeout(() => {
             // remove the downloaded file from list
-            dispatch(deleteDownloadingFile({ id: id }))
+            dispatch(deleteDownloadingFile({ id: id }));
         }, 8000);
-
-    } 
-
+    }
+    
+    /**
+     * This method used to download the adaptive file translate target file
+     * @param {*} task_data
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 15 Apr 2025
+     */
+    const downloadAdaptiveTaskTargetFile = async(task_data) => {
+        let url = "";
+         try {
+             let url = '';
+             if(Array.isArray(downloadTaskFile) && downloadTaskFile.length > 0) {
+                const downloadEntry = downloadTaskFile.find(item => item.taskId === task_data.id);
+                if (!downloadEntry) {
+                    console.error("Download URL not found for task:", task_id);
+                    return;
+                }
+               url = `${Config.BASE_URL}/${downloadEntry.url}`   
+            } else {
+                url = `${Config.BASE_URL}/workspace_okapi/document/to/file/${task_data.document}?output_type=SIMPLE`;
+            }
+             setIsDownloading(task_data.id); 
+             const response = await Config.downloadFileFromApi(url);
+             Config.downloadFileInBrowser(response);
+             } catch (error) {
+               console.error("Download failed:", error);
+            } finally {
+               setIsDownloading(null); 
+            }
+    }
 
     // this api will initiate the file translate process and provide the status of each task
     const getProjectTransDownloadStatus = (task_id) => {
         if(projectObject.current?.id === undefined) return;
-
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
-            axiosFileTranslateAbortController.abort()
+            axiosFileTranslateAbortController.abort();
         }
-    
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-
-        let task_list_arr = []
-
-        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing)
+        let task_list_arr = [];
+        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing);
         let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
-        // console.log(alreadyProcessingTaskIds)
         if(alreadyProcessingTask?.length !== 0){
-            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
         }else{
-            task_list_arr = [task_id]
+            task_list_arr = [task_id];
         }
-        // console.log("taskList: "+task_list_arr?.toString())
-
-        fileTranslatingTaskListRef.current = task_list_arr
-
+        fileTranslatingTaskListRef.current = task_list_arr;
         // create task list to process
         let list = ""
         fileTranslatingTaskListRef.current?.map((each, index) => {
             list += `task=${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
-
-        // console.log(list)
-
         // display the button loader as soon as the user clicks the TRANSLATE button
         if(task_id !== undefined){
             let newArr = selectedProjectFilesRef.current?.map(obj => {
@@ -5007,12 +4726,12 @@ function AllProjectList(props) {
                     return {
                         ...obj,
                         isProcessing: true,
-                    }
+                    };
                 }
-                return obj
+                return obj;
             })
-            selectedProjectFilesRef.current = newArr 
-            setSelectedProjectFiles(newArr)
+            selectedProjectFilesRef.current = newArr;
+            setSelectedProjectFiles(newArr);
         }
 
         Config.axios({
@@ -5022,51 +4741,45 @@ function AllProjectList(props) {
             success: (response) => {
                 // if called with project_id, returns list if task_data
                 if(response.data?.results !== undefined){
-                    let dataList = response.data?.results
+                    let dataList = response.data?.results;
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
                         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
-                            let status = dataList?.find(each => each.task === obj.id)?.status
+                            let status = dataList?.find(each => each.task === obj.id)?.status;
                             return {
                                 ...obj,
                                 isProcessing: status == 400 ? true : false,
                                 status: status,
                                 file_translate_done: status === 200 ? true : obj.file_translate_done
-                            }
+                            };
                         }
-                        return obj
+                        return obj;
                     })
-                    // console.log('modified list with isProcessing key')
-                    // console.log(newArr)
-                    selectedProjectFilesRef.current = newArr 
-                    setSelectedProjectFiles(newArr)
-                    // console.log('isAnyTaskIsProcessing')
-                    
-                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false
+                    selectedProjectFilesRef.current = newArr;
+                    setSelectedProjectFiles(newArr);
+                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false;
+                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false;
+                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false;
                     
                     if(isPageNumNotFound){
                         // Config.toast(`File couldn't process!`, 'error')
-                        setShowFileErrorModal(true)
+                        setShowFileErrorModal(true);
                         let newArr = selectedProjectFilesRef.current?.map(obj => {
                             if(obj.status === 404){
                                 return {
                                     ...obj,
                                     isProcessing: false,
-                                }
+                                };
                             }
-                            return obj
+                            return obj;
                         })
-                        selectedProjectFilesRef.current = newArr 
-                        setSelectedProjectFiles(newArr)
-                        return
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles(newArr);
+                        return;
                     }
-                    
-                    if(insuffientCredit) setShowCreditAlertModal(true)
-
+                    if(insuffientCredit) setShowCreditAlertModal(true);
                     if(isAnyTaskIsProcessing){
                         setTimeout(() => {
-                            getProjectTransDownloadStatus(task_id)
+                            getProjectTransDownloadStatus(task_id);
                         }, 5000);
                     }
                 }
@@ -5078,12 +4791,11 @@ function AllProjectList(props) {
                             return {
                                 ...obj,
                                 isProcessing: false,
-                            }
-                        })
-                        // console.log(newArr)
-                        selectedProjectFilesRef.current = newArr 
-                        setSelectedProjectFiles(newArr)
-                        setShowCreditAlertModal(true)
+                            };
+                        });
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles(newArr);
+                        setShowCreditAlertModal(true);
                     }
                 }
             },
@@ -5095,49 +4807,303 @@ function AllProjectList(props) {
                                 ...obj,
                                 isProcessing: false,
                                 file_translate_done: false
-                            }
+                            };
                         }
-                        return obj
+                        return obj;
                     })
-                    // console.log(newArr)
-                    selectedProjectFilesRef.current = newArr 
-                    setSelectedProjectFiles(newArr)
+                    selectedProjectFilesRef.current = newArr; 
+                    setSelectedProjectFiles(newArr);
                 }
             }
         });
     }
 
+    /**
+     * This method used to get the pooling API to find a task progress data.
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since  08 APR 2025
+     */
+    const getBatchByTaskId = (batchList, key, taskId) => {
+        return batchList.find(batch => batch[key] === taskId);
+    };
+
+     /**
+     * This method used to trigger the polling API to know the file translation progress data.
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
+    const getProgressData = (endpoint, taskId, projectId) => {
+        setTimeout(() => {
+            getTaskTranslationProgress(endpoint, taskId, projectId);
+        }, 6000);
+    }
+
+     /**
+     * This method used to update whole project list fields
+     * @param {*} taskId 
+     * @param {*} percentage 
+     * @param {*} status 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 08 2025
+     */
+    const updateProjectTaskList = (taskId, percentage, status, batchData) => {
+        const updatedTasks = selectedProjectFilesRef.current.map(task => {
+            if (task.id === taskId) {
+                if (('FAILED' === status.toUpperCase()) && ((batchData?.completed_batches + batchData?.failed_batches) === batchData?.total_batches)) {
+                    task.adaptive_file_translate_status = 'FAILED';
+                    task.isProcessing = false;
+                    task.percentage = 0;
+                    return task;
+                }
+                task.adaptive_file_translate_status = 'ONGOING';
+                const updatedTask = {
+                    ...task,
+                    percentage,
+                    status,
+                    file_translate_done: percentage == 100,
+                    isProcessing: percentage !== 100
+                };
+                // Set progressLoading based on percentage
+                if (percentage === 100) {
+                    // Temporarily set to true, will be set to false after timeout
+                    updatedTask.progressLoading = true;
+                    // Delay clearing the loader
+                    setTimeout(() => {
+                        const finalTasks = selectedProjectFilesRef.current.map(t => {
+                            if (t.id === taskId) {
+                                return { ...t, progressLoading: false };
+                            }
+                            return t;
+                        });
+                        selectedProjectFilesRef.current = finalTasks;
+                        setSelectedProjectFiles([...finalTasks]);
+                    }, 3000); // 500ms delay or whatever fits your use case
+                } else {
+                    updatedTask.progressLoading = true;
+                }
+                return updatedTask;
+            }
+            return task;
+        });
+        selectedProjectFilesRef.current = updatedTasks;
+        setSelectedProjectFiles([...updatedTasks]);
+    }
+
+     /**
+     * This method used to get the pooling API to find a task progress data.
+     * @param {*} endpoint 
+     * @param {*} taskId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since  08 APR 2025
+     */
+    const getTaskTranslationProgress = (endpoint, taskId, projectId) => {
+        if (projectId == null || projectId == '')
+            projectId = openedProjectId;
+        if (endpoint == null || endpoint == '')
+            endpoint = `workspace/adaptive_file_translate/${projectId}`;        
+        // Only proceed if this project is still the selected one
+        if ((projectId !== selectedProjectIdRef.current) || (window.location.pathname !== '/file-upload'))
+           return; // Skip outdated task
+
+        Config.axios({
+            url: `${Config.BASE_URL}/${endpoint}`,
+            method: "GET",
+            auth: true,
+            success: (response) => {
+                const resultData = response?.data;
+                let downloadTargetFile = [];
+                if (resultData && resultData?.batch_status && resultData?.batch_status.length > 0) {
+                    const batchList = resultData?.batch_status;
+                    const batch = getBatchByTaskId(batchList, 'task_id', taskId);
+                    if (batch != null && batchList != null && batchList.length > 0) {
+                        batchList.map(batch => {
+                            // batch.status = 'FAILED';
+                            updateProjectTaskList(batch?.task_id, batch?.completed_percentage, batch?.status, batch);
+                            if ('COMPLETED' === batch?.status?.toUpperCase()) {
+                                const newDownloadItem = {
+                                    taskId: batch.task_id,
+                                    url: batch.download_file
+                                  };
+                                downloadTargetFile.push(newDownloadItem);
+                            } else if (('FAILED' === batch?.status?.toUpperCase()) && ((batch?.completed_batches + batch?.failed_batches) === batch?.total_batches)) {
+                                return;
+                            } else {
+                                getProgressData(endpoint, batch?.task_id, projectId);
+                            }
+                        })
+                    setDownloadTaskTargetFile([...new Set(downloadTargetFile)]);
+                    } else {
+                        getProgressData(endpoint, taskId, projectId);
+                    }
+                } else {
+                    getProgressData(endpoint, taskId, projectId);
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
+    }
+
+   
+    /**
+     * This mehtod is used to initiate the file translation process and provide the endpoint for check the translation progress.
+     * @param {*} task_id 
+     * @returns task
+     * @author Padmabharathi Subiramanian 
+     * @since 10 Apr 2025
+     */
+    const getTaskTransDownloadStatus = (task_id) => {
+        if(projectObject.current?.id === undefined) return;
+            if (axiosFileTranslateAbortController) {
+                axiosFileTranslateAbortController.abort();
+            }
+            const controller = new AbortController();
+            setAxiosFileTranslateAbortController(controller);
+            let task_list_arr = [];
+            let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.adaptive_file_translate_status === "NOT_INITIATED");
+            let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id);
+            if(alreadyProcessingTask?.length !== 0){
+                task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
+            }else{
+                task_list_arr = [task_id];
+            }
+            fileTranslatingTaskListRef.current = task_list_arr;
+            // create task list to process
+            let list = ""
+            fileTranslatingTaskListRef.current?.map((each, index) => {
+                list += `${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
+            });
+            // display the button loader as soon as the user clicks the TRANSLATE button
+            if(task_id !== undefined){
+                let newArr = selectedProjectFilesRef.current?.map(obj => {
+                    if(obj.id === task_id){
+                        return {
+                            ...obj,
+                            isProcessing: true
+                        }
+                    }
+                    return obj
+                })
+                selectedProjectFilesRef.current = newArr;
+                setSelectedProjectFiles(newArr);
+            }
+            let formData = new FormData();
+            formData.append("task", task_id);
+            
+            Config.axios({
+                url: `${Config.BASE_URL}/workspace/adaptive_file_translate/`,
+                method: "POST",
+                data: formData,
+                auth: true,
+                ...(controller !== undefined && {signal: controller.signal}),
+                success: (response) => {
+                    if(response?.status === 200 && response?.data?.status === 'success' && response?.data?.endpoint){
+                        getTaskTranslationProgress(response.data.endpoint, task_id);
+                    }
+                },
+                error: (err) => {
+                    Config.toast("","",true)
+                    if(err?.response?.status === 500){
+                        let newArr = projectTaskListRef.current?.map(obj => {
+                            if(selectedProjectFilesRef.current?.find(each => each === obj.id)){
+                                return {
+                                    ...obj,
+                                    isProcessing: false,
+                                    status: 402
+                                }
+                            }
+                            return obj
+                        })
+                        selectedProjectFilesRef.current = newArr; 
+                        setSelectedProjectFiles(newArr);
+                    }
+                    if(err?.response?.status === 400){
+                        if(err?.response?.data?.msg.includes("Something went wrong in re-initiation, contact admin")){
+                     Config.toast("Contact support",'support',false,"Translation Failed","We couldn’t process that file right now.",() => window.open(Config.STATIC_URL + "/support"));
+                      let newArr = selectedProjectFilesRef.current?.map(obj => {
+                                if(obj.id === task_id){
+                                    return {
+                                        ...obj,
+                                       isProcessing: false
+                                    }
+                                }
+                                return obj
+                            })  
+                            selectedProjectFilesRef.current = newArr;
+                            setSelectedProjectFiles([...newArr]);
+                                    }
+                        else if(err?.response?.data?.msg === 'Insufficient Credits'){
+                            setShowCreditAlertModal(true);
+                            let newArr = selectedProjectFilesRef.current?.map(obj => {
+                                if(obj.id === task_id){
+                                    return {
+                                        ...obj,
+                                       isProcessing: false
+                                    }
+                                }
+                                return obj
+                            })  
+                            selectedProjectFilesRef.current = newArr;
+                            setSelectedProjectFiles([...newArr]);
+                        }
+                    }
+                    if(err?.response?.data?.msg === 'File is Empty'){
+                        Config.toast(t("oops_file_empty"), 'error');
+                        let newArr = selectedProjectFilesRef.current?.map(obj => {
+                            if(obj.id === task_id){
+                                return {
+                                    ...obj,
+                                   isProcessing: false
+                                }
+                            }
+                            return obj
+                        })  
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles([...newArr]);
+                    }
+                }
+            });
+        }
+
     const handleBookOpen = (book_id) => {
-        history(`/book-writing?book=${book_id}`, {state: {from: 'list'}})
+        history(`/book-writing?book=${book_id}`, {state: {from: 'list'}});
     }
 
     const handleBookDownload = (bookId) => {
         if(bookId){
-            setMoreEl(false)
-            setOpenedMoreOption(null)
-            getBookDetails(bookId)
+            setMoreEl(false);
+            setOpenedMoreOption(null);
+            getBookDetails(bookId);
         }
     } 
 
     const getBookDetails = (book_id) => {
-        if(book_id === undefined || book_id === null) return
+        if(book_id === undefined || book_id === null) return;
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${book_id}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${book_id}/`,
             method: "GET",
             auth: true,
             success: (response) => {
-                let data = response.data
-                bookCreationRef.current = data
+                let data = response.data;
+                bookCreationRef.current = data;
                 setTimeout(() => {
-                    handleDownloadAll()
+                    handleDownloadAll();
                 }, 10);
             },
         });
     } 
 
     const filesDownload = async(html_data, item) => {
-        var summerNoteData = html_data
-
+        var summerNoteData = html_data;        
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -5147,14 +5113,8 @@ function AllProjectList(props) {
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    // console.log(attribs)
-
-                    // console.log(attribs.style)
-                    // console.log(attribs.style)
-                    let c = attribs?.color ? attribs?.color : ''
-                    let s = attribs?.style ? attribs.style : ''
-
-
+                    let c = attribs?.color ? attribs?.color : '';
+                    let s = attribs?.style ? attribs.style : '';
                     return {
                         tagName: 'span',
                         //   attribs: {
@@ -5168,21 +5128,16 @@ function AllProjectList(props) {
                 }
             }
         });
-
         // regex to replace all <p><br /></p>
-        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />')
-        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '')
-
+        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />');
+        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '');
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
-
         // formData.append("name", documentNameRef.current.innerText);
         var myHeaders = new Headers();
         var formdata = new FormData();
-
         formdata.append("html", removedStyleAttribFromImg);
         // formdata.append("html_str", removedStyleAttribFromImg)
-        formdata.append("name", "name")
-        
+        formdata.append("name", "name");
         var requestOptions = {
             method: 'POST',
             body: formdata,
@@ -5192,39 +5147,34 @@ function AllProjectList(props) {
         try{
             let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
             // let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions)
-         
             if (data.status === 200) {
-                let response = await data.blob()
-    
-                let fileObj = new File([response], `${(item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-                // console.log(fileObj);
+                let response = await data.blob();
+                let fileObj = new File([response], `${(item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
                 return fileObj;
             }else {
                 console.error('Failed to download file');
                 return null;
             }
         }catch(e) {
-            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
+            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }));
         }
     } 
 
     const handleDownloadAll = () => {
-        allDownloadedFilesArrRef.current = []
-        let arr = []
+        allDownloadedFilesArrRef.current = [];
+        let arr = [];
         bookCreationRef.current?.front_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
         bookCreationRef.current?.body_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
         bookCreationRef.current?.back_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
-        dispatch(addDownloadingFiles({ id: bookCreationRef.current?.id, file_name: bookCreationRef.current?.name, ext: '.docx', status: 1 }))
-
+        dispatch(addDownloadingFiles({ id: bookCreationRef.current?.id, file_name: bookCreationRef.current?.name, ext: '.docx', status: 1 }));
         downloadFilesInOrder(arr).then(() => {
-            // console.log(allDownloadedFilesArrRef.current)
-            mergeFile()
+            mergeFile();
         })
     } 
 
@@ -5243,13 +5193,8 @@ function AllProjectList(props) {
     const mergeFile = async() => {
         let formData = new FormData();
         let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
-        );
-        // console.log(a);
+            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null );
         let token = userCacheData != null ? userCacheData?.token : "";
-        
-        // console.log(allDownloadedFilesArrRef.current)
-
         allDownloadedFilesArrRef.current?.forEach(each => {
             formData.append("docx_files", each);
         })
@@ -5257,40 +5202,34 @@ function AllProjectList(props) {
         
         axios({
             method: "POST",
-            url: `${Config.BASE_URL}/openai/docx_merger/`,
+            url: `${Config.BASE_URL}/writer/docx_merger/`,
             data: formData,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },
         }).then(function (response) {
             //handle success
-            // console.log(response.data)
             const filename = response.headers['content-disposition']?.split('filename*=')[1];
-            let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''))
+            let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''));
             const url = URL.createObjectURL(new Blob([response.data]));
-
             var fileDownload = document.createElement("a");
             document.body.appendChild(fileDownload);
             // fileDownload.href = URL.createObjectURL(response.data);
-            fileDownload.href = url
+            fileDownload.href = url;
             fileDownload.download = Config.unescape(`${bookName}`);
             fileDownload?.click();
             document.body.removeChild(fileDownload);
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: bookCreationRef.current?.id, status: 2 }))
-
+            dispatch(updateDownloadingFile({ id: bookCreationRef.current?.id, status: 2 }));
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
+                dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }));
             }, 8000);
-
-
         }).catch((e) =>{
-            console.log(e)
-            Config.toast('Failed to download file', 'error')
-            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
+            console.log(e);
+            Config.toast('Failed to download file', 'error');
+            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }));
         })
     } 
-
 
     return (
         <React.Fragment>
@@ -5583,10 +5522,10 @@ function AllProjectList(props) {
                                                                                                 <KeyboardArrowDownIcon className="proj-list-arrow-down" />
                                                                                         }
                                                                                     </span>
-                                                                                    
                                                                                     {/* {project?.get_project_type === 6 && <span class="empty-box-icon"></span>} */}
                                                                                     <div className="proj-title-list-container">
-                                                                                        <div className="proj-type-icon-wrap">
+                                                                                        <div className={openedProjectId === project.id && project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ?"proj-type-icon-wrap" : ""}>
                                                                                             <span className={"proj-type-icon " + (project?.get_project_type == 6 ? "designer-bg" : (project?.get_project_type === 1 || project?.get_project_type === 2) ? "translate-bg" : (project?.get_project_type === 3 || project?.get_project_type === 10) ? "assets-bg" : (project?.get_project_type === 4 && project?.voice_proj_detail.project_type_sub_category === 2) ? "voice-bg" : "")}>
                                                                                                 {
                                                                                                     (project?.get_project_type === 1 || project?.get_project_type === 2) ?
@@ -5607,7 +5546,6 @@ function AllProjectList(props) {
                                                                                                 }
     
                                                                                             </span>
-    
                                                                                         </div>
                                                                                         <div className="proj-list-info">
                                                                                             <div className="proj-information">
@@ -5627,7 +5565,6 @@ function AllProjectList(props) {
                                                                                                             </span>}
                                                                                                     </span>
                                                                                                 </Tooltip>
-    
                                                                                                 {/* project.is_proj_analysed is removed from the below condition */}
                                                                                                 {project?.project_analysis?.proj_word_count != null && project?.project_analysis.proj_word_count != 0 ? (
                                                                                                     <div className="position-relative">
@@ -5653,7 +5590,6 @@ function AllProjectList(props) {
                                                                                                         </span>
                                                                                                     </div>
                                                                                                 )}
-    
                                                                                                 {project.assigned && (
                                                                                                     <span className="pl-2 pr-2">
                                                                                                         <img
@@ -5671,6 +5607,29 @@ function AllProjectList(props) {
                                                                                                     (project?.get_project_type === 5) ? t("instant") : (project?.get_project_type === 6) && t("proj_list_cate_design")}
                                                                                                 </span>
                                                                                             </div>
+                                                                                            {openedProjectId === project.id &&
+                                                                                                project?.adaptive_simple &&
+                                                                                                project?.adaptive_file_translate && selectedProjectFiles.map((selectedProjectFile) => (
+                                                                                                    <div className="file-edit-translation-txt">
+                                                                                                        {/* <img
+                                                                                                            className="translation-pair-L"
+                                                                                                            src={TranslationPair}
+                                                                                                        /> */}
+                                                                                                        <span>{targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}</span>
+                                                                                                        <img
+                                                                                                            src={ArrowRightAltColor}
+                                                                                                        />
+                                                                                                        <span>
+                                                                                                            {
+                                                                                                                (targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) !== undefined &&
+                                                                                                                    targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language) != null) ?
+                                                                                                                    targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language :
+                                                                                                                    targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language
+                                                                                                            }
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                ))}
+                                                                                            {/* <div>kjhuggjh</div>     */}
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -5801,7 +5760,6 @@ function AllProjectList(props) {
                                                                                     openedProjectId == project.id &&
                                                                                     ((selectedProjectFiles?.length > 0) ? (
                                                                                         selectedProjectFiles.map((selectedProjectFile, key) => {
-                                                                                            // console.log(selectedProjectFile)
                                                                                             isAssignedProject = createdProjects.find(
                                                                                                 (element) => element.id === openedProjectId
                                                                                             )?.assign_enable;
@@ -5827,12 +5785,10 @@ function AllProjectList(props) {
                                                                                                     Config.userState?.id
                                                                                                     ? "Assigner" : "Editor"
                                                                                             }
-    
                                                                                             // New logic
                                                                                             if (selectedProjectFile?.task_assign_info?.length === 2) {
     
                                                                                             }
-    
                                                                                             if (selectedProjectFile?.task_assign_info?.length === 2) {
                                                                                                 editorAssignmentDetails =
                                                                                                     selectedProjectFile?.task_assign_info[0]?.assign_to_details?.id ===
@@ -5846,10 +5802,8 @@ function AllProjectList(props) {
                                                                                                         ? selectedProjectFile?.task_assign_info[1]?.assigned_by_details
                                                                                                         : selectedProjectFile?.task_assign_info[1]?.assign_to_details;
                                                                                             }
-                                                                                            
                                                                                             let taskAssignStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.task_status
                                                                                             let taskClientStatus = selectedProjectFile?.task_assign_info?.find(each => each?.task_assign_detail?.task_status)?.task_assign_detail?.client_response
-
                                                                                             selectedFilesData = (
                                                                                                 <div 
                                                                                                     className={
@@ -5874,7 +5828,12 @@ function AllProjectList(props) {
                                                                                                     key={selectedProjectFile.id}
                                                                                                 >
                                                                                                     <div className="file-edit-list-inner-table-row">
-                                                                                                        <div className="file-edit-list-inner-table-cell">
+
+                                                                                                        {/* New Update */}
+                                                                                                        {project?.adaptive_simple &&
+                                                                                                            project?.adaptive_file_translate ? "" :
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             <div className="file-edit-translation-txt">
                                                                                                                 <img
                                                                                                                     className="translation-pair-L"
@@ -5894,7 +5853,9 @@ function AllProjectList(props) {
                                                                                                                 </span>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                        <div className="file-edit-list-inner-table-cell">
+                                                                                        }
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                            project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             {/* {projectType === 1 || projectType === 2 ? ( */}
                                                                                                             {selectedProjectFile?.filename !== undefined &&
                                                                                                                 <>
@@ -5968,7 +5929,33 @@ function AllProjectList(props) {
                                                                                                             </div>
                                                                                                         )}
                                                                                                     </div> */}
-                                                                                                        <div className="file-edit-list-inner-table-cell circular-progress">
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                            project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell circular-progress"}>
+                                                                                                            { project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'FAILED'  ? (
+                                                                                                                <div class="error-container">
+                                                                                                                    <div class="error-message">
+                                                                                                                        <span class="error-icon">
+                                                                                                                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                                                                                                            <path d="M9 12.75C9.2125 12.75 9.39063 12.6781 9.53438 12.5344C9.67813 12.3906 9.75 12.2125 9.75 12C9.75 11.7875 9.67813 11.6094 9.53438 11.4656C9.39063 11.3219 9.2125 11.25 9 11.25C8.7875 11.25 8.60938 11.3219 8.46563 11.4656C8.32188 11.6094 8.25 11.7875 8.25 12C8.25 12.2125 8.32188 12.3906 8.46563 12.5344C8.60938 12.6781 8.7875 12.75 9 12.75ZM8.25 9.75H9.75V5.25H8.25V9.75ZM9 16.5C7.9625 16.5 6.9875 16.3031 6.075 15.9094C5.1625 15.5156 4.36875 14.9813 3.69375 14.3063C3.01875 13.6313 2.48438 12.8375 2.09063 11.925C1.69688 11.0125 1.5 10.0375 1.5 9C1.5 7.9625 1.69688 6.9875 2.09063 6.075C2.48438 5.1625 3.01875 4.36875 3.69375 3.69375C4.36875 3.01875 5.1625 2.48438 6.075 2.09063C6.9875 1.69688 7.9625 1.5 9 1.5C10.0375 1.5 11.0125 1.69688 11.925 2.09063C12.8375 2.48438 13.6313 3.01875 14.3063 3.69375C14.9813 4.36875 15.5156 5.1625 15.9094 6.075C16.3031 6.9875 16.5 7.9625 16.5 9C16.5 10.0375 16.3031 11.0125 15.9094 11.925C15.5156 12.8375 14.9813 13.6313 14.3063 14.3063C13.6313 14.9813 12.8375 15.5156 11.925 15.9094C11.0125 16.3031 10.0375 16.5 9 16.5ZM9 15C10.675 15 12.0938 14.4188 13.2563 13.2563C14.4188 12.0938 15 10.675 15 9C15 7.325 14.4188 5.90625 13.2563 4.74375C12.0938 3.58125 10.675 3 9 3C7.325 3 5.90625 3.58125 4.74375 4.74375C3.58125 5.90625 3 7.325 3 9C3 10.675 3.58125 12.0938 4.74375 13.2563C5.90625 14.4188 7.325 15 9 15Z" fill="#E41E3F"/>
+                                                                                                                          </svg>
+                                                                                                                        </span>
+                                                                                                                        Oops! Something went wrong. Retry to continue from where you left off.
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            ) : selectedProjectFile?.progressLoading ? (
+                                                                                                                <ProgressBar
+                                                                                                                    progressValue={selectedProjectFile.percentage || 0}
+                                                                                                                    progressMap={progressMap}
+                                                                                                                    progressBarStyle={{ width: "270px", pr: "30px" }}
+                                                                                                                />
+                                                                                                            ) : (
+                                                                                                                selectedProjectFile?.percentage === 100 && (
+                                                                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0'}}>
+                                                                                                                        <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
+                                                                                                                        <span style={{ color: '#3c4043', fontWeight: '500' }}>Translation Completed</span>
+                                                                                                                    </div>
+                                                                                                                )
+                                                                                                            )}
                                                                                                             {/* {(selectedProjectFile?.filename !== undefined && project?.get_project_type !== 5 && selectedProjectFile?.open_in !== "Download") && 
                                                                                                         <div className="workspace-progress-bar-part-setup">
                                                                                                             {
@@ -6444,13 +6431,10 @@ function AllProjectList(props) {
                                                                                                             )}
     
                                                                                                         </div>
-                                                                                                        <div className="file-edit-list-inner-table-cell">
+                                                                                                        <div className={project?.adaptive_simple &&
+                                                                                                                project?.adaptive_file_translate ? "new-file-edit-list-inner-table-cell" : "file-edit-list-inner-table-cell"}>
                                                                                                             {/*  Need to destructure this following conditional code and set everything optimised properly */}
                                                                                                             <div className="file-assigned-member-lists">
-                                                                                                                {/* {console.log(userDetails.agency)}
-                                                                                                            {console.log(selectedProjectFile?.task_assign_info)}
-                                                                                                            {console.log(project?.assign_enable)} */}
-                                                                                                                {/* {console.log(userDetails.agency ? (selectedProjectFile?.task_assign_info !== null && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.task_assign_info !== null))} */}
                                                                                                                 {(userDetails.agency ? (selectedProjectFile?.task_assign_info != null && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.task_assign_info != null)) ?
                                                                                                                     (
                                                                                                                         <>
@@ -7239,7 +7223,6 @@ function AllProjectList(props) {
                                                                                                             </div>
     
                                                                                                             {/* Task action button logic ---- STARTS HERE */}
-                                                                                                            {/* {console.log(selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))))} */}
                                                                                                             <div className="project-list-action-wrap">
                                                                                                                 {selectedProjectFile?.task_assign_info?.length ? (  // if task is assigned
                                                                                                                     selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))) !== undefined ? (  // if task is assigned to same loged in user (assigned to me)
@@ -8404,20 +8387,84 @@ function AllProjectList(props) {
                                                                                                                         )
                                                                                                                     ) : (selectedProjectFile?.open_in === 'Download' && (project?.get_project_type === 1 || project?.get_project_type === 2)) ? (   // for translate batch file/files project
                                                                                                                         <>
-                                                                                                                            {selectedProjectFile?.file_translate_done ? (   // if file is translated show download btn
-                                                                                                                                <button className="workspace-files-OpenProjectButton"
+                                                                                                                               {(!project.adaptive_file_translate && selectedProjectFile?.file_translate_done) ? (
+                                                                                                                                    <button
+                                                                                                                                    className="translate-download-btn"
                                                                                                                                     type="button"
-                                                                                                                                    style={{
-                                                                                                                                        paddingLeft: "16px",
-                                                                                                                                        paddingRight: "16px"
-                                                                                                                                    }}
-                                                                                                                                    onMouseUp={(e) => downloadTaskTargetFile(selectedProjectFile)}
-                                                                                                                                >
+                                                                                                                                    style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                    onMouseUp={() => downloadTaskTargetFile(selectedProjectFile)}
+                                                                                                                                    >
                                                                                                                                     <span className="fileopen-new-btn">{t("download")}</span>
-                                                                                                                                </button>
-                                                                                                                            ) : (   // not translated then show translate btn
+                                                                                                                                    </button>
+                                                                                                                                ) : (project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status === "COMPLETED") ? (
+                                                                                                                                    <button
+                                                                                                                                    className="translate-download-btn"
+                                                                                                                                    type="button" 
+                                                                                                                                    style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                    onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)}
+                                                                                                                                    >
+                                                                                                                                    <span className="fileopen-new-btn">
+                                                                                                                                        {selectedProjectFile?.id === isDownloading && <SaveButtonLoader />}
+                                                                                                                                        {t("download")}
+                                                                                                                                    </span>
+                                                                                                                                    </button> 
+                                                                                                                                ) : (selectedProjectFile?.percentage >= 0 && selectedProjectFile.adaptive_file_translate_status != 'FAILED') ? (
+                                                                                                                                    <button
+                                                                                                                                    className="translate-download-btn"
+                                                                                                                                    type="button" 
+                                                                                                                                    style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                    onMouseUp={() => downloadAdaptiveTaskTargetFile(selectedProjectFile)}
+                                                                                                                                    disabled={selectedProjectFile?.progressLoading || selectedProjectFile?.percentage !== 100}
+                                                                                                                                    >
+                                                                                                                                    <span className="fileopen-new-btn">
+                                                                                                                                        {selectedProjectFile?.id === isDownloading && <SaveButtonLoader />}
+                                                                                                                                        {t("download")}
+                                                                                                                                    </span>
+                                                                                                                                    </button> 
+                                                                                                                                ) : (   // not translated then show translate btn
                                                                                                                                 selectedProjectFile?.isProcessing ? (
                                                                                                                                     <ProgressAnimateButton />
+                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'NOT_INITIATED' && project.adaptive_simple ? (
+                                                                                                                                    <>
+                                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                                            type="button"
+                                                                                                                                            style={{
+                                                                                                                                                paddingLeft: "16px",
+                                                                                                                                                paddingRight: "16px"
+                                                                                                                                            }}
+                                                                                                                                            onMouseUp={(e) => getTaskTransDownloadStatus(selectedProjectFile?.id)}
+                                                                                                                                        >
+                                                                                                                                            <span className="fileopen-new-btn">{t("translate")}</span>
+                                                                                                                                        </button>
+                                                                                                                                    </>
+                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'ONGOING' && project.adaptive_simple  ? (
+                                                                                                                                    <>
+                                                                                                                                        <button className="workspace-files-OpenProjectButton"
+                                                                                                                                            type="button"
+                                                                                                                                            style={{
+                                                                                                                                                paddingLeft: "16px",
+                                                                                                                                                paddingRight: "16px",
+                                                                                                                                                display: "flex",
+                                                                                                                                                alignItems: "center"
+                                                                                                                                            }}
+                                                                                                                                            onMouseUp={(e) => getTaskTranslationProgress('', selectedProjectFile?.id)}
+                                                                                                                                        >   <ButtonLoader />
+                                                                                                                                            <span className="fileopen-new-btn" style={{
+                                                                                                                                                paddingLeft: "5px"
+                                                                                                                                            }}>{'Processing'}</span>
+                                                                                                                                        </button>
+                                                                                                                                    </>
+                                                                                                                                ) : project.adaptive_file_translate && selectedProjectFile.adaptive_file_translate_status == 'FAILED' && project.adaptive_simple ?(
+                                                                                                                                    <>
+                                                                                                                                        <button
+                                                                                                                                            className="workspace-files-OpenProjectButton"
+                                                                                                                                            type="button"
+                                                                                                                                            style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                                                                                                                                            onMouseUp={(e) => getTaskTransDownloadStatus(selectedProjectFile?.id)}
+                                                                                                                                            >
+                                                                                                                                            <span className="fileopen-new-btn">{t("Retry")}</span>
+                                                                                                                                        </button>
+                                                                                                                                    </>
                                                                                                                                 ) : (
                                                                                                                                     <button className="workspace-files-OpenProjectButton"
                                                                                                                                         type="button"
@@ -8430,7 +8477,8 @@ function AllProjectList(props) {
                                                                                                                                         <span className="fileopen-new-btn">{t("translate")}</span>
                                                                                                                                     </button>
                                                                                                                                 )
-                                                                                                                            )}
+                                                                                                                            )
+                                                                                                                            }
                                                                                                                             <MoreOptionsIcon selectedProjectFile={selectedProjectFile} project={project} onlyDelete={true} disabled={selectedProjectFile?.pre_trans_processing} />
                                                                                                                         </>
                                                                                                                     ) : (
@@ -8438,6 +8486,7 @@ function AllProjectList(props) {
                                                                                                                             <ProgressAnimateButton />
                                                                                                                         ) : (
                                                                                                                             <>
+                                                                                                                            {/* new changes */}
                                                                                                                                 {
                                                                                                                                     clickedOpenButton == key ? (
                                                                                                                                         <button className="workspace-files-OpeningProjectButton" type="button">
@@ -8525,6 +8574,9 @@ function AllProjectList(props) {
                                                                                                                                                                     <ul>
                                                                                                                                                                         {
                                                                                                                                                                             subDownloadOptions?.filter(each => project.mt_enable ? true : each.value !== 'MTRAW')?.map((item) => {
+                                                                                                                                                                                if (project.adaptive_file_translate && item.label === t("mt_only")) {
+                                                                                                                                                                                    return null;
+                                                                                                                                                                                  }
                                                                                                                                                                                 return (
                                                                                                                                                                                     <li
                                                                                                                                                                                         key={item.id}
@@ -8698,6 +8750,7 @@ function AllProjectList(props) {
                                                                         <div className="file-edit-list-table-cell-wrap">
                                                                             <div className="file-edit-list-table-cell">
                                                                                 <span className="empty-box-icon"></span>
+                                                                                {/* new update */}
                                                                                 <div className="proj-title-list-container">
                                                                                     {
                                                                                         (project.docx_url_field !== null && project.docx_file_name !== null) ?
@@ -8737,6 +8790,9 @@ function AllProjectList(props) {
                                                                                                 </span>
                                                                                             </Tooltip>
                                                                                         </div>
+
+
+                                                                                 
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -9908,6 +9964,7 @@ function AllProjectList(props) {
                     POFilesDetails={POFilesDetails}
                 />
             )}
+
             {showTaskReworkReasonModal && (<Rodal
                 visible={showTaskReworkReasonModal}
                 showCloseButton={false}
@@ -10099,7 +10156,6 @@ function AllProjectList(props) {
                     </div>
                 </div>
             </Rodal>)}
-
 
             {/* Document file delete confirmation modal */}
             {showDeleteFileModal && (<Rodal

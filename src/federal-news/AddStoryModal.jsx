@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import Config from '../vendor/Config';
@@ -9,7 +9,7 @@ import { ButtonLoader } from '../loader/CommonBtnLoader';
 import sanitizeHtml from 'sanitize-html-react';
 import { useNavigate } from 'react-router-dom';
 import AddStoryFile from './AddStoryFile';
-import CloseBlack from "../assets/images/new-ui-icons/close_black.svg"
+import CloseBlack from "../assets/images/new-ui-icons/close_black.svg";
 
 
 const AddStoryModal = (props) => {
@@ -18,27 +18,22 @@ const AddStoryModal = (props) => {
         showAddStoryModal,
         setShowAddStoryModal,
         setActiveProjTab
-    } = props
+    } = props;
 
     const history = useNavigate();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-
-    const [isCreatingStory, setIsCreatingStory] = useState(false)
-    const [createModeStory, setCreateModeStory] = useState("text")
+    const [isCreatingStory, setIsCreatingStory] = useState(false);
+    const [createModeStory, setCreateModeStory] = useState("text");
     const [files, setFiles] = useState([]);
     const [fileError, setFileError] = useState("");
 
-
-    const editorRef = useRef(null)
+    const editorRef = useRef(null);
 
     const cleanEditorData = () => {
         // Take value of summernote editor
-        // var editorData = document.querySelector('.note-editable').innerHTML
-        
+        // var editorData = document.querySelector('.note-editable').innerHTML        
         // Take value of textarea
-        var editorData = editorRef.current.value
-        
-        // console.log(editorData)
+        var editorData = editorRef.current.value;
         let clean = sanitizeHtml(editorData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -48,14 +43,8 @@ const AddStoryModal = (props) => {
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    // console.log(attribs)
-
-                    // console.log(attribs.style)
-                    // console.log(attribs.style)
-                    let c = attribs?.color ? attribs?.color : ''
-                    let s = attribs?.style ? attribs.style : ''
-
-
+                    let c = attribs?.color ? attribs?.color : '';
+                    let s = attribs?.style ? attribs.style : '';
                     return {
                         tagName: 'span',
                         //   attribs: {
@@ -69,44 +58,38 @@ const AddStoryModal = (props) => {
                 }
             }
         });
-
-        return clean
+        return clean;
     } 
 
     const createStory = () => {
-        let formData = new FormData();
-        
+        let formData = new FormData();        
         // This is for getting html data from summernote editor
         // let editorData = cleanEditorData()
         // if (editorRef.current.summernote('isEmpty') || document?.querySelector('.note-editable')?.innerText?.trim()?.replace(/\n/g, '')?.length === 0) {
         //     Config.toast(t("empty_story"), 'warning')
         //     return;
         // }
-
         if(createModeStory === "text") {
             // This is for getting text from textarea
-            let editorData = cleanEditorData()
-            editorData = editorData?.trim()
+            let editorData = cleanEditorData();
+            editorData = editorData?.trim();
             if (editorData?.length === 0 || editorData === "") {
-                Config.toast(t("empty_story"), 'warning')
+                Config.toast(t("empty_story"), 'warning');
                 return;
             }
-
-            formData.append('news_data', editorData)
+            formData.append('news_data', editorData);
         }else{
             if(files?.length === 0){
-                setFileError(t("upload_files"))
+                setFileError(t("upload_files"));
                 return;
             }
             for (let x = 0; x < files.length; x++) {
                 if (typeof files[x] != "undefined") formData.append("files", files[x]);
             }
         }
-
         formData.append('source_language', 17);     // for English
-        formData.append('target_languages', 77)     // for Tamil
-        
-        setIsCreatingStory(true)
+        formData.append('target_languages', 77);     // for Tamil
+        setIsCreatingStory(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/add_stories/`,
@@ -114,27 +97,27 @@ const AddStoryModal = (props) => {
             method: "POST",
             data: formData,
             success: (response) => {
-                setIsCreatingStory(false)
-                setShowAddStoryModal(false)
-                let urlProjId = URL_SEARCH_PARAMS.get('open-project')
+                setIsCreatingStory(false);
+                setShowAddStoryModal(false);
+                let urlProjId = URL_SEARCH_PARAMS.get('open-project');
                 if(urlProjId == response.data?.id){
-                    let refreshParam = URL_SEARCH_PARAMS.get('refresh-proj')
-                    URL_SEARCH_PARAMS.set('refresh-proj', (refreshParam !== null && refreshParam !== undefined && refreshParam == "true") ? false : true)
-                    URL_SEARCH_PARAMS.set('filter', 'inprogress')
-                    URL_SEARCH_PARAMS.delete('editor')
-                    setActiveProjTab(2)
+                    let refreshParam = URL_SEARCH_PARAMS.get('refresh-proj');
+                    URL_SEARCH_PARAMS.set('refresh-proj', (refreshParam !== null && refreshParam !== undefined && refreshParam == "true") ? false : true);
+                    URL_SEARCH_PARAMS.set('filter', 'inprogress');
+                    URL_SEARCH_PARAMS.delete('editor');
+                    setActiveProjTab(2);
                     history("/my-stories" + '?' + URL_SEARCH_PARAMS.toString());
                 }else{
-                    URL_SEARCH_PARAMS.set('open-project', response.data?.id)
-                    URL_SEARCH_PARAMS.set('filter', 'inprogress')
-                    URL_SEARCH_PARAMS.delete('editor')
-                    setActiveProjTab(2)
+                    URL_SEARCH_PARAMS.set('open-project', response.data?.id);
+                    URL_SEARCH_PARAMS.set('filter', 'inprogress');
+                    URL_SEARCH_PARAMS.delete('editor');
+                    setActiveProjTab(2);
                     history("/my-stories" + '?' + URL_SEARCH_PARAMS.toString());
                 }
             },
             error: (err) => {
-                Config.toast(`${t("something_went_wrong")}`, 'error')
-                setIsCreatingStory(false)
+                Config.toast(`${t("something_went_wrong")}`, 'error');
+                setIsCreatingStory(false);
             }
         });
     }
@@ -173,8 +156,7 @@ const AddStoryModal = (props) => {
                                 files={files}
                                 setFiles={setFiles}
                                 fileError={fileError}
-                                setFileError={setFileError}
-                            />
+                                setFileError={setFileError}/>
                         )
                     }
                 </div>
@@ -198,4 +180,4 @@ const AddStoryModal = (props) => {
     )
 }
 
-export default AddStoryModal
+export default AddStoryModal;

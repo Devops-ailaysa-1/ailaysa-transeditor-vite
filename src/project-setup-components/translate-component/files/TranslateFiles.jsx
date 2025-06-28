@@ -12,7 +12,6 @@ import Select, { components } from "react-select";
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 // import Tooltip from '@mui/material/Tooltip';
-
 import Button from '@mui/material/Button';
 import Joyride, { ACTIONS, EVENTS, STATUS } from "react-joyride";
 // import TourTooltip from "../../../tour/TourTooltip";
@@ -32,34 +31,36 @@ import { ButtonLoader } from "../../../loader/CommonBtnLoader";
 import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
 import ProgressAnimateButton from "../../../vendor/button-loader/ProgressAnimateButton";
 import { AnalysisLoader } from "../../../loader/AnalysisLoader";
-import ArrowRightAltColor from "../../../assets/images/new-ui-icons/arrow_right_alt_color.svg"
-import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
-import InsuffientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg"
-import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg"
-import FileError from "../../../assets/images/new-ui-icons/file-error.png"
-import ImpFileIcon from "../../../assets/images/new-ui-icons/imp-icon-file.svg"
-import GroupsColor from "../../../assets/images/new-ui-icons/groups_color.svg"
-import ArrowRightGreyColor from "../../../assets/images/new-create-hub/arrow_right_grey_color.svg"
-import UploadFolder from "../../../assets/images/new-ui-icons/upload-folder.svg"
-import LinkPin from "../../../assets/images/new-ui-icons/link-pin.svg"
+import ArrowRightAltColor from "../../../assets/images/new-ui-icons/arrow_right_alt_color.svg";
+import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg";
+import InsuffientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg";
+import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg";
+import FileError from "../../../assets/images/new-ui-icons/file-error.png";
+import ImpFileIcon from "../../../assets/images/new-ui-icons/imp-icon-file.svg";
+import new_info_mark from "../../../assets/images/new-ui-icons/new_info_mark.svg";
+import GroupsColor from "../../../assets/images/new-ui-icons/groups_color.svg";
+import ArrowRightGreyColor from "../../../assets/images/new-create-hub/arrow_right_grey_color.svg";
+import UploadFolder from "../../../assets/images/new-ui-icons/upload-folder.svg";
+import LinkPin from "../../../assets/images/new-ui-icons/link-pin.svg";
 import sanitizeHtml from 'sanitize-html-react';
 import ReactRouterPrompt from 'react-router-prompt'
 import { Checkbox, Radio } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setAdvanceTranslateGlossaryModal } from "../../../features/AdvanceTranslateGlossaryModalSlice";
+import { AdvanceTranslateGlossaryModal } from "../../../vendor/model-select/Ailaysa-Glossaries/AdvanceTranslateGlossaryModal";
 
 function TranslateFiles(props) {
-    const {
-        setSidebarActiveTab
-    } = props
+    const {setSidebarActiveTab} = props ;
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
-
     /* State constants - start */
     const params = useParams();
     const history = useNavigate();
     const location = useLocation();
-
     const { t } = useTranslation();
-
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
+    const dispatch = useDispatch();
+    const open = Boolean(anchorEl); //Assigned task open
+
     const [didMount, setDidMount] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [fileUrl, setFileUrl] = useState("");
@@ -81,9 +82,8 @@ function TranslateFiles(props) {
     const [contentType, setContentType] = useState([]);
     const [deadline, setDeadline] = useState("");
     const [mtEnable, setMtEnable] = useState(true);
-    const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
-        useState(false);
-    // const [preTranslate, setPreTranslate] = useState(false)
+    const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
+    // const [preTranslate, setPreTranslate] = useState(false);
     const [createdProjects, setCreatedProjects] = useState([]);
     const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
@@ -96,12 +96,8 @@ function TranslateFiles(props) {
     const [openedProjectId, setOpenedProjectId] = useState(null);
     const [createdTasks, setCreatedTasks] = useState({ files: [], jobs: [] });
     const [supportFileExtensions, setSupportFileExtensions] = useState([]);
-    const [supportedTMXFileExtensions, setSupportedTMXFileExtensions] = useState([
-        ".tmx",
-    ]);
-    const [supportedTBXFileExtensions, setSupportedTBXFileExtensions] = useState([
-        ".tbx",
-    ]);
+    const [supportedTMXFileExtensions, setSupportedTMXFileExtensions] = useState([ ".tmx",]);
+    const [supportedTBXFileExtensions, setSupportedTBXFileExtensions] = useState([ ".tbx",]);
     const [paginationContent, setPaginationContent] = useState("");
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -113,8 +109,7 @@ function TranslateFiles(props) {
     const [fileUploadTabActive, setFileUploadTabActive] = useState(1);
     const [selectedProjectFilesCount, setSelectedProjectFilesCount] = useState(1);
     const [selectedProjectFiles, setSelectedProjectFiles] = useState([]);
-    const [machineLangTranslationChange, setmachineLangTranslationChange] =
-        useState(null);
+    const [machineLangTranslationChange, setmachineLangTranslationChange] = useState(null);
     const [editProjectId, setEditProjectId] = useState(null);
     const [sourceLanguageDisable, setSourceLanguageDisable] = useState(false);
     const [editFiles, setEditFiles] = useState([]);
@@ -173,18 +168,16 @@ function TranslateFiles(props) {
     const [sourceTargetValidation, setSourceTargetValidation] = useState({
         source: false,
         target: false,
-    })
-    const [preTranslate, setPreTranslate] = useState(false)
-    const [translationByPage, setTranslationByPage] = useState(true)
+    });
+    const [preTranslate, setPreTranslate] = useState(false);
+    const [translationByPage, setTranslationByPage] = useState(true);
     // steps related states
-    const [steps, setSteps] = useState([])
-    const [stepOptions, setStepOptions] = useState([])
+    const [steps, setSteps] = useState([]);
+    const [stepOptions, setStepOptions] = useState([]);
     const [selectedSteps, setSelectedSteps] = useState([]);
-    const [stepsFromApi, setstepsFromApi] = useState([])
-
+    const [stepsFromApi, setstepsFromApi] = useState([]);
     // Glossary project states
-    const [primaryGlossarySourceName, setPrimaryGlossarySourceName] =
-        useState("");
+    const [primaryGlossarySourceName, setPrimaryGlossarySourceName] =  useState("");
     const [glossaryCopyrightOwner, setGlossaryCopyrightOwner] = useState("");
     const [
         detailsOfPrimaryGlossarySourceName,
@@ -196,12 +189,9 @@ function TranslateFiles(props) {
         value: 1,
         label: t("private"),
     });
-    const [glossaryProjectCreationResponse, setGlossaryProjectCreationResponse] =
-        useState(null);
+    const [glossaryProjectCreationResponse, setGlossaryProjectCreationResponse] = useState(null);
     const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
-    const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState(
-        []
-    );
+    const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
     const [commonTarValue, setCommonTarValue] = useState(null);
     const [commonSrcValue, setCommonSrcValue] = useState(null);
@@ -209,47 +199,47 @@ function TranslateFiles(props) {
     const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
-    const [revisionStepEdit, setRevisionStepEdit] = useState(null)
-    const [selectedMTFromAPI, setSelectedMTFromAPI] = useState({})
-    const [pdfIdFromToolkit, setPdfIdFromToolkit] = useState(null)
-    const [recentlyUsedLangs, setRecentlyUsedLangs] = useState([])
-
-    const [showmodelwarning, setShowmodelwarning] = useState(false)
-    const [lastLocation, setLastLocation] = useState(null)
-    const [confirmedNavigation, setConfirmedNavigation] = useState(false)
-    const { pathname } = useLocation()
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
-
-    const [hasTeam, setHasTeam] = useState(null)
-    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
-    const [isProjectDeleting, setIsProjectDeleting] = useState(false)
-
-    const [showDocumentOpeingModal, setshowDocumentOpeingModal] = useState(false)
-    const [showTranslateAndDownloadBtn, setShowTranslateAndDownloadBtn] = useState(false)
-    const [projectTaskList, setProjectTaskList] = useState([])
-    const [translateDownloadBtnLoader, setTranslateDownloadBtnLoader] = useState(false)
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-
-    const [checkchangenav, setCheckchangenav] = useState(false)
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
+    const [revisionStepEdit, setRevisionStepEdit] = useState(null);
+    const [selectedMTFromAPI, setSelectedMTFromAPI] = useState({});
+    const [pdfIdFromToolkit, setPdfIdFromToolkit] = useState(null);
+    const [recentlyUsedLangs, setRecentlyUsedLangs] = useState([]);
+    const [showmodelwarning, setShowmodelwarning] = useState(false);
+    const [lastLocation, setLastLocation] = useState(null);
+    const [confirmedNavigation, setConfirmedNavigation] = useState(false);
+    const { pathname } = useLocation();
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
+    const [hasTeam, setHasTeam] = useState(null);
+    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false);
+    const [isProjectDeleting, setIsProjectDeleting] = useState(false);
+    const [showDocumentOpeingModal, setshowDocumentOpeingModal] = useState(false);
+    const [showTranslateAndDownloadBtn, setShowTranslateAndDownloadBtn] = useState(false);
+    const [projectTaskList, setProjectTaskList] = useState([]);
+    const [translateDownloadBtnLoader, setTranslateDownloadBtnLoader] = useState(false);
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const [checkchangenav, setCheckchangenav] = useState(false);
     const [axiosFileTranslateAbortController, setAxiosFileTranslateAbortController] = useState(null);
     const [isDownloading, setIsDownloading] = useState(null);
-    const [showFileErrorModal, setShowFileErrorModal] = useState(false);
-    
+    const [showFileErrorModal, setShowFileErrorModal] = useState(false);    
     // adaptive translation state
     const [adaptiveTransEnable, setAdaptiveTransEnable] = useState(false);
-
-    const searchAreaRef = useRef(null);
-    const mtEngineOptionRef = useRef(null)
-
+    // advance glossary state
+    const [glossaryProjectId, setGlossaryProjectId] = useState(null);
+    const [glossaryTaskId, setGlossaryTaskId] = useState(null);
+    const [defaultGlossaryProjectId, setDefaultGlossaryProjectId] = useState(null);
+    const [openGlossariesModal, setOpenGlossariesModal] = useState(false);
+    const [backupSourceLanguage, setBackupSourceLanguage] = useState("");
+    const [backupTargetLanguage, setBackupTargetLanguage] = useState("");
+    const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
     /* State constants - end */
 
     /* Ref constants - start */
+    const searchAreaRef = useRef(null);
+    const mtEngineOptionRef = useRef(null);
     const fileUploadTop = createRef();
     const sourceLanguageLabel = createRef();
     const targetLanguageLabel = createRef();
-
     const projectNameRef = useRef("");
     const sourceLanguageModal = useRef();
     const projectsPerPage = useRef(20);
@@ -257,11 +247,11 @@ function TranslateFiles(props) {
     const deletedJobIds = useRef([]);
     const deletedSubjectIds = useRef([]);
     const deletedContentIds = useRef([]);
-    // const allowedFileLength = useRef(10)
-    // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`)
-    // const allowedTargetLanguageLength = useRef(20)
-    // const allowedFileSize = useRef(100) //In MB
-    // const fileSizeErrMsg = useRef(`Exceeds the file(s) size limit of ${allowedFileSize.current} MB`)
+    // const allowedFileLength = useRef(10);
+    // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`);
+    // const allowedTargetLanguageLength = useRef(20);
+    // const allowedFileSize = useRef(100); //In MB
+    // const fileSizeErrMsg = useRef(`Exceeds the file(s) size limit of ${allowedFileSize.current} MB`);
     const allowedSingleFileSize = useRef(100); // in MB
     const singleFileSizeError = useRef(t("file_size_exceeds"));
     const projectIdToSelect = useRef(null);
@@ -274,18 +264,17 @@ function TranslateFiles(props) {
     const projectEditable = useRef(false);
     const contentprojectNameRef = useRef();
     const [hasFocus, setHasFocus] = useState(false);
-    const prevPageInfo = useRef(null)
-    const sourceLangRef = useRef(null)
-    const projectDataFromApi = useRef(null)
-    const translateDownloadCeleryTaskListRef = useRef([])
-    const createdProjectIdRef = useRef(null)
-    const projectTaskListRef = useRef(null)
-    const inputFileUploadRef = useRef(null)
-    const fileTranslatingTaskListRef = useRef([])
+    const prevPageInfo = useRef(null);
+    const sourceLangRef = useRef(null);
+    const projectDataFromApi = useRef(null);
+    const translateDownloadCeleryTaskListRef = useRef([]);
+    const createdProjectIdRef = useRef(null);
+    const projectTaskListRef = useRef(null);
+    const inputFileUploadRef = useRef(null);
+    const fileTranslatingTaskListRef = useRef([]);
+    const defaultGlossDetailsRef = useRef(null);
     /* Ref constants - end */
-
-    const open = Boolean(anchorEl); //Assigned task open
-
+   
     const customMtSelectStyles = {
         placeholder: (provided, state) => ({
             ...provided,
@@ -353,7 +342,6 @@ function TranslateFiles(props) {
         getAllLangDetailsList();
         getSteps();
         getTeamsOptions();
-
         // runs when the component is unmounted
         return () => {
             var id = window.setTimeout(function() {}, 0);
@@ -366,25 +354,21 @@ function TranslateFiles(props) {
     useEffect(() => {
         if (targetLanguageOptionsRef.current !== null) {
             if (location.search === '') {
-                recentlyUsedLanguage()
+                recentlyUsedLanguage();
             }
         }
-    }, [targetLanguageOptionsRef.current, location.search])
-
-
+    }, [targetLanguageOptionsRef.current, location.search]);
 
     useEffect(() => {
         if (files.length > 0) {
-            setCheckchangenav(true)
-            setConfirmedNavigation(false)
-            checkForOfficeFiles(files)
+            setCheckchangenav(true);
+            setConfirmedNavigation(false);
+            checkForOfficeFiles(files);
         }
         else {
-            setCheckchangenav(false)
+            setCheckchangenav(false);
         }
-    }, [files])
-
-
+    }, [files]);
 
     useEffect(() => {
         if (
@@ -395,58 +379,51 @@ function TranslateFiles(props) {
         ) {
             let projectId = URL_SEARCH_PARAMS.get("get-project-info");
             let projectType = URL_SEARCH_PARAMS.get("type");
-            editProject(projectId, projectType);
-            // console.log('from param');
-            // console.log(targetLanguageOptionsRef.current);
-            // console.log(mtEngineOptionRef.current);
-        
+            editProject(projectId, projectType);        
         }
     }, [targetLanguageOptionsRef.current, mtEngineOptionRef.current, URL_SEARCH_PARAMS.get("get-project-info")]);
 
     useEffect(() => {
         let pdfId = URL_SEARCH_PARAMS.get("pdf")
         if (pdfId && location.state?.filename) {
-            setPdfIdFromToolkit(parseInt(pdfId))
-            // console.log(didMount);
-            let arr = []
+            setPdfIdFromToolkit(parseInt(pdfId));
+            let arr = [];
             arr.push({
                 id: parseInt(pdfId),
                 can_delete: true,
                 filename: location.state?.filename,
-            })
-            setEditFiles(arr)
+            });
+            setEditFiles(arr);
         }
-    }, [URL_SEARCH_PARAMS.get("pdf"), location.state])
+    }, [URL_SEARCH_PARAMS.get("pdf"), location.state]);
 
     useEffect(() => {
         let docId = URL_SEARCH_PARAMS.get("doc")
         if (docId && location.state?.docxFile) {
-            let arr = []
-            arr.push(location.state?.docxFile)
-            setFiles(arr)
+            let arr = [];
+            arr.push(location.state?.docxFile);
+            setFiles(arr);
         }
-    }, [URL_SEARCH_PARAMS.get("doc"), location.state])
-
+    }, [URL_SEARCH_PARAMS.get("doc"), location.state]);
 
     useEffect(() => {
         if (URL_SEARCH_PARAMS.get("get-project-info")) {
             setLoading(true);
         }
-    }, [URL_SEARCH_PARAMS.get("get-project-info")])
+    }, [URL_SEARCH_PARAMS.get("get-project-info")]);
 
     useEffect(() => {
         if (location.state?.prevPageInfo) {
-            prevPageInfo.current = location.state?.prevPageInfo
+            prevPageInfo.current = location.state?.prevPageInfo;
         }
-    }, [location.state])
-
+    }, [location.state]);
 
     useEffect(() => {
         let translateFilesDiv = document.querySelector('.translate-task-list')
         if(translateFilesDiv){
-            translateFilesDiv.scrollIntoView({ behavior: "smooth"})
+            translateFilesDiv.scrollIntoView({ behavior: "smooth"});
         }
-    }, [document.querySelector('.translate-task-list')])
+    }, [document.querySelector('.translate-task-list')]);
     
 
     /* Show / Hide the Github, Gitlab file upload */
@@ -478,7 +455,7 @@ function TranslateFiles(props) {
             url: `${Config.BASE_URL}/app/mt_engines/`,
             auth: true,
             success: (response) => {
-                mtEngineOptionRef.current = response?.data
+                mtEngineOptionRef.current = response?.data;
                 setMtpeEngines(response?.data);
             },
         });
@@ -503,59 +480,45 @@ function TranslateFiles(props) {
                     value: each.id,
                     label: each.name,
                     disabled: true
-                })
+                });
             } else {
                 stepList.push({
                     value: each.id,
                     label: each.name,
-                })
+                });
             }
-            stepOptionsRef.current = stepList
-            setStepOptions(stepList)
+            stepOptionsRef.current = stepList;
+            setStepOptions(stepList);
         })
     }, [steps])
 
     // by default post editing is selected and it can't be removed [mandatory step]
     useEffect(() => {
-        setSelectedSteps(stepOptionsRef.current?.filter(each => each.value === 1))
-    }, [stepOptions])
-
+        setSelectedSteps(stepOptionsRef.current?.filter(each => each.value === 1));
+    }, [stepOptions]);
 
     // handler for steps selection
     const handleSelectedSteps = (selected) => {
         setSelectedSteps(selected);
     };
 
-
-
     useEffect(() => {
-
-        let sourceFilter = allLangDetailsList?.filter(each => each?.language == sourceLanguage)
-
+        let sourceFilter = allLangDetailsList?.filter(each => each?.language == sourceLanguage);
         let srcTranslateFilterRes = sourceFilter?.filter((each) => each?.translate === true);
-
         let sortedSrcMtpe = srcTranslateFilterRes?.map((each) => {
             return each?.mtpe_engines;
         });
-
-        // console.log(sortedSrcMtpe)
-
         setCommonSrcValue(sortedSrcMtpe);
-
         // remove the source language from the target language list
-        setTargetLanguageOptions(targetLanguageOptions?.filter(each => each.id !== sourceLanguage))
+        setTargetLanguageOptions(targetLanguageOptions?.filter(each => each.id !== sourceLanguage));
         if (targetLanguage !== '') {
-            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage))
+            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage));
         }
-
-        //   console.log(allLangDetailsList.find(function(each){each.language === sourceLanguage})
     }, [sourceLanguage]);
 
     useEffect(() => {
-        // console.log(targetLanguage)
         let targetArr = [];
         for (let i = 0; i < targetLanguage?.length; i++) {
-            // console.log(targetLanguage[i].id)
             targetArr?.push(
                 allLangDetailsList?.filter(
                     (each2) => each2?.language === targetLanguage[i]?.id
@@ -566,7 +529,6 @@ function TranslateFiles(props) {
             return each?.filter((eachTargetArr) => eachTargetArr?.translate === true);
         });
 
-        // console.log(tarTranslateFilter)
         let sortedTarMtpe = tarTranslateFilter?.map((each) => {
             return each?.map((each2) => {
                 return each2?.mtpe_engines;
@@ -577,17 +539,13 @@ function TranslateFiles(props) {
                 return a?.indexOf(v) !== -1;
             });
         });
-        // console.log(commonTarMtpeEngine)
         setCommonTarValue(commonTarMtpeEngine);
     }, [targetLanguage]);
 
     useEffect(() => {
-
-        // console.log(commonSrcValue)
         const common = commonSrcValue?.filter((value) =>
             commonTarValue?.includes(value)
         );
-        // console.log(common)
         setCommonMtpeEngine(common);
     }, [commonSrcValue, commonTarValue]);
 
@@ -626,20 +584,15 @@ function TranslateFiles(props) {
                     label: eachEngine?.name?.replaceAll("_", " "),
                 })
             );
-
             if (engines?.filter((each) => each.value === selectedMTEngine?.value)?.length ? false : true) {
-                setSelectedMTEngine(mtpeEngineOptions?.find((each) => each?.value === 1))
-                // console.log(mtpeEngineOptions?.find((each) => each?.value === 1));
-                // console.log('inside if');
+                setSelectedMTEngine(mtpeEngineOptions?.find((each) => each?.value === 1));
             } else if (engines?.length > 1) {
-                // console.log('inside else');
                 setTimeout(() => {
-                    setSelectedMTEngine(selectedMTFromAPI)
+                    setSelectedMTEngine(selectedMTFromAPI);
                 }, 100);
             }
         }
-    }, [targetLanguage, commonMtpeEngine])
-
+    }, [targetLanguage, commonMtpeEngine]);
 
     /* Handling the team checkbox selection */
     const handleTeamChange = (TeamSelect) => {
@@ -656,8 +609,8 @@ function TranslateFiles(props) {
     const hideVersionControlModal = () => setShowVersionControlModal(false);
 
     /* 
-          - Get the analysis data if it's not counted already
-      */
+    - Get the analysis data if it's not counted already
+    */
     const showWordCountModal = (
         e = null,
         projectId = 0,
@@ -665,6 +618,7 @@ function TranslateFiles(props) {
     ) => {
         if (projectId && !isProjectAnalyzed) {
             setShowWordCountLoader(true);
+
             Config.axios({
                 url: `${Config.BASE_URL}/workspace/project_analysis/${projectId}`,
                 auth: true,
@@ -761,7 +715,6 @@ function TranslateFiles(props) {
             url: Config.BASE_URL + "/app/mt-language-support/",
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 setAllLangDetailsList(response.data);
             },
         };
@@ -818,14 +771,14 @@ function TranslateFiles(props) {
     };
 
     /* const filesSizeExceed = () => {
-          let allFilesSize = 0
+          let allFilesSize = 0;
           Object.keys(files).map(eachKey => {
               allFilesSize += parseInt(files[eachKey].size)
-          })
+          });
           allFilesSize = allFilesSize/1024/1024 //Convert to MB
           if (allFilesSize <= allowedFileSize.current)
-              return false
-          return true
+              return false;
+          return true;
       } */
 
     /* Switch to file upload view */
@@ -844,18 +797,17 @@ function TranslateFiles(props) {
 
     /* Handling all the project creation form */
     const handleChange = (e) => {
-        // e.target.files[0].name.length
-        // console.log(e.target.files);
+        // e.target.files[0].name.length;
         for (let i = 0; i < (e.target.files).length; i++) {
             if ((e.target.files[i]?.name).length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
-                return
+                return;
             }
         }
         switch (e.target.name) {
             case "files": {
                 let thisFiles = e.target.files;
-                // let fileList = JSON.parse(JSON.stringify(files))
+                // let fileList = JSON.parse(JSON.stringify(files));
                 let fileList = [...files];
                 Object.keys(thisFiles).map((eachKey) => {
                     if (isSupportedFile(thisFiles[eachKey])) {
@@ -868,11 +820,11 @@ function TranslateFiles(props) {
                             fileList.push(thisFiles[eachKey]);
                         else Config.toast(singleFileSizeError.current, "error");
                         // else
-                        // Config.toast(fileLengthErrMsg.current, 'error')
+                        // Config.toast(fileLengthErrMsg.current, 'error');
                     }
                 });
                 setFiles(fileList);
-                // setFiles(prevState => [...prevState, e.target.files])
+                // setFiles(prevState => [...prevState, e.target.files]);
                 break;
             }
             case "projectName": {
@@ -890,7 +842,6 @@ function TranslateFiles(props) {
     const handleProjectNamechange = (e) => {
         if (e.target.innerText == "") setProjectNameError(t("enter_proj_name"));
         else setProjectNameError("");
-        // console.log(e.target.innerText)
         setProjectName(e.target.innerText);
     };
 
@@ -901,9 +852,7 @@ function TranslateFiles(props) {
             )
         );
     };
-
-    const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
-
+   
     useEffect(() => {
         alreadySelecetedTarLangID.length !== 0 &&
             removeAlreadySelectedTargetlanguage();
@@ -935,15 +884,15 @@ function TranslateFiles(props) {
             ...sourceTargetValidation,
             source: false,
         });
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     /* Handling target language selection */
     const handleTargetLangClick = (value, e) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
-            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected");
             targetLanguageTemp = Config.removeItemFromArray(
                 targetLanguageTemp,
                 value
@@ -963,10 +912,9 @@ function TranslateFiles(props) {
             ...sourceTargetValidation,
             target: false,
         });
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
-
 
     /* Handling subject field selection */
     const handleSubjectFieldClick = (value, e) => {
@@ -974,7 +922,6 @@ function TranslateFiles(props) {
         if (e.target.classList.contains("selected")) {
             e.target.classList.remove("selected");
             subjectFieldTemp = Config.removeItemFromArray(subjectFieldTemp, value);
-
             if (editProjectId != null) {
                 let thisSubject = editSubjects.find(
                     (element) => element.subject == value?.id
@@ -1021,66 +968,53 @@ function TranslateFiles(props) {
         }
     }, [targetLanguage]);
 
-
     useEffect(() => {
         if (targetLanguage) {
             let list = ""
             targetLanguage?.map((each, index) => {
-                list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
-                    }`;
+                list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : "" }`;
             });
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current])
-
+    }, [targetLanguage, targetLanguageOptionsRef.current]);
 
     /* Adding new project */
     const handleSubmit = (e, action) => {
-
-        // console.log(projectName);
         //Also check the handleUpdate
         e.preventDefault();
         let formData = new FormData();
         /* Validation - start */
         if (sourceLanguage == "" && targetLanguage.length < 1 && ((files.length == 0 && pdfIdFromToolkit == null) && fileUrl == "") && params?.menu === "files") {
-            // console.log('first if');  
             setSourceTargetValidation({
                 source: true,
                 target: true,
             });
             setFileError(t("required"));
             setProjectNameError(t("enter_proj_name"));
-            contentprojectNameRef.current.scrollIntoView()
+            contentprojectNameRef.current.scrollIntoView();
             contentprojectNameRef.current.focus();
             setHasFocus(true);
             return;
         }
-
         if (
             files.length == 0 &&
             fileUrl == "" &&
             pdfIdFromToolkit == null
         ) {
-            setFileError(t("upload_files"));
+            setFileError(t("required"));
             return;
         }
-
         if (files?.length === 0 && editFiles?.length === 0) {
             setFileError(t("upload_files"));
             return;
         }
-
-
         if (fileError != "") setFileError("");
-
         for (let x = 0; x < files.length; x++) {
             if (typeof files[x] != "undefined") formData.append("files", files[x]);
         }
-
         if (pdfIdFromToolkit !== null) {
-            formData.append("pdf_obj_id", pdfIdFromToolkit)
+            formData.append("pdf_obj_id", pdfIdFromToolkit);
         }
-
         if (sourceLanguage == "") {
             setSourceTargetValidation({
                 ...sourceTargetValidation,
@@ -1099,7 +1033,6 @@ function TranslateFiles(props) {
             });
             return;
         }
-
         if (targetLanguage?.length > 0) setSourceTargetValidation({
             ...sourceTargetValidation,
             target: false,
@@ -1115,18 +1048,15 @@ function TranslateFiles(props) {
             }
         }
         /* Validation - end */
-
         // formData.append("project_type", 2);
         formData.append(
             "mt_engine",
             selectedMTEngine?.value ? selectedMTEngine?.value : 1
         );
         formData.append("source_language", sourceLanguage);
-
         targetLanguage.map((eachTargetLanguage) => {
             formData.append("target_languages", eachTargetLanguage?.id);
         });
-
         subjectField?.length > 0 &&
             subjectField?.map((eachSubjectField) => {
                 formData.append("subjects", eachSubjectField?.id);
@@ -1135,26 +1065,21 @@ function TranslateFiles(props) {
             contentType?.map((eachContentType) => {
                 formData.append("contents", eachContentType?.id);
             });
-
         let deadlineUTC = Config.convertLocalToUTC(deadline);
         deadline && formData.append("project_deadline", deadlineUTC);
-
         formData.append("mt_enable", mtEnable);
         formData.append("isAdaptiveTranslation", adaptiveTransEnable);
-
+        formData.append("adaptive_file_translate", adaptiveTransEnable);
         formData.append("pre_translate", preTranslate);
         if(mtEnable) formData.append("get_mt_by_page", translationByPage);
-
+        if(defaultGlossaryProjectId) formData.append("default_gloss_project_id", defaultGlossaryProjectId);
         selectedSteps?.map(eachStep => {
             formData.append("steps", eachStep?.value);
-        })
-
+        })  
         if (projectName !== null && projectName?.trim() !== "") {
             formData.append("project_name", projectName);
         }
-
         if(action === 'trans-download') formData.append("file_translate", true); 
-
         if (fileUrl != "") formData.append("url", fileUrl);
         let url = "";
         if (integrationFiles.length) {
@@ -1175,9 +1100,8 @@ function TranslateFiles(props) {
         } else if (fileUrl == "")
             url = Config.BASE_URL + "/workspace/project/quick/setup/";
         else url = Config.BASE_URL + "/srt/fileUpload";
-
         // button loaders
-        if(action === 'trans-download') setTranslateDownloadBtnLoader(true)
+        if(action === 'trans-download') setTranslateDownloadBtnLoader(true);
         else setShowCreateLoader(true);
         
         Config.axios({
@@ -1192,38 +1116,32 @@ function TranslateFiles(props) {
             data: formData,
             auth: true,
             success: (response) => {
-                createdProjectIdRef.current = response.data.id
-
+                createdProjectIdRef.current = response.data.id;
                 if(action === 'trans-download'){
                     setProjectName(response.data.project_name);
                     contentprojectNameRef.current.innerText = response.data.project_name;
                     getProjectTaskData(response.data.id, action)
                     return;
                 }
-
-                // if(response.data.tasks_count === 1 && !preTranslate){
-                    
+                // if(response.data.tasks_count === 1 && !preTranslate){                    
                 //     // first get project analysis status
                 //     if(response.data?.project_analysis?.hasOwnProperty('celery_id')){
-                //         getProjectAnalysisStatus(response.data.id)
-                //         setshowDocumentOpeingModal(true)
+                //         getProjectAnalysisStatus(response.data.id);
+                //         setshowDocumentOpeingModal(true);
                 //     }else{
-                //         getProjectTaskData(response.data.id)
-                //     }
-                    
+                //         getProjectTaskData(response.data.id);
+                //     }                    
                 // }else{
                 // }
                 Config.toast("Project created successfully");
-                // console.log('redirect')
-                history(`/translations?page=1&open-project=${response.data.id}`)
-
+                history(`/translations?page=1&open-project=${response.data.id}`);
             },
             error: (err) => {
                 if (err?.response?.data?.files) {
-                    Config.toast(t("submitted_file_empty"), 'warning')
+                    Config.toast(t("submitted_file_empty"), 'warning');
                 }
                 setShowCreateLoader(false);
-                setTranslateDownloadBtnLoader(false)
+                setTranslateDownloadBtnLoader(false);
             }
         });
     };
@@ -1234,20 +1152,29 @@ function TranslateFiles(props) {
             url: `${Config.BASE_URL}/workspace/project/word_char/count?project_id=${proj_id}`,
             auth: true,
             success: (analysisResponse) => {
-                // console.log(analysisResponse.data?.out[0]?.hasOwnProperty('celery_id'))
                 if(analysisResponse.data?.out[0]?.hasOwnProperty('celery_id')){
                     setTimeout(() => {
-                        getProjectAnalysisStatus(proj_id)
+                        getProjectAnalysisStatus(proj_id);
                     }, 4000);
                 }else{
-                    getProjectTaskData(proj_id)
+                    getProjectTaskData(proj_id);
                 }
             },
-            error: (err) => {}
+            error: (err) => {
+                console.error(err);
+            }
         });
     } 
 
-    const getProjectTaskData = (proj_id, action) => {
+    /**
+     * This method used to retrieve the task created under the project id.
+     * @param {*} proj_id 
+     * @param {*} action 
+     * 
+     * For Glossary Project @author - Padmabharathi Subiramanian 
+     * @since APR 22 2025
+     */
+    const getProjectTaskData = (proj_id, action, isFrom) => {
         // vendor dashboard
         Config.axios({
             url: `${Config.BASE_URL}/workspace/vendor/dashboard/${proj_id}`,
@@ -1262,17 +1189,33 @@ function TranslateFiles(props) {
                             isProcessing: true
                         }
                     })
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
-
-                    getProjectTransDownloadStatus()
+                    projectTaskListRef.current = newArr; 
+                    setProjectTaskList(newArr);
+                    getProjectTransDownloadStatus();
                     return;
+                } else if (action === 'GLOSSARY') {
+                    const glossaryData = dashboardResponse.data[0];
+                    setGlossaryTaskId(glossaryData.id);
+                    const defaultGlossary = {
+                        // gloss_id: glossaryProjectId,
+                        gloss_job_id: glossaryData.job,
+                        gloss_task_id: glossaryData.id,
+                        gloss_project_id: glossaryProjectId
+                    };
+                    defaultGlossDetailsRef.current = defaultGlossary;
+                    if (isFrom !== 'INIT') {
+                        setOpenGlossariesModal(true);
+                        setTimeout(() => {
+                            dispatch(setAdvanceTranslateGlossaryModal(true));
+                        }, 500);
+                    }
                 }
                 // open file/document
-                openDocumentFile(dashboardResponse.data[0].document_url, proj_id)
+                // openDocumentFile(dashboardResponse.data[0].document_url, proj_id)
             },
-            error: (err) => { }
+            error: (err) => {
+                console.error(err);
+             }
         });
     } 
 
@@ -1291,10 +1234,9 @@ function TranslateFiles(props) {
                 }
                 if(err?.response?.status === 400){
                     if(err?.response?.data?.msg?.toLowerCase()?.includes('analysis')){
-                        // console.log(err?.response?.data)
-                        history(`/translations?page=1&open-project=${proj_id}`)
+                        history(`/translations?page=1&open-project=${proj_id}`);
                         // setTimeout(() => {
-                        //     openDocumentFile(url, proj_id)
+                        //     openDocumentFile(url, proj_id);
                         // }, 4000);
                     }
                 }
@@ -1302,33 +1244,32 @@ function TranslateFiles(props) {
         });
     }
 
-
     /* Reset the project creation form */
     const resetForm = () => {
-        contentprojectNameRef.current.innerText = ''
+        contentprojectNameRef.current.innerText = '';
         setEditProjectId(null);
         setProjectName("");
         setTeamSelect("");
         setSourceLanguage('');
-        setSourceLanguageDisable(false)
-        setTargetLanguageListTooltip('')
+        setSourceLanguageDisable(false);
+        setTargetLanguageListTooltip('');
         setSourceLabel("");
         setTargetLanguage("");
-        setAlreadySelecetedTarLangID([])
+        setAlreadySelecetedTarLangID([]);
         setSubjectField([]);
-        // setIsOpen(false)
+        // setIsOpen(false);
         setContentType([]);
         setDeadline(null);
         setMtEnable(true);
         setPreTranslate(false);
         setFiles([]);
-        setProjectTaskList([])
+        setProjectTaskList([]);
         setSourceTargetValidation({
             source: false,
             target: false,
-        })
-        inputFileUploadRef.current.value = ''
-        projectTaskListRef.current = null
+        });
+        inputFileUploadRef.current.value = '';
+        projectTaskListRef.current = null;
         setTimeout(() => {
             setSourceLanguageError("");
             setTargetLanguageError("");
@@ -1635,7 +1576,7 @@ function TranslateFiles(props) {
                     fileList.push(filesTemp[eachKey]);
                 else Config.toast(singleFileSizeError.current, "error");
                 // else
-                // Config.toast(fileLengthErrMsg.current, 'error')
+                // Config.toast(fileLengthErrMsg.current, 'error');
             } else if (request !== null) {
                 if (
                     (request === "tmx" && isSupportedFile(filesTemp[eachKey], request)) ||
@@ -1653,9 +1594,8 @@ function TranslateFiles(props) {
         if (request === "tmx") setTMXFiles(fileList);
         else if (request === "tbx") setTBXFiles(fileList);
         else setFiles(fileList);
-
         setShowFileUpload(false);
-        // setFiles(prevState => [...prevState, fileList])
+        // setFiles(prevState => [...prevState, fileList]);
     };
 
     /* Removed dragged files */
@@ -1672,7 +1612,7 @@ function TranslateFiles(props) {
         });
         if (isFilesEmpty) filesTemp = [];
         setFiles(finalFiles);
-        inputFileUploadRef.current.value = ''
+        inputFileUploadRef.current.value = '';
     };
 
     /* Remove all the droped files */
@@ -1709,20 +1649,19 @@ function TranslateFiles(props) {
         onClose: hideVersionControlModal,
     };
 
-
     /* Get all the details of a project by id and load into the form */
     const editProject = (projectId, projectType, e = null) => {
         setEditProjectId(projectId);
         setProjectType(projectType);
         setActiveTab(2);
         projectEditable.current = true;
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/files_jobs/${projectId}/`,
             method: "GET",
             auth: true,
             success: (response) => {
-                let {
-                    data,
+                let { data,
                     data: { glossary },
                 } = response;
                 let editSourceLanguage = targetLanguageOptionsRef.current?.find(
@@ -1738,7 +1677,11 @@ function TranslateFiles(props) {
                         filename: location.state?.filename,
                     })
                 }
+                
                 projectDataFromApi.current = response.data
+              
+                setBackupSourceLanguage(data.jobs[0].source_language);
+                setBackupTargetLanguage(data.jobs[0].target_language);
                 setEditFiles(data.files);
                 setGlossaryEditFiles(data.glossary_files);
                 setEditJobs(data.jobs);
@@ -1787,7 +1730,6 @@ function TranslateFiles(props) {
                         );
                     }
                 });
-
                 data.subjects?.map((subject) => {
                     editSubjectFields.push(
                         subjectFieldOptionsRef.current?.find(
@@ -1802,7 +1744,6 @@ function TranslateFiles(props) {
                         )
                     );
                 });
-                // console.log(editTargetLanguages)
                 setTimeout(() => {
                     setProjectName(data.project_name);
                     setRevisionStepEdit(data?.revision_step_edit);
@@ -1820,10 +1761,11 @@ function TranslateFiles(props) {
                     setLoading(false);
                 }, 50);
                 setFileError("");
+                setGlossaryProjectId(data.individual_gloss_project_id);               
+                getProjectTaskData(data.individual_gloss_project_id, "GLOSSARY", 'INIT');
             },
         });
     };
-
 
     // const handleStepSelection = (selectedStepOptions) => {
     //   if (selectedStepOptions?.length === 0) {
@@ -1842,9 +1784,7 @@ function TranslateFiles(props) {
     // };
 
     // useEffect(() => {
-    //   console.log(targetLanguage)
-    // }, [targetLanguage])
-
+    // }, [targetLanguage]);
 
     /* Update the edited values */
     const handleUpdate = (e, submission) => {
@@ -1915,10 +1855,7 @@ function TranslateFiles(props) {
                 formData.append("pdf_obj_id", pdfIdFromToolkit)
             }
         }
-
-
         let targetLanguageArr = [];
-
         targetLanguage.map((eachTargetLanguage) => {
             if (
                 editJobs.find(
@@ -1927,7 +1864,6 @@ function TranslateFiles(props) {
             )
                 formData.append("target_languages", eachTargetLanguage?.id);
         });
-
         subjectField.map((eachSubjectField) => {
             if (
                 editSubjects.find(
@@ -1936,7 +1872,6 @@ function TranslateFiles(props) {
             )
                 formData.append("subjects", eachSubjectField.id);
         });
-
         contentType.map((eachContentType) => {
             if (
                 editContents.find(
@@ -1945,13 +1880,11 @@ function TranslateFiles(props) {
             )
                 formData.append("contents", eachContentType.id);
         });
-
         let deadlineUTC = Config.convertLocalToUTC(deadline);
-
         deadline && formData.append("project_deadline", deadlineUTC);
-        formData.append("mt_enable", mtEnable);
-        
+        formData.append("mt_enable", mtEnable);        
         formData.append("isAdaptiveTranslation", adaptiveTransEnable);
+        formData.append("adaptive_file_translate", adaptiveTransEnable);
 
         primaryGlossarySourceName &&
             formData.append(
@@ -1974,6 +1907,9 @@ function TranslateFiles(props) {
 
         if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
             formData.append("get_mt_by_page", translationByPage);
+        }
+        if(adaptiveTransEnable){
+            formData.append("get_mt_by_page", true);
         }
 
 
@@ -2013,6 +1949,8 @@ function TranslateFiles(props) {
         // }`;
         else url = Config.BASE_URL + "/srt/fileUpload";
         setShowUpdateLoader(true);
+        
+        
         Config.axios({
             headers: {
                 "Access-Control-Allow-Origin": "*",
@@ -2277,8 +2215,14 @@ function TranslateFiles(props) {
 
     const handleProjectEnter = (e) => {
         e.which === 13 ? e.target.blur() : e.target.focus();
+        
     };
-
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            // e.stopProgation();
+            e.preventDefault();
+        }
+    };
 
     useEffect(() => {
         if (targetLanguage !== "") {
@@ -2293,57 +2237,52 @@ function TranslateFiles(props) {
                 }
             });
             let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
-            //   console.log(targetLangToRemove)
             setTargetLangListToRemove(targetLangToRemove);
         }
     }, [targetLanguage]);
 
-
     const removebrtag = () => {
-        let rem = document.querySelector('.project-box')
+        let rem = document.querySelector('.project-box');
         var var1 = rem.getElementsByTagName('br');
-
         for (var i = var1.length; i--;) {
             var1[i].parentNode.removeChild(var1[i]);
         }
     }
+
     document.querySelector('[contenteditable]')?.addEventListener('paste', function pasteAsPlainText(event) {
         event.preventDefault();
         event.target.innerText = event.clipboardData.getData("text/plain");
-        removebrtag()
+        removebrtag();
     });
 
-
     const executeProposalScroll = () => {
-        contentprojectNameRef.current.scrollTo(0, 0);
+        contentprojectNameRef?.current?.scrollTo(0, 0);
     }
 
-    const handleBlockedNavigation = ({nextLocation}) => {
-        
+    const handleBlockedNavigation = ({nextLocation}) => {        
         if (
             files.length <= 0 || nextLocation.pathname === "/file-upload" ||
             nextLocation.pathname?.includes('/translations') || nextLocation.pathname?.includes('/workspace')
         ) {
             if(projectTaskList?.find(each => each.isProcessing)) {
-                return true
+                return true;
             }
-            return false
+            return false;
         }
-        return true
+        return true;
     }
 
     useEffect(() => {
         if (confirmedNavigation && lastLocation) {
             // Navigate to the previous blocked location with your navigate function
-            let docParam = URL_SEARCH_PARAMS.get("doc")
+            let docParam = URL_SEARCH_PARAMS.get("doc");
             if (lastLocation.search === '' && docParam) { // redirected from new document 
-                history(lastLocation.pathname + `?document-id=${docParam}`)
+                history(lastLocation.pathname + `?document-id=${docParam}`);
             } else {  //  redirected from already created document - open 
-                history(lastLocation.pathname + lastLocation.search)
+                history(lastLocation.pathname + lastLocation.search);
             }
         }
-    }, [confirmedNavigation, history, lastLocation])
-
+    }, [confirmedNavigation, history, lastLocation]);
 
     const modaloptions = {
         closeMaskOnClick: false,
@@ -2351,7 +2290,6 @@ function TranslateFiles(props) {
         height: navigationModalVisible ? 240 : null,
         onClose: hideSettingsModal,
     };
-
 
     const formatOptionLabel = ({ value, label, customAbbreviation }) => (
         <div style={{ display: "flex" }}>
@@ -2364,42 +2302,42 @@ function TranslateFiles(props) {
         </div>
     );
 
-
     const recentlyUsedLanguage = () => {
         var list;
         Config.axios({
             url: Config.BASE_URL + "/workspace/default_detail/",
             auth: true,
             success: (response) => {
-                let options = []
-                // console.log(response.data?.recent_pairs);
+                let options = [];
                 response.data?.recent_pairs?.map(each => {
                     list = (<span>{targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.src)?.language}</span> + <span>{each.tar?.length > 1 ? each.tar.map(eachTar => targetLanguageOptionsRef.current.find(eachlang => eachlang.id === eachTar)?.language).join(', ') : targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.tar[0])?.language}</span>)
-                    // console.log(list);
                     options.push({
                         value: `${each.src}->${each.tar.join(',')}`,
                         label: `${targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.src)?.language}`,
                         customAbbreviation: `${each.tar?.length > 1 ? each.tar.map(eachTar => targetLanguageOptionsRef.current.find(eachlang => eachlang.id === eachTar)?.language).join(', ') : targetLanguageOptionsRef.current.find(eachlang => eachlang.id === each.tar[0])?.language
                             }`
-                    })
-                })
-                setRecentlyUsedLangs(options)
+                    });
+                });
+                setRecentlyUsedLangs(options);
             },
         });
     }
 
-
     const handleRecentLangClick = (clickedLang) => {
-        let src = clickedLang.value.split('->')[0]
-        let tar = clickedLang.value.split('->')[1]?.split(',')
-        setSourceLabel(targetLanguageOptionsRef.current?.find((element) => element.id == src).language)
-        setSourceLanguage(src)
-        // console.log(src)
-        let selectedTar = []
+        let src = clickedLang.value.split('->')[0];
+        let tar = clickedLang.value.split('->')[1]?.split(',');
+        setSourceLabel(targetLanguageOptionsRef.current?.find((element) => element.id == src).language);
+        setSourceLanguage(src);
+        let selectedTar = [];
         tar?.map(eachTar => {
             selectedTar.push(targetLanguageOptionsRef.current?.find((element) => element.id == eachTar))
-        })
+        });
         setTargetLanguage([...new Set(selectedTar)]);
+        //set error null
+        setSourceTargetValidation({
+            source: false,
+            target: false,
+        });
     }
 
     const focusSourceLangDiv = () => {
@@ -2411,21 +2349,17 @@ function TranslateFiles(props) {
 
     // .docx, .doc, .xlxs, .pptx, .txt
     const checkForOfficeFiles = (files) => {
-        // console.log(files)
-        let officeFilesExt = ['doc', 'docx', 'pdf', 'pptx', 'xlsx']
-        let uploadedFilesExt = []
+        let officeFilesExt = ['doc', 'docx', 'pdf', 'pptx', 'xlsx'];
+        let uploadedFilesExt = [];
         files.forEach(file => {
             let name = file.name;
             let lastDot = name.lastIndexOf(".");
             let ext = name.substring(lastDot + 1)?.toLowerCase();
-            // console.log(ext)
-            uploadedFilesExt.push(ext)
-        })
-        // console.log(uploadedFilesExt)
-        // console.log(uploadedFilesExt?.filter(each => !officeFilesExt?.some(item => item === each)))
-        let notOfficeListPresent = uploadedFilesExt?.filter(each => !officeFilesExt?.some(item => item === each))?.length !== 0 ? true : false
-        if(notOfficeListPresent) setShowTranslateAndDownloadBtn(false)
-        else setShowTranslateAndDownloadBtn(true)
+            uploadedFilesExt.push(ext);
+        });
+        let notOfficeListPresent = uploadedFilesExt?.filter(each => !officeFilesExt?.some(item => item === each))?.length !== 0 ? true : false;
+        if(notOfficeListPresent) setShowTranslateAndDownloadBtn(false);
+        else setShowTranslateAndDownloadBtn(true);
     } 
 
     // this api will initiate the file translate process and provide the status of each task
@@ -2441,11 +2375,9 @@ function TranslateFiles(props) {
                     }
                 }
                 return obj
-            })
-            // console.log('modified list with isProcessing key')
-            // console.log(newArr)
-            projectTaskListRef.current = newArr 
-            setProjectTaskList(newArr)
+            });
+            projectTaskListRef.current = newArr;
+            setProjectTaskList(newArr);
         }
 
         Config.axios({
@@ -2453,7 +2385,7 @@ function TranslateFiles(props) {
             auth: true,
             success: (response) => {
                 if(response.data?.results !== undefined){
-                    let dataList = response.data?.results
+                    let dataList = response.data?.results;
                     let newArr = projectTaskListRef.current?.map(obj => {
                         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
                             let status = dataList?.find(each => each.task === obj.id)?.status
@@ -2463,23 +2395,16 @@ function TranslateFiles(props) {
                                 status: status
                             }
                         }
-                        return obj
-                    })
-                    // console.log('modified list with isProcessing key')
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
-
-                    // console.log('isAnyTaskIsProcessing')
-                    // console.log(projectTaskListRef.current?.find(each => each.isProcessing === true))
-                    
-                    let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false
-                    
+                        return obj;
+                    });
+                    projectTaskListRef.current = newArr;
+                    setProjectTaskList(newArr);                    
+                    let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false;
+                    let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false;
+                    let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false;                    
                     if(isPageNumNotFound){
-                        // Config.toast(`File couldn't process!`, 'error')
-                        setShowFileErrorModal(true)
+                        // Config.toast(`File couldn't process!`, 'error');
+                        setShowFileErrorModal(true);
                         let newArr = projectTaskListRef.current?.map(obj => {
                                 if(obj.status === 404){
                                 return {
@@ -2488,31 +2413,28 @@ function TranslateFiles(props) {
                                     status: 402
                                 }
                             }
-                            return obj
+                            return obj;
                         })
-                        projectTaskListRef.current = newArr 
-                        setProjectTaskList(newArr)
-                        return
+                        projectTaskListRef.current = newArr ;
+                        setProjectTaskList(newArr);
+                        return;
                     }
-
-                    if(insuffientCredit) setShowCreditAlertModal(true)
-
+                    if(insuffientCredit) setShowCreditAlertModal(true);
                     if(isAnyTaskIsProcessing){
                         setTimeout(() => {
-                            getProjectTransDownloadStatus()
+                            getProjectTransDownloadStatus();
                         }, 5000);
                     }
-                    // translateDownloadCeleryTaskListRef.current = []
+                    // translateDownloadCeleryTaskListRef.current = [];
                 }else if(task_id === undefined){
                     let newArr = projectTaskListRef.current?.map(obj => {
                         return {
                             ...obj,
                             isProcessing: false
                         }
-                    })
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
+                    });
+                    projectTaskListRef.current = newArr ;
+                    setProjectTaskList(newArr);
                 }
             },
             error: (err) => {
@@ -2523,10 +2445,9 @@ function TranslateFiles(props) {
                             isProcessing: false,
                             status: 402
                         }
-                    })
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
+                    });
+                    projectTaskListRef.current = newArr; 
+                    setProjectTaskList(newArr);
                 }
             }
         });
@@ -2535,37 +2456,26 @@ function TranslateFiles(props) {
     // this api will initiate the file translate process and provide the status of each task
     const getTaskTransDownloadStatus = (task_id) => {
         if(createdProjectIdRef.current === null) return;
-
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
-            axiosFileTranslateAbortController.abort()
-        }
-    
+            axiosFileTranslateAbortController.abort();
+        }    
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-
-        let task_list_arr = []
-
-        let alreadyProcessingTask = projectTaskListRef.current?.filter(each => each.isProcessing)
-        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
-        // console.log(alreadyProcessingTaskIds)
+        let task_list_arr = [];
+        let alreadyProcessingTask = projectTaskListRef.current?.filter(each => each.isProcessing);
+        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id);
         if(alreadyProcessingTask?.length !== 0){
-            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
         }else{
-            task_list_arr = [task_id]
+            task_list_arr = [task_id];
         }
-        // console.log("taskList: "+task_list_arr?.toString())
-
-        fileTranslatingTaskListRef.current = task_list_arr
-
+        fileTranslatingTaskListRef.current = task_list_arr;
         // create task list to process
-        let list = ""
+        let list = "";
         fileTranslatingTaskListRef.current?.map((each, index) => {
             list += `task=${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
-
-        // console.log(list)
-
         // display the button loader as soon as the user clicks the TRANSLATE button
         if(task_id !== undefined){
             let newArr = projectTaskListRef.current?.map(obj => {
@@ -2575,10 +2485,10 @@ function TranslateFiles(props) {
                         isProcessing: true,
                     }
                 }
-                return obj
+                return obj;
             })
-            projectTaskListRef.current = newArr 
-            setProjectTaskList(newArr)
+            projectTaskListRef.current = newArr ;
+            setProjectTaskList(newArr);
         }
 
         Config.axios({
@@ -2588,7 +2498,7 @@ function TranslateFiles(props) {
             success: (response) => {
                 // if called with project_id, returns list if task_data
                 if(response.data?.results !== undefined){
-                    let dataList = response.data?.results
+                    let dataList = response.data?.results;
                     let newArr = projectTaskListRef.current?.map(obj => {
                         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
                             let status = dataList?.find(each => each.task === obj.id)?.status
@@ -2598,22 +2508,16 @@ function TranslateFiles(props) {
                                 status: status,
                             }
                         }
-                        return obj
-                    })
-                    // console.log('modified list with isProcessing key')
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
-
-                    // console.log('isAnyTaskIsProcessing')
-                    
-                    let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false
-                    
+                        return obj;
+                    });
+                    projectTaskListRef.current = newArr; 
+                    setProjectTaskList(newArr);                    
+                    let isAnyTaskIsProcessing = projectTaskListRef.current?.find(each => each.status === 400) ? true : false;
+                    let insuffientCredit = projectTaskListRef.current?.find(each => each.status === 402) ? true : false;
+                    let isPageNumNotFound = projectTaskListRef.current?.find(each => each.status === 404) ? true : false;                    
                     if(isPageNumNotFound){
-                        // Config.toast(`File couldn't process!`, 'error')
-                        setShowFileErrorModal(true)
+                        // Config.toast(`File couldn't process!`, 'error');
+                        setShowFileErrorModal(true);
                         let newArr = projectTaskListRef.current?.map(obj => {
                             if(obj.status === 404){
                                 return {
@@ -2621,15 +2525,13 @@ function TranslateFiles(props) {
                                     isProcessing: false,
                                 }
                             }
-                            return obj
+                            return obj;
                         })
-                        projectTaskListRef.current = newArr 
-                        setProjectTaskList(newArr)
-                        return
+                        projectTaskListRef.current = newArr;
+                        setProjectTaskList(newArr);
+                        return;
                     }
-
-                    if(insuffientCredit) setShowCreditAlertModal(true)
-
+                    if(insuffientCredit) setShowCreditAlertModal(true);
                     if(isAnyTaskIsProcessing){
                         setTimeout(() => {
                             getTaskTransDownloadStatus(task_id)
@@ -2647,37 +2549,192 @@ function TranslateFiles(props) {
                                 status: 402
                             }
                         }
-                        return obj
-                    })
-                    // console.log(newArr)
-                    projectTaskListRef.current = newArr 
-                    setProjectTaskList(newArr)
+                        return obj;
+                    });
+                    projectTaskListRef.current = newArr ;
+                    setProjectTaskList(newArr);
                 }
             }
         });
     }
 
-
-
     const downloadTaskTargetFile = async(task_id) => {
-        setIsDownloading(task_id)
-        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${task_id}`
+        setIsDownloading(task_id);
+        let url = `${Config.BASE_URL}/workspace/download_task_target_file/?task=${task_id}`;
         const response = await Config.downloadFileFromApi(url);
-        // console.log(response)
-        Config.downloadFileInBrowser(response)
-        setIsDownloading(null)
+        Config.downloadFileInBrowser(response);
+        setIsDownloading(null);
     } 
 
     const downloadAllFiles = async() => {
-
-        let url = `${Config.BASE_URL}/workspace/download/${createdProjectIdRef.current}/`
-
+        let url = `${Config.BASE_URL}/workspace/download/${createdProjectIdRef.current}/`;
         const response = await Config.downloadFileFromApi(url);
-
-        Config.downloadFileInBrowser(response)
-
+        Config.downloadFileInBrowser(response);
     } 
 
+    const handleInput = (e) => {
+        const div = contentprojectNameRef.current;
+        let text = div.innerText.replace(/\n/g, '');
+        if (text.length > 255) {
+            text = text.slice(0, 255);
+            div.innerText = text;
+            placeCaretAtEnd(div);
+        }
+        const el = e.currentTarget;
+        if (el.innerText.trim() === '') {
+            el.innerHTML = '';
+        }
+    };
+
+     // Helper function to place caret at the end
+     const placeCaretAtEnd = (el) => {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+    };
+
+    /**
+     * This method used to validate the source and target languages value while click the glossary button
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 22 2025
+     */
+    const handleGlossaryBtnEvent = () => {
+        if (sourceLanguage == "" || targetLanguage == "") {
+            setSourceTargetValidation({
+            ...sourceTargetValidation,
+            source: sourceLanguage == "",
+            target: targetLanguage == ""
+            });
+            return;
+        }
+        let isLanguageChanges = false;
+        if (glossaryProjectId) {
+            isLanguageChanges = checkIsLanguageChanges(sourceLanguage, targetLanguage);
+        }
+        if (!glossaryProjectId || isLanguageChanges) {
+            handleGlossarySubmit(isLanguageChanges);
+        } else {
+            setOpenGlossariesModal(true);
+            dispatch(setAdvanceTranslateGlossaryModal(true));
+        }
+    };
+
+    /**
+     * This method used to if the source and target languages changes with the existing one.
+     * @param {*} sourceLanguageValue 
+     * @param {*} targetLanguageValue 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 22 2025
+     */
+    const checkIsLanguageChanges = (sourceLanguageValue, targetLanguage) => {
+        if ((Number(backupSourceLanguage) != Number(sourceLanguageValue)) || !areTargetLangIdsEqual(backupTargetLanguage, targetLanguage))
+            return true;
+        else return false;
+    }
+
+    /**
+     * This method is used to check if the backup target language Id's are changed or not.
+     * @param {*} backupIds 
+     * @param {*} languages 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since APR 24 2025
+     */
+    const areTargetLangIdsEqual = (backupIds, languages) => {
+        const languageIds = languages.map(lang => lang.id);
+        // Sort both arrays to ignore order
+        const sortedBackup = Array.isArray(backupIds) ? [...backupIds].sort((a, b) => a - b): [backupIds];
+        const sortedLanguage = [...languageIds].sort((a, b) => a - b);
+        // Compare lengths first
+        if (sortedBackup.length !== sortedLanguage.length) return false;
+        // Compare elements
+        return sortedBackup.every((id, index) => id === sortedLanguage[index]);
+    }
+    
+    /**
+     * This method used to create a glossary project based on
+     * the Soruce and target languaage while click the Glossary button
+     * @param {*} isLanguageChanges 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since Apr 22 2025
+    */
+    const handleGlossarySubmit = (isLanguageChanges) => {
+        let formData = new FormData();
+        formData.append("project_type", 3);
+        formData.append("source_language", sourceLanguage);
+        const targetLangIds = [];
+        targetLanguage.map((eachTargetLanguage) => {
+            const tLangId = eachTargetLanguage?.id;
+            formData.append("target_languages", eachTargetLanguage?.id);
+            targetLangIds.push(tLangId);
+        });
+        formData.append("mt_enable", mtEnable);
+        formData.append("primary_glossary_source_name", "");
+        formData.append("source_Copyright_owner", "");
+        formData.append("details_of_PGS", "");
+        formData.append("notes", "");
+        formData.append("usage_permission", "Private");
+        formData.append("public_license", "");
+        formData.append("steps", 1);    
+        let url = Config.BASE_URL + "/workspace/project/quick/setup/";
+        let glossaryToast = "Glossary Project created successfully";
+        if (isLanguageChanges) {
+            formData.append("glossary_job_update", true);
+            url += `${glossaryProjectId}/?step_delete_ids=&file_delete_ids=&job_delete_ids=&subject_delete_ids=&project_type_id=3`;
+            glossaryToast = "Glossary Project updated successfully";
+        }
+    
+        Config.axios({
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                Accept: "application/json",
+                "Content-Type":
+                "multipart/form-data; boundary=---------------------------735323031399963166993862150",
+            },
+            url: url,
+            method: isLanguageChanges ? "PUT" : "POST",
+            data: formData,
+            auth: true,
+            success: (response) => {
+                setGlossaryProjectId(response.data.id);
+                setDefaultGlossaryProjectId(response.data.glossary_proj_id);
+                getProjectTaskData(response.data.id, "GLOSSARY");
+                Config.toast(glossaryToast);
+                setBackupSourceLanguage(formData.get("source_language"));
+                setBackupTargetLanguage(targetLangIds);
+                return;
+            },
+            error: (err) => {
+                if (err?.response?.data?.files) {
+                  Config.toast(t("submitted_file_empty"), 'warning')
+                }
+                setShowCreateLoader(false);
+                setTranslateDownloadBtnLoader(false)
+                }
+            });
+    };
+
+    const getDefaultGlossDetails = () => {
+        // Config.axios({
+        //     url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
+        //     auth: true,
+        //     success: (response) => {
+        //         defaultGlossDetailsRef.current = response.data
+        //     },
+        //     error: (err) => {
+        //         // setisGlossaryListLoading(false)
+        //     }
+        // });
+    } 
 
     return (
         <React.Fragment>
@@ -2688,18 +2745,21 @@ function TranslateFiles(props) {
                 {projectNameError?.length ? <span className="text-danger d-block  error-bottom">Required</span> : null} */}
                 <div className="file-trans-breadcrumbs-section">
                     <Breadcrumbs />
+                    
                     <div className={"project-input-wrap "} style={projectTaskList?.length !== 0 ? {pointerEvents: 'none'} : {}}>
-                        <div
+                        <div 
                             ref={contentprojectNameRef}
                             suppressContentEditableWarning={true}
                             contentEditable={projectTaskList?.length === 0 ? true : false}
-                            onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
-                            onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
                             data-placeholder={t("untitled_project")}
-                            onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
-                            onKeyDown={() => projectTaskList?.length === 0 && handleProjectEnter}
-                            className="project-box"
+                            style={{padding: "0px 4px", minWidth: '160px'}}
+                             className="project-box"
                             tabIndex={0}
+                            onClick={() => projectTaskList?.length === 0 && handleHideIcon()}
+                            onInput={(e) => projectTaskList?.length === 0 && handleInput(e)}
+                            onKeyUp={(e) => projectTaskList?.length === 0 && handleProjectNamechange(e)}
+                            onKeyDown={(e) => projectTaskList?.length === 0 && handleKeyDown(e)}
+                            onBlur={() => projectTaskList?.length === 0 && executeProposalScroll()}
                         ></div>
                         {/* {editBtnReveal && (
               <span className="edit-icon">
@@ -2732,7 +2792,22 @@ function TranslateFiles(props) {
                             </div>
                         </div>
                     </div> */}
+                    {/* <div className="translation-actions">
+                        <div></div>
+                        <div style={{alignContent: 'end'}}>
+                            <button className={"glossary-btn" + (projectTaskList?.length !== 0 ? " behind-overlay" : "")} onClick={() => handleGlossaryBtnEvent()}>Glossary</button>
+                        </div>
+                    </div> */}
                 </div>
+                { openGlossariesModal && 
+                    <AdvanceTranslateGlossaryModal 
+                        documentDetails={{}}//documentDetailsRef.current}
+                        defaultGlossDetailsRef={defaultGlossDetailsRef}
+                        getDefaultGlossDetails={getDefaultGlossDetails}
+                        glossTaskId={glossaryTaskId}
+                        glossaryProjecId= {glossaryProjectId}
+                    />
+                }
                 <div className={"ai-translate-file-wrapper " + (projectTaskList?.length !== 0 ? "behind-overlay" : "")} style={(showCreateLoader || translateDownloadBtnLoader) ? {pointerEvents: 'none'} : {}}>
                     <div>
                     {/* <div className="project-setup-heading-new">
@@ -2877,11 +2952,14 @@ function TranslateFiles(props) {
                                                     }
                                                 >
                                                     <DragandDrop handleDrop={handleDrop}>
-                                                        <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap sa"} >
+                                                        <div className={files.length > 0 || editFiles.length > 0 || editProjectId != null ? "button-wrap fileloaded h-25" : "button-wrap-new"} >
+                                                         <div className="overall-draganddrop">
                                                             <div className="draganddrop-align">
                                                                 <img className={(files.length > 0 || editFiles.length > 0 || editProjectId != null) ? 'img' : ''}
                                                                     src={UploadFolder}
                                                                     alt="folder"
+                                                                    height="38px"
+                                                                    width="46px"
                                                                 />
 
                                                                 {Object.keys(files).map((eachKey) => {
@@ -2931,7 +3009,38 @@ function TranslateFiles(props) {
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div className="file-upload-instruction-new" style={{flexDirection:'column'}}>
+                    <div className="supp-file-format">
+                        <div>
+                            <div className="supp-file-format-list">
+                                <p>{supportFileExtensions.map((dat)=>dat.toUpperCase()).join(" ")}</p>
+                            </div>
+                            <span className="imp-icon-img">
+                                <img
+                                    src={ImpFileIcon}
+                                    alt="imp-icon-file"
+                                />
+                            </span>
+                            <span className="supported-file-tooltip">
+                                {t(("supported_file_formats"))}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="file-upload_instruct-row">
+                        <span className="max-word-note">
+                            {t("file_upload_condition_note_1")}: <span>50,000</span>
+                        </span>
+                        {/* <span className="add-padd-left max-word-note">
+              Bigger files may lead to a slow process initially
+            </span> */}
+                        <span className="max-file-note">
+                            {t("file_upload_condition_note_2")}: <span>100 MB</span>
+                        </span>
+                    </div>
+                                                           </div>
+                                                            </div>
                                                         </div>
+                                                      
                                                     </DragandDrop>
                                                 </div>
 
@@ -2945,7 +3054,6 @@ function TranslateFiles(props) {
                                                             : "col-xs-12"
                                                     }
                                                 >
-                                                    {/* {console.log(editFiles)} */}
                                                     {/* <DragandDrop handleDrop={handleDrop}> */}
                                                     <div className="button-wrap-file-list">
                                                         <div className="file-list-align">
@@ -3288,7 +3396,7 @@ function TranslateFiles(props) {
                                             </div>
                                         )}
 
-                                    <div className="d-flex gap-3 files-space-align ">
+                                    <div className="d-flex gap-3 files-space-align mt-4">
                                         <div className="form-fields">
                                             <div className="form-group">
                                                 <label htmlFor="exampleFormControlFile1">
@@ -3313,6 +3421,9 @@ function TranslateFiles(props) {
                                                         className="fas fa-caret-down"
                                                     />
                                                 </div>
+                                               
+                                                {sourceTargetValidation.source && <small className="text-danger">{t("select_source_language")}</small>}
+
                                                 {(location.search === "" && recentlyUsedLangs?.length !== 0) &&
                                                     <Select
                                                         // menuIsOpen={true}
@@ -3328,7 +3439,8 @@ function TranslateFiles(props) {
                                                         components={{ DropdownIndicator, IndicatorSeparator: () => null }}
                                                     />
                                                 }
-                                                {sourceTargetValidation.source && <small className="text-danger">{t("select_source_language")}</small>}
+
+
                                             </div>
                                         </div>
                                         <div className="form-fields">
@@ -3377,8 +3489,10 @@ function TranslateFiles(props) {
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 w-2/3">
+<div className="translation_text_container">
+    {/* Translation Preferences */}
+    </div>
+                                    <div className="mt-options-wrapper -ml-2 -mt-4 mb-3 ">
                                         <div className="flex items-center">
                                             <Checkbox
                                                 id="machine-type"
@@ -3399,7 +3513,8 @@ function TranslateFiles(props) {
                                                 !mtEnable ? "disable opacity-60" : ""
                                             ].join(' ')}
                                         >
-                                            <div className="flex items-start">
+                                            <div  onClick={() => setAdaptiveTransEnable(true)} className={`flex items-start ${adaptiveTransEnable ? "overall_mt_engine_active" : "overall_mt_engine"}`}
+                                            >
                                                 <Radio
                                                     checked={adaptiveTransEnable}
                                                     id="adaptive_trans"
@@ -3417,10 +3532,33 @@ function TranslateFiles(props) {
                                                     <span className="help_text">
                                                         {t("adaptive_help_txt")}
                                                     </span>
+
+
+                                                    <div className="supp-file-format">
+                        <div>
+                            {/* <div className="supp-file-format-list">
+                                <p>{supportFileExtensions.join(" ")}</p>
+                            </div> */}
+                            <span >
+                                <img
+                                    src={new_info_mark}
+                                    alt="imp-icon-file"
+                                    height={"20px"}
+                                    width={"20px"}
+                                />
+                            </span>
+                            <span className="supported-file-tooltip-new">
+                            Currently supports only TXT, DOCX
+                            </span>
+                        </div>
+                    </div>
+
+
                                                 </label>
 
                                             </div>
-                                            <div className="flex items-start">
+                                            <div onClick={() => setAdaptiveTransEnable(false)} className={`flex items-start ${!adaptiveTransEnable ? "overall_mt_engine_active" : "overall_mt_engine"}`}
+                                            >
                                                 <Radio
                                                     checked={!adaptiveTransEnable}
                                                     id="standard_trans"
@@ -3437,6 +3575,25 @@ function TranslateFiles(props) {
                                                     <span className="help_text">
                                                         {t("standard_mt_help_txt")}
                                                     </span>
+                                                    <div className="supp-file-format">
+                        <div>
+                           
+                            <span className="imp-icon-img">
+                                {/* <img
+                                    src={ImpFileIcon}
+                                    alt="imp-icon-file"
+                                    height={"20px"}
+                                    width={"20px"}
+                                /> */}
+                            </span>
+                            <span className="supported-file-tooltip">
+                            {/* Currently supports only TXT, DOCX */}
+                            </span>
+                        </div>
+                    </div>
+
+
+
                                                 </label>
                                             </div>
                                         </div>
@@ -3482,7 +3639,7 @@ function TranslateFiles(props) {
                                 </div>
                             )}
                             <div className="col-xs-12">
-                                <div className="d-flex justify-between">
+                                <div className="d-flex justify-between align-items-end">
                                     {editProjectId != null && (
                                         <button
                                             className="glossaryglobalform-StepCancelButton"
@@ -3558,7 +3715,7 @@ function TranslateFiles(props) {
                                                 </button>
                                             </React.Fragment>
                                         )}
-                                        {(editProjectId == null && showTranslateAndDownloadBtn) && (
+                                        {/* {(editProjectId == null && showTranslateAndDownloadBtn) && (
                                             <button className="convert-pdf-list-UploadProjectButton"
                                                 type="submit"
                                                 onMouseUp={(e) => !translateDownloadBtnLoader && handleSubmit(e, 'trans-download')}
@@ -3570,7 +3727,7 @@ function TranslateFiles(props) {
                                                     {t("translate_and_download")}
                                                 </span>
                                             </button>
-                                        )}
+                                        )} */}
                                     </div>
                                 </div>
                             </div>
@@ -3685,35 +3842,8 @@ function TranslateFiles(props) {
                         </div>
                     </div>
                 }
-                <div className="file-upload-instruction">
-                    <div className="supp-file-format">
-                        <div>
-                            <div className="supp-file-format-list">
-                                <p>{supportFileExtensions.join(" ")}</p>
-                            </div>
-                            <span className="imp-icon-img">
-                                <img
-                                    src={ImpFileIcon}
-                                    alt="imp-icon-file"
-                                />
-                            </span>
-                            <span className="supported-file-tooltip">
-                                {t(("supported_file_formats"))}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="file-upload_instruct-row">
-                        <span className="max-word-note">
-                            {t("file_upload_condition_note_1")}: <span>50,000</span>
-                        </span>
-                        {/* <span className="add-padd-left max-word-note">
-              Bigger files may lead to a slow process initially
-            </span> */}
-                        <span className="max-file-note">
-                            {t("file_upload_condition_note_2")}: <span>100 MB</span>
-                        </span>
-                    </div>
-                </div>
+
+              
             </div>
             {showSrcLangModal && (<Rodal
                 visible={showSrcLangModal}

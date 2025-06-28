@@ -78,7 +78,6 @@ const AIChat = () => {
           method: "GET",
           auth: true,
           success: (response) => {
-             console.log(response.data)
              setChatBookRemainingStatus(response.data)
           },
           error: (err) => { }
@@ -99,13 +98,9 @@ const AIChat = () => {
         if(localFiles?.length !== 0){
             handleUploadFiles()
             inputFileUploadRef.current.value = ''
-            console.log(localFiles)
         }
     }, [localFiles])
-
-    console.log(exampleFileQue)
-    
-
+   
     useEffect(() => {
         if(messageInput?.current !== null){
             /* Handle keydown eventHandler - start*/
@@ -160,22 +155,18 @@ const AIChat = () => {
     };
 
     const handleFileSelect = (file) => {
-        if(file?.status !== 'SUCCESS') return
-        
+        if(file?.status !== 'SUCCESS') return;
         let newArr = chatFiles?.map(obj => {
             return {
                 ...obj,
                 isDelete: false
             }
-        })
-        console.log(newArr)
-        setChatFiles(newArr)
-
-        setPageNumber(1)
-        setSelectedChatFile(file)
-        getChatBook(file?.id)
+        });
+        setChatFiles(newArr);
+        setPageNumber(1);
+        setSelectedChatFile(file);
+        getChatBook(file?.id);
     };
-
 
     /* File upload drag and drop handling */
     const handleDrop = (filesTemp, request = null) => {
@@ -228,7 +219,6 @@ const AIChat = () => {
                
             },
             error: (err) => { 
-                console.log(err.response.data.msg)
                 getChatBook()
                 if(err.response.data?.msg?.includes('buy')){
                     setShowInsufficientCreditDiscription('Need to buy add-on pack reached your file upload limit')
@@ -325,8 +315,6 @@ const AIChat = () => {
 
     const toggleDeleteConfirm = (e, value, file_id) => {
         e.stopPropagation()
-        console.log(value)
-        console.log(file_id)
         let newArr = chatFiles?.map(obj => {
             if(obj?.id === file_id){
                 return {
@@ -336,7 +324,6 @@ const AIChat = () => {
             }
             return obj;
         })
-        console.log(newArr)
         setChatFiles(newArr)
     }
 
@@ -380,7 +367,6 @@ const AIChat = () => {
     }, [currPage]);
 
     const focusUploadFilesSection = () => {
-        console.log(fileUploadDiv.current)
         fileUploadDiv.current.style.border = "2px solid #0074d3"
         setTimeout(() => {
             fileUploadDiv.current.style.border = "2px dashed #d3d4d5"
@@ -416,10 +402,7 @@ const AIChat = () => {
         scroll(page)
       
     }
-
-    console.log(chatFiles)
-
-  
+ 
     return (
         <>
             <Navbar isAiChatBook={true} />

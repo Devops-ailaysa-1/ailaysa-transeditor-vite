@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, createFactory } from "react";
-import BlogHeader from './Writter-componenets/writer-blog/BlogHeader'
-import BlogStepWrapper from './Writter-componenets/writer-blog/BlogStepWrapper'
+import BlogHeader from './Writter-componenets/writer-blog/BlogHeader';
+import BlogStepWrapper from './Writter-componenets/writer-blog/BlogStepWrapper';
 import Config from "../vendor/Config";
 import { useTranslation } from "react-i18next";
-
 
 const WriterBlog = (props) => {
     const { t } = useTranslation();
@@ -15,14 +14,12 @@ const WriterBlog = (props) => {
     const [targetLabel, setTargetLabel] = useState(t("select_output_lang"));
     const [showSrcLangModal, setshowSrcLangModal] = useState(false);
     const [showTarLangModal, setshowTarLangModal] = useState(false);
-
-    const [hasFocus, setHasFocus] = useState(false)
+    const [hasFocus, setHasFocus] = useState(false);
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
     const [stepWizard, setStepWizard] = useState("create-title");
     const [stepWizardComplete, setStepWizardComplete] = useState(null);
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
-
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
     const searchAreaRef = useRef(null);
     const languageOptionsListRef = useRef([]);
 
@@ -50,8 +47,8 @@ const WriterBlog = (props) => {
         setSourceLanguage(value);
         setshowSrcLangModal(false);
         setSourceLabel(name);
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     /* Handling target language selection */
@@ -59,10 +56,10 @@ const WriterBlog = (props) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
             if(targetLanguageTemp?.length === 1){
-                Config.toast(t("one_lang_must_select"), 'warning')
+                Config.toast(t("one_lang_must_select"), 'warning');
                 return;
             }
-            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected");
             targetLanguageTemp = Config.removeItemFromArray(
                 targetLanguageTemp,
                 value
@@ -70,13 +67,10 @@ const WriterBlog = (props) => {
         } else {
             e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected")
             targetLanguageTemp.push(value);
-        }
-        
-        
+        }       
         setTargetLanguage([...new Set(targetLanguageTemp)]);
-
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
   return (
@@ -111,11 +105,10 @@ const WriterBlog = (props) => {
                 showTarLangModal={showTarLangModal}
                 setshowTarLangModal={setshowTarLangModal}
                 targetLabel={targetLabel}
-                setTargetLabel={setTargetLabel}
-            />
+                setTargetLabel={setTargetLabel}/>
         </section>
     </>
   )
 }
 
-export default WriterBlog
+export default WriterBlog;

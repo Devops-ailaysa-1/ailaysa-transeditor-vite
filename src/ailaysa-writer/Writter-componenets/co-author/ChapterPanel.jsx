@@ -30,7 +30,6 @@ import sanitizeHtml from 'sanitize-html-react';
 import { addDownloadingFiles, deleteDownloadingFile, updateDownloadingFile } from "../../../features/FileDownloadingListSlice";
 
 const ChapterPanel = (props) => {
-
     let { 
         getBookDetails,
         createdBookIdRef,
@@ -41,53 +40,42 @@ const ChapterPanel = (props) => {
         isDeleting,
         setIsDeleting,
         setShowCreditAlertModal
-     } = props
+     } = props;
     const { t } = useTranslation();
-    const history = useNavigate()
-    const dispatch = useDispatch()
-
+    const history = useNavigate();
+    const dispatch = useDispatch();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-
-    const frontMatterOptions = useSelector((state) => state.bookFrontMatterOption.value)
-    const backMatterOptions = useSelector((state) => state.bookBackMatterOption.value)
-    const modalConfirmationUserDecision = useSelector((state) => state.modalConfirmationUserDecision.value)
-    const bookCreationResponseRedux = useSelector((state) => state.bookCreationResponse.value)
-
-    const [frontMatterList, setFrontMatterList] = useState([])
-    const [bodyMatterList, setBodyMatterList] = useState([])
-    const [backMatterList, setBackMatterList] = useState([])
-    const [frontMatterListCopy, setFrontMatterListCopy] = useState([])
-    const [bodyMatterListCopy, setBodyMatterListCopy] = useState([])
-    const [backMatterListCopy, setBackMatterListCopy] = useState([])
-
-    const [frontMatterCollapse, setFrontMatterCollapse] = useState(true)
-    const [bodyMatterCollapse, setBodyMatterCollapse] = useState(true)
-    const [backMatterCollapse, setBackMatterCollapse] = useState(true)
-    const [frontAddMoreTitleBox, setFrontAddMoreTitleBox] = useState(false)
-    const [bodyAddMoreTitleBox, setBodyAddMoreTitleBox] = useState(false)
-    const [backAddMoreTitleBox, setBackAddMoreTitleBox] = useState(false)
-    const [rerender, setRerender] = useState(false)
-    const [titleFocus, setTitleFocus] = useState(false)
-    
-    const [selectedMatterItem, setSelectedMatterItem] = useState({
-        matter: null,
-        id: null,
-    })
-    const [isTranslateProceeding, setIsTranslateProceeding] = useState(false)
-
-    const frontMatterReorderingRef = useRef([])
-    const bodyMatterReorderingRef = useRef([])
-    const backMatterReorderingRef = useRef([])
-
+    const frontMatterOptions = useSelector((state) => state.bookFrontMatterOption.value);
+    const backMatterOptions = useSelector((state) => state.bookBackMatterOption.value);
+    const modalConfirmationUserDecision = useSelector((state) => state.modalConfirmationUserDecision.value);
+    const bookCreationResponseRedux = useSelector((state) => state.bookCreationResponse.value);
+    const [frontMatterList, setFrontMatterList] = useState([]);
+    const [bodyMatterList, setBodyMatterList] = useState([]);
+    const [backMatterList, setBackMatterList] = useState([]);
+    const [frontMatterListCopy, setFrontMatterListCopy] = useState([]);
+    const [bodyMatterListCopy, setBodyMatterListCopy] = useState([]);
+    const [backMatterListCopy, setBackMatterListCopy] = useState([]);
+    const [frontMatterCollapse, setFrontMatterCollapse] = useState(true);
+    const [bodyMatterCollapse, setBodyMatterCollapse] = useState(true);
+    const [backMatterCollapse, setBackMatterCollapse] = useState(true);
+    const [frontAddMoreTitleBox, setFrontAddMoreTitleBox] = useState(false);
+    const [bodyAddMoreTitleBox, setBodyAddMoreTitleBox] = useState(false);
+    const [backAddMoreTitleBox, setBackAddMoreTitleBox] = useState(false);
+    const [rerender, setRerender] = useState(false);
+    const [titleFocus, setTitleFocus] = useState(false);
+    const [selectedMatterItem, setSelectedMatterItem] = useState({ matter: null, id: null });
+    const [isTranslateProceeding, setIsTranslateProceeding] = useState(false);
+    const frontMatterReorderingRef = useRef([]);
+    const bodyMatterReorderingRef = useRef([]);
+    const backMatterReorderingRef = useRef([]);
     const bookTitleRef = useRef();
-    const frontAddMoreTitleBoxRef = useRef()
-    const bodyAddMoreTitleBoxRef = useRef()
-    const backAddMoreTitleBoxRef = useRef()
-    const isStreamClosedRef = useRef(false)
-    const tempStoredGenerateLinkParamRef = useRef(null)
-    
-    const isContentGenerateRef = useRef(false)
-    const allDownloadedFilesArrRef = useRef([])
+    const frontAddMoreTitleBoxRef = useRef();
+    const bodyAddMoreTitleBoxRef = useRef();
+    const backAddMoreTitleBoxRef = useRef();
+    const isStreamClosedRef = useRef(false);
+    const tempStoredGenerateLinkParamRef = useRef(null);
+    const isContentGenerateRef = useRef(false);
+    const allDownloadedFilesArrRef = useRef([]);
     
     const convert = new MarkdownIt({ html: true, });
     
@@ -96,20 +84,16 @@ const ChapterPanel = (props) => {
             id: 1,
             title: "Chapter"
         }
-    ]
-
-
+    ];
 
     /* Check for clicing outside of the New project Dropdown */
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (frontAddMoreTitleBoxRef.current && !frontAddMoreTitleBoxRef.current.contains(e.target) && !e.target?.closest('.front-addon')) {
-                setFrontAddMoreTitleBox(false)
+                setFrontAddMoreTitleBox(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -119,12 +103,10 @@ const ChapterPanel = (props) => {
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (bodyAddMoreTitleBoxRef.current && !bodyAddMoreTitleBoxRef.current.contains(e.target) && !e.target?.closest('.body-addon')) {
-                setBodyAddMoreTitleBox(false)
+                setBodyAddMoreTitleBox(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -134,12 +116,10 @@ const ChapterPanel = (props) => {
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (backAddMoreTitleBoxRef.current && !backAddMoreTitleBoxRef.current.contains(e.target) && !e.target?.closest('.back-addon')) {
-                setBackAddMoreTitleBox(false)
+                setBackAddMoreTitleBox(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -147,21 +127,18 @@ const ChapterPanel = (props) => {
     
     // get the whole book data 
     useEffect(() => {
-        let book_id = URL_SEARCH_PARAMS.get('book')
-        let item_id = URL_SEARCH_PARAMS.get('item')
+        let book_id = URL_SEARCH_PARAMS.get('book');
+        let item_id = URL_SEARCH_PARAMS.get('item');
         if(bookCreationResponseRedux !== null && book_id){
-            // console.log(bookCreationResponseRedux.front_matter)
-            bookTitleRef.current.innerText = bookCreationResponseRedux.title
-            setFrontMatterList(bookCreationResponseRedux.front_matter)
-            setFrontMatterListCopy(bookCreationResponseRedux.front_matter)
-            setBodyMatterList(bookCreationResponseRedux.body_matter)
-            setBodyMatterListCopy(bookCreationResponseRedux.body_matter)
-            
-            setBackMatterList(bookCreationResponseRedux.back_matter)
-            setBackMatterListCopy(bookCreationResponseRedux.back_matter)
+            bookTitleRef.current.innerText = bookCreationResponseRedux.title;
+            setFrontMatterList(bookCreationResponseRedux.front_matter);
+            setFrontMatterListCopy(bookCreationResponseRedux.front_matter);
+            setBodyMatterList(bookCreationResponseRedux.body_matter);
+            setBodyMatterListCopy(bookCreationResponseRedux.body_matter);            
+            setBackMatterList(bookCreationResponseRedux.back_matter);
+            setBackMatterListCopy(bookCreationResponseRedux.back_matter);
         }
-    }, [bookCreationResponseRedux, URL_SEARCH_PARAMS.get('book')])
-
+    }, [bookCreationResponseRedux, URL_SEARCH_PARAMS.get('book')]);
 
     // useEffect(() => {
     //     if(bookCreationResponseRedux !== null){
@@ -169,101 +146,95 @@ const ChapterPanel = (props) => {
     //     }
     // },[bookCreationResponseRedux])
 
-
     // based on the item in search param open the matter item
     useEffect(() => {
-        let bookId = URL_SEARCH_PARAMS.get('book')
-        let item_id = URL_SEARCH_PARAMS.get('item')
-        let matter = URL_SEARCH_PARAMS.get('matter')
-        let isStreaming = URL_SEARCH_PARAMS.get('streaming') ? true : false
+        let bookId = URL_SEARCH_PARAMS.get('book');
+        let item_id = URL_SEARCH_PARAMS.get('item');
+        let matter = URL_SEARCH_PARAMS.get('matter');
+        let isStreaming = URL_SEARCH_PARAMS.get('streaming') ? true : false;
 
         if(selectedMatterItem?.id !== undefined && bookCreationObjRef.current !== null && bookId && item_id && !isStreaming){
-            let item = {}
+            let item = {};
             if(matter === 'front'){
-                item = bookCreationObjRef.current?.front_matter?.find(each => each.id === parseInt(item_id))
-                if(item !== undefined && item?.generated_content !== null) handleFrontMatterOptionClick(item)
-                else selectFirstChapterInBody()
+                item = bookCreationObjRef.current?.front_matter?.find(each => each.id === parseInt(item_id));
+                if(item !== undefined && item?.generated_content !== null) handleFrontMatterOptionClick(item);
+                else selectFirstChapterInBody();
             }else if(matter === 'body'){
-                item = bookCreationObjRef.current?.body_matter?.find(each => each.id === parseInt(item_id))
-                if(item !== undefined && item?.html_data !== null) handleBodyMatterOptionClick(item)
-                else selectFirstChapterInBody()
+                item = bookCreationObjRef.current?.body_matter?.find(each => each.id === parseInt(item_id));
+                if(item !== undefined && item?.html_data !== null) handleBodyMatterOptionClick(item);
+                else selectFirstChapterInBody();
             }else if(matter === 'back'){
-                item = bookCreationObjRef.current?.back_matter?.find(each => each.id === parseInt(item_id))
-                if(item !== undefined && item?.generated_content !== null) handleBackMatterOptionClick(item)
-                else selectFirstChapterInBody()
+                item = bookCreationObjRef.current?.back_matter?.find(each => each.id === parseInt(item_id));
+                if(item !== undefined && item?.generated_content !== null) handleBackMatterOptionClick(item);
+                else selectFirstChapterInBody();
             }
         }
         // by default open the first chapter in body matter
         else if(!isStreaming && bookId && bodyMatterList?.length !== 0 && bookCreationObjRef.current !== null && (item_id === null || item_id === undefined)){
-            selectFirstChapterInBody()
+            selectFirstChapterInBody();
         }
         else if(bookId === null){
-            history('/book-writing')
+            history('/book-writing');
         }
-    }, [bookCreationObjRef.current])
+    }, [bookCreationObjRef.current]);
     
-
-
-
     // store the matter and item whenever item is changed
     useEffect(() => {
-        let item_id = URL_SEARCH_PARAMS.get('item')
-        let matter = URL_SEARCH_PARAMS.get('matter')
+        let item_id = URL_SEARCH_PARAMS.get('item');
+        let matter = URL_SEARCH_PARAMS.get('matter');
         if(bookCreationObjRef.current !== null && item_id){
             setSelectedMatterItem({
                 matter: matter,
                 id: parseInt(item_id)
-            })
-            scrollToTop()
+            });
+            scrollToTop();
         } 
-    }, [URL_SEARCH_PARAMS.get('item')])
+    }, [URL_SEARCH_PARAMS.get('item')]);
 
     // if item ordering is changed update the new order in server
     useEffect(() => {
         if(frontMatterReorderingRef.current?.length !== 0){
-            updateFrontOutlineOrder()
+            updateFrontOutlineOrder();
         }
-    }, [frontMatterReorderingRef.current])
+    }, [frontMatterReorderingRef.current]);
 
     useEffect(() => {
         if(bodyMatterReorderingRef.current?.length !== 0){
-            updateBodyOutlineOrder()
+            updateBodyOutlineOrder();
         }
-    }, [bodyMatterReorderingRef.current])
+    }, [bodyMatterReorderingRef.current]);
 
     useEffect(() => {
         if(backMatterReorderingRef.current?.length !== 0){
-            updateBackOutlineOrder()
+            updateBackOutlineOrder();
         }
-    }, [backMatterReorderingRef.current])
+    }, [backMatterReorderingRef.current]);
 
     useEffect(() => {
         if(modalConfirmationUserDecision !== null){
             // close the content loss alert modal
-            dispatch(setShowBookContentLossAlertModal(false))
-            let {item, matter} = tempStoredGenerateLinkParamRef.current
+            dispatch(setShowBookContentLossAlertModal(false));
+            let {item, matter} = tempStoredGenerateLinkParamRef.current;
             $('.summernote').summernote('code', '');
             if(matter === 'front'){
-                getMatterItemData(item, 'front')
+                getMatterItemData(item, 'front');
             }else if(matter === 'body'){
-                getChapterDataInStream(item?.id, item)
+                getChapterDataInStream(item?.id, item);
             }else if(matter === 'back'){
-                getMatterItemData(item, 'back')
+                getMatterItemData(item, 'back');
             }
             // reset the user decision state to null 
-            dispatch(setModalConfirmationUserDecision(null))
+            dispatch(setModalConfirmationUserDecision(null));
         }
-    }, [modalConfirmationUserDecision])
+    }, [modalConfirmationUserDecision]);
 
     useEffect(() => {
         if(bodyMatterCollapse || frontMatterCollapse || backMatterCollapse){
-            setRerender(!rerender)
+            setRerender(!rerender);
         }
-    }, [bodyMatterCollapse, frontMatterCollapse, backMatterCollapse])
-
+    }, [bodyMatterCollapse, frontMatterCollapse, backMatterCollapse]);
 
     // remove break
-
     const removeBreakParagraphs = (htmlContent) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlContent, 'text/html');
@@ -273,9 +244,7 @@ const ChapterPanel = (props) => {
         });
         return doc.body.innerHTML;
       };
-
-    
-
+   
     // scroll the summernote editor to bottom
     const scrollToBottom = () => {
         const element = document.querySelector('.note-editable');
@@ -302,8 +271,8 @@ const ChapterPanel = (props) => {
                 isDelete : false,
                 isEdit: false
             }
-        })
-        return newArr
+        });
+        return newArr;
     }
 
     // rearrange the list items in the list
@@ -311,48 +280,48 @@ const ChapterPanel = (props) => {
         const items = Array.from(list);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
-        return items
+        return items;
     } 
 
     // handle matter item reordering drag
     function handleItemOnDragEnd(result, matter) {
         if (!result.destination) return;
-        let items = []
+        let items = [];
         if(matter === 'front'){
-            items = rearrangeTheListItems(result, frontMatterList)
-            frontMatterReorderingRef.current = items
+            items = rearrangeTheListItems(result, frontMatterList);
+            frontMatterReorderingRef.current = items;
             setFrontMatterList(items);
-            setFrontMatterListCopy(items)
+            setFrontMatterListCopy(items);
         }else if(matter === 'body'){
-            items = rearrangeTheListItems(result, bodyMatterList)
-            bodyMatterReorderingRef.current = items
+            items = rearrangeTheListItems(result, bodyMatterList);
+            bodyMatterReorderingRef.current = items;
             setBodyMatterList(items);
-            setBodyMatterListCopy(items)
+            setBodyMatterListCopy(items);
         }else if(matter === 'back'){
-            items = rearrangeTheListItems(result, backMatterList)
-            backMatterReorderingRef.current = items
+            items = rearrangeTheListItems(result, backMatterList);
+            backMatterReorderingRef.current = items;
             setBackMatterList(items);
-            setBackMatterListCopy(items)
+            setBackMatterListCopy(items);
         }
     }
    
     // selects and opens the first chapter in body matter
     const selectFirstChapterInBody = () => {
-        let itemId = bookCreationObjRef.current?.body_matter?.find((each, ind) => ind === 0)?.id
-        updateSearchParamInURL('body', itemId)
+        let itemId = bookCreationObjRef.current?.body_matter?.find((each, ind) => ind === 0)?.id;
+        updateSearchParamInURL('body', itemId);
     } 
 
     // update matter and item_id in URL as search param
     const updateSearchParamInURL = (matter, id) => {
-        URL_SEARCH_PARAMS.set('matter', matter)
-        URL_SEARCH_PARAMS.set('item', id)
+        URL_SEARCH_PARAMS.set('matter', matter);
+        URL_SEARCH_PARAMS.set('item', id);
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
     } 
 
     // focuses the textarea when edit mode is open
     const focusCurrentEditingTextarea = (id) => {
-        let textarea = document.getElementById(id)
-        textarea.focus()
+        let textarea = document.getElementById(id);
+        textarea.focus();
     } 
 
     // update the isEdit/isDelete (any specific) key in the list for operation
@@ -370,10 +339,10 @@ const ChapterPanel = (props) => {
                         [key]: !value
                     }
                 }
-                return obj   
+                return obj  ; 
             }
         })
-        return newArr
+        return newArr;
     } 
 
     // update processing key in list for showing loader
@@ -385,9 +354,9 @@ const ChapterPanel = (props) => {
                     processing: isProcessing
                 }
             }
-            return obj
+            return obj;
         })
-        return newArr
+        return newArr;
     } 
 
     // update text in textarea in item
@@ -399,24 +368,19 @@ const ChapterPanel = (props) => {
                     [key]: value
                 }
             }
-            return obj
+            return obj;
         })
-        return newArr
+        return newArr;
     } 
-
     
     // insert the text in editor and commit
     const insertContentInEditor = (text, heading) => {
         // before inserting text in editor reset the editor
         // creates an illusion of new working space
         // $('.summernote').summernote('code', '');
-        
         if(text?.length === 0) return;
-        
-       
-        let final = ''
-        let html = convert.render(text)
-        
+        let final = '';
+        let html = convert.render(text);
         if(isContentGenerateRef.current){
             // let final = html.replace(/(?:\r\n|\r|\n)/g, '<p><br></p>');
             final = html.replace(/(<li>[^]*?<\/li>)|(\r\n|\r|\n)/g, (match, liTag, lineBreak) => {
@@ -426,15 +390,12 @@ const ChapterPanel = (props) => {
                     return "<p><br></p>"; // Replace line breaks with <p><br></p>
                 }
             });
-            // console.log(final)
         }else{
-            final = html
+            final = html;
         }
-
-        $('.summernote').summernote('code', final)
+        $('.summernote').summernote('code', final);
         $('.summernote').summernote('commit');
-
-        isContentGenerateRef.current = false
+        isContentGenerateRef.current = false;
     }
 
     // functions for more options drop-down in each matter section
@@ -447,71 +408,63 @@ const ChapterPanel = (props) => {
   
     // onchange handler for textarea - the changes made in textarea store in copy
     const handleTextareaOnChange = (e, item, matter) => {
-        let {value} = e.target
+        let {value} = e.target;
         if(matter === 'front'){
-            let newArr = updateTitleTextInList(frontMatterListCopy, item?.id, 'name', value)
-            setFrontMatterListCopy(newArr)
+            let newArr = updateTitleTextInList(frontMatterListCopy, item?.id, 'name', value);
+            setFrontMatterListCopy(newArr);
         }else if(matter === 'body'){
-            let newArr = updateTitleTextInList(bodyMatterListCopy, item?.id, 'generated_content', value)
-            setBodyMatterListCopy(newArr)
-
+            let newArr = updateTitleTextInList(bodyMatterListCopy, item?.id, 'generated_content', value);
+            setBodyMatterListCopy(newArr);
         }else if(matter === 'back'){
-            let newArr = updateTitleTextInList(backMatterListCopy, item?.id, 'name', value)
-            setBackMatterListCopy(newArr)
+            let newArr = updateTitleTextInList(backMatterListCopy, item?.id, 'name', value);
+            setBackMatterListCopy(newArr);
         }
     } 
 
     // function to toggle in delete mode
     const handleDeleteToggleBtnClick = (e, item_id, matter, value) => {
-        e?.stopPropagation()
+        e?.stopPropagation();
         if(matter === 'front'){
-            let newArr = updateSpecificKeyInList(frontMatterList, item_id, 'isDelete', value)
-            // console.log(newArr)
-            setFrontMatterList(newArr)
+            let newArr = updateSpecificKeyInList(frontMatterList, item_id, 'isDelete', value);
+            setFrontMatterList(newArr);
         }if(matter === 'body'){
-            // console.log(item_id)
-            // console.log("value" + value)
-            let newArr = updateSpecificKeyInList(bodyMatterList, item_id, 'isDelete', value)
-            // console.log(newArr)
-            setBodyMatterList(newArr)
+            let newArr = updateSpecificKeyInList(bodyMatterList, item_id, 'isDelete', value);
+            setBodyMatterList(newArr);
         }else if(matter === 'back'){
-            let newArr = updateSpecificKeyInList(backMatterList, item_id, 'isDelete', value)
-            // console.log(newArr)
-            setBackMatterList(newArr)
+            let newArr = updateSpecificKeyInList(backMatterList, item_id, 'isDelete', value);
+            setBackMatterList(newArr);
         }
     } 
 
     // toggle edit mode for matter section items
     const toggleEditMode = (e, item_id, matter, open = true) => {
-        e?.stopPropagation()
+        e?.stopPropagation();
         if(matter === 'front'){
-            let newArr = updateSpecificKeyInList(frontMatterList, item_id, 'isEdit', open)
-            // console.log(newArr)
-            setFrontMatterList(newArr)
-            setFrontMatterListCopy(newArr)
+            let newArr = updateSpecificKeyInList(frontMatterList, item_id, 'isEdit', open);
+            setFrontMatterList(newArr);
+            setFrontMatterListCopy(newArr);
             if(open){
                 setTimeout(() => {
-                    focusCurrentEditingTextarea(`front-mat-textarea-${item_id}`)
+                    focusCurrentEditingTextarea(`front-mat-textarea-${item_id}`);
                 }, 10);
             }
         }else if(matter === 'body'){
-            let newArr = updateSpecificKeyInList(bodyMatterList, item_id, 'isEdit', open)
-            let removeLocalBox = newArr?.filter(each => !each?.local)
-            setBodyMatterList(removeLocalBox)
-            setBodyMatterListCopy(removeLocalBox)
+            let newArr = updateSpecificKeyInList(bodyMatterList, item_id, 'isEdit', open);
+            let removeLocalBox = newArr?.filter(each => !each?.local);
+            setBodyMatterList(removeLocalBox);
+            setBodyMatterListCopy(removeLocalBox);
             if(open){
                 setTimeout(() => {
-                    focusCurrentEditingTextarea(`body-mat-textarea-${item_id}`)
+                    focusCurrentEditingTextarea(`body-mat-textarea-${item_id}`);
                 }, 10);
             }
         }else if(matter === 'back'){
-            let newArr = updateSpecificKeyInList(backMatterList, item_id, 'isEdit', open)
-            // console.log(newArr)
-            setBackMatterList(newArr)
-            setBackMatterListCopy(newArr)
+            let newArr = updateSpecificKeyInList(backMatterList, item_id, 'isEdit', open);
+            setBackMatterList(newArr);
+            setBackMatterListCopy(newArr);
             if(open){
                 setTimeout(() => {
-                    focusCurrentEditingTextarea(`back-mat-textarea-${item_id}`)
+                    focusCurrentEditingTextarea(`back-mat-textarea-${item_id}`);
                 }, 10);
             }
         }
@@ -520,107 +473,97 @@ const ChapterPanel = (props) => {
     // close isEdit mode when textarea is blured
     const handleTextAreaBlur = (e, item, matter) => {
         if(matter === 'front'){
-            let newArr = updateSpecificKeyInList(frontMatterList, item?.id, 'isEdit', false)
-            setFrontMatterList(newArr)
-            setFrontMatterListCopy(newArr)
+            let newArr = updateSpecificKeyInList(frontMatterList, item?.id, 'isEdit', false);
+            setFrontMatterList(newArr);
+            setFrontMatterListCopy(newArr);
         }else if(matter === 'body'){
-            let newArr = updateSpecificKeyInList(bodyMatterList, item?.id, 'isEdit', false)
-            setBodyMatterList(newArr)
-            setBodyMatterListCopy(newArr)
+            let newArr = updateSpecificKeyInList(bodyMatterList, item?.id, 'isEdit', false);
+            setBodyMatterList(newArr);
+            setBodyMatterListCopy(newArr);
         }else if(matter === 'back'){
-            let newArr = updateSpecificKeyInList(backMatterList, item?.id, 'isEdit', false)
-            setBackMatterList(newArr)
+            let newArr = updateSpecificKeyInList(backMatterList, item?.id, 'isEdit', false);
+            setBackMatterList(newArr);
             setBackMatterListCopy(newArr)
         }
     } 
 
-
     // handle when front matter item is clicked
     const handleFrontMatterOptionClick = (item) => {
         $('.summernote').summernote('code', '');
-        let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.front_matter)
-        setFrontMatterList(newArr)
+        let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.front_matter);
+        setFrontMatterList(newArr);
         // let item = {}
         // item = bookCreationResponseRedux?.front_matter?.find(each => each?.id === itemObj?.id)
         if(item?.generated_content){
-            insertContentInEditor(item?.generated_content, item?.name)
+            insertContentInEditor(item?.generated_content, item?.name);
         }else{
             // comment the below line to stop the auto generation of chapter when the particular chapter is clicked 
             if(item?.name?.toLowerCase() === 'preface'){
-                getMatterItemData(item, 'front')
+                getMatterItemData(item, 'front');
             }
         }
-        updateSearchParamInURL('front', item?.id)
+        updateSearchParamInURL('front', item?.id);
     } 
 
     // handle when body matter item is clicked
     const handleBodyMatterOptionClick = (item) => {
-        let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.body_matter)
-        setBodyMatterList(newArr)
+        let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.body_matter);
+        setBodyMatterList(newArr);
         $('.summernote').summernote('code', '');
         // let item = {}
         // item = bookCreationResponseRedux?.body_matter?.find(each => each?.id === itemObj?.id)
         if(item?.html_data){
-            insertContentInEditor(item?.html_data, item?.generated_content)
+            insertContentInEditor(item?.html_data, item?.generated_content);
         }else {
             // comment the below line to stop the auto generation of chapter when the particular chapter is clicked 
-            getChapterDataInStream(item.id)
+            getChapterDataInStream(item.id);
         }
-        updateSearchParamInURL('body', item?.id)
+        updateSearchParamInURL('body', item?.id);
     } 
 
     // handle when back matter item is clicked
     const handleBackMatterOptionClick = (item) => {
-        let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.back_matter)
-        setBackMatterList(newArr)
+        let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.back_matter);
+        setBackMatterList(newArr);
         $('.summernote').summernote('code', '');
        
         if(item?.generated_content){
-            insertContentInEditor(item?.generated_content, item?.name)
+            insertContentInEditor(item?.generated_content, item?.name);
         }else{
             // comment the below line to stop the auto generation of chapter when the particular chapter is clicked 
             // getMatterItemData(item, 'back')
         }
-        updateSearchParamInURL('back', item?.id)
+        updateSearchParamInURL('back', item?.id);
     } 
 
     // get generated data when particular matter item is clicked 
     const getMatterItemData = (item, matter) => {
         let formdata = new FormData();
-
         if(matter === 'front'){
-            let newArr = updateProcessingKeyInList(frontMatterList, item?.id, true)
-            // console.log(newArr)
-            setFrontMatterList(newArr)
-            setFrontMatterListCopy(newArr)
+            let newArr = updateProcessingKeyInList(frontMatterList, item?.id, true);
+            setFrontMatterList(newArr);
+            setFrontMatterListCopy(newArr);
         }else if(matter === 'back'){
-            let newArr = updateProcessingKeyInList(backMatterList, item?.id, true)
-            // console.log(newArr)
-            setBackMatterList(newArr)
-            setBackMatterListCopy(newArr)
+            let newArr = updateProcessingKeyInList(backMatterList, item?.id, true);
+            setBackMatterList(newArr);
+            setBackMatterListCopy(newArr);
         }
-
-        
         if(matter === 'body') {
-            let newCreatedItemObj = bodyMatterListCopy?.find(each => each?.id === item?.id)
+            let newCreatedItemObj = bodyMatterListCopy?.find(each => each?.id === item?.id);
             formdata.append("generated_content", newCreatedItemObj?.generated_content);
         }
         else formdata.append("obj", item?.id);
-        
         formdata.append("book_creation", createdBookIdRef.current);
-
-        let url = ''
-        if(matter === 'front') url = `${Config.BASE_URL}/openai/bookfrontmatter/`
-        else if (matter === 'body') url = `${Config.BASE_URL}/openai/bookbodymatter/`
-        else if (matter === 'back') url = `${Config.BASE_URL}/openai/bookbackmatter/`
-        
+        let url = '';
+        if(matter === 'front') url = `${Config.BASE_URL}/writer/bookfrontmatter/`;
+        else if (matter === 'body') url = `${Config.BASE_URL}/writer/bookbodymatter/`;
+        else if (matter === 'back') url = `${Config.BASE_URL}/writer/bookbackmatter/`;
         if(matter !== 'body'){
-            document.querySelector('.note-editable').classList.add('note-editable-loader')
-            document.querySelector('.note-editable').classList.add('cursor-hide')
-            document.querySelector('.ailaysa-writter-main-wrapper').style.pointerEvents = 'none'
-            props.showOverlay()
+            document.querySelector('.note-editable').classList.add('note-editable-loader');
+            document.querySelector('.note-editable').classList.add('cursor-hide');
+            document.querySelector('.ailaysa-writter-main-wrapper').style.pointerEvents = 'none';
+            props.showOverlay();
         }
-
 
         Config.axios({
             url: url,
@@ -629,15 +572,11 @@ const ChapterPanel = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                document.querySelector('.note-editable').classList.remove('note-editable-loader')
-                document.querySelector('.note-editable').classList.remove('cursor-hide')
-                props.closeOverlay()
+                document.querySelector('.note-editable').classList.remove('note-editable-loader');
+                document.querySelector('.note-editable').classList.remove('cursor-hide');
+                props.closeOverlay();
                 document.querySelector('.pop-overlay').style.pointerEvents = 'all';
-
-                // console.log(response.data)
-
-                getBookDetails(createdBookIdRef.current)
-
+                getBookDetails(createdBookIdRef.current);
                 // setTimeout(() => {
                 //     // once the new chapter/matter-item is saved in list : then generate data for chapter/item
                 //     if(matter === 'front'){
@@ -655,20 +594,19 @@ const ChapterPanel = (props) => {
                 // }, 80);
             },
             error: (err) => {
-                // console.log('inside error')
                 if (err?.response.status === 400) {
-                    setShowCreditAlertModal(true)
-                    document.querySelector('.note-editable').classList.remove('note-editable-loader')
-                    document.querySelector('.note-editable').classList.remove('cursor-hide')
+                    setShowCreditAlertModal(true);
+                    document.querySelector('.note-editable').classList.remove('note-editable-loader');
+                    document.querySelector('.note-editable').classList.remove('cursor-hide');
                     document.querySelector('.pop-overlay').style.pointerEvents = 'all';
-                    props.closeOverlay()
+                    props.closeOverlay();
                 }else{
-                    document.querySelector('.note-editable').classList.remove('note-editable-loader')
-                    document.querySelector('.note-editable').classList.remove('cursor-hide')
+                    document.querySelector('.note-editable').classList.remove('note-editable-loader');
+                    document.querySelector('.note-editable').classList.remove('cursor-hide');
                     document.querySelector('.pop-overlay').style.pointerEvents = 'all';
-                    props.closeOverlay()
+                    props.closeOverlay();
                 }
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             }
         });
     } 
@@ -678,18 +616,17 @@ const ChapterPanel = (props) => {
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        let token = userCacheData != null ? userCacheData?.token : "";
-        
+        let token = userCacheData != null ? userCacheData?.token : "";        
         // URL_SEARCH_PARAMS.set('streaming', true)
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
 
-        document.querySelector('.ailaysa-writter-main-wrapper').style.pointerEvents = 'none'
-        props.showOverlay()
+        document.querySelector('.ailaysa-writter-main-wrapper').style.pointerEvents = 'none';
+        props.showOverlay();
+        document.querySelector('.note-editable').classList.add('note-editable-loader');
+        document.querySelector('.note-editable').classList.add('cursor-hide');
 
-        document.querySelector('.note-editable').classList.add('note-editable-loader')
-        document.querySelector('.note-editable').classList.add('cursor-hide')
         try{
-            await fetchEventSource(`${Config.AI_GEN_URL}/openai/book_chapter_generate/?bookbody_id=${id}`, {
+            await fetchEventSource(`${Config.AI_GEN_URL}/writer/book_chapter_generate/?bookbody_id=${id}`, {
                 openWhenHidden: true,
                 method: "GET",
                 headers: {
@@ -698,104 +635,82 @@ const ChapterPanel = (props) => {
                 },
                 onopen(res) {
                     if(res.status == 400){
-                        // console.log('ran erron')
-                        setShowCreditAlertModal(true)
-                        document.querySelector('.note-editable').classList.remove('note-editable-loader')
-                        document.querySelector('.note-editable').classList.remove('cursor-hide')
-                        isStreamClosedRef.current = true
-                        URL_SEARCH_PARAMS.delete('streaming')
-                        history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-        
+                        setShowCreditAlertModal(true);
+                        document.querySelector('.note-editable').classList.remove('note-editable-loader');
+                        document.querySelector('.note-editable').classList.remove('cursor-hide');
+                        isStreamClosedRef.current = true;
+                        URL_SEARCH_PARAMS.delete('streaming');
+                        history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());        
                         setTimeout(() => {
-                            updateHTMLInMatterItem(id)
-                            props.closeOverlay()
+                            updateHTMLInMatterItem(id);
+                            props.closeOverlay();
                             document.querySelector('.pop-overlay').style.pointerEvents = 'all';
-                            getBookDetails(createdBookIdRef.current)
+                            getBookDetails(createdBookIdRef.current);
                         }, 500);
                     }
                     if (res.ok && res.status === 200) {
-                        // console.log("Connection made ", res);
                         // blogAricleUpdate(createdDocumentId.current, blogCreatedId.current)
-    
                     } else if (
                         res.status >= 400 &&
                         res.status < 500 &&
                         res.status !== 429
-                    ) {
-                        // console.log("Client side error ", res);
-                       
-                    }
+                    ) {}
                 },
                 onmessage(event) {
-                    
-                    scrollToBottom()
-                    const text = event.data.slice(7, -2)
-                    // console.log(text)
+                    scrollToBottom();
+                    const text = event.data.slice(7, -2);
                     if (text.includes('\\n')) {
-                        updateHTMLInMatterItem(id)
-                    } else {
-                    
-                    }
-    
-                    let final = text.replace(/\\n/g, `<p class="break"><br/></p>`)
-                    // let final = text.replace(/\\n/g, " ")
-                    let update = final.replace('/\u200c/g', " ")
-                    document.querySelector('.note-editable').innerHTML += final
-                   
-                    scrollToBottom()
+                        updateHTMLInMatterItem(id);
+                    } else { }
+                    let final = text.replace(/\\n/g, `<p class="break"><br/></p>`);
+                    // let final = text.replace(/\\n/g, " ");
+                    let update = final.replace('/\u200c/g', " ");
+                    document.querySelector('.note-editable').innerHTML += final;                   
+                    scrollToBottom();
                 },
                 onclose() {
-                    // console.log("Connection closed by the server");
                     try{
-                        scrollToBottom()
-                        isStreamClosedRef.current = true
-                        URL_SEARCH_PARAMS.delete('streaming')
-                        history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-                        
-                        handleFormatGenerateData(id, item)
-                        document.querySelector('.note-editable').classList.remove('note-editable-loader')
-                        document.querySelector('.note-editable').classList.remove('cursor-hide')
-                        props.closeOverlay()
+                        scrollToBottom();
+                        isStreamClosedRef.current = true;
+                        URL_SEARCH_PARAMS.delete('streaming');
+                        history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());                        
+                        handleFormatGenerateData(id, item);
+                        document.querySelector('.note-editable').classList.remove('note-editable-loader');
+                        document.querySelector('.note-editable').classList.remove('cursor-hide');
+                        props.closeOverlay();
                     }catch(e){
-                        console.log(e)
+                        console.error(e);
                     }
                 },
                 onerror(err) {
-                    // console.log('ran erron')
-                    // console.log(err)
-                    Config.toast("Streaming failed", 'warning')
-                    // console.log("There was an error from server", err);
-                    document.querySelector('.note-editable').classList.remove('note-editable-loader')
-                    document.querySelector('.note-editable').classList.remove('cursor-hide')
-                    isStreamClosedRef.current = true
-                    URL_SEARCH_PARAMS.delete('streaming')
+                    Config.toast("Streaming failed", 'warning');
+                    document.querySelector('.note-editable').classList.remove('note-editable-loader');
+                    document.querySelector('.note-editable').classList.remove('cursor-hide');
+                    isStreamClosedRef.current = true;
+                    URL_SEARCH_PARAMS.delete('streaming');
                     history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
     
                     setTimeout(() => {
-                        updateHTMLInMatterItem(id)
-                        props.closeOverlay()
+                        updateHTMLInMatterItem(id);
+                        props.closeOverlay();
                         document.querySelector('.pop-overlay').style.pointerEvents = 'all';
-                        getBookDetails(createdBookIdRef.current)
+                        getBookDetails(createdBookIdRef.current);
                     }, 500);
                     // exit the stream if any error occurs
                     throw new Error(); 
                 },
             });
         }catch(e){
-            console.log(e)
+            console.error(e);
         }
         
     };
 
-
     // convert the generated data (From .md format to html format)
     const handleFormatGenerateData = (id, item) => {
-        document.querySelector('.note-editable').classList.remove('note-editable-loader')
-
-        let data = document.querySelector('.note-editable').innerText
-        // console.log(data)
-
-        let html = convert.render(data)
+        document.querySelector('.note-editable').classList.remove('note-editable-loader');
+        let data = document.querySelector('.note-editable').innerText;
+        let html = convert.render(data);
         // let final = html.replace(/(?:\r\n|\r|\n)/g, '<p><br></p>');
         let final = html.replace(/(<li>[^]*?<\/li>)|(\r\n|\r|\n)/g, (match, liTag, lineBreak) => {
             if (liTag) {
@@ -803,62 +718,53 @@ const ChapterPanel = (props) => {
             } else {
                 return ``; // Replace line breaks with <p><br></p>
             }
-        });
-
-       
-        document.querySelector('.note-editable').innerHTML = final
-        document.querySelector('.note-editable-backdrop').innerHTML = document.querySelector('.note-editable').innerHTML
-       
-        scrollToTop()
+        });       
+        document.querySelector('.note-editable').innerHTML = final;
+        document.querySelector('.note-editable-backdrop').innerHTML = document.querySelector('.note-editable').innerHTML;
+        scrollToTop();
         setTimeout(() => {
-            updateHTMLInMatterItem(id,'last',final)
+            updateHTMLInMatterItem(id,'last',final);
             document.querySelector('.pop-overlay').style.pointerEvents = 'all';
-            props.closeOverlay()
-      
-    
+            props.closeOverlay();
             // $('.summernote').summernote('commit');
         }, 500);
     }
 
-
     // update the generated content in the html_data field
     const updateHTMLInMatterItem = (id,isLast,htmlaData) => {
         let formdata = new FormData();
-
-        let data = document.querySelector('.note-editable').innerText
-        let html = convert.render(data)
+        let data = document.querySelector('.note-editable').innerText;
+        let html = convert.render(data);
         let final = html.replace(/(?:\r\n|\r|\n)/g, '');
-        let spaceRemovedHtml = final
+        let spaceRemovedHtml = final;
         formdata.append("html_data", isLast ? htmlaData : spaceRemovedHtml);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookbodymatter/${id}/`,
+            url: `${Config.BASE_URL}/writer/bookbodymatter/${id}/`,
             body:formdata,
             method: "PUT",
             data: formdata,
             auth: true,
             success: (response) => {
-                // console.log(response)
                 if(isLast){
                 if(isStreamClosedRef){
-                    getBookDetails(createdBookIdRef.current)
-                    isStreamClosedRef.current = false
+                    getBookDetails(createdBookIdRef.current);
+                    isStreamClosedRef.current = false;
                 }
-                }
-               
+                }               
             },
         });
     }
 
     // more option item is clicked 
     const handleMoreOptionsItemClick = (e, option, matter) => {
-        e.stopPropagation()
+        e.stopPropagation();
         if(matter === 'front'){
-            addMatterItems(option, matter)
+            addMatterItems(option, matter);
         }else if(matter === 'body'){
-            addMatterItems(option, matter)
+            addMatterItems(option, matter);
         }else if(matter === 'back'){
-            addMatterItems(option, matter)
+            addMatterItems(option, matter);
         }
     } 
 
@@ -877,41 +783,40 @@ const ChapterPanel = (props) => {
     // add new/additional items from more options in selected matter 
     const addMatterItems = (option, matter) => {
         let formdata = new FormData();
-        let newArr = []
+        let newArr = [];
         if(matter === 'front'){
-            newArr = getMatterItemAddedArr(frontMatterList, 'name', option)
-            setFrontMatterList(newArr)
-            setFrontMatterListCopy(newArr)
-            handleAddItemDrpVisibility(null, false, 'front')
+            newArr = getMatterItemAddedArr(frontMatterList, 'name', option);
+            setFrontMatterList(newArr);
+            setFrontMatterListCopy(newArr);
+            handleAddItemDrpVisibility(null, false, 'front');
             formdata.append("front_matter", option.value);
         }else if(matter === 'body'){
-            newArr = getMatterItemAddedArr(bodyMatterList, 'generated_content', option)
-            setBodyMatterList(newArr)
-            setBodyMatterListCopy(newArr)
-            handleAddItemDrpVisibility(null, false, 'body')
+            newArr = getMatterItemAddedArr(bodyMatterList, 'generated_content', option);
+            setBodyMatterList(newArr);
+            setBodyMatterListCopy(newArr);
+            handleAddItemDrpVisibility(null, false, 'body');
             // scroll to the added custom chapter and have it focus
             setTimeout(() => {
-                let focusingEleId = newArr?.find(each => each.local)?.id
-                let scrollingDiv = document.querySelector('.gen-prop-main-wrap')
+                let focusingEleId = newArr?.find(each => each.local)?.id;
+                let scrollingDiv = document.querySelector('.gen-prop-main-wrap');
                 scrollingDiv.scrollTo({
                     top: scrollingDiv.scrollHeight,
                     behavior: 'smooth',
                   });
-                focusCurrentEditingTextarea(`body-mat-textarea-${focusingEleId}`)
+                focusCurrentEditingTextarea(`body-mat-textarea-${focusingEleId}`);
             }, 15);
             return;
         }else if(matter === 'back'){
-            newArr = getMatterItemAddedArr(backMatterList, 'name', option)
-            setBackMatterList(newArr)
-            setBackMatterListCopy(newArr)
-            handleAddItemDrpVisibility(null, false, 'back')
+            newArr = getMatterItemAddedArr(backMatterList, 'name', option);
+            setBackMatterList(newArr);
+            setBackMatterListCopy(newArr);
+            handleAddItemDrpVisibility(null, false, 'back');
             formdata.append("back_matter", option.value);
         }
         formdata.append("book_creation", createdBookIdRef.current);
-        
-        let url = ''
-        if(matter === 'front') url = `${Config.BASE_URL}/openai/bookfrontmatter/`
-        else if (matter === 'back') url = `${Config.BASE_URL}/openai/bookbackmatter/`
+        let url = '';
+        if(matter === 'front') url = `${Config.BASE_URL}/writer/bookfrontmatter/`;
+        else if (matter === 'back') url = `${Config.BASE_URL}/writer/bookbackmatter/`;
 
         Config.axios({
             url: url,
@@ -920,56 +825,52 @@ const ChapterPanel = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             },
             error: (err) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             }
         });
     } 
 
     const handleConfirmDoneBtnClick = (e, item, matter) => {
-        e?.stopPropagation()
-        
+        e?.stopPropagation();        
         // save the local chapter in the server list first 
         if(item?.local){
-            setIsUpdatingText(true)
-            getMatterItemData(item, 'body')
+            setIsUpdatingText(true);
+            getMatterItemData(item, 'body');
         }
         // for non-local files - update the text in the server
         else{
-            setIsUpdatingText(true)
-            updateMatterItemText(e, item, matter, 'PUT')
+            setIsUpdatingText(true);
+            updateMatterItemText(e, item, matter, 'PUT');
         }
     } 
 
     // update new new textarea value in the server
     const updateMatterItemText = (e = null, item, matter, method) => {
-        e?.stopPropagation();
-        
+        e?.stopPropagation();        
         let formdata = new FormData();
         if(method === 'PUT'){
             let textareaValue = ''
             if(matter === 'front'){
-                 textareaValue = frontMatterListCopy?.find(each => each?.id === item?.id)?.name
-                //  console.log(textareaValue)
+                 textareaValue = frontMatterListCopy?.find(each => each?.id === item?.id)?.name;
                 formdata.append("name", textareaValue);
             }else if(matter === 'body'){
-                textareaValue = bodyMatterListCopy?.find(each => each?.id === item?.id)?.generated_content
+                textareaValue = bodyMatterListCopy?.find(each => each?.id === item?.id)?.generated_content;
                 formdata.append("generated_content", textareaValue);
             }else if(matter === 'back'){
-                textareaValue = backMatterListCopy?.find(each => each?.id === item?.id)?.name
+                textareaValue = backMatterListCopy?.find(each => each?.id === item?.id)?.name;
                 formdata.append("name", textareaValue);
             }
             formdata.append("book_creation", createdBookIdRef.current);
         }else if(method === 'DELETE'){
-            setIsDeleting(true)
+            setIsDeleting(true);
         }
-
-        let url = ''
-        if(matter === 'front') url = `${Config.BASE_URL}/openai/bookfrontmatter/${item?.id}/`
-        else if (matter === 'body') url = `${Config.BASE_URL}/openai/bookbodymatter/${item?.id}/`
-        else if (matter === 'back') url = `${Config.BASE_URL}/openai/bookbackmatter/${item?.id}/`
+        let url = '';
+        if(matter === 'front') url = `${Config.BASE_URL}/writer/bookfrontmatter/${item?.id}/`;
+        else if (matter === 'body') url = `${Config.BASE_URL}/writer/bookbodymatter/${item?.id}/`;
+        else if (matter === 'back') url = `${Config.BASE_URL}/writer/bookbackmatter/${item?.id}/`;
 
         Config.axios({
             url: url,
@@ -978,10 +879,10 @@ const ChapterPanel = (props) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             },
             error: (err) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             }
         });
     }
@@ -989,27 +890,25 @@ const ChapterPanel = (props) => {
     // update the reordering list for front matter list
     const updateFrontOutlineOrder = () => {
         let formdata = new FormData();
-        let reorder_list = ''
-        // console.log(outlineReorderingRef.current)
+        let reorder_list = '';
         frontMatterReorderingRef.current?.filter(each => each.temp_order !== undefined)?.map((each, index) => {
             reorder_list += `${each.temp_order}${
                 index !== frontMatterReorderingRef.current.length - 1 ? "," : ""
             }`;
         });
-        // console.log(reorder_list)
         formdata.append("order_list", reorder_list);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookfrontmatter/${frontMatterList[0]?.id}/`,
+            url: `${Config.BASE_URL}/writer/bookfrontmatter/${frontMatterList[0]?.id}/`,
             body:formdata,
             method: "PUT",
             data: formdata,
             auth: true,
             success: (response) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             },
             error: (err) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             }
         });
         
@@ -1018,28 +917,25 @@ const ChapterPanel = (props) => {
     // update the reordering list for body matter list
     const updateBodyOutlineOrder = () => {
         let formdata = new FormData();
-        let reorder_list = ''
-        
+        let reorder_list = '';        
         bodyMatterReorderingRef.current?.filter(each => each.temp_order !== undefined)?.map((each, index) => {
             reorder_list += `${each.temp_order}${
                 index !== bodyMatterReorderingRef.current.length - 1 ? "," : ""
             }`;
         });
-        // console.log(reorder_list)
-        
         formdata.append("order_list", reorder_list);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookbodymatter/${bodyMatterList[0]?.id}/`,
+            url: `${Config.BASE_URL}/writer/bookbodymatter/${bodyMatterList[0]?.id}/`,
             body:formdata,
             method: "PUT",
             data: formdata,
             auth: true,
             success: (response) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             },
             error: (err) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             }
         });
     } 
@@ -1047,27 +943,25 @@ const ChapterPanel = (props) => {
     // update the reordering list for back matter list
     const updateBackOutlineOrder = () => {
         let formdata = new FormData();
-        let reorder_list = ''
-        // console.log(outlineReorderingRef.current)
+        let reorder_list = '';
         backMatterReorderingRef.current?.filter(each => each.temp_order !== undefined)?.map((each, index) => {
             reorder_list += `${each.temp_order}${
                 index !== backMatterReorderingRef.current.length - 1 ? "," : ""
             }`;
         });
-        // console.log(reorder_list)
         formdata.append("order_list", reorder_list);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookbackmatter/${backMatterList[0]?.id}/`,
+            url: `${Config.BASE_URL}/writer/bookbackmatter/${backMatterList[0]?.id}/`,
             body:formdata,
             method: "PUT",
             data: formdata,
             auth: true,
             success: (response) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             },
             error: (err) => {
-                getBookDetails(createdBookIdRef.current)
+                getBookDetails(createdBookIdRef.current);
             }
         });
     } 
@@ -1075,29 +969,28 @@ const ChapterPanel = (props) => {
     // check if editor is empty or not: if empty generate the content otherwise show the content loss alert
     const generateItemContentBtn = (e, item, matter) => {
         tempStoredGenerateLinkParamRef.current = {item, matter}
-        let isEditorEmpty = $('.summernote').summernote('isEmpty')
+        let isEditorEmpty = $('.summernote').summernote('isEmpty');
 
         if(matter === 'front'){
             if(item?.generated_content && !isEditorEmpty){
-                dispatch(setShowBookContentLossAlertModal(true))
+                dispatch(setShowBookContentLossAlertModal(true));
             }else{
-                document.querySelector('.note-editable').classList.add('note-editable-loader')
-                document.querySelector('.note-editable').classList.add('cursor-hide')
-        
-                getMatterItemData(item, 'front')
+                document.querySelector('.note-editable').classList.add('note-editable-loader');
+                document.querySelector('.note-editable').classList.add('cursor-hide');
+                getMatterItemData(item, 'front');
             }
         }else if(matter === 'body'){
             if(item?.html_data && !isEditorEmpty){
-                dispatch(setShowBookContentLossAlertModal(true))
+                dispatch(setShowBookContentLossAlertModal(true));
             }else{
-                getChapterDataInStream(item?.id, item)
-                isContentGenerateRef.current = true
+                getChapterDataInStream(item?.id, item);
+                isContentGenerateRef.current = true;
             }
         }else if(matter === 'back'){
             if(item?.generated_content && !isEditorEmpty){
-                dispatch(setShowBookContentLossAlertModal(true))
+                dispatch(setShowBookContentLossAlertModal(true));
             }else{
-                getMatterItemData(item, 'back')
+                getMatterItemData(item, 'back');
             }
         }
     } 
@@ -1105,44 +998,42 @@ const ChapterPanel = (props) => {
     // update the book title on blur
     const handleBookTitleChange = () => {
         let formdata = new FormData();
-        let book_title = bookTitleRef.current?.value?.trim()
+        let book_title = bookTitleRef.current?.value?.trim();
         if(book_title?.length === 0) {
-            bookTitleRef.current.focus()
+            bookTitleRef.current.focus();
             return;
         }
         if(bookCreationResponseRedux?.title === book_title){
-            setTitleFocus(false)
-            return
+            setTitleFocus(false);
+            return;
         } 
-
         formdata.append("title", book_title);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${createdBookIdRef.current}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${createdBookIdRef.current}/`,
             method: "PUT",
             data: formdata,
             auth: true,
             success: (response) => {
-                getBookDetails(createdBookIdRef.current)
-                setTitleFocus(false)
+                getBookDetails(createdBookIdRef.current);
+                setTitleFocus(false);
             },
             error: (err) => {
                 if (err?.response.status === 400) {
-                    getBookDetails(createdBookIdRef.current)
+                    getBookDetails(createdBookIdRef.current);
                 }
-                setTitleFocus(false)
+                setTitleFocus(false);
             }
         });
     } 
 
     const toggleTitleFocus = () => {
-        setTitleFocus(true)
-        bookTitleRef.current.focus()
+        setTitleFocus(true);
+        bookTitleRef.current.focus();
     } 
 
     const filesDownload = async(html_data, item) => {
-        var summerNoteData = html_data
-
+        var summerNoteData = html_data;
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -1152,14 +1043,8 @@ const ChapterPanel = (props) => {
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    // console.log(attribs)
-
-                    // console.log(attribs.style)
-                    // console.log(attribs.style)
-                    let c = attribs?.color ? attribs?.color : ''
-                    let s = attribs?.style ? attribs.style : ''
-
-
+                    let c = attribs?.color ? attribs?.color : '';
+                    let s = attribs?.style ? attribs.style : '';
                     return {
                         tagName: 'span',
                         //   attribs: {
@@ -1173,33 +1058,25 @@ const ChapterPanel = (props) => {
                 }
             }
         });
-
         // regex to replace all <p><br /></p>
-        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />')
-        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '')
-
+        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />');
+        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '');
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
-
         // formData.append("name", documentNameRef.current.innerText);
         var myHeaders = new Headers();
         var formdata = new FormData();
-
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-
         let token = userCacheData != null ? userCacheData?.token : "";
-
         let headers = {
             "Access-Control-Allow-Origin": "*",
             Accept: "application/json",
             Authorization: `Bearer ${token}`
         };
-
         formdata.append("html", removedStyleAttribFromImg);
         // formdata.append("html_str", removedStyleAttribFromImg)
-        formdata.append("name", "name")
-        
+        formdata.append("name", "name");
         var requestOptions = {
             method: 'POST',
             body: formdata,
@@ -1207,43 +1084,37 @@ const ChapterPanel = (props) => {
             redirect: 'follow'
         };
        
-
         try{
-            let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
+            let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions);
             // let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions)
-          
             if (data.status === 200) {
-                let response = await data.blob()
-    
+                let response = await data.blob();    
                 let fileObj = new File([response], `${(item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-                // console.log(fileObj);
                 return fileObj;
             }else {
                 console.error('Failed to download file');
                 return null;
             }
         }catch(e) {
-            dispatch(deleteDownloadingFile({ id: bookCreationResponseRedux?.id }))
+            dispatch(deleteDownloadingFile({ id: bookCreationResponseRedux?.id }));
         }
     } 
 
     const handleDownloadAll = () => {
-        allDownloadedFilesArrRef.current = []
+        allDownloadedFilesArrRef.current = [];
         let arr = []
         bookCreationResponseRedux?.front_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
         bookCreationResponseRedux?.body_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
         bookCreationResponseRedux?.back_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
-        dispatch(addDownloadingFiles({ id: bookCreationResponseRedux?.id, file_name: bookCreationResponseRedux?.name, ext: '.docx', status: 1 }))
-
+        dispatch(addDownloadingFiles({ id: bookCreationResponseRedux?.id, file_name: bookCreationResponseRedux?.name, ext: '.docx', status: 1 }));
         downloadFilesInOrder(arr).then(() => {
-            // console.log(allDownloadedFilesArrRef.current)
-            mergeFile()
+            mergeFile();
         })
     } 
 
@@ -1264,11 +1135,7 @@ const ChapterPanel = (props) => {
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
-        
-        // console.log(allDownloadedFilesArrRef.current)
-
         allDownloadedFilesArrRef.current?.forEach(each => {
             formData.append("docx_files", each);
         })
@@ -1278,47 +1145,41 @@ const ChapterPanel = (props) => {
         
         axios({
             method: "POST",
-            url: `${Config.BASE_URL}/openai/docx_merger/`,
+            url: `${Config.BASE_URL}/writer/docx_merger/`,
             data: formData,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },
         }).then(function (response) {
             //handle success
-            // console.log(response.data)
             const filename = response.headers['content-disposition']?.split('filename*=')[1];
-            let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''))
+            let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''));
             const url = URL.createObjectURL(new Blob([response.data]));
-
             var fileDownload = document.createElement("a");
             document.body.appendChild(fileDownload);
             // fileDownload.href = URL.createObjectURL(response.data);
-            fileDownload.href = url
+            fileDownload.href = url;
             fileDownload.download = Config.unescape(`${bookName}`);
             fileDownload?.click();
             document.body.removeChild(fileDownload);
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: bookCreationResponseRedux?.id, status: 2 }))
-
+            dispatch(updateDownloadingFile({ id: bookCreationResponseRedux?.id, status: 2 }));
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: bookCreationResponseRedux?.id }))
+                dispatch(deleteDownloadingFile({ id: bookCreationResponseRedux?.id }));
             }, 8000);
-
-
         }).catch((e) =>{
-            console.log(e)
-            Config.toast('Failed to download file', 'error')
-            dispatch(deleteDownloadingFile({ id: bookCreationResponseRedux?.id }))
+            console.error(e);
+            Config.toast('Failed to download file', 'error');
+            dispatch(deleteDownloadingFile({ id: bookCreationResponseRedux?.id }));
         })
     } 
 
     const currentFileDownload = async() => {
-        var summerNoteData = document.querySelector('.note-editable').innerHTML
+        var summerNoteData = document.querySelector('.note-editable').innerHTML;
         if($('.summernote').summernote('isEmpty')) {
-            Config.toast('Nothing to download', 'warning')
-            return
+            Config.toast('Nothing to download', 'warning');
+            return;
         }
-
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -1328,14 +1189,8 @@ const ChapterPanel = (props) => {
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    // console.log(attribs)
-
-                    // console.log(attribs.style)
-                    // console.log(attribs.style)
-                    let c = attribs?.color ? attribs?.color : ''
-                    let s = attribs?.style ? attribs.style : ''
-
-
+                    let c = attribs?.color ? attribs?.color : '';
+                    let s = attribs?.style ? attribs.style : '';
                     return {
                         tagName: 'span',
                         //   attribs: {
@@ -1349,42 +1204,31 @@ const ChapterPanel = (props) => {
                 }
             }
         });
-
         // regex to replace all <p><br /></p>
-        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />')
-        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '')
-
+        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />');
+        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '');
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
-
         // formData.append("name", documentNameRef.current.innerText);
         var myHeaders = new Headers();
         var formdata = new FormData();
-
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
-        // console.log(a);
         let token = userCacheData != null ? userCacheData?.token : "";
-
         formdata.append("html", removedStyleAttribFromImg);
         formdata.append("name", "name");
-        let item_id = URL_SEARCH_PARAMS.get('item')
-        let matter = URL_SEARCH_PARAMS.get('matter')
-        let item = {}
-
+        let item_id = URL_SEARCH_PARAMS.get('item');
+        let matter = URL_SEARCH_PARAMS.get('matter');
+        let item = {};
         if(matter === 'front'){
-            item = bookCreationObjRef.current?.front_matter?.find(each => each.id === parseInt(item_id))
+            item = bookCreationObjRef.current?.front_matter?.find(each => each.id === parseInt(item_id));
         }else if(matter === 'body'){
-            item = bookCreationObjRef.current?.body_matter?.find(each => each.id === parseInt(item_id))
+            item = bookCreationObjRef.current?.body_matter?.find(each => each.id === parseInt(item_id));
         }else if(matter === 'back'){
-            item = bookCreationObjRef.current?.back_matter?.find(each => each.id === parseInt(item_id))
+            item = bookCreationObjRef.current?.back_matter?.find(each => each.id === parseInt(item_id));
         }
-        // console.log(item)
-
-        let file_name = (item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content
-
-        dispatch(addDownloadingFiles({ id: item?.id, file_name: file_name, ext: '.docx', status: 1 }))
-
+        let file_name = (item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content;
+        dispatch(addDownloadingFiles({ id: item?.id, file_name: file_name, ext: '.docx', status: 1 }));
 
         axios({
             method: "POST",
@@ -1393,7 +1237,6 @@ const ChapterPanel = (props) => {
             // url: "http://localhost:8000/docx-generator",
             // url: `${Config.BASE_URL}/workspace/docx_convertor/`,
             // url: `${Config.BASE_URL}/workspace/html2docx`,
-
             data: formdata,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },
@@ -1407,22 +1250,18 @@ const ChapterPanel = (props) => {
             fileDownload.download = Config.unescape(`${file_name}.docx`);
             fileDownload?.click();
             document.body.removeChild(fileDownload);
-
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: item?.id, status: 2 }))
-
-
+            dispatch(updateDownloadingFile({ id: item?.id, status: 2 }));
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: item?.id }))
+                dispatch(deleteDownloadingFile({ id: item?.id }));
             }, 8000);
         })
         .catch(function (response) {
             //handle error
-            // console.log(response);
+            // console.error(response);
         });
     } 
-
     
     return (
         <>
@@ -1927,4 +1766,4 @@ const ChapterPanel = (props) => {
     )
 }
 
-export default ChapterPanel
+export default ChapterPanel;

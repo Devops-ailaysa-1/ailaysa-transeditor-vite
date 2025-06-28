@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, useRef } from 'react'
+import React, { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import { 
     Route, 
     Navigate, 
@@ -42,39 +42,34 @@ const lazyRetry = function (componentImport) {
 // Dynamically import all components
 // const Fileupload = lazy(() => lazyRetry(() => import('../vendor/Fileupload')))
 // const Dashboard = lazy(() => lazyRetry(() => import('../vendor/Dashboard')))
-const AilaysaChat = lazy(() => lazyRetry(() => import('../vendor/ailaysa-chats/AIChat')))
-const Workspace = lazy(() => lazyRetry(() => import('../vendor/Workspace')))
-const Chat = lazy(() => lazyRetry(() => import('../vendor/chat/Chat')))
-const GlossaryWorkspace = lazy(() => lazyRetry(() => import('../vendor/project-type-selection/glossary-workspace/GlossaryWorkspace')))
-const Invitation = lazy(() => lazyRetry(() => import('../vendor/Invitation')))
-const ProjectSetup = lazy(() => lazyRetry(() => import('../project-setup-components/ProjectSetup')))
-const WordchoiceWorkspace = lazy(() => lazyRetry(() => import('../vendor/project-type-selection/wordchoice-workspace/WordchoiceWorkspace')))
-// const ProjectManagement = lazy(() => lazyRetry(() => import('../project-setup-components/ProjectManagement')))
-
-const Writter = lazy(() => lazyRetry(() => import('../ailaysa-writer/Writter')))
-// const Prompt = lazy(() => lazyRetry(() => import('../ailaysa-writer/prompt')))
-const WriterBlog = lazy(() => lazyRetry(() => import('../ailaysa-writer/WriterBlog')))
-
-const AilaysaProjects = lazy(() => lazyRetry(() => import('../vendor/ailaysa-projects/AilaysaProjects')))
+const AilaysaChat = lazy(() => lazyRetry(() => import('../vendor/ailaysa-chats/AIChat')));
+const Workspace = lazy(() => lazyRetry(() => import('../vendor/Workspace')));
+const Chat = lazy(() => lazyRetry(() => import('../vendor/chat/Chat')));
+const GlossaryWorkspace = lazy(() => lazyRetry(() => import('../vendor/project-type-selection/glossary-workspace/GlossaryWorkspace')));
+const Invitation = lazy(() => lazyRetry(() => import('../vendor/Invitation')));
+const ProjectSetup = lazy(() => lazyRetry(() => import('../project-setup-components/ProjectSetup')));
+const WordchoiceWorkspace = lazy(() => lazyRetry(() => import('../vendor/project-type-selection/wordchoice-workspace/WordchoiceWorkspace')));
+// const ProjectManagement = lazy(() => lazyRetry(() => import('../project-setup-components/ProjectManagement')));
+const Writter = lazy(() => lazyRetry(() => import('../ailaysa-writer/Writter')));
+// const Prompt = lazy(() => lazyRetry(() => import('../ailaysa-writer/prompt')));
+const WriterBlog = lazy(() => lazyRetry(() => import('../ailaysa-writer/WriterBlog')));
+const AilaysaProjects = lazy(() => lazyRetry(() => import('../vendor/ailaysa-projects/AilaysaProjects')));
 
 const AllRoutes = (props) => {
-
-    const userDetails = useSelector((state) => state.userDetails.value)
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
-    const isFederal = useSelector((state) => state.isFederalNews.value)
-    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
-    let isEnterprise = userDetails?.is_enterprise
-
+    const userDetails = useSelector((state) => state.userDetails.value);
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
+    const isFederal = useSelector((state) => state.isFederalNews.value);
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
+    let isEnterprise = userDetails?.is_enterprise;
 
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route>
-
                 {isEnterprise === false ? (
                     is_internal_meber_editor ? (
                         <Route path="*" element={<Navigate to="/file-upload"/>} />
                     ) : (
-                        <Route path="*" element={<Navigate to="/create/all-templates"/>} />
+                        <Route path="*" element={<Navigate to="/create/translate/translate-files"/>} />
                     )
                 ) : (
                     isDinamalar ? (
@@ -86,11 +81,10 @@ const AllRoutes = (props) => {
                             <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
                         )
                     )
-                )}
-                
-
+                )} 
                 {!is_internal_meber_editor && (
                     isEnterprise === false ? (
+                        
                         <Route path="/" element={<Navigate to="/create/all-templates"/>} />
                     ) : (
                         isDinamalar ? (
@@ -100,11 +94,9 @@ const AllRoutes = (props) => {
                         )
                     )
                 )}
-
                 {!is_internal_meber_editor && (
                     <Route exact path="/chat-books" element={<Suspense fallback={<MainAILoader />}><AilaysaChat /></Suspense>} />
                 )}
-                
                 <Route exact path="/file-upload" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
                 <Route exact path="/documents-list" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
                 <Route exact path="/translations" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
@@ -112,11 +104,9 @@ const AllRoutes = (props) => {
                 <Route exact path="/ai-voices" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
                 <Route exact path="/assets" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
                 <Route exact path="/designs" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
-                
                 {!is_internal_meber_editor && (
                     <Route exact path="/toolkit" element={<Suspense fallback={<MainAILoader />}><AilaysaProjects /></Suspense>} />
                 )}
-
                 {/* Federal News Project */}
                 {/* get story route */}
                 {(isFederal && !is_internal_meber_editor) && (
@@ -126,15 +116,11 @@ const AllRoutes = (props) => {
                 {(isFederal || isDinamalar) && (
                     <Route exact path="/my-stories" element={<Suspense fallback={<MainAILoader />}><NewsProjects /></Suspense>} />
                 )}
-                
-                <Route exact path="/default-glossary-workspace" element={<Suspense fallback={<MainAILoader />}><DefaultGlossaryWorkspace /></Suspense>} />
-                
+                <Route exact path="/default-glossary-workspace" element={<Suspense fallback={<MainAILoader />}><DefaultGlossaryWorkspace /></Suspense>} />                
                 <Route exact path="/glossary-workspace/:projectId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
                 <Route exact path="/glossary-workspace/:projectId/:taskId" element={<Suspense fallback={<MainAILoader />}><WordchoiceWorkspace /></Suspense>} />
-
                 <Route exact path="/accept/:uid/:token" element={<Invitation />} />
                 <Route exact path="/confirm/:uid/:token" element={<Invitation />} />
-
                 <Route exact path="/workspace" element={<Suspense fallback={<MainAILoader />}><Workspace /></Suspense>} />
                 <Route exact path="/workspace/:documentId" element={<Suspense fallback={<MainAILoader />}><Workspace /></Suspense>} />
                 <Route exact path="/news-workspace" element={<Suspense fallback={<MainAILoader />}><FederalWorkspace /></Suspense>} />
@@ -169,21 +155,14 @@ const AllRoutes = (props) => {
                     Config.userState?.internal_member_team_detail?.role !== 'Editor' &&
                     <Route path="/book-writing/:category" element={<ErrorBoundary onError={(err) => console.log(err)} fallback={<p>Something went wrong. Try again later.</p>}><Suspense fallback={<MainAILoader />}><Writter /></Suspense></ErrorBoundary>} />
                 }
-
                 <Route exact path="/report" element={<Suspense fallback={<MainAILoader />}><BIReport /></Suspense>} />
-
                 {!is_internal_meber_editor && (
                     <>
                         <Route exact path="/create/:category/:menu" element={<Suspense fallback={<MainAILoader />}><ProjectSetup /></Suspense>} />
                         <Route exact path="/create/:category/:menu/:action" element={<Suspense fallback={<MainAILoader />}><ProjectSetup /></Suspense>} />
                     </>
                 )}
-                
                 {Config.userState?.internal_member_team_detail?.role != 'Editor' && <Route exact path="/create/:category" element={<Suspense fallback={<MainAILoader />}><ProjectSetup /></Suspense>} />}
-                
-
-                
-
             </Route>
         )
     )

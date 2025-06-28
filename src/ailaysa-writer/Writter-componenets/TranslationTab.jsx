@@ -1,18 +1,18 @@
 import React, { useState, useEffect, createRef, useRef } from "react";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion';
 
 const TranslationTab = () => {
-    const [translationTabActive, setTranslationTabActive] = useState(1)
-    const [translationTabDropDownVisibility, setTanslationTabDropDownVisibility] = useState(false)
-    const BookTranslationRef = useRef()
+    const [translationTabActive, setTranslationTabActive] = useState(1);
+    const [translationTabDropDownVisibility, setTanslationTabDropDownVisibility] = useState(false);
+    const BookTranslationRef = useRef();
 
     const tabsData = [
         { id: 1, label: "Book translation 1", dropdownOptions: ["Opt 1A", "Opt 1B"] },
         { id: 2, label: "Book translation 2", dropdownOptions: ["Opt 2A", "Opt 2B"] },
         { id: 3, label: "Book translation 3", dropdownOptions: ["Opt 3A", "Opt 3B"] },
         { id: 4, label: "Book translation 4", dropdownOptions: ["Opt 4A", "Opt 4B"] }
-      ];
+    ];
 
     const handleBookTranslationDrpVisibility = (show = true) => {
         setTanslationTabDropDownVisibility(show);
@@ -22,16 +22,15 @@ const TranslationTab = () => {
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (BookTranslationRef.current && !BookTranslationRef.current.contains(e.target)) {
-                handleBookTranslationDrpVisibility(false)
+                handleBookTranslationDrpVisibility(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     });
+
     return (
         <div className="book-tranlation-wrapper">
             <div className="book-tranlation-wrapper__row">
@@ -86,4 +85,4 @@ const TranslationTab = () => {
     )
 }
 
-export default TranslationTab
+export default TranslationTab;

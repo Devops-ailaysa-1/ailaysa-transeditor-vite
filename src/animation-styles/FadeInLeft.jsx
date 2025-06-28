@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react"
-import { motion } from "framer-motion"
+import React, { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 function FadeInLeft ({ children, props }) {
     return (
@@ -8,12 +8,11 @@ function FadeInLeft ({ children, props }) {
         initial={{ opacity: 0, x: 30 }}
         exit={{ opacity: 0, x: -30 }}
         transition={{ duration: 0.4 }}
-        className="advanced-section-wrapper"
-      >
+        className="advanced-section-wrapper">
         {children}
       </motion.div>
     );
   }
 
 
-  export default FadeInLeft
+  export default FadeInLeft;

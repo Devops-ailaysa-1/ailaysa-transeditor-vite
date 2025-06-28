@@ -848,9 +848,7 @@ const LSPAssignManage = (props) => {
 
         if (userDetails?.agency && isProjectAssignedRef.current) {
             selected_editor_assign_to_task = taskAssignmentInfo.current?.find(each => each.assign_to_details.id === editor.id)
-            // console.log(selected_editor_assign_to_task);
             assigned_editor_step = selected_editor_assign_to_task?.task_assign_detail.step
-            // console.log(assigned_editor_step);
         } else {
             selected_tasks = allTaskListRef.current?.filter(task => checkedTaskIds?.some(each => each.task_id === task.id))
             selected_editor_assign_to_task = selected_tasks?.find(task => task.task_assign_info?.find(each => each.task_assign_detail.step !== assignStep)?.assign_to_details?.id === editor.id)
@@ -874,7 +872,6 @@ const LSPAssignManage = (props) => {
 
         if (selectedJobIds?.length === 1) {
             let vendor_bid = selectedJobIds[0]?.bid_info ? selectedJobIds[0]?.bid_info[0]?.bid_details?.find(each => each.vendor_id == editor.id && each.bid_step === assignStep) : undefined
-            // console.log(vendor_bid);
             if (vendor_bid) {
                 let { currency, mtpe_count_unit, mtpe_rate, mtpe_hourly_rate, bid_step } = vendor_bid
                 setEditorsBiddedRate({ currency, mtpe_count_unit, mtpe_rate: (mtpe_count_unit !== 3 ? mtpe_rate : mtpe_hourly_rate), step: bid_step })
@@ -896,7 +893,6 @@ const LSPAssignManage = (props) => {
                     true : false
             )
             // if assign_enable is true then its own created project
-            // console.log(selectedFileRow.current?.assign_enable);
             // isProjectAssigned is [true] if the project is assigned to me - it will be [false] if it is my project
             isProjectAssignedRef.current = !selectedFileRow.current?.assign_enable
             setIsProjectAssigned(!selectedFileRow.current?.assign_enable)
@@ -1051,22 +1047,17 @@ const LSPAssignManage = (props) => {
             url: `${Config.BASE_URL}/workspace/task_assign_info/?tasks=${taskId}${(userDetails?.agency && isProjectAssignedRef.current) ? '&reassigned=True' : ''}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data);
-
                 let newArr = response.data?.map(obj => {
                     return {
                         ...obj,
                         task_id: taskId
                     };
                 })
-                // console.log(newArr);
                 let a = [...taskAssignmentInfo.current, ...newArr]
-
                 taskAssignmentInfo.current = [...new Map(a.map(item => [item['id'], item])).values()]
 
                 // if(response.data?.length !== 0){
                 // 	response?.data?.map((eachRole) => {
-                // 		// console.log(eachRole?.task_assign_detail.step == assignStep)
                 // 		if(eachRole?.task_assign_detail.step == assignStep){
 
                 // 		}
@@ -1074,15 +1065,12 @@ const LSPAssignManage = (props) => {
                 // }
             },
             error: (err) => {
-
             }
         });
     }
 
     // useEffect(() => {
-    //   console.log(taskAssignmentInfo.current);
     // }, [taskAssignmentInfo.current])
-
 
     // get editor list based on project, mutiple jobs(lang-pair), and reassignable tasks(applicable only for LSPs)
     const getAllEditorsList = (from) => {
@@ -1109,21 +1097,14 @@ const LSPAssignManage = (props) => {
                 if (checkedTaskIds?.length === 1) {
                     let list = response.data
                     let checked_task = allTaskListRef.current?.find(task => checkedTaskIds?.some(each => each.task_id === task.id))
-                    // console.log(checked_task)
                     let assign_info = null
-
                     if (userDetails?.agency && isProjectAssignedRef.current) {
                         assign_info = taskAssignmentInfo.current?.find(each => each.task_assign_detail.step !== assignStep)
                     } else {
                         assign_info = checked_task?.task_assign_info?.find(each => each.task_assign_detail.step !== assignStep)
                     }
-
-                    // console.log(assign_info)
-                    // console.log(list)
-
                     // Loop through each key-value pair
                     for (const key in list) {
-                        // console.log(key)
                         if (key !== 'agencies') {
                             if (Object.hasOwnProperty.call(list, key)) {
                                 // Use filter to create a new array without the value to remove
@@ -1146,7 +1127,6 @@ const LSPAssignManage = (props) => {
 
     // This will get all the language pairs of that project and adds [All pairs] option to the language drop-down
     const getVendorDashboard = () => {
-        // console.log(selectedFileRow.current)
         Config.axios({
             url: `${Config.BASE_URL}/workspace/vendor/dashboard/${selectedFileRow.current?.project}`,
             auth: true,
@@ -1200,8 +1180,6 @@ const LSPAssignManage = (props) => {
                 if (response.data.length == 0) setEmptyProjects(true);
                 else setEmptyProjects(false);
                 taskListRef.current = response.data
-                // console.log(response.data?.find(task => task?.task_assign_info?.find(each => (userDetails.pk === each?.assign_to_details.id && each.task_assign_detail.step === 1))))
-                // console.log(response.data?.find(task => task?.task_assign_info?.find(each => (userDetails.pk === each?.assign_to_details.id && each.task_assign_detail.step === 2))))
                 if (userDetails?.agency && isProjectAssignedRef.current) {
                     let step_switch = { editor: false, reviewer: false }
                     if (response.data?.find(task => task?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each?.task_ven_status === 'task_accepted')))) {
@@ -1211,7 +1189,6 @@ const LSPAssignManage = (props) => {
                     if (response.data?.find(task => task?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 2 && each?.task_ven_status === 'task_accepted')))) {
                         step_switch = { ...step_switch, reviewer: true }
                     }
-                    console.log(step_switch);
                     if (step_switch.editor) setAssignStep(1)
                     else setAssignStep(2)
                     setStepSwitchForLSP(step_switch)
@@ -1254,11 +1231,8 @@ const LSPAssignManage = (props) => {
 
                 let assignInfo = task?.task_assign_info?.find(each => each.task_assign_detail.step == assignStep)
                 let reassignInfo = typeof task?.task_reassign_info === 'object' ? task?.task_reassign_info?.find(each => each.task_assign_detail.step == assignStep) : null
-                // console.log(reassignInfo);
-
                 // filtered task - task that are available for that selected step - it is applied for [LSPs] only
                 let taskAvailableToAssign = task?.task_assign_info?.find(each => (each.task_assign_detail.step === assignStep && each?.task_ven_status === 'task_accepted' && each?.task_assign_detail.task_status !== 'Completed' && each?.task_assign_detail.task_status !== 'Return Request'))
-
                 if (
                     (userDetails?.agency && isProjectAssignedRef.current) ? ((reassignInfo === null || reassignInfo === undefined) && taskAvailableToAssign) :
                         (assignInfo === null || assignInfo === undefined)
@@ -1277,7 +1251,6 @@ const LSPAssignManage = (props) => {
     // based on the selected tasks create distinct jobs with rates layout containing all the data given to [API]
     useEffect(() => {
         setSelectedEditor({})
-        // console.log(checkedTaskIds);
         let a = allTaskListRef.current?.filter(task => checkedTaskIds?.some(each => each.task_id === task.id))
         let distinct = [...new Map(a.map(item => [item['job'], item])).values()]
         let job_list = distinct?.map(item => {
@@ -1298,7 +1271,6 @@ const LSPAssignManage = (props) => {
                 }
             }
         })
-        // console.log(job_list);
         setSelectedJobPairRate(job_list[0]?.job_id)
         setSelectedJobIds(job_list)
 
@@ -1382,8 +1354,6 @@ const LSPAssignManage = (props) => {
             })
         }
 
-        // console.log(JSON.stringify(arrDict))
-
         formData.append("task_assign_detail", JSON.stringify(arrDict))
 
         if (userDetails?.agency && isProjectAssignedRef.current) {
@@ -1397,7 +1367,6 @@ const LSPAssignManage = (props) => {
             data: formData,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("task_assigned_success"))
                 listFiles(selectedFileRow.current?.project)
                 setShowLSPAssignManage(false)
@@ -1437,8 +1406,6 @@ const LSPAssignManage = (props) => {
             }
             return obj;
         });
-
-        // console.log(newArr)
         setSelectedJobIds(newArr)
     }
 
@@ -1453,7 +1420,6 @@ const LSPAssignManage = (props) => {
             };
 
         });
-        // console.log(newArr)
         setSelectedJobIds(newArr)
     }
 
@@ -1472,7 +1438,6 @@ const LSPAssignManage = (props) => {
             };
 
         });
-        // console.log(newArr)
         setSelectedJobIds(newArr)
     }
 
@@ -1527,7 +1492,6 @@ const LSPAssignManage = (props) => {
                     rates = each[selectedJobIds[0]?.job_id]
                 })
             }
-            // console.log(rates);
             let { currency, mtpe_count_unit, mtpe_rate, step } = rates
             if (assignStep === step) {
                 setCurrencySelect(currencyOption?.find(each => each.value === currency))
@@ -1589,9 +1553,6 @@ const LSPAssignManage = (props) => {
 
     const handleUseAccepteRate = () => {
         let { currency, mtpe_count_unit, mtpe_rate, step } = editorsAcceptedRates[0]?.[selectedJobIds[0]?.job_id]
-        // console.log(currency);
-        // console.log(mtpe_count_unit);
-        // console.log(step);
         if (assignStep === step) {
             setCurrencySelect(currencyOption?.find(each => each.value === currency))
             setUnitTypeSelect(unitTypeOptionRef.current.find((element) => element.value === mtpe_count_unit))
@@ -1625,8 +1586,6 @@ const LSPAssignManage = (props) => {
             }
             return obj;
         });
-
-        // console.log(newArr)
         setSelectedJobIds(newArr)
         setShowAcceptedRate(false)
     }
@@ -1646,8 +1605,6 @@ const LSPAssignManage = (props) => {
             }
             return obj;
         });
-
-        // console.log(newArr)
         setSelectedJobIds(newArr)
         setShowBiddedRate(false)
     }
@@ -1832,8 +1789,6 @@ const LSPAssignManage = (props) => {
 
                                                                             let is_task_reassignable = assignInfo?.task_assign_detail.task_status !== 'Completed' && assignInfo?.task_assign_detail.task_status !== 'Return Request'
                                                                             let task_status = assignInfo?.task_assign_detail.task_status
-
-                                                                            // console.log(assignInfo);
 
                                                                             return (
                                                                                 <Tooltip
@@ -2381,7 +2336,6 @@ const LSPAssignManage = (props) => {
                                                                                 <div className="accepted-rate-box-inner-wrap">
                                                                                     <div className="accepted-rate-box-rates-units">
                                                                                         <span className="header">{t("unit_type")}:</span>
-                                                                                        {console.log(unitTypeOptionRef.current)}
                                                                                         <span className="content">{unitTypeOptionRef.current?.find((element) => element.value === editorsAcceptedRates[0]?.[selectedJobIds[0]?.job_id]?.mtpe_count_unit)?.label}</span>
 
                                                                                     </div>

@@ -16,7 +16,7 @@ const WriterPDFSplit = (props) => {
 		referenceFileExt,
 		referenceFileUrl,
 		splitViewChange
-	} = props
+	} = props;
     const { t } = useTranslation();
 	const [zoomLevel, setZoomLevel] = useState(1.551);
 	const [selectedZoomLevel, setSelectedZoomLevel] = useState(1.551);
@@ -31,16 +31,13 @@ const WriterPDFSplit = (props) => {
 
 	const handleZoomSelect = e => {
 		setSelectedZoomLevel(e.value);
-		setZoomLevel(e.value)
+		setZoomLevel(e.value);
 	  };
 
 	const handleBotZoomSelect = e => {
 		setBotSelectedZoomLevel(e.value);
-		setBotZoomLevel(e.value)
+		setBotZoomLevel(e.value);
 	};
-
-
-
 
 	const customProjectTypeSelectStyles = {
 		placeholder: (provided, state) => ({
@@ -105,7 +102,6 @@ const WriterPDFSplit = (props) => {
 		menuList: (base) => ({
 		...base,
 		// height: "100px",
-
 		"::-webkit-scrollbar": {
 			width: "8px"
 		},
@@ -129,7 +125,6 @@ const WriterPDFSplit = (props) => {
         );
     };
 
-
 	const handleZoomIn = () => {
 		const newZoomLevel = zoomLevel + 0.5;
 		if (newZoomLevel <= 5.051){
@@ -139,11 +134,8 @@ const WriterPDFSplit = (props) => {
 	};
 
 	// useEffect(() => {
-	// 	console.log(selectedZoomLevel)
-	// 	console.log(zoomLevel)
 	// }, [selectedZoomLevel, zoomLevel])
 	
-
 	const handleZoomOut = () => {
 		const newZoomLevel = zoomLevel - 0.5;
 		if(newZoomLevel >= 1.051){
@@ -168,12 +160,8 @@ const WriterPDFSplit = (props) => {
 		}
 	};
 
-
-
 	// useEffect(() => {
-	// 	console.log(referenceFileExt)
-	// 	console.log(referenceFileUrl)
-	//   }, [referenceFileUrl, referenceFileExt])
+	// }, [referenceFileUrl, referenceFileExt])
 
 	const botzoomScaling = [
 		{
@@ -212,8 +200,7 @@ const WriterPDFSplit = (props) => {
 			value: 5.051,
 			label: "500%"
 		}
-	]
-
+	];
 
 	const zoomScaling = [
 		{
@@ -252,9 +239,8 @@ const WriterPDFSplit = (props) => {
 			value: 5.051,
 			label: "500%"
 		}
-	]
+	];
 	
-
 	return (
 		<section style={{ display: splitViewTab ? '' : 'none', userSelect: 'none'}} className="pdf-document-view">
 			{splitViewChange === "right" &&
@@ -347,4 +333,4 @@ const WriterPDFSplit = (props) => {
 	)
 }
 
-export default WriterPDFSplit
+export default WriterPDFSplit;

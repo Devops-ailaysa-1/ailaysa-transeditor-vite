@@ -77,22 +77,22 @@ const Config = {
     STRAPI_BASE_URL: import.meta.env.VITE_APP_STRAPI_BASE_URL, //Card Content API BASE_URL
     IS_MAINTANCE: import.meta.env.VITE_APP_MAINTANCE,
     AI_GEN_URL: import.meta.env.VITE_APP_AI_GEN_URL,
+    STATIC_URL:import.meta.env.VITE_APP_STATIC_URL,
     redirectIfNotLoggedIn: function (props) {
         //Redirect to specified page if not logged in
         if (Config.userState === null) {
             window.location.href = import.meta.env.VITE_APP_LOGIN_URL;
         }
     },
-    toast: function (alertText = "", type = "success", dismiss=false) {
+    toast: function (alertText = "", type = "success", dismiss=false, alertheadtext="", alertsubheadtext="", onClick = null) {
         //Toast alert
         // toast.configure();
-        toast.clearWaitingQueue()
+        toast.clearWaitingQueue();
         // dismiss/remove all toast
         if(dismiss){
-            toast.dismiss()
-            return
+            toast.dismiss();
+            return;
         } 
-
         let AlertContent = () => (
             <div className="toast-align">
                 <span className="toast-img">
@@ -115,7 +115,7 @@ const Config = {
                 return toast.warn(<AlertContent />, {
                     transition: Slide,
                     position: "top-center",
-                    autoClose: 3000,
+                     autoClose: 8000,
                     hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -157,13 +157,39 @@ const Config = {
                 return toast.error(<AlertContent />, {
                     transition: Slide,
                     position: "top-center",
-                    autoClose: 3000,
+                    autoClose: 8000,
                     hideProgressBar: true,
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
                     progress: undefined,
                     limit: 1,
+                });
+            }
+            case "support":{
+                // To show warnings
+                AlertContent = () => (
+                    <div className="toast-align">
+                        
+                        <span className="toast-img">
+                            <img src={ErrorBlackWarn} />
+                        </span>
+                        <div>
+                        <div className="head_toast_container">{alertheadtext}</div>
+                        <div className="desc_toast_container">{alertsubheadtext}</div>
+                        <div className="subhead_toast_container" onClick={onClick}>{alertText}</div>
+                        </div>
+                    </div>
+                );
+                return toast.warn(<AlertContent />, {
+                    transition: Slide,
+                    position: "top-center",
+                     autoClose: 8000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
                 });
             }
             default: {
@@ -207,8 +233,6 @@ const Config = {
             headers: headers,
             ...(params.signal !== undefined && {signal: params.signal})
         };
-        // if(params.signal) console.log(axiosObj)
-
         if (params.method == null)
             //Define method
             params["method"] = "GET";
@@ -234,7 +258,6 @@ const Config = {
                         data: formData,
                         auth: true,
                         success: (response) => {
-                            // console.log(response.data)
                             let userData = Config.userState;
                             userData.token = response.data.access;
                             Cookies.remove(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
@@ -245,7 +268,7 @@ const Config = {
                             Config.axios(params);
                         },
                         error: (error) => {
-                            console.log(error.response.status);
+                            console.error(error.response.status);
                             if (Config.userState !== null) Cookies.remove(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME, { domain: Config.COOKIE_DOMAIN });
                             window.location.href = import.meta.env.VITE_APP_LOGIN_REDIRECT_URL;
                         },
@@ -487,11 +510,8 @@ const Config = {
         const year = yourDate.getFullYear();
         const month = String(yourDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
         const day = String(yourDate.getDate()).padStart(2, '0');
-
         // Create the formatted date string
         const formattedDate = `${year}-${month}-${day}`;
-
-        // console.log(formattedDate);
         return formattedDate
     },
 
@@ -513,13 +533,10 @@ const Config = {
         const specs = 'width=800,height=600'
         var screenWidth = window.screen.width;
         var screenHeight = window.screen.height;
-
         var windowWidth = parseInt(specs.split(",")[0].split("=")[1]);
         var windowHeight = parseInt(specs.split(",")[1].split("=")[1]);
-
         var left = (screenWidth - windowWidth) / 2;
         var top = (screenHeight - windowHeight) / 2;
-
         var newSpecs = specs + ',top=' + top + ',left=' + left;
         window.open(link, '_blank', newSpecs);
         return false;
@@ -533,10 +550,10 @@ const Config = {
                     [key]: value
                 }
             }else{
-                return obj   
+                return obj;   
             }
         })
-        return newArr
+        return newArr;
     }
 };
 export default Config;

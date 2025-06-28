@@ -23,26 +23,20 @@ const CoAuthorWriterFooter = (props) => {
         promptSrcLang,
         promptSrcLabel,
         promptTarLang,
-    } = props
-
+    } = props;
     const promptInput = useRef(null);
     const { t } = useTranslation();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-    const [promptText, setPromptText] = useState("")
-    const [isGenerating, setIsGenerating] = useState(false)
-    const generatedPromptId = useRef(null)
-
+    const [promptText, setPromptText] = useState("");
+    const [isGenerating, setIsGenerating] = useState(false);
+    const generatedPromptId = useRef(null);
     // check if the text contains rtl characters
     const containsRtlCharacters = (text) => {
         var rtlCharacters = /[\u0600-\u06FF\u0590-\u05FF\uFE70-\uFEFF]/;
-
-        // console.log('text : ' + text)
-        // console.log('rtl : ' + rtlCharacters.test(text))
         // return rtlCharacters.test(text);
         // Count the number of RTL characters and non-RTL characters
         let rtlCount = 0;
         let nonRtlCount = 0;
-
         for (let i = 0; i < text.length; i++) {
             const char = text[i];
             if (rtlCharacters.test(char)) {
@@ -51,7 +45,6 @@ const CoAuthorWriterFooter = (props) => {
                 nonRtlCount++;
             }
         }
-
         // Compare the counts and return the result
         return rtlCount > nonRtlCount;
     }
@@ -60,34 +53,30 @@ const CoAuthorWriterFooter = (props) => {
     const removeBgColor = (e) => {
         // e.target.style = 'background: none;' 
         // e.target.removeEventListener('click', removeBgColor)
-        e.target.classList.remove('temp-color')
-        e.target.removeEventListener('click', removeBgColor)
+        e.target.classList.remove('temp-color');
+        e.target.removeEventListener('click', removeBgColor);
         // currentSummerNoteData.current = document.querySelector('.note-editable').innerHTML   
     }
 
     // onchange handler for text prompt box
     const handlePromptTextChange = (e) => {
-        setPromptText(e.target.value)
+        setPromptText(e.target.value);
     }
     
     // onkeydown handle for prompt box
     // send prompt request on ENTER
     const handlePromptBoxKeyDown = (e) => {
         if(e.key === "Enter" && !e.shiftKey){
-            e.preventDefault() 
-            if(promptText?.trim()?.length === 0) return
-            console.log('enter pressed')
+            e.preventDefault();
+            if(promptText?.trim()?.length === 0) return;
             // try{
-            //     let capturedWarnings = []
+            //     let capturedWarnings = [];
             //     const rng = $('.summernote').summernote('editor.getLastRange');
-            //     rng.select()
-                
-            //     console.log(rng.isCollapsed())
-            //     console.log(capturedWarnings)
+            //     rng.select();
             // }catch(e){
-            //     console.log(e)
+            //     console.error(e);
             // }
-            postAiPrompt()
+            postAiPrompt();
         }
     }
     
@@ -98,8 +87,8 @@ const CoAuthorWriterFooter = (props) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                     if (promptInput.current?.value?.trim() !== '') {
                         e.preventDefault();
-                        if(promptText?.trim()?.length === 0) return
-                        postAiPrompt()
+                        if(promptText?.trim()?.length === 0) return;
+                        postAiPrompt();
                     }
                 }
             };
@@ -138,55 +127,50 @@ const CoAuthorWriterFooter = (props) => {
 
     const postAiPrompt = () => {
         if(promptText?.trim()?.length === 0) return
-        promptInput.current.blur()
-
+        promptInput.current.blur();
         let formdata = new FormData();
-        let isCoAuthor = window.location.pathname.includes('book-writing')
-        let bookId = URL_SEARCH_PARAMS.get("book")
-
+        let isCoAuthor = window.location.pathname.includes('book-writing');
+        let bookId = URL_SEARCH_PARAMS.get("book");
         if (document.querySelector('.temp-color')) {
-            document.querySelector('.temp-color').classList.remove('temp-color')
+            document.querySelector('.temp-color').classList.remove('temp-color');
         }
-
         formdata.append("catagories", 9);   // for freestye the category is "9"
-        
-
         if (isCoAuthor && bookId) {
             formdata.append("book", bookId);	
         }
         formdata.append("description", promptText?.trim());
         formdata.append("source_prompt_lang", 17);      // source language
-        
         // // loop based on the number of target-language
         // targetLanguage?.map(each => {                               // target language
             // formdata.append("get_result_in", 38);
             // formdata.append("get_result_in", 32);
         // })
-        setPromptText("")
-        setIsGenerating(true)
+        setPromptText("");
+        setIsGenerating(true);
+
         Config.axios({
-            url: `${Config.BASE_URL}/openai/aiprompt/`,
+            url: `${Config.BASE_URL}/writer/aiprompt/`,
             method: "POST",
             data: formdata,
             auth: true,
             success: (response) => {
                 if (response.data?.id) {
-                    generatedPromptId.current = response.data?.id
-                    getAiPromptResult(response.data?.id)
+                    generatedPromptId.current = response.data?.id;
+                    getAiPromptResult(response.data?.id);
                 }
             },
             error: (err) => {
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                        setShowCreditAlertModal(true)
-                        setIsGenerating(false)
+                        setShowCreditAlertModal(true);
+                        setIsGenerating(false);
                     }
                 }
                 if (err.response.status === 500) {
-                    Config.toast(t("paraphrase_get_error_3"), 'error')
-                    setIsGenerating(false)
+                    Config.toast(t("paraphrase_get_error_3"), 'error');
+                    setIsGenerating(false);
                 }
-                setIsGenerating(false)
+                setIsGenerating(false);
             }
         });
     }
@@ -194,29 +178,27 @@ const CoAuthorWriterFooter = (props) => {
     // get the ai prompt results with prompt ID
     const getAiPromptResult = (promptId) => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/prompt_result/?prompt_id=${promptId}`,
+            url: `${Config.BASE_URL}/writer/prompt_result/?prompt_id=${promptId}`,
             auth: true,
             success: (response) => {
                 // setFreeStylePromptResultsList(response.data)
-                setIsGenerating(false)
-                let data = []
+                setIsGenerating(false);
+                let data = [];
                 Object.values(response.data[0]?.prompt_results)?.map(item => {
                     data.push({
                         data: item
-                    })
+                    });
                 })
-                let dataList = data[0].data
-                console.log(dataList)
+                let dataList = data[0].data;
                 const rng = $('.summernote').summernote('editor.getLastRange');
-                const isCollapsed = rng.isCollapsed()
+                const isCollapsed = rng.isCollapsed();
                 if(!isCollapsed){
                     const newRng = rng.getWordRange(true);   // after cursor
-                    newRng.select()
+                    newRng.select();
                 }else rng.select()
-
                 dataList?.forEach(result => {
-                    let text = result?.api_result !== null ? result?.api_result?.match(/[^\r\n]+/g) : result?.translated_prompt_result?.match(/[^\r\n]+/g)
-                    insertResultInEditor(text)
+                    let text = result?.api_result !== null ? result?.api_result?.match(/[^\r\n]+/g) : result?.translated_prompt_result?.match(/[^\r\n]+/g);
+                    insertResultInEditor(text);
                 });
                 
             },
@@ -233,23 +215,20 @@ const CoAuthorWriterFooter = (props) => {
             pNode.innerHTML = each.trim()
             pNode.className = 'temp-color'
             // pNode.style = 'display: inline;'
-
             if (containsRtlCharacters(each)) {
-                pNode.classList.add('right-align-lang-style')
+                pNode.classList.add('right-align-lang-style');
             } else {
-                pNode.classList.remove('right-align-lang-style')
+                pNode.classList.remove('right-align-lang-style');
             }
-
-            pNode?.addEventListener('click', removeBgColor)
-            var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'))
-            console.log("caret position: "+caretPosition)
+            pNode?.addEventListener('click', removeBgColor);
+            var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'));
             if (caretPosition === 0) {
-                document.querySelector('.note-editable').appendChild(pNode)?.scrollIntoView({ behavior: 'smooth', block: 'nearest'})
-                document.querySelector('.note-editable').appendChild(brNode)
+                document.querySelector('.note-editable').appendChild(pNode)?.scrollIntoView({ behavior: 'smooth', block: 'nearest'});
+                document.querySelector('.note-editable').appendChild(brNode);
             }else{
-                $('.summernote')?.summernote('insertNode', pNode)
-                $('.summernote')?.summernote('insertNode', brNode)
-                pNode?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                $('.summernote')?.summernote('insertNode', pNode);
+                $('.summernote')?.summernote('insertNode', brNode);
+                pNode?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         })
     } 
@@ -347,4 +326,4 @@ const CoAuthorWriterFooter = (props) => {
     )
 }
 
-export default CoAuthorWriterFooter
+export default CoAuthorWriterFooter;    

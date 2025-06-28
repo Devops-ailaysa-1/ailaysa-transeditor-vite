@@ -1,5 +1,4 @@
 import "bootstrap";
-
 import parse from "html-react-parser";
 import React, { useState, useEffect, createRef, useRef } from "react";
 import ReactDOM from "react-dom";
@@ -10,8 +9,8 @@ import Navbar from "./Navbar";
 import Draggable from "react-draggable";
 import Tooltip from '@mui/material/Tooltip';
 import ButtonBase from '@mui/material/ButtonBase';
-// import {enableTransliteration} from './google-input-tools/transliteration-input.bundle.js'
-// import { enableTransliteration, disableTransliteration } from './google-input-tools/index.ts'
+// import {enableTransliteration} from './google-input-tools/transliteration-input.bundle.js';
+// import { enableTransliteration, disableTransliteration } from './google-input-tools/index.ts';
 // import { TransliterationProvider } from "./google-input-tools/transliteration-provider";
 // import "./google-input-tools/styles/style.scss";
 // import Segment from './Segment'
@@ -58,26 +57,26 @@ import generateKey from "../project-setup-components/speech-component/speech-to-
 import { Popover as MUIPopover } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import CircularProgress from '@mui/material/CircularProgress';
-import CloseBlack from "../assets/images/new-ui-icons/close_black.svg"
-import ErrorBlackWarn from "../assets/images/new-ui-icons/error_black_warn.svg"
-import InsuffientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg"
-import RemoveCircleRed from "../assets/images/new-ui-icons/remove_circle_red.svg"
-import OpenInNew from "../assets/images/new-ui-icons/open_in_new.svg"
-import ArrowRightAltColor from "../assets/images/new-ui-icons/arrow_right_alt_color.svg" 
-import WikitionaryIcon from "../assets/images/new-ui-icons/wikitionary-new-img.png"
-import WikipediaIcon from "../assets/images/new-ui-icons/wiki-new-img.svg"
-import SendIcon from "../assets/images/new-ui-icons/send.svg"
-import PushPin from "../assets/images/new-project-setup/push_pin.svg"
-import PlusSymbol from "../assets/images/new-ui-icons/plus-sym.svg"
-import MinusSymbol from "../assets/images/new-ui-icons/minus-sym.svg"
-import ErrorFillYellow from "../assets/images/new-ui-icons/error_fill_yellow.svg"
-import MergeNewBlack from "../assets/images/new-ui-icons/merge_new_black.svg"
-import SplitNew from "../assets/images/new-ui-icons/split_new.svg"
-import NoSegmentIcon from "../assets/images/no_segments_icon.png"
+import CloseBlack from "../assets/images/new-ui-icons/close_black.svg";
+import ErrorBlackWarn from "../assets/images/new-ui-icons/error_black_warn.svg";
+import InsuffientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg";
+import RemoveCircleRed from "../assets/images/new-ui-icons/remove_circle_red.svg";
+import OpenInNew from "../assets/images/new-ui-icons/open_in_new.svg";
+import ArrowRightAltColor from "../assets/images/new-ui-icons/arrow_right_alt_color.svg"; 
+import WikitionaryIcon from "../assets/images/new-ui-icons/wikitionary-new-img.png";
+import WikipediaIcon from "../assets/images/new-ui-icons/wiki-new-img.svg";
+import SendIcon from "../assets/images/new-ui-icons/send.svg";
+import PushPin from "../assets/images/new-project-setup/push_pin.svg";
+import PlusSymbol from "../assets/images/new-ui-icons/plus-sym.svg";
+import MinusSymbol from "../assets/images/new-ui-icons/minus-sym.svg";
+import ErrorFillYellow from "../assets/images/new-ui-icons/error_fill_yellow.svg";
+import MergeNewBlack from "../assets/images/new-ui-icons/merge_new_black.svg";
+import SplitNew from "../assets/images/new-ui-icons/split_new.svg";
+import NoSegmentIcon from "../assets/images/no_segments_icon.png";                                                                                                
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import NewMagnifier from "../assets/images/new-ui-icons/new-magnifier.svg"
-import NorCopyContent from "../assets/images/new-ui-icons/nor-copy-content.svg"
+import NewMagnifier from "../assets/images/new-ui-icons/new-magnifier.svg";
+import NorCopyContent from "../assets/images/new-ui-icons/nor-copy-content.svg";
 import WorkspaceFeatures from "./workspace-components/WorkspaceFeatures";
 import {ClickAwayListener} from '@mui/base/ClickAwayListener';
 import AddGlossaryTermModal from "./model-select/AddGlossaryTermModal";
@@ -96,7 +95,6 @@ const DropdownIndicator = (props) => {
         </components.DropdownIndicator>
     );
 };
-
 
 const filterMenuProps = {
     getContentAnchorEl: null,
@@ -146,10 +144,8 @@ const filterMenuProps = {
     }
 };
 
-
 function Workspace(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect to login page if not logged in
-
     let userToken = new URLSearchParams(window.location.search).get("token");
     /* If coming with token from some other app like ailaysa.com. No longer used - start */
     if (userToken != null) {
@@ -163,17 +159,16 @@ function Workspace(props) {
         Config.userState = JSON.parse(Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME));
     } else Config.redirectIfNotLoggedIn(props);
     /* If coming with token from some other app like ailaysa.com. No longer used - start */
-
     const location = useLocation();
     const history = useNavigate();
     const params = useParams();
     const dispatch = useDispatch()
-
+    const check_is_adaptive= location?.state?.is_adaptive?.adaptive_file_translate;
     // const classes = useStyles();
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
-    let isEnterprise = userDetails?.is_enterprise
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
+    let isEnterprise = userDetails?.is_enterprise;
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
 
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -226,7 +221,6 @@ function Workspace(props) {
     const [wholeWordMatch, setWholeWordMatch] = useState(false);
     const [pushPinActive, setPushPinActive] = useState(false);
     const [segmentStatusName, setSegmentStatusName] = useState([]);
-
     /*Find and replace - end*/
     const [segmentStatuses, setSegmentStatuses] = useState({
         0: t("un_opened"),
@@ -331,155 +325,124 @@ function Workspace(props) {
     const [firstTagSegmentId, setFirstTagSegmentId] = useState(null);
     const [isShowRestoreSegmentIcon, setIsShowRestoreSegmentIcon] = useState(false);
     const [restoreSegmentation, setRestoreSegmentation] = useState([]);
-    const [enableSynonym, setEnableSynonym] = useState(false)
-    const [isWordsCorrected, setIsWordsCorrected] = useState(false)
-    const [isWordsCorrectedTrigger, setIsWordsCorrectedTrigger] = useState(false)
-    const [totalCharCount, setTotalCharCount] = useState(null)
-    const [updatedFileDownload, setUpdatedFileDownload] = useState(null)
-    const [paraphraseText, setParaphraseText] = useState("")
-    const [paraphraseTrigger, setparaphraseTrigger] = useState(false)
-    const [synonymText, setSynonymText] = useState("")
-
-    const [grammarPopoverOpen, setGrammarPopoverOpen] = useState(false)
-    const [paraphrasePopoverOpen, setParaphrasePopoverOpen] = useState(false)
-    const [paraPhraseResList, setParaPhraseResList] = useState(null)
-    const [paraPhraseTag, setparaPhraseTag] = useState("")
-    const [paraPhrasePopoverTarget, setparaPhrasePopoverTarget] = useState("")
-    const [synonymsResList, setSynonymsResList] = useState([])
-    const paraPhraseRef = useRef(null)
-    const [grammarCheckPopoverTarget, setgrammarCheckPopoverTarget] = useState("")
-    const [grammarCheckSuggestedSentence, setGrammarCheckSuggestedSentence] = useState([])
-    const [grammarCheckResponse, setGrammarCheckResponse] = useState([])
-    const [translateSwitch, setTranslateSwitch] = useState(false)
-    const [showParaphraseBtn, setShowParaphraseBtn] = useState(true)   // hide paraphrase button when contenteditable is empty
-    const [isTranslatedAudioFileAvailable, setIsTranslatedAudioFileAvailable] = useState(null)
-    const [synonumSelectionObject, setSynonumSelectionObject] = useState(null)
-    // const [updatedFileDownload, setUpdatedFileDownload] = useState(null)
-    const [taskAssignUserDetails, setTaskAssignUserDetails] = useState(null)
-    const [isUserIsReviwer, setIsUserIsReviwer] = useState(false)
-    const [steps, setSteps] = useState([])
-    const [stepOptions, setStepOptions] = useState([])
-    const [audioFileAlreadyExist, setAudioFileAlreadyExist] = useState(false)
-    const [disbaleSplitIcon, setDisbaleSplitIcon] = useState(true)
-
+    const [enableSynonym, setEnableSynonym] = useState(false);
+    const [isWordsCorrected, setIsWordsCorrected] = useState(false);
+    const [isWordsCorrectedTrigger, setIsWordsCorrectedTrigger] = useState(false);
+    const [totalCharCount, setTotalCharCount] = useState(null);
+    const [updatedFileDownload, setUpdatedFileDownload] = useState(null);
+    const [paraphraseText, setParaphraseText] = useState("");
+    const [paraphraseTrigger, setparaphraseTrigger] = useState(false);
+    const [synonymText, setSynonymText] = useState("");
+    const [grammarPopoverOpen, setGrammarPopoverOpen] = useState(false);
+    const [paraphrasePopoverOpen, setParaphrasePopoverOpen] = useState(false);
+    const [paraPhraseResList, setParaPhraseResList] = useState(null);
+    const [paraPhraseTag, setparaPhraseTag] = useState("");
+    const [paraPhrasePopoverTarget, setparaPhrasePopoverTarget] = useState("");
+    const [synonymsResList, setSynonymsResList] = useState([]);
+    const paraPhraseRef = useRef(null);
+    const [grammarCheckPopoverTarget, setgrammarCheckPopoverTarget] = useState("");
+    const [grammarCheckSuggestedSentence, setGrammarCheckSuggestedSentence] = useState([]);
+    const [grammarCheckResponse, setGrammarCheckResponse] = useState([]);
+    const [translateSwitch, setTranslateSwitch] = useState(false);
+    const [showParaphraseBtn, setShowParaphraseBtn] = useState(true) ;  // hide paraphrase button when contenteditable is empty
+    const [isTranslatedAudioFileAvailable, setIsTranslatedAudioFileAvailable] = useState(null);
+    const [synonumSelectionObject, setSynonumSelectionObject] = useState(null);
+    // const [updatedFileDownload, setUpdatedFileDownload] = useState(null);
+    const [taskAssignUserDetails, setTaskAssignUserDetails] = useState(null);
+    const [isUserIsReviwer, setIsUserIsReviwer] = useState(false);
+    const [steps, setSteps] = useState([]);
+    const [stepOptions, setStepOptions] = useState([]);
+    const [audioFileAlreadyExist, setAudioFileAlreadyExist] = useState(false);
+    const [disbaleSplitIcon, setDisbaleSplitIcon] = useState(true);
     // Auido Download States
-    const [showAudioOptionsModal, setShowAudioOptionsModal] = useState(false)
-    const [localeOptions, setLocaleOptions] = useState([])
-    const [genderOptions, setGenderOptions] = useState([])
-    const [audioLocale, setAudioLocale] = useState(null)
-    const [audioGender, setAudioGender] = useState(null)
-    const [voiceType, setVoiceType] = useState(null)
-
-    const [partialPretranslate, setPartialPretranslate] = useState(false)
-
-    const [splitLoader, setSplitLoader] = useState(false)
-    const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false)
-    const [showMtDisabledModal, setShowMtDisabledModal] = useState(false)
-    const [imeTextObject, setImeTextObject] = useState('')
-    const [imeTextObjectTarget, setTextImeObjectTarget] = useState('')
-    const [isConfirmBtnClicked, setIsConfirmBtnClicked] = useState(false)
-    const [selectedPageSize, setSelectedPageSize] = useState(null)
-
-    const [showInsufficientConfirmAllModal, setShowInsufficientConfirmAllModal] = useState(false)
-    const [showAiLoader, setShowAiLoader] = useState(false)
-    const [isCopied, setIsCopied] = useState(false)
-
-    const [mtEnable, setMtEnable] = useState(false)
-
-    const [isWorkspaceEditable, setIsWorkspaceEditable] = useState(true)
-    const [showDocumentSubmitButton, setShowDocumentSubmitButton] = useState(false)
-    const [enableDocumentSubmitBtn, setEnableDocumentSubmitBtn] = useState(false)
-    const [showVendorComplaintReasonModal, setShowVendorComplaintReasonModal] = useState(false)
-    const [vendorReturnRequestReasonText, setVendorReturnRequestReasonText] = useState('')
-    const [showReturnRequestBtn, setShowReturnRequestBtn] = useState(false)
-
-    const [showDontHaveEditingAccessAlertModal, setShowDontHaveEditingAccessAlertModal] = useState(false)
-    const [showSubmitConfirmModal, setShowSubmitConfirmModal] = useState(false)
+    const [showAudioOptionsModal, setShowAudioOptionsModal] = useState(false);
+    const [localeOptions, setLocaleOptions] = useState([]);
+    const [genderOptions, setGenderOptions] = useState([]);
+    const [audioLocale, setAudioLocale] = useState(null);
+    const [audioGender, setAudioGender] = useState(null);
+    const [voiceType, setVoiceType] = useState(null);
+    const [partialPretranslate, setPartialPretranslate] = useState(false);
+    const [splitLoader, setSplitLoader] = useState(false);
+    const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+    const [showMtDisabledModal, setShowMtDisabledModal] = useState(false);
+    const [imeTextObject, setImeTextObject] = useState('');
+    const [imeTextObjectTarget, setTextImeObjectTarget] = useState('');
+    const [isConfirmBtnClicked, setIsConfirmBtnClicked] = useState(false);
+    const [selectedPageSize, setSelectedPageSize] = useState(null);
+    const [showInsufficientConfirmAllModal, setShowInsufficientConfirmAllModal] = useState(false);
+    const [showAiLoader, setShowAiLoader] = useState(false);
+    const [isCopied, setIsCopied] = useState(false);
+    const [mtEnable, setMtEnable] = useState(false);
+    const [isWorkspaceEditable, setIsWorkspaceEditable] = useState(true);
+    const [showDocumentSubmitButton, setShowDocumentSubmitButton] = useState(false);
+    const [enableDocumentSubmitBtn, setEnableDocumentSubmitBtn] = useState(false);
+    const [showVendorComplaintReasonModal, setShowVendorComplaintReasonModal] = useState(false);
+    const [vendorReturnRequestReasonText, setVendorReturnRequestReasonText] = useState('');
+    const [showReturnRequestBtn, setShowReturnRequestBtn] = useState(false);
+    const [showDontHaveEditingAccessAlertModal, setShowDontHaveEditingAccessAlertModal] = useState(false);
+    const [showSubmitConfirmModal, setShowSubmitConfirmModal] = useState(false);
     const [segmentDifference, setSegmentDifference] = useState([]);
-
     const [selectedParaphrase, setSelectedParaphrase] = useState(null);
     const [isParaphrasing, setIsParaphrasing] = useState(false);
-
     const [isListening, setIsListening] = useState(false);
     const [recognizedText, setRecognizedText] = useState('');
-
     const [commentsDataCopy, setCommentsDataCopy] = useState([]);
     const [isDocumentSubmitting, setIsDocumentSubmitting] = useState(false);
-
-    const [isAssignEnable, setIsAssignEnable] = useState(true)
-
+    const [isAssignEnable, setIsAssignEnable] = useState(true);
     const [transphrasePopoverOpen, setTransphrasePopoverOpen] = useState(false);
-    const [transphrasePopoverTarget, setTransphrasePopoverTarget] = useState(null);
-    
-    const [spellCheckWordsOptions, setSpellCheckWordsOptions] = useState([]);
-    
-    const [isSegmentConfirming, setIsSegmentConfirming] = useState(false);
-    
+    const [transphrasePopoverTarget, setTransphrasePopoverTarget] = useState(null);    
+    const [spellCheckWordsOptions, setSpellCheckWordsOptions] = useState([]);    
+    const [isSegmentConfirming, setIsSegmentConfirming] = useState(false);    
     const [isSegmentPageLoading, setIsSegmentPageLoading] = useState(false);
-    const [spellCheckSuggestion, setSpellCheckSuggestion] = useState([])
-    
+    const [spellCheckSuggestion, setSpellCheckSuggestion] = useState([]);    
     // on-the-fly glossary term add states
     const [showGlossaryAddition, setShowGlossaryAddition] = useState(false);
-    const [sourceSelectionText, setSourceSelectionText] = useState("")
-    const [targetSelectionText, setTargetSelectionText] = useState("")
-    
-    const [wordChoicelist, setWordChoicelist] = useState([])
-    const [selectedWordChoiceItem, setSelectedWordChoiceItem] = useState(null)
-    const [selectedWordChoicePOS, setSelectedWordChoicePOS] = useState(null)
-
-    const [isTermAdding, setIsTermAdding] = useState(false)
-    const [showTaskAssignActionBtn, setShowTaskAssignActionBtn] = useState(false)
-    
-    const [commentsLoader, setCommentsLoader] = useState(false)
-    const [segmentHistoryLoader, setSegmentHistoryLoader] = useState(false)
-    const [isSegmentDataLoading, setIsSegmentDataLoading] = useState(false)
-    
-    const [activeFooterTab, setActiveFooterTab] = useState(1)
-    
+    const [sourceSelectionText, setSourceSelectionText] = useState("");
+    const [targetSelectionText, setTargetSelectionText] = useState("");
+    const [wordChoicelist, setWordChoicelist] = useState([]);
+    const [selectedWordChoiceItem, setSelectedWordChoiceItem] = useState(null);
+    const [selectedWordChoicePOS, setSelectedWordChoicePOS] = useState(null);
+    const [isTermAdding, setIsTermAdding] = useState(false);
+    const [showTaskAssignActionBtn, setShowTaskAssignActionBtn] = useState(false);    
+    const [commentsLoader, setCommentsLoader] = useState(false);
+    const [segmentHistoryLoader, setSegmentHistoryLoader] = useState(false);
+    const [isSegmentDataLoading, setIsSegmentDataLoading] = useState(false);    
+    const [activeFooterTab, setActiveFooterTab] = useState(1);    
     // store selection coordinates
-    const [selectedCoordinates, setSelectedCoordinates] = useState(null)
-    const [isAdaptiveTransEnabled, setIsAdaptiveTransEnabled] = useState(false)
-    
-    const forcedLoaderRef = useRef(false)
-    const glossarySrcFieldRef = useRef(null)
-    const glossaryTarFieldRef = useRef(null)
-
-    const axiosTransliterationAbortControllerRef = useRef(null)
-    const axiosCommentListAbortControllerRef = useRef(null)
-    const axiosSegmentHistoryAbortControllerRef = useRef(null)
-    const axiosMTRawTMAbortControllerRef = useRef(null)
-    const isDocumentOpenerVendorRef = useRef(false)
-    const documentProgressRef = useRef(null)
-
-    const isAssignEnableRef = useRef(true)
-    const documentTaskIdRef = useRef(null)
-    const isTaskReassignedRef = useRef(false)
-    const documentSubmitStepRef = useRef(null)
-    const isDocumentSubmittedRef = useRef(false)
-
-    const docCreditCheckAlertRef = useRef(false)
-
-    const translatedResponseRef = useRef([])
-    const translatedResponseDisableEditRef = useRef([])
-
-    const isEditorSubmittedDocument = useRef(false)
-    const isWorkspaceEditableRef = useRef(true)
-
-    const documentRestrictionReasonRef = useRef(null)
-
+    const [selectedCoordinates, setSelectedCoordinates] = useState(null);
+    const [isAdaptiveTransEnabled, setIsAdaptiveTransEnabled] = useState(false);
+    // const [selectionObject, setselectionObject] = useState(null);
+    /* State constants - end */
     const pageSizeOption = [
         { value: 10, label: '10' },
         { value: 20, label: '20' },
         { value: 30, label: '30' },
         { value: 50, label: '50' },
-    ]
-    // const [selectionObject, setselectionObject] = useState(null)
-
-    /* State constants - end */
+    ];
 
     /*useRef() constants - start*/
+    const forcedLoaderRef = useRef(false);
+    const glossarySrcFieldRef = useRef(null);
+    const glossaryTarFieldRef = useRef(null);
+    const axiosTransliterationAbortControllerRef = useRef(null);
+    const axiosCommentListAbortControllerRef = useRef(null);
+    const axiosSegmentHistoryAbortControllerRef = useRef(null);
+    const axiosMTRawTMAbortControllerRef = useRef(null);
+    const isDocumentOpenerVendorRef = useRef(false);
+    const documentProgressRef = useRef(null);
+    const isAssignEnableRef = useRef(true);
+    const documentTaskIdRef = useRef(null);
+    const isTaskReassignedRef = useRef(false);
+    const documentSubmitStepRef = useRef(null);
+    const isDocumentSubmittedRef = useRef(false);
+    const docCreditCheckAlertRef = useRef(false);
+    const translatedResponseRef = useRef([]);
+    const translatedResponseDisableEditRef = useRef([]);
+    const isEditorSubmittedDocument = useRef(false);
+    const isWorkspaceEditableRef = useRef(true);
+    const documentRestrictionReasonRef = useRef(null);
     let scrl = useRef(null);
-    const imeTextObjectTargetRef = useRef('')
+    const imeTextObjectTargetRef = useRef('');
     const allSegmentStatuses = useRef({});
     const downloadTrigger = useRef(null);
     const findTriggerCount = useRef(0);
@@ -505,7 +468,7 @@ function Workspace(props) {
     const workspaceRow = useRef([]);
     const savedStatus = useRef([]);
     const saveBtn = useRef([]);
-    // const correctWordRef = useRef([])
+    // const correctWordRef = useRef([]);
     const toggleSpellCheckBtn = useRef(null);
     const toggleIMEBtn = useRef(null);
     const toggleSynonymBtn = useRef(null);
@@ -536,16 +499,15 @@ function Workspace(props) {
     const mergeIcon = useRef(null);
     const mergeSelectedSegmentNos = useRef([]);
     const restoreSegmentIcon = useRef(null);
-
-    const segmentIdRef = useRef(null)
-    const sourceTextUnitRef = useRef(null)
-    const isSegmentMergeRef = useRef(null)
-    const isMergedRef = useRef(false)
-    const isRestoredRef = useRef(false)
-    const isSplitRef = useRef(false)
-    const errorNoteCount = useRef(0)
-    const didMountRef = useRef(false)
-    const prevPageInfo = useRef(null)
+    const segmentIdRef = useRef(null);
+    const sourceTextUnitRef = useRef(null);
+    const isSegmentMergeRef = useRef(null);
+    const isMergedRef = useRef(false);
+    const isRestoredRef = useRef(false);
+    const isSplitRef = useRef(false);
+    const errorNoteCount = useRef(0);
+    const didMountRef = useRef(false);
+    const prevPageInfo = useRef(null);
     /*useRef() constants - end*/
 
     /* createRef() constants - start */
@@ -575,53 +537,38 @@ function Workspace(props) {
     const showSpecialCharactersRef = useRef();
     const contentEditableParentRef = useRef();
     const selectionRangeRef = useRef();
-    const lowCreditAlertCounter = useRef(1)
-    const segmentDiffButton = useRef(null)
-    const rawMtResponseRef = useRef(null)
-
-    const showConcoradanceRef = useRef(null)
-    const prevPathRef = useRef(null)
-
-    const pageSizeFromApi = useRef(null)
-
-    const segmentStatusOptionsRef = useRef(null)
-
-    const confirmedSegmentListFromConfirmAll = useRef([])
-    const showAllSegmentsConfirmedToastRef = useRef(true)
-
-    const taskDataRef = useRef(null)
-    const recognition = useRef(null)
-    
-    const savedCursorPositionRef = useRef(null)
-    const commentScrollingDivRef = useRef(null)
-    
-    const istargetSegmentOnBlurTriggeredRef = useRef(false)
-
-    const isMovedFromLastSegmentConfirmRef = useRef(false)
-
+    const lowCreditAlertCounter = useRef(1);
+    const segmentDiffButton = useRef(null);
+    const rawMtResponseRef = useRef(null);
+    const showConcoradanceRef = useRef(null);
+    const prevPathRef = useRef(null);
+    const pageSizeFromApi = useRef(null);
+    const segmentStatusOptionsRef = useRef(null);
+    const confirmedSegmentListFromConfirmAll = useRef([]);
+    const showAllSegmentsConfirmedToastRef = useRef(true);
+    const taskDataRef = useRef(null);
+    const recognition = useRef(null);    
+    const savedCursorPositionRef = useRef(null);
+    const commentScrollingDivRef = useRef(null);    
+    const istargetSegmentOnBlurTriggeredRef = useRef(false);
+    const isMovedFromLastSegmentConfirmRef = useRef(false);
     // new spell-check modal implementation states
     const [rectElement, setRectElement] = useState(null);
-
-    const clickedMarkEleRef = useRef(null)
-    const clickedWrongWordRef = useRef(null)
-    const spellCheckResponseRef = useRef([])
-    const pageSizeRef = useRef(null)
-    const clientResponseDataRef = useRef(null)
-    const previousSegmentIdRef = useRef(null)
-    
-    const documentDetailsRef = useRef(null)
-    const termAddModalPositionRef = useRef({ x: '-50%', y: '-60%' })
-    const wordChoiceListRef = useRef([])
-
-    const defaultGlossDetailsRef = useRef(null)
-
+    const clickedMarkEleRef = useRef(null);
+    const clickedWrongWordRef = useRef(null);
+    const spellCheckResponseRef = useRef([]);
+    const pageSizeRef = useRef(null);
+    const clientResponseDataRef = useRef(null);
+    const previousSegmentIdRef = useRef(null);    
+    const documentDetailsRef = useRef(null);
+    const termAddModalPositionRef = useRef({ x: '-50%', y: '-60%' });
+    const wordChoiceListRef = useRef([]);
+    const defaultGlossDetailsRef = useRef(null);
 
     const transphraseId = transphrasePopoverOpen ? "simple-popover" : undefined;
     let userSelectionCallTimer = null;
-
     const [allowedMinFontSize, allowedMaxFontSize] = [12, 18];
     // filterMenuPaperclassName = classes.selectOptions;
-
     const customPageSelectStyles = {
         placeholder: (provided, state) => ({
             ...provided,
@@ -689,8 +636,7 @@ function Workspace(props) {
         if (location.state?.partial) {
             setPartialPretranslate(true)
         }
-    }, [location.state])
-
+    }, [location.state]);
 
     useEffect(() => {
         if(userDetails !== null) {
@@ -711,7 +657,6 @@ function Workspace(props) {
                 getDocumentDetailsById(params.documentId);
             } // If laguage data or document id is not present, redirect to file-upload page
             else history("/file-upload");
-
             makeSegmentStatusOptions();
             getSavedPageSize();
             // history.listen((location, action) => {
@@ -723,16 +668,13 @@ function Workspace(props) {
             //         }, 100)
             //     } */
             // });
-
             let element = workspaceFeaturRef.current; // Footer toolbar
             makeResizable(element, 10, 10);
-
             /* How to tour will be shown for the first time - start */
             if (typeof Cookies.get("isProductTourSeen") == "undefined")
                 // Check for the product tour is not seen yet
                 setIsProductTourSeen(false); // Product tour is not yet seen
             /* How to tour will be shown for the first time - end */
-
             /* To unselect the spellcheck by default - start (ID1)*/
             const waitForSpellCheckButton = setInterval(() => {
                 // Wait for the spellcheck icon is to be rendered
@@ -758,35 +700,33 @@ function Workspace(props) {
     }, []);
     /*Keep the focus of the target segment contenteditable when clicking the toolbars- end*/
 
-
     // set steps as stepOptions for react-select
     useEffect(() => {
-        let stepList = []
+        let stepList = [];
         steps?.map(each => {
             if (each.id === 1) {
                 stepList.push({
                     value: each.id,
                     label: each.name,
                     disabled: true
-                })
+                });
             } else {
                 stepList.push({
                     value: each.id,
                     label: each.name,
-                })
+                });
             }
-            setStepOptions(stepList)
+            setStepOptions(stepList);
         })
-    }, [steps])
+    }, [steps]);
 
     useEffect(() => {
         /*Get cursor position in contenteditable - start*/
         const handleSelectionChange = (e) => {
             changeContenteditableSelection();
-
             if(window.getSelection()?.toString()?.trim()?.length === 0) {
-                // dispatch(setShowGlossTermAddForm(false))
-                // setSelectedCoordinates(null)
+                // dispatch(setShowGlossTermAddForm(false));
+                // setSelectedCoordinates(null);
             }
         };
         /*Get cursor position in contenteditable - end*/
@@ -799,13 +739,12 @@ function Workspace(props) {
     useEffect(() => {
         const handleMouseover = (e) => {
             if(e.target.classList.contains('segment-save-btn')){
-                istargetSegmentOnBlurTriggeredRef.current = true
+                istargetSegmentOnBlurTriggeredRef.current = true;
             }else{
-                istargetSegmentOnBlurTriggeredRef.current = false
-            }
-            
+                istargetSegmentOnBlurTriggeredRef.current = false;
+            }            
             if (e.target.classList.contains("spellcheck-highlight")) {
-                // handleSpellCheckWordMouseEnter(e)
+                // handleSpellCheckWordMouseEnter(e);
                 // // If it's a wrong word and hoghlight for spellcheck
                 // setPopoverTarget(null); //Make the spellcheck target parent empty
                 // let cursorWord = e.target.innerHTML; //Current hovering word
@@ -821,12 +760,8 @@ function Workspace(props) {
                 //         suggestedWords.map((value) => {
                 //             // correctWordRef.current[value] = createRef()
                 //             spellCheckPopoverContent.push(
-                //                 <p
-                //                     key={value}
-                //                     /* ref={elem => correctWordRef.current[value] = elem}*/ href="#!"
-                //                     className="corrected-word"
-                //                     onClick={(event) => correctWord(e, value)}
-                //                 >
+                //                 <p key={value}
+                //                     /* ref={elem => correctWordRef.current[value] = elem}*/ href="#!" className="corrected-word" onClick={(event) => correctWord(e, value)} >
                 //                     {value}
                 //                 </p>
                 //             );
@@ -849,15 +784,14 @@ function Workspace(props) {
 
     useEffect(() => {
         if(enableSpellCheck && focusedDivId){
-            window?.addEventListener('mousemove', getMouseMoveCoordinates)
-            document?.addEventListener('click', handleWrongWordClick)
-            
+            window?.addEventListener('mousemove', getMouseMoveCoordinates);
+            document?.addEventListener('click', handleWrongWordClick);            
             return () => {
-                window?.removeEventListener('mousemove', getMouseMoveCoordinates)
-                document?.removeEventListener('click', handleWrongWordClick)
+                window?.removeEventListener('mousemove', getMouseMoveCoordinates);
+                document?.removeEventListener('click', handleWrongWordClick);
             }
         }
-    }, [targetContentEditable.current, enableSpellCheck])
+    }, [targetContentEditable.current, enableSpellCheck]);
 
     useEffect(() => {
         /* Keep the target contenteditable focus when clicking the spellcheck / synonum popover - start*/
@@ -904,29 +838,24 @@ function Workspace(props) {
         }
     }, [documentId, new URLSearchParams(window.location.search).get("page")]);
 
-
     useEffect(() => {
         if (didMount) {
-            if (targetLanguageCode != "") {
-                
-                translatedResponse.map((value, key) => {
+            if (targetLanguageCode != "") {                
+                translatedResponse?.map((value, key) => {
                     if (enableIME) {
                         // If enabled
                         targetContentEditable.current[value.segment_id].current.value = targetContentEditable.current[value.segment_id].current.innerText;
                       
-                    } else if (enableIME == false) {
-                      
-                    }
+                    } else if (enableIME == false) { }
                 });
                 if (enableIME == false) {
                     // If disabled
                     if (targetContentEditable.current) {
                         targetContentEditable.current[focusedDivIdRef.current]?.current.blur(); // Make the currently focused contenteditable to save
-                    }
-                  
+                    }                  
                     setTimeout(() => {
                         window.location.reload(); // As of now just reload the page to disable
-                        // history(window.location)
+                        // history(window.location);
                     }, 100);
                 }
                 /*Google input tools suggestion functionality end*/
@@ -940,84 +869,69 @@ function Workspace(props) {
         }, 200);
     }, [targetLanguageId]);
 
-
     useEffect(() => {
         if (isDocumentOpenerVendorRef.current) {    // for the user to whom task is assigned (editor)
-            // console.log(" inside isDocumentOpenerVendorRef")
             if (isWorkspaceEditable) {
                 // show the button to editor if the user has permission to edit the document
-                setShowDocumentSubmitButton(true)
-
+                setShowDocumentSubmitButton(true);
                 let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
-                // console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
                 if (!isUserIsReviwer ? (segments_confirmed_count === total_segment_count) : isEditorSubmittedDocument.current) {
                     if(isEditorSubmittedDocument.current){  // if document submitted - don't show the button
-                        setShowDocumentSubmitButton(false)  // this is good
+                        setShowDocumentSubmitButton(false);  // this is good
                     }else{
-                        setEnableDocumentSubmitBtn(true)    // enable the button if all segments are confirmed
-                        // setShowDocumentSubmitButton(true)
+                        setEnableDocumentSubmitBtn(true);    // enable the button if all segments are confirmed
+                        // setShowDocumentSubmitButton(true);
                     }
                 } else {    // if all segments are not confirmed (editor) || if document is not submitted (reviewer) 
                     if(!isUserIsReviwer) {  // for editor - disable the button
-                        setEnableDocumentSubmitBtn(false)
-                        // setShowDocumentSubmitButton(false)
+                        setEnableDocumentSubmitBtn(false);
+                        // setShowDocumentSubmitButton(false);
                     }else {     // for reviwer enable the button - reviewer submittion not depends on the segment confirmation
-                        setEnableDocumentSubmitBtn(true)
+                        setEnableDocumentSubmitBtn(true);
                     }
                 }
             } else {    // this is good
-                setShowDocumentSubmitButton(false)
+                setShowDocumentSubmitButton(false);
             }
         } else if (taskDataRef.current) {   // for the user who assigned the task (owner)
-            // console.log(" inside else ")
-
-            // console.log("isEditorSubmittedDocument: "+isEditorSubmittedDocument.current)
             // if post-editing (step-1) is not available but reviewing step is present then the project admin will act as editor the should submit the document 
             // check if step 1 is not preset and task_assign_info length is 1
-            if (taskDataRef.current?.task_assign_info?.find(each => each.task_assign_detail.step !== 1) && taskDataRef.current?.task_assign_info?.length === 1) {
-                
+            if (taskDataRef.current?.task_assign_info?.find(each => each.task_assign_detail.step !== 1) && taskDataRef.current?.task_assign_info?.length === 1) {                
                 if(!isEditorSubmittedDocument.current)  // check if document is already submitted - if not submitted show the button 
-                    setShowDocumentSubmitButton(true)
-
+                    setShowDocumentSubmitButton(true);
                 let { segments_confirmed_count, total_segment_count } = documentProgressRef.current
                 if (segments_confirmed_count === total_segment_count) {
-                    // setShowDocumentSubmitButton(true)
-                    setEnableDocumentSubmitBtn(true)
+                    // setShowDocumentSubmitButton(true);
+                    setEnableDocumentSubmitBtn(true);
                 } else {
-                    setEnableDocumentSubmitBtn(false)
+                    setEnableDocumentSubmitBtn(false);
                 }
             }
         }
-    }, [isWorkspaceEditable, documentProgressRef.current, isDocumentOpenerVendorRef.current, isUserIsReviwer, isEditorSubmittedDocument.current, taskDataRef.current])
+    }, [isWorkspaceEditable, documentProgressRef.current, isDocumentOpenerVendorRef.current, isUserIsReviwer, isEditorSubmittedDocument.current, taskDataRef.current]);
 
     // useEffect(() => {
-    //     console.log("showDocumentSubmitButton: " + showDocumentSubmitButton)
-    // }, [showDocumentSubmitButton])
+    // }, [showDocumentSubmitButton]);
     
     // useEffect(() => {
-    //     console.log("isEditorSubmittedDocument: " + isEditorSubmittedDocument.current)
-    // }, [isEditorSubmittedDocument.current])
-    
+    // }, [isEditorSubmittedDocument.current]);    
 
     useEffect(() => {
         if (!isWorkspaceEditableRef.current) {
             setShowDontHaveEditingAccessAlertModal(true)
         }
-    }, [isWorkspaceEditableRef.current])
-
+    }, [isWorkspaceEditableRef.current]);
 
     // ============= Voice option selection logic starts =============
 
     useEffect(() => {
-        // console.log(isTranslatedAudioFileAvailable)
         const localeCount = isTranslatedAudioFileAvailable?.reduce((a, { locale }) => (
             Object.assign(a, { [locale]: (a[locale] || 0) + 1 })
         ), {})
         const genderCount = isTranslatedAudioFileAvailable?.reduce((a, { gender }) => (
             Object.assign(a, { [gender]: (a[gender] || 0) + 1 })
         ), {})
-
-        let gender_options = []
+        let gender_options = [];
         if (genderCount !== null && genderCount !== undefined) {
             Object?.keys(genderCount)?.map((each, index) => {
                 gender_options.push({
@@ -1026,8 +940,7 @@ function Workspace(props) {
                 })
             })
         }
-
-        let locale_options = []
+        let locale_options = [];
         if (localeCount !== null && localeCount !== undefined) {
             Object?.keys(localeCount)?.map((each, index) => {
                 locale_options.push({
@@ -1036,73 +949,64 @@ function Workspace(props) {
                 })
             })
         }
-
-        setLocaleOptions(locale_options)
-        setGenderOptions(gender_options)
-    }, [isTranslatedAudioFileAvailable])
+        setLocaleOptions(locale_options);
+        setGenderOptions(gender_options);
+    }, [isTranslatedAudioFileAvailable]);
 
     const handleLocaleChange = (selected) => {
-        setAudioLocale(selected)
+        setAudioLocale(selected);
     }
 
     const handleGenderChange = (selected) => {
-        setAudioGender(selected)
+        setAudioGender(selected);
     }
 
     useEffect(() => {
         if (localeOptions?.length === 1) {
-            setAudioLocale(localeOptions[0])
+            setAudioLocale(localeOptions[0]);
         }
         if (genderOptions?.length === 1) {
-            setAudioGender(genderOptions[0])
+            setAudioGender(genderOptions[0]);
         }
-    }, [localeOptions, genderOptions])
+    }, [localeOptions, genderOptions]);
 
     useEffect(() => {
         if (audioLocale !== null) {
-            let filteredLocale = isTranslatedAudioFileAvailable?.filter(each => audioLocale.label.toUpperCase() == each.locale.toUpperCase())
-            // console.log(filteredLocale)
+            let filteredLocale = isTranslatedAudioFileAvailable?.filter(each => audioLocale.label.toUpperCase() == each.locale.toUpperCase());
             const filteredGender = filteredLocale?.reduce((a, { gender }) => (
                 Object.assign(a, { [gender]: (a[gender] || 0) + 1 })
-            ), {})
-
-            let filteredGenderOption = []
+            ), {});
+            let filteredGenderOption = [];
             if (filteredGender !== null && filteredGender !== undefined) {
                 Object?.keys(filteredGender)?.map((each, index) => {
                     filteredGenderOption.push({
                         value: index,
                         label: each.charAt(0) + each?.slice(1).toLowerCase()
-                    })
-                })
+                    });
+                });
             }
-            setGenderOptions(filteredGenderOption)
+            setGenderOptions(filteredGenderOption);
         }
-    }, [audioLocale])
+    }, [audioLocale]);
 
     useEffect(() => {
         if (audioLocale !== null && audioGender !== null) {
-            let filteredRes = isTranslatedAudioFileAvailable?.filter(each => audioLocale?.label == each?.locale && audioGender?.label.toUpperCase() == each?.gender.toUpperCase())
-            // console.log(filteredRes)
+            let filteredRes = isTranslatedAudioFileAvailable?.filter(each => audioLocale?.label == each?.locale && audioGender?.label.toUpperCase() == each?.gender.toUpperCase());
             const filteredVoiceType = filteredRes?.reduce((a, item) => (
                 Object.assign(a, { [item?.voice_type]: item })
-            ), {})
-            // console.log(filteredVoiceType)
-
+            ), {});
             // set voice-type as Neural(1st priority) then Standard(2nd priority) and then Wavenet(3rd priority)
             // if(filteredVoiceType?.Neural2 !== undefined){
-            //     setVoiceType(filteredVoiceType?.Neural2?.voice_name)
+            //     setVoiceType(filteredVoiceType?.Neural2?.voice_name);
             // }else 
             if (filteredVoiceType?.Wavenet !== undefined) {
-                setVoiceType(filteredVoiceType?.Wavenet?.voice_name)
+                setVoiceType(filteredVoiceType?.Wavenet?.voice_name);
             } else if (filteredVoiceType?.Standard !== undefined) {
-                setVoiceType(filteredVoiceType?.Standard?.voice_name)
+                setVoiceType(filteredVoiceType?.Standard?.voice_name);
             }
         }
-    }, [audioLocale, audioGender])
-
-
+    }, [audioLocale, audioGender]);
     // ============= Voice option selection logic ends =============
-
 
     useEffect(() => {
         findTriggerCount.current = 0; // Initial find and replace trigger
@@ -1117,42 +1021,29 @@ function Workspace(props) {
                 // if (!creditAlertTxt?.length) {
                 setTimeout(() => {
                     //targetContentEditable Ref's assigned
-                    // console.log(targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current);
-                    if (targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current !== null) {
-                        
+                    if (targetContentEditable?.current[translatedResponse?.[0]?.segment_id]?.current !== null) {                        
                         // focus the first segment if moved by confirming the last segment manually  
                         if(isMovedFromLastSegmentConfirmRef.current){
-                            targetContentEditable.current[translatedResponse[0]?.segment_id]?.current?.focus();
-                            isMovedFromLastSegmentConfirmRef.current = false
+                            targetContentEditable.current[translatedResponse?.[0]?.segment_id]?.current?.focus();
+                            isMovedFromLastSegmentConfirmRef.current = false;
                         }
                         if (Cookies.get('isProductTourSeen') == undefined) {
                             if (isWorkspaceEditable) {
-                                targetContentEditable.current[translatedResponse[0]?.segment_id]?.current?.focus();
+                                targetContentEditable.current[translatedResponse?.[0]?.segment_id]?.current?.focus();
                             }
                         }
-                        // didMountRef.current = false
+                        // didMountRef.current = false;
                     }
-
                     // if (targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current != null){
                     //     let a = document.getElementsByClassName('workspace-editor')[0];
-                    //     console.log(a);
-                    //     a.scroll({
-                    //         top: 0,
-                    //         behavior: 'smooth'
-                    //       });
+                    //     a.scroll({ top: 0, behavior: 'smooth'});
                     //     targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current.scrollTo({top: 0, behavior: 'smooth'});
                     //     if(findTerm === ""){
-                    //         console.log(isRestoredRef.current);
-                    //         console.log(isMergedRef.current);
-                    //         console.log(isSplitRef.current);
                     //         if(isMergedRef.current || isRestoredRef.current || isSplitRef.current){
-                    // //         //     // if(isMergedRef.current || isRestoredRef.current){
-                    // //         //     //     console.log(mergedSegmentIDsRef.current);
-                    // //         //     //     console.log(mergedSegmentIDsRef.current?.sort()[0]);
-                    // //         //     //     console.log(isRestoredRef.current);
-                    // //         //     //     targetContentEditable.current[translatedResponse[0].segment_id].current.focus();
-                    // //         //     //     targetContentEditable.current[translatedResponse.find(each => each.segment_id === mergedSegmentIDsRef.current?.sort()[0]).segment_id].current.focus();
-                    // //         //     // }
+                    //           if(isMergedRef.current || isRestoredRef.current){
+                    //             targetContentEditable.current[translatedResponse[0].segment_id].current.focus();
+                    //             targetContentEditable.current[translatedResponse.find(each => each.segment_id === mergedSegmentIDsRef.current?.sort()[0]).segment_id].current.focus();
+                    //              }
                     // //         //     // mergedSegmentIDsRef.current = null
                     // //             if(translatedResponse !== null){
                     //                 isMergedRef.current = false
@@ -1169,45 +1060,41 @@ function Workspace(props) {
                 /*Trigger focus on the first segment - end*/
             }
         }
-
     }, [translatedResponse, allSegmentStatusState]);
-
 
     useEffect(() => {
         if (didMount) {
             // spellCheck();
             // reset the paraphrase states when segment focus is changed
-            setparaphraseTrigger(false)
-            setParaPhraseResList(null)
-            setQaData([])
-            // setSegmentDifference([])
-            setQaContent([])
-            setQaCountShow(false)
-            setTranslationMatches([])
-            setTbxData([])
-            setSelectedParaphrase(null)
-            setGlossaryData([])
-
+            setparaphraseTrigger(false);
+            setParaPhraseResList(null);
+            setQaData([]);
+            // setSegmentDifference([]);
+            setQaContent([]);
+            setQaCountShow(false);
+            setTranslationMatches([]);
+            setTbxData([]);
+            setSelectedParaphrase(null);
+            setGlossaryData([]);
             if(document.querySelector('.MuiTooltip-popper')){
-                let tooltips = document.querySelectorAll('.MuiTooltip-popper')
-                // console.log(tooltips)
+                let tooltips = document.querySelectorAll('.MuiTooltip-popper');
                 tooltips?.forEach(each => {
                     each.style.visibility = 'hidden'
-                })
+                });
             }
-            errorNoteCount.current = 0
+            errorNoteCount.current = 0;
         }
         if(focusedDivId !== ""){
             try{
-                let activeFooterTab = document.querySelector('.nav-link.active')
+                let activeFooterTab = document.querySelector('.nav-link.active');
                 if(activeFooterTab){
-                    activeFooterTab.classList.remove('active')
+                    activeFooterTab.classList.remove('active');
                 }
             }catch(e) {
-                console.log(e)
+                console.error(e);
             }
-            setConcordanceData([])
-            setIsSegmentDataLoading(true)
+            setConcordanceData([]);
+            setIsSegmentDataLoading(true);
         }
     }, [focusedDivId, URL_SEARCH_PARAMS.get("page"), URL_SEARCH_PARAMS.get("status")]);
 
@@ -1217,20 +1104,18 @@ function Workspace(props) {
             var selection = window.getSelection().getRangeAt(0);
             if (window.getSelection().toString().length) {
                 var selectedText = selection.extractContents();
-                let randomNum = Math.floor(Math.random() * 1000)
+                let randomNum = Math.floor(Math.random() * 1000);
                 var mark = document.createElement("mark");
-                mark.id = `synonym-${randomNum}`
+                mark.id = `synonym-${randomNum}`;
                 mark.style.setProperty('background-color', 'transparent', 'important');
                 mark.appendChild(selectedText);
-                mark.contentEditable = "true"
+                mark.contentEditable = "true";
                 selection.insertNode(mark);
-                setSynonymPopoverTarget("synonym-" + randomNum)
+                setSynonymPopoverTarget("synonym-" + randomNum);
             }
         }
-
         if (enableIME && imeTextObject.length) {
             var selection = window.getSelection().getRangeAt(0);
-
             if (window.getSelection().toString().length && imeTextObjectTarget.length != "") {
                 let childMark = document?.getElementById(imeTextObjectTarget)
                 if (childMark) {
@@ -1238,76 +1123,65 @@ function Workspace(props) {
                     childMark.style.setProperty('color', '#3C4043', 'important');
                 }
                 // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML, "mark")
-
             }
-            // removeSpecificTag()
-
+            // removeSpecificTag();
             if (window.getSelection().toString().length && window.getSelection().toString().trim() != "") {
-
                 var selectedText = selection.extractContents();
-                let randomNum = Math.floor(Math.random() * 1000)
+                let randomNum = Math.floor(Math.random() * 1000);
                 var mark = document.createElement("mark");
-                mark.id = `ime-${randomNum}`
+                mark.id = `ime-${randomNum}`;
                 mark.style.setProperty('background-color', '#3390ff', 'important');
                 mark.style.setProperty('color', '#ffffff', 'important');
                 mark.appendChild(selectedText);
-                mark.contentEditable = "true"
+                mark.contentEditable = "true";
                 selection.insertNode(mark);
-                setTextImeObjectTarget("ime-" + randomNum)
-                imeTextObjectTargetRef.current = "ime-" + randomNum
+                setTextImeObjectTarget("ime-" + randomNum);
+                imeTextObjectTargetRef.current = "ime-" + randomNum;
             }
         }
-    }, [synonymText, imeTextObject])
+    }, [synonymText, imeTextObject]);
 
     useEffect(() => {
         if (synonymPopoverTarget !== "") {
-            setSynonymPopoverOpen(true)
+            setSynonymPopoverOpen(true);
             if (enableSynonym) {
-                setSynonymsResList([])
+                setSynonymsResList([]);
                 if (synonymText.trim().length !== "") {
-                    fetchSynonym()
+                    fetchSynonym();
                 }
             }
         }
-    }, [synonymPopoverTarget])
+    }, [synonymPopoverTarget]);
 
     useEffect(() => {
         if (synonymsResList.length !== 0) {
-            document.addEventListener('mousedown', outsideClickHandler)
-            document.addEventListener('keyup', outsideClickHandler)
+            document.addEventListener('mousedown', outsideClickHandler);
+            document.addEventListener('keyup', outsideClickHandler);
         }
         return () => {
             document.removeEventListener('mousedown', outsideClickHandler);
             document.removeEventListener('keyup', outsideClickHandler);
         }
-    }, [synonymsResList])
+    }, [synonymsResList]);
 
     useEffect(() => {
-        // console.log(isWordsCorrected)
         if (targetLanguage === "English") {
             if (isWordsCorrected === true && enableSpellCheck === true) {
-                // console.log('grammar check')
-                // console.log(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML.length)
-                // console.log(targetContentEditable.current[focusedDivIdRef.current].current.textContent.length)
                 if (targetContentEditable.current[focusedDivIdRef.current].current.textContent.length !== 0 ||
                     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML.length !== 0) {
-                    // grammarCheck()
+                    // grammarCheck();
                 }
             }
         }
-    }, [isWordsCorrected, isWordsCorrectedTrigger])
-
+    }, [isWordsCorrected, isWordsCorrectedTrigger]);
 
     // close the popover and remove the mark tag when clicked outside of the popover
     // useEffect(() => {
-    //     // console.log('sarvesh')
     //     if (grammarCheckPopoverTarget !== "") {
     //         document.addEventListener('click', (e) => {
-    //             // console.log(e.target)
-    //             let popoverDiv = document.getElementsByClassName('popover')[0]
-    //             // console.log(popoverDiv)
+    //             let popoverDiv = document.getElementsByClassName('popover')[0];
     //             if (!e.target.classList.contains('popover') && popoverDiv) {
-    //                 // setParaphraseText("")
+    //                 // setParaphraseText("");
     //                 setGrammarPopoverOpen(false);
     //                 setgrammarCheckPopoverTarget("");
     //                 setGrammarCheckResponse([]);
@@ -1322,36 +1196,26 @@ function Workspace(props) {
     //         })
 
     //     }
-    // }, [grammarCheckPopoverTarget])
-
+    // }, [grammarCheckPopoverTarget]);
 
     useEffect(() => {
-        setGrammarPopoverOpen(false)
-        setgrammarCheckPopoverTarget("")
-        setGrammarCheckSuggestedSentence([])
-
+        setGrammarPopoverOpen(false);
+        setgrammarCheckPopoverTarget("");
+        setGrammarCheckSuggestedSentence([]);
         grammarCheckResponse?.map((value, index) => {
-            // console.log('sarvesh '+index)
-            // changeSavedCaretPosition()
+            // changeSavedCaretPosition();
             if (index === 0) {
                 if (value.edit.length !== 0 && value?.sentence !== " ") {
-                    var selectedTextStartIndex = targetContentEditable.current[focusedDivIdRef.current].current?.textContent.indexOf(value.sentence)
-                    // console.log(selectedTextStartIndex)
-
-                    let randomNum = Math.floor(Math.random() * 1000)
+                    var selectedTextStartIndex = targetContentEditable.current[focusedDivIdRef.current].current?.textContent.indexOf(value.sentence);
+                    let randomNum = Math.floor(Math.random() * 1000);
                     var mark = document.createElement("mark");
-                    let txt = document.createTextNode(value.sentence)
-                    mark.id = `grammar-check-${randomNum}`
-                    mark.classList.add('grammarcheck-highlight')
+                    let txt = document.createTextNode(value.sentence);
+                    mark.id = `grammar-check-${randomNum}`;
+                    mark.classList.add('grammarcheck-highlight');
                     // mark.style.setProperty('background-color', 'transper', 'important');
                     mark.appendChild(txt);
-
-
-                    mark.contentEditable = "true"
-                    // console.log(mark)
-                    let finalTxt = targetContentEditable.current[focusedDivIdRef.current].current.innerHTML.replace(value.sentence, mark.outerHTML)
-                    // console.log(finalTxt)
-                    // console.log(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML)
+                    mark.contentEditable = "true";
+                    let finalTxt = targetContentEditable.current[focusedDivIdRef.current].current.innerHTML.replace(value.sentence, mark.outerHTML);
                     var doc = new DOMParser().parseFromString(finalTxt, "text/html");
                     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = doc.body.innerHTML.replaceAll("&nbsp;", " ");
                     // const selection = window.getSelection();
@@ -1361,8 +1225,8 @@ function Workspace(props) {
                     // range.collapse(false);
                     // selection.addRange(range);
                     // targetContentEditable.current[focusedDivIdRef.current].current.focus();
-                    setgrammarCheckPopoverTarget("grammar-check-" + randomNum)
-                    // let grammarList = []
+                    setgrammarCheckPopoverTarget("grammar-check-" + randomNum);
+                    // let grammarList = [];
                     // grammarList.push(
                     //     <p
                     //         key={value.corrected_sentence}
@@ -1372,38 +1236,31 @@ function Workspace(props) {
                     //         {value.corrected_sentence}
                     //     </p>
                     // );
-                    // setGrammarCheckSuggestedSentence(grammarList)
+                    // setGrammarCheckSuggestedSentence(grammarList);
                 }
             }
         })
-    }, [grammarCheckResponse])
-
+    }, [grammarCheckResponse]);
 
     useEffect(() => {
         grammarCheckResponse.map((value, index) => {
             if (index === 0) {
-                let grammarList = []
+                let grammarList = [];
                 grammarList.push(
-                    <p
-                        key={value.corrected_sentence}
-                        className="corrected-word"
-                        onClick={(event, grammarCheckPopoverTarget) => replaceWithCorrectGrammarSentence(event, value.corrected_sentence, grammarCheckPopoverTarget)}
-                    >
+                    <p key={value.corrected_sentence}  className="corrected-word" onClick={(event, grammarCheckPopoverTarget) => replaceWithCorrectGrammarSentence(event, value.corrected_sentence, grammarCheckPopoverTarget)} >
                         {value.corrected_sentence}
                     </p>
                 );
-                setGrammarCheckSuggestedSentence(grammarList)
+                setGrammarCheckSuggestedSentence(grammarList);
             }
         })
-    }, [grammarCheckPopoverTarget])
-
+    }, [grammarCheckPopoverTarget]);
 
     // useEffect(() => {
     //     const handleMouseOverGrammar = (e) => {
     //         if (e.target.classList.contains('grammarcheck-highlight')) {
-    //             // console.log(e.target)
     //             if (grammarPopoverOpen === false) {
-    //                 setGrammarPopoverOpen(true)
+    //                 setGrammarPopoverOpen(true);
     //             }
     //         }
     //     }
@@ -1413,8 +1270,6 @@ function Workspace(props) {
     //     };
     // });
 
-
-
     /* Update the pagination content whenever the page changes */
     useEffect(() => {
         if (didMount) {
@@ -1422,7 +1277,7 @@ function Workspace(props) {
             if (location.state?.findHighlightSegment != null) {
                 findHighlightSegment.current = location.state.findHighlightSegment;
                 window.history.replaceState(null, "");
-                // filterWithFindTerm()
+                // filterWithFindTerm();
                 setTimeout(() => {
                     if (finalHighlightId.current != null) {
                         let element = document.getElementById("search-highlight-" + finalHighlightId.current);
@@ -1445,48 +1300,39 @@ function Workspace(props) {
         }
     }, [totalPages, currentPage]);
 
-
     useEffect(() => {
-        // console.log('from page');
-        let pageParam = URL_SEARCH_PARAMS.get("page")
-        let statusParam = URL_SEARCH_PARAMS.get("status")
+        let pageParam = URL_SEARCH_PARAMS.get("page");
+        let statusParam = URL_SEARCH_PARAMS.get("status");
         if (documentId !== 0) {
             if (statusParam == null || statusParam == undefined) {
                 if (pageParam !== null && pageParam !== undefined) {
                     if (pageSizeFromApi.current !== null) {
-                        listSegments()
+                        listSegments();
                     }
                 }
             } else {
-                segmentStatusFilter()
+                segmentStatusFilter();
             }
-
         }
     }, [URL_SEARCH_PARAMS.get("page"), documentId, pageSizeFromApi.current]);
 
-
     /* Go to the top of the page when move to another pages */
     useEffect(() => {
-        let statusParam = URL_SEARCH_PARAMS.get("status")
-        let pageParam = URL_SEARCH_PARAMS.get("page")
+        let statusParam = URL_SEARCH_PARAMS.get("status");
+        let pageParam = URL_SEARCH_PARAMS.get("page");
         if (documentId && segmentStatusOptionsRef.current !== null) {
-            // console.log('document '+ documentId)
             if (statusParam !== null && statusParam !== undefined) {
-                setFindStatus(statusParam)
-                // console.log(segmentStatusOptionsRef.current?.filter(o1 => statusParam.split(',').some(o2 => o1.value === o2)))
-                setSegmentStatusName(segmentStatusOptionsRef.current?.filter(status => statusParam.split(',').some(each => status.value === each)))
-                segmentStatusFilter()
-                didMountRef.current = false
+                setFindStatus(statusParam);
+                setSegmentStatusName(segmentStatusOptionsRef.current?.filter(status => statusParam.split(',').some(each => status.value === each)));
+                segmentStatusFilter();
+                didMountRef.current = false;
             } else {
-                // console.log('from-status else')
-                // console.log('empty status');
                 if (!didMountRef.current) {
-                    listSegments()
+                    listSegments();
                 }
             }
         }
     }, [URL_SEARCH_PARAMS.get("status"), documentId, segmentStatusOptionsRef.current]);
-
 
     useEffect(() => {
         if (didMount && translationMatches?.length !== 0) {
@@ -1504,7 +1350,6 @@ function Workspace(props) {
                 });
         }
     }, [specialCharSectionRef]);
-
 
     /* Make the find and replace icon active when select that */
     useEffect(() => {
@@ -1545,23 +1390,19 @@ function Workspace(props) {
                 toggleSynonymBtn.current?.classList?.add("toolbar-list-icons-active");
             }
         }
-    }, [enableSynonym])
+    }, [enableSynonym]);
 
     useEffect(() => {
         const errorHandler = (message, source, lineno, colno, error) => {
           // You can log the error or perform any other action here.
           console.error(error);
           return true; // Return true to prevent the default browser error handling
-        };
-    
-        window.onerror = errorHandler;
-    
+        };    
+        window.onerror = errorHandler;    
         return () => {
           window.onerror = null; // Clean up the event handler when the component unmounts
         };
     }, []);
- 
-
 
     useEffect(() => {
         // Create a state specifically for Parawise segmentation
@@ -1569,7 +1410,6 @@ function Workspace(props) {
         let tempParagraphSegment = {};
         let cacheList = [];
         let cache = {};
-
         let enoughObject = {
             has_comment: false,
             is_merge_start: null,
@@ -1584,10 +1424,8 @@ function Workspace(props) {
             temp_target: "",
             text_unit: null,
         };
-
         if (!segmentation) {
             for (let i = 0; i < translatedResponse?.length; i++) {
-                // console.log(cache);
                 if (!cache[translatedResponse[i]?.text_unit]) {
                     cache[translatedResponse[i]?.textUnit] = translatedResponse[i]?.textUnit;
                 } else {
@@ -1609,14 +1447,11 @@ function Workspace(props) {
                 cacheList?.push({ ...cache }, cache);
             }
         }
-        // console.log(cacheList);
-        // console.log(tempParagraphSegmentsList);
     }, [segmentation]);
 
     useEffect(() => {
         filterWithFindTerm();
     }, [findArea]);
-
 
     useEffect(() => {
         if (didMount) {
@@ -1628,7 +1463,6 @@ function Workspace(props) {
     useEffect(() => {
         if (didMount) {
             if (lastCalledArgs.current.functionName == "findStatusChange") {
-
                 let pageParam = URL_SEARCH_PARAMS.get("page");
                 let url = `/workspace/${documentId}?page=1`
                 // if (pageParam != 0 && pageParam != null) url += `?page=1`;
@@ -1637,7 +1471,6 @@ function Workspace(props) {
                 } else {
                     history(url);
                 }
-                // console.log(findStatus);
                 // let urlWithParam = removeParamFromUrl();
                 // let removableParams = ["status"];
                 // if (queryParamExistUrl("page")) removableParams = ["page", "status"];
@@ -1654,21 +1487,17 @@ function Workspace(props) {
         }
     }, [findStatus]);
 
-
     useEffect(() => {
         const handleAllsegmentVisibilty = (e) => {
             if (allSegmenswrapBtn.current && !allSegmenswrapBtn.current.contains(e.target)) {
                 setCompleteAllWrap(false);
             }
         };
-
         document.addEventListener("mousedown", handleAllsegmentVisibilty);
-
         return () => {
             document.removeEventListener("mousedown", handleAllsegmentVisibilty);
         };
     });
-
 
     /* Whenever the QA data changes, highlight on the source and target */
     useEffect(() => {
@@ -1680,10 +1509,10 @@ function Workspace(props) {
                         <span className="qa-text">{qaData}</span>
                     </li>
                 );
-                setQaCountShow(false)
+                setQaCountShow(false);
             } else {
                 qaData?.map((value, index) => {
-                    setQaCountShow(true)
+                    setQaCountShow(true);
                     if (Object.values(value)[0].source.length || Object.values(value)[0].target.length || Object.values(value)[0].ErrorNote.length) {
                         qaContentTemp.push(
                             // <u>
@@ -1713,8 +1542,8 @@ function Workspace(props) {
             setTimeout(() => {
                 if (qaData.length) {
                     setQaContent(qaContentTemp);
-                    // sourceTextDiv.current[lastCalledArgs.current.segmentId].current.innerHTML = replaceTextWithTags(lastCalledArgs.current.sourceText, 'mark')
-                    // targetContentEditable.current[lastCalledArgs.current.segmentId].current.innerHTML = replaceTextWithTags(lastCalledArgs.current.translatedText, 'mark')
+                    // sourceTextDiv.current[lastCalledArgs.current.segmentId].current.innerHTML = replaceTextWithTags(lastCalledArgs.current.sourceText, 'mark');
+                    // targetContentEditable.current[lastCalledArgs.current.segmentId].current.innerHTML = replaceTextWithTags(lastCalledArgs.current.translatedText, 'mark');
                     updateTranslatedResponseSegment(lastCalledArgs.current.segmentId, "original", lastCalledArgs.current.sourceText, "mark");
                     updateTranslatedResponseSegment(lastCalledArgs.current.segmentId, "temp_target", lastCalledArgs.current.translatedText, "mark");
                 }
@@ -1722,29 +1551,27 @@ function Workspace(props) {
         }
     }, [qaData]);
 
-
     useEffect(() => {
         if (selectedPageSize) {
-            let pageParam = URL_SEARCH_PARAMS.get("page")
-            let statusParam = URL_SEARCH_PARAMS.get("status")
+            let pageParam = URL_SEARCH_PARAMS.get("page");
+            let statusParam = URL_SEARCH_PARAMS.get("status");
             if (statusParam == null || statusParam == undefined) {
                 if (pageSizeFromApi.current != selectedPageSize?.value) {
-                    saveCustomPageSize(selectedPageSize?.value)
-                    let url = `/workspace/${documentId}?page=${1}`
+                    saveCustomPageSize(selectedPageSize?.value);
+                    let url = `/workspace/${documentId}?page=${1}`;
                     let pageParam = URL_SEARCH_PARAMS.get("page");
                     if (pageParam != 1) {
-                        // console.log(pageParam)
                         history(url);
                     } else {
-                        listSegments('page-size-change')
+                        listSegments('page-size-change');
                     }
                 }
-                listSegments()
+                listSegments();
             } else {
-                segmentStatusFilter()
+                segmentStatusFilter();
             }
         }
-    }, [selectedPageSize])
+    }, [selectedPageSize]);
 
     /* Cookie based tour show */
     useEffect(() => {
@@ -1758,15 +1585,14 @@ function Workspace(props) {
         if(spellCheckResponseRef.current?.length !== 0){
             highlightSpellCheckWords(focusedDivId)
         }
-    }, [spellCheckResponseRef.current])
-    
+    }, [spellCheckResponseRef.current]);    
 
     useEffect(() => {
         const handleClick = (e) => {
             if (!e.target.classList.contains("suggestion-input")) {
                 //If clicking on the IME suggested input
                 removeIMESuggestion();
-                // return
+                // return;
             }
             if (
                 !hasParentClass(e.target, "workspace-features") &&
@@ -1774,7 +1600,7 @@ function Workspace(props) {
                 !e.target.classList.contains("suggestion-div")
             ) {
                 // Not inside the workspace area or IME suggestion div
-                // handleToggleVisibility(false)
+                // handleToggleVisibility(false);
             } else if (hasParentClass(e.target, "workspace-textarea")) {
                 // Inside target contenteditable div
                 /* Tag insert functionality - start */
@@ -1799,7 +1625,7 @@ function Workspace(props) {
                         }
                     }
                 } else {
-                    if (selectedTagDiv.current == focusedDivIdRef.current)
+                    if (selectedTagDiv.current == focusedDivIdRef.current);
                         //Only insert into the same div
                         insertSelectedTag();
                 }
@@ -1847,7 +1673,7 @@ function Workspace(props) {
                 }
             }
             if(popoverOpen){
-                setPopoverOpen(false)
+                setPopoverOpen(false);
                 setPopoverTarget(null);
                 setSpellCheckPopoverContent("");
             }
@@ -1869,24 +1695,21 @@ function Workspace(props) {
                     ...termAddModalPositionRef.current,
                     y: (scrollTop - 268)
                 }
-
                 let selection = window.getSelection();
                 if(selection?.toString()?.trim()?.length === 0) {
                     if(selectedCoordinates !== null) {
-                        dispatch(setShowGlossTermAddForm(false))
-                        setSelectedCoordinates(null)
+                        dispatch(setShowGlossTermAddForm(false));
+                        setSelectedCoordinates(null);
                     }
-                    return
-                }
-                
+                    return;
+                }                
                 if(!isEnterprise && !is_internal_meber_editor){
                     let range = selection.getRangeAt(0);
                     let selectionRect = range.getBoundingClientRect();
-                    setSelectedCoordinates(selectionRect)
+                    setSelectedCoordinates(selectionRect);
                 }
             }
-        }
-    
+        }    
         workspaceEditor?.addEventListener('scroll', handleScroll);
         return () => {
             workspaceEditor?.removeEventListener('scroll', handleScroll);
@@ -1895,9 +1718,8 @@ function Workspace(props) {
 
     useEffect(() => {
         if (mergeSelectedSegmentIds?.length !== 0) {
-            let txt_unit = translatedResponse?.find(each => each.segment_id == mergeSelectedSegmentIds[0])?.text_unit
-            let sameTxtUnitSeg = translatedResponse?.filter(each => each.text_unit == txt_unit)
-            // console.log(sameTxtUnitSeg)
+            let txt_unit = translatedResponse?.find(each => each.segment_id == mergeSelectedSegmentIds[0])?.text_unit;
+            let sameTxtUnitSeg = translatedResponse?.filter(each => each.text_unit == txt_unit);
             let newArr = translatedResponse?.map(obj => {
                 if (obj.segment_id == sameTxtUnitSeg?.find(each => each.segment_id == obj.segment_id)?.segment_id) {
                     return {
@@ -1907,55 +1729,51 @@ function Workspace(props) {
                 }
                 return obj;
             })
-            // console.log(newArr)
-            setTranslatedResponse(newArr)
+            setTranslatedResponse(newArr);
         } else {
             let newArr = translatedResponse?.map(obj => {
                 return {
                     ...obj,
                     sameTxtUnit: false
                 }
-            })
-            // console.log(newArr)
-            setTranslatedResponse(newArr)
+            });
+            setTranslatedResponse(newArr);
         }
-    }, [mergeSelectedSegmentIds])
-
+    }, [mergeSelectedSegmentIds]);
 
     // get the list of wordchoices based on the task_id
     useEffect(() => {
         if(documentTaskIdRef.current !== null){
-            // getWordChoiceListForDocument()
+            // getWordChoiceListForDocument();
         }
-    }, [documentTaskIdRef.current])
+    }, [documentTaskIdRef.current]);
     
     // reset the target if source text is selected
     useEffect(() => {
         if(sourceSelectionText !== "" && !showGlossaryAddition){
-            setTargetSelectionText("")
+            setTargetSelectionText("");
         }
-    }, [sourceSelectionText])
+    }, [sourceSelectionText]);
 
     // reset the source if target text is selected
-useEffect(() => {
+    useEffect(() => {
         if(targetSelectionText !== "" && !showGlossaryAddition){
-            setSourceSelectionText("")
+            setSourceSelectionText("");
         }
-    }, [targetSelectionText])    
+    }, [targetSelectionText]);
 
     useEffect(() => {
         if(Cookies.get("adaptive-mt-intro") !== "true") {
-            dispatch(setShowAdaptiveMTIntroModal(true))
+            dispatch(setShowAdaptiveMTIntroModal(true));
         }
-
         return () => {
-            dispatch(setShowAdaptiveMTIntroModal(false))
+            dispatch(setShowAdaptiveMTIntroModal(false));
         }
-    }, [])
+    }, []);
 
     // Handle footer pin
     const handlePushPinActive = (show = false) => {
-        setPushPinActive(show)
+        setPushPinActive(show);
     }
 
     const getSteps = () => {
@@ -1970,7 +1788,6 @@ useEffect(() => {
 
     // Handle paste on target segment - only plain text is accepted
     const handlePasteOnWorkArea = (e) => {
-        // console.log(e.target)   
         e.preventDefault();
         var text = "";
         if (e.clipboardData && e.clipboardData.getData) {
@@ -1981,30 +1798,25 @@ useEffect(() => {
         document.execCommand("insertHTML", false, text);
     } 
 
-
-        /* Class name for top div based on toolbar and find and replace visibility - start*/
-        let workspaceAreaClassName = "";
-        if (advancedOptionVisibility) workspaceAreaClassName = "workspace-editor-new-bottom-height";
-        if (!advancedOptionVisibility) workspaceAreaClassName = "";
-        if (showFindReplace) workspaceAreaClassName = "workspace-editor-show-tm-add-top";
-        if (showFindReplace && advancedOptionVisibility) workspaceAreaClassName = "workspace-editor-show-tm-comments-add-top";
-        if (!showFindReplace && !advancedOptionVisibility) workspaceAreaClassName = "";
-        /* Class name for top div based on advancedOption and find and replace visibility - start*/
-        /* let toolbarClassName = ''
-        if (showTmSection)
-            toolbarClassName = 'toolbar-parts-padd-top-remove'
-        if (!showTmSection)
-            toolbarClassName = 'toolbar-parts-padd-top-add toolbar-parts-padd-new-height'
-        if (showToolbarSection && showTmSection)
-            toolbarClassName = 'toolbar-parts-padd-both-show' */
-    
-    
+    /* Class name for top div based on toolbar and find and replace visibility - start*/
+    let workspaceAreaClassName = "";
+    if (advancedOptionVisibility) workspaceAreaClassName = "workspace-editor-new-bottom-height";
+    if (!advancedOptionVisibility) workspaceAreaClassName = "";
+    if (showFindReplace) workspaceAreaClassName = "workspace-editor-show-tm-add-top";
+    if (showFindReplace && advancedOptionVisibility) workspaceAreaClassName = "workspace-editor-show-tm-comments-add-top";
+    if (!showFindReplace && !advancedOptionVisibility) workspaceAreaClassName = "";
+    /* Class name for top div based on advancedOption and find and replace visibility - start*/
+    /* let toolbarClassName = ''
+    if (showTmSection)
+        toolbarClassName = 'toolbar-parts-padd-top-remove'
+    if (!showTmSection)
+        toolbarClassName = 'toolbar-parts-padd-top-add toolbar-parts-padd-new-height'
+    if (showToolbarSection && showTmSection)
+       toolbarClassName = 'toolbar-parts-padd-both-show' */  
 
     // Handle keyboard key press on target segment
-    const handleKeyDown = (e) => {
-        
-        if(imeOn) handeIMEKeyDownDiv(e)
-
+    const handleKeyDown = (e) => {        
+        if(imeOn) handeIMEKeyDownDiv(e);
         if (ctrlAClicked.current) {
             // To detect empty for status if the user removes the content with CTRL + A
             if (String.fromCharCode(e.keyCode).match(/(\w|\s)/g))
@@ -2014,10 +1826,9 @@ useEffect(() => {
                     changeEditedStatus(focusedDivIdRef.current, "unsaved");
                 }
         }
-
         ctrlAClicked.current = false;
         if(e.key === "Enter"){
-            e.preventDefault()
+            e.preventDefault();
         }
         if (e.ctrlKey) {
             if (e.key === "a") ctrlAClicked.current = true; // To Change status if user selects CTRL+A and type
@@ -2045,7 +1856,6 @@ useEffect(() => {
                 let activeSuggestion = inputSuggestionElements[0].getElementsByClassName("suggestion-div active");
                 if (activeSuggestion[0]?.innerText != null) {
                     //Get the highlighted inner text
-
                     //Get the highlighted inner text
                     e.preventDefault(); //Prevent adding br for Enter
                     changeSavedCaretPosition();
@@ -2084,7 +1894,7 @@ useEffect(() => {
         if (document.activeElement.classList.contains("workspace-textarea")) {
             caretRange.current = 0;
             // saveCaretPosition();
-            savedCursorPositionRef.current = saveCursorPositionWithinContenteditable()
+            savedCursorPositionRef.current = saveCursorPositionWithinContenteditable();
         }
     };
 
@@ -2114,23 +1924,21 @@ useEffect(() => {
 
     /* Get the next segment's data by current segment id */
     const getNextSegmentData = (currentDivId = null) => {
-        let index = translatedResponse.findIndex((element) => element.segment_id == currentDivId);
-        if (index != -1) return translatedResponse[index + 1];
+        let index = translatedResponse?.findIndex((element) => element.segment_id == currentDivId);
+        if (index != -1) return translatedResponse?.[index + 1];
         return null;
     };
 
     /* Get the next unsaved segment's data by current segment id */
     const getUnsavedSegmentData = (currentDivId = null) => {
-        let currentSegPosition = translatedResponseRef.current?.findIndex(each => each.segment_id == currentDivId)
-        let segmentAfterCurrentSeg = translatedResponseRef.current?.slice(currentSegPosition)?.filter(each => [101, 103, 105, 109].includes(each.status))
-
+        let currentSegPosition = translatedResponseRef.current?.findIndex(each => each.segment_id == currentDivId);
+        let segmentAfterCurrentSeg = translatedResponseRef.current?.slice(currentSegPosition)?.filter(each => [101, 103, 105, 109].includes(each.status));
         if(segmentAfterCurrentSeg?.length !== 0)
-            return segmentAfterCurrentSeg[0]
+            return segmentAfterCurrentSeg[0];
         else 
-            return null
-
+            return null;
         // let index = Object.keys(allSegmentStatusState).findIndex(
-        //     (element) => element > currentDivId && [101, 103, 105].indexOf(allSegmentStatusState[element]) != -1
+        //     (element) => element > currentDivId && [101, 103, 105].indexOf(allSegmentStatusState[element]) != -1;
         // );
         // if (index != -1) return translatedResponse[index];
         // return null;
@@ -2154,13 +1962,10 @@ useEffect(() => {
 
     /* Save and go to next unconfirmed segment */
     const saveAndNextUnsavedSegment = () => {
-        // console.log(focusedDivIdRef.current);
         if (focusedDivIdRef.current != null) {
             saveBtn.current[focusedDivIdRef.current].current?.click();
             setTimeout(() => {
-                // console.log(saveBtn.current[focusedDivIdRef.current].current);
                 let nextSegmentUnsavedId = getUnsavedSegmentData(focusedDivIdRef.current)?.segment_id;
-                // console.log(nextSegmentUnsavedId);
                 if (targetContentEditable.current[nextSegmentUnsavedId]?.current != null) targetContentEditable.current[nextSegmentUnsavedId].current.focus();
             
             }, 100);
@@ -2191,7 +1996,7 @@ useEffect(() => {
             preSelectionRange.setEnd(range.startContainer, range.startOffset);
             return preSelectionRange.toString().length;
         }catch(e){
-            // console.log(e)
+            console.error(e);
         }
     }
 
@@ -2210,25 +2015,19 @@ useEffect(() => {
         let element = targetContentEditable.current[focusedDivIdRef.current]?.current;
         const selection = window.getSelection();
         if (!savedPosition || !selection) return;
-
         const range = document.createRange();
         const { caretIndex } = savedPosition;
         const nodes = element.childNodes;
-
         let currentIndex = 0;
         let foundNode = null;
-
         for (const node of nodes) {
             const nodeLength = node.textContent.length;
-
             if (currentIndex + nodeLength >= caretIndex) {
                 foundNode = node;
                 break;
             }
-
             currentIndex += nodeLength;
         }
-
         if (!foundNode) return;
         try{
             range.setStart(foundNode, caretIndex - currentIndex);
@@ -2237,7 +2036,7 @@ useEffect(() => {
             selection.addRange(range);
 
         }catch(e) {
-            // console.log(e)
+            console.error(e);
         }
     }
     // ==========================================================================================
@@ -2249,85 +2048,65 @@ useEffect(() => {
             auth: true,
             success: (docResponse) => {
                 let responseTemp = docResponse.data;
-                documentDetailsRef.current = docResponse.data
-                // console.log(responseTemp)
+                documentDetailsRef.current = docResponse.data;
                 if (responseTemp.doc_credit_check_open_alert) {
                     setShowCreditAlert(true);
                     setShowCreditAlertRedirection(false);
                 }
-                docCreditCheckAlertRef.current = responseTemp.doc_credit_check_open_alert
-                isAssignEnableRef.current = responseTemp.assign_enable
-                setIsAssignEnable(responseTemp.assign_enable)
+                docCreditCheckAlertRef.current = responseTemp.doc_credit_check_open_alert;
+                isAssignEnableRef.current = responseTemp.assign_enable;
+                setIsAssignEnable(responseTemp.assign_enable);
                 if (!responseTemp.assign_enable) {
-                    setCreditAlertTxt(t("insufficient_credit_contact"))
+                    setCreditAlertTxt(t("insufficient_credit_contact"));
                 }
-
-                documentTaskIdRef.current = responseTemp.task_id
-                setAudioFileAlreadyExist(responseTemp.converted_audio_file_exists)
-                setTotalCharCount(responseTemp.total_char_count)
+                documentTaskIdRef.current = responseTemp.task_id;
+                setAudioFileAlreadyExist(responseTemp.converted_audio_file_exists);
+                setTotalCharCount(responseTemp.total_char_count);
                 setSourceLanguage(responseTemp.source_language);
                 setSourceLanguageId(responseTemp.source_language_id);
                 setTargetLanguage(responseTemp.target_language);
                 setTargetLanguageId(responseTemp.target_language_id);
                 setFileName(responseTemp.filename);
-                setIsTranslatedAudioFileAvailable(responseTemp?.download_audio_output_file?.length ? responseTemp?.download_audio_output_file : null)
+                setIsTranslatedAudioFileAvailable(responseTemp?.download_audio_output_file?.length ? responseTemp?.download_audio_output_file : null);
                 setSourceLanguageCode(responseTemp.source_language_code);
                 setTargetLanguageCode(responseTemp.target_language_code);
                 setTargetLanguageScript(responseTemp.target_language_script);
-                setUpdatedFileDownload(responseTemp?.updated_download === "enable" ? true : false)
+                setUpdatedFileDownload(responseTemp?.updated_download === "enable" ? true : false);
                 setEnableFileDownload(responseTemp?.download === "enable" ? true : false);
-                setMtEnable(responseTemp?.mt_enable)
-                setTaskAssignUserDetails(responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id)
-
-                setIsAdaptiveTransEnabled(responseTemp?.isAdaptive)
-
-                if(!isEnterprise) getDefaultGlossDetails()
-
+                setMtEnable(responseTemp?.mt_enable);
+                setTaskAssignUserDetails(responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id);
+                setIsAdaptiveTransEnabled(responseTemp?.isAdaptive);
+                if(!isEnterprise) getDefaultGlossDetails();
                 if(userDetails?.enterprise_name !== "Enterprise - DIN"){
                     // edit_allowed key will restrict the workspace editing access
                     setIsWorkspaceEditable(responseTemp.edit_allowed)
-                    isWorkspaceEditableRef.current = responseTemp.edit_allowed
-                    // console.log("edit allow: "+responseTemp.edit_allowed)
+                    isWorkspaceEditableRef.current = responseTemp.edit_allowed;
                     if (responseTemp.edit_allowed) { isEditorSubmittedDocument.current = false }
-                    else { isEditorSubmittedDocument.current = true }
-                    
+                    else { isEditorSubmittedDocument.current = true }                    
                 }
-
-
                 // go back to the previous page and keep open the project collapse
                 if (location.state?.prevPath) {
-                    let [pathname, search] = location.state.prevPath?.split("?")
+                    let [pathname, search] = location.state.prevPath?.split("?");
                     const URL_SEARCH_PARAMS = new URLSearchParams(`?${search}`);
-                    URL_SEARCH_PARAMS.set('open-project', responseTemp.project)
-                    prevPathRef.current = pathname + '?' + URL_SEARCH_PARAMS.toString()
+                    URL_SEARCH_PARAMS.set('open-project', responseTemp.project);
+                    prevPathRef.current = pathname + '?' + URL_SEARCH_PARAMS.toString();
                 }
-
-               
-                // console.log("editor submnit: "+isEditorSubmittedDocument.current)
-
-
-                // console.log(location.state?.open_as);
-
-                let is_user_reviewer = false
-                let is_reviewer = false
-                // console.log(responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id && location.state?.open_as === 'reviewer'));
-
+                let is_user_reviewer = false;
+                let is_reviewer = false;
                 if (userDetails.agency) {
-                    is_reviewer = responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id && location.state?.open_as === 'reviewer')?.step_id === 2
-                    setIsUserIsReviwer(is_reviewer)
-                    is_user_reviewer = is_reviewer
+                    is_reviewer = responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id && location.state?.open_as === 'reviewer')?.step_id === 2;
+                    setIsUserIsReviwer(is_reviewer);
+                    is_user_reviewer = is_reviewer;
                 } else {
-                    is_reviewer = responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id === 2
-                    setIsUserIsReviwer(is_reviewer)
-                    is_user_reviewer = is_reviewer
+                    is_reviewer = responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id === 2;
+                    setIsUserIsReviwer(is_reviewer);
+                    is_user_reviewer = is_reviewer;
                 }
-
-                let is_from_reviewer = responseTemp?.assign_detail.filter(each => each.assign_to_id === Config?.userState.id && each.step_id === 2 && location.state?.open_as === 'reviewer')?.length !== 0 ? true : false
-
+                let is_from_reviewer = responseTemp?.assign_detail.filter(each => each.assign_to_id === Config?.userState.id && each.step_id === 2 && location.state?.open_as === 'reviewer')?.length !== 0 ? true : false;
                 if (location.state?.open_as != undefined && location.state?.open_as != null) {
                     if (location.state?.open_as !== 'editor') {
-                        setIsUserIsReviwer(is_from_reviewer)
-                        is_user_reviewer = is_from_reviewer
+                        setIsUserIsReviwer(is_from_reviewer);
+                        is_user_reviewer = is_from_reviewer;
                     }
                 }
 
@@ -2335,33 +2114,18 @@ useEffect(() => {
                     url: `${Config.BASE_URL}/workspace/vendor/dashboard/${responseTemp.project}/`,
                     auth: true,
                     success: (response) => {
-
-                        documentSubmitStepRef.current = (is_reviewer || is_from_reviewer) ? 2 : 1
-                        // console.log(response.data?.find(each => each.id === responseTemp.task_id));
-                        let task_data = response.data?.find(each => each.id === responseTemp.task_id)
-                        // console.log(task_data);
-                        taskDataRef.current = task_data
-                        
+                        documentSubmitStepRef.current = (is_reviewer || is_from_reviewer) ? 2 : 1;
+                        let task_data = response.data?.find(each => each.id === responseTemp.task_id);
+                        taskDataRef.current = task_data;                        
                         if(userDetails?.enterprise_name === "Enterprise - DIN") {
-
                             try{
-                                let assign_info = task_data?.task_assign_info?.find(each => each.task_assign_detail?.step == 1)
-                                let assign_by_data = assign_info?.assigned_by_details
-                                let assign_to_data = assign_info?.assign_to_details
-                                
-                                // console.log("Assign info")
-                                // console.log(assign_info)
-                                // console.log("Assign by");
-                                // console.log(assign_by_data);
-                                // console.log("Assign to");
-                                // console.log(assign_to_data);
-                                
-                                // console.log(assign_info?.task_assign_detail?.client_response)
+                                let assign_info = task_data?.task_assign_info?.find(each => each.task_assign_detail?.step == 1);
+                                let assign_by_data = assign_info?.assigned_by_details;
+                                let assign_to_data = assign_info?.assign_to_details;
                                 if(assign_info?.task_assign_detail?.client_response === "Approved"){
-                                    setIsWorkspaceEditable(responseTemp.edit_allowed)
-                                    isWorkspaceEditableRef.current = responseTemp.edit_allowed
+                                    setIsWorkspaceEditable(responseTemp.edit_allowed);
+                                    isWorkspaceEditableRef.current = responseTemp.edit_allowed;
                                 }
-
                                 if(userDetails?.pk !== assign_to_data?.id && assign_info?.task_assign_detail?.task_status === 'Completed'){
                                     clientResponseDataRef.current = {
                                         step: 1,
@@ -2370,227 +2134,154 @@ useEffect(() => {
                                         assign_info
                                     }
                                     if(assign_info?.task_assign_detail?.task_status === "Completed"){
-                                        setShowTaskAssignActionBtn(true)
+                                        setShowTaskAssignActionBtn(true);
                                     } 
                                 }
-
-                                if (assign_info?.task_assign_detail?.task_status === "Completed") isEditorSubmittedDocument.current = true
-                                else isEditorSubmittedDocument.current = false
+                                if (assign_info?.task_assign_detail?.task_status === "Completed") isEditorSubmittedDocument.current = true;
+                                else isEditorSubmittedDocument.current = false;
                                 
                             }catch(e){
-                                console.log(e)
+                                console.error(e);
                             }
                         }
-
-
                         // logged in user is an agency and this task is assigned to LSP(not his own project) (LSP(reassign) -> vendor)
                         if (userDetails?.agency && !isAssignEnableRef.current) {
                             // the task whether reassigned or not, the LSP needs to work/see work and submit the document
-                            isDocumentOpenerVendorRef.current = true
-                            isTaskReassignedRef.current = typeof task_data.task_reassign_info === 'boolean' ? true : false
-
+                            isDocumentOpenerVendorRef.current = true;
+                            isTaskReassignedRef.current = typeof task_data.task_reassign_info === 'boolean' ? true : false;
                             if (task_data?.task_reassign_info === null) {
-                                console.log('return 1')
-                                setShowReturnRequestBtn(true)
-                                // setIsWorkspaceEditable(true)
+                                setShowReturnRequestBtn(true);
+                                // setIsWorkspaceEditable(true);
                             }
-
                             // task_reassign_into
-                            let assign_to_data = task_data?.task_reassign_info?.find(each => ((each?.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))))
-                            let assign_by_data = task_data?.task_reassign_info?.find(each => ((each?.assigned_by_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))))
-
-                            // console.log("Assign by");
-                            // console.log(assign_by_data);
-                            // console.log("Assign to");
-                            // console.log(assign_to_data);
-
+                            let assign_to_data = task_data?.task_reassign_info?.find(each => ((each?.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))));
+                            let assign_by_data = task_data?.task_reassign_info?.find(each => ((each?.assigned_by_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))));
                             // task is assigned by me (view -> when task owner/admin sees)
                             if (assign_by_data?.assigned_by_details?.id === userDetails.pk) {
-                                // console.log('owner view');
                                 if (assign_by_data?.task_assign_detail.task_status === "Completed" || assign_by_data?.task_assign_detail.task_status === "Return Request") {
-                                    // setIsWorkspaceEditable(true)
-                                    isDocumentSubmittedRef.current = true
+                                    // setIsWorkspaceEditable(true);
+                                    isDocumentSubmittedRef.current = true;
                                 } else {
-                                    // setIsWorkspaceEditable(false)
+                                    // setIsWorkspaceEditable(false);
                                 }
                             }
-
                             // task is assigned to someone (view -> when editor/reviewer sees)
                             // don't show the submit button when work is not started and when work is completed
                             if (assign_to_data?.assign_to_details?.id === userDetails.pk) {
-                                // console.log('vendor view');
                                 if (assign_to_data?.task_assign_detail.task_status !== "Return Request" && assign_to_data?.task_assign_detail.task_status !== "Completed") {
-                                    // console.log('return 2')
-                                    setShowReturnRequestBtn(true)
+                                    setShowReturnRequestBtn(true);
                                 }
-                                else setShowReturnRequestBtn(false)
-
+                                else setShowReturnRequestBtn(false);
                                 if (assign_to_data?.task_assign_detail.task_status === "Yet to start" || assign_to_data?.task_assign_detail.task_status === "In Progress") {
-                                    // setIsWorkspaceEditable(true)
+                                    // setIsWorkspaceEditable(true);
                                 } else {
-                                    // setIsWorkspaceEditable(false)
-                                    isDocumentSubmittedRef.current = true
+                                    // setIsWorkspaceEditable(false);
+                                    isDocumentSubmittedRef.current = true;
                                 }
                             }
-
                             // task_assign_info
-
-                            // console.log(is_reviewer);
-                            // console.log(location.state?.open_as);
-                            // console.log(is_from_reviewer);
-
-                            let task_assign_assign_to_data = task_data?.task_assign_info?.find(each => ((each?.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))))
-                            let task_assign_assign_by_data = task_data?.task_assign_info?.find(each => ((each?.assigned_by_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))))
-
-                            // console.log('assign_info_ assign_to');
-                            // console.log(task_assign_assign_to_data);
-
+                            let task_assign_assign_to_data = task_data?.task_assign_info?.find(each => ((each?.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))));
+                            let task_assign_assign_by_data = task_data?.task_assign_info?.find(each => ((each?.assigned_by_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))));
                             // task is assigned to someone (view -> when editor/reviewer sees)
                             // don't show the submit button when work is not started and when work is completed
                             if (task_assign_assign_to_data?.assign_to_details?.id === userDetails.pk) {
-                                isDocumentOpenerVendorRef.current = true
-
+                                isDocumentOpenerVendorRef.current = true;
                                 if (task_assign_assign_to_data?.task_assign_detail.task_status !== "Return Request" && task_assign_assign_to_data?.task_assign_detail.task_status !== "Completed" && task_data.task_reassign_info === null) {
-                                    setShowReturnRequestBtn(true)
+                                    setShowReturnRequestBtn(true);
                                 } else if (task_assign_assign_to_data?.task_assign_detail.task_status !== "Return Request" && task_assign_assign_to_data?.task_assign_detail.task_status !== "Completed" && assign_by_data?.task_assign_detail.task_status === "Return Request") {
-                                    setShowReturnRequestBtn(true)
-                                } else setShowReturnRequestBtn(false)
-
-
+                                    setShowReturnRequestBtn(true);
+                                } else setShowReturnRequestBtn(false);
                                 if (task_assign_assign_to_data?.task_assign_detail.task_status === "Yet to start" || task_assign_assign_to_data?.task_assign_detail.task_status === "In Progress") {
                                     if (assign_by_data?.task_assign_detail.task_status === "Completed" || assign_by_data?.task_assign_detail.task_status === "Return Request") {
-                                        // setIsWorkspaceEditable(true)
-                                        isDocumentSubmittedRef.current = false
+                                        // setIsWorkspaceEditable(true);
+                                        isDocumentSubmittedRef.current = false;
                                     } else {
-                                        // setIsWorkspaceEditable(false)
-                                        isDocumentSubmittedRef.current = true
+                                        // setIsWorkspaceEditable(false);
+                                        isDocumentSubmittedRef.current = true;
                                     }
                                 } else {
-                                    // setIsWorkspaceEditable(false)
-                                    isDocumentSubmittedRef.current = true
-                                    // console.log('submitted');
+                                    // setIsWorkspaceEditable(false);
+                                    isDocumentSubmittedRef.current = true;
                                 }
-
                                 if (task_assign_assign_to_data?.task_assign_detail.task_status === "Completed") {
-                                    documentRestrictionReasonRef.current = 'completed'
+                                    documentRestrictionReasonRef.current = 'completed';
                                 } else if (task_assign_assign_to_data?.task_assign_detail.task_status === "Return Request") {
-                                    documentRestrictionReasonRef.current = 'returned'
+                                    documentRestrictionReasonRef.current = 'returned';
                                 }
-
                             }
-
-
                         } else {  // logged in user can be agency or non-agency and its their own project (customer(agency/non-agency) -> vendor)
                             // if(task_data?.task_assign_info === null) setIsWorkspaceEditable(true) 
-
-                            let assign_to_data = task_data?.task_assign_info?.find(each => ((each?.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))))
-                            let assign_by_data = task_data?.task_assign_info?.find(each => ((each?.assigned_by_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))))
-
-                            // console.log('all assign info');
-                            // console.log(task_data?.task_assign_info);
-                            // console.log(task_data?.task_assign_info?.filter(each => each?.task_assign_detail.task_status === 'Completed' || each?.task_assign_detail.task_status === 'Return Request'));
-
-                            // console.log("Assign by");
-                            // console.log(assign_by_data);
-                            // console.log("Assign to");
-                            // console.log(assign_to_data);
-
-
+                            let assign_to_data = task_data?.task_assign_info?.find(each => ((each?.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))));
+                            let assign_by_data = task_data?.task_assign_info?.find(each => ((each?.assigned_by_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))));
                             // only 3rd level assigned vendor has reassigned true 
-                            isTaskReassignedRef.current = typeof task_data.task_reassign_info === 'boolean' ? true : false
-
+                            isTaskReassignedRef.current = typeof task_data.task_reassign_info === 'boolean' ? true : false;
                             // task is assigned by me (view -> when task owner/admin sees)
                             if (assign_by_data?.assigned_by_details?.id === userDetails.pk) {
-                                if (assign_by_data?.task_assign_detail.task_status === "Completed" || assign_by_data?.task_assign_detail.task_status === "Return Request") {
-                                    // console.log('owner view');
-                                    if (task_data?.task_assign_info?.filter(each => each?.task_assign_detail.task_status === 'Completed' || each?.task_assign_detail.task_status === 'Return Request')?.length === task_data?.task_assign_info?.length) {
-                                        // setIsWorkspaceEditable(true)
-                                    } else {
-                                        // setIsWorkspaceEditable(false)
-                                    }
+                                if (assign_by_data?.task_assign_detail.task_status === "Completed" || assign_by_data?.task_assign_detail.task_status === "Return Request") {                                    if (task_data?.task_assign_info?.filter(each => each?.task_assign_detail.task_status === 'Completed' || each?.task_assign_detail.task_status === 'Return Request')?.length === task_data?.task_assign_info?.length) {
+                                        // setIsWorkspaceEditable(true);
                                 } else {
-                                    // setIsWorkspaceEditable(false)
+                                        // setIsWorkspaceEditable(false);
+                                }
+                                } else {
+                                    // setIsWorkspaceEditable(false);
                                 }
                             }
-
                             // task is assigned to someone (view -> when editor/reviewer sees)
                             // don't show the submit button when work is not started and when work is completed
                             if (assign_to_data?.assign_to_details?.id === userDetails.pk) {
                                 isDocumentOpenerVendorRef.current = true
-                                // console.log('vendor view');
                                 if (assign_to_data?.task_assign_detail.task_status !== "Return Request" && assign_to_data?.task_assign_detail.task_status !== "Completed") {
-                                    setShowReturnRequestBtn(true)
+                                    setShowReturnRequestBtn(true);
                                 }
-                                else setShowReturnRequestBtn(false)
-
+                                else setShowReturnRequestBtn(false);
                                 if (assign_to_data?.task_assign_detail.task_status === "In Progress") {
-                                    // setIsWorkspaceEditable(true)
-                                    // isEditorSubmittedDocument.current = true
+                                    // setIsWorkspaceEditable(true);
+                                    // isEditorSubmittedDocument.current = true;
                                 } else {
-                                    // setIsWorkspaceEditable(false)
-                                    // console.log('submitted');
-                                    isDocumentSubmittedRef.current = true
-                                }
+                                    // setIsWorkspaceEditable(false);
+                                    isDocumentSubmittedRef.current = true;                                }
 
                                 if (assign_to_data?.task_assign_detail.task_status === "Completed") {
-                                    documentRestrictionReasonRef.current = 'completed'
+                                    documentRestrictionReasonRef.current = 'completed';
                                 } else if (assign_to_data?.task_assign_detail.task_status === "Return Request") {
-                                    documentRestrictionReasonRef.current = 'returned'
+                                    documentRestrictionReasonRef.current = 'returned';
                                 }
                             }
                         }
-
-                        // console.log(isTaskReassignedRef.current);
-
                         if (isTaskReassignedRef.current) {
-                            let a = responseTemp?.assign_detail?.filter(each => each.reassigned === isTaskReassignedRef.current)
-                            let assign_to_data = task_data?.task_assign_info?.find(each => ((each?.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))))
-
-                            // console.log(a);
-                            // console.log(is_user_reviewer);
+                            let a = responseTemp?.assign_detail?.filter(each => each.reassigned === isTaskReassignedRef.current);
+                            let assign_to_data = task_data?.task_assign_info?.find(each => ((each?.assign_to_details.id === userDetails.pk || each?.assign_to_details?.managers.find(user => user === userDetails.pk)) && (each.task_assign_detail?.step === (is_reviewer || is_from_reviewer ? 2 : 1))));
                             if (is_user_reviewer) {
-                                // console.log(a?.find(each => each.assign_to_id !== userDetails.pk));
                                 // condition is true if editing status is completed then make the editable true
                                 if (a?.find(each => each.assign_to_id !== userDetails.pk)?.status === 3) {
                                     // step-1 editor has submitted document (post-editing step(1) is done) 
                                     if (assign_to_data?.task_assign_detail.task_status !== "Return Request" && assign_to_data?.task_assign_detail.task_status !== "Completed") {
-                                        // isEditorSubmittedDocument.current = true
-                                        // setIsWorkspaceEditable(true)
-                                        // console.log( "is_editable_inside: true");
+                                        // isEditorSubmittedDocument.current = true;
+                                        // setIsWorkspaceEditable(true);
                                     }
                                 } else {
-                                    // setIsWorkspaceEditable(false)
-                                    // console.log('is_editable_inside: false');
+                                    // setIsWorkspaceEditable(false);
                                 }
-                                // console.log(a?.find(each => each.assign_to_id !== userDetails.pk)?.status !== 3 ? 'is_editable_inside: false' : "is_editable_inside: true");
                             }
                         } else {
                             if (userDetails.agency) {
-                                let a = responseTemp?.assign_detail?.filter(each => each.reassigned === false)
-                                // console.log(a);
-
-                                // console.log(a?.find(each => each.step_id !== 2));
-                                // console.log(is_user_reviewer);
+                                let a = responseTemp?.assign_detail?.filter(each => each.reassigned === false);
                                 if (is_user_reviewer) {
-                                    // console.log(a?.find(each => each.step_id !== 2));
                                     if (a?.find(each => each.step_id !== 2)?.status === 3) {
                                         // step-1 editor has submitted document (post-editing step(1) is done) 
-                                        // isEditorSubmittedDocument.current = true
+                                        // isEditorSubmittedDocument.current = true;
                                         // setIsWorkspaceEditable(true)
                                     } else {
-                                        // setIsWorkspaceEditable(false)
-                                        // console.log('no access');
+                                        // setIsWorkspaceEditable(false);
                                     }
-                                    // console.log(a?.find(each => each.assign_to_id !== userDetails.pk)?.status !== 3 ? 'is_editable_inside: false' : "is_editable_inside: true");
                                 }
                                 // else{
-                                //     console.log(a?.find(each => each.step_id !== 1));
                                 //     if(a?.find(each => each.step_id !== 1)?.status !== 3){
                                 //         // step-1 editor has submitted document (post-editing step(1) is done) 
-                                //         isEditorSubmittedDocument.current = true
-                                //         setIsWorkspaceEditable(true)
+                                //         isEditorSubmittedDocument.current = true;
+                                //         setIsWorkspaceEditable(true);
                                 //     } else {
-                                //         setIsWorkspaceEditable(false)
+                                //         setIsWorkspaceEditable(false);
                                 //     }
                                 // }
                             }
@@ -2598,7 +2289,6 @@ useEffect(() => {
                     },
                     error: (err) => { }
                 })
-
                 // setIsUserIsReviwer(stepOptions?.find(eachStep => responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id === eachStep.value) )
             },
             error: (err) => {
@@ -2612,27 +2302,25 @@ useEffect(() => {
     const handleDocumentSubmitBtn = (status) => {
         setVendorReturnRequestReasonText('')
         if (status === 4 && vendorReturnRequestReasonText?.trim() === '') {
-            setShowVendorComplaintReasonModal(true)
+            setShowVendorComplaintReasonModal(true);
             return;
         } else if (status === 3) {
             if (!showSubmitConfirmModal) {
-                setShowSubmitConfirmModal(true)
+                setShowSubmitConfirmModal(true);
                 return;
             }
         }
-
         let formData = new FormData();
         formData.append("task", documentTaskIdRef.current);
         formData.append("step", documentSubmitStepRef.current);
         formData.append("status", status?.toString()); // in-progress: 2, submit: 3, raise-complaint: 4 
-
         if (status === 4) {
-            formData.append("return_request_reason", vendorReturnRequestReasonText?.trim())
+            formData.append("return_request_reason", vendorReturnRequestReasonText?.trim());
         }
         if (isTaskReassignedRef.current) {
-            formData.append("reassigned", 'True')
+            formData.append("reassigned", 'True');
         }
-        setIsDocumentSubmitting(true)
+        setIsDocumentSubmitting(true);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_update/`,
             method: 'PUT',
@@ -2640,30 +2328,26 @@ useEffect(() => {
             auth: true,
             success: (response) => {
                 // hide and disbale the submit button once docuemnt is submitted
-                setShowDocumentSubmitButton(false)
-                setEnableDocumentSubmitBtn(false)
-
+                setShowDocumentSubmitButton(false);
+                setEnableDocumentSubmitBtn(false);
                 if(!isDinamalar){
-                    setIsWorkspaceEditable(false)
-                }
-                
-                setShowReturnRequestBtn(false)
-                setShowVendorComplaintReasonModal(false)
-                setShowSubmitConfirmModal(false)
-                setIsDocumentSubmitting(false)
+                    setIsWorkspaceEditable(false);
+                }                
+                setShowReturnRequestBtn(false);
+                setShowVendorComplaintReasonModal(false);
+                setShowSubmitConfirmModal(false);
+                setIsDocumentSubmitting(false);
                 if (status === 3) {
-                    Config.toast(t("document_submitted"))
+                    Config.toast(t("document_submitted"));
                 } else if (status === 4) {
-                    Config.toast(t("return_req_send"))
+                    Config.toast(t("return_req_send"));
                 }
             },
-            error: (err) => { setIsDocumentSubmitting(false) }
+            error: (err) => { setIsDocumentSubmitting(false); }
         });
     }
 
-    /*
-        - Remove the suggestion div -start
-    */
+    /*- Remove the suggestion div -start*/
     const removeIMESuggestion = () => {
         let inputSuggestionElements = document.querySelectorAll("div.ks-input-suggestions:not(.hidden)");
         if (inputSuggestionElements[0] != null) inputSuggestionElements[0].classList.add("hidden");
@@ -2671,15 +2355,13 @@ useEffect(() => {
 
     /* Create refs for each target contenteditable */
     const createTargetContentEditableRefs = () => {
-        for (let i = 0; i < translatedResponse.length; i++) {
-            // if (typeof targetContentEditable?.current[translatedResponse[i].segment_id] == 'undefined') {
+        for (let i = 0; i < translatedResponse?.length; i++) {
             sourceTextDiv.current[translatedResponse[i].segment_id] = createRef();
             targetContentEditable.current[translatedResponse[i].segment_id] = createRef();
             savedStatus.current[translatedResponse[i].segment_id] = createRef();
             notSavedStatus.current[translatedResponse[i].segment_id] = createRef();
             workspaceRow.current[translatedResponse[i].segment_id] = createRef();
             saveBtn.current[translatedResponse[i].segment_id] = createRef();
-            // }
         }
     };
 
@@ -2694,9 +2376,9 @@ useEffect(() => {
         while (replaceContentUsedIds.indexOf(randomNumber) != -1) randomNumber = Math.floor(Math.random() * 1000);
         setReplaceContentUsedIds((prevState) => [...prevState, randomNumber]);
         let mark = document.createElement("mark");
-        // mark.setAttribute("id", 'replaceable-content-' + randomNumber)
-        // mark.setAttribute("contenteditable", true)
-        // mark.className = cName
+        // mark.setAttribute("id", 'replaceable-content-' + randomNumber);
+        // mark.setAttribute("contenteditable", true);
+        // mark.className = cName;
         textNode.parentNode.insertBefore(mark, newNode);
         newNode.splitText(str.length);
         mark.appendChild(newNode);
@@ -2725,7 +2407,7 @@ useEffect(() => {
                 if (node.nodeType === Node.TEXT_NODE) {
                     if (wrap(node, word, highlightClass)) {
                         // changeSavedCaretPosition();
-                        restoreCursorPositionWithinContenteditable()
+                        restoreCursorPositionWithinContenteditable();
                         ++i;
                     }
                 } else if (node.nodeType === Node.ELEMENT_NODE) {
@@ -2801,12 +2483,12 @@ useEffect(() => {
         }
     };
 
-
     /* Enable the spellcheck after checking the availability of the target language */
     const toggleSpellcheck = (e = null) => {
-        resetSynonymStates()
+        resetSynonymStates();
         let formData = new FormData();
         formData.append("doc_id", documentId);
+
         Config.axios({
             url: Config.BASE_URL + "/vendor/spellcheck_availability/",
             method: "POST",
@@ -2818,9 +2500,9 @@ useEffect(() => {
                     if (response.data.out) {
                         setShowSpellCheckIcon(true); // Hide the spellcheck icon itself
                         if (!enableSpellCheck) {
-                            //!enableSpellCheck == true
+                            //!enableSpellCheck == true;
                             setEnableSpellCheck(true);
-                            setEnableSynonym(false)
+                            setEnableSynonym(false);
                             let segmentId = focusedDivIdRef.current;
                             if (toggleSpellCheckBtn.current?.classList != null) {
                                 toggleSpellCheckBtn.current?.classList.remove("toolbar-list-icons-active", "toolbar-list-icons-disable");
@@ -2848,7 +2530,7 @@ useEffect(() => {
                     //Triggered
                     if (response.data.out) {
                         setEnableSpellCheck(true);
-                        setEnableSynonym(false)
+                        setEnableSynonym(false);
                         setShowSpellCheckIcon(true);
                         if (toggleSpellCheckBtn.current?.classList != null) {
                             toggleSpellCheckBtn.current?.classList.remove("toolbar-list-icons-active", "toolbar-list-icons-disable");
@@ -2867,19 +2549,15 @@ useEffect(() => {
                 setShowIME(response.data.show_ime);
                 /* Show IME Editor based on response - end */
             },
-            error: (err) => {
-
-            }
+            error: (err) => {}
         });
     };
-
     
     // Save the cursor position in a ref varaible
     const saveCaretPosition = () => {
         let element = targetContentEditable.current[focusedDivIdRef.current]?.current;
         if (element) caretRange.current = Cursor.getCurrentCursorPosition(element);
     };
-
    
     // Set the cursor position which was saved from saveCaretPosition()
     const changeSavedCaretPosition = () => {
@@ -2939,27 +2617,23 @@ useEffect(() => {
         if (e?.target != null) sentence = e.target?.innerHTML;
         else sentence = targetContentEditable.current[segmentId]?.current?.innerHTML;
         // let words = sentence.match(/\S+\s*/g)
-
         // if (!grammarPopoverOpen) {
         sentence = removeSpecificTag(sentence, "mark");
         // } else {    
-        //     setGrammarPopoverOpen(false)
-        //     setgrammarCheckPopoverTarget("")
+        //     setGrammarPopoverOpen(false);
+        //     setgrammarCheckPopoverTarget("");
         //     sentence = removeSpecificTag(sentence, "mark");
         // }
-        // sentence = replaceTagsWithText(sentence)
-        // sentence = removeAllTags(sentence)
-        // console.log(sentence)   
-        sentence = removeTagWithItsTextContent(sentence)
-
-        // console.log(sentence)
-
+        // sentence = replaceTagsWithText(sentence);
+        // sentence = removeAllTags(sentence);
+        sentence = removeTagWithItsTextContent(sentence);
         if (sentence != null) sentence = sentence.replaceAll("&nbsp;", " ");
         if (enableSpellCheck) {
             let formData = new FormData();
             formData.append("doc_id", documentId);
             formData.append("target", sentence);
             let url = `${Config.BASE_URL}/workspace_okapi/spellcheck/`;
+
             Config.axios({
                 url: url,
                 method: "POST",
@@ -2967,8 +2641,8 @@ useEffect(() => {
                 data: formData,
                 success: (response) => {
                     let result = response.data.result;
-                    setIsWordsCorrected(response.data.result.length === 0 ? true : false)
-                    setIsWordsCorrectedTrigger(!isWordsCorrectedTrigger)
+                    setIsWordsCorrected(response.data.result.length === 0 ? true : false);
+                    setIsWordsCorrectedTrigger(!isWordsCorrectedTrigger);
                     spellCheckData.current = result;
                     // setTimeout(() => {
                     // if (!grammarPopoverOpen) {
@@ -2977,8 +2651,8 @@ useEffect(() => {
                     //         "mark"
                     //     );
                     // } else {
-                    //     setGrammarPopoverOpen(false)
-                    //     setgrammarCheckPopoverTarget("")
+                    //     setGrammarPopoverOpen(false);
+                    //     setgrammarCheckPopoverTarget("");
                     //     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
                     //         targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
                     //         "mark"
@@ -3000,7 +2674,7 @@ useEffect(() => {
     const correctWord = (e, replaceableWord) => {
         // saveCaretPosition() // Can't use. the replaced word doesn't have the same range because of the length difference
         e.target.innerHTML = replaceableWord;
-        // changeSavedCaretPosition() // Can't use. the replaced word doesn't have the same range because of the length difference
+        // changeSavedCaretPosition(); // Can't use. the replaced word doesn't have the same range because of the length difference
         e.target.classList.remove("spellcheck-highlight");
         e.target.classList.add("spellcheck-replaced");
         setPopoverOpen(false);
@@ -3008,15 +2682,14 @@ useEffect(() => {
         setSpellCheckPopoverContent("");
     };
 
-
     /* Synonym - replace the selected word and change it's class name too. */
     const changeSynonym = (target, replaceableWord) => {
-        // saveCaretPosition() // Can't use. the replaced word doesn't have the same range because of the length difference
+        // saveCaretPosition(); // Can't use. the replaced word doesn't have the same range because of the length difference
         target.innerHTML = replaceableWord;
-        // changeSavedCaretPosition() // Can't use. the replaced word doesn't have the same range because of the length difference
+        // changeSavedCaretPosition(); // Can't use. the replaced word doesn't have the same range because of the length difference
         target.classList.remove("synonym-highlight");
         target.classList.add("synonym-replaced");
-        // target.removeAttribute('id')
+        // target.removeAttribute('id');
         setSynonymPopoverOpen(false);
         setSynonymPopoverTarget(null);
         setSynonymPopoverContent("");
@@ -3024,67 +2697,53 @@ useEffect(() => {
 
     // reset all NLP state variables
     const resetSynonymStates = () => {
-        setSynonymPopoverOpen(false)
-        setSynonymPopoverTarget("")
-        setSynonymsResList([])
-        setSynonymText("")
-        setSynonumSelectionObject(null)
+        setSynonymPopoverOpen(false);
+        setSynonymPopoverTarget("");
+        setSynonymsResList([]);
+        setSynonymText("");
+        setSynonumSelectionObject(null);
     }
 
-
-
-
-    const getSelectedText = (e) => {
-
-      
+    const getSelectedText = (e) => {      
         if (enableSynonym && window.getSelection().toString().length) {
-            // console.log(window.getSelection().toString())
-            setSynonymText(window.getSelection().toString())
-
-            setSynonumSelectionObject(window.getSelection())
-            // console.log(window.getSelection().anchorOffset)
-            // console.log(window.getSelection())
-            // setEnableSpellCheck(false)
+            setSynonymText(window.getSelection().toString());
+            setSynonumSelectionObject(window.getSelection());
+            // setEnableSpellCheck(false);
             // toggleSpellCheckBtn.current?.classList?.remove("toolbar-list-icons-active");
             // if (popoverOpen || paraPhrasePopoverTarget !== "" || grammarPopoverOpen || grammarCheckPopoverTarget !== "") {
             // } else {
-            //     setSynonymText(window.getSelection().toString())
+            //     setSynonymText(window.getSelection().toString());
             // }
         } else {
-            //  selectionRangeRef.current =  saveSelection(targetContentEditable.current[focusedDivIdRef.current].current)
-            //  console.log(selectionRangeRef.current);
-            setImeTextObject(window.getSelection().toString())
+            //  selectionRangeRef.current =  saveSelection(targetContentEditable.current[focusedDivIdRef.current].current);
+            setImeTextObject(window.getSelection().toString());
         }
     }
 
     const replaceWithNewPara = (e, value, tag = "") => {
         try {
-            console.log(value)
             updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", value + tag);
-            handleTransphrasePopoverClose()
+            handleTransphrasePopoverClose();
             setTimeout(() => {
                 updateSegmentStatus(focusedDivIdRef.current, 103);
                 changeEditedStatus(focusedDivIdRef.current, "unsaved");
                 updateTranslationById(null, focusedDivIdRef.current, true, { forceUpdate: true });
             }, 250);
         }catch (e) {
-            console.log(e)
+            console.error(e);
         }
     }
 
     const repalceWithNewSynonym = (e, value) => {
-        let childMark = document?.getElementById(synonymPopoverTarget)
-        childMark.innerHTML = value + " "
-
-        setSynonymPopoverOpen(false)
-        setSynonymPopoverTarget("")
-        setSynonymsResList([])
-
+        let childMark = document?.getElementById(synonymPopoverTarget);
+        childMark.innerHTML = value + " ";
+        setSynonymPopoverOpen(false);
+        setSynonymPopoverTarget("");
+        setSynonymsResList([]);
         // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
         //     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
         //     "mark"
         // );
-
         const selection = window.getSelection();
         const range = document.createRange();
         selection.removeAllRanges();
@@ -3092,7 +2751,6 @@ useEffect(() => {
         range.collapse(false);
         selection.addRange(range);
         targetContentEditable.current[focusedDivIdRef.current].current.focus();
-
         // updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", targetContentEditable.current[focusedDivIdRef.current].current.innerHTML);
         // updateSegmentStatus(focusedDivIdRef.current, 103);
         // changeEditedStatus(focusedDivIdRef.current, "unsaved");
@@ -3100,25 +2758,21 @@ useEffect(() => {
     }
 
     const removeSelectedText = (e) => {
-        let childMark = document?.getElementById(imeTextObjectTarget)
+        let childMark = document?.getElementById(imeTextObjectTarget);
         if (childMark) {
             childMark.style.setProperty('background-color', 'transparent', 'important');
             childMark.style.setProperty('color', '#3C4043', 'important');
         }
-        // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML =  targetContentEditable.current[focusedDivIdRef.current].current.innerText
-        // console.log('clicked')
+        // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML =  targetContentEditable.current[focusedDivIdRef.current].current.innerText;
     }
     // !e.target.classList.contains('popover') && 
     // close the popover and remove the mark tag when clicked outside of the popover
-
-
     const outsideClickHandler = (e) => {
-        // console.log('called from disable synonom')
         if(!e.target?.closest('.paraphrase-popover-box')){
-            let popoverDiv = document.getElementsByClassName('popover')[0]
-            let markTag = document.getElementById(synonymPopoverTarget)
+            let popoverDiv = document.getElementsByClassName('popover')[0];
+            let markTag = document.getElementById(synonymPopoverTarget);
             if (markTag !== undefined && synonymPopoverOpen && synonymsResList.length) {
-                resetSynonymStates()
+                resetSynonymStates();
                 targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
                     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
                     "mark"
@@ -3127,72 +2781,58 @@ useEffect(() => {
         }
     }
 
-
     const handleTransphrase = (e, action) => {
-        let text = ''
+        let text = '';
         if (targetLanguageId == 17) {
-            text = replaceTagsWithText(unescape(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML), "")
+            text = replaceTagsWithText(unescape(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML), "");
         } else if (sourceLanguageId == 17) {
-            text = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML), "")
+            text = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML), "");
         }
-
         if (removeAllTags(text)?.trim()?.split(' ')?.length <= 1) {
-            Config.toast(t("text_more_than_one_word"), 'warning')
-            setIsParaphrasing(false)
-            return
+            Config.toast(t("text_more_than_one_word"), 'warning');
+            setIsParaphrasing(false);
+            return;
         }
-
-        setSelectedParaphrase(action)
-        setTransphrasePopoverTarget(e.currentTarget)
-        setTransphrasePopoverOpen(true)
-
+        setSelectedParaphrase(action);
+        setTransphrasePopoverTarget(e.currentTarget);
+        setTransphrasePopoverOpen(true);
         if (!isParaphrasing) {
-            getParaphrases(action)
+            getParaphrases(action);
         }
     }
 
     const handleTransphrasePopoverClose = () => {
-        setTransphrasePopoverTarget(null)
-        setTransphrasePopoverOpen(false)
-        setSelectedParaphrase(null)
+        setTransphrasePopoverTarget(null);
+        setTransphrasePopoverOpen(false);
+        setSelectedParaphrase(null);
     }
 
-
     const getParaphrases = async (option) => {
-
-        setIsParaphrasing(true)
-        setParaPhraseResList(null) // reset the paraphrase response list before getting the new list
-        let text = ''
+        setIsParaphrasing(true);
+        setParaPhraseResList(null); // reset the paraphrase response list before getting the new list
+        let text = '';
         if (targetLanguageId == 17) {
-            text = replaceTagsWithText(unescape(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML), "")
+            text = replaceTagsWithText(unescape(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML), "");
         } else if (sourceLanguageId == 17) {
-            text = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML), "")
+            text = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML), "");
         }
-
-        setParaphraseText(text)
-        setparaphraseTrigger(true)
-        // handleToggleVisibility(true)
-        // console.log(paraphraseTabButton.current)
+        setParaphraseText(text);
+        setparaphraseTrigger(true);
+        // handleToggleVisibility(true);
         // paraphraseTabButton.current?.click();
-        // scrollRight()
-
+        // scrollRight();
         let userCacheData = JSON.parse(
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
         let token = userCacheData != null ? userCacheData?.token : "";
-
-        // console.log(sourceTextDiv.current[focusedDivIdRef.current].current);
         if (removeAllTags(text)?.trim()?.length.length !== 0) {
-
             var formdata = new FormData();
             let myHeaders = new Headers();
             myHeaders.append("Authorization", `Bearer ${token}`);
-
             if (targetLanguageId == 17) {
                 // normal paraphrasing
                 formdata.append("sentence", text.trim());
                 formdata.append("doc_id", documentId);
-
                 formdata.append("seg_id", focusedDivId ? focusedDivId : focusedDivIdRef.current);
             } else if (sourceLanguageId == 17) {
                 // transphrasing
@@ -3200,10 +2840,8 @@ useEffect(() => {
                 formdata.append("target_lang_id", targetLanguageId);
                 formdata.append("doc_id", documentId);
             }
-
             // options: Rewrite, Shorten, Simplify
             formdata.append("option", option);
-
             var requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
@@ -3214,50 +2852,46 @@ useEffect(() => {
             try{
                 let data = null
                 if (targetLanguageId == 17) {
-                    data = await fetch(Config.BASE_URL + "/workspace_okapi/paraphrase/", requestOptions)
+                    data = await fetch(Config.BASE_URL + "/workspace_okapi/paraphrase/", requestOptions);
                 } else if (sourceLanguageId == 17) {
-                    data = await fetch(Config.BASE_URL + "/workspace_okapi/seg_rewrite/", requestOptions)
+                    data = await fetch(Config.BASE_URL + "/workspace_okapi/seg_rewrite/", requestOptions);
                 }
-
-                // console.log(data)
-                let response = await data.json()
+                let response = await data.json();
                 if (data.status === 200) {
-                    setParaPhraseResList(response)
-                    // setparaPhraseTag(response?.tag)
-                    setIsParaphrasing(false)
+                    setParaPhraseResList(response);
+                    // setparaPhraseTag(response?.tag);
+                    setIsParaphrasing(false);
                     if (response?.msg === 'error') {
-                        setIsParaphrasing(false)
-                        setparaphraseTrigger(false)
-                        setIsParaphrasing(false)
+                        setIsParaphrasing(false);
+                        setparaphraseTrigger(false);
+                        setIsParaphrasing(false);
                         Config.toast(t("paraphrase_get_error_1"), 'warning');
                     }
                 } else if (data.status === 400) {
                     if (response?.msg === 'Insufficient Credits') {
-                        setShowCreditAlert(true)
-                        if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
-                        else setCreditAlertTxt(t("insufficient_credits"))
+                        setShowCreditAlert(true);
+                        if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"));
+                        else setCreditAlertTxt(t("insufficient_credits"));
                     }
-                    handleTransphrasePopoverClose()
-                    setparaphraseTrigger(false)
-                    setIsParaphrasing(false)
+                    handleTransphrasePopoverClose();
+                    setparaphraseTrigger(false);
+                    setIsParaphrasing(false);
                 } else if (data.status === 500) {
-                    handleTransphrasePopoverClose()
-                    Config.toast(t("paraphrase_get_error_3"), 'error')
-                    setparaphraseTrigger(false)
-                    setIsParaphrasing(false)
+                    handleTransphrasePopoverClose();
+                    Config.toast(t("paraphrase_get_error_3"), 'error');
+                    setparaphraseTrigger(false);
+                    setIsParaphrasing(false);
                 }
             } catch (e) {
-                console.log(e)
+                console.error(e);
             }
         } else {
-            handleTransphrasePopoverClose()
-            Config.toast(t("paraphrase_get_error_4"), 'warning')
-            setparaphraseTrigger(false)
-            setIsParaphrasing(false)
+            handleTransphrasePopoverClose();
+            Config.toast(t("paraphrase_get_error_4"), 'warning');
+            setparaphraseTrigger(false);
+            setIsParaphrasing(false);
         }
     }
-
-
 
     // Get Synonym for selected word
     const fetchSynonym = async () => {
@@ -3266,33 +2900,24 @@ useEffect(() => {
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
         let token = userCacheData != null ? userCacheData?.token : "";
-
         var formdata = new FormData();
         let myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${token}`);
-
-        let fullSentence = replaceTagsWithText(removeSpecificTag(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML, "mark"), " ")
-
+        let fullSentence = replaceTagsWithText(removeSpecificTag(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML, "mark"), " ");
         formdata.append("word", synonymText.trim());
         formdata.append("word", synonymText.trim());
         formdata.append("sentence", fullSentence);
-
-        // console.log("sarvesh" + fullSentence.slice(0, synonumSelectionObject?.anchorOffset))
         formdata.append("second_word", synonumSelectionObject?.anchorOffset !== 0 ? fullSentence.slice(0, synonumSelectionObject?.anchorOffset) : "-1");
-
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
             body: formdata,
             redirect: 'follow'
         };
-
-        let data = await fetch(Config.BASE_URL + "/workspace_okapi/synonyms/", requestOptions)
+        let data = await fetch(Config.BASE_URL + "/workspace_okapi/synonyms/", requestOptions);
         if (data.status === 200) {
-            let response = await data.json()
-            // console.log(response.context.synonyms)
-            let synonymList = []
-            // console.log(typeof response.context?.synonyms)
+            let response = await data.json();
+            let synonymList = [];
             if (typeof response.context == "object") {
                 response.context?.map((value) => {
                     synonymList.push(
@@ -3305,62 +2930,48 @@ useEffect(() => {
                         </p>
                     );
                 });
-                setSynonymsResList(synonymList)
-                setParaphrasePopoverOpen(true)
+                setSynonymsResList(synonymList);
+                setParaphrasePopoverOpen(true);
             } else {
-                Config.toast(t("no_synonym_found"), 'warning')
+                Config.toast(t("no_synonym_found"), 'warning');
                 targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
                     targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
                     "mark"
                 );
-                setSynonymPopoverOpen(false)
-                setSynonymPopoverTarget("")
-                setSynonymsResList([])
+                setSynonymPopoverOpen(false);
+                setSynonymPopoverTarget("");
+                setSynonymsResList([]);
             }
         }
     }
 
     const highlightGrammarMistake = (originalSentence, newSentence) => {
-        var selectedTextStartIndex = targetContentEditable.current[focusedDivIdRef.current]?.current?.textContent.indexOf(originalSentence)
-        // console.log(selectedTextStartIndex)
-        let randomNum = Math.floor(Math.random() * 1000)
+        var selectedTextStartIndex = targetContentEditable.current[focusedDivIdRef.current]?.current?.textContent.indexOf(originalSentence);
+        let randomNum = Math.floor(Math.random() * 1000);
         var mark = document.createElement("mark");
-        let txt = document.createTextNode(originalSentence)
-        mark.id = `grammar-check-${randomNum}`
-        setgrammarCheckPopoverTarget("grammar-check-" + randomNum)
-        mark.classList.add('grammarcheck-highlight')
+        let txt = document.createTextNode(originalSentence);
+        mark.id = `grammar-check-${randomNum}`;
+        setgrammarCheckPopoverTarget("grammar-check-" + randomNum);
+        mark.classList.add('grammarcheck-highlight');
         // mark.style.setProperty('background-color', 'transper', 'important');
         mark.appendChild(txt);
-        mark.contentEditable = "true"
-        // console.log(mark)
-        let finalTxt = targetContentEditable.current[focusedDivIdRef.current].current.textContent.replace(originalSentence, mark.outerHTML)
-        // console.log(finalTxt)
+        mark.contentEditable = "true";
+        let finalTxt = targetContentEditable.current[focusedDivIdRef.current].current.textContent.replace(originalSentence, mark.outerHTML);
         var doc = new DOMParser().parseFromString(finalTxt, "text/html");
-        // console.log(doc.body.innerHTML)
-        targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = doc.body.innerHTML
-        targetContentEditable.current[focusedDivIdRef.current].current.focus()
+        targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = doc.body.innerHTML;
+        targetContentEditable.current[focusedDivIdRef.current].current.focus();
     }
 
-
-
     // const replaceWithCorrectGrammarSentence = (e, value, targetValue) => {
-    //     console.log(typeof grammarCheckPopoverTarget)
-    //     let childMark = document.getElementById(grammarCheckPopoverTarget)
-    //     console.log(childMark)
-    //     childMark.innerHTML = value + " "
-    //     console.log(childMark.innerHTML)
-
-    //     setGrammarCheckSuggestedSentence([])
-    //     setGrammarPopoverOpen(false)
-    //     setgrammarCheckPopoverTarget("")
-
-    //     // console.log(targetContentEditable.current[focusedDivIdRef.current].current?.innerHTML)
+    //     let childMark = document.getElementById(grammarCheckPopoverTarget);
+    //     childMark.innerHTML = value + " ";
+    //     setGrammarCheckSuggestedSentence([]);
+    //     setGrammarPopoverOpen(false);
+    //     setgrammarCheckPopoverTarget("");
     //     // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
     //     //     targetContentEditable.current[focusedDivIdRef.current].current?.innerHTML,
     //     //     "mark"
     //     // );
-    //     console.log(targetContentEditable.current[focusedDivIdRef.current].current?.innerHTML)
-
     //     const selection = window.getSelection();
     //     const range = document.createRange();
     //     selection.removeAllRanges();
@@ -3368,43 +2979,27 @@ useEffect(() => {
     //     range.collapse(false);
     //     selection.addRange(range);
     //     targetContentEditable.current[focusedDivIdRef.current].current.focus();
-
     //     updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", targetContentEditable.current[focusedDivIdRef.current].current.innerHTML);
     //     updateSegmentStatus(focusedDivIdRef.current, 103);
     //     changeEditedStatus(focusedDivIdRef.current, "unsaved");
-
     // }
 
     const correctSentence = (correctedSentence) => {
-        let markDiv = document.getElementById(grammarCheckPopoverTarget)
-        // console.log(markDiv)
-        markDiv.innerHTML = correctedSentence
+        let markDiv = document.getElementById(grammarCheckPopoverTarget);
+        markDiv.innerHTML = correctedSentence;
     }
 
-
-
     const replaceWithCorrectGrammarSentence = (e, value, targetValue) => {
-        let childMark = document.getElementById(grammarCheckPopoverTarget)
-        childMark.textContent = value + " "
-        childMark.classList.remove("grammarcheck-highlight")
-        childMark.classList.add("spellcheck-replaced")
-
-        setGrammarCheckSuggestedSentence([])
-        setGrammarCheckResponse([])
-        setGrammarPopoverOpen(false)
-        setgrammarCheckPopoverTarget("")
-
-        // console.log(childMark)
-
-        // console.log(removeSpecificTag(targetContentEditable.current[focusedDivIdRef.current].current?.innerHTML,"mark"))
-
+        let childMark = document.getElementById(grammarCheckPopoverTarget);
+        childMark.textContent = value + " ";
+        childMark.classList.remove("grammarcheck-highlight");
+        childMark.classList.add("spellcheck-replaced");
+        setGrammarCheckSuggestedSentence([]);
+        setGrammarCheckResponse([]);
+        setGrammarPopoverOpen(false);
+        setgrammarCheckPopoverTarget("");
         var doc = new DOMParser().parseFromString(removeSpecificTag(targetContentEditable.current[focusedDivIdRef.current].current?.innerHTML, "mark"), "text/html");
-        // console.log(doc)
         // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = doc.body.innerHTML.replaceAll("&nbsp;", " ");
-
-        // console.log(targetContentEditable.current[focusedDivIdRef.current].current.innerHTML)
-
-
         // targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
         //     targetContentEditable.current[focusedDivIdRef.current].current?.innerHTML,
         //     "mark"
@@ -3412,9 +3007,7 @@ useEffect(() => {
         // updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", targetContentEditable.current[focusedDivIdRef.current].current.innerHTML);
         // updateSegmentStatus(focusedDivIdRef.current, 103);
         // changeEditedStatus(focusedDivIdRef.current, "unsaved");
-
         // targetContentEditable.current[focusedDivIdRef.current].current.setAttribute("data-translated-text", targetContentEditable.current[focusedDivIdRef.current]?.current.innerHTML);
-
         const selection = window.getSelection();
         const range = document.createRange();
         selection.removeAllRanges();
@@ -3423,7 +3016,6 @@ useEffect(() => {
         selection.addRange(range);
         targetContentEditable.current[focusedDivIdRef.current].current.focus();
     }
-
 
     function unescape(s) {
         var re = /&(?:amp|#38|lt|#60|gt|#62|apos|#39|quot|#34|nbsp);/g;
@@ -3445,38 +3037,32 @@ useEffect(() => {
         });
     }
 
-
-
     // Grammer check for only English
     const grammarCheck = async (sentence) => {
-        saveCaretPosition()
-        let thisElement = targetContentEditable.current[focusedDivIdRef.current]?.current
+        saveCaretPosition();
+        let thisElement = targetContentEditable.current[focusedDivIdRef.current]?.current;
         if (thisElement != null) UnCheckIt(thisElement);
-        setGrammarPopoverOpen(false)
-        setgrammarCheckPopoverTarget("")
+        setGrammarPopoverOpen(false);
+        setgrammarCheckPopoverTarget("");
         var myHeaders = new Headers();
         var formdata = new FormData();
-        let text = removeTagWithItsTextContent(unescape(targetContentEditable.current[focusedDivIdRef.current]?.current?.innerHTML.replaceAll("&nbsp;", " ")))
+        let text = removeTagWithItsTextContent(unescape(targetContentEditable.current[focusedDivIdRef.current]?.current?.innerHTML.replaceAll("&nbsp;", " ")));
         formdata.append("target", text);
-
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
             body: formdata,
             redirect: 'follow'
         };
-
-        let data = await fetch(Config.BASE_URL + "/workspace_okapi/grammercheck/", requestOptions)
+        let data = await fetch(Config.BASE_URL + "/workspace_okapi/grammercheck/", requestOptions);
         if (data.status === 200) {
-            let response = await data.json()
-
-            // console.log(response)
-            setGrammarCheckResponse(response.grammar_check)
+            let response = await data.json();
+            setGrammarCheckResponse(response.grammar_check);
             // response.grammar_check?.map(value => {
             //     if(value.edit.length !== 0){
             //         // checkIt(thisElement, value.sentence);
-            //         highlightGrammarMistake(value.sentence, value.corrected_sentence)
-            //         // let grammarList = []
+            //         highlightGrammarMistake(value.sentence, value.corrected_sentence);
+            //         // let grammarList = [];
             //         // grammarList.push(
             //         //     <p
             //         //         key={value.corrected_sentence}
@@ -3486,21 +3072,21 @@ useEffect(() => {
             //         //         {value.corrected_sentence}
             //         //     </p>
             //         // );
-            //         // setGrammarCheckSuggestedSentence(grammarList)
+            //         // setGrammarCheckSuggestedSentence(grammarList);
             //     }
             // })
         }
     }
-
     
     window.onerror = function (message, file, line, col, error) {
-        console.log("Error occurred: " + error?.message);
+        console.error("Error occurred: " + error?.message);
         return false;
     };
+
     window.addEventListener("error", function (e) {
-        console.log("Error occurred: " + e?.error?.message);
+        console.error("Error occurred: " + e?.error?.message);
         return false;
-    })
+    });
 
     const debounceApiCall = (callback) => {
         if (userSelectionCallTimer) {
@@ -3514,34 +3100,27 @@ useEffect(() => {
 
     /* Whenever typing on the target contenteditable */
     const translatedTextChange = (e) => {
-        let id = e.target.getAttribute("data-id");
-        
+        let id = e.target.getAttribute("data-id");        
         // Call the spellchecker api
         if (e.target.innerText !== ""){
             debounceApiCall(() => {
-                // console.log('debounce')
-                symSpellCheck(id)
-            })
+                symSpellCheck(id);
+            });
         }
-
         // call segment update - to automatically update the segment
-        // debounceSegmentUpdate(e, (e) => updateTranslationById(null, id, true, null, null, null, true))
-        
-        if (savedStatus.current[id].current != null) savedStatus.current[id].current.style.display = "none";
-        
-        let translatedText = e.target.getAttribute("data-translated-text");
-        
+        // debounceSegmentUpdate(e, (e) => updateTranslationById(null, id, true, null, null, null, true))        
+        if (savedStatus.current[id].current != null) savedStatus.current[id].current.style.display = "none";        
+        let translatedText = e.target.getAttribute("data-translated-text");        
         /*status(Manual) update - start*/
         if (e.target.innerHTML == "") {
             updateSegmentStatus(id, 105);
             changeEditedStatus(id, "unsaved");
         }
         /*status(Manual) update - end*/
-
         // check if contenteditable is empty then clear the contenteditable and update status
         if (e.target.textContent == '') {
-            setparaPhrasePopoverTarget("")
-            setShowParaphraseBtn(false)
+            setparaPhrasePopoverTarget("");
+            setShowParaphraseBtn(false);
             if(targetContentEditable.current[focusedDivId].current){
                 targetContentEditable.current[focusedDivId].current.innerHTML = "";
             }
@@ -3549,7 +3128,7 @@ useEffect(() => {
             updateSegmentStatus(focusedDivIdRef.current, 105);
             changeEditedStatus(focusedDivIdRef.current, "unsaved");
         } else {
-            setShowParaphraseBtn(true)
+            setShowParaphraseBtn(true);
         }
     };
 
@@ -3559,45 +3138,35 @@ useEffect(() => {
         return str?.replace(/\s/g, '')?.replace(regex, '');
     }
 
-
     /* Update the contenteditable value. Both temperory and user saved */
-    const updateTranslationById = (e = null, id = null, isTemp = false, extraArgs = {}, temp_target, target, isTyping = false) => {
-        
+    const updateTranslationById = (e = null, id = null, isTemp = false, extraArgs = {}, temp_target, target, isTyping = false) => {        
         resetSynonymStates();
-
         let userTrigger = false;
         let alreadyTranslatedText = null;
         let translatedText = null;
         if (e != null) {
             userTrigger = true;
             id = e.currentTarget.getAttribute("data-id");
-            // translatedText = e.target.innerHTML
+            // translatedText = e.target.innerHTML;
         }
-        // console.log(id)
         if (id != null) {
             alreadyTranslatedText = targetContentEditable.current[id]?.current?.getAttribute("data-translated-text");
             translatedText = targetContentEditable.current[id]?.current?.innerHTML;
             translatedText = removeSpecificTag(translatedText, "div");
             translatedText = removeSpecificTag(translatedText, "br");
-            // console.log("sarvesh: "+ translatedText)
             let textWithoutTags = removeAllTags(replaceTagsWithText(translatedText !== undefined ? translatedText : '')  ? replaceTagsWithText(translatedText !== undefined ? translatedText : '') : '')
-            // console.log(textWithoutTags?.trim())
-            // console.log(textWithoutTags?.trim()?.length)
-            if (textWithoutTags?.trim()?.length === 0) {
+             if (textWithoutTags?.trim()?.length === 0) {
                 // If empty
                 if (!isTemp)
                     // Don't check empty for temp
                     Config.toast(t("add_trans_working"), "warning");
                 return;
             }
-
             if (!translatedText) return;
-
-
             // disable removemark tag
             if (grammarPopoverOpen) {
-                setGrammarPopoverOpen(false)
-                setgrammarCheckPopoverTarget("")
+                setGrammarPopoverOpen(false);
+                setgrammarCheckPopoverTarget("");
                 translatedText = removeSpecificTag(translatedText, "mark");
                 translatedText = replaceTagsWithText(translatedText);
             } else {
@@ -3611,22 +3180,7 @@ useEffect(() => {
             if (isTemp) {
                 formDataKey = "temp_target";
                 if (extraArgs?.forceUpdate == null) {
-                    // force update even translatedText == alreadyTranslatedText
-                    // console.log(alreadyTranslatedText.replace(/\s+/g, "") == translatedText.replace(/\s+/g, ""))
-                    // console.log("你 好 世 界".replace(/\s+/g, "") == "你 好 世 界".replace(/\s+/g, ""))
-
-                    // console.log(alreadyTranslatedText)
-                    // console.log(translatedText)
-
-                    // console.log(temp_target)
-                    // console.log(target)
-
-                    // console.log(temp_target.trim() == target.trim())
-
-                    // console.log(alreadyTranslatedText.trim() == translatedText.trim())
-                    // console.log("combined condition : " + (removeWhitespace(alreadyTranslatedText) == removeWhitespace(translatedText)) && (removeWhitespace(temp_target) == removeWhitespace(target)))
-                    // console.log("combined condition : " + (alreadyTranslatedText.trim() == translatedText.trim()) && (temp_target.trim() == target.trim()))
-
+                    // force update even translatedText == alreadyTranslatedText;
                     // if innerText and data-translated-text are same not update and if temp_target and target both are same then also don't update the segment
                     // if((removeWhitespace(alreadyTranslatedText) == removeWhitespace(translatedText)) && (removeWhitespace(temp_target) == removeWhitespace(target))){
                     if ((removeWhitespace(alreadyTranslatedText?.trim()) === removeWhitespace(translatedText?.trim())) && (removeWhitespace(temp_target?.trim()) === removeWhitespace(target?.trim()))) {
@@ -3634,25 +3188,20 @@ useEffect(() => {
                     }
                 }
             }
-
-
             if (!isShowTags.current)
                 translatedText =
                     translatedText +
-                    (translatedResponse.find((element) => element.segment_id == id)?.target_tags
-                        ? translatedResponse.find((element) => element.segment_id == id)?.target_tags
+                    (translatedResponse?.find((element) => element.segment_id == id)?.target_tags
+                        ? translatedResponse?.find((element) => element.segment_id == id)?.target_tags
                         : ""); //Added for not to show tags
-            // console.log(translatedText)
             formData.append(formDataKey, translatedText == 'undefined' ? "" : unescape(translatedText));
             let status = allSegmentStatuses?.current[id] == null ? 105 : allSegmentStatuses?.current[id];
             // let changeStatusTo = status - 1;
-            // console.log(status)
-            // console.log(isTemp)
             let changeStatusTo = status;
             /* Change the appropriate status - start */
             if (isTemp) {
                 if (isUserIsReviwer) {
-                    changeStatusTo = 109
+                    changeStatusTo = 109;
                 } else {
                     if (status == 102) changeStatusTo = 101;
                     else if (status == 104) changeStatusTo = 103;
@@ -3662,7 +3211,7 @@ useEffect(() => {
                 }
             } else {
                 if (isUserIsReviwer) {
-                    changeStatusTo = 110
+                    changeStatusTo = 110;
                 } else {
                     if (status == 101) changeStatusTo = 102;
                     else if (status == 103) changeStatusTo = 104;
@@ -3670,19 +3219,18 @@ useEffect(() => {
                     else if (status == 109) changeStatusTo = 104;
                     else if (status == 110) changeStatusTo = 104;
                 }
-                setIsConfirmBtnClicked(true)
+                setIsConfirmBtnClicked(true);
             }
 
             if(!isTemp){
-                setIsSegmentConfirming(true)
+                setIsSegmentConfirming(true);
             }
-
-            // console.log(changeStatusTo)
             /* Change the appropriate status - start */
             formData.append("status", changeStatusTo);
             formData.append("user", Config.userState.id);
             formData.append("segment", id);
             let url = Config.BASE_URL + "/workspace_okapi/segment/update/";
+
             Config.axios({
                 url: url,
                 method: "PUT",
@@ -3690,7 +3238,6 @@ useEffect(() => {
                 data: formData,
                 success: (response) => {
                     if (response.data.id) {
-                        // console.log(targetContentEditable?.current[id]?.current)
                         if (targetContentEditable?.current[id]?.current != null)
                             targetContentEditable.current[id].current.setAttribute("data-translated-text", response.data.target == '' ? "" : response.data.target);
                         updateTranslatedResponseSegment(id, "temp_target", response.data.temp_target == null ? "" : response.data.temp_target);
@@ -3703,23 +3250,17 @@ useEffect(() => {
                         }
                         updateSegmentStatus(id, response.data.status);
                         getDocumentProgressData();
-                        // if (!isTemp) showSegmentQa(id)
-
+                        // if (!isTemp) showSegmentQa(id);
                         // if confirm button is clicked, this will move the focus to next unconfirmed segment otherwise focus the un-opned segment  
                         if (!isTemp) {
-                            setIsSegmentConfirming(false)
-                            
+                            setIsSegmentConfirming(false);                            
                             // confirm current segment then move to next unconfimed segment
                             let nextSegmentUnsavedId = getUnsavedSegmentData(focusedDivIdRef.current)?.segment_id;
-                            // console.log("unconfirmed segment: " + nextSegmentUnsavedId);
                             if (targetContentEditable.current[nextSegmentUnsavedId]?.current != null) targetContentEditable.current[nextSegmentUnsavedId].current.focus();
-
                             // if no unsaved segment is found then move to next segment
                             if (nextSegmentUnsavedId === undefined) {
                                 // confirm current segment then move to next immediate segment
                                 let nextSegmentId = getNextSegmentData(focusedDivIdRef.current)?.segment_id;
-                                // console.log("immediate next segment: " + nextSegmentId);
-
                                 // if no unopened segment is found or confirmed the last segment then move to next page
                                 if(translatedResponse?.filter(each => each.status === undefined || each.status === null)?.length === 0 || translatedResponse?.slice(-1)[0]?.segment_id == id) {
                                     // move to next page when last segment is confirmed
@@ -3727,12 +3268,10 @@ useEffect(() => {
                                         // update page and scroll to top 
                                         let pageParam = URL_SEARCH_PARAMS.get("page");
                                         // don't update page beyond the total page
-                                        // console.log(totalPages)
                                         if(totalPages > pageParam){
                                             URL_SEARCH_PARAMS.set("page", parseInt(pageParam) + 1);
                                             history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-                                            isMovedFromLastSegmentConfirmRef.current = true
-    
+                                            isMovedFromLastSegmentConfirmRef.current = true;    
                                             let workspaceContainer = document.getElementsByClassName('workspace-editor')[0];
                                             workspaceContainer.scroll({ top: 0, behavior: 'smooth' });
                                         }
@@ -3748,14 +3287,13 @@ useEffect(() => {
                                 }
                             }
                         }
-
-                        if(advancedOptionVisibility) getSegmentDiff()
+                        if(advancedOptionVisibility) getSegmentDiff();
                         if(isTyping) {
-                            restoreCursorPositionWithinContenteditable()
-                            symSpellCheck(id)
+                            restoreCursorPositionWithinContenteditable();
+                            symSpellCheck(id);
                         } 
                     }
-                    istargetSegmentOnBlurTriggeredRef.current = false
+                    istargetSegmentOnBlurTriggeredRef.current = false;
                 },
                 error: (err) => {
                     if (err.response?.status === 400) {
@@ -3763,15 +3301,15 @@ useEffect(() => {
                             history({
                                 pathname: '/file-upload',
                                 state: { documentLock: isUserIsReviwer ? t("sp_working") : t("reviewer_working") }
-                            })
+                            });
                         } else {
-                            setShowCreditAlert(true)
+                            setShowCreditAlert(true);
                             setCreditAlertTxt(t("insuffient_credits_to_continue_work"));
-                            // setShowCreditAlertRedirection(true)
+                            // setShowCreditAlertRedirection(true);
                         }
                     }
-                    setIsSegmentConfirming(false)
-                    istargetSegmentOnBlurTriggeredRef.current = false
+                    setIsSegmentConfirming(false);
+                    istargetSegmentOnBlurTriggeredRef.current = false;
                 }
             });
         }
@@ -3780,66 +3318,69 @@ useEffect(() => {
     const listSegments = (from) => {
         let page = 1;
         let pageParam = URL_SEARCH_PARAMS.get("page");
-        // console.log(pageParam)
         if (pageParam != null) {
             setCurrentPage(pageParam);
             page = pageParam;
         } else setCurrentPage(pageParam);
         if (from === 'invalid-page') {
-            setCurrentPage(1)
+            setCurrentPage(1);
             URL_SEARCH_PARAMS.set("page", 1);
             history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
         }
-
-        setIsSegmentPageLoading(true)
-
+        setIsSegmentPageLoading(true);
         let url = `${Config.BASE_URL}/workspace_okapi/segments/${documentId}?page=${from === 'invalid-page' ? 1 : page}&page_size=${selectedPageSize?.value ? selectedPageSize?.value : pageSizeFromApi.current}`
+        
         Config.axios({
             url: url,
             method: "GET",
             auth: true,
             success: (response) => {
+                if(response?.data?.response === 'Adaptive translation is already in progress. Please wait.'){
+                    setIsSegmentPageLoading(true);
+                    setTimeout(() => {
+                        listSegments();
+                    }, 5000);
+                    return;
+                }
                 setTimeout(() => {
                     setIsSegmentLoading(false);
                 }, 200);
                 lastCalledArgs.current.functionName = "pageSelect";
                 lastCalledArgs.current.page = page;
-                let tempList = response.data.results
+                let tempList = response.data.results;
                 if (confirmedSegmentListFromConfirmAll.current?.length !== 0) {
                     if (showAllSegmentsConfirmedToastRef.current) {
-                        Config.toast(t("segments_confirm"))
+                        Config.toast(t("segments_confirm"));
                     }
-                    showAllSegmentsConfirmedToastRef.current = true
+                    showAllSegmentsConfirmedToastRef.current = true;
                     confirmedSegmentListFromConfirmAll.current?.map(each => {
                         if (targetContentEditable?.current[each]?.current != null){
-                            // console.log(response.data.results?.find(seg => seg?.segment_id == each)?.target)
                             targetContentEditable.current[each].current.setAttribute("data-translated-text", (response.data.results?.find(seg => seg?.segment_id == each)?.target == '' || response.data.results?.find(seg => seg?.segment_id == each)?.target == null) ? "" : response.data.results?.find(seg => seg?.segment_id == each)?.target);
                         }
                     })
-                    confirmedSegmentListFromConfirmAll.current = []
+                    confirmedSegmentListFromConfirmAll.current = [];
                     setTimeout(() => {
-                        setShowAiLoader(false)
+                        setShowAiLoader(false);
                     }, 50);
                 }
                 setTranslatedResponse(tempList);
-                translatedResponseRef.current = tempList
+                translatedResponseRef.current = tempList;
                 setNextPageUrl(response.data.next);
                 setPreviousPageUrl(response.data.previous);
-                // console.log("selected page-szie: " + selectedPageSize?.value)
                 setTotalPages(Math.ceil(response.data.count / (selectedPageSize?.value ? selectedPageSize?.value : pageSizeFromApi.current)));
-                // pageSizeFromApi.current = null
-                setIsSegmentPageLoading(false)
-                getDocumentProgressData()
+                // pageSizeFromApi.current = null;
+                setIsSegmentPageLoading(false);
+                getDocumentProgressData();
                 if (from === 'confirm-all') {
-                    confirmAllsegments('list-segments')
-                }
+                    confirmAllsegments('list-segments');
+                }           
             },
             error: (err) => {
                 if (err?.response?.data?.detail?.includes('page')) {
-                    // lastCalledArgs.current.page = 1
-                    listSegments('invalid-page')
+                    // lastCalledArgs.current.page = 1;
+                    listSegments('invalid-page');
                 }
-                setIsSegmentPageLoading(false)
+                setIsSegmentPageLoading(false);
             }
         });
     }
@@ -3847,33 +3388,27 @@ useEffect(() => {
     const confirmAllsegments = (from) => {
         var formdata = new FormData();
         if (from !== 'list-segments') {
-            listSegments('confirm-all')
+            listSegments('confirm-all');
             return;
         }
         // formdata.append("status", isUserIsReviwer ? 110 : 104);
-        
-        // console.log(translatedResponseRef.current)
-        let list = []
-        let confirmedStatusList = [102, 104, 106, 110]
+        let list = [];
+        let confirmedStatusList = [102, 104, 106, 110];
         translatedResponseRef.current?.map(each => {
-            // console.log(confirmedStatusList?.includes(each?.status))
             if (each?.status !== undefined && !confirmedStatusList?.includes(each?.status)) {
                 list.push({
                     pk: each.segment_id,
                     status: each.status == 101 ? "102" : each.status == 103 ? "104" : each.status == 105 ? "106" : (each.status == 109 && !isUserIsReviwer) ? "104" :
                         each.status == 104 ? "104" : (each.status == 109 && isUserIsReviwer) ? "110" : each.status == 106 ? "106" : each.status == 110 ? "110" : each.status == 102 ? "102" :
                             "110"
-                })
+                });
             }
-        })
-        // console.log(list)
+        });
         if (list?.length === 0) {
-            Config.toast(t("no_segments_confirm"), 'warning')
+            Config.toast(t("no_segments_confirm"), 'warning');
             return;
         }
-
-        setShowAiLoader(true)
-
+        setShowAiLoader(true);
         formdata.append("confirm_list", JSON.stringify(list));
 
         Config.axios({
@@ -3883,36 +3418,33 @@ useEffect(() => {
             data: formdata,
             success: (response) => {
                 if (response.data?.confirmed_list !== undefined) {
-                    confirmedSegmentListFromConfirmAll.current = response.data?.confirmed_list
+                    confirmedSegmentListFromConfirmAll.current = response.data?.confirmed_list;
                 }
                 if (response.data?.message?.includes('insufficient')) {
-                    setShowAiLoader(false)
-                    setShowInsufficientConfirmAllModal(true)
-                    showAllSegmentsConfirmedToastRef.current = false
+                    setShowAiLoader(false);
+                    setShowInsufficientConfirmAllModal(true);
+                    showAllSegmentsConfirmedToastRef.current = false;
                 }
-                listSegments()
+                listSegments();
                 // if(response.status === 200){
-                //     // console.log(response.data)
                 // }else{
-                //     // Config.toast(`Something went wrong`, 'error')
+                //    Config.toast(`Something went wrong`, 'error');
                 // }
             },
             error: (err) => {
-                setShowAiLoader(false)
+                setShowAiLoader(false);
             }
         });
     }
-
-
 
     /* Specific page is selected. */
     // const pageSelect = (page = 0) => {
     //     let workspaceContainer = document.getElementsByClassName('workspace-editor')[0];
     //     setTimeout(() => {
     //         if(isMergedRef.current || isRestoredRef.current || isSplitRef.current){
-    //             isMergedRef.current = false
-    //             isRestoredRef.current = false
-    //             isSplitRef.current = false
+    //             isMergedRef.current = false;
+    //             isRestoredRef.current = false;
+    //             isSplitRef.current = false;
     //         }else{
     //             workspaceContainer.scroll({top: 0,behavior: 'smooth'});
     //         }
@@ -3925,6 +3457,7 @@ useEffect(() => {
     //         page = pageParam;
     //     }
     //     if (page != 0 && page != null) url += "?page=" + page;
+
     //     Config.axios({
     //         url: url,
     //         method: "GET",
@@ -3945,9 +3478,9 @@ useEffect(() => {
         let workspaceContainer = document.getElementsByClassName('workspace-editor')[0];
         setTimeout(() => {
             if (isMergedRef.current || isRestoredRef.current || isSplitRef.current) {
-                isMergedRef.current = false
-                isRestoredRef.current = false
-                isSplitRef.current = false
+                isMergedRef.current = false;
+                isRestoredRef.current = false;
+                isSplitRef.current = false;
             } else {
                 workspaceContainer.scroll({ top: 0, behavior: 'smooth' });
             }
@@ -4026,33 +3559,33 @@ useEffect(() => {
                     history(url + value);
                 }
                 // history(url + value);
-                storeLastVisitedPageNumber(url + value)
+                storeLastVisitedPageNumber(url + value);
             }
             else {
                 Config.toast(t("page_not_found"), "warning");
                 // reset the input value to the current page number
                 let pageParam = URL_SEARCH_PARAMS.get("page");
-                e.target.value = pageParam
+                e.target.value = pageParam;
             }
         }
     };
 
     /* Show / hide the TM section in the footer toolbar */
     const showTmSectionFunction = (show = true) => {
-        setActiveFooterTab(1)
-        scrollLeft()
+        setActiveFooterTab(1);
+        scrollLeft();
         // if (show) {
         //     // tmTabButton.current?.click();
-        //     // if (localStorage.getItem('showTmSection') === 'true' || localStorage.getItem('showTmSection') == null)
+        //     // if (localStorage.getItem('showTmSection') === 'true' || localStorage.getItem('showTmSection') == null);
         //     setShowTmSection(true);
-        //     scrollLeft()
+        //     scrollLeft();
         // } else setShowTmSection(false);
     };
 
     const toggleListening = () => {
         if (recognition.current === null) {
-            Config.toast(t("speech_not_support_this_browser"), 'warning')
-            return
+            Config.toast(t("speech_not_support_this_browser"), 'warning');
+            return;
         }
         if (isListening) {
             recognition.current.stop();
@@ -4068,45 +3601,38 @@ useEffect(() => {
 
         if (e.target.className?.includes('source')) {
             if (sourceTextDiv.current[id].current !== null) {
-                let pos = getHTMLCaretPosition(sourceTextDiv.current[id].current)
+                let pos = getHTMLCaretPosition(sourceTextDiv.current[id].current);
                 try {
                     if ((pos !== null || pos !== undefined) && mergeSelectedSegmentIds?.length === 0) {
                         if (e.target.getAttribute('data-id') && e.target.getAttribute('source-data-text-unit')) {
-                            segmentIdRef.current = e.target.getAttribute('data-id')
-                            sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit')
-                            setDisbaleSplitIcon(false)
+                            segmentIdRef.current = e.target.getAttribute('data-id');
+                            sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit');
+                            setDisbaleSplitIcon(false);
                         }
                     }
                 }catch (e) {
-                    console.log(e)
+                    console.error(e);
                 }
             }
         }
-
         handleToggleVisibility(pushPinActive ? true : (advancedOptionVisibility) ? true : false);
-
         highlightFocusedSegment(id);
-
-        setGrammarPopoverOpen(false)
-        setgrammarCheckPopoverTarget("")
-        // setPopoverOpen(false)
-        // showTmSectionFunction();
-        
+        setGrammarPopoverOpen(false);
+        setgrammarCheckPopoverTarget("");
+        // setPopoverOpen(false);
+        // showTmSectionFunction();        
         setFocusedDivId(id);
         ctrlAClicked.current = false;
         focusedDivIdRef.current = id;
         // spellCheck(e);
-        symSpellCheck(id)
+        symSpellCheck(id);
         if(isDinamalar){
-            getNerTerms(id)
+            getNerTerms(id);
         }
-
         changeEditedStatus(id);
-
         let advanceToolbarOpenedForTm = false;
         if (targetContentEditable?.current[id]?.current != null) {
             if (findTerm === "") {
-                // console.log(findTerm);
                 // uncomment below line to auto scroll the segment into view
                 // targetContentEditable?.current[id]?.current.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
             }
@@ -4118,36 +3644,27 @@ useEffect(() => {
         }
         /* Remove NER if it's active - end */
         let segmentId = e.target.getAttribute("data-id");
-        let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
+        let segmentData = translatedResponse?.find((element) => element.segment_id == segmentId);
         let thisSegmentTag = segmentData?.target_tags;
-        let textTag = "" + thisSegmentTag
-
-        searchTbxForDoc(e)
-        searchGlossaryForDoc(e)
-
-        showSegmentComments(segmentId, true)
-        
-        // if(segment_status) return
+        let textTag = "" + thisSegmentTag;
+        searchTbxForDoc(e);
+        searchGlossaryForDoc(e);
+        showSegmentComments(segmentId, true);        
+        // if(segment_status) return;
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace_okapi/mt_raw_and_tm/${id}?mt_uc=false`,
             auth: true,
             success: (response) => {
-                let mtTmResponse = response.data;
-               
-                getSegmentDiff()
-
+                let mtTmResponse = response.data;               
+                getSegmentDiff();
                 let thisSegmentTags = "";
-                let segmentData = translatedResponse.find((element) => element.segment_id == id);
-
+                let segmentData = translatedResponse?.find((element) => element.segment_id == id);
                 rawMtResponseRef.current = {
                     mt: mtTmResponse?.mt_only,
                     tags: segmentData.target_tags
-                }
-
+                };
                 let segmentStatus = allSegmentStatuses.current[id];
-                // console.log(segmentStatus)
-                // console.log(segmentData)
                 if (segmentStatus && !is_merged) {
                     if (segmentStatus == 101 || segmentStatus == 103 || segmentStatus == 105) changeEditedStatus(id, "unsaved");
                     else changeEditedStatus(id);
@@ -4163,15 +3680,12 @@ useEffect(() => {
                             );
                             updateSegmentStatus(id, 105);
                         } else {
-                            console.log(mtTmResponse)
-                            console.log(segmentData)
                             updateTranslatedResponseSegment(
                                 id,
                                 "temp_target",
                                 (mtTmResponse?.mt_raw != "" && mtTmResponse?.mt_raw != undefined) ?
                                     mtTmResponse.mt_raw + segmentData.target_tags : mtTmResponse?.tm[0]?.target + segmentData.target_tags
                             );
-
                             updateSegmentStatus(
                                 id,
                                 (mtTmResponse?.mt_raw != "" && mtTmResponse?.mt_raw != undefined) ?
@@ -4179,7 +3693,6 @@ useEffect(() => {
                                     :
                                     101
                             );
-
                             // updateSegmentStatus(id, 103);
                             insertedDivIds.current.push(id);
                         }
@@ -4198,19 +3711,18 @@ useEffect(() => {
                         handleToggleVisibility(true);
                     }
                 }
-                setIsSegmentDataLoading(false)
+                setIsSegmentDataLoading(false);
             },
             error: (error) => {
-                setIsSegmentDataLoading(false)
+                setIsSegmentDataLoading(false);
                 if (error.response?.data?.mt_alert) {
                     if (showCreditAlert) {
-                        if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
+                        if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"));
                         else setCreditAlertTxt(creditAlertTxt);
                     } else {
-                        if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
+                        if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"));
                         else setCreditAlertTxt(error.response.data.alert_msg);
                     }
-
                     let newArr = translatedResponse?.map(obj => {
                         if(obj.segment_id == id){
                             return{
@@ -4220,10 +3732,8 @@ useEffect(() => {
                         }
                         return obj
                     })
-                    setTranslatedResponse(newArr)
-                    translatedResponseDisableEditRef.current = newArr
-                    // console.log(newArr)
-                    
+                    setTranslatedResponse(newArr);
+                    translatedResponseDisableEditRef.current = newArr;                    
                     // if (lowCreditAlertCounter.current === 1) {
                         setShowCreditAlert(true);
                     //     lowCreditAlertCounter.current++
@@ -4238,9 +3748,9 @@ useEffect(() => {
         });
         /*Glossary request starts*/
         // let glossaryFileId = localStorage.getItem("glossaryFileId");
-        setGrammarPopoverOpen(false)
-        setgrammarCheckPopoverTarget("")
-        setPopoverOpen(false)
+        setGrammarPopoverOpen(false);
+        setgrammarCheckPopoverTarget("");
+        setPopoverOpen(false);
     };
 
     const searchTbxForDoc = (e) => {
@@ -4251,6 +3761,7 @@ useEffect(() => {
         tbxFormdata.append("lang", targetLanguage);
         tbxFormdata.append("srclang", sourceLanguage);
         let url = Config.BASE_URL + "/workspace/tbx_read";
+
         Config.axios({
             url: url,
             method: "POST",
@@ -4261,9 +3772,8 @@ useEffect(() => {
                     if (response.data.out.length > 0) {
                         setTbxData(response.data.out);
                         showTmSectionFunction();
-
                         if (!advanceToolbarOpenedForTm) {
-                            let segmentData = translatedResponse.find((element) => element.segment_id == id);
+                            let segmentData = translatedResponse?.find((element) => element.segment_id == id);
                             let segmentStatus = allSegmentStatuses.current[id];
                             if (segmentStatus == null || segmentStatus == 101) {
                                 advanceToolbarOpenedForTm = true;
@@ -4273,17 +3783,20 @@ useEffect(() => {
                     }
                 }
             },
-            error: (error) => { },
+            error: (error) => {
+                console.error(error);
+             },
         });
     }
 
     const searchGlossaryForDoc = (e) => {
-        setGlossaryData([])
+        setGlossaryData([]);
         let glossaryFormdata = new FormData();
         let sourceText = e.target.getAttribute("data-source-text");
         glossaryFormdata.append("user_input", removeAllTags(sourceText));
         glossaryFormdata.append("doc_id", documentId);
         let glossaryUrl = Config.BASE_URL + "/glex/glossary_term_search/";
+
         Config.axios({
             url: glossaryUrl,
             method: "POST",
@@ -4293,10 +3806,10 @@ useEffect(() => {
                 if (response.data !== undefined) {
                     if (response.data.res !== null || response.data.res.length > 0) {
                         showTmSectionFunction();
-                        setGlossaryData(response.data.res)
+                        setGlossaryData(response.data.res);
                         handleToggleVisibility(true);
                         if (!advanceToolbarOpenedForTm) {
-                            let segmentData = translatedResponse.find((element) => element.segment_id == id);
+                            let segmentData = translatedResponse?.find((element) => element.segment_id == id);
                             let segmentStatus = allSegmentStatuses.current[id];
                             if (segmentStatus == null || segmentStatus == 101) {
                                 advanceToolbarOpenedForTm = true;
@@ -4306,7 +3819,9 @@ useEffect(() => {
                     }
                 }
             },
-            error: (error) => { },
+            error: (error) => {
+                console.error(error);
+             },
         });
     } 
 
@@ -4318,9 +3833,7 @@ useEffect(() => {
         if (tagName) {
             tagName = tagName.map((val, key) => {
                 thisTag = val.replace(/[<>]|[</>]/g, "");
-                // console.log(thisTag)
                 bgColor = bgColors[thisTag] != undefined ? bgColors[thisTag] : "#0074D3";
-                // console.log(thisTag)
                 let digitPattern = /^[0-9]+$/;
                 let isDigit = digitPattern?.test(thisTag);
                 if (exculudeTags.indexOf(thisTag) == -1) {
@@ -4336,7 +3849,6 @@ useEffect(() => {
                             ';">' +
                             thisTag +
                             "</span>";
-                        // console.log(thisTag);
                         targetText = targetText.replace(val, thisTag);
                     } else {
                         // Close tag
@@ -4357,9 +3869,6 @@ useEffect(() => {
         }
         return targetText;
     };
-
-    // console.log(document.querySelectorAll('.tag-close'));
-    // console.log(document.querySelectorAll('.tag-open'));
 
     /* Removing the tags strings*/
     const replaceTextWithTagsTemp = (targetText, exculudeTags = []) => {
@@ -4435,11 +3944,9 @@ useEffect(() => {
     // removes specified tag with its text content
     const removeSpecificTagWithContent = (html, tagName) => {
         const openingTagRegExp = new RegExp(`<${tagName}[^>]*>.*?<\\/${tagName}>`, "gs");
-        const modifiedHTML = html.replace(openingTagRegExp, "");
-    
+        const modifiedHTML = html.replace(openingTagRegExp, "");    
         return modifiedHTML;
-    };
- 
+    }; 
 
     /* Get the TM */
     const getTranslationMatch = (e) => {
@@ -4448,10 +3955,10 @@ useEffect(() => {
         let matchPercentage = e.target.getAttribute("data-match-percentage");
         let selectedTranslationMatch = translationMatches[key];
         let id = focusedDivIdRef.current;
-        let thisSegmentTags = translatedResponse.find((element) => element.segment_id == id)?.target_tags;
+        let thisSegmentTags = translatedResponse?.find((element) => element.segment_id == id)?.target_tags;
         let replacedText = selectedTranslationMatch.target + thisSegmentTags;
-        /*replacedText = replaceTextWithTags(replacedText)
-        if (targetContentEditable.current[id]?.current != null)
+        /*replacedText = replaceTextWithTags(replacedText);
+        if (targetContentEditable.current[id]?.current != null);
             targetContentEditable.current[id].current.innerHTML = replacedText*/
         updateTranslatedResponseSegment(id, "temp_target", replacedText);
         updateSegmentStatus(id, 101);
@@ -4465,34 +3972,29 @@ useEffect(() => {
 
     /* Get the MT */
     const getMachineTranslation = (e) => {
-        // console.log("comes heres");
-        setTranslateSwitch(false)
-        setGrammarPopoverOpen(false)
-        setgrammarCheckPopoverTarget("")
-        // setPopoverOpen(false)
+        setTranslateSwitch(false);
+        setGrammarPopoverOpen(false);
+        setgrammarCheckPopoverTarget("");
+        // setPopoverOpen(false);
         let advanceToolbarOpenedForTm = false;
         showTmSectionFunction(false);
         let token = Config.userState.token;
         let segmentId = e.target.getAttribute("data-id");
-        let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
+        let segmentData = translatedResponse?.find((element) => element.segment_id == segmentId);
         let thisSegmentTags = segmentData.target_tags;
-
         if (axiosMTRawTMAbortControllerRef.current) {
-            axiosMTRawTMAbortControllerRef.current.abort()
+            axiosMTRawTMAbortControllerRef.current.abort();
         }
-
         const controller = new AbortController();
-        axiosMTRawTMAbortControllerRef.current = controller 
-
-        forcedLoaderRef.current = true
-        setIsSegmentDataLoading(true)
+        axiosMTRawTMAbortControllerRef.current = controller;
+        forcedLoaderRef.current = true;
+        setIsSegmentDataLoading(true);
         
         Config.axios({
             url: `${Config.BASE_URL}/workspace_okapi/mt_raw_and_tm/${segmentId}?mt_uc=true`,
             auth: true,
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
-                // console.log("workgin and cmg", response);
                 lastCalledArgs.current.functionName = "getMachineTranslation";
                 let translatedText = response.data.mt_raw;
                 if (translatedText == undefined) {
@@ -4504,42 +4006,30 @@ useEffect(() => {
                 let segmentStatus = allSegmentStatuses.current[segmentId];
                 if (isShowTags.current) replacedText = replaceTextWithTags(translatedText); //Hide for not to show tags
                 else replacedText = replaceTextWithTagsTemp(translatedText); //Added for not to show tags
-                // console.log(translatedText);
-                // console.log(replacedText);
-                // console.log(targetFindTerm);
 
                 if (targetFindTerm != "") {
                     let globalMatch, replaceFromRegExp;
                     let targetFindTermTemp = targetFindTerm;
-                    // console.log(caseMatch);
                     if (!caseMatch) {
                         globalMatch = "gi";
                         targetFindTermTemp = targetFindTermTemp.toLowerCase();
                     } else globalMatch = "g";
-                    // console.log(targetFindTermTemp);
                     targetFindTermTemp = targetFindTermTemp
                         .replace(/\+/g, " ")
                         .trim()
                         .split(" ")
                         .sort((a, b) => b.length - a.length);
-                    // console.log(wholeWordMatch);
                     if (wholeWordMatch) replaceFromRegExp = new RegExp("\\b" + `(${targetFindTermTemp.join("|")})` + "\\b", globalMatch);
                     else replaceFromRegExp = new RegExp(`(${targetFindTermTemp.join("|")})`, globalMatch);
-                    // console.log(replaceFromRegExp);
                     replacedText = replacedText.replace(replaceFromRegExp, (match) => '<mark contentEditable="false">' + match + "</mark>");
                 }
-                forcedLoaderRef.current = false
-                setIsSegmentDataLoading(false)
-                // console.log(replacedText);
+                forcedLoaderRef.current = false;
+                setIsSegmentDataLoading(false);
                 /*if (targetContentEditable?.current[segmentId]?.current != null)
                     targetContentEditable.current[segmentId].current.innerHTML = replaceTextWithTags(translatedText)*/
-
-                // console.log(segmentId);
-                // console.log(translatedText);
                 if (response.data?.alert_msg == "MT Disabled") {
-                    setShowMtDisabledModal(true)
+                    setShowMtDisabledModal(true);
                 }
-                console.log(translatedText);
                 updateTranslatedResponseSegment(segmentId, "temp_target", translatedText);
                 updateSegmentStatus(segmentId, 103);
                 changeEditedStatus(segmentId, "unsaved");
@@ -4558,11 +4048,10 @@ useEffect(() => {
             },
             error: (error) => {
                 if (error.response?.data?.mt_alert) {
-                    forcedLoaderRef.current = false
-                    setIsSegmentDataLoading(false)
-
+                    forcedLoaderRef.current = false;
+                    setIsSegmentDataLoading(false);
                     setShowCreditAlert(true);
-                    if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"))
+                    if (!isAssignEnable) setCreditAlertTxt(t("insufficient_credit_contact"));
                     else setCreditAlertTxt(error.response?.data?.alert_msg);
                     // setTimeout(() => {
                     //     history("/file-upload");
@@ -4572,12 +4061,11 @@ useEffect(() => {
         });
     };
 
-
     /* The :copyText will be copied to the clipboard */
     const copyText = (copyText = null) => {
         if (copyText != null) {
             /*if (navigator.clipboard && window.isSecureContext)
-                navigator.clipboard.writeText(copyText)
+                navigator.clipboard.writeText(copyText);
             else {*/
             let textArea = document.createElement("textarea");
             textArea.value = copyText;
@@ -4596,7 +4084,6 @@ useEffect(() => {
             // }
         }
     };
-
 
     /* Enable/ Disable the toolbar tools */
     const showHideToolbarElement = (stateKey) => {
@@ -4625,14 +4112,14 @@ useEffect(() => {
             case "showGlossaryAddition": {
                 setShowGlossaryAddition(!showGlossaryAddition);
                 if(showGlossaryAddition){
-                    setSourceSelectionText("")
-                    setTargetSelectionText("")
+                    setSourceSelectionText("");
+                    setTargetSelectionText("");
                 }
                 break;
             }
             case "showSpecialCharacters": {
                 // if (document.activeElement.classList.contains("workspace-textarea")) // show the symbol modal only when target segment is focused
-                setShowSpecialCharacters(!showSpecialCharacters);
+                setShowSpecialCharacters(!showSpecialCharacters);;
                 break;
             }
             case "ner": {
@@ -4662,81 +4149,66 @@ useEffect(() => {
             }
         }
     };
-
     
     // put curosr on the source segment but dont allow any kind of editing (keypress, pasting of content and drag and drop of contentx)
     const handleSourceSegmentClick = (e) => {
-        // console.log(e);
         // disable when any of the checkbox is selected
         if (sourceTextDiv.current[focusedDivIdRef.current].current !== null) {
             // let pos = getHTMLCaretPosition(sourceTextDiv.current[focusedDivIdRef.current].current)
             // if(mergeSelectedSegmentIds?.length === 0 && pos){
             //     let firstSeg = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(0, pos))
             //     let secondSeg = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(pos, unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).length))
-            //     // console.log(pos);
-            //     // console.log(replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)).slice(0, pos));
-            //     // console.log(replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)).slice(pos, replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).length)));
-
             if (e.target.getAttribute('data-id') && e.target.getAttribute('source-data-text-unit')) {
                 segmentIdRef.current = e.target.getAttribute('data-id')
-                sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit')
-                setDisbaleSplitIcon(false)
+                sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit');
+                setDisbaleSplitIcon(false);
             }
-
             // }
-            // let pos = getCaretPosition()
-            // console.log(pos);
-            // console.log(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)?.slice(0, pos));
-            // console.log(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)?.slice(pos, unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)?.length));
-
+            // let pos = getCaretPosition();
         }
     }
 
     const handleSourceSegmentBlur = (e) => {
-        setDisbaleSplitIcon(true)
+        setDisbaleSplitIcon(true);
     }
 
     const handleTargetSegmentBlur = (e = null, id = null, isTemp = false, extraArgs = {}, temp_target, target) => {      
         if(isWorkspaceEditable){
-            updateTranslationById(e, id, isTemp, extraArgs, temp_target, target)
+            updateTranslationById(e, id, isTemp, extraArgs, temp_target, target);
         }
     }
 
     const handleSegmentSaveBtnClick = (e, id) => {
         if(isWorkspaceEditable){
-            updateTranslationById(null, id)
+            updateTranslationById(null, id);
         }
     } 
 
-
     const toggleSynonym = () => {
-        setEnableSpellCheck(false)
-        resetSynonymStates()
+        setEnableSpellCheck(false);
+        resetSynonymStates();
         toggleSpellCheckBtn.current?.classList?.remove("toolbar-list-icons-active");
-        // console.log(focusedDivIdRef.current)
-
         if(!focusedDivIdRef.current){
             targetContentEditable.current[translatedResponse[0]?.segment_id].current.focus();
         } 
         if (grammarPopoverOpen) {
-            setGrammarPopoverOpen(false)
-            setgrammarCheckPopoverTarget("")
+            setGrammarPopoverOpen(false);
+            setgrammarCheckPopoverTarget("");
             targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
                 targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
                 "mark"
             );
         } else {
-            setSynonymPopoverOpen(false)
-            setSynonymPopoverTarget("")
-            setSynonymText("")
+            setSynonymPopoverOpen(false);
+            setSynonymPopoverTarget("");
+            setSynonymText("");
             targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
                 targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
                 "mark"
             );
         }
-        setEnableSynonym(!enableSynonym)
+        setEnableSynonym(!enableSynonym);
     }
-
     const toggleSegmentation = () => {
         // translatedResponse
         setSegmentation(!segmentation);
@@ -4746,26 +4218,27 @@ useEffect(() => {
     const nerHighlight = (highlight = true) => {
         if (highlight) {
             if (focusedDivIdRef.current != null) {
-                /* let formData = new FormData()
-                formData.append('src_lang_code', sourceLanguageCode)
-                let sourceText = translatedResponse.find(element => element.segment_id == focusedDivIdRef.current)?.source
-                formData.append('src_segment', sourceText)
+                /* let formData = new FormData();
+                formData.append('src_lang_code', sourceLanguageCode);
+                let sourceText = translatedResponse.find(element => element.segment_id == focusedDivIdRef.current)?.source;
+                formData.append('src_segment', sourceText);
+
                 Config.axios({
                     url: `${Config.BASE_URL}/nlp/ner`,
                     auth: true,
                     method: 'POST',
                     data: formData,
                     success: (response) => {
-                        let wordsArray = response.data.src_ner
-                        let highlightedSourceText = sourceText
+                        let wordsArray = response.data.src_ner;
+                        let highlightedSourceText = sourceText;
                         wordsArray.map(value => {
                             replaceFromRegExp = new RegExp("(" + value + ")(?!([^<]+)?>)", 'g')
                             highlightedSourceText = highlightedSourceText.replace(replaceFromRegExp, match => '<mark>' + match + '</mark>')
                             updateTranslatedResponseSegment(focusedDivIdRef.current, 'tagged_source', highlightedSourceText)
-                        })
+                        });
                     }
                 }) */
-                let thisSourceText = translatedResponse.find((element) => element.segment_id == focusedDivIdRef.current)?.source;
+                let thisSourceText = translatedResponse?.find((element) => element.segment_id == focusedDivIdRef.current)?.source;
                 let wordsArray = ["Chidambaram", "Pillai"];
                 let highlightedSourceText = thisSourceText;
                 wordsArray.map((value) => {
@@ -4780,21 +4253,21 @@ useEffect(() => {
             }
         } else {
             /* Remove all the ner highlighted mark tags - start*/
-            translatedResponse.map((value) => {
+            translatedResponse?.map((value) => {
                 updateTranslatedResponseSegment(
                     value.segment_id,
                     "tagged_source",
                     grammarPopoverOpen ? clearGrammarPopoverAndRemoveTag(value.tagged_source) : removeSpecificTag(value.tagged_source, "mark")
-                )
+                );
             });
             /* Remove all the ner highlighted mark tags - end*/
         }
     };
 
     const clearGrammarPopoverAndRemoveTag = (value) => {
-        setGrammarPopoverOpen(false)
-        setgrammarCheckPopoverTarget("")
-        removeSpecificTag(value, "mark")
+        setGrammarPopoverOpen(false);
+        setgrammarCheckPopoverTarget("");
+        removeSpecificTag(value, "mark");
     }
 
     /* Find and replace inputs handling */
@@ -4825,10 +4298,10 @@ useEffect(() => {
         setTargetFindTerm("");
         if (findArea == "target") {
             setTargetFindTerm(findTerm);
-            // setShowReplaceSection(true)
+            // setShowReplaceSection(true);
         } else if (findArea == "source") {
             setSourceFindTerm(findTerm);
-            // setShowReplaceSection(false)
+            // setShowReplaceSection(false);
         }
         setTimeout(() => {
             findTriggerCount.current = 0;
@@ -4845,6 +4318,7 @@ useEffect(() => {
         formData.append("match_case", caseMatch);
         formData.append("exact_word", wholeWordMatch);
         if (findStatus.length) formData.append("status_list", "[" + findStatus.toString() + "]");
+
         Config.axios({
             url: url,
             method: "POST",
@@ -4874,17 +4348,16 @@ useEffect(() => {
         let pageParam = URL_SEARCH_PARAMS.get("page");
         let statusParam = URL_SEARCH_PARAMS.get("status")
         if (pageParam != null) {
-            // console.log(pageParam);
             setCurrentPage(pageParam);
             url = `${Config.BASE_URL}/workspace_okapi/source/segments/filter/${documentId}?page=${pageParam}&page_size=${selectedPageSize?.value ? selectedPageSize?.value : pageSizeFromApi.current}`;
         }
         let formData = new FormData();
         /*if (findTerm != '')
-            formData.append('search_word', findTerm)
-        formData.append('match_case', caseMatch)
-        formData.append('exact_word', wholeWordMatch)*/
-        // console.log(findStatus)
+            formData.append('search_word', findTerm);
+        formData.append('match_case', caseMatch);
+        formData.append('exact_word', wholeWordMatch);*/
         formData.append("status_list", `[${findStatus.toString() ? findStatus.toString() : statusParam}]`);
+
         Config.axios({
             url: url,
             method: "POST",
@@ -4895,7 +4368,7 @@ useEffect(() => {
                 lastCalledArgs.current.functionName = "filter";
                 lastCalledArgs.current.page = pageParam;
                 setTranslatedResponse(response.data.results);
-                translatedResponseRef.current = response.data.results
+                translatedResponseRef.current = response.data.results;
                 setNextPageUrl(response.data.next);
                 setPreviousPageUrl(response.data.previous);
                 setTotalPages(Math.ceil(response.data.count / (selectedPageSize?.value ? selectedPageSize?.value : pageSizeFromApi.current)));
@@ -4919,12 +4392,12 @@ useEffect(() => {
         setTargetFindTerm("");
         setSourceFindTerm("");
         setReplaceConfirm(false);
-        listSegments()
+        listSegments();
         // pageSelect(1);
         occurrenceData.current = null;
         findTriggerCount.current = 0;
-        // let urlWithParam = removeParamFromUrl(['find', 'replace', 'find_area', 'match_case', 'whole_word'])
-        // history(urlWithParam)
+        // let urlWithParam = removeParamFromUrl(['find', 'replace', 'find_area', 'match_case', 'whole_word']);
+        // history(urlWithParam);
     };
 
     /* Remove a specific :param (s) from the url */
@@ -4942,7 +4415,7 @@ useEffect(() => {
     /* Find the previous segment */
     const findPrevious = () => {
         findIds.current.forEach((findId) => {
-            if (document.getElementById("search-highlight-" + findId) != null)
+            if (document.getElementById("search-highlight-" + findId) != null);
                 document.getElementById("search-highlight-" + findId).classList.remove("highlight-selected");
         });
         findTriggerCount.current -= 1;
@@ -4960,7 +4433,7 @@ useEffect(() => {
 
     /* Find on the previous page */
     const findTermPreviousPage = () => {
-        let minSegmentId = Math.min(...translatedResponse.map((element) => element.segment_id));
+        let minSegmentId = Math.min(...translatedResponse?.map((element) => element.segment_id));
         if (occurrenceData.current?.results == null) return;
         let previousCurrentSegmentIds = Array.from(occurrenceData.current?.results, (element) => {
             if (element.segment_id < minSegmentId) return element.segment_id;
@@ -4989,7 +4462,9 @@ useEffect(() => {
                     if (response.data?.page_id != null)
                     history("/workspace/" + documentId + "?page=" + response.data.page_id, {state: { findHighlightSegment: nextPageSegmentIdMax }});
                 },
-                error: (error) => { },
+                error: (error) => { 
+                    console.error(error);
+;                },
             });
         }
     };
@@ -5011,13 +4486,12 @@ useEffect(() => {
             // All occurrences highlighted and no other occurrence remaining
             // findTriggerCount.current = 0 // To let it go to the first occurrence of the page
             findTermNextPage();
-
         }
     };
 
     /* Find on the next page */
     const findTermNextPage = () => {
-        let maxSegmentId = Math.max(...translatedResponse.map((element) => element.segment_id));
+        let maxSegmentId = Math.max(...translatedResponse?.map((element) => element.segment_id));
         if (occurrenceData.current?.results == null) return;
         let previousCurrentSegmentIds = Array.from(occurrenceData.current?.results, (element) => {
             if (element.segment_id > maxSegmentId) return element.segment_id;
@@ -5036,6 +4510,7 @@ useEffect(() => {
             if (findStatus.length) statusList = findStatus;
             else statusList = Object.keys(segmentStatuses);
             let data = JSON.stringify({ status_list: statusList });
+
             Config.axios({
                 headers: {
                     "Content-Type": "application/json",
@@ -5048,7 +4523,9 @@ useEffect(() => {
                     if (response.data?.page_id != null)
                     history("/workspace/" + documentId + "?page=" + response.data.page_id, {state: { highlightFirstFindTerm: true }});
                 },
-                error: (error) => { },
+                error: (error) => { 
+                    console.error(error);
+                },
             });
         }
     };
@@ -5082,7 +4559,6 @@ useEffect(() => {
             return;
         }
         let element = document.getElementsByClassName("highlight-selected");
-        // console.log(element);
         if (element.length !== 0) {
             let parent = null;
             if (element[0]) {
@@ -5095,14 +4571,14 @@ useEffect(() => {
                 setTimeout(() => {
                     updateTranslationById(null, segmentId, !replaceConfirm);
                     setTimeout(() => {
-                        // filterWithFindTerm()
+                        // filterWithFindTerm();
                         findNext();
                     }, 200);
                 }, 100);
                 /*}*/
             }
         } else {
-            filterWithFindTerm()
+            filterWithFindTerm();
         }
     };
 
@@ -5119,6 +4595,7 @@ useEffect(() => {
         formData.append("exact_word", wholeWordMatch);
         formData.append("replace_word", replaceTerm);
         formData.append("do_confirm", replaceConfirm);
+
         Config.axios({
             url: url,
             method: "PUT",
@@ -5144,16 +4621,14 @@ useEffect(() => {
     /* Update the segment status in the front-end itself  */
     const updateSegmentStatus = (segmentId = null, status = null) => {
         if (segmentId != null) {
-            // console.log(segmentId)
-            // console.log(status)
             allSegmentStatuses.current[segmentId] = status;
             setAllSegmentStatusState((prevState) => ({
                 ...prevState,
                 [segmentId]: status,
             }));
-            translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, status: status } : el))
+            translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, status: status } : el));
         } else if (segmentId == null && status == null) {
-            translatedResponse.map((value) => {
+            translatedResponse?.map((value) => {
                 allSegmentStatuses.current[value.segment_id] = value?.status;
             });
             setTimeout(() => {
@@ -5169,9 +4644,8 @@ useEffect(() => {
             Config.toast(t("select_text"), "error");
             return;
         }
-        // let selectedText = window.getSelection().anchorNode.data.substring( window.getSelection().anchorOffset,window.getSelection().extentOffset)
+        // let selectedText = window.getSelection().anchorNode.data.substring( window.getSelection().anchorOffset,window.getSelection().extentOffset);
         let selectedText = window.getSelection().toString();
-        // console.log(selectedText)
         if (selectedText != "") {
             setDictionaryTerm(selectedText);
             // showDictionaryRef.current.classList.add("toolbar-list-icons-active");
@@ -5184,12 +4658,12 @@ useEffect(() => {
         if (window.getSelection().anchorNode.parentNode.classList.contains("workspace-textarea")) setDictionaryTermType("target");
         else setDictionaryTermType("source");
         dictionaryTabButton.current?.click();
-        scrollRight()
+        scrollRight();
     };
 
     /* useEffect(() => {
         if (didMount) {
-            dictionaryTabButton.current.click()
+            dictionaryTabButton.current.click();
         }
     }, [wikipediaData, wiktionaryData, posData]) */
 
@@ -5203,6 +4677,7 @@ useEffect(() => {
             }, 100);
             /*Wikipedia call - start*/
             let url = `${Config.BASE_URL}/workspace_okapi/get_wikipedia/?doc_id=${documentId}&term=${encodeURI(dictionaryTerm)}&term_type=${dictionaryTermType}`;
+
             Config.axios({
                 url: url,
                 auth: true,
@@ -5245,7 +4720,7 @@ useEffect(() => {
                             targetUrls: targetUrls,
                         }));
                     }, 100);
-                    setActiveFooterTab(4)
+                    setActiveFooterTab(4);
                 },
             });
             /*Wiktionary call - end*/
@@ -5270,7 +4745,6 @@ useEffect(() => {
         }
     };
 
-
     /* Show the concordance data on the footer toolbar */
     const showConcoradance = () => {
         if (window.getSelection().anchorNode == null || window.getSelection().anchorNode.data == null) {
@@ -5284,8 +4758,8 @@ useEffect(() => {
             return;
         }
         let selectedSegmentId = window.getSelection().anchorNode.parentNode.getAttribute("data-id");
-
         let url = Config.BASE_URL + "/workspace_okapi/concordance/" + selectedSegmentId + "?string=" + encodeURI(selectedText);
+
         Config.axios({
             url: url,
             auth: true,
@@ -5293,20 +4767,19 @@ useEffect(() => {
                 try{
                     // showConcoradanceRef.current.classList.add("toolbar-list-icons-active");
                     handleToggleVisibility(true);                    
-                    response.data.map((value, index) => {
-                        response.data[index].source = higlightText(value.source, selectedText);
+                    response.data.map((value, index) => {  response.data[index].source = higlightText(value.source, selectedText);
                     });
                     setTimeout(() => {
                         setConcordanceData(response.data);
                     }, 100);
-                    setActiveFooterTab(6)
-                    scrollRight()
+                    setActiveFooterTab(6);
+                    scrollRight();
                 }catch(e){
-                    console.log(e)
+                    console.error(e);
                 }
             },
             error: (error) => {
-                Config.log(error);
+                Config.error(error);
             },
         });
     };
@@ -5315,21 +4788,21 @@ useEffect(() => {
     const insertSpecialCharacter = (e) => {
         let specialCharacter = e.target.innerHTML;
         // to prevent the symbol insertion in source div
-        if (document.activeElement !== sourceTextDiv.current[focusedDivIdRef.current].current) {  // it will check if source div is focused or not
-            console.log(specialCharacter)
+        if (document.activeElement !== sourceTextDiv.current[focusedDivIdRef.current].current); {  // it will check if source div is focused or not
             document.execCommand("insertHTML", false /*no UI*/, specialCharacter);
         }
     };
 
     /* Highlight the TM mismatch text with mark tag */
     const highlightTmMismatch = (segmentId, tmSource = "") => {
-        let segmentData = translatedResponse.find((response) => response.segment_id == segmentId);
+        let segmentData = translatedResponse?.find((response) => response.segment_id == segmentId);
         let sourceText = segmentData.tagged_source;
-        let thisIndex = translatedResponse.findIndex((response) => response.segment_id == segmentId);
+        let thisIndex = translatedResponse?.findIndex((response) => response.segment_id == segmentId);
         let formData = new FormData();
         formData.append("src", sourceText);
         formData.append("tm", tmSource);
         let url = Config.BASE_URL + "/tbxApp/source_tm_match/";
+
         Config.axios({
             url: url,
             auth: true,
@@ -5346,11 +4819,11 @@ useEffect(() => {
                         replaceFromRegExp = new RegExp("(" + val + ")(?!([^<]+)?>)", "g");
                         text = text.replace(replaceFromRegExp, (match) => "<mark>" + match + "</mark>");
                     });
-                    // item.original = text
-                    // items[thisIndex] = item
+                    // item.original = text;
+                    // items[thisIndex] = item;
                     lastCalledArgs.current.functionName = "highlightTmMismatch";
                     updateTranslatedResponseSegment(segmentId, "tagged_source", text);
-                    // setTranslatedResponse(items)
+                    // setTranslatedResponse(items);
                 }
             },
         });
@@ -5364,7 +4837,7 @@ useEffect(() => {
             segmentStatusOptions.push({ value: value, label: allValues[key] });
         });
         setTimeout(() => {
-            segmentStatusOptionsRef.current = segmentStatusOptions
+            segmentStatusOptionsRef.current = segmentStatusOptions;
             setSegmentStatusOptions(segmentStatusOptions);
         }, 100);
     };
@@ -5379,26 +4852,21 @@ useEffect(() => {
         }
     };
 
-
-
     const handleClearFilter = () => {
-        setSegmentStatusName([])
-        setSelectedFindStatus(null)
-        setFindStatus([])
-        let url = `/workspace/${documentId}`
+        setSegmentStatusName([]);
+        setSelectedFindStatus(null);
+        setFindStatus([]);
+        let url = `/workspace/${documentId}`;
         let pageParam = URL_SEARCH_PARAMS.get("page");
         if (pageParam != 0 && pageParam != null) url += `?page=${pageParam}`;
-        else url += `?page=1`
+        else url += `?page=1`;
         history(url);
     }
 
     /* Whenever selecting the set the findStatus values */
     const findStatusChange = (selectedOption) => {
         const { target: { value }, } = selectedOption;
-        setSegmentStatusName(
-            typeof value === 'string' ? value.split(',') : value,
-        );
-        // console.log(typeof value === 'string' ? value.split(',') : value)
+        setSegmentStatusName( typeof value === 'string' ? value.split(',') : value, );
         setSelectedFindStatus(value);
         lastCalledArgs.current.functionName = "findStatusChange";
         let findStatusTemp = [];
@@ -5412,13 +4880,12 @@ useEffect(() => {
         }, 100);
     };
 
-
     /* Show the segment comment section on the footer toolbar */
     const showCommentSection = (e) => {
         commentsTabButton.current?.click();
-        // scrollLeft()
+        // scrollLeft();
         let segmentId = e.target.getAttribute("data-id");
-        // targetContentEditable.current[segmentId].current.focus()
+        // targetContentEditable.current[segmentId].current.focus();
         lastCalledArgs.current.functionName = "showCommentSection";
         setTimeout(() => {
             // Outside click close the toolbar. Wait for the toolbar is to be closed
@@ -5430,7 +4897,7 @@ useEffect(() => {
     /* Show QA section in the footer toolbar */
     const showQaSection = (e) => {
         qaTabButton.current?.click();
-        // scrollLeft()
+        // scrollLeft();
         let segmentId = e.target.getAttribute("data-id");
         lastCalledArgs.current.functionName = "showQaSection";
         handleToggleVisibility(true);
@@ -5439,7 +4906,7 @@ useEffect(() => {
 
     /* Adding new segment comment(s) */
     const commentSubmit = (e) => {
-        let commentTextarea = document.querySelector('#comments')
+        let commentTextarea = document.querySelector('#comments');
         let segmentId = focusedDivIdRef.current;
         let comment = commentTextArea.current.value;
         if (comment?.trim() == "") {
@@ -5455,32 +4922,31 @@ useEffect(() => {
         formData.append("comment", comment);
         formData.append("segment", segmentId);
         let url = Config.BASE_URL + "/workspace_okapi/comment/";
+
         Config.axios({
             url: url,
             method: "POST",
             auth: true,
             data: formData,
             success: (response) => {
-                // Config.toast('Comment is added successfully')
+                // Config.toast('Comment is added successfully');
                 showSegmentComments(segmentId);
                 if(commentTextArea.current){
                     commentTextArea.current.value = "";
                 }
-                commentTextarea.value = ""
+                commentTextarea.value = "";
                 setTimeout(() => {
-                    commentScrollingDivRef.current.scrollTop = commentScrollingDivRef.current.scrollHeight
+                    commentScrollingDivRef.current.scrollTop = commentScrollingDivRef.current.scrollHeight;
                 }, 200);
             },
             error: (err) => {
-                console.log(err)
+                console.error(err);
             }
         });
     };
 
     const commentEdit = (commentId) => {
-
         let segmentId = focusedDivIdRef.current;
-
         let comment = commentsDataCopy?.find(each => each.id === commentId)?.comment;
         if (comment?.trim() == "") {
             Config.toast(t("type_comment"), "warning");
@@ -5490,25 +4956,24 @@ useEffect(() => {
             Config.toast(t("select_segment"), "error");
             return;
         }
-
         let formData = new FormData();
         formData.append("comment", comment);
         formData.append("segment", segmentId);
-
         let url = `${Config.BASE_URL}/workspace_okapi/comment/${commentId}/`;
+
         Config.axios({
             url: url,
             method: "PUT",
             auth: true,
             data: formData,
             success: (response) => {
-                // Config.toast('Comment is added successfully')
+                // Config.toast('Comment is added successfully');
                 showSegmentComments(segmentId);
                 // commentTextArea.current.value = "";
             },
             error: (err) => {
                 if (err.response.status === 403) {
-                    Config.toast(t("permission_edit_comment"), 'warning')
+                    Config.toast(t("permission_edit_comment"), 'warning');
                 }
             }
         });
@@ -5522,10 +4987,9 @@ useEffect(() => {
                     comment: e.target.value
                 }
             }
-            return obj
-        })
-        // console.log(newArr);
-        setCommentsDataCopy(newArr)
+            return obj;
+        });
+        setCommentsDataCopy(newArr);
     }
 
     const openCommentsEdit = (comment_id) => {
@@ -5536,11 +5000,9 @@ useEffect(() => {
                     isEdit: true
                 }
             }
-            return obj
-        })
-
-        // console.log(newArr);
-        setCommentsData(newArr)
+            return obj;
+        });
+        setCommentsData(newArr);
     }
 
     const closeCommentsEdit = (comment_id) => {
@@ -5551,58 +5013,52 @@ useEffect(() => {
                     isEdit: false
                 }
             }
-            return obj
-        })
-
-        // console.log(newArr);
-        setCommentsData(newArr)
-        setCommentsDataCopy(newArr)
+            return obj;
+        });
+        setCommentsData(newArr);
+        setCommentsDataCopy(newArr);
     }
-
 
     const handleCommentEnter = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault()
-            commentSubmit(e)
+            e.preventDefault();
+            commentSubmit(e);
         }
     }
 
     /* Get and set all segment comments */
     const showSegmentComments = (segmentId, showLoader = false, activateTab = false) => {
-        segmentId = segmentId ? segmentId : focusedDivId
-        if(!segmentId) return 
-
+        segmentId = segmentId ? segmentId : focusedDivId;
+        if(!segmentId) return ;
         if(showLoader){
-            setCommentsData([])
-            setCommentsLoader(true)
-        }
-        
+            setCommentsData([]);
+            setCommentsLoader(true);
+        }        
         if (axiosCommentListAbortControllerRef.current) {
-            axiosCommentListAbortControllerRef.current.abort()
-        }
-    
+            axiosCommentListAbortControllerRef.current.abort();
+        }    
         const controller = new AbortController();
-        axiosCommentListAbortControllerRef.current = controller
-        
+        axiosCommentListAbortControllerRef.current = controller;       
         let url = Config.BASE_URL + "/workspace_okapi/comment/?by=segment&id=" + segmentId;
+
         Config.axios({
             url: url,
             auth: true,
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
                 setCommentsData(response.data);
-                setCommentsDataCopy(response.data)
-                setCommentsLoader(false)
+                setCommentsDataCopy(response.data);
+                setCommentsLoader(false);
                 if (response.data?.length > 0) updateTranslatedResponseSegment(segmentId, "has_comment", true);
                 else updateTranslatedResponseSegment(segmentId, "has_comment", false);
                 if(activateTab){
-                    setActiveFooterTab(3)
+                    setActiveFooterTab(3);
                 }
             },
             error: (err) => {
                 if(err?.message !== "canceled") 
-                    setCommentsLoader(false)
-                setCommentsData([])
+                    setCommentsLoader(false);
+                setCommentsData([]);
             }
         });
     };
@@ -5612,49 +5068,45 @@ useEffect(() => {
         let segmentId = focusedDivIdRef.current;
         let commentId = e.currentTarget.getAttribute("data-comment-id");
         let url = Config.BASE_URL + "/workspace_okapi/comment/" + commentId;
+
         Config.axios({
             url: url,
             auth: true,
             method: "DELETE",
             success: (response) => {
-                // Config.toast('Comment is deleted successfully')
+                // Config.toast('Comment is deleted successfully');
                 showSegmentComments(segmentId);
             },
             error: (err) => {
                 if (err.response.status === 403) {
-                    Config.toast(t("permission_delete_comment"), 'warning')
+                    Config.toast(t("permission_delete_comment"), 'warning');
                 }
             }
         });
     };
 
     // useEffect(() => {
-    //   console.log(qaData);
     // }, [qaData])
-
 
     /* Show the segment QA data after getting the response */
     const showSegmentQa = (segmentId) => {
-
-        segmentId = segmentId ? segmentId : focusedDivIdRef.current
-
+        segmentId = segmentId ? segmentId : focusedDivIdRef.current;
         setQaData([]);
         let formData = new FormData();
         formData.append("doc_id", documentId);
-        let segmentData = translatedResponse.find((response) => response.segment_id == segmentId);
+        let segmentData = translatedResponse?.find((response) => response.segment_id == segmentId);
         if (segmentData == null) return;
         let sourceText = segmentData.tagged_source;
         let translatedText = "";
         if (targetContentEditable.current[segmentId]?.current != null) {
             translatedText = targetContentEditable.current[segmentId].current.innerHTML;
-            // console.log("sarvesh: "+translatedText)
             // disable removemark tag
             if (!grammarPopoverOpen) {
                 translatedText = removeSpecificTag(translatedText, "mark");
                 translatedText = replaceTagsWithText(translatedText);
             } else {
-                setGrammarPopoverOpen(false)
-                setgrammarCheckPopoverTarget("")
+                setGrammarPopoverOpen(false);
+                setgrammarCheckPopoverTarget("");
                 translatedText = removeSpecificTag(translatedText, "mark");
                 translatedText = replaceTagsWithText(translatedText);
             }
@@ -5663,6 +5115,7 @@ useEffect(() => {
         formData.append("source", sourceText);
         formData.append("target", translatedText);
         let url = Config.BASE_URL + "/qa/qa_check/";
+
         Config.axios({
             url: url,
             method: "POST",
@@ -5674,7 +5127,7 @@ useEffect(() => {
                     lastCalledArgs.current.segmentId = segmentId;
                     lastCalledArgs.current.sourceText = sourceText;
                     lastCalledArgs.current.translatedText = translatedText;
-                    errorNoteCount.current = 0
+                    errorNoteCount.current = 0;
                     Object.entries(response.data?.data)?.forEach(([key, value]) => {
                         Object.entries(value).forEach(([keys, values]) => {
                             if (values.ErrorNote && values.ErrorNote.length > 0) {
@@ -5683,7 +5136,7 @@ useEffect(() => {
                         })
                     });
                     setQaData(response.data.data);
-                    setActiveFooterTab(5)
+                    setActiveFooterTab(5);
                 }
             },
         });
@@ -5693,23 +5146,16 @@ useEffect(() => {
     const updateTranslatedResponseSegment = (segmentId, key, value) => {
         lastCalledArgs.current.functionName = "updateTranslatedResponseSegment";
         /*if (key == 'original')
-            sourceTextDiv.current[segmentId].current.innerHTML = value
+            sourceTextDiv.current[segmentId].current.innerHTML = value;
         else if (key == 'temp_target')
-            targetContentEditable.current[segmentId].current.innerHTML = value
+            targetContentEditable.current[segmentId].current.innerHTML = value;
         else*/
-        // console.log(translatedResponse);
-        console.log(value)
         setTranslatedResponse(preveState => preveState?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el)));
-        translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el))
-        // console.log("ref")
-        // console.log(translatedResponseRef.current)
+        translatedResponseRef.current = translatedResponseRef.current?.map((el) => (el.segment_id == segmentId ? { ...el, [key]: value } : el));
     };
 
     // useEffect(() => {
-    //     console.log("state")
-    //     console.log(translatedResponse)
-    // }, [translatedResponse])
-    
+    // }, [translatedResponse]);    
 
     /* Toggling the footer toolbar show/hide */
     const handleToggleVisibility = (show = true) => {
@@ -5722,8 +5168,8 @@ useEffect(() => {
                             "mark"
                         );
                     } else {
-                        setGrammarPopoverOpen(false)
-                        setgrammarCheckPopoverTarget("")
+                        setGrammarPopoverOpen(false);
+                        setgrammarCheckPopoverTarget("");
                         targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
                             targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,
                             "mark"
@@ -5734,21 +5180,16 @@ useEffect(() => {
         } else {
             if (!pushPinActive) {
                 workspaceFeaturRef.current.style.height = footerToolbarHeightRef.current + "px";
-            } else {
-
-            }
+            } else {}
         }
         setAdvancedOptionVisibility(show);
     };
 
     /* Adding/Removing specific CSS classes to differentiate the active one */
     const highlightFocusedSegment = (segmentId) => {
-        // console.log(segmentId)
-
         setFocusedDivId(segmentId);
         ctrlAClicked.current = false;
         focusedDivIdRef.current = segmentId;
-
         let newArr = translatedResponse?.map(obj => {
             if (obj.segment_id == segmentId) {
                 return {
@@ -5761,8 +5202,7 @@ useEffect(() => {
                     isFocused: false
                 }
             }
-        })
-        // console.log(newArr)
+        });
         setTranslatedResponse((prevState) => {
             return prevState?.map(obj => {
                 if (obj.segment_id == segmentId) {
@@ -5776,9 +5216,8 @@ useEffect(() => {
                         isFocused: false
                     }
                 }
-            })
-        })
-
+            });
+        });
         // let workspaceRowDiv = "";
         // translatedResponse.map((value) => {
         //     workspaceRowDiv = targetContentEditable.current[value.segment_id].current.closest(".workspace-row");
@@ -5796,24 +5235,16 @@ useEffect(() => {
         if (targetContentEditable.current[focusedDivIdRef.current]?.current != null) {
             // targetContentEditable.current[focusedDivId].current.innerHTML = ''
             let segmentId = e.currentTarget.getAttribute("data-id");
-            // console.log(segmentId);
-            let targetTextContent = removeAllTags(replaceTagsWithText(targetContentEditable.current[focusedDivId].current.innerHTML))
-            // console.log(targetTextContent);
-            let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
+            let targetTextContent = removeAllTags(replaceTagsWithText(targetContentEditable.current[focusedDivId].current.innerHTML));
+            let segmentData = translatedResponse?.find((element) => element.segment_id == segmentId);
             let thisSegmentTags = segmentData?.target_tags;
-            // console.log(thisSegmentTags);
-            let txt = `${targetTextContent}${(thisSegmentTags !== undefined || thisSegmentTags !== '') ? thisSegmentTags : ''}`
-            // console.log(txt);
+            let txt = `${targetTextContent}${(thisSegmentTags !== undefined || thisSegmentTags !== '') ? thisSegmentTags : ''}`;
             let replacedText = replaceTextWithTags(txt);
-
-
-            resetSynonymStates()
-
+            resetSynonymStates();
             setTimeout(() => {
                 // updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", replacedText);
                 // updateSegmentStatus(focusedDivIdRef.current, 103);
                 // changeEditedStatus(focusedDivIdRef.current, "unsaved");
-
                 targetContentEditable.current[focusedDivId].current.innerHTML = replacedText;
             }, 150);
         }
@@ -5826,28 +5257,22 @@ useEffect(() => {
             return;
         }
         if (targetContentEditable.current[focusedDivIdRef.current]?.current != null) {
-            targetContentEditable.current[focusedDivId].current.innerHTML = ''
+            targetContentEditable.current[focusedDivId].current.innerHTML = '';
             let segmentId = e.target.getAttribute("data-id");
-            let segmentData = translatedResponse.find((element) => element.segment_id == segmentId);
+            let segmentData = translatedResponse?.find((element) => element.segment_id == segmentId);
             let thisSegmentTags = segmentData.target_tags;
-            let txt = '' + (thisSegmentTags !== undefined || thisSegmentTags !== '') ? thisSegmentTags : ''
+            let txt = '' + (thisSegmentTags !== undefined || thisSegmentTags !== '') ? thisSegmentTags : '';
             let replacedText = replaceTextWithTags(txt);
-
-            // console.log(replacedText)
-
-            setShowParaphraseBtn(false)
-            resetSynonymStates()
-
+            setShowParaphraseBtn(false);
+            resetSynonymStates();
             setTimeout(() => {
                 updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", "");
                 updateSegmentStatus(focusedDivIdRef.current, 105);
                 changeEditedStatus(focusedDivIdRef.current, "unsaved");
-
                 targetContentEditable.current[focusedDivId].current.innerHTML = replacedText;
             }, 150);
         }
     };
-
 
     /* Copy the source text to the target. This will remove old values and replace with the source text */
     const copySourceToTarget = () => {
@@ -5857,11 +5282,9 @@ useEffect(() => {
         }
         if (sourceTextDiv?.current[focusedDivIdRef.current]?.current != null) {
             if (targetContentEditable.current[focusedDivIdRef.current]?.current != null) {
-                // targetContentEditable.current[focusedDivId].current.innerHTML = sourceTextDiv?.current[focusedDivId]?.current?.innerHTML
+                // targetContentEditable.current[focusedDivId].current.innerHTML = sourceTextDiv?.current[focusedDivId]?.current?.innerHTML;
                 setTimeout(() => {
-
                     var srcText = removeTagsWithClass(sourceTextDiv?.current[focusedDivIdRef.current]?.current?.innerHTML, 'mark', 'ner-highlight');
-
                     updateTranslatedResponseSegment(
                         focusedDivIdRef.current,
                         "temp_target",
@@ -5904,6 +5327,7 @@ useEffect(() => {
         let formData = new FormData();
         formData.append("font_size", fontSize);
         formData.append("language", LanguageId);
+
         Config.axios({
             url: Config.BASE_URL + "/workspace_okapi/font_size",
             method: "POST",
@@ -5933,6 +5357,7 @@ useEffect(() => {
     const saveCustomPageSize = (pageSize) => {
         let formData = new FormData();
         formData.append("size", pageSize);
+
         Config.axios({
             url: Config.BASE_URL + "/workspace_okapi/page_size/",
             method: "POST",
@@ -5947,37 +5372,33 @@ useEffect(() => {
             auth: true,
             success: (response) => {
                 if (response.data.page_size != null) {
-                    pageSizeFromApi.current = response.data.page_size
-                    setSelectedPageSize(pageSizeOption?.find(each => each.value === response.data.page_size))
+                    pageSizeFromApi.current = response.data.page_size;
+                    setSelectedPageSize(pageSizeOption?.find(each => each.value === response.data.page_size));
                 } else {
-                    pageSizeFromApi.current = 20
-                    setSelectedPageSize(pageSizeOption?.find(each => each.value === 20))
+                    pageSizeFromApi.current = 20;
+                    setSelectedPageSize(pageSizeOption?.find(each => each.value === 20));
                 }
             },
         });
     }
 
     const getSegmentDiff = () => {
-
-        if(!focusedDivIdRef.current) return 
-
+        if(!focusedDivIdRef.current) return ;
         if (axiosSegmentHistoryAbortControllerRef.current) {
-            axiosSegmentHistoryAbortControllerRef.current.abort()
-        }
-    
+            axiosSegmentHistoryAbortControllerRef.current.abort();
+        }    
         const controller = new AbortController();
-        axiosSegmentHistoryAbortControllerRef.current = controller
+        axiosSegmentHistoryAbortControllerRef.current = controller;
+        setSegmentDifference([]);
+        setSegmentHistoryLoader(true);
 
-        setSegmentDifference([])
-        setSegmentHistoryLoader(true)
         Config.axios({
             url: `${Config.BASE_URL}/workspace_okapi/segment_history/?segment=${focusedDivIdRef.current}`,
             method: "GET",
             auth: true,
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
-                // console.log(response.data)
-                setSegmentHistoryLoader(false)
+                setSegmentHistoryLoader(false);
                 let mtOnlyObj = {
                     "segment": focusedDivIdRef.current,
                     "created_at": "",
@@ -5994,16 +5415,15 @@ useEffect(() => {
                             "save_type": "-"
                         }
                     ]
-                }
-                setSegmentDifference([...response.data, mtOnlyObj])
+                };
+                setSegmentDifference([...response.data, mtOnlyObj]);
             },
             error: (err) => {
-                setSegmentHistoryLoader(false)
+                setSegmentHistoryLoader(false);
             }
         });
 
     };
-
 
     /* Getting and setting the document status data */
     const getDocumentProgressData = () => {
@@ -6012,14 +5432,14 @@ useEffect(() => {
             auth: true,
             success: (response) => {
                 let responseTemp = response.data;
-                documentProgressRef.current = responseTemp
+                documentProgressRef.current = responseTemp;
                 setConfirmedSegmentsCount(responseTemp.segments_confirmed_count);
                 setTotalSegmentsCount(responseTemp.total_segment_count);
                 if (responseTemp.total_segment_count == 0) setSegmentStatusPercentage(0);
                 else setSegmentStatusPercentage(((responseTemp.segments_confirmed_count / responseTemp.total_segment_count) * 100).toFixed(2));
             },
             error: (err) => {
-
+               console.error(err);
             }
         });
     };
@@ -6035,7 +5455,7 @@ useEffect(() => {
                     savedStatus.current[segmentId].current.style.display = "block";
                     // saveBtn.current[segmentId].current.classList.remove("btn-primary", "unsaved-check-circle");
                     // saveBtn.current[segmentId].current.classList.add("check-unsaved-circle");
-                    saveBtn.current[segmentId].current.style.color = '#0078D4'
+                    saveBtn.current[segmentId].current.style.color = '#0078D4';
                     break;
                 }
                 case "unsaved": {
@@ -6044,15 +5464,14 @@ useEffect(() => {
                     savedStatus.current[segmentId].current.style.display = "none";
                     // saveBtn.current[segmentId].current.classList.remove("btn-primary", "check-unsaved-circle");
                     // saveBtn.current[segmentId].current.classList.add("unsaved-check-circle");
-                    saveBtn.current[segmentId].current.style.color = '#E74C3C'
-                    // console.log(saveBtn.current[segmentId].current);
+                    saveBtn.current[segmentId].current.style.color = '#E74C3C';
                     break;
                 }
                 default: {
                     notSavedStatus.current[segmentId].current.style.display = "none";
                     workspaceRow.current[segmentId].current.classList.remove("unsaved-border");
                     savedStatus.current[segmentId].current.style.display = "none";
-                    saveBtn.current[segmentId].current.style.color = '#5F6368'
+                    saveBtn.current[segmentId].current.style.color = '#5F6368';
                     // saveBtn.current[segmentId].current.classList.remove("saved", "check-unsaved-circle");
                     break;
                 }
@@ -6064,7 +5483,6 @@ useEffect(() => {
     const targetSegmentClick = (e) => {
         if (e.target.classList.contains("trigger-focus")) {
             let segmentId = e.target.getAttribute("data-id");
-
             if (targetContentEditable?.current[segmentId]?.current) {
                 if (document.activeElement != targetContentEditable?.current[segmentId]?.current) targetContentEditable.current[segmentId].current.focus();
             }
@@ -6073,25 +5491,19 @@ useEffect(() => {
 
     /* Setting focus and adding class for currently focusing contenteditable */
     const sourceSegmentClick = (e) => {
-        // console.log(e);
         if (e.target.classList.contains("trigger-focus")) {
             let segmentId = e.target.getAttribute("data-id");
-
-
             if (sourceTextDiv?.current[segmentId]?.current) {
                 if (document.activeElement != sourceTextDiv?.current[segmentId]?.current) {
                     sourceTextDiv.current[segmentId].current.focus();
-                    let pos = getHTMLCaretPosition(sourceTextDiv.current[focusedDivIdRef.current].current)
+                    let pos = getHTMLCaretPosition(sourceTextDiv.current[focusedDivIdRef.current].current);
                     if (mergeSelectedSegmentIds?.length === 0 && pos) {
-                        let firstSeg = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(0, pos))
-                        let secondSeg = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(pos, unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).length))
-                        // console.log(pos);
-                        // console.log(firstSeg);
-                        // console.log(secondSeg);
+                        let firstSeg = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(0, pos));
+                        let secondSeg = replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(pos, unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).length));
                         if (e.target.getAttribute('data-id') && e.target.getAttribute('source-data-text-unit')) {
-                            segmentIdRef.current = e.target.getAttribute('data-id')
-                            sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit')
-                            setDisbaleSplitIcon(false)
+                            segmentIdRef.current = e.target.getAttribute('data-id');
+                            sourceTextUnitRef.current = e.target.getAttribute('source-data-text-unit');
+                            setDisbaleSplitIcon(false);
                         }
                     }
                 }
@@ -6119,16 +5531,12 @@ useEffect(() => {
         top.style.top = -(size / 2) + "px";
         top.style.left = "0px";
         top.style.cursor = "n-resize";
-        // top.innerHTML = 'Top Lorem Ipsum'
-
+        // top.innerHTML = 'Top Lorem Ipsum';
         top.addEventListener("mousedown", resizeYNegative());
-
         element.appendChild(top);
-
         function get_int_style(key) {
             return parseInt(window.getComputedStyle(element).getPropertyValue(key));
         }
-
         function resizeYNegative() {
             let offsetY;
             let startY;
@@ -6143,11 +5551,9 @@ useEffect(() => {
                 startH = get_int_style("height");
                 offsetY = clientY - startY;
                 maxY = startY + startH - minH;
-
                 document.addEventListener("mouseup", closeDragElement, false);
                 document.addEventListener("mousemove", elementDrag, false);
             }
-
             function elementDrag(e) {
                 const { clientY } = e;
                 let y = clientY - offsetY;
@@ -6165,7 +5571,6 @@ useEffect(() => {
                     setAdvancedOptionVisibility(false);
                 }
             }
-
             function closeDragElement() {
                 document.removeEventListener("mouseup", closeDragElement);
                 document.removeEventListener("mousemove", elementDrag);
@@ -6220,8 +5625,6 @@ useEffect(() => {
             if (navDropDown) navDropDown.classList.remove("tour-hover");
             setIsProductTourSeen(true);
         }
-        // console.log(tourStepIndex)
-
     };
 
     /* Product tour component */
@@ -6236,25 +5639,20 @@ useEffect(() => {
         }
     };
 
-
-
     /* Check given :obj has consecutive numbers */
     const isSequceConsecutive = (obj) => Boolean(obj.reduce((output, lastest) => (output ? (Number(output) + 1 === Number(lastest) ? lastest : false) : false)));
 
     /* Check all the values in the :ilst are same */
     const areAllValuesSame = (list) => list.every((item) => list.indexOf(item) === 0);
 
-
     /* handling merge check box click */
     const mergeCheckboxSelect = (e) => {
         let segmentId = parseInt(e.target.getAttribute("data-id"));
         let segmentNumber = parseInt(e.target.getAttribute("data-segment-no"));
         let textUnit = parseInt(e.target.getAttribute("data-text-unit"));
-
         let segmentIds = [...mergeSelectedSegmentIds];
         let textUnits = selectedTextUnit.current;
         let segmentNos = mergeSelectedSegmentNos.current;
-
         if (e.target.checked) {
             segmentIds.push(segmentId);
             segmentNos.push(segmentNumber);
@@ -6272,7 +5670,7 @@ useEffect(() => {
         let isAlreadyMerged = false;
         let thisSegment = null;
         segmentIds.map((eachSegmentId) => {
-            thisSegment = translatedResponse.find((element) => element.segment_id === eachSegmentId);
+            thisSegment = translatedResponse?.find((element) => element.segment_id === eachSegmentId);
             Config.log(thisSegment);
             if (thisSegment.is_merged) isAlreadyMerged = true;
         });
@@ -6288,7 +5686,7 @@ useEffect(() => {
         /* Enabling restrore icon - start */
         setIsShowRestoreSegmentIcon(false);
         if (segmentIds.length === 1) {
-            let selectedSegment = translatedResponse.find((element) => element.segment_id === segmentIds[0]);
+            let selectedSegment = translatedResponse?.find((element) => element.segment_id === segmentIds[0]);
             if (selectedSegment.is_merged) setIsShowRestoreSegmentIcon(true);
         }
         /* Enabling restrore icon - end */
@@ -6302,6 +5700,7 @@ useEffect(() => {
             formData.append("segments", segmentId);
         });
         formData.append("text_unit", selectedTextUnit.current[0]);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace_okapi/merge/segment/`,
             method: "POST",
@@ -6346,19 +5745,16 @@ useEffect(() => {
 
     // const handleScroll = (e) => {
     //     const position = e.target.scrollTop;
-    //     currentScrollPosition.current = position
-    //     console.log(position);
+    //     currentScrollPosition.current = position;
     // };
 
     // useEffect(() => {
     //     const output = document.querySelector(".workspace-editor-add-top");
-    //     // console.log(output);
     //     output.addEventListener('scroll', handleScroll, { passive: true });
     //     return () => {
     //         output.removeEventListener('scroll', handleScroll);
     //     };
     // });
-
     // ===================================================================================================================
 
     function textNodesUnder(el) {
@@ -6377,15 +5773,12 @@ useEffect(() => {
                 // Store the original range
                 const range = window.getSelection().getRangeAt(0);
                 // Clone the range
-                // console.log(range);
                 const preCaretRange = range.cloneRange();
                 // Select all textual contents from the contenteditable element
-                // console.log(preCaretRange);
                 preCaretRange.selectNodeContents(element);
                 // And set the range end to the original clicked position
                 preCaretRange.setEnd(range.endContainer, range.endOffset);
                 // Return the text length from contenteditable start to the range end
-                // console.log(preCaretRange.toString());
                 position = preCaretRange.toString().length;
             }
         }
@@ -6397,15 +5790,12 @@ useEffect(() => {
             preCaretRange = range.cloneRange(),
             caretPosition,
             tmp = document.createElement("div");
-
         preCaretRange.selectNodeContents(node);
         preCaretRange.setEnd(range.endContainer, range.endOffset);
         tmp.appendChild(preCaretRange.cloneContents());
         caretPosition = tmp.innerHTML.length;
         return caretPosition - 7;
     }
-
-
 
     function getHTMLCaretPosition(element) {
         var textPosition = getCaretIndex(element),
@@ -6415,21 +5805,13 @@ useEffect(() => {
             insideHtml = false,
             htmlBeginChars = ['<'],
             htmlEndChars = ['>'];
-
-        // console.log(textPosition)
-        // console.log(htmlContent);
-
         if (textPosition == 0) {
             return 0;
         }
-
         while (textIndex < textPosition) {
-
             htmlIndex++;
-            // console.log(htmlIndex);
             // check if next character is html and if it is, iterate with htmlIndex to the next non-html character
             while (htmlBeginChars.indexOf(htmlContent.charAt(htmlIndex)) > -1) {
-                // console.log('encountered HTML');
                 // now iterate to the ending char
                 insideHtml = true;
 
@@ -6438,7 +5820,6 @@ useEffect(() => {
                         if (htmlContent.charAt(htmlIndex) == '.' || htmlContent.charAt(htmlIndex) == ';') {
                             htmlIndex--; // entity is char itself
                         }
-                        // console.log('encountered end of HTML');
                         insideHtml = false;
                     }
                     htmlIndex++;
@@ -6446,9 +5827,6 @@ useEffect(() => {
             }
             textIndex++;
         }
-
-        // console.log(htmlIndex);
-        // console.log(textPosition);
         // in htmlIndex is caret position inside html
         return htmlIndex;
     }
@@ -6498,71 +5876,47 @@ useEffect(() => {
         return -1;
     }
 
-
     /* split the segments */
     const splitSegment = () => {
-        // console.log(window.getSelection());
-        // console.log(sel.anchorOffset);
-        // console.log(replaceTagsWithText(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML));
-
-        // console.log(getHTMLCaretPosition(sourceTextDiv.current[focusedDivIdRef.current].current));
-        isSplitRef.current = false
-        let thisSegment = translatedResponse.find((element) => element.segment_id == segmentIdRef.current);
+        isSplitRef.current = false;
+        let thisSegment = translatedResponse?.find((element) => element.segment_id == segmentIdRef.current);
 
         if (thisSegment?.is_split) {
-            Config.toast(t("segment_split_err_1"), 'warning')
-            setDisbaleSplitIcon(true)
+            Config.toast(t("segment_split_err_1"), 'warning');
+            setDisbaleSplitIcon(true);
             return;
         }
-
-        setSplitLoader(true)
-        // let pos = getHTMLCaretPosition(sourceTextDiv.current[focusedDivIdRef.current].current)
-        // let pos = getCaretPosition()
-        // console.log(replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(0, pos)));
-        // console.log(replaceTagsWithText(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(pos, unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).length)));
-        // console.log(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(0, pos));
-        // console.log(unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).slice(pos, unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML).length));
-
-        // console.log(replaceTextWithTags(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML));
-        // console.log(replaceTextWithTagsTemp(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML));
+        setSplitLoader(true);
+        // let pos = getHTMLCaretPosition(sourceTextDiv.current[focusedDivIdRef.current].current);
+        // let pos = getCaretPosition();
         let pos = getCaretPosition()
-        let firstSeg = unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)?.slice(0, pos)
-        let secondSeg = unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)?.slice(pos, unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)?.length)
-
-        // console.log(pos);
-        // console.log(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML?.slice(0, pos));
-        // console.log(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML?.slice(pos, sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML?.length));
-
-        // console.log(replaceTagsWithText(firstSeg));
-        // console.log(replaceTagsWithText(secondSeg));
-        // console.log(segmentIdRef.current);
-        // console.log(sourceTextUnitRef.current);
-
-
+        let firstSeg = unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)?.slice(0, pos);
+        let secondSeg = unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)?.slice(pos, unescape(sourceTextDiv.current[focusedDivIdRef.current].current.innerHTML)?.length);
         let formData = new FormData();
         formData.append("seg_first", replaceTagsWithText(firstSeg));
         formData.append("seg_second", replaceTagsWithText(secondSeg));
         formData.append("segment", segmentIdRef.current);
         formData.append("text_unit", sourceTextUnitRef.current);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace_okapi/split/segment/`,
             method: "POST",
             auth: true,
             data: formData,
             success: (response) => {
-                isSplitRef.current = true
+                isSplitRef.current = true;
                 resetMergeAndRestore();
-                setSplitLoader(false)
-                setDisbaleSplitIcon(true)
+                setSplitLoader(false);
+                setDisbaleSplitIcon(true);
             },
             error: (err) => {
-                setSplitLoader(false)
-                setDisbaleSplitIcon(true)
+                setSplitLoader(false);
+                setDisbaleSplitIcon(true);
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('already')) {
-                        Config.toast(t("segment_already_merged"), 'warning')
+                        Config.toast(t("segment_already_merged"), 'warning');
                     } else if (err.response.data?.msg?.includes('No text')) {
-                        Config.toast(err.response.data?.msg, 'warning')
+                        Config.toast(err.response.data?.msg, 'warning');
                     }
                 }
             }
@@ -6574,27 +5928,18 @@ useEffect(() => {
     const scrollLeft = () => {
         const container = scrl.current;
         const scrollStep = 500; // The amount of pixels to scroll
-
         if (container) {
-            container.scrollTo({
-                left: container.scrollLeft - scrollStep,
-                behavior: 'smooth',
-            });
+            container.scrollTo({  left: container.scrollLeft - scrollStep,  behavior: 'smooth' });
         }
     };
 
     const scrollRight = () => {
         const container = scrl.current;
         const scrollStep = 500; // The amount of pixels to scroll
-
         if (container) {
-            container.scrollTo({
-                left: container.scrollLeft + scrollStep,
-                behavior: 'smooth',
-            });
+            container.scrollTo({  left: container.scrollLeft + scrollStep, behavior: 'smooth'});
         }
     };
-
     // ===================================================================================================================
 
     const shouldShowInsufficientModal = (bool = true) => {
@@ -6613,7 +5958,7 @@ useEffect(() => {
         if (restoreSegmentIcon.current.classList.contains("toolbar-list-icons-active")) restoreSegmentIcon.current.classList.remove("toolbar-list-icons-active");
         let pageParam = URL_SEARCH_PARAMS.get("page");
         // pageSelect();
-        listSegments()
+        listSegments();
     };
 
     /* Show how to use tags tour */
@@ -6621,7 +5966,6 @@ useEffect(() => {
         let firstTag = document.querySelector(".workspace-row span.tag");
         let digitPattern = /^[0-9]+$/;
         let isDigitTag = digitPattern?.test(firstTag?.innerText);
-
         let firstTagSegmentIdTemp = firstTag?.parentElement?.getAttribute("data-id");
         setFirstTagSegmentId(firstTagSegmentIdTemp);
         let firstTagSegment = targetContentEditable?.current[firstTagSegmentIdTemp]?.current;
@@ -6631,7 +5975,7 @@ useEffect(() => {
             firstTagSegment.focus();
         } else Config.toast(t("no_segments_found_tags"), "error");
         if (isProductTourSeen === false) {
-            setIsProductTourSeen(true)
+            setIsProductTourSeen(true);
         }
     };
 
@@ -6664,8 +6008,8 @@ useEffect(() => {
                     data: formData,
                     success: (response) => {
                         if(response.data?.result){
-                            setSpellCheckWordsOptions(response.data.result)
-                            spellCheckResponseRef.current = response.data.result
+                            setSpellCheckWordsOptions(response.data.result);
+                            spellCheckResponseRef.current = response.data.result;
                         }
                     },
                     error: (err) => { }
@@ -6676,28 +6020,23 @@ useEffect(() => {
 
     const highlightSpellCheckWords = (segment_id) => {
 
-        if (targetContentEditable.current[segment_id].current?.innerText === '') return
-        let content_editable_div = targetContentEditable.current[segment_id].current
-        // console.log(content_editable_div)
+        if (targetContentEditable.current[segment_id].current?.innerText === '') return;
+        let content_editable_div = targetContentEditable.current[segment_id].current;
         if(spellCheckResponseRef.current?.length !== 0 && content_editable_div){
             let words_list = spellCheckResponseRef.current?.map(each => {
-                return each.word
-            })
-
+                return each.word;
+            });
             var text = removeTagsWithClass(content_editable_div?.innerHTML, 'mark', 'spellcheck-highlight');
             var wordsToHighlight = words_list; // Array of words to highlight
-            // console.log(wordsToHighlight)
-            // console.log(text)
-            // let highlightedHtml = ""
+            // let highlightedHtml = "";
             // const savedCaretPosition = saveCursorPositionWithinContenteditable(content_editable_div);
             savedCursorPositionRef.current = saveCursorPositionWithinContenteditable(content_editable_div);
-            // saveCaretPosition();
-           
+            // saveCaretPosition();           
             // wordsToHighlight.forEach(word => {
             //     const regex = new RegExp(String.raw`(?:\B(?!\w)|\b(?=\w))(${word.replace(/\+/g, " ").trim()})(?!([^<]+)?>)(?:(?<=\w)\b|(?<!\w)\B)`, globalMatch)
             //     text = text.replace(
             //         regex, (match) => {
-            //             let uid = generateKey()
+            //             let uid = generateKey();
             //             return `<mark data-word=${`"${match}"`} id=${`"spell-check-${uid}"`} class="spellcheck-highlight" >${match}</mark>`
             //         }
             //     );
@@ -6708,15 +6047,13 @@ useEffect(() => {
                 var pattern = new RegExp('\\b(' + wordsToHighlight.join('|') + ')\\b', 'g');
                 var highlightedHtml = text.replace(
                     pattern, (match) => {
-                        let uid = generateKey()
+                        let uid = generateKey();
                         return `<mark data-word=${`"${match}"`} id=${`"spell-check-${uid}"`} class="spellcheck-highlight" >${match}</mark>`
                     }
                 );
-    
-                // console.log(highlightedHtml)
                 content_editable_div.innerHTML = removeSpecificTag(highlightedHtml, 'font');
             }catch(e){
-                console.log(e)
+                console.error(e);
             }
             restoreCursorPositionWithinContenteditable(content_editable_div);
         }
@@ -6729,24 +6066,22 @@ useEffect(() => {
     function changeArrow(dir) {
         if (!arrow) return;
         if (dir == 'up') {
-            arrow.classList.remove(arrowTop)
+            arrow.classList.remove(arrowTop);
             arrow.classList.add(arrowBottom);
         }
         else {
-            arrow.classList.remove(arrowBottom)
+            arrow.classList.remove(arrowBottom);
             arrow.classList.add(arrowTop);
         }
     }
 
     // Function to check if the mouse pointer is within the bounding box of the <mark> element
     function isMouseOverMark(event, ele) {
-        if(ele === undefined || ele?.length === 0) return
-
+        if(ele === undefined || ele?.length === 0) return;
         for (const markElement of ele) {
             const boundingBox = markElement.getBoundingClientRect();
             const mouseX = event.clientX;
             const mouseY = event.clientY;
-
             if (
                 mouseX >= boundingBox.left &&
                 mouseX <= boundingBox.right &&
@@ -6759,57 +6094,46 @@ useEffect(() => {
                 };
             }
         }
-
         return null;
     }    
 
     const getMouseMoveCoordinates = (e) => {
-        // console.log(targetContentEditable.current)
         if (targetContentEditable.current && focusedDivIdRef.current) {
-            // console.log(targetContentEditable.current[focusedDivIdRef.current].current)
             const markTags = targetContentEditable.current[focusedDivIdRef.current].current?.querySelectorAll('.spellcheck-highlight');
-            let isSpellCheckPopOpen = document.querySelector('#pop').style.visibility === 'visible' ? true : false
-    
+            let isSpellCheckPopOpen = document.querySelector('#pop').style.visibility === 'visible' ? true : false;    
             const touchedMark = isMouseOverMark(e, markTags);
             if (isMouseOverMark(e, markTags) && !isSpellCheckPopOpen) {
                 // Mouse pointer is touching the bounding box of a <mark> element
                 for (const markElement of markTags) {
-                    // tarDivRef.current.style.cursor = 'pointer'
+                    // tarDivRef.current.style.cursor = 'pointer';
                 }
                 // if(document.querySelector('#pop').style.visibility === 'hidden'){
-                    clickedWrongWordRef.current = touchedMark
-                    clickedMarkEleRef.current = touchedMark 
-                    // console.log(touchedMark)
-
-                    setRectElement(touchedMark)
-                // }
-                // console.log("Touched <mark> element:", touchedMarkText);
+                    clickedWrongWordRef.current = touchedMark;
+                    clickedMarkEleRef.current = touchedMark ;
+                    setRectElement(touchedMark);
+                // };
             } else {
                 // Mouse pointer is not over any <mark> element
-                if(markTags === undefined || markTags?.length === 0) return
+                if(markTags === undefined || markTags?.length === 0) return;
                 for (const markElement of markTags) {
-                    clickedWrongWordRef.current = null
-                    // tarDivRef.current.style.cursor = 'text'
+                    clickedWrongWordRef.current = null;
+                    // tarDivRef.current.style.cursor = 'text';
                 }
             }
         }
     }
 
-    const setPopOnPosition = () => {
-        // console.log("rect element "+rectElement)
-        // console.log("rect ref "+clickedWrongWordRef.current)
-        
-        if(rectElement !== null) clickedWrongWordRef.current = rectElement
+    const setPopOnPosition = () => {        
+        if(rectElement !== null) clickedWrongWordRef.current = rectElement;
         if(clickedWrongWordRef.current !== null){
-            // console.log(document.querySelector(`.workspace-editor`))
-            let {element, rect} = clickedWrongWordRef.current
-            rect = element?.getBoundingClientRect()
+            let {element, rect} = clickedWrongWordRef.current;
+            rect = element?.getBoundingClientRect();
             let pos = decidePopPosition(rect);
             let top = pos.y - document.querySelector(`.workspace-editor`).scrollTop;
             let left = pos.x - document.querySelector(`.workspace-editor`).scrollLeft;
             if (top < 0)
                 top = document.querySelector(`.workspace-editor`).scrollTop + 20;
-            else if (top + document.querySelector('#pop').clientHeight > document.querySelector(`.workspace-editor`).clientHeight)
+            else if (top + document.querySelector('#pop').clientHeight > document.querySelector(`.workspace-editor`).clientHeight);
                 top = document.querySelector(`.workspace-editor`).clientHeight - document.querySelector('#pop').clientHeight + document.querySelector(`.workspace-editor`).scrollTop - 20;
             if (left < 0)
                 left = document.querySelector(`.workspace-editor`).scrollLeft + 20;
@@ -6821,12 +6145,10 @@ useEffect(() => {
             }
             else
                 document.querySelector('#pop').style.top = `${pos.y}px`;
-            document.querySelector('#pop').style.left = `${pos.x}px`;
-
-            changeArrow(pos.dir);
-            document.querySelector('#pop').style.visibility = 'visible';
-            document.querySelector('#pop').style.opacity = '1';
-            
+                document.querySelector('#pop').style.left = `${pos.x}px`;
+                changeArrow(pos.dir);
+                document.querySelector('#pop').style.visibility = 'visible';
+                document.querySelector('#pop').style.opacity = '1';            
         }
     } 
 
@@ -6837,10 +6159,8 @@ useEffect(() => {
             x = 0;
         else if (x + document.querySelector('#pop')?.clientWidth > document.querySelector(`.workspace-editor`)?.clientWidth)
             x = document.querySelector(`.workspace-editor`)?.clientWidth - document.querySelector('#pop')?.clientWidth;
-
-        let y, dir;
+            let y, dir;
         if (rect.top > window.innerHeight - rect.bottom) {
-
             y = rect.bottom - document.querySelector(`.workspace-editor`)?.getBoundingClientRect().top + document.querySelector(`.workspace-editor`).scrollTop + 8
             dir = 'down';
         }
@@ -6852,157 +6172,132 @@ useEffect(() => {
     }
 
     const handleWrongWordClick = (e) => {
-        let clickedOverPop = e.target.closest('#pop') ? true : false
-        let segment_id = e.target?.parentNode?.getAttribute('data-id')
-        
+        let clickedOverPop = e.target.closest('#pop') ? true : false;
+        let segment_id = e.target?.parentNode?.getAttribute('data-id');        
         if(clickedWrongWordRef.current !== null && !clickedOverPop){
-            let {element} = clickedWrongWordRef.current
-
-            setPopOnPosition()
-
-            let suggestions = spellCheckResponseRef.current?.find(each => each.word === element.innerText)?.suggestion
+            let {element} = clickedWrongWordRef.current;
+            setPopOnPosition();
+            let suggestions = spellCheckResponseRef.current?.find(each => each.word === element.innerText)?.suggestion;
 
             try{
                 let options_list = suggestions?.map((value, ind) => {
                     return (
-                        <p
-                            key={value}
-                            className={"corrected-word "}
-                            onClick={(e) => repalceWithSelectedSpellCheckSuggestedWord(value, segment_id, element)}
-                        >
+                        <p key={value} className={"corrected-word "} onClick={(e) => repalceWithSelectedSpellCheckSuggestedWord(value, segment_id, element)} >
                             {value}
                         </p>
                     )
                 })
-                setSpellCheckSuggestion(options_list)
+                setSpellCheckSuggestion(options_list);
             }catch(e){
-                console.log(e)
-            }
-            
+                console.error(e);
+            }            
         }else{
-            // console.log(e.target)
             // don't close when clicked inside the #pop div
             if(e.target instanceof Element && !e.target?.closest('#pop')){
                 document.querySelector('#pop').style.visibility = 'hidden';
                 document.querySelector('#pop').style.opacity = '0';
-                setRectElement(null)
-                clickedWrongWordRef.current = null
+                setRectElement(null);
+                clickedWrongWordRef.current = null;
             }
         }
     }
 
-    
     const repalceWithSelectedSpellCheckSuggestedWord = (value, segment_id, element) => {
-        let childMark = element
-        childMark.innerHTML = value + " "
-
+        let childMark = element;
+        childMark.innerHTML = value + " ";
         document.querySelector('#pop').style.visibility = 'hidden';
         document.querySelector('#pop').style.opacity = '0';
         highlightSpellCheckWords(segment_id)
     }
 
     const checkTargetTextSelection = () => {
-        // let selTxt = window.getSelection()?.toString()
+        // let selTxt = window.getSelection()?.toString();
         let selection = window.getSelection();
         if(selection?.toString()?.trim()?.length === 0) {
-            setSelectedCoordinates(null)
-            dispatch(setShowGlossTermAddForm(false))
-            return
+            setSelectedCoordinates(null);
+            dispatch(setShowGlossTermAddForm(false));
+            return;
         } 
         let range = selection.getRangeAt(0);
-
         if(!isEnterprise && !is_internal_meber_editor){
             let selectionRect = range.getBoundingClientRect();
-            dispatch(setShowGlossTermAddForm(false))
-            setSelectedCoordinates(selectionRect)
+            dispatch(setShowGlossTermAddForm(false));
+            setSelectedCoordinates(selectionRect);
         }
-
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
         div.appendChild(clonedSelection);
         let selectedHTML = div.innerHTML;
-        let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
-        selTxt = removeSpecificTag(selTxt, 'mark')
-
-        setTargetSelectionText(Config.unescape(selTxt))
+        let selTxt = removeSpecificTagWithContent(selectedHTML, 'span');
+        selTxt = removeSpecificTag(selTxt, 'mark');
+        setTargetSelectionText(Config.unescape(selTxt));
         if(window.getSelection().toString()?.trim() === '' || dictionaryTerm !== selTxt){
-            showDictionaryRef.current?.classList.remove("toolbar-list-icons-active")
+            showDictionaryRef.current?.classList.remove("toolbar-list-icons-active");
         }
     }
 
-
     const checkSourceTextSelection = () => {
-        // let selTxt = window.getSelection()?.toString()
-        // console.log(window.getSelection())
-        // console.log(selTxt)
+        // let selTxt = window.getSelection()?.toString();
         let selection = window.getSelection();
+    //   text selection
+        const restrectedtext=selection?.toString()?.trim().split(/\s+/).filter(Boolean);
         if(selection?.toString()?.trim()?.length === 0) {
-            setSelectedCoordinates(null)
-            dispatch(setShowGlossTermAddForm(false))
-            return
+            setSelectedCoordinates(null);
+            dispatch(setShowGlossTermAddForm(false));
+            return;
         }
         let range = selection.getRangeAt(0);
         if(!isEnterprise && !is_internal_meber_editor){
             let selectionRect = range.getBoundingClientRect();
-            dispatch(setShowGlossTermAddForm(false))
-            setSelectedCoordinates(selectionRect)
+            dispatch(setShowGlossTermAddForm(false));
+            // if(restrectedtext.length <= 2){
+            setSelectedCoordinates(selectionRect);
+            // }
         }
-
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
         div.appendChild(clonedSelection);
         let selectedHTML = div.innerHTML;
-        let selTxt = removeSpecificTagWithContent(selectedHTML, 'span')
-        selTxt = removeSpecificTag(selTxt, 'mark')
-
-        // console.log(selTxt)
-        setSourceSelectionText(Config.unescape(selTxt))
+        let selTxt = removeSpecificTagWithContent(selectedHTML, 'span');
+        selTxt = removeSpecificTag(selTxt, 'mark');
+        setSourceSelectionText(Config.unescape(selTxt));
     }
-
     // ================================================================================================================
 
      // Transliteration
-
-     const supportedImeLanguage = [
+    const supportedImeLanguage = [
         "am", "ar", "bn", "be", "bg", "yue-hant",
         "zh", "zh-hant", "fr", "de", "el", "gu", "he",
         "hi", "it", "ja", "kn", "ml", "mr", "ne", "or",
         "fa", "pt", "pa", "ru", "sa", "sr", "si", "es",
         "ta", "te", "ti", "uk", "ur", "vi"
-      ];
-    const [imeOn, setImeOn] = useState(false)
-    const [options, setOptions] = useState([])
-    const [activeResult, setActiveResult] = useState(0)
-    const [top, setTop] = useState(0)
-    const [left, setLeft] = useState(0)
-    const [showImeSuggesstion, setShowImeSugessiton] = useState(false)
-    const transliterateCompRef = useRef()
-    const inputTransliterate = useRef(null)
+    ];
+    const [imeOn, setImeOn] = useState(false);
+    const [options, setOptions] = useState([]);
+    const [activeResult, setActiveResult] = useState(0);
+    const [top, setTop] = useState(0);
+    const [left, setLeft] = useState(0);
+    const [showImeSuggesstion, setShowImeSugessiton] = useState(false);
+    const transliterateCompRef = useRef();
+    const inputTransliterate = useRef(null);
 
-    const imeRef = useRef(false)
-    let shouldRenderSuggestions = true
-    let showCurrentWordAsLastSuggestion = true
-    let maxOptions = 5
-    let lang = targetLanguageCode
+    const imeRef = useRef(false);
+    let shouldRenderSuggestions = true;
+    let showCurrentWordAsLastSuggestion = true;
+    let maxOptions = 5;
+    let lang = targetLanguageCode;
 
     const handleIme = () => {
-        setImeOn(!imeOn)
+        setImeOn(!imeOn);
     }
 
     const renderSuggestions = async (lastWord) => {
-        if (!shouldRenderSuggestions) return;
-        
-        
-
+        if (!shouldRenderSuggestions) return; 
         // fetch suggestion from api
         const numOptions = showCurrentWordAsLastSuggestion ? maxOptions - 1 : maxOptions;
         const data = await transliteration(lastWord, {
-
-            numOptions: numOptions,
-            showCurrentWordAsLastSuggestion: showCurrentWordAsLastSuggestion,
-            lang: lang
+            numOptions: numOptions, showCurrentWordAsLastSuggestion: showCurrentWordAsLastSuggestion, lang: lang
         });
-        // console.log(data)
         setOptions(data);
     };
 
@@ -7012,17 +6307,15 @@ useEffect(() => {
             showCurrentWordAsLastSuggestion: true,
             lang: targetLanguageCode
         };
-
         if (axiosTransliterationAbortControllerRef.current) {
-            axiosTransliterationAbortControllerRef.current.abort()
+            axiosTransliterationAbortControllerRef.current.abort();
         }
-
         const controller = new AbortController();
-        axiosTransliterationAbortControllerRef.current = controller 
-
+        axiosTransliterationAbortControllerRef.current = controller;
         // fetch suggestion from api
         // const url = `https://www.google.com/inputtools/request?ime=transliteration_en_${lang}&num=5&cp=0&cs=0&ie=utf-8&oe=utf-8&app=jsapi&text=${word}`;
         const url = `https://inputtools.google.com/request?text=${word}&itc=${lang}-t-i0-und&num=${numOptions}&cp=0&cs=1&ie=utf-8&oe=utf-8&app=demopage`;
+
         try {
             const res = await fetch(url, {
                 signal: controller.signal
@@ -7047,7 +6340,6 @@ useEffect(() => {
         }
     };
 
-
     function getCaretPositions() {
         var x = 0;
         var y = 0;
@@ -7069,41 +6361,32 @@ useEffect(() => {
         };
     }
 
-
-
     function insertTextAtCaret(text, expression, space = true) {
         if (isPrecedingCharacterSpace()) {
             if(expression == null){
-                document.execCommand("insertText", false, text + (space ? " " : ""))
+                document.execCommand("insertText", false, text + (space ? " " : ""));
             }else{
-                document.execCommand("insertText", false, text + expression + (space ? " " : ""))
+                document.execCommand("insertText", false, text + expression + (space ? " " : ""));
             }
-           
-
         } else {
             if(expression == null){
-                document.execCommand("insertText", false, text + (space ? " " : ""))
+                document.execCommand("insertText", false, text + (space ? " " : ""));
             }else{
-                document.execCommand("insertText", false, text + expression + (space ? " " : ""))
+                document.execCommand("insertText", false, text + expression + (space ? " " : ""));
 
             }
         }
-
-        document.querySelector('.input-box-transliterate').innerHTML = ''
-        setActiveResult(0)
-        setOptions([])
-        setShowImeSugessiton(false)
+        document.querySelector('.input-box-transliterate').innerHTML = '';
+        setActiveResult(0);
+        setOptions([]);
+        setShowImeSugessiton(false);        
         // sel.removeAllRanges();
-
     }
-
 
     function isPrecedingCharacterSpace() {
         var sel = window.getSelection();
-
         if (sel.rangeCount > 0) {
             var range = sel.getRangeAt(0);
-
             // Ensure that there is content before the caret
             if (range.startOffset > 0) {
                 var precedingText = range.startContainer.textContent.substring(0, range.startOffset);
@@ -7114,57 +6397,50 @@ useEffect(() => {
                 return /\s$/.test(precedingText);
             }
         }
-
         return false; // Return false if no space or no selection
     }
 
+    let textRef = useRef('');
 
-   let textRef = useRef('')
     const handeIMEKeyDownDiv = (e) => {
-
-        var charCode = e.keyCode;
-        // console.log(e.target.getBoundingClientRect())
-      
+        var charCode = e.keyCode;      
         if (e.ctrlKey) {
             if (charCode == 39) {
                 if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                    e.preventDefault()
+                    e.preventDefault();
                 } 
             } else if (charCode == 37) {
                 if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                    e.preventDefault()
+                    e.preventDefault();
                 }
             }else if(charCode == 40 || charCode == 38 ){
                 if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                    e.preventDefault()
+                    e.preventDefault();
                 }
             }else{
                 if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                    e.preventDefault()
+                    e.preventDefault();
                 }
             }
         } else {
             if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 8) {
                 if(charCode >= 112 && charCode <= 123) {
-
                     if(charCode == 113 || charCode == 115 || charCode == 119 || charCode == 120){
                         if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                        return
+                          return;
                         }
                     }else{
                         if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                       handleDissapear()
-                       return
+                          handleDissapear();
+                          return;
                         }
                     }
-                }
-                
+                }                
                 if (getCaretPositions()?.x == 0 && getCaretPositions()?.y == 0) {
-                    let rect = e.target.getBoundingClientRect()
-                    setLeft(rect.left + window.pageXOffset + 10)
-                    setTop(rect.top + window.pageYOffset)
+                    let rect = e.target.getBoundingClientRect();
+                    setLeft(rect.left + window.pageXOffset + 10);
+                    setTop(rect.top + window.pageYOffset);
                     if (window.innerHeight - (rect.top + window.pageYOffset) > (transliterateCompRef.current?.clientHeight + 50)) {
-
                     } else {
                         document.querySelector('.workspace-editor-add-top').scrollBy({
                             top: transliterateCompRef.current?.clientHeight,
@@ -7172,14 +6448,10 @@ useEffect(() => {
                         });
                     }
                 } else {
-                    setLeft(window.innerWidth - getCaretPositions()?.x > (transliterateCompRef.current?.clientWidth + 50) ? getCaretPositions()?.x : (getCaretPositions()?.x - transliterateCompRef.current?.clientWidth))
-                    setTop(getCaretPositions()?.y)
+                    setLeft(window.innerWidth - getCaretPositions()?.x > (transliterateCompRef.current?.clientWidth + 50) ? getCaretPositions()?.x : (getCaretPositions()?.x - transliterateCompRef.current?.clientWidth));
+                    setTop(getCaretPositions()?.y);
                 }
-
-
-                // console.log(window.innerHeight - getCaretPositions()?.y > (transliterateCompRef.current?.clientHeight + 50) ? getCaretPositions()?.y : (getCaretPositions()?.x - 5))
                 if (window.innerHeight - getCaretPositions()?.y > (transliterateCompRef.current?.clientHeight + 50)) {
-
                 } else {
                     // document.querySelector('.workspace-editor-add-top').scrollIntoView({
                     //     // top: transliterateCompRef.current?.clientHeight,
@@ -7187,145 +6459,120 @@ useEffect(() => {
                     // });
                     document.querySelector(".focused-row")?.scrollIntoView({ behavior: "smooth",block: 'nearest',
                     inline: 'center' });
-                }
-
-               
-                let text = ''
+                }               
+                let text = '';
                 if (charCode == 8) {
                     if (inputTransliterate.current.innerText.length > 0) {
                         text = inputTransliterate.current.innerText.slice(0, -1);
                         textRef.current = inputTransliterate.current.innerText.slice(0, -1)
-                        inputTransliterate.current.innerText = inputTransliterate.current.innerText.slice(0, -1); // 
-                    
-                        e.preventDefault()
-                        renderSuggestions(textRef.current)
+                        inputTransliterate.current.innerText = inputTransliterate.current.innerText.slice(0, -1);                    
+                        e.preventDefault();
+                        renderSuggestions(textRef.current);
                         if(document.querySelector('.input-box-transliterate').innerText.length == 0){
-                            handleDissapear()
+                            handleDissapear();
                         }
                     } else {
-
                     }
                 } else if(charCode >= 65 && charCode <= 90) {
-                    setShowImeSugessiton(true)
-                    text = inputTransliterate.current.innerText + e.key
-                    textRef.current = inputTransliterate.current.innerText + e.key
-                    inputTransliterate.current.innerText = inputTransliterate.current.innerText + e.key
-
-                    e.preventDefault()
-                    renderSuggestions(textRef.current)
+                    setShowImeSugessiton(true);
+                    text = inputTransliterate.current.innerText + e.key;
+                    textRef.current = inputTransliterate.current.innerText + e.key;
+                    inputTransliterate.current.innerText = inputTransliterate.current.innerText + e.key;
+                    e.preventDefault();
+                    renderSuggestions(textRef.current);
                 }else if(charCode >= 106 && charCode <= 111) {
                     if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,e.key)
-                        e.preventDefault()
-                       
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,e.key);
+                        e.preventDefault();                       
                     }
                 }else{
                     if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                    e.preventDefault()
+                    e.preventDefault();
                     }
-                }
-              
-
-
+                } 
             }
             else {
-                console.log(e)
-                if(document.querySelector('.active-transliterate-result') === null) return
-                
+                console.error(e);
+                if(document.querySelector('.active-transliterate-result') === null) return;                
                 if (charCode == 40) {
                     if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
-                        setActiveResult(activeResult == 4 ? 0 : activeResult + 1)
-                        e.preventDefault()
+                        setActiveResult(activeResult == 4 ? 0 : activeResult + 1);
+                        e.preventDefault();
                     } else {
                     }
-
-
                 }else if(charCode >= 48 && charCode <= 57){
                     if (e.shiftKey && document.querySelector('.input-box-transliterate').innerText.length != 0) {
-                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,e.key)
-                        e.preventDefault()
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,e.key);
+                        e.preventDefault();
                     }else{
-                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,null)
-                        e.preventDefault()
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,null);
+                        e.preventDefault();
                     }
                 }else if(charCode == 18){
                     if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
-                        e.preventDefault()
+                        e.preventDefault();
                     }
                 } else if (charCode == 46) {
-                    // console.log('clicked')
                     if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
-                        e.preventDefault()
+                        e.preventDefault();
                     }
                 } else if (charCode == 38) {
                     if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
-                        setActiveResult(activeResult == 0 ? 4 : activeResult - 1)
-                        e.preventDefault()
-                    } else {
-
-                    }
-
-
+                        setActiveResult(activeResult == 0 ? 4 : activeResult - 1);
+                        e.preventDefault();
+                    } else { }
                 }else if((charCode >= 186 && charCode <= 222)){
                     if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
-                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,e.key)
-                        e.preventDefault()
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,e.key);
+                        e.preventDefault();
                     }
                 } else if (charCode == 32) {
                     if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
-                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,null)
-                        e.preventDefault()
-                    } else {
-
-                    }
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText,null);
+                        e.preventDefault();
+                    } else { }
                 }else if (charCode == 13){
                     if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
-                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText, null, false)
-                        e.preventDefault()
+                        insertTextAtCaret(document.querySelector('.active-transliterate-result').innerText, null, false);
+                        e.preventDefault();
                     }
                 } else if (charCode == 39) {
                     if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                        e.preventDefault()
+                        e.preventDefault();
                     } 
                 } else if (charCode == 37) {
                     if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                        e.preventDefault()
+                        e.preventDefault();
                     }
                 } else if (charCode == 16) {
                     if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                        e.preventDefault()
+                        e.preventDefault();
                     }
                 }else {
                     if(document.querySelector('.input-box-transliterate').innerText.length != 0){
-                    setShowImeSugessiton(false)
-                    e.preventDefault()
+                    setShowImeSugessiton(false);
+                    e.preventDefault();
                     }
-
                 }
                 return false;
             }
         }
-
-
-
-        // inputTransliterate.current.innerText = inputTransliterate.current.innerText + e.key 
-
+        // inputTransliterate.current.innerText = inputTransliterate.current.innerText + e.key;
     }
 
     const handlePasteSelection = (e) => {
-
         if (document.querySelector('.input-box-transliterate').innerText.length != 0) {
-            insertTextAtCaret(e.target.innerText,null)
-            e.preventDefault()
+            insertTextAtCaret(e.target.innerText,null);
+            e.preventDefault();
         }
-        e.preventDefault()
+        e.preventDefault();
     }
 
     const handleDissapear = () => {
-        document.querySelector('.input-box-transliterate').innerHTML = ''
-        setOptions([])
-        setActiveResult(0)
-        setShowImeSugessiton(false)
+        document.querySelector('.input-box-transliterate').innerHTML = '';
+        setOptions([]);
+        setActiveResult(0);
+        setShowImeSugessiton(false);
     }
 
     const getWordChoiceListForDocument = () =>{
@@ -7339,11 +6586,10 @@ useEffect(() => {
                         value: each?.glossary_id
                     }
                 })
-                wordChoiceListRef.current = list
-                setWordChoicelist(list)
-                
+                wordChoiceListRef.current = list;
+                setWordChoicelist(list);                
                 // get the selected wordchoice list for the project
-                getSelectedWordChoice()
+                getSelectedWordChoice();
             },
             error: (error) => {},
         });
@@ -7351,19 +6597,17 @@ useEffect(() => {
 
     const addTermToGlossary = (glossary_id) => {
         let formData = new FormData();
-
-        let srcInputEle = glossarySrcFieldRef.current
-        let tarInputEle = glossaryTarFieldRef.current
+        let srcInputEle = glossarySrcFieldRef.current;
+        let tarInputEle = glossaryTarFieldRef.current;
         if(srcInputEle?.value?.trim() === "" || tarInputEle?.value?.trim() === ""){
             if(srcInputEle?.value?.trim() === ""){
-                srcInputEle.classList.add('error-field-style')
+                srcInputEle.classList.add('error-field-style');
             }
             if(tarInputEle?.value?.trim() === ""){
-                tarInputEle.classList.add('error-field-style')
+                tarInputEle.classList.add('error-field-style');
             }
-            return
+            return;
         }
-
         if(isDinamalar){
             formData.append("sl_term", srcInputEle?.value);
             formData.append("tl_term", tarInputEle?.value);
@@ -7378,13 +6622,10 @@ useEffect(() => {
             }
         }
         formData.append("doc_id", documentId);
-
-        let url = ''
-        if(isDinamalar) url = `${Config.BASE_URL}/glex/default_glossary/`
-        else url = `${Config.BASE_URL}/glex/term_save/`
-
-        setIsTermAdding(true)
-
+        let url = '';
+        if(isDinamalar) url = `${Config.BASE_URL}/glex/default_glossary/`;
+        else url = `${Config.BASE_URL}/glex/term_save/`;
+        setIsTermAdding(true);
 
         Config.axios({
             url: url,
@@ -7392,55 +6633,44 @@ useEffect(() => {
             auth: true,
             data: formData,
             success: (response) => {
-                // getWordChoiceListForDocument()
-                setIsTermAdding(false)
-                Config.toast(t("term_added_success"))
-                showHideToolbarElement("showGlossaryAddition")
+                // getWordChoiceListForDocument();
+                setIsTermAdding(false);
+                Config.toast(t("term_added_success"));
+                showHideToolbarElement("showGlossaryAddition");
             },
             error: (error) => { 
-                console.log(error)
+                console.error(error);
                 if(error?.response?.status == 400){
                     Config.toast(t("term_already_exist"),'warning');
                 }else{
-                    Config.toast("Failed to add term!", "error")
-
+                    Config.toast("Failed to add term!", "error");
                 }
-                setIsTermAdding(false)
+                setIsTermAdding(false);
             },
         });
     } 
 
     const handleAddGlossaryTermBtn = () => {
-        let srcTxt = sourceSelectionText?.trim()
-        let tarTxt = targetSelectionText?.trim()
-        // console.log("srcTxt: "+srcTxt)
-        // console.log("tarTxt: "+tarTxt)
+        let srcTxt = sourceSelectionText?.trim();
+        let tarTxt = targetSelectionText?.trim();
         if(window.getSelection()?.toString()?.trim()?.length === 0 || (srcTxt === "" && tarTxt === "")) {
-            Config.toast('Select a term to add!', 'warning')
-            return
+            Config.toast('Select a term to add!', 'warning');
+            return;
         }
-        showHideToolbarElement("showGlossaryAddition")
+        showHideToolbarElement("showGlossaryAddition");
     } 
 
     const getNerTerms = (id) => {
-        
-        // console.log("isDinamalar: "+isDinamalar)
-        // console.log("targetLanguage: "+sourceLanguage)
-        if(!isDinamalar && sourceLanguage !== "English") return
-
+        if(!isDinamalar && sourceLanguage !== "English") return;
         if(previousSegmentIdRef.current !== null && previousSegmentIdRef.current !== ""){
-            let content_editable_div = sourceTextDiv.current[previousSegmentIdRef.current].current
-            // console.log(content_editable_div)
-            if(content_editable_div === null) return 
+            let content_editable_div = sourceTextDiv.current[previousSegmentIdRef.current].current;
+            if(content_editable_div === null) return ;
             var text = removeTagsWithClass(content_editable_div.innerHTML, 'mark', 'ner-highlight');
             content_editable_div.innerHTML = removeSpecificTag(text, 'font');
         }
-
-        previousSegmentIdRef.current = id
-
+        previousSegmentIdRef.current = id;
         let formData = new FormData();
-        let sourceText = translatedResponse.find(element => element.segment_id == id)?.source
-        
+        let sourceText = translatedResponse?.find(element => element.segment_id == id)?.source;        
         formData.append("text", sourceText);
 
         Config.axios({
@@ -7449,40 +6679,34 @@ useEffect(() => {
             auth: true,
             data: formData,
             success: (response) => {
-                highlightNerTerms(response.data?.ner)
+                highlightNerTerms(response.data?.ner);
             },
             error: (error) => {},
         });
     } 
 
     const highlightNerTerms = (nerResposne) => {
-
-        if (sourceTextDiv.current[focusedDivIdRef.current].current.innerText === '') return
-        
-        let content_editable_div = sourceTextDiv.current[focusedDivIdRef.current].current
+        if (sourceTextDiv.current[focusedDivIdRef.current].current.innerText === '') return;        
+        let content_editable_div = sourceTextDiv.current[focusedDivIdRef.current].current;
         if(nerResposne?.length !== 0){
             let words_list = nerResposne?.map(each => {
                 return each
-            })
-
+            });
             var text = removeTagsWithClass(content_editable_div.innerHTML, 'mark', 'ner-highlight');
-            var wordsToHighlight = words_list; // Array of words to highlight
-            
+            var wordsToHighlight = words_list; // Array of words to highlight            
             try{
                 // Generate regular expression pattern with all the words to highlight
                 var pattern = new RegExp('\\b(' + wordsToHighlight.join('|') + ')\\b', 'g');
                 var highlightedHtml = text.replace(
                     pattern, (match) => {
-                        let uid = generateKey()
-                        return `<mark data-word=${`"${match}"`} id=${`"ner-${uid}"`} class="ner-highlight" >${match}</mark>`
+                        let uid = generateKey();
+                        return `<mark data-word=${`"${match}"`} id=${`"ner-${uid}"`} class="ner-highlight" >${match}</mark>`;
                     }
                 );
                 content_editable_div.innerHTML = removeSpecificTag(highlightedHtml, 'font');
             }catch(e){
-                console.log(e)
-            }
-            
-
+                console.error(e);
+            } 
         }
     }
 
@@ -7492,14 +6716,14 @@ useEffect(() => {
             url: `${Config.BASE_URL}/glex/glossary_selected/?project=${documentDetailsRef.current?.project}&option=word_choices`,
             auth: true,
             success: (response) => {
-                let list = response.data
+                let list = response.data;
                 if(list?.length === 0) {
                     // if there is no selected wordchoice for the project by default select the first wordchoice project
-                    setSelectedWordChoiceItem(wordChoiceListRef.current[0])
-                    return
+                    setSelectedWordChoiceItem(wordChoiceListRef.current[0]);
+                    return;
                 }
                 // set the first selected wordchoice by default
-                setSelectedWordChoiceItem(wordChoiceListRef.current?.find(each => parseInt(each?.value) === list[0]?.glossary) )
+                setSelectedWordChoiceItem(wordChoiceListRef.current?.find(each => parseInt(each?.value) === list[0]?.glossary) );
             },
         });
     };
@@ -7509,15 +6733,13 @@ useEffect(() => {
             url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
             auth: true,
             success: (response) => {
-                defaultGlossDetailsRef.current = response.data
+                defaultGlossDetailsRef.current = response.data;
             },
             error: (err) => {
-                // setisGlossaryListLoading(false)
+                // setisGlossaryListLoading(false);
             }
         });
     } 
-
-
     // ================================================================================================================
 
     let id,
@@ -7582,6 +6804,7 @@ useEffect(() => {
                 clientResponseDataRef={clientResponseDataRef}
                 showTaskAssignActionBtn={showTaskAssignActionBtn}
                 setShowTaskAssignActionBtn={setShowTaskAssignActionBtn}
+                check_is_adaptive={check_is_adaptive}
             />
             {
                 showAiLoader && <MainAILoader background={"#ffffffba"} />
@@ -7766,6 +6989,10 @@ useEffect(() => {
                                             </Tooltip>
                                         </li>
                                     </ul> */}
+
+                                    {/* //New changes */}
+
+                                    {/* {!check_is_adaptive && */}
                                 <ul>
                                     <Tooltip title={t("merge")} placement="bottom" arrow>
                                         <li className={!isShowMergeIcon ? "onclickdisable" : ""} onClick={mergeSegments}>
@@ -7789,7 +7016,7 @@ useEffect(() => {
                                             </div>
                                         </li>
                                     </Tooltip>
-                                </ul>
+                                </ul>         
                                 {supportedImeLanguage?.includes(targetLanguageCode) &&  <ul className="last-row-tools-1" onClick={handleIme}>
                                     <li>
                                         <Tooltip title="Transliteration typing" placement="bottom" arrow>
@@ -7799,7 +7026,6 @@ useEffect(() => {
                                         </Tooltip>
                                     </li>
                                 </ul>}
-
                                 {/* {webSpeechLang?.find(each => each.name?.toLowerCase() === targetLanguage?.toLowerCase()) && (
                                     <ul>
                                         <Tooltip title={isListening ? t("listening") : t("voice_typing")} placement="bottom" arrow>
@@ -7822,7 +7048,6 @@ useEffect(() => {
                                         </Tooltip>
                                     </ul>
                                 )} */}
-
                             </div>
                             <div className="toolbar-filter-option">
                                 <div className="pagesize-wrapper">
@@ -7835,8 +7060,7 @@ useEffect(() => {
                                         ref={pageSizeRef}
                                         defaultValue={{ value: 20, label: '20' }}
                                         onChange={(selectedOption) => setSelectedPageSize(selectedOption)}
-                                        components={{ DropdownIndicator, IndicatorSeparator: () => null }}
-                                    />
+                                        components={{ DropdownIndicator, IndicatorSeparator: () => null }}/>
                                     <span>{t("segments/page")}</span>
                                 </div>
                                 {/* <div className="confirm-all-btn">
@@ -8126,8 +7350,7 @@ useEffect(() => {
                     </div>
                 </div>
             )}
-            <section className={"workspace-editor workspace-editor-add-top " + workspaceAreaClassName}>
-                
+            <section className={"workspace-editor workspace-editor-add-top " + workspaceAreaClassName}>                
                 {!isSegmentPageLoading ? (
                     <div className="workspace-container">
                         <div className="workspace-wrap">
@@ -8136,7 +7359,6 @@ useEffect(() => {
                                     <h3>{projectName}</h3>
                                 </div>
                             )}
-
                             {isSegmentLoading ? (
                                 <form className="workspace-form">
                                     <ul id="workspace" className="display load">
@@ -8188,13 +7410,11 @@ useEffect(() => {
                                     <ul id="workspace" className="display" ref={contentEditableParentRef}>
                                         {
                                             translatedResponse?.map((translation, key) => {
-                                                // console.log(translation);
                                                 if (key == 0) {
                                                     // Reset the values whenever renders
                                                     findIds.current = [];
                                                     uniqueFindIdNumber.current = 0;
                                                 }
-                                                // console.log(translatedResponse[key]);
                                                 id = translatedResponse[key].segment_id;
                                                 textUnit = translation?.text_unit;
                                                 segmentNo = translatedResponse[key].segment_count;
@@ -8202,11 +7422,7 @@ useEffect(() => {
                                                 sourceOriginal = translatedResponse[key].tagged_source;
                                                 translation = translatedResponse[key].temp_target ? translatedResponse[key].temp_target : "";
                                                 savedTranslation = translatedResponse[key].target ? translatedResponse[key].target : "";
-                                                machineTranslatedText = translation;
-                                                
-                                                // console.log("===================temp-target===============");
-                                                // console.log(translation);
-                                         
+                                                machineTranslatedText = translation;                                         
                                                 if (isShowTags.current) {
                                                     translation = replaceTextWithTags(translation, "mark"); //Hide for not to show tags
                                                     savedTranslation = replaceTextWithTags(savedTranslation); //Hide for not to show tags
@@ -8262,14 +7478,9 @@ useEffect(() => {
                                                         );
                                                     });
                                                 }
-
-
                                                 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
                                                 const restoreMTTranslation = () => {
-                                                    // console.log(targetContentEditable.current[focusedDivId].current)
                                                     if (targetContentEditable.current[focusedDivId].current.innerHTML.trim().length === 0) {
-                                                        // console.log("sarvesh "+translation)
                                                         targetContentEditable.current[focusedDivId].current.innerHTML = translation
                                                         setShowParaphraseBtn(true)
                                                         resetSynonymStates()
@@ -8288,12 +7499,7 @@ useEffect(() => {
                                                         each.contentEditable = 'false'
                                                     })
                                                 }
-
                                                 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-                                                // console.log(translation);
-                                                // console.log(replaceTagsWithText(translation))
                                                 return (
                                                     <li key={id} onClick={() => !isWorkspaceEditable && highlightFocusedSegment(translatedResponse[key].segment_id)}>
                                                         {/* {console.log("-1")} */}
@@ -8310,8 +7516,7 @@ useEffect(() => {
                                                                     : (allSegmentStatusState[id] == 102 || allSegmentStatusState[id] == 104 || allSegmentStatusState[id] == 106 || allSegmentStatusState[id] == 110) ?
                                                                         "confirmed-segment" : "") + (translatedResponse[key].isFocused ? " focused-row" : "")
                                                             }
-                                                            data-id={id}
-                                                        >
+                                                            data-id={id}>
                                                             <div className="src-lang-part trigger-focus" data-id={id} onClick={(e) => isWorkspaceEditable && sourceSegmentClick(e)}>
                                                                 <div className="src-workspace-align trigger-focus" data-id={id} style={translatedResponse[key].isFocused ? { justifyContent: 'space-between' } : { justifyContent: 'flex-end' }} >
                                                                     <div
@@ -8334,8 +7539,7 @@ useEffect(() => {
                                                                         source-data-text-unit={textUnit}
                                                                         suppressContentEditableWarning={true}
                                                                         data-source-text={sourceOriginal}
-                                                                        spellCheck="false"
-                                                                    >
+                                                                        spellCheck="false" >
                                                                         {parse(sourceText)}
                                                                     </div>
                                                                     {segmentNo != null && (
@@ -8393,18 +7597,13 @@ useEffect(() => {
                                                                     )}
                                                                 </div>
                                                             </div>
-                                                            {/* {console.log("testing 0")} */}
                                                             <div className="target-lang-part trigger-focus" data-id={id} onClick={(e) => targetSegmentClick(e)}>
-                                                                {/* {console.log("testing 1")} */}
                                                                 <div className="workspace-align trigger-focus" data-id={id}>
-                                                                    {/* {console.log("testing 2")} */}
                                                                     <div className="form-group new-form-group trigger-focus" data-id={id}>
-                                                                        
                                                                         <div style={{display: ((isSegmentDataLoading && focusedDivId == id) && (!translatedResponse[key].status || forcedLoaderRef.current)) ? 'block' : 'none'}}>
                                                                             <Skeleton animation="wave" height={15} style={{ marginBottom: 6 }} />
                                                                             <Skeleton animation="wave" height={15} width="80%" />
                                                                         </div>
-
                                                                         <div
                                                                             style={targetLanguageFontSize != null ? { fontSize: targetLanguageFontSize, opacity: (isSegmentDataLoading && focusedDivId == id && (!translatedResponse[key].status || forcedLoaderRef.current)) ? 0 : 1 } : {opacity: isSegmentDataLoading ? 0 : 1}}
                                                                             data-placeholder={(segmentNo == 1 && !isUserIsReviwer) ? "Click here to translate..." : (segmentNo == 1 && isUserIsReviwer) ? "Click here to review" : (isConfirmBtnClicked && segmentNo == 2) ? "Click here to continue" : ''}
@@ -8449,8 +7648,6 @@ useEffect(() => {
                                                                                     </>
                                                                                 ) : null
                                                                             ) : null}
-
-                                                                            
                                                                             {/* <AdaptiveMTTabs 
                                                                                 segmentId={id}
                                                                                 updateTranslatedResponseSegment={updateTranslatedResponseSegment}
@@ -8461,9 +7658,7 @@ useEffect(() => {
                                                                                 setIsSegmentDataLoading={setIsSegmentDataLoading}
                                                                                 forcedLoaderRef={forcedLoaderRef}
                                                                             /> */}
-
                                                                         </div>
-
                                                                         <div data-id={id} className="workspace-btn-algin trigger-focus">
                                                                             {/* <span
                                                                                 ref={notSavedStatus.current[id]}
@@ -8484,11 +7679,7 @@ useEffect(() => {
                                                                                 Changes Saved!
                                                                             </span> */}
 
-                                                                            <Tooltip
-                                                                                title={`${segmentStatuses[allSegmentStatusState[id]]}`}
-                                                                                placement="top"
-                                                                                arrow
-                                                                            >
+                                                                            <Tooltip title={`${segmentStatuses[allSegmentStatusState[id]]}`} placement="top" arrow >
                                                                                 <div type="button"
                                                                                     id={"save-btn-" + id}
                                                                                     ref={saveBtn.current[id]}
@@ -8497,10 +7688,7 @@ useEffect(() => {
                                                                                     onClick={(e) => { !isSegmentConfirming && (isWorkspaceEditable && updateTranslationById(e)) }}
                                                                                 // onClick={(e) => {saveAndNextUnsavedSegment()}}
                                                                                 >
-                                                                                    <div 
-                                                                                        data-id={id}
-                                                                                        style={{display: 'flex', alignItems: 'center'}} 
-                                                                                    >
+                                                                                    <div  data-id={id}  style={{display: 'flex', alignItems: 'center'}}  >
                                                                                         {!isSegmentConfirming ? (
                                                                                             <CheckCircleOutlineOutlinedIcon
                                                                                                 data-id={id}
@@ -8519,7 +7707,6 @@ useEffect(() => {
                                                                                     {/* <div ref={saveBtn.current[id]} className="check-circle" data-id={id}></div> */}
                                                                                 </div>
                                                                             </Tooltip>
-
                                                                             <Tooltip data-id={id} title={t("restore_tags")} placement="top" arrow>
                                                                                 <a type="button" className="workspace-feature-btn" data-id={id} onClick={(e) => isWorkspaceEditable && restoreTags(e)}>
                                                                                     <div className="position-relative" data-id={id}>
@@ -8527,7 +7714,6 @@ useEffect(() => {
                                                                                     </div>
                                                                                 </a>
                                                                             </Tooltip>
-
                                                                             <Tooltip title={t("add_view_comments")} placement="top" arrow>
                                                                                 <a
                                                                                     type="button"
@@ -8541,15 +7727,13 @@ useEffect(() => {
                                                                                         boxShadow: '0px 3px 3px #00000014',
                                                                                         border: '1px solid #0000000F'
                                                                                     }}
-                                                                                    onClick={(e) => showCommentSection(e)}
-                                                                                >
+                                                                                    onClick={(e) => showCommentSection(e)} >
                                                                                     {/* <div data-id={id} className={hasComment ? "comment-batch" : ""}>
                                                                                             <AddCommentOutlinedIcon style={{color: '#0074d3'}} />
                                                                                         </div> */}
                                                                                     <div data-id={id} className={hasComment ? "comment comment-batch" : "comment"}></div>
                                                                                 </a>
                                                                             </Tooltip>
-
                                                                             <Tooltip data-id={id} title={qaCountShow ? `${errorNoteCount.current} ${errorNoteCount.current === 1 ? t("issue") : t("issues")} ${t("found")}` : t("qa_text")} placement="top" arrow>
                                                                                 <a type="button" className="workspace-feature-btn" data-id={id} onClick={(e) => showQaSection(e)}>
                                                                                     <div className="position-relative">
@@ -8563,7 +7747,6 @@ useEffect(() => {
                                                                                     </div>
                                                                                 </a>
                                                                             </Tooltip>
-
                                                                         </div>
                                                                         {hasComment && (
                                                                             <Tooltip title={t("add_view_comments")} placement="top" arrow>
@@ -8718,7 +7901,6 @@ useEffect(() => {
                     </div>    
                 </div>
             </section>
-
             <WorkspaceFeatures 
                 workspaceFeaturRef={workspaceFeaturRef} 
                 advancedOptionVisibility={advancedOptionVisibility}
@@ -8784,7 +7966,6 @@ useEffect(() => {
                 activeFooterTab={activeFooterTab}
                 setActiveFooterTab={setActiveFooterTab}
             />
-
             {popoverTarget != null && (
                 <div>
                     <Popover
@@ -8796,8 +7977,7 @@ useEffect(() => {
                         <PopoverHeader>{spellCheckPopoverContent}</PopoverHeader>
                     </Popover>
                 </div>
-            )}
-           
+            )}           
             {/* Synonym popover */}
             {
                 (synonymPopoverTarget?.length && synonymPopoverOpen) ? (
@@ -8815,7 +7995,6 @@ useEffect(() => {
                     </div>
                 ) : null
             }
-
             {/* Grammar check popover */}
             {
                 (grammarCheckPopoverTarget.length !== 0 && grammarCheckSuggestedSentence.length !== 0 && enableSpellCheck && grammarPopoverOpen) ? (
@@ -8844,8 +8023,7 @@ useEffect(() => {
                     transformOrigin={{
                         vertical: 'top',
                         horizontal: 'left',
-                    }}
-                >
+                    }} >
                     <div className="transphraseing-popover-box">
                         <div className="header-wrapper">
                             <span className="header-text d-flex">
@@ -8856,13 +8034,9 @@ useEffect(() => {
                                     </span>
                                 )}
                             </span>
-                            <span
-                                onClick={handleTransphrasePopoverClose}
-                                className="transphrasing-popover-close-icon"
-                            >
+                            <span onClick={handleTransphrasePopoverClose} className="transphrasing-popover-close-icon" >
                                 <img src={CloseBlack} alt="close_black" />
                             </span>
-
                         </div>
                         {(paraphraseTrigger && paraPhraseResList !== null) ? (
                             <div className="paraphrase-result-div">
@@ -8888,9 +8062,7 @@ useEffect(() => {
                         )}
                     </div>
                 </MUIPopover>
-
             )}
-
             {showCreditAlert && (
                 <div className="credit-alert-box">
                     <div className="credit-alert-bg"></div>
@@ -8903,8 +8075,7 @@ useEffect(() => {
                                     shouldShowInsufficientModal(false);
                                     setPartialPretranslate(false)
                                 }}
-                                className="credits-close-btn"
-                            >
+                                className="credits-close-btn" >
                                 <img src={CloseBlack} alt="close_black" />
                             </span>
                         </div>
@@ -9005,7 +8176,6 @@ useEffect(() => {
                 run={!isProductTourSeen}
                 scrollToFirstStep={true}
             />
-
             <Joyride
                 steps={[
                     {
@@ -9083,8 +8253,7 @@ useEffect(() => {
             <AilaysaGlossariesModal 
                 documentDetails={documentDetailsRef.current}
                 defaultGlossDetailsRef={defaultGlossDetailsRef}
-                getDefaultGlossDetails={getDefaultGlossDetails}
-            />
+                getDefaultGlossDetails={getDefaultGlossDetails}/>
             {selectedCoordinates && (
                 <OnTheFlyGlossary 
                     selectedCoordinates={selectedCoordinates}
@@ -9093,8 +8262,7 @@ useEffect(() => {
                     targetSelectionText={targetSelectionText}
                     defaultGlossDetailsRef={defaultGlossDetailsRef}
                     taskId={defaultGlossDetailsRef.current ? defaultGlossDetailsRef.current?.gloss_task_id : documentDetailsRef.current.task_id}
-                    focusedDivIdRef={focusedDivIdRef}
-                />
+                    focusedDivIdRef={focusedDivIdRef}/>
             )}
         </React.Fragment>
     );

@@ -703,7 +703,6 @@ function DashboardQuickAccess(props){
 
     const handleIndividualTaskAssignManage = (e, selectedStep, task, project) => {
         e.stopPropagation();
-        // console.log(task);
         selectedFileRow.current = {
             task: task.id,
             job: task.job,
@@ -722,7 +721,6 @@ function DashboardQuickAccess(props){
 
     const handleShowLSPAssignManage = (e, project) => {
         e.stopPropagation();
-        // console.log(assign_enable)
         selectedFileRow.current = {
             project: project?.id,
             steps: project?.steps,
@@ -734,7 +732,6 @@ function DashboardQuickAccess(props){
 
     /* Edit task assignment by id */
     const editAssignedTask = (e, project, task, jobId, stepId) => {
-        // console.log(taskId)
         // e.stopPropagation()
         selectedFileRow.current = {
             task: task.id,
@@ -763,7 +760,6 @@ function DashboardQuickAccess(props){
     };
 
     const handleMoreVertOption = (e, id) => {
-        console.log(id)
         e.stopPropagation();
         setOpenedMoreOption(id)
         setMoreEl(true);
@@ -1014,8 +1010,6 @@ function DashboardQuickAccess(props){
                 setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription);
                 setAddonCredit(response?.data?.credits_left?.addon);
                 setSubscriptionCredit(response?.data?.credits_left?.subscription);
-                // console.log(response?.data?.credits_left?.total_buyed)
-                // console.log(progressPercentage)
                 if (response?.data?.credits_left?.total_buyed === 0) {
                     setProgressPercentage(0)
                 } else {
@@ -1301,7 +1295,6 @@ function DashboardQuickAccess(props){
                 });
             }
         });
-        // console.log(a)
         let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
         setTargetLangListToRemove(targetLangToRemove);
     }, [targetLanguage]);
@@ -1443,7 +1436,6 @@ function DashboardQuickAccess(props){
         let projectIdParam = URL_SEARCH_PARAMS.get("project")
         if (proceedAssignParam !== null && proceedAssignParam !== undefined && projectIdParam && createdProjectsList?.length !== 0) {
             let assignIcon = document.querySelector(`#project-assigni-icon-${projectIdParam}`)
-            // console.log(assignIcon);
             assignIcon?.click()
 
         }
@@ -1583,10 +1575,8 @@ function DashboardQuickAccess(props){
     // need to put in useeffect instead of a function because new need to clear the timeout when the component is unmounted (so, we clear the settimout in return of useeffect)
     // otherwise if written as function the settimout will be called in every component until the page is reloaded
     useEffect(() => {
-        // console.log(analysisRunningProjectList);
         if (analysisRunningProjectList?.length !== 0) {
             let list = "";
-            // console.log(analysisRunningProjectListRef.current)
             analysisRunningProjectList?.map((each, index) => {
                 if (each?.id !== null || each?.proj) {
                     list += `project_id=${each.id ? each.id : each?.proj}${index !== analysisRunningProjectList?.length - 1 ? "&" : ""
@@ -1600,15 +1590,11 @@ function DashboardQuickAccess(props){
                 success: (response) => {
                     let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'))
                     let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'))
-                    // console.log(analysisRunningProjectListRef.current)
                     // if(finishedProj?.length !== 0){
-                    //     // console.log(finishedProj)
                     //     finishedProj?.map(each => {
 
                     //     })
                     // }
-                    // console.log(runningProj)
-
                     if (runningProj?.length !== 0) {
                         const newArr = createdProjectsRef.current?.map(obj => {
                             if (obj.id === response.data?.out?.find(each => each.proj === obj.id)?.proj) {
@@ -1619,10 +1605,8 @@ function DashboardQuickAccess(props){
                             }
                             return obj;
                         });
-                        // console.log(newArr);
                         setCreatedProjects(newArr)
                         wordCountAnalysisTimeoutRef.current = setTimeout(() => {
-                            // console.log(runningProj)
                             setAnalysisRunningProjectList(runningProj)
                             analysisRunningProjectListRef.current = runningProj
                             wordCountAnalysisTriggerRef.current = !wordCountAnalysisTriggerRef.current
@@ -1718,7 +1702,6 @@ function DashboardQuickAccess(props){
         if (hasParentThisClass(e?.target, "selected-file-row") || hasParentThisClass(e?.target, "dont-open-files")) return;
         setSelectedProjectFiles([]);
         // setProjectType(projectType);
-        // console.log(openedProjectId)
         if (projectId == openedProjectId) {
             setOpenedProjectId(null);
         } else {
@@ -1737,18 +1720,11 @@ function DashboardQuickAccess(props){
                 // let responseTemp = response.data;
                 setPreTranslateAllTask([])
                 selectedProjectFilesRef.current = response.data
-
-                // console.log(createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail);
                 // getVoiceTranscribeTaskStatus(projectId)
-
                 isProjectPreTranslate.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.pre_translate
-                // console.log(isProjectPreTranslate.current);
-                // console.log(isProjectTransciptionRef.current);
-
                 if (createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail != null) {
                     isProjectTransciptionRef.current = createdProjectsRef.current?.find(each => each.id == selectedProjectIdRef.current)?.voice_proj_detail.project_type_sub_category == 1
                 }
-
                 if (isProjectPreTranslate.current || isProjectTransciptionRef.current) {
                     // for transcription projects
                     if (isProjectTransciptionRef.current) {
@@ -1765,7 +1741,6 @@ function DashboardQuickAccess(props){
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
                                 setSelectedProjectFiles(newArr)
                                 let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True')
                                 if (voiceStatusResponse.data.res?.length !== canOpenFiles?.length) {
@@ -1786,7 +1761,6 @@ function DashboardQuickAccess(props){
                             auth: true,
                             success: (statusResponse) => {
                                 const newArr = response.data?.map(obj => {
-                                    // console.log(statusResponse.data.res?.find(each => each.task === obj.id)?.task)
                                     if (obj.id === statusResponse.data.res?.find(each => each.task === obj.id)?.task) {
                                         return {
                                             ...obj,
@@ -1800,7 +1774,6 @@ function DashboardQuickAccess(props){
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
                                 setSelectedProjectFiles(newArr)
                                 let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
                                 if (statusResponse.data.res?.length !== canOpenFiles?.length) {
@@ -1822,12 +1795,9 @@ function DashboardQuickAccess(props){
 
     };
 
-
-
     useEffect(() => {
         if (transcriptionTaskList?.length !== 0) {
             let canOpenFiles = transcriptionTaskList?.filter(each => each.open == 'True')
-            // console.log(canOpenFiles)
             if (transcriptionTaskList?.length !== canOpenFiles?.length) {   // if any one of the task is not 
                 myTimeoutFunc.current = setTimeout(() => {
                     Config.axios({
@@ -1849,7 +1819,6 @@ function DashboardQuickAccess(props){
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
                                 setSelectedProjectFiles(newArr)
                             })
                             setTranscriptionTaskList(response.data.res)
@@ -1866,7 +1835,6 @@ function DashboardQuickAccess(props){
                     }
                     return obj;
                 });
-                // console.log(newArr);
                 setSelectedProjectFiles(newArr)
             }
         }
@@ -1876,7 +1844,6 @@ function DashboardQuickAccess(props){
     useEffect(() => {
         if (preTranslateAllTask?.length !== 0) {
             let canOpenFiles = preTranslateAllTask?.filter(each => each.open == 'True')
-            // console.log(canOpenFiles)
             if (preTranslateAllTask?.length !== canOpenFiles?.length) {   // if any one of the task is not 
                 myTimeoutFunc.current = setTimeout(() => {
                     Config.axios({
@@ -1899,7 +1866,6 @@ function DashboardQuickAccess(props){
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
                                 setSelectedProjectFiles(newArr)
                             })
                             setPreTranslateAllTask(response.data.res)
@@ -2023,7 +1989,6 @@ function DashboardQuickAccess(props){
                                             }
                                             return obj;
                                         });
-                                        // console.log(newArr)
                                         setSelectedProjectFiles(newArr)
                                         let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
                                         if (statusResponse.data.res?.length !== canOpenFiles?.length) {
@@ -2339,10 +2304,9 @@ function DashboardQuickAccess(props){
             url: `${Config.BASE_URL}/workspace/express_project_detail/${projectId}`,
             auth: true,
             success: (response) => {
-                // console.log(mtpeEngineRef.current);
                 let { data } = response;
-                setExpressProjectName(data.project_name)
-                setHasTeam(data.team)
+                setExpressProjectName(data.project_name);
+                setHasTeam(data.team);
                 setEditJobs(data.jobs);
                 let editTargetLanguages = [];
                 let tar = [];
@@ -2501,7 +2465,6 @@ function DashboardQuickAccess(props){
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("task_unassigned"));
                 listFiles(project?.id)
                 // props.history(`/file-upload?page=1&order_by=-id&open-project=${projectID}`)
@@ -2608,10 +2571,9 @@ function DashboardQuickAccess(props){
             method: "GET",
             success: (response) => {
                 if (response.status === 200) {
-                    // console.log(response.data.url)
-                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`)
+                    setPoPDFUrl(`${Config.BASE_URL}${response?.data?.url}`);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
@@ -2620,14 +2582,10 @@ function DashboardQuickAccess(props){
     // task accept api 
     const taskAssignUpdate = (targetValue) => {
         // e.stopPropagation(); 
-        // console.log(particularClickedTask)
         var formdata = new FormData();
         formdata.append("task_ven_status ", targetValue);
         formdata.append("task", particularClickedTask);
         formdata.append("step", stepToAccept);
-
-        // console.log(isTaskReassigned.current)
-
         if (isTaskReassigned.current) {
             formdata.append("reassigned", 'True')
         }
@@ -2639,7 +2597,6 @@ function DashboardQuickAccess(props){
             data: formdata,
             success: (response) => {
                 if (response.status === 200) {
-                    // console.log(response.data)
                     setShowPoModal(false)
                     listFiles(openedProjectId)
                     isTaskReassigned.current = false
@@ -2652,62 +2609,37 @@ function DashboardQuickAccess(props){
     }
 
     const handleAcceptBtn = (assignmentId, taskId, step, is_reassigned) => {
-        setParticularClickedTask(taskId)
-        setStepToAccept(step)
-        getPOPdf(assignmentId)
-        setShowPoModal(true)
-        // console.log(is_reassigned)
-        isTaskReassigned.current = typeof is_reassigned === 'boolean' ? true : false
+        setParticularClickedTask(taskId);
+        setStepToAccept(step);
+        getPOPdf(assignmentId);
+        setShowPoModal(true);
+        isTaskReassigned.current = typeof is_reassigned === 'boolean' ? true : false;
     }
 
     // peoples circle
     const AssignInfoUiBox = (props) => {
         let { project, selectedProjectFile, eachRole } = props;
-        // console.log(selectedProjectFile);
-        // console.log(eachRole?.assigned_by_details?.avatar);
-        // console.log(eachRole);
-
         // let editorProfile = (Config.userState?.id !== eachRole?.assign_to_details?.id && eachRole?.assign_to_details?.avatar)
-
-        // console.log(eachRole);
         // let assigned_by_name = (Config.userState?.id === eachRole?.assigned_by_details?.id ? 
         //                     eachRole?.assigned_by_details?.name : 
         //                     eachRole?.assign_to_details?.name)
-
         // let assigned_to_name = (Config.userState?.id === eachRole?.assign_to_details?.id ? 
         //                     eachRole?.assign_to_details?.name :
-        //                     eachRole?.assigned_by_details?.name)  
-
+        //                     eachRole?.assigned_by_details?.name) 
         // let editorEmail = (Config.userState?.id === eachRole?.assign_to_details?.id ? 
         //                     eachRole?.assigned_by_details?.email : 
         //                     eachRole?.assign_to_details?.email)
-
-
         let assigned_by_name = eachRole?.assigned_by_details?.name
         let assigned_to_name = eachRole?.assign_to_details?.name
         let assigned_to_isExternal = eachRole?.assign_to_details?.external_editor
-
-
         let assignedByOrAssignedTo = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("assigned_to")}:` : `${t("assigned_by")}:`
-
         let by_or_to = Config.userState?.id === eachRole?.assign_to_details?.id ? `${t("to_sm")}` : `${t("by")}`
-
         let editorProfile = (by_or_to === 'by' ? eachRole?.assign_to_details?.avatar : eachRole?.assigned_by_details?.avatar)
-
         // let assignBy = Config.userState?.id === eachRole?.assign_to_details?.id ? true : false
         let editorRole = eachRole?.task_assign_detail?.step === 1 ? t("editor") : t("reviewer")
-
         let stepId = eachRole?.task_assign_detail?.step === 1 ? 1 : eachRole?.task_assign_detail?.step === 2 && 2
-
         let assign_info = selectedProjectFile?.task_assign_info?.find(each => each.task_assign_detail.step === stepId)
-
-
-        // console.log(eachRole?.change_request_reason);
-        // console.log(eachRole);
         // && assign_info.task_assign_detail.task_status === "Completed"
-
-        // console.log(assignedByOrAssignedTo)
-        // console.log(by_or_to === 'by' ? assigned_by_name : assigned_to_name)
 
         return (
             // <div className="custom-assign-box-wrapper">
@@ -3046,7 +2978,6 @@ function DashboardQuickAccess(props){
                                     }
                                     return obj;
                                 });
-                                // console.log(newArr)
                                 setSelectedProjectFiles(newArr)
                                 let canOpenFiles = statusResponse.data.res?.filter(each => each.open == 'True')
                                 if (statusResponse.data.res?.length !== canOpenFiles?.length) {
@@ -3070,7 +3001,6 @@ function DashboardQuickAccess(props){
                         //     auth: true,
                         //     success: (voiceStatusResponse) => {
                         //         const newArr = selectedProjectFilesRef.current.data?.map(obj => {
-                        //             // console.log(statusResponse.data.res?.find(each => each.task === obj.id)?.task)
                         //             if (obj.id === voiceStatusResponse.data.res?.find(each => each.task === obj.id)?.task) {
                         //                 return {
                         //                     ...obj, 
@@ -3079,7 +3009,6 @@ function DashboardQuickAccess(props){
                         //             }
                         //             return obj;
                         //         });
-                        //         console.log(newArr)
                         //         setSelectedProjectFiles(newArr)
                         //         let canOpenFiles = voiceStatusResponse.data.res?.filter(each => each.open == 'True')
                         //         if(voiceStatusResponse.data.res?.length !== canOpenFiles?.length){
@@ -3123,38 +3052,36 @@ function DashboardQuickAccess(props){
             url: `${Config.BASE_URL}/workspace/convert_text_to_speech_source/?task=${taskid}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data?.source_audio_file)
                 const newArr = selectedProjectFiles?.map(obj => {
                     if (obj.id === taskid) {
                         return { ...obj, audio_file_url: response.data?.source_audio_file };
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                setSelectedProjectFiles(newArr)
-                setClickedOpenButton(null)
+                setSelectedProjectFiles(newArr);
+                setClickedOpenButton(null);
                 getCreditStatus();
             },
             error: (err) => {
                 if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                    setShowCreditAlertModal(true)
-                    setClickedOpenButton(null)
+                    setShowCreditAlertModal(true);
+                    setClickedOpenButton(null);
                 }
                 if (err.response.data?.msg !== undefined && err.response.data?.msg?.includes('Text to Speech conversion ongoing')) {
-                    setShowProcessingModal(true)
-                    setTextToSpeechConvert(true)
-                    setClickedOpenButton(null)
+                    setShowProcessingModal(true);
+                    setTextToSpeechConvert(true);
+                    setClickedOpenButton(null);
                     setTimeout(() => {
-                        setTextToSpeechConvert(false)
-                        setShowProcessingModal(false)
-                        setShowProcessingModal(false)
+                        setTextToSpeechConvert(false);
+                        setShowProcessingModal(false);
+                        setShowProcessingModal(false);
                     }, 4000);
                 } else {
-                    Config.toast('Download failed', 'error')
-                    setClickedOpenButton(null)
+                    Config.toast('Download failed', 'error');
+                    setClickedOpenButton(null);
                 }
                 getCreditStatus();
-                // Config.toast('Download failed', 'error')
+                // Config.toast('Download failed', 'error');
             }
         });
     }
@@ -3173,23 +3100,21 @@ function DashboardQuickAccess(props){
     // get analysied report for project and its task (project analysis)
     const handleShowAnalysisModal = (e, projectID, callback = false) => {
         e?.stopPropagation();
-        setProjectAnalysisedData(null)
+        setProjectAnalysisedData(null);
         if (!callback) {
-            projectAnalysisTempProjectId.current = projectID
+            projectAnalysisTempProjectId.current = projectID;
         }
-        projectAnalysisApiCounter.current++
-        // console.log(projectID)
+        projectAnalysisApiCounter.current++;
+
         Config.axios({
             url: `${Config.BASE_URL}/tm/project_analysis/${projectID}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 let {
                     payable_rate,
                     project_wwc,
                     task_wwc
-                } = response.data
-
+                } = response.data;
                 let payable_rates = {
                     info: {
                         id: payable_rate?.id,
@@ -3210,8 +3135,7 @@ function DashboardQuickAccess(props){
                         key10: payable_rate?.tm_102_percentage,
                     }
                 }
-
-                let project = []
+                let project = [];
                 project_wwc?.map(each => {
                     project.push({
                         projectInfo: {
@@ -3290,7 +3214,6 @@ function DashboardQuickAccess(props){
             error: (err) => {
                 if (err.response?.status === 401) {
                     setTimeout(() => {
-                        // console.log(projectAnalysisTempProjectId.current)
                         if (projectAnalysisApiCounter.current <= 10) {
                             handleShowAnalysisModal(e, projectAnalysisTempProjectId.current, true)
                         } else {
@@ -3318,10 +3241,8 @@ function DashboardQuickAccess(props){
         setMoreEl(false)
         let url = `${Config.BASE_URL}/exportpdf/docx_file_download/?${targetValue === 'task' ? 'task_id' : 'id'}=${taskID}`
         const response = await Config.downloadFileFromApi(url);
-        // console.log(response);
         const filename = response.headers['content-disposition']?.split('filename*=')[1];
         downloadedFileName.current = decodeURIComponent(filename?.replace(`UTF-8''`, ''))
-        // console.log(filename);
         const blob_url = URL.createObjectURL(new Blob([response.data]));
         setHiddenLinkUrl(blob_url)
         downloadref.current?.click();
@@ -3336,25 +3257,23 @@ function DashboardQuickAccess(props){
             method: 'POST',
             auth: true,
             success: (response) => {
-                // console.log(response.data);
-                checkPdfConversionStatus(taskId)
+                checkPdfConversionStatus(taskId);
                 getCreditStatus();
-                setClickedOpenButton(null)
+                setClickedOpenButton(null);
             },
             error: (err) => {
                 if (err.response?.data?.msg?.includes('Insufficient Credits')) {
-                    setShowCreditAlertModal(true)
-                    setClickedOpenButton(null)
+                    setShowCreditAlertModal(true);
+                    setClickedOpenButton(null);
                 }
                 if (err.response?.data?.msg?.includes('File Cannot be Processed')) {
-                    Config.toast(t("file_is_corrupted"), 'error')
-                    listFiles(projectId)
-                    // console.log(newArr)
+                    Config.toast(t("file_is_corrupted"), 'error');
+                    listFiles(projectId);
                 }
-                setClickedOpenButton(null)
+                setClickedOpenButton(null);
                 // else{
-                //     Config.toast('Conversion failed', 'error')
-                //     setClickedOpenButton(null)
+                //     Config.toast('Conversion failed', 'error');
+                //     setClickedOpenButton(null);
                 // }
                 // getCreditStatus();
             }
@@ -3366,7 +3285,6 @@ function DashboardQuickAccess(props){
             url: `${Config.BASE_URL}/exportpdf/convertpdftodocx/?task=${taskId}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data);
                 if (response.data?.status === '') {
                     convertPdfToDocxFromTask(taskId, projectId)
                 }
@@ -3394,9 +3312,8 @@ function DashboardQuickAccess(props){
                         }
                         return obj;
                     });
-                    // console.log(newArr)
-                    setSelectedProjectFiles(newArr)
-                    setClickedOpenButton(null)
+                    setSelectedProjectFiles(newArr);
+                    setClickedOpenButton(null);
                 }
             }
         });
@@ -3449,61 +3366,57 @@ function DashboardQuickAccess(props){
     }
 
     const handleTaskDeleteButton = (e, project_id, taskId, taskAssignInfo) => {
-        e.preventDefault()
-        setMoreEl(false)
-        // e.stopPropagation()
-
-        // console.log(project_id)
-        // console.log(taskId)
-        // console.log(taskAssignInfo)
+        e.preventDefault();
+        setMoreEl(false);
+        // e.stopPropagation();
         taskDeleteParam.current = {
             project_id: project_id,
             taskId: taskId
         }
         if (taskAssignInfo !== null) {
-            taskDeleteFunction()
+            taskDeleteFunction();
         } else {
-            setShowTaskDeleteAlert(true)
+            setShowTaskDeleteAlert(true);
         }
 
     }
 
     const taskDeleteFunction = () => {
-        setIsTaskDeleting(true)
+        setIsTaskDeleting(true);
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/tasks/${taskDeleteParam.current?.taskId}/`,
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                setIsTaskDeleting(false)
+                setIsTaskDeleting(false);
                 if (selectedProjectFiles?.length === 1) {
                     Config.toast(t("deleted_success"));
-                    setCreatedProjects(createdProjects?.filter(each => each.id !== taskDeleteParam.current?.project_id))
+                    setCreatedProjects(createdProjects?.filter(each => each.id !== taskDeleteParam.current?.project_id));
                     if (createdProjects?.filter(each => each.id !== taskDeleteParam.current?.project_id)?.length === 0) setEmptyProjects(true);
                 } else {
                     Config.toast(t("task_deleted_success"));
                 }
-                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each.id !== taskDeleteParam.current?.taskId))
-                setShowTaskDeleteAlert(false)
+                setSelectedProjectFiles(selectedProjectFiles?.filter(each => each.id !== taskDeleteParam.current?.taskId));
+                setShowTaskDeleteAlert(false);
             },
             error: (err) => {
                 if (err.response?.status === 400) {
                     if (err.response?.data?.Message?.includes('Unassign')) {
-                        setShowTaskDeleteAlert(true)
-                        setUnassignTaskDeleteAlert(true)
-                        setIsTaskDeleting(false)
+                        setShowTaskDeleteAlert(true);
+                        setUnassignTaskDeleteAlert(true);
+                        setIsTaskDeleting(false);
                     }
                 }
-                setIsTaskDeleting(false)
+                setIsTaskDeleting(false);
             }
         });
     }
 
-
     const focusTargetLangDiv = () => {
-        if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #E74C3C;'
+        if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #E74C3C;';
         setTimeout(() => {
-            if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #ced4da;'
+            if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #ced4da;';
         }, 1000);
     }
 
@@ -3512,16 +3425,13 @@ function DashboardQuickAccess(props){
             url: `${Config.BASE_URL}/workspace/voice_task_status/?project=${projectId}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 // const newArr = selectedProjectFiles?.map(obj => {
-                //     // console.log(response.data.res?.find(each => each.task === obj.id)?.task)
                 //     if (obj.id === response.data.res?.find(each => each.task === obj.id)?.task) {
                 //       return {...obj, pre_trans_processing: response.data.res?.find(each => each.task === obj.id)?.open};
                 //     }
                 //     return obj;
                 // });
-                // // console.log(newArr)
-                // setSelectedProjectFiles(newArr)
+                // setSelectedProjectFiles(newArr);
             },
             error: (err) => {
 
@@ -3573,7 +3483,6 @@ function DashboardQuickAccess(props){
                 setIsDownloading(false)
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
             let responseObj = JSON.parse(await err.response.data.text())
             if (err.response.status === 400) {
                 if (responseObj?.msg?.includes('Pending')) {
@@ -3690,13 +3599,11 @@ function DashboardQuickAccess(props){
                     }
                     return obj;
                 });
-                // console.log(newArr)
                 setSelectedProjectFiles(newArr)
                 // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
                 setIsDownloading(false)
             }
         } catch (err) {
-            // console.log(JSON.parse(await err.response.data.text()))
             let responseObj = JSON.parse(await err.response.data.text())
             if (err.response.status === 400) {
                 if (responseObj?.celery_id) {
@@ -3731,12 +3638,11 @@ function DashboardQuickAccess(props){
                     }
                     return obj;
                 });
-                // console.log(newArr)
-                Config.toast(t("something_wrong_file_process"), 'warning')
-                setSelectedProjectFiles(newArr)
-                dispatch(deleteDownloadingFile({ id: uniqueKey }))
-                // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id)
-                setIsDownloading(false)
+                Config.toast(t("something_wrong_file_process"), 'warning');
+                setSelectedProjectFiles(newArr);
+                dispatch(deleteDownloadingFile({ id: uniqueKey }));
+                // downloadingFilesList.current = downloadingFilesList.current.filter(each => each !== id);
+                setIsDownloading(false);
             }
         }
     };
@@ -3807,9 +3713,6 @@ function DashboardQuickAccess(props){
         let step = open_as === 'editor' ? 1 : 2
         let isTaskAccepted = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted") ? true : false
         let stepData = assignInfo?.find(each => each.task_assign_detail.step === step && each.task_ven_status === "task_accepted")
-
-        // console.log(stepData);
-
         if (isTaskAccepted) {
             // if(!stepData?.task_assign_detail?.can_open){
             //     Config.toast(`${step === 1 ? 'Reviewer' : 'Editor'} is working!!!`, 'warning')
@@ -3861,15 +3764,12 @@ function DashboardQuickAccess(props){
         if (response === 2) {
             formdata.append("client_reason", customerTaskReworkReasonText);
         }
-
         if (reassign) {
             formdata.append("reassigned", 'True')
         }
+        if (response === 1) setIsApproving(true);
+        setIsReworkSending(true);
 
-        if (response === 1) setIsApproving(true)
-
-        setIsReworkSending(true)
-        // console.log(clientResponseDataRef.current);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_update/`,
             auth: true,
@@ -3912,15 +3812,12 @@ function DashboardQuickAccess(props){
     }
 
     const sendExtendTaskDeadlineRequest = () => {
-        // console.log(taskDetailsForDeadlineCrossedTask.current);
-        let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current
-
+        let { task_id, step, reassign } = taskDetailsForDeadlineCrossedTask.current;
         var formdata = new FormData();
         formdata.append("task", task_id);
         formdata.append("step", step);
-        formdata.append("reassigned", reassign ? 'True' : 'False')
-
-        setIsDeadlineExtendReqSending(true)
+        formdata.append("reassigned", reassign ? 'True' : 'False');
+        setIsDeadlineExtendReqSending(true);
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/send_msg_extend_deadline/`,
@@ -3929,28 +3826,28 @@ function DashboardQuickAccess(props){
             data: formdata,
             success: (api_response) => {
                 if (api_response.status === 200) {
-                    Config.toast(`${t("deadline_req_sent")}`)
+                    Config.toast(`${t("deadline_req_sent")}`);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
-                setIsDeadlineExtendReqSending(false)
-                setShowDeadlineCrossedModal(false)
+                setIsDeadlineExtendReqSending(false);
+                setShowDeadlineCrossedModal(false);
             },
             error: (err) => {
-                setIsDeadlineExtendReqSending(false)
+                setIsDeadlineExtendReqSending(false);
             }
         });
     }
 
     const getPODetailsForTask = (task_id) => {
-        setMoreEl(false)
+        setMoreEl(false);
+
         Config.axios({
             url: `${Config.BASE_URL}/aipay/po/?task=${task_id}`,
             auth: true,
             success: (response) => {
-                // console.log(response);
-                setPOFilesDetails(response.data)
-                setShowPOFilesModal(true)
+                setPOFilesDetails(response.data);
+                setShowPOFilesModal(true);
             },
             error: (err) => { }
         });
@@ -4121,7 +4018,6 @@ function DashboardQuickAccess(props){
             }
             return obj;
         });
-        // console.log(newArr);
         setCreatedProjects(newArr);
 
         Config.axios({
@@ -4132,7 +4028,6 @@ function DashboardQuickAccess(props){
                 setTimeout(() => {
                     checkFileStatus()
                 }, 3500);
-                // console.log(fileIdList.current);
             },
             error: (err) => {
                 if (err.response.status === 400) {
@@ -4148,7 +4043,6 @@ function DashboardQuickAccess(props){
                             }
                             return obj;
                         });
-                        // console.log(newArr);
                         setCreatedProjects(newArr);
                     }
                 }
@@ -4161,21 +4055,13 @@ function DashboardQuickAccess(props){
         fileIdList.current?.map((each, index) => {
             idList += `${each}${index !== fileIdList.current?.length - 1 ? "&id=" : ""}`
         })
-        // console.log(idList);
-
         if (idList !== '') {
             Config.axios({
                 url: `${Config.BASE_URL}/exportpdf/convertpdftodocx?id=${idList}`,
                 auth: true,
                 success: (response) => {
-                    // console.log(response.data);
-                    // console.log(fileIdList.current);
-
                     const newArr = createdProjects?.map(obj => {
-                        // console.log(response.data?.find(each => each?.id === obj?.id));
-                        // console.log(obj.id == response.data?.find(each => each?.id === obj?.id)?.id);
                         if (obj.id == response.data?.find(each => each?.id === obj?.id)?.id) {
-                            // console.log("pass")
                             return {
                                 ...obj,
                                 status: response.data?.find(each => each?.id === obj?.id)?.status != null ? response.data?.find(each => each?.id === obj?.id)?.status : 'PENDING',
@@ -4188,7 +4074,6 @@ function DashboardQuickAccess(props){
                         }
                         return obj;
                     });
-                    // console.log(newArr);
                     setCreatedProjects(newArr);
                     triggerTimeoutRef.current = setTimeout(() => {
                         setFileCheckTrigger(!fileCheckTrigger)
@@ -4201,7 +4086,6 @@ function DashboardQuickAccess(props){
     useEffect(() => {
         if (createdProjects?.length !== 0 && fileIdList.current?.length !== 0) {
             let remainingFiles = createdProjects?.filter(each => each?.status !== "DONE" && each?.status !== "ERROR" && each?.status != 'YET TO START' && each?.status != null)
-            // console.log(remainingFiles)
             if (remainingFiles?.length !== 0) {
                 statusCheckTimeoutRef.current = setTimeout(() => {
                     checkFileStatus()
@@ -4273,7 +4157,7 @@ function DashboardQuickAccess(props){
         if (deleteFromDocOrBlog.current === 'doc') {
             url = `${Config.BASE_URL}/workspace/mydocuments/${documentId}`
         } else {
-            url = `${Config.BASE_URL}/openai/blogcreation/${documentId}`
+            url = `${Config.BASE_URL}/writer/blogcreation/${documentId}`
         }
 
         setIsDocumentDeleting(true)
@@ -4283,7 +4167,6 @@ function DashboardQuickAccess(props){
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("document_deleted_success"));
                 setIsDocumentDeleting(false)
                 const newArr = createdProjects?.filter(obj => obj.id !== documentId);
@@ -4738,7 +4621,6 @@ function DashboardQuickAccess(props){
                                                                                 openedProjectId == project.id &&
                                                                                 ((selectedProjectFiles?.length > 0) ? (
                                                                                     selectedProjectFiles.map((selectedProjectFile, key) => {
-                                                                                        // console.log(selectedProjectFile)
                                                                                         isAssignedProject = createdProjects.find(
                                                                                             (element) => element.id === openedProjectId
                                                                                         )?.assign_enable;
@@ -5360,10 +5242,6 @@ function DashboardQuickAccess(props){
                                                                                                     <div className="file-edit-list-inner-table-cell">
                                                                                                         {/*  Need to destructure this following conditional code and set everything optimised properly */}
                                                                                                         <div className="file-assigned-member-lists">
-                                                                                                            {/* {console.log(userDetails.agency)}
-                                                                                                        {console.log(selectedProjectFile?.task_assign_info)}
-                                                                                                        {console.log(project?.assign_enable)} */}
-                                                                                                            {/* {console.log(userDetails.agency ? (selectedProjectFile?.task_assign_info !== null && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.task_assign_info !== null))} */}
                                                                                                             {(userDetails.agency ? (selectedProjectFile?.task_assign_info != null && userDetails.agency && project?.assign_enable) : (selectedProjectFile?.task_assign_info != null)) ?
                                                                                                                 (
                                                                                                                     <>
@@ -6150,9 +6028,7 @@ function DashboardQuickAccess(props){
                                                                                                                 )
                                                                                                             }
                                                                                                         </div>
-
                                                                                                         {/* Task action button logic ---- STARTS HERE */}
-                                                                                                        {/* {console.log(selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))))} */}
                                                                                                         <div className="project-list-action-wrap">
                                                                                                             {selectedProjectFile?.task_assign_info?.length ? (  // if task is assigned
                                                                                                                 selectedProjectFile?.task_assign_info?.find(each => (Config.userState?.id === each.assign_to_details.id || each.assign_to_details?.managers?.find(each => each === userDetails?.pk))) !== undefined ? (  // if task is assigned to same loged in user (assigned to me)

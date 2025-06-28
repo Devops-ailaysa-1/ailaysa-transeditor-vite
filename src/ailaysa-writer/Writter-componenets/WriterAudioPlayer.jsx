@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
 import PauseRoundedIcon from '@mui/icons-material/PauseRounded';
 import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import { styled } from '@mui/material/styles';
@@ -6,7 +6,6 @@ import Slider from '@mui/material/Slider';
 import { useTranslation } from 'react-i18next';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-
 
 const AudioSlider = styled(Slider)({
     color: '#0078D44D',
@@ -34,7 +33,6 @@ const AudioSlider = styled(Slider)({
         },
     },
 });
-
 
 const VolumeSlider = styled(Slider)({
     color: '#0078D44D',
@@ -64,27 +62,22 @@ const VolumeSlider = styled(Slider)({
     },
 });
 
-
-
 const WriterAudioPlayer = (props) => {
-
     let {
         isAudioOrPdf,
         referenceFileUrl,
         referenceFileExt,
-    } = props
+    } = props;
 
     const { t } = useTranslation();
-
     const [volumeOpen, setVolumeOpen] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [currentTime, setCurrentTime] = useState('00:00');
     const [duration, setDuration] = useState('00:00');
     const [volume, setVolume] = useState(1);
-
     const audioRef = useRef(null);
-    const volumeOutsideClick = useRef(null)
+    const volumeOutsideClick = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -92,9 +85,7 @@ const WriterAudioPlayer = (props) => {
                 setVolumeOpen(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -222,4 +213,4 @@ const WriterAudioPlayer = (props) => {
     )
 }
 
-export default WriterAudioPlayer
+export default WriterAudioPlayer;

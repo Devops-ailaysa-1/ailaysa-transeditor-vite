@@ -20,15 +20,14 @@ import ChapterPanel from "./co-author/ChapterPanel";
 import { useSelector, useDispatch } from "react-redux";
 import $ from 'jquery';
 import { setBookCreationResponse } from "../../features/writer-slices/BookCreationResponseSlice";
-import ReloadIcon from "../../assets/images/reload.svg"
-import DoubleArrowIcon from "../../assets/images/new-ui-icons/doubleArrow.svg"
+import ReloadIcon from "../../assets/images/reload.svg";
+import DoubleArrowIcon from "../../assets/images/new-ui-icons/doubleArrow.svg";
 import Box from '@mui/material/Box';
 import CircularProgress, {circularProgressClasses} from '@mui/material/CircularProgress';
 import { PromptLibraryModal } from "../Prompt-library/PromptLibraryModal";
 import { LangSelectorDropDown } from "../lang-select-drop-down/LangSelectorDropDown";
 
 const WritterPromptForm = (props) => {
-
     let {
         editor,
         toneOptions,
@@ -65,67 +64,58 @@ const WritterPromptForm = (props) => {
         showOverlay,
         confirmedNavigation,
         lastLocation
-    } = props
+    } = props;
 
     const { t } = useTranslation();
-    const location = useLocation()
-    const history = useNavigate()
-    const dispatch = useDispatch()
+    const location = useLocation();
+    const history = useNavigate();
+    const dispatch = useDispatch();
 
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 
-    const [coAuthorPanelView, setCoAuthorPanelView] = useState(1)
-    const [isBookDetailsLoading, setIsBookDetailsLoading] = useState(false)
-
-
-    const descriptionTextRef = useRef(null)
-    const freeStyleDescriptionTextRef = useRef(null)
-    const keywordTextRef = useRef(null)
-
+    const [coAuthorPanelView, setCoAuthorPanelView] = useState(1);
+    const [isBookDetailsLoading, setIsBookDetailsLoading] = useState(false);
+    const descriptionTextRef = useRef(null);
+    const freeStyleDescriptionTextRef = useRef(null);
+    const keywordTextRef = useRef(null);
     const writterPromptWrapRef = useRef();
-
-
 
     // prompt form states
     let copiesOptions = [
         { label: 1, value: 1 },
         { label: 2, value: 2 },
         { label: 3, value: 3 },
-    ]
+    ];
     let copiesOptions2 = [
         { label: 3, value: 3 },
         { label: 5, value: 5 },
         { label: 10, value: 10 },
-    ]
+    ];
+    const copiesOptions2Category = useRef([38, 41, 46, 47]);
+    const rightAlignLangId = [4, 83, 31, 60, 101, 88, 106];
 
-    const [description, setDescription] = useState('')
-    const [aiWrittingKeywords, setAiWrittingKeywords] = useState('')
-    const [freeStyleDescription, setFreeStyleDescription] = useState('')
-    const [aiWrittingProductName, setAiWrittingProductName] = useState('')
-    // const [toneOptions, setToneOptions] = useState([])
-    // const [categoryOptions, setCategoryOptions] = useState([])
-    const [subCategoryOptions, setSubCategoryOptions] = useState([])
-    const [seletctedMainCategory, setSeletctedMainCategory] = useState(null)
-    const [selectedSubCategory, setSelectedSubCategory] = useState(null)
-    const [selectedNumberOfCopies, setSelectedNumberOfCopies] = useState(null)    // default value
-    const [promptResultsList, setPromptResultsList] = useState([])
-    const [freeStylePromptResultsList, setFreeStylePromptResultsList] = useState([])
-    const [isGenerateLoading, setIsGenerateLoading] = useState(false)
-    const [isGenerateLoadingFreestyle, setIsGenerateLoadingFreestyle] = useState(false)
-    // const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
+    const [description, setDescription] = useState('');
+    const [aiWrittingKeywords, setAiWrittingKeywords] = useState('');
+    const [freeStyleDescription, setFreeStyleDescription] = useState('');
+    const [aiWrittingProductName, setAiWrittingProductName] = useState('');
+    // const [toneOptions, setToneOptions] = useState([]);
+    // const [categoryOptions, setCategoryOptions] = useState([]);
+    const [subCategoryOptions, setSubCategoryOptions] = useState([]);
+    const [seletctedMainCategory, setSeletctedMainCategory] = useState(null);
+    const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+    const [selectedNumberOfCopies, setSelectedNumberOfCopies] = useState(null);    // default value
+    const [promptResultsList, setPromptResultsList] = useState([]);
+    const [freeStylePromptResultsList, setFreeStylePromptResultsList] = useState([]);
+    const [isGenerateLoading, setIsGenerateLoading] = useState(false);
+    const [isGenerateLoadingFreestyle, setIsGenerateLoadingFreestyle] = useState(false);
+    // const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
     const [toggleState, setToggleState] = useState(1);
-
-    const [isListening, setIsListening] = useState(false)
+    const [isListening, setIsListening] = useState(false);
     const [writterPromptHasScrollbar, setWritterPromptHasScrollbar] = useState(false);
-
-    const generatedPromptId = useRef(null)
+    const generatedPromptId = useRef(null);    
+    const bookCreationPanelRef = useRef(null);
+    const bookChapterPanelRef = useRef(null);
     
-    const bookCreationPanelRef = useRef(null)
-    const bookChapterPanelRef = useRef(null)
-    const copiesOptions2Category = useRef([38, 41, 46, 47])
-    const rightAlignLangId = [4, 83, 31, 60, 101, 88, 106]
-
-
     // ========================== Book Co-author =============================================
     const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
     const levelOptions = useSelector((state) => state.bookLevelOption.value)
@@ -139,15 +129,12 @@ const WritterPromptForm = (props) => {
     const [selectedTitle, setSelectedTitle] = useState({
         id: null, title: ''
     });
-    const [bookTitleList, setBookTitleList] = useState([])
-    const [isUpdatingText, setIsUpdatingText] = useState(false)
-    const [isDeleting, setIsDeleting] = useState(false)
-
-    const createdBookIdRef = useRef(null)
-    const chaptersCreatedRef = useRef(false)
-    const bookCreationObjRef = useRef(null)
-
-    
+    const [bookTitleList, setBookTitleList] = useState([]);
+    const [isUpdatingText, setIsUpdatingText] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const createdBookIdRef = useRef(null);
+    const chaptersCreatedRef = useRef(false);
+    const bookCreationObjRef = useRef(null);    
     // =======================================================================================
     
     function FacebookCircularProgress(props) {
@@ -183,8 +170,6 @@ const WritterPromptForm = (props) => {
           </Box>
         );
       }
-
-
 
     const customProjectTypeSelectStyles = {
         placeholder: (provided, state) => ({
@@ -275,120 +260,111 @@ const WritterPromptForm = (props) => {
 
     useEffect(() => {
         if (resetToNewDoc) {
-            setDescription('')
-            setAiWrittingKeywords('')
-            setFreeStyleDescription('')
-            setAiWrittingProductName('')
-            setToggleState(1)
-            setSourceLabel(17)
-            setSourceLabel("English")
-            generatedPromptId.current = null
-            setSeletctedMainCategory(categoryOptions[0])
-            setSelectedSubCategory(subCategoryOptions[0])
-            setResetToNewDoc(false)
+            setDescription('');
+            setAiWrittingKeywords('');
+            setFreeStyleDescription('');
+            setAiWrittingProductName('');
+            setToggleState(1);
+            setSourceLabel(17);
+            setSourceLabel("English");
+            generatedPromptId.current = null;
+            setSeletctedMainCategory(categoryOptions[0]);
+            setSelectedSubCategory(subCategoryOptions[0]);
+            setResetToNewDoc(false);
             if (alreadySelecetedTarLangID) {
                 setTargetLanguage(
                     targetLanguageOptionsRef.current?.filter(each => each.id === 17)   // by default english language is selected
-                )
+                );
             }
         }
-
-    }, [resetToNewDoc])
+    }, [resetToNewDoc]);
 
     useEffect(() => {
-        let bookId = URL_SEARCH_PARAMS.get('book')
-        let from = location.state?.from
-        // console.log(location)
+        let bookId = URL_SEARCH_PARAMS.get('book');
+        let from = location.state?.from;
         if(bookId && from === 'list') {
-            setIsBookDetailsLoading(true)
+            setIsBookDetailsLoading(true);
         }
-    }, [URL_SEARCH_PARAMS.get('book'), location.state])
+    }, [URL_SEARCH_PARAMS.get('book'), location.state]);
 
     // get book details from book id
     useEffect(() => {
-        let bookId = URL_SEARCH_PARAMS.get('book')
+        let bookId = URL_SEARCH_PARAMS.get('book');
         if(bookId && levelOptions?.length !== 0 && genreOptions?.length !== 0) {
-            getBookDetails(bookId, 'param')
+            getBookDetails(bookId, 'param');
         }
-    }, [URL_SEARCH_PARAMS.get('book'), levelOptions, genreOptions])
+    }, [URL_SEARCH_PARAMS.get('book'), levelOptions, genreOptions]);
     
-
     useEffect(() => {
         if (targetLanguage) {
-            let list = ""
+            let list = "";
             targetLanguage?.map((each, index) => {
                 list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
                     }`;
             });
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current])
-
+    }, [targetLanguage, targetLanguageOptionsRef.current]);
 
     useEffect(() => {
         if (targetLanguageOptionsRef.current) {
             setTargetLanguage(
                 targetLanguageOptionsRef.current?.filter(each => each.id === 17)   // by default english language is selected
-            )
+            );
         }
-    }, [targetLanguageOptionsRef.current])
+    }, [targetLanguageOptionsRef.current]);
 
     useEffect(() => {
         if (categoryOptions && location.state?.aiWritingCateg && editor) {
             if (isNaN(parseInt(location.state?.aiWritingCateg))) {
-                setSeletctedMainCategory(categoryOptions[0])
+                setSeletctedMainCategory(categoryOptions[0]);
             } else {
                 if (location.state?.aiWritingCateg == 9) {
-                    setSeletctedMainCategory(categoryOptions[0])
-                    setToggleState(2)
-                    editor?.summernote('focus')
-                    // freeStyleDescriptionTextRef.current?.focus()
+                    setSeletctedMainCategory(categoryOptions[0]);
+                    setToggleState(2);
+                    editor?.summernote('focus');
+                    // freeStyleDescriptionTextRef.current?.focus();
                 } else {
-                    setSeletctedMainCategory(categoryOptions?.find(each => each.value === parseInt(location.state?.aiWritingCateg)))
+                    setSeletctedMainCategory(categoryOptions?.find(each => each.value === parseInt(location.state?.aiWritingCateg)));
                 }
             }
         } else {
-            setSeletctedMainCategory(categoryOptions[0])
+            setSeletctedMainCategory(categoryOptions[0]);
         }
-    }, [categoryOptions, editor])
-
-
+    }, [categoryOptions, editor]);
 
     // filter sub-category based on selected main category
     useEffect(() => {
         if (seletctedMainCategory && subCategoryRef.current !== null) {
-            let subOptions = []
+            let subOptions = [];
             subCategoryRef.current?.map(each => {
                 if (each.category === seletctedMainCategory?.value) {
                     subOptions.push({
                         value: each.id,
                         label: each.sub_category
-                    })
+                    });
                 }
             })
-            setSubCategoryOptions(subOptions)
-            setSelectedSubCategory(subOptions[0])
+            setSubCategoryOptions(subOptions);
+            setSelectedSubCategory(subOptions[0]);
         }
-    }, [seletctedMainCategory, subCategoryRef.current])
+    }, [seletctedMainCategory, subCategoryRef.current]);
 
     useEffect(() => {
         if (selectedSubCategory) {
             if (subCategoryRef.current?.find(each => each.id === selectedSubCategory?.value)?.sub_category_fields?.length === 1) {
-                setAiWrittingProductName('')
+                setAiWrittingProductName('');
             }
         }
-    }, [selectedSubCategory])
+    }, [selectedSubCategory]);
 
     useEffect(() => {
-        // console.log(selectedSubCategory)
-        // console.log(copiesOptions2Category.current)
-        // console.log(copiesOptions2Category.current?.find(each => each === selectedSubCategory?.value))
         if (copiesOptions2Category.current?.find(each => each === selectedSubCategory?.value)) {
-            setSelectedNumberOfCopies(copiesOptions2[0])
+            setSelectedNumberOfCopies(copiesOptions2[0]);
         } else {
-            setSelectedNumberOfCopies(copiesOptions[0])
+            setSelectedNumberOfCopies(copiesOptions[0]);
         }
-    }, [selectedSubCategory])
+    }, [selectedSubCategory]);
 
     useEffect(() => {
         const checkWritterPromptScrollbar = () => {
@@ -402,11 +378,9 @@ const WritterPromptForm = (props) => {
         const divElement = writterPromptWrapRef.current;
         if (divElement) {
             checkWritterPromptScrollbar(); // Check scrollbar initially
-
             // Attach event listener to recheck when the content changes
             const observer = new MutationObserver(checkWritterPromptScrollbar);
             observer.observe(divElement, { childList: true, subtree: true });
-
             return () => {
                 observer.disconnect(); // Disconnect the observer when component unmounts
             };
@@ -415,55 +389,50 @@ const WritterPromptForm = (props) => {
 
     useEffect(() => {
         if(window.location.pathname.includes('book-writing')){
-            setToggleState(4)
+            setToggleState(4);
         }
-    }, [window.location.pathname])
+    }, [window.location.pathname]);
     
     useEffect(() => {
         if(confirmedNavigation){
-            // setToggleState(toggleWritingStateRef.current)
-            console.log("state: "+ toggleWritingStateRef.current)
+            // setToggleState(toggleWritingStateRef.current);
             if(toggleWritingStateRef.current === 4){
-                dispatch(setBookCreationResponse(null))
-                window.location.href = '/book-writing'
+                dispatch(setBookCreationResponse(null));
+                window.location.href = '/book-writing';
             }else if(lastLocation.pathname?.includes('/word-processor')){
-                dispatch(setBookCreationResponse(null))
-                window.location.href = '/word-processor'
+                dispatch(setBookCreationResponse(null));
+                window.location.href = '/word-processor';
             }
-            // setConfirmedNavigation(false)
-            // resetBookStates()
-            resetBookStates()
+            // setConfirmedNavigation(false);
+            // resetBookStates();
+            resetBookStates();
         }
-    }, [confirmedNavigation])
+    }, [confirmedNavigation]);
     
-
     const toggleTab = (index) => {
-        let bookId = URL_SEARCH_PARAMS.get('book')
-        let docId = URL_SEARCH_PARAMS.get('document-id')
-        if(index !== 3) toggleWritingStateRef.current = index
-        
+        let bookId = URL_SEARCH_PARAMS.get('book');
+        let docId = URL_SEARCH_PARAMS.get('document-id');
+        if(index !== 3) toggleWritingStateRef.current = index;        
         if(index === 4){
-            history('/book-writing')
-            // window.location.href = '/co-author'
+            history('/book-writing');
+            // window.location.href = '/co-author';
             if((toggleState === 1 || toggleState === 2) && docId && !confirmedNavigation) {
-                return
+                return;
             }
             setToggleState(index);
         } else if(index === 3){
-            history('/writer-blog/create-title', {state: { prevPath: location.pathname + location.search }})
+            history('/writer-blog/create-title', {state: { prevPath: location.pathname + location.search }});
         }else{
             if((toggleState === 1 && index === 2) || (toggleState === 2 && index === 1)) {
                 setToggleState(index);
-                return
+                return;
             }
             // opening writer from co-author
             else{
-                history(`/word-processor`)
+                history(`/word-processor`);
                 // window.location.href = '/word-processor'
                 if(toggleState === 4 && bookId && !confirmedNavigation) {
-                    console.log(toggleState)
-                    console.log(confirmedNavigation)
-                    return
+                    return;
                 }
                 setToggleState(index);
             }
@@ -471,88 +440,74 @@ const WritterPromptForm = (props) => {
     };
 
     const resetBookStates = () => {
-        setCoAuthorPanelView(1)
-        bookCreationPanelRef.current = null
-        bookChapterPanelRef.current = null
-        setBookDescription("")
-        setBookTitle("")
-        setBookTitleList([])
-        createdBookIdRef.current = null
-        bookCreationObjRef.current = null
-        setAuthorIdentity("")
-        setSelectedGenre(null)
+        setCoAuthorPanelView(1);
+        bookCreationPanelRef.current = null;
+        bookChapterPanelRef.current = null;
+        setBookDescription("");
+        setBookTitle("");
+        setBookTitleList([]);
+        createdBookIdRef.current = null;
+        bookCreationObjRef.current = null;
+        setAuthorIdentity("");
+        setSelectedGenre(null);
         setSelectedLevel(null)
-        setSelectedTitle({id: null, title: ''})
+        setSelectedTitle({id: null, title: ''});
     } 
 
-
     const handleGenerateBtn = () => {
-
         if(toggleState === 4 && coAuthorPanelView === 1){
-            bookCreationPanelRef.current.createBook()
-            return
+            bookCreationPanelRef.current.createBook();
+            return;
         }else if(toggleState === 4 && coAuthorPanelView === 2){
-            console.log('create chapter')
-            return
-        }
-
-        let docParam = URL_SEARCH_PARAMS.get("document-id")
-        let transcribeParam = URL_SEARCH_PARAMS.get("transcription-task")
-        let taskParam = URL_SEARCH_PARAMS.get("task")
-        let pdfParam = URL_SEARCH_PARAMS.get("pdf-id")
-
+            return;        }
+        let docParam = URL_SEARCH_PARAMS.get("document-id");
+        let transcribeParam = URL_SEARCH_PARAMS.get("transcription-task");
+        let taskParam = URL_SEARCH_PARAMS.get("task");
+        let pdfParam = URL_SEARCH_PARAMS.get("pdf-id");
         if (toggleState === 1 && description?.trim() === '') {
-            descriptionTextRef.current?.focus()
+            descriptionTextRef.current?.focus();
         } else if (toggleState === 2 && freeStyleDescription?.trim() === '') {
-            freeStyleDescriptionTextRef.current?.focus()
+            freeStyleDescriptionTextRef.current?.focus();
         } else {
             if (createdDocumentId.current === null && transcribeParam === null && taskParam === null && pdfParam === null) {
-                createNewDocument()
+                createNewDocument();
             }
-            postAiPrompt()
+            postAiPrompt();
         }
     }
 
     const postAiPrompt = () => {
         let formdata = new FormData();
-
         if (document.querySelector('.temp-color')) {
-            // console.log(document.querySelector('.temp-color'));
-            document.querySelector('.temp-color').classList.remove('temp-color')
+            document.querySelector('.temp-color').classList.remove('temp-color');
         }
-
         if (createdDocumentId.current !== null || URL_SEARCH_PARAMS.get("document-id")) {
             formdata.append("document_id", createdDocumentId.current);	// document id for prompt
         }
-
         if (transcriptionTaskId.current !== null || URL_SEARCH_PARAMS.get("transcription-task")) {
             formdata.append("task", transcriptionTaskId.current !== null ? transcriptionTaskId.current : URL_SEARCH_PARAMS.get("transcription-task"));	// transcriptiontask id for prompt
         }
-
         if (URL_SEARCH_PARAMS.get("task")) {
             formdata.append("task", URL_SEARCH_PARAMS.get("task"));	// pdf task id for prompt
         }
-
         if (toggleState === 1) {  // for copies tab
-            setPromptResultsList([])
-            setIsGenerateLoading(true)
+            setPromptResultsList([]);
+            setIsGenerateLoading(true);
             formdata.append("description", description);
             formdata.append("catagories", seletctedMainCategory?.value);
             formdata.append("sub_catagories", selectedSubCategory?.value);
             formdata.append("Tone", selectedTone?.value);
-
             if (aiWrittingProductName !== null && aiWrittingProductName?.trim() !== '') {
                 formdata.append("product_name", aiWrittingProductName);
             }
             if (aiWrittingKeywords !== null && aiWrittingKeywords?.trim() !== '') {
                 formdata.append("keywords", aiWrittingKeywords);
             }
-
             formdata.append("response_copies", selectedNumberOfCopies?.value);
         } else if (toggleState === 2) {    // for freestyle tab
-            setFreeStylePromptResultsList([])
+            setFreeStylePromptResultsList([]);
             formdata.append("catagories", 9);   // for freestye the category is "9"
-            setIsGenerateLoadingFreestyle(true)
+            setIsGenerateLoadingFreestyle(true);
             if (createdDocumentId.current !== null || URL_SEARCH_PARAMS.get("document-id")) {
                 formdata.append("document_id", createdDocumentId.current);	// document id for prompt
             }
@@ -565,34 +520,34 @@ const WritterPromptForm = (props) => {
         })
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/aiprompt/`,
+            url: `${Config.BASE_URL}/writer/aiprompt/`,
             method: "POST",
             data: formdata,
             auth: true,
             success: (response) => {
                 if (response.data?.id) {
-                    generatedPromptId.current = response.data?.id
-                    getAiPromptResult(response.data?.id)
+                    generatedPromptId.current = response.data?.id;
+                    getAiPromptResult(response.data?.id);
                     if (mobLeftSideBar === true) {
-                        setMobLeftSideBar(false)
+                        setMobLeftSideBar(false);
                     }
                 }
             },
             error: (err) => {
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                        setShowCreditAlertModal(true)
+                        setShowCreditAlertModal(true);
                     }
-                    setIsGenerateLoading(false)
-                    setIsGenerateLoadingFreestyle(false)
+                    setIsGenerateLoading(false);
+                    setIsGenerateLoadingFreestyle(false);
                 }
                 if (err.response.status === 500) {
-                    Config.toast(t("paraphrase_get_error_3"), 'error')
-                    setIsGenerateLoading(false)
-                    setIsGenerateLoadingFreestyle(false)
+                    Config.toast(t("paraphrase_get_error_3"), 'error');
+                    setIsGenerateLoading(false);
+                    setIsGenerateLoadingFreestyle(false);
                 }
-                setIsGenerateLoading(false)
-                setIsGenerateLoadingFreestyle(false)
+                setIsGenerateLoading(false);
+                setIsGenerateLoadingFreestyle(false);
             }
         });
     }
@@ -600,20 +555,18 @@ const WritterPromptForm = (props) => {
     // get the ai prompt results with prompt ID
     const getAiPromptResult = (promptId) => {
         Config.axios({
-            url: `${Config.BASE_URL}/openai/prompt_result/?prompt_id=${promptId}`,
+            url: `${Config.BASE_URL}/writer/prompt_result/?prompt_id=${promptId}`,
             auth: true,
             success: (response) => {
                 if (toggleState === 1) {
-                    setPromptResultsList(response.data)
-                    // console.log(response.data[0]?.prompt_results)
+                    setPromptResultsList(response.data);
                     let data = []
                     Object.values(response.data[0]?.prompt_results)?.map(item => {
                         data.push({
                             data: item
                         })
-                    })
-                    // console.log(data)
-                    var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'))
+                    });
+                    var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'));
                     var node = document.createElement('p');
                     if (caretPosition === 0) {
                         data?.map(each => {
@@ -629,26 +582,26 @@ const WritterPromptForm = (props) => {
                                 if (targetLanguage?.find(each => each.id === result?.result_lang)) {
                                     pasteTextOnCursor(result?.api_result !== null ? result?.api_result?.match(/[^\r\n]+/g) : result?.translated_prompt_result?.match(/[^\r\n]+/g), index, each.data?.length)
                                 }
-                            })
+                            });
                         })
                     }
-                    setIsGenerateLoading(false)
+                    setIsGenerateLoading(false);
                 } else if (toggleState === 2) {
-                    setFreeStylePromptResultsList(response.data)
+                    setFreeStylePromptResultsList(response.data);
                     let data = []
                     Object.values(response.data[0]?.prompt_results)?.map(item => {
                         data.push({
                             data: item
-                        })
+                        });
                     })
-                    var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'))
+                    var caretPosition = getCaretCharacterOffsetWithin(document.querySelector('.note-editable'));
                     if (caretPosition === 0) {
                         data?.map(each => {
                             each.data?.map((result, index) => {
                                 if (targetLanguage?.find(each => each.id === result?.result_lang)) {
                                     pasteTextonAiWritter(result?.api_result !== null ? result?.api_result?.match(/[^\r\n]+/g) : result?.translated_prompt_result?.match(/[^\r\n]+/g), index, each.data?.length)
                                 }
-                            })
+                            });
                         })
                     } else {
                         data?.map(each => {
@@ -659,7 +612,7 @@ const WritterPromptForm = (props) => {
                             })
                         })
                     }
-                    setIsGenerateLoadingFreestyle(false)
+                    setIsGenerateLoadingFreestyle(false);
                 }
 
             },
@@ -692,14 +645,10 @@ const WritterPromptForm = (props) => {
 
     const containsRtlCharacters = (text) => {
         var rtlCharacters = /[\u0600-\u06FF\u0590-\u05FF\uFE70-\uFEFF]/;
-
-        // console.log('text : ' + text)
-        // console.log('rtl : ' + rtlCharacters.test(text))
         // return rtlCharacters.test(text);
         // Count the number of RTL characters and non-RTL characters
         let rtlCount = 0;
         let nonRtlCount = 0;
-
         for (let i = 0; i < text.length; i++) {
             const char = text[i];
             if (rtlCharacters.test(char)) {
@@ -708,61 +657,51 @@ const WritterPromptForm = (props) => {
                 nonRtlCount++;
             }
         }
-
         // Compare the counts and return the result
         return rtlCount > nonRtlCount;
     }
 
     // paste on the end of the page
     const pasteTextonAiWritter = (text, index, arrLength) => {
-        console.log(text)
-        // console.log(editor.summernote('isEmpty'))
-        // console.log(document.querySelector('.note-editable')?.innerText?.trim()?.length)
         if (document.querySelector('.note-editable')?.innerText?.trim()?.length !== 0) {
             var brNode2 = document.createElement('p');
-            brNode2.innerHTML = "<br />"
-            document.querySelector('.note-editable').appendChild(brNode2)
+            brNode2.innerHTML = "<br />";
+            document.querySelector('.note-editable').appendChild(brNode2);
         }
         text.forEach((each) => {
             var divNode = document.createElement('div');
             var pNode = document.createElement('p');
             var brNode = document.createElement('p');
-            brNode.innerHTML = "<br />"
-
-            pNode.innerHTML = each.trim()
-            pNode.className = 'temp-color'
-
+            brNode.innerHTML = "<br />";
+            pNode.innerHTML = each.trim();
+            pNode.className = 'temp-color';
             if (containsRtlCharacters(each)) {
-                pNode.classList.add('right-align-lang-style')
+                pNode.classList.add('right-align-lang-style');
             } else {
-                pNode.classList.remove('right-align-lang-style')
+                pNode.classList.remove('right-align-lang-style');
             }
-
-            pNode?.addEventListener('click', removeBgColor)
-            // divNode.appendChild(headNode)
-            // divNode.appendChild(pNode)
-            document.querySelector('.note-editable').appendChild(pNode)
-            document.querySelector('.note-editable').appendChild(brNode)
-
-            // currentSummerNoteData.current = document.querySelector('.note-editable').innerHTML 
+            pNode?.addEventListener('click', removeBgColor);
+            // divNode.appendChild(headNode);
+            // divNode.appendChild(pNode);
+            document.querySelector('.note-editable').appendChild(pNode);
+            document.querySelector('.note-editable').appendChild(brNode);
+            // currentSummerNoteData.current = document.querySelector('.note-editable').innerHTML;
             if (arrLength - 1 === index) {
-                pNode.scrollIntoView({ behavior: "smooth", block: "end" })
+                pNode.scrollIntoView({ behavior: "smooth", block: "end" });
             }
 
         })
         setTimeout(() => {
-            globalSaveLogic()
+            globalSaveLogic();
         }, 2000);
     }
 
     // paste on the cursor position
     const pasteTextOnCursor = (text, index, arrLength) => {
-        // console.log(editor.summernote('isEmpty'))
-        console.log(text)
         if (document.querySelector('.note-editable')?.innerText?.trim()?.length !== 0) {
             var brNode2 = document.createElement('p');
-            brNode2.innerHTML = "<br />"
-            editor?.summernote('insertNode', brNode2)
+            brNode2.innerHTML = "<br />";
+            editor?.summernote('insertNode', brNode2);
         }
         text.forEach((each) => {
             // var divNode = document.createElement('div');
@@ -772,24 +711,22 @@ const WritterPromptForm = (props) => {
             pNode.innerHTML = each.trim()
             pNode.className = 'temp-color'
             // pNode.style = 'display: inline;'
-
             if (containsRtlCharacters(each)) {
-                pNode.classList.add('right-align-lang-style')
+                pNode.classList.add('right-align-lang-style');
             } else {
-                pNode.classList.remove('right-align-lang-style')
+                pNode.classList.remove('right-align-lang-style');
             }
-
             pNode?.addEventListener('click', removeBgColor)
-            // divNode.appendChild(headNode)
-            // divNode.appendChild(pNode)
-            editor?.summernote('insertNode', pNode)
-            editor?.summernote('insertNode', brNode)
+            // divNode.appendChild(headNode);
+            // divNode.appendChild(pNode);
+            editor?.summernote('insertNode', pNode);
+            editor?.summernote('insertNode', brNode);
             if (arrLength - 1 === index) {
-                pNode.scrollIntoView({ behavior: "smooth", block: "end" })
+                pNode.scrollIntoView({ behavior: "smooth", block: "end" });
             }
         })
         setTimeout(() => {
-            globalSaveLogic()
+            globalSaveLogic();
         }, 2000);
 
     }
@@ -797,68 +734,66 @@ const WritterPromptForm = (props) => {
     // to remove the background color of added prompt
     const removeBgColor = (e) => {
         // e.target.style = 'background: none;' 
-        // e.target.removeEventListener('click', removeBgColor)
-        e.target.classList.remove('temp-color')
-        e.target.removeEventListener('click', removeBgColor)
-        // currentSummerNoteData.current = document.querySelector('.note-editable').innerHTML   
+        // e.target.removeEventListener('click', removeBgColor);
+        e.target.classList.remove('temp-color');
+        e.target.removeEventListener('click', removeBgColor);
+        // currentSummerNoteData.current = document.querySelector('.note-editable').innerHTML;   
     }
 
     const handleDescriptionText = (e) => {
         if (e.target?.value?.length <= 600) {
-            setDescription(e.target?.value)
+            setDescription(e.target?.value);
         }
     }
 
     const resetPromptForm = () => {
         if (toggleState === 1) { // reset templates form
-            setDescription("")
-            setAiWrittingProductName("")
-            setAiWrittingKeywords("")
+            setDescription("");
+            setAiWrittingProductName("");
+            setAiWrittingKeywords("");
         } else {	// reset any prompt form
-            setFreeStyleDescription("")
+            setFreeStyleDescription("");
         }
     }
 
     const getBookDetails = (book_id, from) => {
-        if(book_id === undefined || book_id === null) return
+        if(book_id === undefined || book_id === null) return;
+
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${book_id}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${book_id}/`,
             method: "GET",
             auth: true,
             success: (response) => {
                 if(from === 'param'){
-                    setIsBookDetailsLoading(false)
+                    setIsBookDetailsLoading(false);
                 }
-
-                let data = response.data
-                bookCreationObjRef.current = data
-                dispatch(setBookCreationResponse(data))
-                createdBookIdRef.current = data.id
-                let bookLang = languageOptionsList?.find(each => each.id === data.book_language)
-                setBookLanguage(bookLang?.id)
-                setBookLanguageLabel(bookLang?.language)
-                setSelectedLevel(levelOptions?.find(each => each.value === data.level))
-                setSelectedGenre(genreOptions?.find(each => each.value === data.genre))
+                let data = response.data;
+                bookCreationObjRef.current = data;
+                dispatch(setBookCreationResponse(data));
+                createdBookIdRef.current = data.id;
+                let bookLang = languageOptionsList?.find(each => each.id === data.book_language);
+                setBookLanguage(bookLang?.id);
+                setBookLanguageLabel(bookLang?.language);
+                setSelectedLevel(levelOptions?.find(each => each.value === data.level));
+                setSelectedGenre(genreOptions?.find(each => each.value === data.genre));
                 let selected_title = data.book_title_create?.find(each => each.selected_field)
                 setSelectedTitle({
                     id: selected_title?.id,
                     title: selected_title?.book_title
-                })
-                setAuthorIdentity(data.author_info)
-                setBookDescription(data.description)
-                setBookTitle(data.title)
-                setBookTitleList(data.book_title_create)
-                chaptersCreatedRef.current = data.body_matter?.length !== 0 ? true : false
-                setIsUpdatingText(false)
-                setIsDeleting(false)
-                // setIsGenerateLoadingFreestyle(false)
+                });
+                setAuthorIdentity(data.author_info);
+                setBookDescription(data.description);
+                setBookTitle(data.title);
+                setBookTitleList(data.book_title_create);
+                chaptersCreatedRef.current = data.body_matter?.length !== 0 ? true : false;
+                setIsUpdatingText(false);
+                setIsDeleting(false);
+                // setIsGenerateLoadingFreestyle(false);
                 if(chaptersCreatedRef.current){
-                    setCoAuthorPanelView(2)
-                }
+                    setCoAuthorPanelView(2)               }
             },
         });
     } 
-
 
     return (
         <>

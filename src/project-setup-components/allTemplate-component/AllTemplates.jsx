@@ -15,20 +15,21 @@ import SourceLanguage from "../../vendor/lang-modal/Sourcelanguage";
 import { useSelector, useDispatch } from "react-redux";
 import { setShowGlobalTransition } from "../../features/GlobalTransitionSlice";
 import { motion, AnimatePresence } from "framer-motion";
-import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg"
-import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg"
+import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg";
+import CloseBlack from "../../assets/images/new-ui-icons/close_black.svg";
+import { setShowTranslateDocumentModal } from "../../features/ShowTranslateDocumentModalSlice";
+import { TranslateDocumentModal } from "./TranslateDocumentModal";
 
 const AllTemplate = (props) => {
-    const { category, categoryTab } = props
+    const { category, categoryTab } = props;
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
     const history = useNavigate();
     const location = useLocation();
     const params = useParams();
     const { t } = useTranslation();
-    const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
-    const allTemplateList = useSelector((state) => state.allTemplateList.value)
-    const individualTemplateList = useSelector((state) => state.individualTemplateList.value)
-
+    const languageOptionsList = useSelector((state) => state.languageOptionsList.value);
+    const allTemplateList = useSelector((state) => state.allTemplateList.value);
+    const individualTemplateList = useSelector((state) => state.individualTemplateList.value);
 
     const [fileListSearchEnlarge, setFileListSearchEnlarge] = useState(false);
     const [isSearchTermDelete, setIsSearchTermDelete] = useState(false);
@@ -40,17 +41,18 @@ const AllTemplate = (props) => {
     const [activeTab, setActiveTab] = useState(null);
     const [categoryListItem, setCategoryListItem] = useState(null);
     const [projectSearchTerm, setProjectSearchTerm] = useState("");
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const [openTranslateDocument, setOpenTranslateDocument] = useState(false);
 
-    const searchTermRef = useRef(null)
-    const DataItem = useRef(null)
-    const DataFilterItem = useRef(null)
+    const searchTermRef = useRef(null);
+    const DataItem = useRef(null);
+    const DataFilterItem = useRef(null);
 
     useEffect(() => {
         if (projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
-            setIsSearchTermDelete(false)
+            setIsSearchTermDelete(false);
         }
-    }, [projectSearchTerm, isSearchTermDelete])
+    }, [projectSearchTerm, isSearchTermDelete]);
 
     const handleCloseSearchBox = () => {
         setProjectSearchTerm("");
@@ -59,39 +61,36 @@ const AllTemplate = (props) => {
         // let url = `/file-upload?page=1&order_by=${orderParam}`;
         // if (filterParam != null) url += `&filter=${filterParam}`;
         // props.history(url);
-        setDataItem(DataItem.current)
+        setDataItem(DataItem.current);
         setFileListSearchEnlarge(false);
-        setIsSearchTermDelete(true)
+        setIsSearchTermDelete(true);
     }
-
 
     const SearchTermFilterEnter = (e) => {
         if (e.which === 13 && projectSearchTerm == "") {
-            setFileListSearchEnlarge(false)
-            e.target.blur()
+            setFileListSearchEnlarge(false);
+            e.target.blur();
         } else if (e.which === 13) {
-            setFileListSearchEnlarge(false)
-            handleSearchDropDownClick()
-            searchTermRef.current = projectSearchTerm
-            e.target.blur()
+            setFileListSearchEnlarge(false);
+            handleSearchDropDownClick();
+            searchTermRef.current = projectSearchTerm;
+            e.target.blur();
         }
     }
 
     const handleSearchDropDownClick = (e) => {
         setDataItem(DataFilterItem.current?.filter(e => { return e.attributes?.Title.toLowerCase().includes(projectSearchTerm.toLowerCase()) && e }));
-        setFileListSearchEnlarge(false)
+        setFileListSearchEnlarge(false);
     }
 
     useEffect(() => {
         if (location?.state && DataFilterItem.current) {
-            filterItem(location?.state?.aiCateg)
-            // console.log(location?.state?.aiCateg, location?.state?.aiactivetabval)
+            filterItem(location?.state?.aiCateg);
         }
-    }, [location?.state, DataFilterItem.current])
-
+    }, [location?.state, DataFilterItem.current]);
 
     const getCardContent = async () => {
-        setCardLoaders(true)
+        setCardLoaders(true);
         var myHeaders = new Headers();
 
         var requestOptions = {
@@ -99,67 +98,62 @@ const AllTemplate = (props) => {
             headers: myHeaders,
             redirect: 'follow'
         };
-
-        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/all-template-app?populate=deep`, requestOptions)
+        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/all-template-app?populate=deep`, requestOptions);
         if (data.status === 200) {
-            let response = await data.json()
+            let response = await data.json();
             let {
                 apps_template_cards
-            } = response?.data?.attributes
-
-            let AppsCardsInfo = []
+            } = response?.data?.attributes;
+            let AppsCardsInfo = [];
             apps_template_cards.data?.map((each) => {
-                AppsCardsInfo.push(each)
-            })
+                AppsCardsInfo.push(each);
+            });
             setDataItem(AppsCardsInfo?.flat(1));
-            DataItem.current = AppsCardsInfo?.flat(1)
-            setCardLoaders(false)
+            DataItem.current = AppsCardsInfo?.flat(1);
+            setCardLoaders(false);
         }
     }
 
     const getFilterCardContent = async () => {
-        setCardLoaders(true)
+        setCardLoaders(true);
         var myHeaders = new Headers();
-
         var requestOptions = {
             method: 'GET',
             headers: myHeaders,
             redirect: 'follow'
         };
+        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/app-template?populate=deep`, requestOptions);
 
-        let data = await fetch(`${Config.STRAPI_BASE_URL}/api/app-template?populate=deep`, requestOptions)
         if (data.status === 200) {
-            let response = await data.json()
+            let response = await data.json();
             let {
                 Apps_Templates
-            } = response?.data?.attributes
-
-            let AppsCardsInfo = []
+            } = response?.data?.attributes;
+            let AppsCardsInfo = [];
             Apps_Templates?.map((each) => {
-                AppsCardsInfo.push(each.apps_template_cards.data.flat(1))
-            })
+                AppsCardsInfo.push(each.apps_template_cards.data.flat(1));
+            });
             setDataFilterItem(AppsCardsInfo?.flat(1));
-            DataFilterItem.current = AppsCardsInfo?.flat(1)
-            setCardLoaders(false)
+            DataFilterItem.current = AppsCardsInfo?.flat(1);
+            setCardLoaders(false);
         }
     }
 
     useEffect(() => {
         getCardContent();
         getFilterCardContent();
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (dataFilterItem?.length !== 0) {
-            let categoryArray = [...new Set(dataFilterItem?.map((item) => item.attributes?.category))]
+            let categoryArray = [...new Set(dataFilterItem?.map((item) => item.attributes?.category))];
             // const reorderCategoryArray = categoryArray[0];
             // categoryArray[0] = categoryArray[1];
             // categoryArray[1] = reorderCategoryArray;
-            // console.log(categoryArray)
-            setMenuItem(categoryArray)
-            setCategoryListItem(categoryArray)
+            setMenuItem(categoryArray);
+            setCategoryListItem(categoryArray);
         }
-    }, [dataFilterItem])
+    }, [dataFilterItem]);
 
     useEffect(() => {
         if (params?.menu === "translate") {
@@ -179,44 +173,62 @@ const AllTemplate = (props) => {
         } else if (params?.menu === "toolkit") {
             filterItem("Toolkit");
         }
-    }, [params?.menu, DataFilterItem.current])
+    }, [params?.menu, DataFilterItem.current]);
 
     const filterItem = (curcat) => {
-        setFileListSearchEnlarge(false)
-        setProjectSearchTerm('')
+        setFileListSearchEnlarge(false);
+        setProjectSearchTerm('');
         const newItem = DataFilterItem.current?.filter((newVal) => {
             return newVal.attributes?.category === curcat;
         });
-        let categoryArray = [...new Set(newItem?.map((item) => item.attributes?.category))]
+        let categoryArray = [...new Set(newItem?.map((item) => item.attributes?.category))];
         // const reorderCategoryArray = categoryArray[0];
         // categoryArray[0] = categoryArray[1];
         // categoryArray[1] = reorderCategoryArray;
         setCategoryListItem(categoryArray);
         setDataItem(newItem);
         setActiveTab(curcat);
-        setHideSelectedCategory(true)
-        history(`/create/all-templates/${curcat?.toLowerCase() === "voice" ? "voice" : curcat?.toLowerCase()}`)
-        // console.log('done')
+        setHideSelectedCategory(true);
+        history(`/create/all-templates/${curcat?.toLowerCase() === "voice" ? "voice" : curcat?.toLowerCase()}`);
     };
 
     const handleCardClick = (item) => {
-        dispatch(setShowGlobalTransition(false))
+        dispatch(setShowGlobalTransition(false));
         setTimeout(() => {
             if (item.attributes?.url.includes("https")) {
-                window.open(item.attributes?.url, "_blank")
+                window.open(item.attributes?.url, "_blank");
             } else {
-                history(item.attributes?.url, { state: { aiWritingCateg: item.attributes?.backend_id, prevPath: location.pathname } })
+                const state = {
+                    aiWritingCateg: item.attributes?.backend_id,
+                    prevPath: location.pathname,
+                };
+                if (item.id === 2) {
+                    state.isFromView = 'SIMPLE_FILE_TRANSLATOR';
+                }
+                history(item.attributes?.url, { state });
             }
         }, 250);
     }
 
-    const handleOpenSpellCheck = (item) => {
-        history(`/spell-check`, { state: { aiWritingCateg: null, prevPath: location.pathname } })
-    }
+    /**
+     * This method used to open the translate document popup modal
+     * @param {*} item 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 08 Apr 2025
+     */
+    // const translateDocumentHandler = (item) => {
+    //     dispatch(setShowTranslateDocumentModal(true));
+    //     setOpenTranslateDocument(true);
+    // }
 
+    const handleOpenSpellCheck = (item) => {
+        history(`/spell-check`, { state: { aiWritingCateg: null, prevPath: location.pathname } });
+    }
 
     return (
         <React.Fragment>
+            {/* {openTranslateDocument && <TranslateDocumentModal />} */}
             <section className="all-template-glb-wrapper">
                 <div className="all-template-header">
                     <div className="all-templates-container">

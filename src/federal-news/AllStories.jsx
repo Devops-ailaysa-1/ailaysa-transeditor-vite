@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { ButtonBase } from '@mui/material'
+import React, { useState, useEffect, useRef } from 'react';
+import { ButtonBase } from '@mui/material';
 import { useTranslation } from "react-i18next";
 import Checkbox from '@mui/material/Checkbox';
 import AddIcon from '@mui/icons-material/Add';
 import Config from '../vendor/Config';
 import LanguageSelector from './LanguageSelector';
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion';
 const AllStories = () => {
     const { t } = useTranslation();
+    const [selectedCard, setSelectedCard] = useState();
 
     const storiesList = [
         {
@@ -30,12 +31,10 @@ const AllStories = () => {
             story_title: "ICC World Cup 2023: Is it time to bowl out ODI cricket?",
             img_link: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?q=80&w=2006&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         }
-    ]
-
-    const [selectedCard, setSelectedCard] = useState()
+    ];
 
     const handleSelectedcard = (item) => {
-        setSelectedCard(item)
+        setSelectedCard(item);
     }
 
     return (
@@ -94,4 +93,4 @@ const AllStories = () => {
     )
 }
 
-export default AllStories
+export default AllStories;

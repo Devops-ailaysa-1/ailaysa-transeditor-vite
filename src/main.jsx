@@ -1,9 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
 import App from './App';
-
 import "../src/assets/css/style.css";
 import "../src/assets/css/responsive.css";
 import "../src/assets/css/language_support_styles.css";
@@ -13,35 +11,31 @@ import "../src/assets/library/bootstrap-4.5.3-dist/bootstrap-4.5.3-dist/css/boot
 // import "../src/assets/js/jquery-3.5.1.min.js";
 // // import "../src/assets/js/ws-ui.js";
 // import "../src/assets/library/bootstrap-4.5.3-dist/bootstrap-4.5.3-dist/js/bootstrap.min.js";
-
-
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import "bootstrap/dist/js/bootstrap.bundle.min";
-
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import HttpApi from "i18next-http-backend";
-import { configureStore } from '@reduxjs/toolkit'
-import { Provider } from 'react-redux'
-
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
 import WriterDialogToggleReducer from './features/WriterDialogToggleSlice';
 import customizationSettingsReducer from './features/CustomizationSettingsSlice';
-import blogCreationReducer from './features/BlogCreationSlice'
-import fileDownloadingListReducer from './features/FileDownloadingListSlice'
-import userDetailsReducer from './features/UserDetailsSlice'
-import projectStepsReducer from './features/ProjectStepsSlice'
-import currencyOptionReducer from './features/CurrencyOptionSlice'
-import unitTypeOptionReducer from './features/UnitTypeOptionSlice'
-import showCustomSettingsModalReducer from './features/ShowCustomSettingsModalSlice'
-import mtEngineOptionReducer from './features/MtEngineOptionSlice'
-import editorSettingStatusReducer from './features/EditorSettingStatusSlice'
-import editorSettingsAlertModalReducer from './features/EditorSettingsAlertModalSlice'
-import languageOptionReducer from './features/LanguageOptionSlice'
-import campaignCouponStripReducer from './features/CampaignCouponStripSlice'
-import globalTransitionReducer from './features/GlobalTransitionSlice'
-import allTemplateListReducer from './features/AllTempateListSlice'
-import individualTemplateListReducer from './features/IndividualTemplateListSlice'
+import blogCreationReducer from './features/BlogCreationSlice';
+import fileDownloadingListReducer from './features/FileDownloadingListSlice';
+import userDetailsReducer from './features/UserDetailsSlice';
+import projectStepsReducer from './features/ProjectStepsSlice';
+import currencyOptionReducer from './features/CurrencyOptionSlice';
+import unitTypeOptionReducer from './features/UnitTypeOptionSlice';
+import showCustomSettingsModalReducer from './features/ShowCustomSettingsModalSlice';
+import mtEngineOptionReducer from './features/MtEngineOptionSlice';
+import editorSettingStatusReducer from './features/EditorSettingStatusSlice';
+import editorSettingsAlertModalReducer from './features/EditorSettingsAlertModalSlice';
+import languageOptionReducer from './features/LanguageOptionSlice';
+import campaignCouponStripReducer from './features/CampaignCouponStripSlice';
+import globalTransitionReducer from './features/GlobalTransitionSlice';
+import allTemplateListReducer from './features/AllTempateListSlice';
+import individualTemplateListReducer from './features/IndividualTemplateListSlice';
 import { writerReducers } from './features/writer-reducers/writerReducers';
 import IsFederalNewsReducer from './features/IsFederalNewsSlice';
 import IsDinamalarNewsReducer from './features/IsDinamalarNewsSlice';
@@ -50,6 +44,9 @@ import toggleGlossTermAddFormReducer from './features/ai-glossary/ToggleGlossTer
 import * as Sentry from "@sentry/react";
 import SpellCheckHtmlDataSlice from './features/SpellCheckHtmlDataSlice';
 import ShowAdaptiveTransIntroModalReducer from './features/ShowAdaptiveTransIntroModalSlice';
+import showTranslateDocumentModalReducer from './features/ShowTranslateDocumentModalSlice';
+import SimpleTranslateGlossaryModalReducer from './features/SimpleTranslateGlossaryModalSlice';
+import AdvanceTranslateGlossaryModalReducer  from './features/AdvanceTranslateGlossaryModalSlice';
 
 const store = configureStore({
   reducer: {
@@ -76,7 +73,10 @@ const store = configureStore({
 	showGlossTermAddForm: toggleGlossTermAddFormReducer,
 	spellCheckData:SpellCheckHtmlDataSlice,
 	showAdaptiveTransIntroModal: ShowAdaptiveTransIntroModalReducer,
-	...writerReducers        
+	showTranslateDocumentModal: showTranslateDocumentModalReducer,
+	showSimpleTranslateGlossaryModal: SimpleTranslateGlossaryModalReducer,
+	showAdvanceTranslateGlossaryModal: AdvanceTranslateGlossaryModalReducer,
+	...writerReducers   
   }
 })
 
@@ -109,7 +109,7 @@ i18n.use(initReactI18next) // passes i18n down to react-i18next
 			loadPath: "/locales/{{lng}}/translation.json",
 		},
 		react: { useSuspense: false },
-	});
+});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <>

@@ -26,15 +26,14 @@
     line-height: 1.5;
     transition: 0.3 all ease;
 }
-/* 
-.nav-assign-manage-link:hover span{
+
+/*.nav-assign-manage-link:hover span{
     color: #ffffff;
     font-weight: 500;
     transition: 0.3 all ease;
     text-decoration: none;
 } */
 
-/*  */
 .error-bottom {
     left: 20px;
     bottom: -18px;

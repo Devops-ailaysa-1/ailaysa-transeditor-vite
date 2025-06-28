@@ -165,8 +165,6 @@ export const OnTheFlyGlossary = (props) => {
     // output => if target given => source is output
     const getTermMT = (source, target) => {
         let formData = new FormData();
-        // console.log(documentTaskIdRef.current)
-
         formData.append("task_id", taskId);
         formData.append("segment_id", focusedDivIdRef.current);
         if(source !== "") formData.append("source", source?.slice(0, 200));
@@ -178,21 +176,15 @@ export const OnTheFlyGlossary = (props) => {
             auth: true,
             data: formData,
             success: (response) => {
-                let data = response.data
-                // console.log('source: '+source)
-                // console.log('target: '+target)
-
+                let data = response.data;
                 if(data?.pos_tag){
-                    setSelectedPOS(partOfSpeechOptions.find(each => each.label === data?.pos_tag))
+                    setSelectedPOS(partOfSpeechOptions.find(each => each.label === data?.pos_tag));
                 }
-
-                let sugg_mt = source !== "" ? data?.target_mt : data?.source
-
+                let sugg_mt = source !== "" ? data?.target_mt : data?.source;
                 setSuggestedMT({
                     for: source !== "" ? "target" : "source",
                     mt: sugg_mt
-                })
-
+                });
                 // if(source !== ""){
                 //     setInputData({
                 //         sl_term: data?.source ? data?.source : source,
@@ -207,7 +199,7 @@ export const OnTheFlyGlossary = (props) => {
             },
             error: (err) => {
                 if(err.response.data.res === 'Insufficient credits'){
-                    // setShowCreditAlert(true)
+                    // setShowCreditAlert(true);
                 }
             },
         });
@@ -215,27 +207,21 @@ export const OnTheFlyGlossary = (props) => {
 
     const addTermToGlossary = () => {
         let formData = new FormData();
-
         if(inputData.sl_term?.trim() === "" || inputData.tl_term?.trim() === ""){
             if(inputData.sl_term?.trim() === ""){
-                srcInputRef.current.classList.add('error-field-style')
+                srcInputRef.current.classList.add('error-field-style');
             }
             if(inputData.tl_term?.trim() === ""){
-                tarInputRef.current.classList.add('error-field-style')
+                tarInputRef.current.classList.add('error-field-style');
             }
-            console.log('inside validation')
-            return
+            return;
         }
-
         formData.append('sl_term', inputData?.sl_term?.slice(0, 200));
         formData.append('tl_term', inputData?.tl_term?.slice(0, 200));
         if(selectedPOS?.value) formData.append('pos', selectedPOS?.label);
         formData.append("task", taskId);
-
-        let url = `${Config.BASE_URL}/glex/term_upload/`
-
-        setIsTermAdding(true)
-
+        let url = `${Config.BASE_URL}/glex/term_upload/`;
+        setIsTermAdding(true);
 
         Config.axios({
             url: url,
@@ -243,20 +229,20 @@ export const OnTheFlyGlossary = (props) => {
             auth: true,
             data: formData,
             success: (response) => {
-                // getWordChoiceListForDocument()
-                setIsTermAdding(false)
-                Config.toast(t("term_added_success"))
-                handleClose()
-                // showHideToolbarElement("showGlossaryAddition")
+                // getWordChoiceListForDocument();
+                setIsTermAdding(false);
+                Config.toast(t("term_added_success"));
+                handleClose();
+                // showHideToolbarElement("showGlossaryAddition");
             },
             error: (error) => { 
-                console.log(error)
+                console.error(error);
                 if(error?.response?.status == 400){
                     Config.toast(t("term_already_exist"),'warning');
                 }else{
-                    Config.toast("Failed to add term!", "error")
+                    Config.toast("Failed to add term!", "error");
                 }
-                setIsTermAdding(false)
+                setIsTermAdding(false);
             },
         });
     } 

@@ -10,13 +10,12 @@ import { useTranslation } from "react-i18next";
 const Breadcrumbs = () => {
     const { t } = useTranslation();
     const params = useParams();
-    const history = useNavigate()
-
+    const history = useNavigate();
 
     const getTitleCaseString = (path_names) => {
         if(path_names !== undefined){
-            let name = path_names?.split('-')?.join(' ')
-            return name?.charAt(0)?.toUpperCase() + name?.slice(1)
+            let name = path_names?.split('-')?.join(' ');
+            return name?.charAt(0)?.toUpperCase() + name?.slice(1);
                 // ?.map((nam) => nam.charAt(0)?.toUpperCase() + nam.slice(1))
                 // ?.join(" ");
         }
@@ -24,31 +23,31 @@ const Breadcrumbs = () => {
 
     // const handleBreadcrumbRedirection = () => {
     //     if(params?.category === "translate" && params?.menu === "text"){
-    //         history("/create/all-templates", {aiCateg: "Translate text", aiactivetabval: 0})
+    //         history("/create/all-templates", {aiCateg: "Translate text", aiactivetabval: 0});
     //     } else if (params?.category === "translate" && params?.menu === "files"){
-    //         history("/create/all-templates", {aiCateg: "Translate files", aiactivetabval: 1})
+    //         history("/create/all-templates", {aiCateg: "Translate files", aiactivetabval: 1});
     //     } else if (params?.category === "speech"){
-    //         history("/create/all-templates/speech")
+    //         history("/create/all-templates/speech");
     //     } else if (params?.category === "tool-kit"){
-    //         history("/create/all-templates/tool-kit")
+    //         history("/create/all-templates/tool-kit");
     //     } else if (params?.category === "assets"){
-    //         history("/create/all-templates/assets")
+    //         history("/create/all-templates/assets");
     //     }
     // }
 
     const handleBreadcrumbRedirection = () => {
         if(params?.category === "translate"){
-            history("/create/all-templates/translate")
+            history("/create/all-templates/translate");
         } else if (params?.category === "write"){
-            history("/create/all-templates/write")
+            history("/create/all-templates/write");
         } else if ((params?.category === "speech" && params?.menu === "speech-to-text")){
-            history("/create/all-templates/transcribe")
+            history("/create/all-templates/transcribe");
         } else if ((params?.category === "speech" && params?.menu === "text-to-speech")){
-            history("/create/all-templates/voice")
+            history("/create/all-templates/voice");
         } else if (params?.category === "assets"){
-            history("/create/all-templates/assets")
+            history("/create/all-templates/assets");
         } else if (params?.category === "tool-kit"){
-            history("/create/all-templates/toolkit")
+            history("/create/all-templates/toolkit");
         } 
     }
 
@@ -135,6 +134,8 @@ const Breadcrumbs = () => {
                         params?.action === "my-list" ? `${t("my_list")}` 
                         : 
                         params?.menu === "wordchoice" ? `${t("wordchoice")}`
+                        :
+                        params?.menu === "translate-files" ? `Translate Files` 
                         : ""
                     }
                 </span>

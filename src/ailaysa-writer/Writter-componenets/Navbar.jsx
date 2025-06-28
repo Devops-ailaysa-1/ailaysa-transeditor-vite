@@ -2,12 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import Config from "../../Config";
 import TranslateIcon from '@mui/icons-material/Translate';
-
 import Button from '@mui/material/Button';
-
 import CloudDoneOutlinedIcon from '@mui/icons-material/CloudDoneOutlined';
 import CachedOutlinedIcon from '@mui/icons-material/CachedOutlined';
-
 import Tooltip from '@mui/material/Tooltip';
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
@@ -16,47 +13,40 @@ import RestoreIcon from '@mui/icons-material/Restore';
 // mui icons
 import CloseIcon from '@mui/icons-material/Close';
 import DownloadAnimation from "../../animation-styles/downloading-animation/DownloadAnimation";
-import ButtonBase from '@mui/material/ButtonBase'
+import ButtonBase from '@mui/material/ButtonBase';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch } from "react-redux";
-import { toggleDialogDisplay } from '../../features/WriterDialogToggleSlice'
+import { toggleDialogDisplay } from '../../features/WriterDialogToggleSlice';
 import SplitViewIcon from "../../vendor/styles-svg/SplitViewIcon";
 import AppsIcon from "../../vendor/styles-svg/AppsIcon";
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import StartUpTNCampaignOffer from './../../vendor/model-select/StartUpTNCampaignOffer';
 import { CircularProgress } from "@mui/material";
-import TransWriterLogo from "../../assets/images/trans-writer-logo-new.svg"
-import ChevronLeftBlack from "../../assets/images/new-ui-icons/chevron_left_black.svg"
-import NavIconOne from "../../assets/images/navIconOne.svg"
-import NavIconTwo from "../../assets/images/navIconTwo.svg"
-import FileDownload from "../../assets/images/new-ui-icons/file_download.svg"
-import ProjectsIcon from "../../assets/images/ai-projects.svg"
-import TranseditorIcon from "../../assets/images/ai-transeditor.svg"
-import DesignerIcon from "../../assets/images/ai-designer.svg"
-import TranscribeIcon from "../../assets/images/ai-transcribe.svg"
-import VoiceIcon from "../../assets/images/ai-voice.svg"
-import ChatbookIcon from "../../assets/images/ai-chatbook.svg"
-import MarketplaceIcon from "../../assets/images/ai-marketplace.svg"
-import ReactRouterPrompt from 'react-router-prompt'
-
+import TransWriterLogo from "../../assets/images/trans-writer-logo-new.svg";
+import ChevronLeftBlack from "../../assets/images/new-ui-icons/chevron_left_black.svg";
+import NavIconOne from "../../assets/images/navIconOne.svg";
+import NavIconTwo from "../../assets/images/navIconTwo.svg";
+import FileDownload from "../../assets/images/new-ui-icons/file_download.svg";
+import ProjectsIcon from "../../assets/images/ai-projects.svg";
+import TranseditorIcon from "../../assets/images/ai-transeditor.svg";
+import DesignerIcon from "../../assets/images/ai-designer.svg";
+import TranscribeIcon from "../../assets/images/ai-transcribe.svg";
+import VoiceIcon from "../../assets/images/ai-voice.svg";
+import ChatbookIcon from "../../assets/images/ai-chatbook.svg";
+import MarketplaceIcon from "../../assets/images/ai-marketplace.svg";
+import ReactRouterPrompt from 'react-router-prompt';
 
 function Navbar(props) {
-
     const { t } = useTranslation();
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const showCampaignCouponStrip = useSelector((state) => state.campaignCouponStrip.value)
-    const bookCreationResponseRedux = useSelector((state) => state.bookCreationResponse.value)
-    const isDinamalar = useSelector((state) => state.isDinamalarNews.value)
-
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
-
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const showCampaignCouponStrip = useSelector((state) => state.campaignCouponStrip.value);
+    const bookCreationResponseRedux = useSelector((state) => state.bookCreationResponse.value);
+    const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const location = useLocation();
-    const history = useNavigate()
-
-    const dispatch = useDispatch()
-
-
+    const history = useNavigate();
+    const dispatch = useDispatch();
     const [didMount, setDidMount] = useState(false);
     // const [fromAilaysa, setFromAilaysa] = useState(false);
     const [writterNav, setWritterNav] = useState(1);
@@ -65,39 +55,34 @@ function Navbar(props) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [AppsDrpVisibility, setAppsDrpVisibility] = useState(false);
-
-
-
     const [projectName, setProjectName] = useState(null);
     const [fileName, setFileName] = useState(null);
     const [currentPlan, setCurrentPlan] = useState(null);
-    const [isPlanCancelled, setIsPlanCancelled] = useState(false)
+    const [isPlanCancelled, setIsPlanCancelled] = useState(false);
     const [planExpireDays, setPlanExpireDays] = useState(null);
     const [planExpireHours, setPlanExpireHours] = useState(null);
     const [subcription_status, setSubcription_status] = useState("");
     const [isTrial, setIsTrial] = useState(null);
     const [downloadOpen, setDownloadOpen] = useState(false);
-    const [downloadpending, setDownloadpending] = useState(false)
+    const [downloadpending, setDownloadpending] = useState(false);
     const [hasFocus, setHasFocus] = useState(false);
-    const { pathname } = useLocation()
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-    const [lastLocation, setLastLocation] = useState(null)
-    const [confirmedNavigation, setConfirmedNavigation] = useState(false)
-    const [isTranslateEnable, setIsTranslateEnable] = useState(false)
-
+    const { pathname } = useLocation();
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
+    const [lastLocation, setLastLocation] = useState(null);
+    const [confirmedNavigation, setConfirmedNavigation] = useState(false);
+    const [isTranslateEnable, setIsTranslateEnable] = useState(false);
     const [availCredits, setAvailCredits] = useState(false);
     const [creditsAvailable, setCreditsAvailable] = useState(null);
     const [progressPercentage, setProgressPercentage] = useState(0);
-    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null)
+    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null);
     const [subscriptionCredit, setSubscriptionCredit] = useState(0);
     const [addonCredit, setAddonCredit] = useState(0);
-    const [isAudioOrPdf, setIsAudioOrPdf] = useState(null)  // state to check if writer opened of transcription or pdf task
-    const [showAudioPDFDialog, setShowAudioPDFDialog] = useState(false)
-    const [isSaving, setIsSaving] = useState(false)
-    const [showDownloadDrpDown, setShowDownloadDrpDown] = useState(false)
-    const [isCurrentChaperDownloading, setIsCurrentChaperDownloading] = useState(false)
-    const [isFullBookDownloading, setIsFullBookDownloading] = useState(false)
-
+    const [isAudioOrPdf, setIsAudioOrPdf] = useState(null);  // state to check if writer opened of transcription or pdf task
+    const [showAudioPDFDialog, setShowAudioPDFDialog] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [showDownloadDrpDown, setShowDownloadDrpDown] = useState(false);
+    const [isCurrentChaperDownloading, setIsCurrentChaperDownloading] = useState(false);
+    const [isFullBookDownloading, setIsFullBookDownloading] = useState(false);
     const outsideClick = useRef();
     const availCreditOutside = useRef();
     const AppDropOutside = useRef();
@@ -107,37 +92,34 @@ function Navbar(props) {
         props.documentNameRef.current.scrollTo(0, 0);
     }
 
-
-
     const openAddOn = () => {
-        window.open(Config.USER_PORTAL_HOST + "/add-ons")
-        handleAppsDrpVisibility(false)
+        window.open(Config.USER_PORTAL_HOST + "/add-ons");
+        handleAppsDrpVisibility(false);
     }
 
     const openSubcription = () => {
-        window.open(Config.USER_PORTAL_HOST + "/subscription-plans")
-        setAvailCredits(false)
+        window.open(Config.USER_PORTAL_HOST + "/subscription-plans");
+        setAvailCredits(false);
     }
 
     const getcreditstoggle = () => {
-        setAvailCredits(!availCredits)
+        setAvailCredits(!availCredits);
     }
 
     // this is responsible for opening pdf task data in writter
     useEffect(() => {
-        let taskParam = URL_SEARCH_PARAMS.get("task")
+        let taskParam = URL_SEARCH_PARAMS.get("task");
         if (taskParam) {
-            setIsAudioOrPdf('pdf')
+            setIsAudioOrPdf('pdf');
         }
-    }, [URL_SEARCH_PARAMS.get("task")])
+    }, [URL_SEARCH_PARAMS.get("task")]);
 
     useEffect(() => {
-        let transcripParam = URL_SEARCH_PARAMS.get("transcription-task")
+        let transcripParam = URL_SEARCH_PARAMS.get("transcription-task");
         if (transcripParam) {
-            setIsAudioOrPdf('audio')
+            setIsAudioOrPdf('audio');
         }
-    }, [URL_SEARCH_PARAMS.get("transcription-task")])
-
+    }, [URL_SEARCH_PARAMS.get("transcription-task")]);
 
     /* Check for clicing outside of the dropdown */
     useEffect(() => {
@@ -148,21 +130,18 @@ function Navbar(props) {
                 handleDownloadDrpVisibility(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     });
-
 
     /* Show/Hide chat logout dropdown */
     const handleLogoutDrpVisibility = (show = true) => {
         setLogoutDrpVisibility(show);
     };
 
-       /* Show/Hide chat logout dropdown */
+    /* Show/Hide chat logout dropdown */
     const handleDownloadDrpVisibility = (show = true) => {
         setShowDownloadDrpDown(show);
     };
@@ -179,36 +158,31 @@ function Navbar(props) {
 
     const handleBlockedNavigation = nextLocation => {
         if (!confirmedNavigation && pathname) {
-            setLastLocation(nextLocation)
-            setNavigationModalVisible(true)
-            return false
+            setLastLocation(nextLocation);
+            setNavigationModalVisible(true);
+            return false;
         }
-        return true
-
+        return true;
     }
 
-
     const handleConfirmNavigationClick = () => {
-        setNavigationModalVisible(false)
-        setConfirmedNavigation(true)
+        setNavigationModalVisible(false);
+        setConfirmedNavigation(true);
     }
 
     useEffect(() => {
         if (confirmedNavigation && lastLocation) {
             // Navigate to the previous blocked location with your navigate function
-            history(lastLocation.pathname)
+            history(lastLocation.pathname);
         }
-    }, [confirmedNavigation, history, lastLocation])
-
+    }, [confirmedNavigation, history, lastLocation]);
 
     useEffect(() => {
         if(bookCreationResponseRedux !== null){
-            props.documentNameRef.current.innerText = bookCreationResponseRedux.name !== undefined ? bookCreationResponseRedux.name : ""
+            props.documentNameRef.current.innerText = bookCreationResponseRedux.name !== undefined ? bookCreationResponseRedux.name : "";
         }
-    }, [bookCreationResponseRedux])
+    }, [bookCreationResponseRedux]);
     
-
-
     const handleProjectEnter = (e) => {
         e.which === 13 ? e.target.blur() : e.target.focus();
         let len = e.target.textContent.trim().length;
@@ -216,25 +190,20 @@ function Navbar(props) {
         let selection = window.getSelection();
         let isSpecial = utils.isSpecial(e);
         let isNavigational = utils.isNavigational(e);
-
         if (selection) {
             hasSelection = !!selection.toString();
         }
-
         if (isSpecial || isNavigational || (e.ctrlKey && e.which === 65)) {
             return true;
         }
-
         if (len >= settings.maxLen && !hasSelection) {
             e.preventDefault();
             return false;
         }
     };
 
-
-
     const removebrtag = () => {
-        let rem = document.querySelector('.project-box-ai')
+        let rem = document.querySelector('.project-box-ai');
         var var1 = rem.getElementsByTagName('br');
         for (var i = var1.length; i--;) {
             var1[i].parentNode.removeChild(var1[i]);
@@ -244,7 +213,7 @@ function Navbar(props) {
     document.querySelector('[contenteditable]')?.addEventListener('paste', function pasteAsPlainText(event) {
         event.preventDefault();
         event.target.innerText = event.clipboardData.getData("text/plain")?.slice(0, 256);
-        removebrtag()
+        removebrtag();
     });
 
     let settings = {
@@ -279,18 +248,16 @@ function Navbar(props) {
     utils.special[keys['ctrl']] = true;
     utils.special[keys['alt']] = true;
     utils.special[keys['delete']] = true;
-
     utils.navigational[keys['upArrow']] = true;
     utils.navigational[keys['downArrow']] = true;
     utils.navigational[keys['leftArrow']] = true;
     utils.navigational[keys['rightArrow']] = true;
 
     const handleDocumentSubmit = () => {
-        let step = 1    // for now writer documents have only editing step (step 1)
+        let step = 1;    // for now writer documents have only editing step (step 1)
         let formData = new FormData();
-        let transcribeParam = URL_SEARCH_PARAMS.get("transcription-task")
-        let taskParam = URL_SEARCH_PARAMS.get("task")
-
+        let transcribeParam = URL_SEARCH_PARAMS.get("transcription-task");
+        let taskParam = URL_SEARCH_PARAMS.get("task");
         formData.append("task", transcribeParam ? transcribeParam : taskParam);
         formData.append("step", step);
         formData.append("status", "3"); // submit: 3, in-progress: 2
@@ -301,51 +268,44 @@ function Navbar(props) {
             data: formData,
             auth: true,
             success: (response) => {
-                Config.toast("Document submitted successfully")
-                props.setShowSubmitDocment(false)
-                props.isTaskInProgressRef.current = false
+                Config.toast("Document submitted successfully");
+                props.setShowSubmitDocment(false);
+                props.isTaskInProgressRef.current = false;
             }
         });
     }
 
     const handleSaveBtn = (name = false) => {
-        let isCoAuthor = window.location.pathname.includes('book-writing')
-
+        let isCoAuthor = window.location.pathname.includes('book-writing');
         if (!isCoAuthor && props.isWriterDocumentRef.current) {
-            if (props.createdDocumentId.current !== null) props.globalSaveLogic()
-            else props.createNewDocument()
-            // console.log('handle save btn')
+            if (props.createdDocumentId.current !== null) props.globalSaveLogic();
+            else props.createNewDocument();
         } else if(isCoAuthor && name){
-            updateBookName()
+            updateBookName();
         }else{
-            props.globalSaveLogic()
+            props.globalSaveLogic();
         }
-        setIsSaving(true)
+        setIsSaving(true);
         setTimeout(() => {
-            setIsSaving(false)
+            setIsSaving(false);
         }, 1000);
     }
 
     const updateBookName = () => {
         let formdata = new FormData();
-        let bookName = props.documentNameRef.current.innerText
-        if(bookName?.trim()?.length === 0) return  
-        if(bookCreationResponseRedux === null) return
-        
+        let bookName = props.documentNameRef.current.innerText;
+        if(bookName?.trim()?.length === 0) return; 
+        if(bookCreationResponseRedux === null) return;        
         formdata.append("project_name", bookName);
 
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${bookCreationResponseRedux?.id}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${bookCreationResponseRedux?.id}/`,
             method: "PUT",
             data: formdata,
             auth: true,
-            success: (response) => {
-
-            },
+            success: (response) => { },
             error: (err) => {
-                if (err?.response.status === 400) {
-                    
-                }
+                if (err?.response.status === 400) { }
             }
         });
     } 
@@ -362,7 +322,7 @@ function Navbar(props) {
                 let timeDifference = planExpiry.getTime() - todaysDate.getTime();
                 let dateDifference = timeDifference / (1000 * 3600 * 24);
                 let hoursDifference = Math.abs(timeDifference) / 36e5;
-                setIsPlanCancelled(response.data?.sub_status === 'canceled' ? true : false)
+                setIsPlanCancelled(response.data?.sub_status === 'canceled' ? true : false);
                 setCurrentPlan(response.data?.subscription_name?.toUpperCase());
                 setPlanExpireDays(Math.ceil(dateDifference));
                 setPlanExpireHours(Math.floor(hoursDifference));
@@ -380,14 +340,12 @@ function Navbar(props) {
                 setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription);
                 setAddonCredit(response?.data?.credits_left?.addon);
                 setSubscriptionCredit(response?.data?.credits_left?.subscription);
-                // console.log(response?.data?.credits_left?.total_buyed)
-                // console.log(progressPercentage)
                 if (response?.data?.credits_left?.total_buyed === 0) {
-                    setProgressPercentage(0)
+                    setProgressPercentage(0);
                 } else {
                     setProgressPercentage(
                         (((response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription) / response?.data?.credits_left?.total_buyed) * 100).toFixed(2)
-                    )
+                    );
                 }
 
             },
@@ -400,23 +358,18 @@ function Navbar(props) {
     //             setAvailCredits(false);
     //         }
     //     };
-
     //     document.addEventListener("mousedown", handleClickOutside);
-
     //     return () => {
     //         document.removeEventListener("mousedown", handleClickOutside);
     //     };
     // });
-
     // useEffect(() => {
     //     const handleClickOutside = (e) => {
     //         if (AppDropOutside.current && !AppDropOutside.current.contains(e.target)) {
     //             handleAppsDrpVisibility(false)
     //         }
     //     };
-
     //     document.addEventListener("mousedown", handleClickOutside);
-
     //     return () => {
     //         document.removeEventListener("mousedown", handleClickOutside);
     //     };
@@ -424,27 +377,24 @@ function Navbar(props) {
 
     useEffect(() => {
         if (logoutDrpVisibility) {
-            getCreditStatus()
+            getCreditStatus();
         }
-    }, [logoutDrpVisibility])
-
+    }, [logoutDrpVisibility]);
 
     useEffect(() => {
         getUserPlanDetails();
-        getCreditStatus()
+        getCreditStatus();
     }, [])
 
     const handleDownloadCurrentChapter = () => {
-        console.log(document.querySelector('#download-current-chapter'))
-        setIsCurrentChaperDownloading(true)
-        document.querySelector('#download-current-chapter')?.click()
-        setShowDownloadDrpDown(false)
+        setIsCurrentChaperDownloading(true);
+        document.querySelector('#download-current-chapter')?.click();
+        setShowDownloadDrpDown(false);
     } 
     const handleDownloadFullBook = () => {
-        console.log(document.querySelector('#download-all-book'))
-        setIsFullBookDownloading(true)
-        document.querySelector('#download-all-book')?.click()
-        setShowDownloadDrpDown(false)
+        setIsFullBookDownloading(true);
+        document.querySelector('#download-all-book')?.click();
+        setShowDownloadDrpDown(false);
     } 
 
     return (

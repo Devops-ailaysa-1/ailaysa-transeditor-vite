@@ -1,6 +1,6 @@
 import React from 'react';
-import SandClockAnime from "./loader-sand-clock.json"
-// import Lottie from 'react-lottie'
+import SandClockAnime from "./loader-sand-clock.json";
+// import Lottie from 'react-lottie';
 import { useLottie } from "lottie-react";
 
 export const SandClockLoader = () => {
@@ -12,8 +12,7 @@ export const SandClockLoader = () => {
         rendererSettings: {
         preserveAspectRatio: "xMidYMid slice",
         },
-    }
-
+    };
     const { View } = useLottie(defaultOptions);
   return (
     <div className='sand-clock-loader-wrap'>

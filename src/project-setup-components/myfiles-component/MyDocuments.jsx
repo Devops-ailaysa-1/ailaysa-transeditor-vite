@@ -29,30 +29,28 @@ import { useDispatch } from "react-redux";
 import { addDownloadingFiles, deleteDownloadingFile, updateDownloadingFile } from "../../features/FileDownloadingListSlice";
 import PaginationLeft  from "../../assets/images/new-ui-icons/pagination-left.svg";
 import PaginationRight  from "../../assets/images/new-ui-icons/pagination-right.svg";
-import PlusIcon from "../../assets/images/new-ui-icons/plus.svg"
-import BlogArticleIcon from "../../assets/images/blog-article.svg"
-import BlogArticleWizardIcon from "../../assets/images/blog-wizard.svg"
-import ChatBookIcon from "../../assets/images/new-ui-icons/book.svg"
-import ChatSearch from "../../assets/images/chat/chat-search.svg"
-import SearchBarClose from "../../assets/images/assign-page/search-bar-close.svg"
-import NoEditorsFound2 from "../../assets/images/no-editors-found-2.svg"
-import EmptyProjectsFolder from "../../assets/images/empty-projects-folder.svg"
+import PlusIcon from "../../assets/images/new-ui-icons/plus.svg";
+import BlogArticleIcon from "../../assets/images/blog-article.svg";
+import BlogArticleWizardIcon from "../../assets/images/blog-wizard.svg";
+import ChatBookIcon from "../../assets/images/new-ui-icons/book.svg";
+import ChatSearch from "../../assets/images/chat/chat-search.svg";
+import SearchBarClose from "../../assets/images/assign-page/search-bar-close.svg";
+import NoEditorsFound2 from "../../assets/images/no-editors-found-2.svg";
+import EmptyProjectsFolder from "../../assets/images/empty-projects-folder.svg";
 
 function MyDocuments(props) {
-    let { mainContainerRef } = props
+    let { mainContainerRef } = props;
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-
     const location = useLocation();
     const { t } = useTranslation();
     const history = useNavigate();
-    const dispatch = useDispatch()
-
+    const dispatch = useDispatch();
     const [didMount, setDidMount] = useState(false);
     const [fileListSearchEnlarge, setFileListSearchEnlarge] = useState(false);
     const [isSearchTermDelete, setIsSearchTermDelete] = useState(false);
-    const [documentsList, setDocumentsList] = useState([])
-    const [documentName, setDocumentName] = useState(t("untitled"))
+    const [documentsList, setDocumentsList] = useState([]);
+    const [documentName, setDocumentName] = useState(t("untitled"));
     const [activeTab, setActiveTab] = useState(1);
     const [projectSearchTerm, setProjectSearchTerm] = useState("");
     const [showEmptyProjects, setEmptyProjects] = useState(false);
@@ -64,12 +62,11 @@ function MyDocuments(props) {
     const [selectedDocumntId, setSelectedDocumntId] = useState(null);
     const [convetedDocsListSearch, setConvertedDocsListSearch] = useState(false);
     const [convetedDocsSearchTerm, setConvertedDocsSearchTerm] = useState("");
-    const [selectedSortValue, setselectedSortValue] = useState(null)
+    const [selectedSortValue, setselectedSortValue] = useState(null);
     const [sortEl, setSortEl] = useState(null);
     const [moreEl, setMoreEl] = useState(null);
     const [openedMoreOption, setOpenedMoreOption] = useState(null);
     const [orderBySelectedValue, setOrderBySelectedValue] = useState(2);
-
     const [isDocumentDeleting, setIsDocumentDeleting] = useState(false);
 
     const fileUploadTop = createRef();
@@ -77,31 +74,25 @@ function MyDocuments(props) {
     const searchTermRef = useRef(null)
     const documentIdRef = useRef(null)
     const searchTermCloseOutside = useRef();
-
     const deleteFromDocOrBlog = useRef(null);
     const moreOptionOutside = useRef();
     const allDownloadedFilesArrRef = useRef([]);
     const bookCreationRef = useRef(null);
-    let paginationTimeOut = null
+    let paginationTimeOut = null;
 
     const open = Boolean(sortEl);
-
-
     const deletemodaloption = {
         closeMaskOnClick: false,
         width: 784,
         height: 'auto',
         onClose: () => console.log(),
     };
-
-
     const orderByOptions = [
         { value: 'doc_name', label: 'A-Z' },
         { value: '-doc_name', label: 'Z-A' },
         { value: '-id', label: t("most_recent") },
         { value: 'id', label: t("least_recent") },
-    ]
-
+    ];
     const moreOptionsForDoc = [
         {
             id: 1,
@@ -115,8 +106,7 @@ function MyDocuments(props) {
             label: t("delete"),
         },
 
-    ]
-
+    ];
     const customProjectTypeSelectStyles = {
         placeholder: (provided, state) => ({
             ...provided,
@@ -174,7 +164,6 @@ function MyDocuments(props) {
             },
         }),
     };
-
     const DropdownIndicator = (props) => {
         return (
             <components.DropdownIndicator {...props}>
@@ -182,28 +171,24 @@ function MyDocuments(props) {
             </components.DropdownIndicator>
         );
     };
-
     const modaloption = {
         closeMaskOnClick: false,
         width: 784,
     };
 
     useEffect(() => {
-        setDidMount(true)
-    }, [])
+        setDidMount(true);
+    }, []);
 
     useEffect(() => {
         const controller = new AbortController();
-
         if (props.activeProjTab === 2) {
-            // console.log('single')
-            getDocumentList(controller)
+            getDocumentList(controller);
         }
-
         return () => {
-            controller.abort()
+            controller.abort();
         }
-    }, [props.activeProjTab])
+    }, [props.activeProjTab]);
 
     /* Check for clicing outside of the dropdown */
     useEffect(() => {
@@ -212,9 +197,7 @@ function MyDocuments(props) {
                 setMoreEl(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -222,34 +205,28 @@ function MyDocuments(props) {
 
     useEffect(() => {
         const controller = new AbortController();
-
         if (convetedDocsSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
-            setDocumentsList([])
-            // console.log('fomr seatch delete')
-            getDocumentList(controller)
-            setIsSearchTermDelete(false)
+            setDocumentsList([]);
+            getDocumentList(controller);
+            setIsSearchTermDelete(false);
         }
-
         return () => {
-            controller.abort()
+            controller.abort();
         }
-    }, [convetedDocsSearchTerm, isSearchTermDelete])
+    }, [convetedDocsSearchTerm, isSearchTermDelete]);
 
     useEffect(() => {
         const controller = new AbortController();
-
         if (convetedDocsSearchTerm == "") {
             if (props.activeProjTab === 2) {
-                // console.log('from sear')
-                getDocumentList(controller)
-                setIsSearchTermDelete(false)
+                getDocumentList(controller);
+                setIsSearchTermDelete(false);
             }
         }
-
         return () => {
-            controller.abort()
+            controller.abort();
         }
-    }, [convetedDocsSearchTerm])
+    }, [convetedDocsSearchTerm]);
 
     useEffect(() => {
         const handleSearchTermClickOutside = (e) => {
@@ -257,9 +234,7 @@ function MyDocuments(props) {
                 setConvertedDocsListSearch(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -270,8 +245,8 @@ function MyDocuments(props) {
     };
 
     const handleSelectedMenuItem = (selected_option) => {
-        setselectedSortValue(selected_option.value)
-        setOrderBySelectedValue(selected_option)
+        setselectedSortValue(selected_option.value);
+        setOrderBySelectedValue(selected_option);
         setSortEl(null);
     };
 
@@ -282,52 +257,49 @@ function MyDocuments(props) {
     const handleMoreVertOption = (e, id) => {
         e.stopPropagation();
         setMoreEl(true);
-        setOpenedMoreOption(id)
+        setOpenedMoreOption(id);
     };
 
     const SearchTermFilterEnter = (e) => {
         if (e.which === 13 && convetedDocsSearchTerm == "") {
             setConvertedDocsListSearch(false);
-            e.target.blur()
+            e.target.blur();
         } else if (e.which === 13) {
             let pageParam = URL_SEARCH_PARAMS.get("page");
             if (pageParam != 1) {
-                pageSelect(1)
+                pageSelect(1);
             } else {
-                // console.log('from search enter')
-                getDocumentList()
+                getDocumentList();
             }
             setConvertedDocsListSearch(false);
-            searchTermRef.current = convetedDocsSearchTerm
-            e.target.blur()
+            searchTermRef.current = convetedDocsSearchTerm;
+            e.target.blur();
         }
     }
 
     const handleCloseSearchBox = () => {
-        setConvertedDocsSearchTerm("")
-        setConvertedDocsListSearch(false)
-        setIsSearchTermDelete(true)
+        setConvertedDocsSearchTerm("");
+        setConvertedDocsListSearch(false);
+        setIsSearchTermDelete(true);
     }
 
     useEffect(() => {
         const controller = new AbortController();
-
         if (selectedSortValue !== null) {
             if (props.activeProjTab === 2) {
-                setDocumentsList([])
-                // console.log('sortvalue')
-                getDocumentList(controller)
+                setDocumentsList([]);
+                getDocumentList(controller);
             }
         }
         return () => {
-            controller.abort()
+            controller.abort();
         }
-    }, [selectedSortValue])
+    }, [selectedSortValue]);
 
 
     const getDocumentList = (controller) => {
         setShowListingLoader(true);
-        let list = []
+        let list = [];
         /* Page param set/get - start */
         let page = 1;
         let pageParam = URL_SEARCH_PARAMS.get("page");
@@ -338,16 +310,17 @@ function MyDocuments(props) {
         /* Page param set/get - start */
         let url = `${Config.BASE_URL}/workspace/mydocuments?page=${page}`;
         if (convetedDocsSearchTerm) url += `&doc_name=${convetedDocsSearchTerm}`;
-        if (selectedSortValue !== null) url += `&ordering=${selectedSortValue}`
+        if (selectedSortValue !== null) url += `&ordering=${selectedSortValue}`;
+
         let params = {
             url: url,
             auth: true,
             ...(controller !== undefined && {signal: controller.signal}),
             success: (response) => {
-                list = response?.data?.results
+                list = response?.data?.results;
                 if (list.length == 0) setEmptyProjects(true);
                 else setEmptyProjects(false);
-                setDocumentsList(list)
+                setDocumentsList(list);
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
                 setShowListingLoader(false);
@@ -358,7 +331,7 @@ function MyDocuments(props) {
 
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
-        setDocumentsList([])
+        setDocumentsList([]);
         let url = `/documents-list?page=${page}`;
         let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
         if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
@@ -422,7 +395,6 @@ function MyDocuments(props) {
         }, 100);
     };
 
-
     /* Show the pagination content a the bottom */
     useEffect(() => {
         if (didMount) {
@@ -436,79 +408,71 @@ function MyDocuments(props) {
     /* Go to the top of the page when move to another pages */
     useEffect(() => {
         const controller = new AbortController();
-
         if (URL_SEARCH_PARAMS.get("page") !== null && URL_SEARCH_PARAMS.get("page") != 'null') {
-            // console.log(props.activeProjTab)
             if (props.activeProjTab === 2) {
-                // console.log('from page')
                 getDocumentList(controller);
             }
-
         } else if (URL_SEARCH_PARAMS.get("page") == null || URL_SEARCH_PARAMS.get("page") == 'null') {
-            // let page = URL_SEARCH_PARAMS.get("page")
-            history(`/documents-list?page=1`)
+            // let page = URL_SEARCH_PARAMS.get("page");
+            history(`/documents-list?page=1`);
         }
-        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
-
+        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("page")]);
-
     
     useEffect(() => {
         if(!showDeleteFileModal){
-          setIsDocumentDeleting(false)
+          setIsDocumentDeleting(false);
         }
-    }, [showDeleteFileModal])
+    }, [showDeleteFileModal]);
 
     useEffect(() => {
-      console.log(deleteFromDocOrBlog.current)
-    }, [deleteFromDocOrBlog.current])
+    }, [deleteFromDocOrBlog.current]);
     
-
     const deleteDocument = (documentId) => {
-        let url = ''
+        let url = '';
         if (deleteFromDocOrBlog.current === 'doc') {
-            url = `${Config.BASE_URL}/workspace/mydocuments/${documentId}`
+            url = `${Config.BASE_URL}/workspace/mydocuments/${documentId}`;
         } else if(deleteFromDocOrBlog.current === 'book') {
-            url = `${Config.BASE_URL}/openai/bookcreation/${documentId}`
+            url = `${Config.BASE_URL}/writer/bookcreation/${documentId}`;
         }else {
-            url = `${Config.BASE_URL}/openai/blogcreation/${documentId}`
+            url = `${Config.BASE_URL}/writer/blogcreation/${documentId}`;
         }
-        setIsDocumentDeleting(true)
+        setIsDocumentDeleting(true);
+
         Config.axios({
             url: url,
             method: 'DELETE',
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 Config.toast(t("document_deleted_success"));
-                setIsDocumentDeleting(false)
+                setIsDocumentDeleting(false);
                 const newArr = documentsList?.filter(obj => obj.id !== documentId);
-                setDocumentsList(newArr)
+                setDocumentsList(newArr);
                 if (newArr?.length === 15) {
-                    getDocumentList()
+                    getDocumentList();
                 }
-                setShowDeleteFileModal(false)
-                if (newArr?.length == 0) setEmptyProjects(true)
+                setShowDeleteFileModal(false);
+                if (newArr?.length == 0) setEmptyProjects(true);
             },
-            error: (err) => { setIsDocumentDeleting(false) }
+            error: (err) => { setIsDocumentDeleting(false); }
         });
     }
 
     const openWriter = (id, name) => {
-        history(`/word-processor?document-id=${id}`, {state: { docName: name, from: "My documents", prevPath: window.location.pathname + window.location.search }})
+        history(`/word-processor?document-id=${id}`, {state: { docName: name, from: "My documents", prevPath: window.location.pathname + window.location.search }});
     }
 
     const handleDeleteButton = (item) => {
-        deleteFromDocOrBlog.current = item?.open_as == 'BlogWizard' ? 'blog' : item?.open_as == 'Book' ? 'book' : 'doc'
+        deleteFromDocOrBlog.current = item?.open_as == 'BlogWizard' ? 'blog' : item?.open_as == 'Book' ? 'book' : 'doc';
         setSelectedDocumntId(item?.id);
-        setShowDeleteFileModal(true)
+        setShowDeleteFileModal(true);
     }
 
     const MoreOptionsIconDoc = (props) => {
-        let { docItem, deleteOnly } = props
+        let { docItem, deleteOnly } = props;
         return (
             <div className="more-options-wrap">
                 <ButtonBase onMouseUp={(e) => handleMoreVertOption(e, docItem.id)} className="sorting-icon">
@@ -547,39 +511,39 @@ function MyDocuments(props) {
 
     const handleOpenButtonClick = (item) => {
         if(item?.open_as === 'BlogWizard'){
-            history(`/writer-blog/?blog=${item?.id}`, {state: { prevPath: window.location.pathname + window.location.search }})
+            history(`/writer-blog/?blog=${item?.id}`, {state: { prevPath: window.location.pathname + window.location.search }});
         } else if(item?.open_as === 'Book'){
-            history(`/book-writing?book=${item?.id}`, {state: { prevPath: window.location.pathname + window.location.search }})
+            history(`/book-writing?book=${item?.id}`, {state: { prevPath: window.location.pathname + window.location.search }});
         } else{
-            openWriter(item?.id, item?.doc_name)
+            openWriter(item?.id, item?.doc_name);
         }
     } 
 
     const handleDownload = (item) => {
         if(item?.open_as === 'Book'){
-            getBookDetails(item?.id)
+            getBookDetails(item?.id);
         }
     } 
 
     const getBookDetails = (book_id) => {
-        if(book_id === undefined || book_id === null) return
+        if(book_id === undefined || book_id === null) return;
+
         Config.axios({
-            url: `${Config.BASE_URL}/openai/bookcreation/${book_id}/`,
+            url: `${Config.BASE_URL}/writer/bookcreation/${book_id}/`,
             method: "GET",
             auth: true,
             success: (response) => {
-                let data = response.data
-                bookCreationRef.current = data
+                let data = response.data;
+                bookCreationRef.current = data;
                 setTimeout(() => {
-                    handleDownloadAll()
+                    handleDownloadAll();
                 }, 10);
             },
         });
     } 
 
     const filesDownload = async(html_data, item) => {
-        var summerNoteData = html_data
-
+        var summerNoteData = html_data;
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
@@ -589,14 +553,8 @@ function MyDocuments(props) {
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
-                    // console.log(attribs)
-
-                    // console.log(attribs.style)
-                    // console.log(attribs.style)
-                    let c = attribs?.color ? attribs?.color : ''
-                    let s = attribs?.style ? attribs.style : ''
-
-
+                    let c = attribs?.color ? attribs?.color : '';
+                    let s = attribs?.style ? attribs.style : '';
                     return {
                         tagName: 'span',
                         //   attribs: {
@@ -610,62 +568,54 @@ function MyDocuments(props) {
                 }
             }
         });
-
         // regex to replace all <p><br /></p>
-        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />')
-        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '')
-
+        let cleaned = clean?.replace(/<p><br \/><\/p>/g, '<br />');
+        let removedPandH1 = cleaned?.replace(/<(p|h1|h2|h3)>\s*<\/\1>/g, '');
         let removedStyleAttribFromImg = removedPandH1.replace(/<img(.*?)\s+style\s*(=\s*["'][^"']*["'])?(\s.*?)?>/gi, '<img$1$3>');
-
         // formData.append("name", documentNameRef.current.innerText);
         var myHeaders = new Headers();
         var formdata = new FormData();
-
         formdata.append("html", removedStyleAttribFromImg);
-        // formdata.append("html_str", removedStyleAttribFromImg)
-        formdata.append("name", "name")
+        // formdata.append("html_str", removedStyleAttribFromImg);
+        formdata.append("name", "name");
         var requestOptions = {
             method: 'POST',
             body: formdata,
             headers: myHeaders,
             redirect: 'follow'
         };
+
         try{
-            let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions)
-            // let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions)
-           
+            let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions);
+            // let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions);           
             if (data.status === 200) {
-                let response = await data.blob()
-    
-                let fileObj = new File([response], `${(item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
-                console.log(fileObj);
+                let response = await data.blob();    
+                let fileObj = new File([response], `${(item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
                 return fileObj;
             }else {
                 console.error('Failed to download file');
                 return null;
             }
         }catch(e) {
-            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
+            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }));
         }
     } 
 
     const handleDownloadAll = () => {
-        allDownloadedFilesArrRef.current = []
-        let arr = []
+        allDownloadedFilesArrRef.current = [];
+        let arr = [];
         bookCreationRef.current?.front_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
         bookCreationRef.current?.body_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
         bookCreationRef.current?.back_matter?.forEach(each => {
-            arr.push(each)
+            arr.push(each);
         })
-        dispatch(addDownloadingFiles({ id: bookCreationRef.current?.id, file_name: bookCreationRef.current?.name, ext: '.docx', status: 1 }))
-
+        dispatch(addDownloadingFiles({ id: bookCreationRef.current?.id, file_name: bookCreationRef.current?.name, ext: '.docx', status: 1 }));
         downloadFilesInOrder(arr).then(() => {
-            console.log(allDownloadedFilesArrRef.current)
-            mergeFile()
+            mergeFile();
         })
     } 
 
@@ -683,52 +633,41 @@ function MyDocuments(props) {
 
     const mergeFile = async() => {
         let formData = new FormData();
-        let userCacheData = JSON.parse(
-            typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
-        );
-        // console.log(a);
+        let userCacheData = JSON.parse(typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null);
         let token = userCacheData != null ? userCacheData?.token : "";
-        
-        console.log(allDownloadedFilesArrRef.current)
-
         allDownloadedFilesArrRef.current?.forEach(each => {
             formData.append("docx_files", each);
-        })
+        });
         formData.append("book_name", bookCreationRef.current?.name);
-        
+
         axios({
             method: "POST",
-            url: `${Config.BASE_URL}/openai/docx_merger/`,
+            url: `${Config.BASE_URL}/writer/docx_merger/`,
             data: formData,
             responseType: "blob",
             headers: { Authorization: `Bearer ${token}` },
         }).then(function (response) {
             //handle success
-            console.log(response.data)
             const filename = response.headers['content-disposition']?.split('filename*=')[1];
-            let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''))
+            let bookName = decodeURIComponent(filename?.replace(`UTF-8''`, ''));
             const url = URL.createObjectURL(new Blob([response.data]));
-
             var fileDownload = document.createElement("a");
             document.body.appendChild(fileDownload);
             // fileDownload.href = URL.createObjectURL(response.data);
-            fileDownload.href = url
+            fileDownload.href = url;
             fileDownload.download = Config.unescape(`${bookName}`);
             fileDownload?.click();
             document.body.removeChild(fileDownload);
             // update the list once download completed
-            dispatch(updateDownloadingFile({ id: bookCreationRef.current?.id, status: 2 }))
-
+            dispatch(updateDownloadingFile({ id: bookCreationRef.current?.id, status: 2 }));
             setTimeout(() => {
                 // remove the downloaded file from list
-                dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
+                dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }));
             }, 8000);
-
-
         }).catch((e) =>{
-            console.log(e)
-            Config.toast('Failed to download file', 'error')
-            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }))
+            console.error(e);
+            Config.toast('Failed to download file', 'error');
+            dispatch(deleteDownloadingFile({ id: bookCreationRef.current?.id }));
         })
     } 
 
@@ -772,7 +711,6 @@ function MyDocuments(props) {
                                                         :
                                                         <p className="results-link">{t("search_results_proj_list_1")} <span>{t("search_results_convert_list_docs")}</span></p>
                                                 }
-
                                             </div>
                                         </div>
                                     </div>
@@ -1096,4 +1034,4 @@ function MyDocuments(props) {
     )
 }
 
-export default MyDocuments
+export default MyDocuments;

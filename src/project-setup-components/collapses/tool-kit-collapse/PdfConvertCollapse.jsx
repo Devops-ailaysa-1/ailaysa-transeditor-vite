@@ -3,8 +3,8 @@ import { NavLink, useParams, useNavigate} from "react-router-dom";
 import Config from "../../../vendor/Config";
 import { Collapse } from "reactstrap";
 import { useTranslation } from "react-i18next";
-import ToolkitMenu from "../../../assets/images/new-create-hub/tool-kit-menu.svg"
-import ExpandMoreIcon from "../../../assets/images/new-ui-icons/expand_more.svg"
+import ToolkitMenu from "../../../assets/images/new-create-hub/tool-kit-menu.svg";
+import ExpandMoreIcon from "../../../assets/images/new-ui-icons/expand_more.svg";
 
 const PdfConvertCollapse = (props) => {
     const { t } = useTranslation();
@@ -27,7 +27,7 @@ const PdfConvertCollapse = (props) => {
         }else{
             setFilesCollapse(false);
         }
-    }, [window.location.pathname])
+    }, [window.location.pathname]);
 
     const handleFilesCollapser = () => {
         setFilesCollapse(!filesCollapse);

@@ -154,11 +154,11 @@ function AdvancedProjectType(props) {
         }
     }, [props?.mtEnable])
 
-    useEffect(() => {
-        if(adaptiveTransEnable) {
-            setTranslationByPage(false)
-        }
-    }, [adaptiveTransEnable])
+    // useEffect(() => {
+    //     if(adaptiveTransEnable) {
+    //         setTranslationByPage(false)
+    //     }
+    // }, [adaptiveTransEnable])
     
 
     const handlePageWiseTransOption = () => {
@@ -169,6 +169,9 @@ function AdvancedProjectType(props) {
             setAdaptiveTransEnable(false)
         }
     } 
+    useEffect(()=>{
+        setTranslationByPage(false)
+    },[adaptiveTransEnable])
 
     const Option = (props) => {
         return (
@@ -231,14 +234,13 @@ function AdvancedProjectType(props) {
             url: `${Config.BASE_URL}/workspace/task_status/?project=${URL_SEARCH_PARAMS.get("get-project-info")}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data)
-                let canOpenFiles = response.data.res?.filter(each => each.open == 'True')
+                let canOpenFiles = response.data.res?.filter(each => each.open == 'True');
                 if(response.data.res?.length !== canOpenFiles?.length){
-                    setDisablePreTranslate(true)
+                    setDisablePreTranslate(true);
                 }
             },
             error: (err) => {
-               
+               console.error(err);
             }
         });
     }
@@ -285,6 +287,9 @@ function AdvancedProjectType(props) {
                             {/* <Collapse className={"collapsed-body " + (isOpen ? "collapsed-body-open" : "")} isOpen={isOpen}> */}
                                 <div className={"form-wrapper " + (projectType === 4 && "single-advance-project")}>
                                     <div className={projectType !== 4 && "d-flex gap-3 files-space-align"}>
+
+{/* {!adaptiveTransEnable && */}
+<>
                                         {projectType !== 4 && 
                                         <div className="form-group mr-3">
                                             <label htmlFor="exampleFormControlFile1" className="adv-form-label">
@@ -313,7 +318,12 @@ function AdvancedProjectType(props) {
                                                     IndicatorSeparator: () => null,
                                                 }}
                                             />
-                                        </div>}
+                                        </div>
+                                        }
+
+</>
+{/* } */}
+
                                         <div className="form-group">
                                             <label className="adv-form-label">{t("set_deadline")}</label>
                                             <div className="date-time-pickers">
@@ -408,10 +418,11 @@ function AdvancedProjectType(props) {
                                     </div>
                                 </div>
                                 <div className={"form-wrapper pt-0 "}>
-                                    {console.log(isTranslationTaskAvailable)}
-                                    {console.log(tempWriterFile)}
                                     {(isTranslationTaskAvailable || (tempWriterFile !== null && tempWriterFile !== undefined) || flowSwitch == 2) &&
+
+                                    
                                         <>
+                                        {/* {!adaptiveTransEnable && */}
                                             <div className="flex items-center" style={!props.mtEnable ? {opacity: 0.5} : {}}>
                                                 <Checkbox
                                                     id="pre-translate"
@@ -426,36 +437,38 @@ function AdvancedProjectType(props) {
                                                 </label>{disablePreTranslate && <small style={{marginLeft: '5px'}}>({t("pre_translation_on_going")})</small>}
                                             
                                             </div>
+{/* } */}
                                             <div 
                                                 className={[
                                                     "d-flex gap-3 files-space-align",
                                                     preTranslate ? "disable opacity-60" : ""
                                                 ].join(' ')}
                                             >
+                                                {/* {!adaptiveTransEnable && */}
                                                 <div 
-                                                    className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3 mt-2"
-                                                    style={!props.mtEnable ? {pointerEvents: 'none', opacity: '0.5', paddingLeft: '10px'} : {paddingLeft: '10px'}}
-                                                >
-                                                        <>
-                                                            <label>{t("get_translation_by")}</label> &nbsp;
-                                                            <Radio
-                                                                checked={translationByPage}
-                                                                id="translate-by-page"
-                                                                className="radio-btn"
-                                                                size="small"
-                                                                onChange={handlePageWiseTransOption}
-                                                            /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
-                                                            &nbsp;&nbsp;
-                                                            <Radio
-                                                                checked={!translationByPage}
-                                                                id="translate-by-segment"
-                                                                onChange={() => setTranslationByPage(false)}
-                                                                size="small"
-                                                                className="radio-btn"
-                                                            /> <label htmlFor="translate-by-segment" className="assign-manage-radio">{t("sentence_one_by_one")}</label>
+                                                className="d-flex align-items-center mt-apply-checkbox form-group mb-0 mr-3 mt-2"
+                                                style={!props.mtEnable ? {pointerEvents: 'none', opacity: '0.5', paddingLeft: '10px'} : {paddingLeft: '10px'}} >
+                                                    <>
+                                                        <label>{t("get_translation_by")}</label> &nbsp;
+                                                        <Radio
+                                                            checked={translationByPage}
+                                                            id="translate-by-page"
+                                                            className="radio-btn"
+                                                            size="small"
+                                                            onChange={handlePageWiseTransOption}
+                                                        /> <label htmlFor="translate-by-page" className="assign-manage-radio">{t("sentence_page_wise")}</label>
+                                                        &nbsp;&nbsp;
+                                                        <Radio
+                                                            checked={!translationByPage}
+                                                            id="translate-by-segment"
+                                                            onChange={() => setTranslationByPage(false)}
+                                                            size="small"
+                                                            className="radio-btn"
+                                                        /> <label htmlFor="translate-by-segment" className="assign-manage-radio">{t("sentence_one_by_one")}</label>
 
-                                                        </>
+                                                    </>
                                                 </div>
+                                                {/* } */}
                                             </div>
                                         </>
                                     }

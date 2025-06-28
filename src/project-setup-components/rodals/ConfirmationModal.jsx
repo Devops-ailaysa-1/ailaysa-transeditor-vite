@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import WarningIcon from '@mui/icons-material/Warning';
 
 function ConfirmationModal(props) {
-
-    const { 
-          setShow 
-        } = props
+    const {setShow } = props;
 
     // const AiMarkSubmit = withStyles((theme) => ({
     //     root: {
@@ -47,12 +44,8 @@ function ConfirmationModal(props) {
 
     const handleClose = () => {
         setShow(false);
-
     }
     
-    // const handleYes = () => {
-    //     console.log("yes");
-    // }
     return(
         <React.Fragment>
             <div className="confirmation-wrapper-mod">

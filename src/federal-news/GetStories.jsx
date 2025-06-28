@@ -68,7 +68,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from "../vendor/styles-svg/DeleteIcon";
 import { useDispatch, useSelector } from "react-redux";
 // import { setDownloadableFileResponse } from "../features/DownloadFileResponseSlice";
-
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -99,16 +98,16 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import { data } from "jquery";
 import LanguageSelector from "./LanguageSelector";
 import RefreshIcon from '@mui/icons-material/Refresh';
-import SearchBarIcon from "../assets/images/chat/chat-search.svg"
-import BlackClose from '../assets/images/assign-page/search-bar-close.svg'
-import NoEditors from "../assets/images/no-editors-found-2.svg"
-import EmptyProjectIcon from "../assets/images/empty-projects-folder.svg"
-import PlusIcon from "../assets/images/new-ui-icons/plus.svg"
-import FederalImgPlaceholder from '../assets/images/federal-news/federal_placeholder.png'
-import BlueRightArrow from '../assets/images/new-ui-icons/arrow_right_alt_color.svg'
-import InsuffientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg"
-import RedCircleIcon from "../assets/images/new-ui-icons/remove_circle_red.svg"
-import FileErrorIcon from "../assets/images/new-ui-icons/file-error.png"
+import SearchBarIcon from "../assets/images/chat/chat-search.svg";
+import BlackClose from '../assets/images/assign-page/search-bar-close.svg';
+import NoEditors from "../assets/images/no-editors-found-2.svg";
+import EmptyProjectIcon from "../assets/images/empty-projects-folder.svg";
+import PlusIcon from "../assets/images/new-ui-icons/plus.svg";
+import FederalImgPlaceholder from '../assets/images/federal-news/federal_placeholder.png';
+import BlueRightArrow from '../assets/images/new-ui-icons/arrow_right_alt_color.svg';
+import InsuffientIcon from "../assets/images/new-ui-icons/insuffient-icon.svg";
+import RedCircleIcon from "../assets/images/new-ui-icons/remove_circle_red.svg";
+import FileErrorIcon from "../assets/images/new-ui-icons/file-error.png";
 
 function GetStories(props) {
     Config.redirectIfNotLoggedIn(props); //Redirect if not logged in.
@@ -121,15 +120,14 @@ function GetStories(props) {
         setIsViewStoryModal,
         setSelectedStoryDetails,
         openAddStoryModal
-    } = props
+    } = props;
     const location = useLocation();
     const { t } = useTranslation();
     const history = useNavigate();
     const dispatch = useDispatch()
-    const userDetails = useSelector((state) => state.userDetails.value)
-    const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
-
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
+    const userDetails = useSelector((state) => state.userDetails.value);
+    const languageOptionsList = useSelector((state) => state.languageOptionsList.value);
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
 
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -151,7 +149,7 @@ function GetStories(props) {
     const [contentTypeOptions, setContentTypeOptions] = useState(null);
     const [projectName, setProjectName] = useState("");
     const [projectType, setProjectType] = useState(null);
-    const [projectTypeOptions, setProjectTypeOptions] = useState([])
+    const [projectTypeOptions, setProjectTypeOptions] = useState([]);
     const [mtpeEngines, setMtpeEngines] = useState([]);
     const [mtpeEngineOptions, setMtpeEngineOptions] = useState([]);
     const [selectedMTEngine, setSelectedMTEngine] = useState({ value: 1, label: "Google" });
@@ -164,8 +162,7 @@ function GetStories(props) {
     const [showIndividualAssignManage, setShowIndividualAssignManage] = useState(false);
     const [showLSPAssignManage, setShowLSPAssignManage] = useState(false);
     const [assignStep, setAssignStep] = useState(null);
-
-    // const [preTranslate, setPreTranslate] = useState(false)
+    // const [preTranslate, setPreTranslate] = useState(false);
     const [createdProjects, setCreatedProjects] = useState([]);
     const [createdGlossaryProject, setCreatedGlossaryProjects] = useState(false);
     const [fileError, setFileError] = useState("");
@@ -252,30 +249,27 @@ function GetStories(props) {
     const [isProductTourSeen, setIsProductTourSeen] = useState(true);
     const [postEditStep, setPostEditStep] = useState(true);
     const [proofReadStep, setProofReadStep] = useState(false);
-    const [selectedProjectFiledID, setselectedProjectFiledID] = useState(null)
+    const [selectedProjectFiledID, setselectedProjectFiledID] = useState(null);
     const [filteredResults, setFilteredResults] = useState([]);
     const [searchInput, setSearchInput] = useState('');
     const [onFocusWrap, setOnFocusWrap] = useState(false)
     const [poPDFUrl, setPoPDFUrl] = useState(null)
-    const [particularClickedTask, setParticularClickedTask] = useState(null)
+    const [particularClickedTask, setParticularClickedTask] = useState(null);
     const [stepToAccept, setStepToAccept] = useState(null)
     const searchAreaRef = useRef(null);
     const [selectFileRow, setSelectFileRow] = useState(false);
     const [availCredits, setAvailCredits] = useState(false);
-    const [projectFilterType, setprojectFilterType] = useState(null)
-    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null)
-
+    const [projectFilterType, setprojectFilterType] = useState(null);
+    const [isCurrentPlanTrial, setIsCurrentPlanTrial] = useState(null);
     const [documentSubmitParameters, setDocumentSubmitParameters] = useState({
         taskid: null,
         step: null,
         confirm: null,
         total: null,
         isTaskReassigned: false
-    })
-    const [showSubmitDocumentAlertModal, setShowSubmitDocumentAlertModal] = useState(false)
-
+    });
+    const [showSubmitDocumentAlertModal, setShowSubmitDocumentAlertModal] = useState(false);
     const [showElement, setShowElement] = useState(true);
-
     // Glossary project states
     const [primaryGlossarySourceName, setPrimaryGlossarySourceName] = useState("");
     const [glossaryCopyrightOwner, setGlossaryCopyrightOwner] = useState("");
@@ -284,103 +278,76 @@ function GetStories(props) {
     const [glossaryLicense, setGlossaryLicense] = useState("");
     const [selectedUsagePermission, setSelectedUsagePermission] = useState({ value: 1, label: t("Private") });
     const [glossaryProjectCreationResponse, setGlossaryProjectCreationResponse] = useState(null);
-    const [selectedGlossaryProject, setSelectedGlossaryProject] = useState(null)
-    const [orderByValue, setOrderByValue] = useState(null)
+    const [selectedGlossaryProject, setSelectedGlossaryProject] = useState(null);
+    const [orderByValue, setOrderByValue] = useState(null);
     const [sortEl, setSortEl] = useState(null);
     const [moreEl, setMoreEl] = useState(null);
     const [openEl, setOpenEl] = useState(null);
-    const [subDownloadOption, setSubDownloadOption] = useState(null)
+    const [subDownloadOption, setSubDownloadOption] = useState(null);
     const [openedMoreOption, setOpenedMoreOption] = useState(null);
     const [showOpenAs, setShowOpenAs] = useState(null);
     const [orderBySelectedValue, setOrderBySelectedValue] = useState(2);
     const sortOpen = Boolean(sortEl);
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-
-    const [showProcessingModal, setShowProcessingModal] = useState(false)
-    const [editInstantProjectModal, setEditInstantProjectModal] = useState(false)
-    const [textToSpeechConvert, setTextToSpeechConvert] = useState(false)
-    const [isTranscribing, setIsTranscribing] = useState(false)
-    const [partialPretranslate, setPartialPretranslate] = useState(false)
-    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
-    const [unassignTaskDeleteAlert, setUnassignTaskDeleteAlert] = useState(false)
-
-    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null)
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const [showProcessingModal, setShowProcessingModal] = useState(false);
+    const [editInstantProjectModal, setEditInstantProjectModal] = useState(false);
+    const [textToSpeechConvert, setTextToSpeechConvert] = useState(false);
+    const [isTranscribing, setIsTranscribing] = useState(false);
+    const [partialPretranslate, setPartialPretranslate] = useState(false);
+    const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false);
+    const [unassignTaskDeleteAlert, setUnassignTaskDeleteAlert] = useState(false);
+    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
     const [taskActionOpen, setTaskActionOpen] = useState(false);
-    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null)
-
-    const [expressProjectName, setExpressProjectName] = useState('')
-
+    const [taskActionAnchorEl, setTaskActionAnchorEl] = useState(null);
+    const [expressProjectName, setExpressProjectName] = useState('');
     // project analysis states
-    const [payableRatesAPI, setPayableRatesAPI] = useState(null)
-    const [payablRateValueAPI, setPayablRateValueAPI] = useState(null)
-    const [projectAnalysisedData, setProjectAnalysisedData] = useState(null)
-    const [projectAnalysisUnitSwitch, setProjectAnalysisUnitSwitch] = useState(false)
-
-
+    const [payableRatesAPI, setPayableRatesAPI] = useState(null);
+    const [payablRateValueAPI, setPayablRateValueAPI] = useState(null);
+    const [projectAnalysisedData, setProjectAnalysisedData] = useState(null);
+    const [projectAnalysisUnitSwitch, setProjectAnalysisUnitSwitch] = useState(false);
     const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
     const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState([]);
-    const [hasTeam, setHasTeam] = useState(false)
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
+    const [hasTeam, setHasTeam] = useState(false);
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
     const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
-    const [isExpressUpdating, setIsExpressUpdating] = useState(false)
-    const [showExpressDeleteModal, setShowExpressDeleteModal] = useState(false) // state to show confirmation modal for express project
-
-    const [preTranslateAllTask, setPreTranslateAllTask] = useState([])
-    const [createdProjectsList, setCreatedProjectsList] = useState([])
-
-    const [isPdfTranslating, setIsPdfTranslating] = useState(false)
-
-    const [transcriptionTaskList, setTranscriptionTaskList] = useState([])
-
-    const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([])
-
-    const [isDownloading, setIsDownloading] = useState(false)
-    const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false)
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-    const [confirmedNavigation, setConfirmedNavigation] = useState(false)
-    const [lastLocation, setLastLocation] = useState(null)
-    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false)
-
-    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false)
-    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('')
-
+    const [isExpressUpdating, setIsExpressUpdating] = useState(false);
+    const [showExpressDeleteModal, setShowExpressDeleteModal] = useState(false); // state to show confirmation modal for express project
+    const [preTranslateAllTask, setPreTranslateAllTask] = useState([]);
+    const [createdProjectsList, setCreatedProjectsList] = useState([]);
+    const [isPdfTranslating, setIsPdfTranslating] = useState(false);
+    const [transcriptionTaskList, setTranscriptionTaskList] = useState([]);
+    const [analysisRunningProjectList, setAnalysisRunningProjectList] = useState([]);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const [showAssignedProjectDeleteAlert, SetShowAssignedProjectDeleteAlert] = useState(false);
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
+    const [confirmedNavigation, setConfirmedNavigation] = useState(false);
+    const [lastLocation, setLastLocation] = useState(null);
+    const [showdocCreditCheckAlert, setShowDocCreditCheckAlert] = useState(false);
+    const [showTaskReworkReasonModal, setShowTaskReworkReasonModal] = useState(false);
+    const [customerTaskReworkReasonText, setCustomerTaskReworkReasonText] = useState('');
     // states for open as button
     const [downloadOpen, setDownloadOpen] = useState(false);
-
     // const [anchorEl, setAnchorEl] = useState(null); // This is the common anchor element for all poppers
     const [popperAnchorEl, setPopperAnchorEl] = useState({}); // Separate anchor element for each popper
-    const [showPOFilesModal, setShowPOFilesModal] = useState(false)
-    const [POFilesDetails, setPOFilesDetails] = useState(null)
-
-    const [isReworkSending, setIsReworkSending] = useState(false)
-    const [isDeadlineExtendReqSending, setIsDeadlineExtendReqSending] = useState(false)
-
-    const [showDeadlineCrossedModal, setShowDeadlineCrossedModal] = useState(false)
-
-    const [vendorChangeRequestReason, setVendorChangeRequestReason] = useState("")
-    const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false)
-    const [isApproving, setIsApproving] = useState(false)
-
-    
+    const [showPOFilesModal, setShowPOFilesModal] = useState(false);
+    const [POFilesDetails, setPOFilesDetails] = useState(null);
+    const [isReworkSending, setIsReworkSending] = useState(false);
+    const [isDeadlineExtendReqSending, setIsDeadlineExtendReqSending] = useState(false);
+    const [showDeadlineCrossedModal, setShowDeadlineCrossedModal] = useState(false);
+    const [vendorChangeRequestReason, setVendorChangeRequestReason] = useState("");
+    const [showVendorChangeRequestModal, setShowVendorChangeRequestModal] = useState(false);
+    const [isApproving, setIsApproving] = useState(false);    
     const [isDesignDeleting, setIsDesignDeleting] = useState(false);
     const [axiosGetStoriesAbortController, setAxiosGetStoriesAbortController] = useState(null);
     const [axiosFileTranslateAbortController, setAxiosFileTranslateAbortController] = useState(null);
     const [showFileErrorModal, setShowFileErrorModal] = useState(false);
-    const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false)
-    const [isStoryTranslating, setIsStoryTranslating] = useState(false)
-    const [isStoryIdTranslating, setIsStoryIdTranslating] = useState(null)
-    const [defaultPair , setDefaultPair] = useState([])
-    const [restrictedTargetLang , setRestrictedTargetLang] = useState([])
-
-    const [newsId, setNewsId] = useState([])
-    const [selectedLanguageCMS, setSelectedLanguageCMS] = useState({value: 1, label: 'English'})
-
-    const downloadAnchorRef = useRef(null);
-    const projectIdForPOModal = useRef(null)
-    const projectTypeForPOModal = useRef(null)
-
-    const clientResponseDataRef = useRef(null)
-
+    const [showTaskDesignIndividualDeleteAlert, setShowTaskDesignIndividualDeleteAlert] = useState(false);
+    const [isStoryTranslating, setIsStoryTranslating] = useState(false);
+    const [isStoryIdTranslating, setIsStoryIdTranslating] = useState(null);
+    const [defaultPair , setDefaultPair] = useState([]);
+    const [restrictedTargetLang , setRestrictedTargetLang] = useState([]);
+    const [newsId, setNewsId] = useState([]);
+    const [selectedLanguageCMS, setSelectedLanguageCMS] = useState({value: 1, label: 'English'});    
     /* State constants - end */
 
     /* Ref constants - start */
@@ -397,14 +364,17 @@ function GetStories(props) {
     const deletedJobIds = useRef([]);
     const deletedSubjectIds = useRef([]);
     const deletedContentIds = useRef([]);
-    const projectTypeRef = useRef(null)
-    const assignedMemberCardRef = useRef(null)
-
-    // const allowedFileLength = useRef(10)
-    // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`)
-    // const allowedTargetLanguageLength = useRef(20)
-    // const allowedFileSize = useRef(100) //In MB
-    // const fileSizeErrMsg = useRef(`Exceeds the file(s) size limit of ${allowedFileSize.current} MB`)
+    const projectTypeRef = useRef(null);
+    const assignedMemberCardRef = useRef(null);
+    const downloadAnchorRef = useRef(null);
+    const projectIdForPOModal = useRef(null);
+    const projectTypeForPOModal = useRef(null);
+    const clientResponseDataRef = useRef(null);
+    // const allowedFileLength = useRef(10);
+    // const fileLengthErrMsg = useRef(`Only ${allowedFileLength.current} files are allowed in a project`);
+    // const allowedTargetLanguageLength = useRef(20);
+    // const allowedFileSize = useRef(100); //In MB
+    // const fileSizeErrMsg = useRef(`Exceeds the file(s) size limit of ${allowedFileSize.current} MB`);
     const allowedSingleFileSize = useRef(100); // in MB
     const singleFileSizeError = useRef(t("file_size_exceeds"));
     const projectIdToSelect = useRef(null);
@@ -413,29 +383,22 @@ function GetStories(props) {
     const typing = useRef(false);
     const typingTimeout = useRef(0);
     const projectEditable = useRef(false);
-
-    const downloadref = useRef(null)
-    const downloadedFileName = useRef(null)
+    const downloadref = useRef(null);
+    const downloadedFileName = useRef(null);
     const searchTermCloseOutside = useRef();
-
-    const searchTermRef = useRef(null)
-    const createdProjectsRef = useRef([])
-    const selectedProjectFilesRef = useRef([])
-    const myTimeoutFunc = useRef(null)
-    const selectedProjectIdRef = useRef(null)
-    const projectObject = useRef(null)
-
-
-    const analysisRunningProjectListRef = useRef(null)
-    const wordCountAnalysisTimeoutRef = useRef(null)
-    const wordCountAnalysisTriggerRef = useRef(false)
-
-    const isTaskReassigned = useRef(false)
-
-    const fileTranslatingTaskListRef = useRef([])
-    const sourceLangSelectBoxRef = useRef([])
-    const targetLangSelectBoxRef = useRef([])
-
+    const searchTermRef = useRef(null);
+    const createdProjectsRef = useRef([]);
+    const selectedProjectFilesRef = useRef([]);
+    const myTimeoutFunc = useRef(null);
+    const selectedProjectIdRef = useRef(null);
+    const projectObject = useRef(null);
+    const analysisRunningProjectListRef = useRef(null);
+    const wordCountAnalysisTimeoutRef = useRef(null);
+    const wordCountAnalysisTriggerRef = useRef(false);
+    const isTaskReassigned = useRef(false);
+    const fileTranslatingTaskListRef = useRef([]);
+    const sourceLangSelectBoxRef = useRef([]);
+    const targetLangSelectBoxRef = useRef([]);
     /* Ref constants - end */
 
     var id = window.setTimeout(function () { }, 0);
@@ -444,9 +407,8 @@ function GetStories(props) {
         let timeOut = setTimeout(function () {
             setShowElement(false);
         }, 10000);
-
         return () => {
-            clearTimeout(timeOut)
+            clearTimeout(timeOut);
         }
     }, []);
 
@@ -456,9 +418,7 @@ function GetStories(props) {
                 setFileListSearchEnlarge(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -470,9 +430,7 @@ function GetStories(props) {
                 setFileListSearchEnlarge(false);
             }
         };
-
         document.addEventListener("mousedown", handleSearchTermClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleSearchTermClickOutside);
         };
@@ -480,61 +438,51 @@ function GetStories(props) {
 
     useEffect(() => {
         setDidMount(true); //Component mounted
-        defaultDetail()
+        defaultDetail();
     }, []);
 
-
-
     useEffect(() => {
-        let langParam = URL_SEARCH_PARAMS.get('lang') ? URL_SEARCH_PARAMS.get('lang') : "English"
-        let langParamId = targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.id
-       
+        let langParam = URL_SEARCH_PARAMS.get('lang') ? URL_SEARCH_PARAMS.get('lang') : "English";
+        let langParamId = targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.id;       
         if(defaultPair && targetLanguageOptionsRef.current?.length !== 0){
-            // setSourceLanguage(defaultPair.src)
-            // setSourceLabel(targetLanguageOptionsRef.current?.find((each) => each.id === defaultPair.src)?.language)
-            let tar = []
+            // setSourceLanguage(defaultPair.src);
+            // setSourceLabel(targetLanguageOptionsRef.current?.find((each) => each.id === defaultPair.src)?.language);
+            let tar = [];
             defaultPair.tar?.forEach((lang) => {
                 if(lang != langParamId){
                     tar.push(targetLanguageOptionsRef.current?.find((each) => each.id == lang))
                 }
             }) 
-            setTargetLanguage([...tar])
+            setTargetLanguage([...tar]);
         }
-
         if(targetLanguageOptionsRef.current?.length !== 0){
-            setSourceLanguage(langParamId)
-            setSourceLabel(targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.language)
+            setSourceLanguage(langParamId);
+            setSourceLabel(targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.language);
         }
-    },[defaultPair, targetLanguageOptionsRef.current, URL_SEARCH_PARAMS.get('lang')])
+    },[defaultPair, targetLanguageOptionsRef.current, URL_SEARCH_PARAMS.get('lang')]);
 
     useEffect(() => {
         if(targetLanguage?.length !== 0 && targetLanguageOptionsRef.current?.length !== 0) {
-            let langParam = URL_SEARCH_PARAMS.get('lang') ? URL_SEARCH_PARAMS.get('lang') : "English"
-            let langParamId = targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.id
-    
+            let langParam = URL_SEARCH_PARAMS.get('lang') ? URL_SEARCH_PARAMS.get('lang') : "English";
+            let langParamId = targetLanguageOptionsRef.current?.find((each) => each.language === langParam)?.id;    
             if(targetLanguage?.find(lang => lang.id == langParamId)){
-                setTargetLanguage(targetLanguage?.filter(lang => lang.id != langParamId))
+                setTargetLanguage(targetLanguage?.filter(lang => lang.id != langParamId));
             }
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current])
-    
+    }, [targetLanguage, targetLanguageOptionsRef.current]);    
 
     // calculate restricting target language from selected news
     useEffect(() => {
-        let newsList = createdProjects?.filter(each => newsId?.some(item => item == each?.newsId))
+        let newsList = createdProjects?.filter(each => newsId?.some(item => item == each?.newsId));
         let restrictedTarLang = Array.from(new Set(newsList?.map(each => {
             if(each?.tar_code !== undefined) return each?.tar_code
             else return []
-        })?.flat()))
-        setRestrictedTargetLang(restrictedTarLang)
-        let filteredTarLang = defaultPair?.tar?.filter(each => !restrictedTarLang?.some(item => item === each))
-        // console.log(filteredTarLang?.slice(0, 2))
-        setTargetLanguage(targetLanguageOptionsRef.current?.filter(each => filteredTarLang?.some(item => item === each?.id))?.slice(0, 2))
-    }, [newsId])
-    
-
-   
-
+        })?.flat()));
+        setRestrictedTargetLang(restrictedTarLang);
+        let filteredTarLang = defaultPair?.tar?.filter(each => !restrictedTarLang?.some(item => item === each));
+        setTargetLanguage(targetLanguageOptionsRef.current?.filter(each => filteredTarLang?.some(item => item === each?.id))?.slice(0, 2));
+    }, [newsId]);
+     
     const modaloptions = {
         closeMaskOnClick: false,
         width: showTaskDeleteAlert ? 520 : null,
@@ -605,7 +553,7 @@ function GetStories(props) {
         { value: 4, label: 'Hindi' },
         { value: 3, label: 'Kannada' },
         { value: 2, label: 'Telugu' },
-    ]
+    ];
 
     const projectTypes = [
         { value: 'all', label: t("all_proj") },
@@ -617,14 +565,13 @@ function GetStories(props) {
         { value: 'text_to_speech', label: t("ai_voice_proj") },
         { value: 'express', label: t("instant_trans_proj") },
         { value: 'assigned', label: t("assign_proj") },
-    ]
+    ];
 
     useEffect(() => {
         let engines = [];
         mtpeEngines.map((eachEngine) => engines.push({ value: eachEngine.id, label: eachEngine.name }));
         setMtpeEngineOptions(engines);
     }, [mtpeEngines]);
-
 
     /* Show errors when not uploadig files */
     useEffect(() => {
@@ -642,13 +589,12 @@ function GetStories(props) {
     /* Handling source language selection */
     const handleSourceLangClick = (value, name, e) => {
         setshowSrcLangModal(false);
-        setSearchInput('')
+        setSearchInput('');
     };
 
     /* Handling target language selection */
     const handleTargetLangClick = (value, e) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
-
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
             e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected")
             targetLanguageTemp = Config.removeItemFromArray(
@@ -660,27 +606,24 @@ function GetStories(props) {
             targetLanguageTemp.push(value);
         }
         setTargetLanguage([...new Set(targetLanguageTemp)]);
-        setSearchInput('')
-        setOnFocusWrap(false)
-
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     useEffect(() => {
         removeSelectedSourceFromTarget();
     }, [sourceLanguage]);
 
-
     useEffect(() => {
         if (targetLanguage) {
-            let list = ""
+            let list = "";
             targetLanguage?.map((each, index) => {
                 list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
                     }`;
             });
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current])
-
+    }, [targetLanguage, targetLanguageOptionsRef.current]);
 
     useEffect(() => {
         let a = [];
@@ -693,30 +636,25 @@ function GetStories(props) {
                 });
             }
         });
-        // console.log(a)
         let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
         setTargetLangListToRemove(targetLangToRemove);
     }, [targetLanguage]);
 
     const handleCloseSearchBox = () => {
-
         setProjectSearchTerm("");
         setFileListSearchEnlarge(false);
-
-        URL_SEARCH_PARAMS.delete("search")
-        URL_SEARCH_PARAMS.set("page", 1)
-
-        history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-     
+        URL_SEARCH_PARAMS.delete("search");
+        URL_SEARCH_PARAMS.set("page", 1);
+        history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());     
     }
 
     useEffect(() => {
         if (projectSearchTerm == "" && searchTermRef.current !== null && isSearchTermDelete) {
-            projectSearchFunctionality('clear-search')
+            projectSearchFunctionality('clear-search');
         }else if(projectSearchTerm == "" && searchTermRef.current !== "" && searchTermRef.current !== null){
-            projectSearchFunctionality('clear-search')
+            projectSearchFunctionality('clear-search');
         }
-    }, [projectSearchTerm])
+    }, [projectSearchTerm]);
 
     /* Throw errors when there's no target language selected */
     useEffect(() => {
@@ -728,32 +666,28 @@ function GetStories(props) {
 
     const SearchTermFilterEnter = (e) => {
         if (e.which === 13 && projectSearchTerm == "") {
-            setFileListSearchEnlarge(false)
+            setFileListSearchEnlarge(false);
             e.target.blur()
         } else if (e.which === 13) {
-            projectSearchFunctionality()
-
-            setFileListSearchEnlarge(false)
-            searchTermRef.current = projectSearchTerm
-            e.target.blur()
+            projectSearchFunctionality();
+            setFileListSearchEnlarge(false);
+            searchTermRef.current = projectSearchTerm;
+            e.target.blur();
         }
     }
 
     const handleSearchDropDownClick = (e) => {
-        projectSearchFunctionality()
+        projectSearchFunctionality();
     }
 
-    const projectSearchFunctionality = (param) => {
-       
-        let queryParam = new URLSearchParams(window.location.search)
-        
-
+    const projectSearchFunctionality = (param) => {       
+        let queryParam = new URLSearchParams(window.location.search);   
         if (param !== 'clear-search') {
-            queryParam.set("page", 1)
-            if (projectSearchTerm != null) queryParam.set("search", projectSearchTerm)
+            queryParam.set("page", 1);
+            if (projectSearchTerm != null) queryParam.set("search", projectSearchTerm);
             // if (projectSearchTerm != null) url += `&search=${projectSearchTerm}`;
         }else if(param === 'clear-search'){
-            setIsSearchTermDelete(true)
+            setIsSearchTermDelete(true);
         }
         history(window.location.pathname + '?' + queryParam.toString());
         // history(url);
@@ -762,82 +696,61 @@ function GetStories(props) {
     /* Go to the top of the page when move to another pages */
     useEffect(() => {
         const controller = new AbortController();
-
-        let pageParam = URL_SEARCH_PARAMS.get("page")
+        let pageParam = URL_SEARCH_PARAMS.get("page");
         if (pageParam !== null && pageParam !== undefined) {
-            getStories(controller)
+            getStories(controller);
         }
-        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' })
-
+        mainContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
         let getStoryInterval = setInterval(() => {
-            getStories(controller, true)
+            getStories(controller, true);
         }, 8000);
-        
         return () => {
-            clearInterval(getStoryInterval)
-            controller.abort()
+            clearInterval(getStoryInterval);
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("page")]);
 
     useEffect(() => {
-        let langParam = URL_SEARCH_PARAMS.get("lang")
-        
+        let langParam = URL_SEARCH_PARAMS.get("lang");        
         if(langParam){
-            getStories()
+            getStories();
         }
-
-    }, [URL_SEARCH_PARAMS.get("lang")])
+    }, [URL_SEARCH_PARAMS.get("lang")]);
     
     useEffect(() => {
         let filterParam = URL_SEARCH_PARAMS.get("filter")
         if (filterParam !== null && filterParam !== undefined) {
-            // console.log('from filter');
-            let filtered = projectTypes?.find(each => each?.value == filterParam)
-            // console.log(filtered)
+            let filtered = projectTypes?.find(each => each?.value == filterParam);
             setprojectFilterType({
                 value: filtered?.value,
                 label: filtered?.label?.charAt(0)?.toUpperCase() + filtered?.label?.slice(1)
-            })
+            });
         }
-        // fileUploadTop.current.scrollIntoView(
-        //     {
-        //         behavior: "smooth",
-        //     },
-        //     100
-        // );
+        // fileUploadTop.current.scrollIntoView({ behavior: "smooth", }, 100 );
     }, [URL_SEARCH_PARAMS.get("filter")]);
-
 
     useEffect(() => {
         const controller = new AbortController();
-
-        let searchParam = URL_SEARCH_PARAMS.get("search")
+        let searchParam = URL_SEARCH_PARAMS.get("search");
         if (searchParam !== null && searchParam !== undefined) {
-            setProjectSearchTerm(searchParam)
-            getStories(controller);
-            
+            setProjectSearchTerm(searchParam);
+            getStories(controller);            
         } else if (isSearchTermDelete) {
-            getStories(controller)
+            getStories(controller);
         }
-
         return () => {
-            controller.abort()
+            controller.abort();
         }
     }, [URL_SEARCH_PARAMS.get("search"), isSearchTermDelete]);
 
-
     /* Set the current page and redirect */
     const pageSelect = (page = 1) => {
-        console.log(page)
-        console.log(currentPage)
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        clearTimeout(myTimeoutFunc.current)
-        let url = `/all-stories?page=${page}`
-
-        let queryParam = new URLSearchParams(window.location.search)
-        queryParam.set("page", page)
-        history(window.location.pathname + '?' + queryParam.toString());
-        
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        clearTimeout(myTimeoutFunc.current);
+        let url = `/all-stories?page=${page}`;
+        let queryParam = new URLSearchParams(window.location.search);
+        queryParam.set("page", page);
+        history(window.location.pathname + '?' + queryParam.toString());        
         // let orderParam = queryParam.get("order_by");
         // if (orderParam != null) url += `&order_by=${orderParam}`;
         // let projectIdParam = queryParam.get("open-project");
@@ -852,17 +765,17 @@ function GetStories(props) {
     };
 
     const handleCMSLangChange = (option) => {
-        setSelectedLanguageCMS(option)
-        setNewsId([])
-        URL_SEARCH_PARAMS.set("lang", option?.label)
+        setSelectedLanguageCMS(option);
+        setNewsId([]);
+        URL_SEARCH_PARAMS.set("lang", option?.label);
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
     } 
 
     /* Set order by value and redirect */
     const orderBy = (orderFieldTemp) => {
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        let page = 1
-        let url = ''
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        let page = 1;
+        let url = '';
         if (activeProjTab === 3) {
             url = `/translations?page=${page}`;
         } else if (activeProjTab === 4) {
@@ -875,28 +788,26 @@ function GetStories(props) {
             url = `/designs?page=${page}`;
         }
         if (orderFieldTemp != null) url += `&order_by=${orderFieldTemp}`;
-
         let projectIdParam = URL_SEARCH_PARAMS.get("open-project");
         if (projectIdParam != null) url += `&open-project=${projectIdParam}`;
         let filter = URL_SEARCH_PARAMS.get("filter");
         if (filter != null) url += `&filter=${filter}`;
         let searchParam = URL_SEARCH_PARAMS.get("search");
         if (searchParam != null) url += `&search=${searchParam}`;
-        let typeParam = URL_SEARCH_PARAMS.get("type")
+        let typeParam = URL_SEARCH_PARAMS.get("type");
         if (typeParam != null) url += `&type=${typeParam}`;
         history(url);
     };
 
     // handle project type filter
     const handleProjectType = (selected) => {
-        clearTimeout(wordCountAnalysisTimeoutRef.current)
-        let page = URL_SEARCH_PARAMS.get("page")
-        let orderby = URL_SEARCH_PARAMS.get("order_by")
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        let page = URL_SEARCH_PARAMS.get("page");
+        let orderby = URL_SEARCH_PARAMS.get("order_by");
         let searchParam = URL_SEARCH_PARAMS.get("search");
-        let url = ''
-        // console.log(selected);
+        let url = '';
         setprojectFilterType(selected);
-        projectTypeRef.current = selected
+        projectTypeRef.current = selected;
         if (projectFilterType?.value != selected?.value) {
             url = `/file-upload?page=1${orderby ? `&order_by=${orderby}` : ''}`;
             if (selected?.value != null) url += `&filter=${selected?.value}`;
@@ -913,7 +824,6 @@ function GetStories(props) {
     useEffect(() => {
         if (analysisRunningProjectList?.length !== 0) {
             let list = "";
-            // console.log(analysisRunningProjectListRef.current)
             analysisRunningProjectList?.map((each, index) => {
                 if (each?.id !== null || each?.proj) {
                     list += `project_id=${each.id ? each.id : each?.proj}${index !== analysisRunningProjectList?.length - 1 ? "&" : ""
@@ -925,17 +835,12 @@ function GetStories(props) {
                 url: `${Config.BASE_URL}/workspace/project/word_char/count?${list}`,
                 auth: true,
                 success: (response) => {
-                    let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'))
-                    let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'))
-                    // console.log(analysisRunningProjectListRef.current)
+                    let runningProj = response.data?.out?.filter(each => each.hasOwnProperty('celery_id'));
+                    let finishedProj = response.data?.out?.filter(each => !each.hasOwnProperty('celery_id'));
                     // if(finishedProj?.length !== 0){
-                    //     // console.log(finishedProj)
                     //     finishedProj?.map(each => {
-
                     //     })
                     // }
-                    // console.log(runningProj)
-
                     if (runningProj?.length !== 0) {
                         const newArr = createdProjectsRef.current?.map(obj => {
                             if (obj.id === response.data?.out?.find(each => each.proj === obj.id)?.proj) {
@@ -946,12 +851,11 @@ function GetStories(props) {
                             }
                             return obj;
                         });
-                        setCreatedProjects(newArr)
+                        setCreatedProjects(newArr);
                         wordCountAnalysisTimeoutRef.current = setTimeout(() => {
-                            console.log(runningProj)
-                            setAnalysisRunningProjectList(runningProj)
-                            analysisRunningProjectListRef.current = runningProj
-                            wordCountAnalysisTriggerRef.current = !wordCountAnalysisTriggerRef.current
+                            setAnalysisRunningProjectList(runningProj);
+                            analysisRunningProjectListRef.current = runningProj;
+                            wordCountAnalysisTriggerRef.current = !wordCountAnalysisTriggerRef.current;
                         }, 8000);
                     } else {
                         const newArr = createdProjectsRef.current?.map(obj => {
@@ -964,19 +868,18 @@ function GetStories(props) {
                             }
                             return obj;
                         });
-                        setCreatedProjects(newArr)
+                        setCreatedProjects(newArr);
                     }
                 },
                 error: (err) => {
-
+                      console.error(err);
                 }
             });
         }
         return () => {
-            clearTimeout(wordCountAnalysisTimeoutRef.current)
+            clearTimeout(wordCountAnalysisTimeoutRef.current);
         }
-    }, [analysisRunningProjectList])
-
+    }, [analysisRunningProjectList]);
 
     /* Reset the project creation form */
     const resetForm = () => {
@@ -1007,20 +910,18 @@ function GetStories(props) {
         }
     };
 
-
-
     /* Select a particular project by id */
     const selectProjectById = (projectId, shouldListFiles) => {
         if (shouldListFiles !== "dont-open") setOpenedProjectId(projectId);
         setSelectedProjectId(projectId);
         // listFiles(projectId);
-        selectedProjectIdRef.current = projectId
-        setTranscriptionTaskList([])
-        setPreTranslateAllTask([])
+        selectedProjectIdRef.current = projectId;
+        setTranscriptionTaskList([]);
+        setPreTranslateAllTask([]);
         // while (id--) {
         //     window.clearTimeout(id); // will do nothing if no timeout with id is present
         // } 
-        clearTimeout(myTimeoutFunc.current)
+        clearTimeout(myTimeoutFunc.current);
         let createdProject = createdProjects.find((element) => element.id == projectId);
         if (createdProject?.project_name != null) setSelectedProjectName(createdProject.project_name);
         if (createdProject?.project_analysis != null) {
@@ -1030,7 +931,6 @@ function GetStories(props) {
             setProjectSegmentCount(createdProjectAnalysis.proj_seg_count);
         }
     };
-
 
     const DropdownIndicator = (props) => {
         return (
@@ -1053,22 +953,16 @@ function GetStories(props) {
         height: 'auto',
         onClose: () => console.log(),
     };
-
     
-
     // task accept api 
     const taskAssignUpdate = (targetValue) => {
         // e.stopPropagation(); 
-        // console.log(particularClickedTask)
         var formdata = new FormData();
         formdata.append("task_ven_status ", targetValue);
         formdata.append("task", particularClickedTask);
         formdata.append("step", stepToAccept);
-
-        // console.log(isTaskReassigned.current)
-
         if (isTaskReassigned.current) {
-            formdata.append("reassigned", 'True')
+            formdata.append("reassigned", 'True');
         }
 
         Config.axios({
@@ -1078,28 +972,24 @@ function GetStories(props) {
             data: formdata,
             success: (response) => {
                 if (response.status === 200) {
-                    // console.log(response.data)
-                    setShowPoModal(false)
-                    // listFiles(openedProjectId)
-                    isTaskReassigned.current = false
-                    // setAcceptedRates(response.data["Previously Agreed Rates"])
+                    setShowPoModal(false);
+                    // listFiles(openedProjectId);
+                    isTaskReassigned.current = false;
+                    // setAcceptedRates(response.data["Previously Agreed Rates"]);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
     }
-
-  
 
     const handleDocumentSubmit = (taskID, step) => {
         let formData = new FormData();
         formData.append("task", taskID);
         formData.append("step", step);
         formData.append("status", "3"); // submit: 3, in-progress: 2
-
         if (documentSubmitParameters?.isTaskReassigned) {
-            formData.append("reassigned", 'True')
+            formData.append("reassigned", 'True');
         }
 
         Config.axios({
@@ -1108,43 +998,40 @@ function GetStories(props) {
             data: formData,
             auth: true,
             success: (response) => {
-                // listFiles(openedProjectId)
-                setShowSubmitDocumentAlertModal(false)
-                setDocumentSubmitParameters({ ...documentSubmitParameters, isTaskReassigned: false })
-                Config.toast(t("document_submitted"))
+                // listFiles(openedProjectId);
+                setShowSubmitDocumentAlertModal(false);
+                setDocumentSubmitParameters({ ...documentSubmitParameters, isTaskReassigned: false });
+                Config.toast(t("document_submitted"));
             }
         });
     }
 
     useEffect(() => {
         if (documentSubmitParameters?.taskid !== null) {
-            getDocumentProgress(documentSubmitParameters?.confirm, documentSubmitParameters?.total)
+            getDocumentProgress(documentSubmitParameters?.confirm, documentSubmitParameters?.total);
         }
-    }, [documentSubmitParameters])
-
+    }, [documentSubmitParameters]);
 
     const getDocumentProgress = (confirmed, total) => {
         if (confirmed == total) {
-            handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step)
+            handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step);
         }
         else {
-            setShowSubmitDocumentAlertModal(true)
+            setShowSubmitDocumentAlertModal(true);
         }
     }
 
     const handleDocuemtSubmitConfirmation = () => {
-        handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step)
+        handleDocumentSubmit(documentSubmitParameters?.taskid, documentSubmitParameters?.step);
     }
-
 
     const handleCreateNewProjectBtnClick = () => {
         const search_param = new URLSearchParams(window.location.search);
-        let typeParam = search_param.get("type")
+        let typeParam = search_param.get("type");
         if (typeParam === 'assert') {
         } else {
-            console.log(Config.DESIGNER_HOST)
             if(activeProjTab === 9){    // redirect to designer
-                window.open(Config.DESIGNER_HOST)
+                window.open(Config.DESIGNER_HOST);
             }else{
                 history(
                     activeProjTab === 3 ? "/create/translate/files/translate-files" :
@@ -1160,37 +1047,26 @@ function GetStories(props) {
     // this api will initiate the file translate process and provide the status of each task
     const getProjectTransDownloadStatus = (task_id) => {
         if(projectObject.current?.id === undefined) return;
-
         // it will abort/cancel the ongoing api request
         if (axiosFileTranslateAbortController) {
-            axiosFileTranslateAbortController.abort()
-        }
-    
+            axiosFileTranslateAbortController.abort();
+        }    
         const controller = new AbortController();
         setAxiosFileTranslateAbortController(controller);
-
-        let task_list_arr = []
-
-        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing)
-        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id)
-        console.log(alreadyProcessingTaskIds)
+        let task_list_arr = [];
+        let alreadyProcessingTask = selectedProjectFilesRef.current?.filter(each => each.isProcessing);
+        let alreadyProcessingTaskIds = alreadyProcessingTask?.map(each => each.id);
         if(alreadyProcessingTask?.length !== 0){
-            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])]
+            task_list_arr = [...new Set([...alreadyProcessingTaskIds, task_id])];
         }else{
-            task_list_arr = [task_id]
+            task_list_arr = [task_id];
         }
-        console.log("taskList: "+task_list_arr?.toString())
-
-        fileTranslatingTaskListRef.current = task_list_arr
-
+        fileTranslatingTaskListRef.current = task_list_arr;
         // create task list to process
-        let list = ""
+        let list = "";
         fileTranslatingTaskListRef.current?.map((each, index) => {
             list += `task=${each}${index !== fileTranslatingTaskListRef.current?.length - 1 ? "&" : ""}`;
         });
-
-        console.log(list)
-
         // display the button loader as soon as the user clicks the TRANSLATE button
         if(task_id !== undefined){
             let newArr = selectedProjectFilesRef.current?.map(obj => {
@@ -1200,10 +1076,10 @@ function GetStories(props) {
                         isProcessing: true,
                     }
                 }
-                return obj
+                return obj;
             })
-            selectedProjectFilesRef.current = newArr 
-            setSelectedProjectFiles(newArr)
+            selectedProjectFilesRef.current = newArr;
+            setSelectedProjectFiles(newArr);
         }
 
         Config.axios({
@@ -1213,7 +1089,7 @@ function GetStories(props) {
             success: (response) => {
                 // if called with project_id, returns list if task_data
                 if(response.data?.results !== undefined){
-                    let dataList = response.data?.results
+                    let dataList = response.data?.results;
                     let newArr = selectedProjectFilesRef.current?.map(obj => {
                         if(obj.id === dataList?.find(each => each.task === obj.id)?.task){
                             let status = dataList?.find(each => each.task === obj.id)?.status
@@ -1224,22 +1100,16 @@ function GetStories(props) {
                                 file_translate_done: status === 200 ? true : obj.file_translate_done
                             }
                         }
-                        return obj
+                        return obj;
                     })
-                    console.log('modified list with isProcessing key')
-                    console.log(newArr)
-                    selectedProjectFilesRef.current = newArr 
-                    setSelectedProjectFiles(newArr)
-
-                    console.log('isAnyTaskIsProcessing')
-                    
-                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false
-                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false
-                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false
-                    
+                    selectedProjectFilesRef.current = newArr ;
+                    setSelectedProjectFiles(newArr);                    
+                    let isAnyTaskIsProcessing = selectedProjectFilesRef.current?.find(each => each.status === 400) ? true : false;
+                    let insuffientCredit = selectedProjectFilesRef.current?.find(each => each.status === 402) ? true : false;
+                    let isPageNumNotFound = selectedProjectFilesRef.current?.find(each => each.status === 404) ? true : false;                    
                     if(isPageNumNotFound){
-                        // Config.toast(`File couldn't process!`, 'error')
-                        setShowFileErrorModal(true)
+                        // Config.toast(`File couldn't process!`, 'error');
+                        setShowFileErrorModal(true);
                         let newArr = selectedProjectFilesRef.current?.map(obj => {
                             if(obj.status === 404){
                                 return {
@@ -1247,18 +1117,16 @@ function GetStories(props) {
                                     isProcessing: false,
                                 }
                             }
-                            return obj
+                            return obj;
                         })
-                        selectedProjectFilesRef.current = newArr 
-                        setSelectedProjectFiles(newArr)
-                        return
+                        selectedProjectFilesRef.current = newArr;
+                        setSelectedProjectFiles(newArr);
+                        return;
                     }
-
-                    if(insuffientCredit) setShowCreditAlertModal(true)
-
+                    if(insuffientCredit) setShowCreditAlertModal(true);
                     if(isAnyTaskIsProcessing){
                         setTimeout(() => {
-                            getProjectTransDownloadStatus(task_id)
+                            getProjectTransDownloadStatus(task_id);
                         }, 5000);
                     }
                 }
@@ -1271,11 +1139,10 @@ function GetStories(props) {
                                 ...obj,
                                 isProcessing: false,
                             }
-                        })
-                        console.log(newArr)
-                        selectedProjectFilesRef.current = newArr 
-                        setSelectedProjectFiles(newArr)
-                        setShowCreditAlertModal(true)
+                        });
+                        selectedProjectFilesRef.current = newArr ;
+                        setSelectedProjectFiles(newArr);
+                        setShowCreditAlertModal(true);
                     }
                 }
             },
@@ -1289,11 +1156,10 @@ function GetStories(props) {
                                 file_translate_done: false
                             }
                         }
-                        return obj
-                    })
-                    console.log(newArr)
-                    selectedProjectFilesRef.current = newArr 
-                    setSelectedProjectFiles(newArr)
+                        return obj;
+                    });
+                    selectedProjectFilesRef.current = newArr;
+                    setSelectedProjectFiles(newArr);
                 }
             }
         });
@@ -1306,10 +1172,9 @@ function GetStories(props) {
             method: "GET",
             success: (response) => {
                 if (response.status === 200) {
-                  setDefaultPair(response?.data?.recent_pairs[0])
-                  // console.log(response.data)
+                  setDefaultPair(response?.data?.recent_pairs[0]);                 
                 } else {
-                  Config.toast(`${t("something_went_wrong")}`, 'error')
+                  Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
@@ -1318,19 +1183,15 @@ function GetStories(props) {
     const getStories = (controllers, fromInterval = false) => {
         const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
         setFileListSearchEnlarge(false);
-
         if(!fromInterval){
             setShowListingLoader(true);
-            setCreatedProjects([])
+            setCreatedProjects([]);
         }
-
         if (axiosGetStoriesAbortController) {
-            axiosGetStoriesAbortController.abort()
+            axiosGetStoriesAbortController.abort();
         }
-
         const controller = new AbortController();
         setAxiosGetStoriesAbortController(controller);
-
         // setprojectFilterType(null)
         /* Page param set/get - start */
         let page = 1;
@@ -1338,8 +1199,7 @@ function GetStories(props) {
         if (pageParam != null) {
             setCurrentPage(pageParam);
             page = pageParam;
-        } else setCurrentPage(pageParam);
-        
+        } else setCurrentPage(pageParam);        
         /* Page param set/get - start */
         /* ordering param set/get - start */
         // let orderFieldTemp = "";
@@ -1349,9 +1209,7 @@ function GetStories(props) {
         let typeParam = URL_SEARCH_PARAMS.get("type");
         let searchParam = URL_SEARCH_PARAMS.get("search");
         let langParam = URL_SEARCH_PARAMS.get("lang");
-
         /* ordering param set/get - end */
-        // console.log(projectFilterType)
         let url = `${Config.BASE_URL}/workspace/get_stories/?page=${page}${orderParam != null ? `&ordering=${orderParam}` : ''}`;
         if (searchParam !== null && searchParam !== undefined) url += `&search=${searchParam}`;
         if (typeParam !== null && typeParam !== undefined && typeParam !== 'all') url += `&type=${typeParam}`
@@ -1368,22 +1226,21 @@ function GetStories(props) {
             timeout: 1000 * 15, // Wait for 15 seconds
             success: (response) => {
                 // setOrderField(orderFieldTemp);
-                // console.log(response.data)
                 setCreatedProjects(response.data);
-                setCreatedProjectsList(response.data)
-                createdProjectsRef.current = response.data
+                setCreatedProjectsList(response.data);
+                createdProjectsRef.current = response.data;
                 setShowListingLoader(false);
                 if (response.data.length === 0) setEmptyProjects(true);
                 else setEmptyProjects(false);
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
                 if (response.data?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))?.length !== 0) {
-                    setAnalysisRunningProjectList(response.data?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id')))
-                    analysisRunningProjectListRef.current = response.data?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'))
+                    setAnalysisRunningProjectList(response.data?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id')));
+                    analysisRunningProjectListRef.current = response.data?.filter(each => each?.project_analysis?.hasOwnProperty('celery_id'));
                 }
             },
             error: (error) => {
-                Config.log(error);
+                Config.error(error);
                 setShowListingLoader(false);
             },
         };
@@ -1398,49 +1255,43 @@ function GetStories(props) {
     const handleSelectedcard = (e, id) => {
         e.stopPropagation()
         if(newsId?.length === 10 && (newsId?.find(each => each === id) ? false : true)){
-            Config.toast('Maximum 10 stories can be added for better project management', 'warning')
-            return
+            Config.toast('Maximum 10 stories can be added for better project management', 'warning');
+            return;
         }
         if(newsId.includes(id)){
-            removeElement(id)
+            removeElement(id);
         }else{
             setNewsId(oldArray => [...oldArray, id]);
         }
-
     }
 
     const handleStoryClick = (e, story) => {
-        setSelectedStoryDetails(story)
-        setIsViewStoryModal(true)
+        setSelectedStoryDetails(story);
+        setIsViewStoryModal(true);
     } 
 
     const addErrorFieldClass = (element) => {
-        element.classList.add('error-field-style')
+        element.classList.add('error-field-style');
     }
     
-
     const handleClaimStoriesBtnClick = (e, news_id, group = false) => {
-        e.stopPropagation()
-
+        e.stopPropagation();
         if(sourceLanguage === "" || sourceLanguage === undefined || sourceLanguage === null){
-            addErrorFieldClass(sourceLangSelectBoxRef.current)
-            return
+            addErrorFieldClass(sourceLangSelectBoxRef.current);
+            return;
         }
         if(targetLanguage?.length === 0 || targetLanguage === undefined || targetLanguage === null){
-            addErrorFieldClass(targetLangSelectBoxRef.current)
-            return
+            addErrorFieldClass(targetLangSelectBoxRef.current);
+            return;
         }
-
         let formData = new FormData();
-
         if(group){
-            setIsStoryTranslating(true)
-            newsId?.forEach(newsId => formData.append('news_id', newsId))
+            setIsStoryTranslating(true);
+            newsId?.forEach(newsId => formData.append('news_id', newsId));
         }else{
-            setIsStoryIdTranslating(news_id)
-            formData.append('news_id', news_id)
-        }
-        
+            setIsStoryIdTranslating(news_id);
+            formData.append('news_id', news_id);
+        }        
         formData.append('source_language', sourceLanguage);
         targetLanguage.forEach(lang => {
             formData.append('target_languages', lang?.id)
@@ -1452,25 +1303,23 @@ function GetStories(props) {
             method: "POST",
             data: formData,
             success: (response) => {
-                setIsViewStoryModal(false)
+                setIsViewStoryModal(false);
                 if (response.status === 200) {
-                    setNewsId([])
-                    history(`/my-stories?page=1`)
+                    setNewsId([]);
+                    history(`/my-stories?page=1`);
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
-                setIsStoryTranslating(false)
-                setIsStoryIdTranslating(null)
+                setIsStoryTranslating(false);
+                setIsStoryIdTranslating(null);
             },
             error: (err) => {
-                Config.toast(`${t("something_went_wrong")}`, 'error')
-                setIsStoryTranslating(false)
-                setIsStoryIdTranslating(null)
+                Config.toast(`${t("something_went_wrong")}`, 'error');
+                setIsStoryTranslating(false);
+                setIsStoryIdTranslating(null);
             }
         });
     }
-
-
 
     return (
         <React.Fragment>
@@ -1497,8 +1346,7 @@ function GetStories(props) {
                                 // }}
                                 />
                                 <span className={"close " + ((fileListSearchEnlarge || projectSearchTerm !== "") ? "show " : " ")}
-                                    onClick={() => handleCloseSearchBox()}
-                                >
+                                    onClick={() => handleCloseSearchBox()} >
                                     <img src={BlackClose} alt="search-bar-close" />
                                 </span>
                             </div>
@@ -1507,11 +1355,10 @@ function GetStories(props) {
                                     <SearchIcon className="search-icon" name="search-dropdown" />
                                     <div className="searched-results-info" name="search-dropdown">
                                         <p className="searched-term" name="search-dropdown">{projectSearchTerm}</p>
-                                        {
-                                            projectSearchTerm !== "" ?
-                                                <p className="results-link" name="search-dropdown">{t("search_results_1")} <span>{t("search_results_2")}</span></p>
-                                                :
-                                                <p className="results-link">{t("search_results_proj_list_1")} <span>{t("story_search_help_text")}</span></p>
+                                        { projectSearchTerm !== "" ?
+                                            <p className="results-link" name="search-dropdown">{t("search_results_1")} <span>{t("search_results_2")}</span></p>
+                                            :
+                                            <p className="results-link">{t("search_results_proj_list_1")} <span>{t("story_search_help_text")}</span></p>
                                         }
                                     </div>
                                 </div>
@@ -1525,8 +1372,7 @@ function GetStories(props) {
                             classNamePrefix="project-type-list"
                             placeholder={'Language'}
                             components={{ DropdownIndicator, IndicatorSeparator: () => null }}
-                            onChange={handleCMSLangChange}
-                        />
+                            onChange={handleCMSLangChange} />
                     </div>
                     <div className="get-stories-btn-wrapper">
                         <ButtonBase className="refresh-btn-wrapper" onClick={getStories}>
@@ -1544,86 +1390,58 @@ function GetStories(props) {
                         <div className="file-edit-heading-row project-list-main">
                             <div className="file-edit-heading-table">
                                 <>
-                                    {
-                                        createdProjects.length != 0 || !showListingLoader ? (
+                                    { createdProjects.length != 0 || !showListingLoader ? (
                                         (createdProjects?.length != 0 || projectFilterType !== null || projectSearchTerm != "") ?
                                             (
                                                 (createdProjects?.length == 0 && projectSearchTerm != "") ? 
                                                 (<React.Fragment>
                                                         <section className="ai-no-project-found">
                                                             <div className="ai-no-project-cont">
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={NoEditors}
-                                                                            alt="empty-folder-open"
-                                                                        />
-                                                                        :
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={EmptyProjectIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                { projectSearchTerm ?
+                                                                    <img  className="empty-folder-img" src={NoEditors}  alt="empty-folder-open" />
+                                                                    :
+                                                                    <img className="empty-folder-img" src={EmptyProjectIcon}  alt="empty-folder-open"  />
                                                                 }
-
                                                                 <h2>{t("no_story_found")}</h2>
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        null
-                                                                        :
-                                                                        <>
-                                                                            {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
-                                                                                <button className="workspace-files-AddNewProjectButton"
-                                                                                    onClick={() => {
-                                                                                        handleCreateNewProjectBtnClick()
-                                                                                    }}
-                                                                                >
-                                                                                    <span className="add-new-project-btn">
-                                                                                    <img src={PlusIcon} alt="plus" />
-                                                                                        {t("create_new_project")}
-                                                                                    </span>
-                                                                                </button>
-                                                                            )}
-                                                                        </>
+                                                                { projectSearchTerm ? null :
+                                                                    <>
+                                                                    {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
+                                                                        <button className="workspace-files-AddNewProjectButton"
+                                                                            onClick={() => { handleCreateNewProjectBtnClick() }} >
+                                                                            <span className="add-new-project-btn">
+                                                                            <img src={PlusIcon} alt="plus" />
+                                                                            {t("create_new_project")}
+                                                                             </span>
+                                                                            </button>
+                                                                    )}
+                                                                    </>
                                                                 }
                                                             </div>
                                                         </section>
-                                                    </React.Fragment>) 
-                                                
+                                                    </React.Fragment>)                                                 
                                                 :
                                                 (createdProjects?.length !== 0) ?
                                                     <React.Fragment>
                                                         {createdProjects?.map((each,index) => {
                                                             return(
                                                                 // file deepcode ignore ReactMissingArrayKeys: <please specify a reason of ignoring this>
-                                                                <div 
-                                                                    className={"file-edit-list-table-row focused-proj-row federal-news " + (newsId.includes(each.newsId) ? "selected" : "" )}
-                                                                    onClick={(e) => handleStoryClick(e, each)}
-                                                                >
+                                                                <div className={"file-edit-list-table-row focused-proj-row federal-news " + (newsId.includes(each.newsId) ? "selected" : "" )} onClick={(e) => handleStoryClick(e, each)} >
                                                                     <div className="selected-file-row">
                                                                         <div  className="file-edit-inner-table" >
                                                                             <div className="file-edit-list-inner-table-row">
                                                                                 <div className="file-edit-list-inner-table-cell">
                                                                                     <div className='check-box-wrap'>
-                                                                                        <Checkbox 
-                                                                                            size="small"
-                                                                                            checked={newsId.includes(each.newsId) ? true : false} 
-                                                                                            onClick={(e) => handleSelectedcard(e, each.newsId)}
-                                                                                        />
+                                                                                        <Checkbox  size="small" checked={newsId.includes(each.newsId) ? true : false} nClick={(e) => handleSelectedcard(e, each.newsId)}/>
                                                                                     </div>
                                                                                     <div className="d-flex flex-column w-100">
                                                                                         <div className="my-stories-doc-info-wrapper">
                                                                                             <div className="doc-icon-wrapper">
-                                                                                                <span className="doc-icon">
-                                                                                                    <img
-                                                                                                        src={each.thumbUrl}
+                                                                                                <span className="doc-icon"> 
+                                                                                                    <img src={each.thumbUrl}  alt="new-img"
                                                                                                         onError={({ currentTarget }) => {
                                                                                                             currentTarget.onerror = null; // prevents looping
                                                                                                             currentTarget.src= FederalImgPlaceholder;
-                                                                                                        }}
-                                                                                                        alt="new-img"
-                                                                                                    />
+                                                                                                        }}  />
                                                                                                 </span>
                                                                                             </div>
                                                                                             <div className="story-info-wrap">
@@ -1647,8 +1465,7 @@ function GetStories(props) {
                                                                                                 </span>
                                                                                                 <img src={BlueRightArrow} />
                                                                                                 <span>
-                                                                                                    {
-                                                                                                        targetLanguageOptionsRef.current?.filter(item => each?.tar_code?.some(obj => obj === item?.id))?.map(each => {
+                                                                                                    { targetLanguageOptionsRef.current?.filter(item => each?.tar_code?.some(obj => obj === item?.id))?.map(each => {
                                                                                                             return each?.language
                                                                                                         })?.join(', ')
                                                                                                     }
@@ -1657,12 +1474,8 @@ function GetStories(props) {
                                                                                         )}
                                                                                         <>
                                                                                             {!newsId.includes(each.newsId) ? (
-                                                                                                <button 
-                                                                                                    className="workspace-files-OpenProjectButton"
-                                                                                                    type="button"
-                                                                                                    disabled={isStoryIdTranslating !== null || isStoryTranslating}
-                                                                                                    onClick={(e) =>{!isStoryIdTranslating !== each.newsId && handleSelectedcard(e, each.newsId)}}
-                                                                                                >
+                                                                                                <button className="workspace-files-OpenProjectButton" type="button" disabled={isStoryIdTranslating !== null || isStoryTranslating}
+                                                                                                    onClick={(e) =>{!isStoryIdTranslating !== each.newsId && handleSelectedcard(e, each.newsId)}} >
                                                                                                     <span className="fileopen-new-btn">
                                                                                                         {isStoryIdTranslating === each.newsId && (
                                                                                                             <ButtonLoader />
@@ -1671,13 +1484,9 @@ function GetStories(props) {
                                                                                                     </span>
                                                                                                 </button>
                                                                                             ) : (
-                                                                                                <button 
-                                                                                                    className="workspace-files-OpenProjectButton"
-                                                                                                    type="button"
-                                                                                                    style={{backgroundColor: "#9d9db1"}}
+                                                                                                <button  className="workspace-files-OpenProjectButton" type="button" style={{backgroundColor: "#9d9db1"}}
                                                                                                     disabled={isStoryIdTranslating !== null || isStoryTranslating}
-                                                                                                    onClick={(e) =>{!isStoryIdTranslating !== each.newsId && handleSelectedcard(e, each.newsId)}}
-                                                                                                >
+                                                                                                    onClick={(e) =>{!isStoryIdTranslating !== each.newsId && handleSelectedcard(e, each.newsId)}} >
                                                                                                     <span className="fileopen-new-btn">
                                                                                                         {isStoryIdTranslating === each.newsId && (
                                                                                                             <ButtonLoader />
@@ -1700,47 +1509,31 @@ function GetStories(props) {
                                                     <React.Fragment>
                                                         <section className="ai-no-project-found">
                                                             <div className="ai-no-project-cont">
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={NoEditors}
-                                                                            alt="empty-folder-open"
-                                                                        />
-                                                                        :
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={EmptyProjectIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                { projectSearchTerm ?
+                                                                    <img className="empty-folder-img" src={NoEditors}  alt="empty-folder-open" />
+                                                                    :
+                                                                    <img  className="empty-folder-img"  src={EmptyProjectIcon}  alt="empty-folder-open" />
                                                                 }
                                                                 <h2>{t("no_project_found")}</h2>
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        null
-                                                                        :
-                                                                        <>
-                                                                            {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
-                                                                                <button className="workspace-files-AddNewProjectButton"
-                                                                                    onClick={() => {
-                                                                                        handleCreateNewProjectBtnClick()
-                                                                                    }}
-                                                                                >
-                                                                                    <span className="add-new-project-btn">
-                                                                                    <img src={PlusIcon} alt="plus" />
-                                                                                        {t("create_new_project")}
-                                                                                    </span>
-                                                                                </button>
-                                                                            )}
-                                                                        </>
+                                                                { projectSearchTerm ?  null  :
+                                                                    <>
+                                                                    {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
+                                                                    <button className="workspace-files-AddNewProjectButton"
+                                                                        onClick={() => {handleCreateNewProjectBtnClick() }}>
+                                                                    <span className="add-new-project-btn">
+                                                                    <img src={PlusIcon} alt="plus" />
+                                                                    {t("create_new_project")}
+                                                                    </span>
+                                                                    </button>
+                                                                    )}
+                                                                    </>
                                                                 }
                                                             </div>
                                                         </section>
                                                     </React.Fragment>
                                             ) 
                                             :
-                                            (
-                                                !showEmptyProjects ? (
+                                            ( !showEmptyProjects ? (
                                                     <React.Fragment>
                                                         {Array(projectsPerPage?.current)
                                                             .fill(null)
@@ -1751,20 +1544,11 @@ function GetStories(props) {
                                                                             <div className="file-edit-list-inner-table-row">
                                                                                 <div className="file-edit-list-inner-table-cell">
                                                                                     <div className='check-box-wrap'>
-                                                                                        <Skeleton
-                                                                                            animation="wave"
-                                                                                            variant="circular"
-                                                                                            width={25}
-                                                                                            height={25}
-                                                                                        />
+                                                                                        <Skeleton animation="wave"  variant="circular" width={25} height={25} />
                                                                                     </div>
                                                                                     <div className="doc-icon-wrapper">
                                                                                         <span className="doc-icon">
-                                                                                            <Skeleton
-                                                                                                animation="wave"
-                                                                                                variant="rounded"
-                                                                                                style={{ width: "100%", height: "100%" }}
-                                                                                            />
+                                                                                            <Skeleton animation="wave" variant="rounded" style={{ width: "100%", height: "100%" }}  />
                                                                                         </span>
                                                                                         {/* <div style={{ marginTop: "10px" }} className="d-flex align-items-center">
                                                                                             <Skeleton
@@ -1791,60 +1575,36 @@ function GetStories(props) {
                                                                                         </div> */}
                                                                                     </div>
                                                                                     <div className="story-info-wrap">
-                                                                                        <Skeleton
-                                                                                            animation="wave"
-                                                                                            style={{ marginBottom: "15px" }}
-                                                                                            variant="rounded"
-                                                                                            width={80}
-                                                                                            height={10}
-                                                                                        />
+                                                                                        <Skeleton  animation="wave"  style={{ marginBottom: "15px" }} variant="rounded"  width={80}  height={10}  />
                                                                                         <div className="d-flex flex-column">
-                                                                                            <Skeleton
-                                                                                                animation="wave"
-                                                                                                variant="rounded"
-                                                                                                width={200}
-                                                                                                height={15}
-                                                                                            />
-                                                                                            <Skeleton
-                                                                                                animation="wave"
-                                                                                                style={{ marginTop: "0.5rem" }}
-                                                                                                variant="rounded"
-                                                                                                width={100}
-                                                                                                height={15}
-                                                                                            />
+                                                                                            <Skeleton animation="wave"  variant="rounded" width={200}  height={15} />
+                                                                                            <Skeleton  animation="wave"  style={{ marginTop: "0.5rem" }} variant="rounded" width={100}  height={15} />
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="file-edit-list-inner-table-cell">
                                                                                     <div className="d-flex align-items-center justify-content-end w-100">
                                                                                         <div className="d-flex align-items-center">
-                                                                                            <Skeleton
-                                                                                                animation="wave"
+                                                                                            <Skeleton animation="wave"  variant="rounded"  width={80}  height={28}
                                                                                                 // style={{ marginRight: "14px" }}
-                                                                                                variant="rounded"
-                                                                                                width={80}
-                                                                                                height={28}
                                                                                             />
                                                                                             {/* <Skeleton
                                                                                                 animation="wave"
                                                                                                 style={{ marginRight: "14px" }}
                                                                                                 variant="rounded"
                                                                                                 width={80}
-                                                                                                height={28}
-                                                                                            />
+                                                                                                height={28}/>
                                                                                             <Skeleton
                                                                                                 animation="wave"
                                                                                                 style={{ marginRight: "14px" }}
                                                                                                 variant="rounded"
                                                                                                 width={80}
-                                                                                                height={28}
-                                                                                            />
+                                                                                                height={28} />
                                                                                             <Skeleton
                                                                                                 animation="wave"
                                                                                                 variant="circular"
                                                                                                 width={25}
-                                                                                                height={25}
-                                                                                            /> */}
+                                                                                                height={25} /> */}
                                                                                         </div>
                                                                                     </div>    
                                                                                 </div>
@@ -1864,25 +1624,13 @@ function GetStories(props) {
                                                     <React.Fragment>
                                                         <section className="ai-no-project-found">
                                                             <div className="ai-no-project-cont">
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={NoEditors}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                { projectSearchTerm ?
+                                                                        <img className="empty-folder-img" src={NoEditors}  alt="empty-folder-open"  />
                                                                         :
-                                                                        <img
-                                                                            className="empty-folder-img"
-                                                                            src={EmptyProjectIcon}
-                                                                            alt="empty-folder-open"
-                                                                        />
+                                                                        <img className="empty-folder-img" src={EmptyProjectIcon}  alt="empty-folder-open" />
                                                                 }
                                                                 <h2>{t("no_project_found")}</h2>
-                                                                {
-                                                                    projectSearchTerm ?
-                                                                        null
-                                                                        :
+                                                                { projectSearchTerm ?  null  :
                                                                         <>
                                                                             {Config.userState?.internal_member_team_detail?.role !== "Editor" && (
                                                                                 <button className="workspace-files-AddNewProjectButton"
@@ -1894,8 +1642,7 @@ function GetStories(props) {
                                                                                         //             activeProjTab === 5 ? "/create/speech/text-to-speech" :
                                                                                         //                 activeProjTab === 6 && "/create/assets/glossaries/create"
                                                                                         // );
-                                                                                    }}
-                                                                                >
+                                                                                    }}  >
                                                                                     <span className="add-new-project-btn">
                                                                                     <img src={PlusIcon} alt="plus" />
                                                                                         {t("create_new_project")}
@@ -1921,20 +1668,11 @@ function GetStories(props) {
                                                                     <div className="file-edit-list-inner-table-row">
                                                                         <div className="file-edit-list-inner-table-cell">
                                                                             <div className='check-box-wrap'>
-                                                                                <Skeleton
-                                                                                    animation="wave"
-                                                                                    variant="circular"
-                                                                                    width={25}
-                                                                                    height={25}
-                                                                                />
+                                                                                <Skeleton animation="wave"  variant="circular"  width={25}  height={25} />
                                                                             </div>
                                                                             <div className="doc-icon-wrapper">
                                                                                 <span className="doc-icon">
-                                                                                    <Skeleton
-                                                                                        animation="wave"
-                                                                                        variant="rounded"
-                                                                                        style={{ width: "100%", height: "100%" }}
-                                                                                    />
+                                                                                    <Skeleton animation="wave" variant="rounded" style={{ width: "100%", height: "100%" }}/>
                                                                                 </span>
                                                                                 {/* <div style={{ marginTop: "10px" }} className="d-flex align-items-center">
                                                                                     <Skeleton
@@ -1942,79 +1680,52 @@ function GetStories(props) {
                                                                                         style={{ marginLeft: "0.2rem" }}
                                                                                         variant="rounded"
                                                                                         width={20}
-                                                                                        height={10}
-                                                                                    />
+                                                                                        height={10} />
                                                                                     <Skeleton
                                                                                         animation="wave"
                                                                                         style={{ marginLeft: "0.2rem" }}
                                                                                         variant="rounded"
                                                                                         width={20}
-                                                                                        height={10}
-                                                                                    />
+                                                                                        height={10} />
                                                                                     <Skeleton
                                                                                         animation="wave"
                                                                                         style={{ marginLeft: "0.2rem" }}
                                                                                         variant="rounded"
                                                                                         width={20}
-                                                                                        height={10}
-                                                                                    />
+                                                                                        height={10}/>
                                                                                 </div> */}
                                                                             </div>
                                                                             <div className="story-info-wrap">
-                                                                                <Skeleton
-                                                                                    animation="wave"
-                                                                                    style={{ marginBottom: "15px" }}
-                                                                                    variant="rounded"
-                                                                                    width={80}
-                                                                                    height={10}
-                                                                                />
+                                                                                <Skeleton animation="wave"  style={{ marginBottom: "15px" }}  variant="rounded"  width={80} height={10} />
                                                                                 <div className="d-flex flex-column">
-                                                                                    <Skeleton
-                                                                                        animation="wave"
-                                                                                        variant="rounded"
-                                                                                        width={200}
-                                                                                        height={15}
-                                                                                    />
-                                                                                    <Skeleton
-                                                                                        animation="wave"
-                                                                                        style={{ marginTop: "0.5rem" }}
-                                                                                        variant="rounded"
-                                                                                        width={100}
-                                                                                        height={15}
-                                                                                    />
+                                                                                    <Skeleton  animation="wave"  variant="rounded"  width={200} height={15}  />
+                                                                                    <Skeleton animation="wave" style={{ marginTop: "0.5rem" }}  variant="rounded" width={100} height={15}  />
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div className="file-edit-list-inner-table-cell">
                                                                             <div className="d-flex align-items-center justify-content-end w-100">
                                                                                 <div className="d-flex align-items-center">
-                                                                                    <Skeleton
-                                                                                        animation="wave"
-                                                                                        // style={{ marginRight: "14px" }}
-                                                                                        variant="rounded"
-                                                                                        width={80}
-                                                                                        height={28}
+                                                                                    <Skeleton  animation="wave" variant="rounded" width={80} height={28}
+                                                                                        // style={{ marginRight: "14px" }} 
                                                                                     />
                                                                                     {/* <Skeleton
                                                                                         animation="wave"
                                                                                         style={{ marginRight: "14px" }}
                                                                                         variant="rounded"
                                                                                         width={80}
-                                                                                        height={28}
-                                                                                    />
+                                                                                        height={28}/>
                                                                                     <Skeleton
                                                                                         animation="wave"
                                                                                         style={{ marginRight: "14px" }}
                                                                                         variant="rounded"
                                                                                         width={80}
-                                                                                        height={28}
-                                                                                    />
+                                                                                        height={28}/>
                                                                                     <Skeleton
                                                                                         animation="wave"
                                                                                         variant="circular"
                                                                                         width={25}
-                                                                                        height={25}
-                                                                                    /> */}
+                                                                                        height={25}/> */}
                                                                                 </div>
                                                                             </div>    
                                                                         </div>
@@ -2039,19 +1750,12 @@ function GetStories(props) {
                             <div className="project-setup-pagination">
                                 <div className="story-pagin-wrapper">
                                     {currentPage > 1 && (
-                                        <ButtonBase 
-                                            style={{ marginLeft: 0 }} 
-                                            className="add-btn-wrapper"
-                                            onClick={() => pageSelect(parseInt(currentPage) - 1)} 
-                                        >
+                                        <ButtonBase   style={{ marginLeft: 0 }}   className="add-btn-wrapper"  onClick={() => pageSelect(parseInt(currentPage) - 1)}  >
                                             <KeyboardArrowLeftOutlinedIcon className="ref-icon" />
                                             {t("previous")}
                                         </ButtonBase>
                                     )}
-                                    <ButtonBase 
-                                        className="add-btn-wrapper"
-                                        onClick={() => {pageSelect(parseInt(currentPage) + 1); console.log(currentPage)}}
-                                    >
+                                    <ButtonBase  className="add-btn-wrapper" onClick={() => {pageSelect(parseInt(currentPage) + 1);}}  >
                                         {t("next")}
                                         <KeyboardArrowRightOutlinedIcon className="ref-icon" />
                                     </ButtonBase>
@@ -2061,24 +1765,15 @@ function GetStories(props) {
                     </div>
                 </div>
             </>
-
-
-            {showSrcLangModal && (<Rodal
+            { showSrcLangModal && (<Rodal
                 visible={showSrcLangModal}
                 {...modaloption}
                 showCloseButton={false}
-                className="ai-lang-select-modal"
-            >
+                className="ai-lang-select-modal"  >
                 <div className="lang-modal-wrapper">
                     {/* <h1>Select a source language</h1> */}
-                    <span
-                        className="modal-close-btn lang-close"
-                        onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false) }}
-                    >
-                        <img
-                            src={BlackClose}
-                            alt="close_black"
-                        />
+                    <span  className="modal-close-btn lang-close" onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false) }}  >
+                        <img src={BlackClose}  alt="close_black"/>
                     </span>
                     {showSrcLangModal &&
                         <Sourcelanguage
@@ -2097,7 +1792,6 @@ function GetStories(props) {
                         />}
                 </div>
             </Rodal>)}
-
             {/* {showSrcLangModal && (<Rodal visible={showSrcLangModal} {...modaloption} showCloseButton={false} className="ai-lang-select-modal">
                 <div className="lang-modal-header">
                     <h1>{t("select_source_language")}</h1>
@@ -2119,8 +1813,7 @@ function GetStories(props) {
                     searchAreaRef={searchAreaRef}
                 />
             </Rodal>)} */}
-
-            {showDurationAlertModal && (<Rodal visible={showDurationAlertModal} {...modaloption} showCloseButton={false} className="ai-large-file-alert-modal">
+            { showDurationAlertModal && (<Rodal visible={showDurationAlertModal} {...modaloption} showCloseButton={false} className="ai-large-file-alert-modal">
                 <span className="prompt-close-btn" onClick={() => setShowDurationAlertModal(false)}>
                 <img src={BlackClose} alt="close_black" />
                 </span>
@@ -2164,9 +1857,7 @@ function GetStories(props) {
                 setShowSubmitDocumentAlertModal={setShowSubmitDocumentAlertModal}
                 handleDocuemtSubmitConfirmation={handleDocuemtSubmitConfirmation}
             />
-
             <a href={hiddenLinkUrl} download={downloadedFileName.current} className="hidden" ref={downloadref} />
-
             {showCreditAlertModal && (<Rodal className="ts-rodal-mask" visible={showCreditAlertModal} {...convertmodaloption} showCloseButton={false}>
                 <span className="modal-close-btn lang-close" onClick={(e) => { setShowCreditAlertModal(false) }}>
                     <img src={BlackClose} alt="close_black" />
@@ -2192,22 +1883,12 @@ function GetStories(props) {
                         )}
                     </React.Fragment>
                 </div>
-            </Rodal>)}
-           
-
-            
-
-            
-
-                
-
-            
-            {showAssignedProjectDeleteAlert && (<Rodal
+            </Rodal>)}  
+            { showAssignedProjectDeleteAlert && (<Rodal
                 visible={showAssignedProjectDeleteAlert}
                 {...modaloptions}
                 showCloseButton={false}
-                className="ai-mark-confirm-box Assign-task-deletion-rodal"
-            >
+                className="ai-mark-confirm-box Assign-task-deletion-rodal" >
                 <div className="confirmation-warning-wrapper Assign-task-deletion-model">
                     <div className="confirm-top">
                         <div><span onClick={() => { SetShowAssignedProjectDeleteAlert(false); }}><CloseIcon /></span></div>
@@ -2221,8 +1902,7 @@ function GetStories(props) {
                         </div>
                     </div>
                 </div>
-            </Rodal>)}
-            
+            </Rodal>)}            
             {/* language selection box */}
             {newsId?.length > 0 && (
                 <LanguageSelector 
@@ -2237,10 +1917,8 @@ function GetStories(props) {
                     restrictedTargetLang={restrictedTargetLang}
                     handleClaimStoriesBtnClick={handleClaimStoriesBtnClick}
                     sourceLangSelectBoxRef={sourceLangSelectBoxRef}
-                    targetLangSelectBoxRef={targetLangSelectBoxRef}
-                />
+                    targetLangSelectBoxRef={targetLangSelectBoxRef} />
             )}
-            
             {showFileErrorModal && (
                 <Rodal 
                     className="ts-rodal-mask" 
@@ -2249,8 +1927,7 @@ function GetStories(props) {
                     width={528}
                     height="auto"
                     onClose={() => console.log()} 
-                    showCloseButton={false}
-                >
+                    showCloseButton={false}>
                     <span className="modal-close-btn lang-close" onClick={(e) => { setShowFileErrorModal(false) }}>
                         <img src={BlackClose} alt="close_black" />
                     </span>

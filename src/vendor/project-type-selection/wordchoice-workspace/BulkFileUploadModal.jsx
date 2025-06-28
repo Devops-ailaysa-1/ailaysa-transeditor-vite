@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import Rodal from "rodal";
-import "rodal/lib/rodal.css";
+import "rodal/lib/rodal.css"    ;
 import { ButtonLoader } from '../../../loader/CommonBtnLoader';
 import Config from '../../Config';
 import { useTranslation } from "react-i18next";
@@ -20,22 +20,20 @@ export const BulkFileUploadModal = (props) => {
         filesList,
         setFilesList,
         nonModal,
+        fileError
     } = props
 
     const { t } = useTranslation();
-    const inputFileUploadRef = useRef(null)
-
+    const inputFileUploadRef = useRef(null);
 
     const downloadTemplate = async() => {
-        try{
-           
+        try{           
             let url = `${Config.BASE_URL}/glex/word-choice-template/`
-            const response = await Config.downloadFileFromApi(url);
-            
-            Config.downloadFileInBrowser(response)
+            const response = await Config.downloadFileFromApi(url);            
+            Config.downloadFileInBrowser(response);
             
         }catch(e) {
-            console.log(e)
+            console.error(e);
         }
     } 
 
@@ -58,7 +56,7 @@ export const BulkFileUploadModal = (props) => {
         for (let i = 0; i < (filesTemp).length; i++) {
             if (filesTemp[i].name.length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
-                return
+                return;
             }
         }
         let fileList = [...filesList];
@@ -71,7 +69,6 @@ export const BulkFileUploadModal = (props) => {
             }
         });
         setFilesList(fileList);
-
         // setShowFileUpload(false);
     };
 
@@ -89,13 +86,12 @@ export const BulkFileUploadModal = (props) => {
         });
         if (isFilesEmpty) filesTemp = [];
         setFilesList(finalFiles);
-        inputFileUploadRef.current.value = ''
+        inputFileUploadRef.current.value = '';
     };
 
     /* Handling all the project creation form */
     const handleChange = (e) => {
         // e.target.files[0].name.length
-        // console.log(e.target.files);
         for (let i = 0; i < (e.target.files).length; i++) {
             if ((e.target.files[i]?.name).length >= 201) {
                 Config.toast(t("filename_should_200_chars"), "warning");
@@ -128,7 +124,7 @@ export const BulkFileUploadModal = (props) => {
                 <div className="body-wrapper">
                     <div className="language-details">
                         <div className='d-flex justify-between toast-align'>
-                            <h2>{t("upload_file")}</h2>
+                            <h2>{t("upload_file")}<span className="asterik-symbol">*</span></h2>
                             <button className="termDataForm-GlossaryDownBtn" onClick={downloadTemplate}>
                                 <span className="glossary-btn-txt">
                                     <span>
@@ -138,6 +134,7 @@ export const BulkFileUploadModal = (props) => {
                                 </span>
                             </button>
                         </div>
+                        {fileError && <p class="text-danger mb-2">{fileError}</p>}
                         <div className={filesList?.length !== 0 ? "dropfile-area mt-3" : "col-xs-12 mt-3"}>
                             <DragandDrop handleDrop={handleDrop}>
                                 <div className={filesList.length > 0 ? "button-wrap fileloaded h-25" : "button-wrap sa"} >

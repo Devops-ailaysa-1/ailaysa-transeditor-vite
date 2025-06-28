@@ -2,7 +2,7 @@ import React, { useState, useEffect, createRef, useRef } from "react";
 import TextareaAutosize from "@mui/material";
 import Config from "../../Config";
 import SplitPane, { Pane } from 'split-pane-react';
-import ChatSentIcon from "../../assets/images/chat/chat-sent-icon.svg"
+import ChatSentIcon from "../../assets/images/chat/chat-sent-icon.svg";
 
 const GlobalWriterFooter = () => {
   const promptInput = useRef(null);
@@ -45,4 +45,4 @@ const GlobalWriterFooter = () => {
   )
 }
 
-export default GlobalWriterFooter
+export default GlobalWriterFooter;

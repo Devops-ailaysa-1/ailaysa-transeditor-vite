@@ -45,7 +45,6 @@ import { BlueButtonLoader } from './../../../loader/BlueButtonLoader';
 import SquareIcon from '@mui/icons-material/Square';
 import MicOutlinedIcon from '@mui/icons-material/MicOutlined';
 // import Cursor from "../../../../src/vendor/Cursor.js";
-
 // mui icons
 import CloseIcon from '@mui/icons-material/Close';
 import MicIcon from '@mui/icons-material/Mic';
@@ -68,61 +67,50 @@ import WarningIcon from "@mui/icons-material/Warning";
 // import MomentTimePicker from "../../../vendor/date-time-picker/MomentTimePicker";
 import MainAssignManage from "../../../vendor/model-select/MainAssignManage";
 import generateKey from "../../speech-component/speech-to-text/recorder-components/utils/GenerateKey";
-import ArrowRightAltColor from "../../../assets/images/new-ui-icons/arrow_right_alt_color.svg"
-import ArrowRightAlt from "../../../assets/images/arrow_right_alt.svg"
-import ContentCopy from "../../../assets/images/project-setup/instant-text/content_copy.svg"
-import ShareIcon from "../../../assets/images/project-setup/instant-text/share.svg"
-import FileDownload from "../../../assets/images/project-setup/instant-text/file_download.svg"
-import HowToRegisterIcon from "../../../assets/images/new-ui-icons/how_to_register.svg"
-import AssignSymbol from "../../../assets/images/project-setup/instant-text/assign-symbol.svg"
-import Spellcheck from "../../../assets/images/new-ui-icons/spellcheck.svg"
-import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
-import AssetsDeleteIcon from "../../../assets/images/new-ui-icons/assets-delete-icon.svg"
-import EventIcon from "../../../assets/images/project-setup/instant-text/event.svg"
-import InsuffientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg"
-import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg"
-import ErrorBlackWarn from "../../../assets/images/new-ui-icons/error_black_warn.svg"
-import TranslateGoogleLogo from "../../../assets/images/new-project-setup/translate-google-logo.svg"
-import AmazaonTranslator from "../../../assets/images/new-project-setup/amazon-trans.svg"
-import NewMicrosoftTranslator from "../../../assets/images/new-project-setup/new-microsoft-translator.svg"
-import ImpFileIcon from "../../../assets/images/new-ui-icons/imp-icon-file.svg"
-import NoMemberImg from "../../../assets/images/assign-page/no-member-img.png"
-import ConfirmIcon from "../../../assets/images/new-ui-icons/confirm-icon.svg"
+import ArrowRightAltColor from "../../../assets/images/new-ui-icons/arrow_right_alt_color.svg";
+import ArrowRightAlt from "../../../assets/images/arrow_right_alt.svg";
+import ContentCopy from "../../../assets/images/project-setup/instant-text/content_copy.svg";
+import ShareIcon from "../../../assets/images/project-setup/instant-text/share.svg";
+import FileDownload from "../../../assets/images/project-setup/instant-text/file_download.svg";
+import HowToRegisterIcon from "../../../assets/images/new-ui-icons/how_to_register.svg";
+import AssignSymbol from "../../../assets/images/project-setup/instant-text/assign-symbol.svg";
+import Spellcheck from "../../../assets/images/new-ui-icons/spellcheck.svg";
+import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg";
+import AssetsDeleteIcon from "../../../assets/images/new-ui-icons/assets-delete-icon.svg";
+import EventIcon from "../../../assets/images/project-setup/instant-text/event.svg";
+import InsuffientIcon from "../../../assets/images/new-ui-icons/insuffient-icon.svg";
+import RemoveCircleRed from "../../../assets/images/new-ui-icons/remove_circle_red.svg";
+import ErrorBlackWarn from "../../../assets/images/new-ui-icons/error_black_warn.svg";
+import TranslateGoogleLogo from "../../../assets/images/new-project-setup/translate-google-logo.svg";
+import AmazaonTranslator from "../../../assets/images/new-project-setup/amazon-trans.svg";
+import NewMicrosoftTranslator from "../../../assets/images/new-project-setup/new-microsoft-translator.svg";
+import ImpFileIcon from "../../../assets/images/new-ui-icons/imp-icon-file.svg";
+import NoMemberImg from "../../../assets/images/assign-page/no-member-img.png";
+import ConfirmIcon from "../../../assets/images/new-ui-icons/confirm-icon.svg";
 import sanitizeHtml from 'sanitize-html-react';
-import ReactRouterPrompt from 'react-router-prompt'
+import ReactRouterPrompt from 'react-router-prompt';
 import useStateWithHistory from "../../../vendor/custom-component/useStateWithHistory";
 
 const InstantTextTranslate = (props) => {
-    const {
-        sidebarActiveTab,
-        setSidebarActiveTab,
-    } = props
-
+    const { sidebarActiveTab,setSidebarActiveTab,} = props;
     // const {
     //     browserSupportsSpeechRecognition
     // } = useSpeechRecognition();
-    const browserSupportsSpeechRecognition = null
+    const browserSupportsSpeechRecognition = null;
 
     const { t } = useTranslation();
     const history = useNavigate();
-    const location = useLocation()
-    const { pathname } = useLocation()
-    const userDetails = useSelector((state) => state.userDetails.value)
-    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor'
+    const location = useLocation();
+    const { pathname } = useLocation();
+    const userDetails = useSelector((state) => state.userDetails.value);    
     const [historyArrState, setHistoryArrState, { historyArr, pointer, back, forward, go }] = useStateWithHistory("")
-
-
-    const [navigationModalVisible, setNavigationModalVisible] = useState(false)
-    const [lastLocation, setLastLocation] = useState(null)
-    const [confirmedNavigation, setConfirmedNavigation] = useState(false)
-    const checkform = useRef(false)
-
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
+    let userSelectionCallTimer = null;
+    let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
 
-    const instantFeatureStickyRef = useRef(null);
-    const instantTranslatedRef = useRef(null);
-    const [isStickyTriggered, setIsStickyTriggered] = useState(false);
-
+    const [navigationModalVisible, setNavigationModalVisible] = useState(false);
+    const [lastLocation, setLastLocation] = useState(null);
+    const [confirmedNavigation, setConfirmedNavigation] = useState(false);
     const [didMount, setDidMount] = useState(false);
     const [sourceLanguage, setSourceLanguage] = useState("");
     const [assignBtnLoader, setAssignBtnLoader] = useState(false);
@@ -138,7 +126,7 @@ const InstantTextTranslate = (props) => {
     const [showSrcLangModal, setshowSrcLangModal] = useState(false);
     const [showTarLangModal, setshowTarLangModal] = useState(false);
     const [error, setError] = useState({ inputText: "", sourceLanguage: "", targetLanguage: "" });
-    const [autoDetectIndication, setAutoDetectIndication] = useState(false)
+    const [autoDetectIndication, setAutoDetectIndication] = useState(false);
     const [translateContent, setTranslateContent] = useState("");
     const [mtOptionsSelect, setMtOptionsSelect] = useState([]);
     const [shareIconsPanel, setShareIconsPanel] = useState(false);
@@ -149,10 +137,10 @@ const InstantTextTranslate = (props) => {
     const [currencySelect, setCurrencySelect] = useState(null);
     const [unitTypeSelect, setUnitTypeSelect] = useState(null);
     const [deadline, setDeadline] = useState(null);
-    const [assignToDrpdown, setAssignToDrpdown] = useState(false)
-    const [assignedEditorSwitch, setAssignedEditorSwitch] = useState(1)
-    const [shareCommonUrl, setShareCommonUrl] = useState(" ")
-    const [translatedtextmodified, setTranslatedtextmodified] = useState(false)
+    const [assignToDrpdown, setAssignToDrpdown] = useState(false);
+    const [assignedEditorSwitch, setAssignedEditorSwitch] = useState(1);
+    const [shareCommonUrl, setShareCommonUrl] = useState(" ");
+    const [translatedtextmodified, setTranslatedtextmodified] = useState(false);
     const [mtpeEngines, setMtpeEngines] = useState([]);
     const [allLangDetailsList, setAllLangDetailsList] = useState(null);
     const [mtpeEngineOptions, setMtpeEngineOptions] = useState([]);
@@ -160,240 +148,193 @@ const InstantTextTranslate = (props) => {
     const [commonTarValue, setCommonTarValue] = useState(null);
     const [commonMtpeEngine, setCommonMtpeEngine] = useState(null);
     const [selectedMTEngine, setSelectedMTEngine] = useState(null);
-    const [mtEngineLable, setMtEngineLable] = useState("")
+    const [mtEngineLable, setMtEngineLable] = useState("");
     const [showSettings, setshowSettings] = useState(false);
     const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
-    const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState(
-        []
-    );
+    const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState([]);
     const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
-    const [createdProject, setCreatedProject] = useState(null)
-    const [languageListOptions, setLanguageListOptions] = useState(null)
-    const [showIndividualAssignManage, setShowIndividualAssignManage] = useState(false)
-    const [selectedLanguageSwitch, setSelectedLanguageSwitch] = useState(null)
-    const [translatedText, setTranslatedText] = useState(null)
-    const [showProcessingModal, setShowProcessingModal] = useState(false)
+    const [createdProject, setCreatedProject] = useState(null);
+    const [languageListOptions, setLanguageListOptions] = useState(null);
+    const [showIndividualAssignManage, setShowIndividualAssignManage] = useState(false);
+    const [selectedLanguageSwitch, setSelectedLanguageSwitch] = useState(null);
+    const [translatedText, setTranslatedText] = useState(null);
+    const [showProcessingModal, setShowProcessingModal] = useState(false);
     const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
     const [clickedOpenButton, setClickedOpenButton] = useState(null);
-    const [targetInputBox, setTargetInputBox] = useState(null)
-    const [browserName, setBrowserName] = useState(null)
-    const projectNameRef = useRef(null)
+    const [targetInputBox, setTargetInputBox] = useState(null);
+    const [browserName, setBrowserName] = useState(null);   
+    const [hasFocus, setHasFocus] = useState(false);
+    const [filteredResults, setFilteredResults] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
+    const [onFocusWrap, setOnFocusWrap] = useState(false);
+    const [projectName, setprojectName] = useState(null);
+    const translatedtrue = useRef(false);
+    const [documentId, setDocumentId] = useState(null);
+    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false);
+    const [projectId, setProjectId] = useState(null);
+    const [jobId, setJobId] = useState(null);
+    const [partialOutput, setPartialOutput] = useState(null);
+    const [sourceApplyToAll, setSourceApplyToAll] = useState(false);
+    const [dontShowAgain, setDontShowAgain] = useState(false);
+    const [isSticky, setIsSticky] = useState(false);
+    const [isStickyTriggered, setIsStickyTriggered] = useState(false);
+    // const [isOpenFromList, setisOpenFromList] = useState(false);
+    //   const [isListening, setIsListening] = useState(false);
+    // Assign editor states
+    const [selectedEditor, setSelectedEditor] = useState(null);
+    const [isForcePickerOpen, setIsOpen] = useState(false);
+    const [unitRate, setUnitRate] = useState(null);
+    const [estimatedHours, setEstimatedHours] = useState(null);
+    const [internalEditors, setInternalEditors] = useState(null);
+    const [externalEditors, setExternalEditors] = useState(null);
+    const [isTaskAssigned, setIsTaskAssigned] = useState(false);
+    const [taskAssignDetails, setTaskAssignDetails] = useState(null);
+    const [userSubscriptionName, setUserSubscriptionName] = useState(null);
+    const [taskId, setTaskId] = useState(null);
+    const [translatedTextTab, setTranslatedTextTab] = useState(1);                                                                                                                                                                                                               const [isFunctionButtonsVisible, setIsFunctionButtonsVisible] = useState(false);
+    const [editorName, setEditorName] = useState(null);
+    const [editorId, setEditorId] = useState(null);
+    const [isInternalEditor, setIsInternalEditor] = useState(false);
+    const [hasTeam, setHasTeam] = useState(false);
+    const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
+    const [newTargetLanguages, setNewTargetLanguages] = useState([]);
+    const [editJobs, setEditJobs] = useState([]);
+    const [editorRates, setEditorRates] = useState(null);
+    const [validationState, setValidationState] = useState({projectName: false, });
+    const [editProjectId, setEditProjectId] = useState(null);
+    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null);
+    const [isEditorAilaysa, setIsEditorAilaysa] = useState(false);
+     // NLP feature states
+    const [enableSynonym, setEnableSynonym] = useState(false);
+    const [enableParaphrase, setEnableParaphrase] = useState(false);    
+    const [synonymPopoverOpen, setSynonymPopoverOpen] = useState(false);
+    const [synonymPopoverTarget, setSynonymPopoverTarget] = useState("");
+    const [synonymsResList, setSynonymsResList] = useState([]);
+    const [synonymText, setSynonymText] = useState(null);
+    const [paraphraseText, setParaphraseText] = useState("");
+    const [paraphrasePopoverTarget, setParaphrasePopoverTarget] = useState("");
+    const [paraphrasePopoverOpen, setParaphrasePopoverOpen] = useState(false);
+    const [paraphraseResList, setParaphraseResList] = useState([]);
+    const [isEdit, setIsEdit] = useState(false);
+    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
+    const [changesSaved, setChangesSaved] = useState(true);
+    const [savedTargetData, setSavedTargetData] = useState(null);
+    const [mtResponses, setMTResponses] = useState(null);
+    const [processing, setProcessing] = useState(false);    // for compare mt loading
+    const [selectedMtType, setSelectedMtType] = useState(1); // 1 for google engine : 2 for microsoft : 3 for amazon
+    const [sourceTextLength, setSourceTextLength] = useState(0);
+    const [compareMTLoader, setCompareMTLoader] = useState(false);
+    const [isMainMtChanged, setIsMainMtChanged] = useState(false);
+    const [isSourceTextChanged, setIsSourceTextChanged] = useState(false);
+    const [showSourceChangeConfimationModal, setShowSourceChangeConfimationModal] = useState(false);
+    const [selectedSrcDictationLang, setSelectedSrcDictationLang] = useState({ label: "English (India)", value: "en-IN" });
+    const [selectedTarDictationLang, setSelectedTarDictationLang] = useState({ label: "English (India)", value: "en-IN" });
+    const [assignInstructionText, setAssignInstructionText] = useState('');
+    const [additionalFiles, setAdditionalFiles] = useState([]);
+    const [additionalFilesFromApi, setAdditionalFilesFromApi] = useState([]);
+    const [dictationLanguageOptions, setDictationLanguageOptions] = useState(null);
+    const [isSourceTextLoading, setIsSourceTextLoading] = useState(false);
+    const [sourceText, setSourceText] = useState('');
+    const [editedTargetLanguage, setEditedTargetLanguage] = useState([]);
+    const [creditsAvailable, setCreditsAvailable] = useState(null);
+    const [jobs, setJobs] = useState(null);
+    const [isCustomizationProcessing, setIsCustomizationProcessing] = useState(false);
+    const [languagesPairs, setLanguagePairs] = useState("");
+    const [isContentPostedited, setIsContentPostedited] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isConfirmContinue, setIsConfirmContinue] = useState(false);
+    const [isSrcListening, setIsSrcListening] = useState(false);
+    const [isTarListening, setIsTarListening] = useState(false);
+    const [partialCompareMt, setPartialCompareMt] = useState(false);
+    const [taskInsufficientCredit, setTaskInsufficientCredit] = useState(false);
+    const [translationHistoryList, setTranslationHistoryList] = useState([]);
+    const [historyDrawerShow, setHistoryDrawerShow] = useState(false);
+    const [historyContentLoader, setHistoryContentLoader] = useState(false);
+    const [isSrcTextEmpty, setIsSrcTextEmpty] = useState(false);
+    const [isTarTextEmpty, setIsTarTextEmpty] = useState(false);
+    const [historySrcShowMore, setHistorySrcShowMore] = useState([]);
+    const [historyTarShowMore, setHistoryTarShowMore] = useState([]);
+    const [showSourceEditDisableAlert, setShowSourceEditDisableAlert] = useState(false);
+    const [showSourceEditPermissionAlert, setShowSourceEditPermissionAlert] = useState(false);
+    const [showEditorAssignModal, setShowEditorAssignModal] = useState(false);    
+    const [spellCheckSuggestion, setSpellCheckSuggestion] = useState([]);    
+    // const [translateResultText, setTranslateResultText] = useState('');
+    const [isSpellCheckEnable, setIsSpellCheckEnable] = useState(true);
+    const [spellcheck, setSpellcheck] = useState(false);
+    const [enableSpellCheck, setEnableSpellCheck] = useState(false);
+    const [replaceContentUsedIds, setReplaceContentUsedIds] = useState([]);
+    const [popoverTarget, setPopoverTarget] = useState(null);
+    const [spellCheckPopoverContent, setSpellCheckPopoverContent] = useState("");
+    const [popoverOpen, setPopoverOpen] = useState(false);
+    const [isWordsCorrected, setIsWordsCorrected] = useState(false);
+    const [isWordsCorrectedTrigger, setIsWordsCorrectedTrigger] = useState(false);
+    const [popoverContentSwitch, setPopoverContentSwitch] = useState(false);
+    const [selectedCustomization, setSelectedCustomization] = useState(null);
+    const [popupLoading, setPopupLoading] = useState('none');
+    const [selectionString, setSelectionString] = useState(null);
+    const [translateResultText, setTranslateResultText] = useState('');
+    const [selectedTaskDetails, setSelectedTaskDetails] = useState(null);
+    const [showAssignIcon, setShowAssignIcon] = useState(false);
+    const [spellCheckWordsOptions, setSpellCheckWordsOptions] = useState([]);    
+    const [rectElement, setRectElement] = useState(null);
+    // const [showmodelwarning,setShowmodelwarning]=useState(false);
+
+    const checkform = useRef(false);
+    const instantFeatureStickyRef = useRef(null);
+    const instantTranslatedRef = useRef(null);
+    const projectNameRef = useRef(null);
     const shareRowPanelOutside = useRef();
-    const downloadPanelOutside = useRef(null)
+    const downloadPanelOutside = useRef(null);
     const textareaRef = useRef();
     const assignDrpdownOutside = useRef();
     const projectQuickSetup = useRef(true);
     const searchAreaRef = useRef(null);
     const targetLanguageOptionsRef = useRef([]);
-    const translatedTextDivRef = useRef(null)
-    const [hasFocus, setHasFocus] = useState(false)
-    const [filteredResults, setFilteredResults] = useState([]);
-    const [searchInput, setSearchInput] = useState('');
-    const [onFocusWrap, setOnFocusWrap] = useState(false)
-    const [projectName, setprojectName] = useState(null)
-    const translatedtrue = useRef(false)
-    const [documentId, setDocumentId] = useState(null)
-    const [showCreditAlertModal, setShowCreditAlertModal] = useState(false)
-    const [projectId, setProjectId] = useState(null)
-    const [jobId, setJobId] = useState(null)
-    const [partialOutput, setPartialOutput] = useState(null)
-    const [sourceApplyToAll, setSourceApplyToAll] = useState(false)
-    const [dontShowAgain, setDontShowAgain] = useState(false)
-    const [isSticky, setIsSticky] = useState(false);
-
-    // const [isOpenFromList, setisOpenFromList] = useState(false)
-
-    // Assign editor states
-    const [selectedEditor, setSelectedEditor] = useState(null);
-    const [isForcePickerOpen, setIsOpen] = useState(false)
-    const [unitRate, setUnitRate] = useState(null)
-    const [estimatedHours, setEstimatedHours] = useState(null)
-    const [internalEditors, setInternalEditors] = useState(null);
-    const [externalEditors, setExternalEditors] = useState(null);
-    const [isTaskAssigned, setIsTaskAssigned] = useState(false)
-    const [taskAssignDetails, setTaskAssignDetails] = useState(null)
-    const [userSubscriptionName, setUserSubscriptionName] = useState(null)
-    const [taskId, setTaskId] = useState(null)
-    const [translatedTextTab, setTranslatedTextTab] = useState(1)
-
-    const [isFunctionButtonsVisible, setIsFunctionButtonsVisible] = useState(false)
-
-    const [editorName, setEditorName] = useState(null)
-    const [editorId, setEditorId] = useState(null)
-    const [isInternalEditor, setIsInternalEditor] = useState(false)
-    const [hasTeam, setHasTeam] = useState(false)
-    const [targetLangListToRemove, setTargetLangListToRemove] = useState([]);
-    const [newTargetLanguages, setNewTargetLanguages] = useState([])
-    const [editJobs, setEditJobs] = useState([]);
-    const [editorRates, setEditorRates] = useState(null)
-
-    const [validationState, setValidationState] = useState({
-        projectName: false,
-    })
-
-    const [editProjectId, setEditProjectId] = useState(null)
-
-    const [hiddenLinkUrl, setHiddenLinkUrl] = useState(null)
-    const [isEditorAilaysa, setIsEditorAilaysa] = useState(false)
-
-    // NLP feature states
-    const [enableSynonym, setEnableSynonym] = useState(false)
-    const [enableParaphrase, setEnableParaphrase] = useState(false)
-    const secondWordRef = useRef(null)
-    const selectedText = useRef(null)
-    const synonymPopoverRef = useRef(null)
-    const [synonymPopoverOpen, setSynonymPopoverOpen] = useState(false)
-    const [synonymPopoverTarget, setSynonymPopoverTarget] = useState("")
-    const [synonymsResList, setSynonymsResList] = useState([])
-    const [synonymText, setSynonymText] = useState(null)
-
-    const [paraphraseText, setParaphraseText] = useState("")
-    const [paraphrasePopoverTarget, setParaphrasePopoverTarget] = useState("")
-    const [paraphrasePopoverOpen, setParaphrasePopoverOpen] = useState(false)
-    const [paraphraseResList, setParaphraseResList] = useState([])
-    const [isEdit, setIsEdit] = useState(false)
-    const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
-
-    const [changesSaved, setChangesSaved] = useState(true)
-    const [savedTargetData, setSavedTargetData] = useState(null)
-    const [mtResponses, setMTResponses] = useState(null);
-    const [processing, setProcessing] = useState(false)     // for compare mt loading
-    const [selectedMtType, setSelectedMtType] = useState(1); // 1 for google engine : 2 for microsoft : 3 for amazon
-    const [sourceTextLength, setSourceTextLength] = useState(0)
-
-    const [compareMTLoader, setCompareMTLoader] = useState(false)
-    const [isMainMtChanged, setIsMainMtChanged] = useState(false)
-    const [isSourceTextChanged, setIsSourceTextChanged] = useState(false)
-    const [showSourceChangeConfimationModal, setShowSourceChangeConfimationModal] = useState(false)
-    const [selectedSrcDictationLang, setSelectedSrcDictationLang] = useState({ label: "English (India)", value: "en-IN" })
-    const [selectedTarDictationLang, setSelectedTarDictationLang] = useState({ label: "English (India)", value: "en-IN" })
-    const [assignInstructionText, setAssignInstructionText] = useState('')
-    const [additionalFiles, setAdditionalFiles] = useState([]);
-    const [additionalFilesFromApi, setAdditionalFilesFromApi] = useState([])
-    const [dictationLanguageOptions, setDictationLanguageOptions] = useState(null)
-
-    const [isSourceTextLoading, setIsSourceTextLoading] = useState(false)
-
-    const [sourceText, setSourceText] = useState('')
-
-    const [editedTargetLanguage, setEditedTargetLanguage] = useState([])
-    const [creditsAvailable, setCreditsAvailable] = useState(null)
-
-    const [jobs, setJobs] = useState(null)
-
-    const [isCustomizationProcessing, setIsCustomizationProcessing] = useState(false)
-    const [languagesPairs, setLanguagePairs] = useState("");
-    const [isContentPostedited, setIsContentPostedited] = useState(false)
-
-    const [isUpdating, setIsUpdating] = useState(false)
-    const [isConfirmContinue, setIsConfirmContinue] = useState(false)
-    const [isSrcListening, setIsSrcListening] = useState(false)
-    const [isTarListening, setIsTarListening] = useState(false)
-
-    const [partialCompareMt, setPartialCompareMt] = useState(false)
-    const [taskInsufficientCredit, setTaskInsufficientCredit] = useState(false)
-
-    const [translationHistoryList, setTranslationHistoryList] = useState([])
-    const [historyDrawerShow, setHistoryDrawerShow] = useState(false)
-    const [historyContentLoader, setHistoryContentLoader] = useState(false)
-
-    const [isSrcTextEmpty, setIsSrcTextEmpty] = useState(false)
-    const [isTarTextEmpty, setIsTarTextEmpty] = useState(false)
-
-
-    const [historySrcShowMore, setHistorySrcShowMore] = useState([])
-    const [historyTarShowMore, setHistoryTarShowMore] = useState([])
-
-    const [showSourceEditDisableAlert, setShowSourceEditDisableAlert] = useState(false)
-    const [showSourceEditPermissionAlert, setShowSourceEditPermissionAlert] = useState(false)
-    const [showEditorAssignModal, setShowEditorAssignModal] = useState(false)
-    
-    const [spellCheckSuggestion, setSpellCheckSuggestion] = useState([])
-    
-    // const [translateResultText, setTranslateResultText] = useState('')
-
-    const [isSpellCheckEnable, setIsSpellCheckEnable] = useState(true)
-
-    const sourceLangIdRef = useRef(null)
-    const targetLangIdRef = useRef(null)
-    const currencyOptionsRef = useRef(null)
-    const unitTypeOptionRef = useRef(null)
-    const mtpeEngineRef = useRef(null)
-    const isOpenFromList = useRef(false)
-    const isEditRef = useRef(false)
+    const translatedTextDivRef = useRef(null);
+    const secondWordRef = useRef(null);
+    const selectedText = useRef(null);
+    const synonymPopoverRef = useRef(null); 
+    const sourceLangIdRef = useRef(null);
+    const targetLangIdRef = useRef(null);
+    const currencyOptionsRef = useRef(null);
+    const unitTypeOptionRef = useRef(null);
+    const mtpeEngineRef = useRef(null);
+    const isOpenFromList = useRef(false);
+    const isEditRef = useRef(false);
     const typing = useRef(false);
     const typingTimeout = useRef(0);
-    const assignSettingDivRef = useRef(null)
+    const assignSettingDivRef = useRef(null);
     const deletedEditFileIds = useRef([]);
     const deletedJobIds = useRef([]);
-    const downloadref = useRef(null)
-    const prevPageInfo = useRef(null)
-    const lastFunctionCall = useRef(null)
-    const mtEngineOptionsRef = useRef(null)
-    const sourceLangRef = useRef(null)
-    const summernoteEditorRef = useRef(null)
-    const sourceSummernoteRef = useRef(null)
-    const taskDataFromApi = useRef(null)
-    const taskInsufficientCreditRef = useRef(undefined)
-    const from = useRef('instant')
-    const autoDetectFireEnable = useRef(true)
-    const editJobRef = useRef(null)
-    const enableassignrow = useRef(false)
-    const updateBtnRef = useRef(null)
+    const downloadref = useRef(null);
+    const prevPageInfo = useRef(null);
+    const lastFunctionCall = useRef(null);
+    const mtEngineOptionsRef = useRef(null);
+    const sourceLangRef = useRef(null);
+    const summernoteEditorRef = useRef(null);
+    const sourceSummernoteRef = useRef(null);
+    const taskDataFromApi = useRef(null);
+    const taskInsufficientCreditRef = useRef(undefined);
+    const from = useRef('instant');
+    const autoDetectFireEnable = useRef(true);
+    const editJobRef = useRef(null);
+    const enableassignrow = useRef(false);
+    const updateBtnRef = useRef(null);
     const historyPerPage = useRef(2);
-
-    const spellCheckResponseRef = useRef([])
-
-
-    const srcDivRef = useRef(null)
-    const tarDivRef = useRef(null)
-
-    const copyTarDivRef = useRef(null)
-
-
-    const maxLength = useRef(0)
-
-
-
-    const [spellcheck, setSpellcheck] = useState(false)
-    const [enableSpellCheck, setEnableSpellCheck] = useState(false);
-    const [replaceContentUsedIds, setReplaceContentUsedIds] = useState([]);
-    const caretRange = useRef(null);
-    const [popoverTarget, setPopoverTarget] = useState(null);
-    const [spellCheckPopoverContent, setSpellCheckPopoverContent] = useState("");
-    const spellCheckData = useRef([]);
-    const [popoverOpen, setPopoverOpen] = useState(false);
-    const [isWordsCorrected, setIsWordsCorrected] = useState(false)
-    const [isWordsCorrectedTrigger, setIsWordsCorrectedTrigger] = useState(false)
-
-    const [popoverContentSwitch, setPopoverContentSwitch] = useState(false)
-    const [selectedCustomization, setSelectedCustomization] = useState(null)
-    const [popupLoading, setPopupLoading] = useState('none')
-    const [selectionString, setSelectionString] = useState(null)
-
-    const [translateResultText, setTranslateResultText] = useState('')
-    const [selectedTaskDetails, setSelectedTaskDetails] = useState(null)
-
-    const [showAssignIcon, setShowAssignIcon] = useState(false)
-    const [spellCheckWordsOptions, setSpellCheckWordsOptions] = useState([]);
-    
-    const [rectElement, setRectElement] = useState(null);
-    
-
-    const temptaskid = useRef()
-    const selectedFileRow = useRef(null)
-
-    const sourceDisableAlertTimeout = useRef(null)
-    const sourcePermissionAlertTimeout = useRef(null)
-    
-    const clickedWrongWordRef = useRef(null)
-    const clickedMarkEleRef = useRef(null)
-    const isSpellcheckAvailableRef = useRef(null)
-    
-    let userSelectionCallTimer = null;
-
-    //   const [isListening, setIsListening] = useState(false);
-
+    const spellCheckResponseRef = useRef([]);
+    const srcDivRef = useRef(null);
+    const tarDivRef = useRef(null);
+    const copyTarDivRef = useRef(null);
+    const maxLength = useRef(0);    
+    const caretRange = useRef(null);    
+    const spellCheckData = useRef([]);    
+    const temptaskid = useRef();
+    const selectedFileRow = useRef(null);
+    const sourceDisableAlertTimeout = useRef(null);
+    const sourcePermissionAlertTimeout = useRef(null);    
+    const clickedWrongWordRef = useRef(null) ;
+    const clickedMarkEleRef = useRef(null);
+    const isSpellcheckAvailableRef = useRef(null); 
     /* API Connections as follows*/
 
     const header = {
@@ -434,7 +375,6 @@ const InstantTextTranslate = (props) => {
     //     };
     //   }, []);
    
-
     const indianLanguages = [
         {
             "id": 91,
@@ -515,8 +455,6 @@ const InstantTextTranslate = (props) => {
             "updated_at": "2021-07-19T15:15:41.646000Z"
         }
     ];
-
-
 
     const customMtSelectStyles = {
         placeholder: (provided, state) => ({
@@ -753,13 +691,13 @@ const InstantTextTranslate = (props) => {
 
     const hideSettingsModal = () => setshowSettings(false);
 
-
     const modaloption = {
         closeMaskOnClick: false,
         width: !showEditorAssignModal ? 450 : 'auto',
         height: !showDeleteConfirmationModal ? 300 : 'auto',
         onClose: hideSettingsModal,
     };
+
     const modaloptions = {
         closeMaskOnClick: false,
         width: navigationModalVisible ? 520 : null,
@@ -773,16 +711,14 @@ const InstantTextTranslate = (props) => {
         height: 'auto',
         onClose: hideSettingsModal,
     };
-
    
     useEffect(() => {
         const escFunctionClose = (e) => {
             if (e.which === 27) {
-                setHistoryDrawerShow(false)
+                setHistoryDrawerShow(false);
             }
         };
         window.addEventListener("keydown", escFunctionClose);
-
         return () => {
             window.removeEventListener("keydown", escFunctionClose);
         };
@@ -797,66 +733,64 @@ const InstantTextTranslate = (props) => {
 
     useEffect(() => {
         if (isTaskAssigned) {
-            srcDivRef.current?.blur()
-            tarDivRef.current?.focus()
-            setTranslatedContentClicked(true)
-            setSourceContentClicked(false)
+            srcDivRef.current?.blur();
+            tarDivRef.current?.focus();
+            setTranslatedContentClicked(true);
+            setSourceContentClicked(false);
         }
-    }, [isTaskAssigned])
+    }, [isTaskAssigned]);
 
     useEffect(() => {
         if (editorRates !== null) {
-            setCurrencySelect(editorRates[0]?.currency !== null ? currencyOptionsRef.current?.find(each => each.value === editorRates[0]?.currency) : "")
-            setUnitTypeSelect(editorRates[0]?.mtpe_count_unit !== null ? unitTypeOptions.find((element) => element.value === editorRates[0]?.mtpe_count_unit) : "")
-            setUnitRate(editorRates[0]?.mtpe_rate !== null ? editorRates[0]?.mtpe_rate : "")
-            setEstimatedHours(2)
+            setCurrencySelect(editorRates[0]?.currency !== null ? currencyOptionsRef.current?.find(each => each.value === editorRates[0]?.currency) : "");
+            setUnitTypeSelect(editorRates[0]?.mtpe_count_unit !== null ? unitTypeOptions.find((element) => element.value === editorRates[0]?.mtpe_count_unit) : "");
+            setUnitRate(editorRates[0]?.mtpe_rate !== null ? editorRates[0]?.mtpe_rate : "");
+            setEstimatedHours(2);
         }
     }, [editorRates])
 
     useEffect(() => {
         if (unitTypeSelect?.label === 'Hour' && editorRates !== null) {
-            setUnitRate(editorRates?.find(each => each?.currency === currencySelect?.value)?.hourly_rate)
-            setEstimatedHours(2)
+            setUnitRate(editorRates?.find(each => each?.currency === currencySelect?.value)?.hourly_rate);
+            setEstimatedHours(2);
         } else if (unitTypeSelect?.label === 'Fixed') {
-            setUnitRate(editorRates?.find(each => each?.currency === currencySelect?.value)?.mtpe_rate)
+            setUnitRate(editorRates?.find(each => each?.currency === currencySelect?.value)?.mtpe_rate);
         } else {
             if (lastFunctionCall.current !== 'getAilaysaServiceRate') {
-                setUnitRate(null)
-
+                setUnitRate(null);
             }
         }
-    }, [unitTypeSelect])
+    }, [unitTypeSelect]);
 
 
     useEffect(() => {
         if (currencySelect !== null && editorRates !== null && !isEditorAilaysa) {
-            let currentCurrencyDict = editorRates?.find(each => each?.currency === currencySelect?.value)
+            let currentCurrencyDict = editorRates?.find(each => each?.currency === currencySelect?.value);
             if (currentCurrencyDict != undefined) {
-                // setCurrencySelect(editorRates[0]?.currency !== null ? currencyOptionsRef.current?.find(each => each.value === editorRates[0]?.currency) : "")
-                setUnitTypeSelect(currentCurrencyDict?.mtpe_count_unit !== null ? unitTypeOptionRef.current.find((element) => element.value === currentCurrencyDict?.mtpe_count_unit) : "")
-                setUnitRate(currentCurrencyDict?.mtpe_rate !== null ? currentCurrencyDict?.mtpe_rate : "")
-                setEstimatedHours(2)
+                // setCurrencySelect(editorRates[0]?.currency !== null ? currencyOptionsRef.current?.find(each => each.value === editorRates[0]?.currency) : "");
+                setUnitTypeSelect(currentCurrencyDict?.mtpe_count_unit !== null ? unitTypeOptionRef.current.find((element) => element.value === currentCurrencyDict?.mtpe_count_unit) : "");
+                setUnitRate(currentCurrencyDict?.mtpe_rate !== null ? currentCurrencyDict?.mtpe_rate : "");
+                setEstimatedHours(2);
             } else {
-                setUnitTypeSelect(null)
-                setUnitRate("")
-                setEstimatedHours("")
+                setUnitTypeSelect(null);
+                setUnitRate("");
+                setEstimatedHours("");
             }
         }
-    }, [currencySelect])
+    }, [currencySelect]);
 
     
     useEffect(() => {
-        // console.log(taskAssignDetails);
         if (taskAssignDetails !== null && selectedTaskDetails !== null) {
             if (taskAssignDetails?.length !== 0) {
                 taskAssignDetails?.map(eachRole => {
                     if (Config.userState?.id !== eachRole?.assign_to_details?.id) {
-                        setIsFunctionButtonsVisible(true)
+                        setIsFunctionButtonsVisible(true);
                     }
                 })
             }
         }
-    }, [taskAssignDetails, selectedTaskDetails])
+    }, [taskAssignDetails, selectedTaskDetails]);
     
     useEffect(() => {
         if (showEditorAssignModal) {
@@ -864,7 +798,7 @@ const InstantTextTranslate = (props) => {
                 behavior: 'smooth'
             })
         }
-    }, [showEditorAssignModal])
+    }, [showEditorAssignModal]);
 
     useEffect(() => {
         let source_language = sourceLanguage;
@@ -879,57 +813,54 @@ const InstantTextTranslate = (props) => {
 
     useEffect(() => {
         if(spellCheckWordsOptions?.length !== 0){
-            highlightSpellCheckWords()
+            highlightSpellCheckWords();
         }
-    }, [spellCheckWordsOptions])
+    }, [spellCheckWordsOptions]);
 
     useEffect(() => {
-        window.addEventListener('mousemove', getMouseMoveCoordinates)
-        document?.addEventListener('click', handleWrongWordClick)
-        
+        window.addEventListener('mousemove', getMouseMoveCoordinates);
+        document?.addEventListener('click', handleWrongWordClick);        
         return () => {
-            window.removeEventListener('mousemove', getMouseMoveCoordinates)
-            document.removeEventListener('click', handleWrongWordClick)
-            // window.removeEventListener('resize', handleWrongWordClick)
+            window.removeEventListener('mousemove', getMouseMoveCoordinates);
+            document.removeEventListener('click', handleWrongWordClick);
+            // window.removeEventListener('resize', handleWrongWordClick);
         }
     }, [])
     
     useEffect(() => {
         if(clickedWrongWordRef.current !== null){
-            window.addEventListener('resize', setPopOnPosition)
-          
+            window.addEventListener('resize', setPopOnPosition);          
             return () => {
-                window.removeEventListener('resize', setPopOnPosition)
+                window.removeEventListener('resize', setPopOnPosition);
             }
         }
-    }, [clickedWrongWordRef.current])
+    }, [clickedWrongWordRef.current]);
 
     useEffect(() => {
         if (!showIndividualAssignManage && taskId !== null) {
-            getTaskAssignInfo(taskId)
+            getTaskAssignInfo(taskId);
         }
-    }, [showIndividualAssignManage])
-
+    }, [showIndividualAssignManage]);
     
     useEffect(() => {
         if (languageListOptions !== null) {
-            setSelectedLanguageSwitch(languageListOptions[0])
+            setSelectedLanguageSwitch(languageListOptions[0]);
         }
-    }, [languageListOptions])
+    }, [languageListOptions]);
 
     useEffect(() => {
         if (selectedLanguageSwitch !== null) {
             if(selectedLanguageSwitch?.value !== undefined){
-                getTranslatedTextByTaskId(selectedLanguageSwitch?.value)
+                getTranslatedTextByTaskId(selectedLanguageSwitch?.value);
             }
-            setIsMainMtChanged(false)
-            // getTaskAssignInfo(selectedLanguageSwitch?.value)
-            setIsCustomizationProcessing(true)
-            setIsSourceTextLoading(true)
-            setTaskId(selectedLanguageSwitch?.value)
-            temptaskid.current = selectedLanguageSwitch?.value
+            setIsMainMtChanged(false);
+            // getTaskAssignInfo(selectedLanguageSwitch?.value);
+            setIsCustomizationProcessing(true);
+            setIsSourceTextLoading(true);
+            setTaskId(selectedLanguageSwitch?.value);
+            temptaskid.current = selectedLanguageSwitch?.value;
         }
-    }, [selectedLanguageSwitch])
+    }, [selectedLanguageSwitch]);
 
     
     // detect if any changes in target languages
@@ -947,12 +878,10 @@ const InstantTextTranslate = (props) => {
             });
             let targetLangToRemove = editJobs?.filter((each) => each?.target_language !== null && !a.includes(each.id));
             let arr1 = editedTargetLanguage?.filter(o1 => !editJobs?.some(o2 => o1.id === o2.target_language));
-            setNewTargetLanguages(arr1)
+            setNewTargetLanguages(arr1);
             setTargetLangListToRemove(targetLangToRemove);
         }
     }, [editedTargetLanguage]);
-
-
 
     // for open task case 
     useEffect(() => {
@@ -962,39 +891,36 @@ const InstantTextTranslate = (props) => {
         ) {
             let projectId = URL_SEARCH_PARAMS.get("project");
             let task_id = URL_SEARCH_PARAMS.get("task");
-            isOpenFromList.current = true
-            setIsSourceTextLoading(true)
-            setIsCustomizationProcessing(true)
+            isOpenFromList.current = true;
+            setIsSourceTextLoading(true);
+            setIsCustomizationProcessing(true);
             if(task_id !== undefined && task_id !== null){
-                getTranslatedTextByTaskId(task_id)
+                getTranslatedTextByTaskId(task_id);
             }
-            setTaskId(task_id)
+            setTaskId(task_id);
             temptaskid.current = task_id;
         }
     }, [targetLanguageOptionsRef.current]);
-
 
     // for open task case 
     useEffect(() => {
         if (URL_SEARCH_PARAMS.get("project") && URL_SEARCH_PARAMS.get("task") === null && targetLanguageOptionsRef.current?.length !== 0) {
             let projectId = URL_SEARCH_PARAMS.get("project");
-            vendorDashboard(projectId)
-            editExpressProject(projectId)
+            vendorDashboard(projectId);
+            editExpressProject(projectId);
         }
     }, [targetLanguageOptionsRef.current, URL_SEARCH_PARAMS.get("project")]);
 
-
     useEffect(() => {
         if (location.state?.filename !== undefined) {
-            setprojectName(location.state?.filename)
-            projectNameRef.current.innerText = location.state?.filename
-            projectNameRef.current?.blur()
+            setprojectName(location.state?.filename);
+            projectNameRef.current.innerText = location.state?.filename;
+            projectNameRef.current?.blur();
         }
         if (location.state?.prevPageInfo) {
-            prevPageInfo.current = location.state?.prevPageInfo
+            prevPageInfo.current = location.state?.prevPageInfo;
         }
-    }, [location.state])
-
+    }, [location.state]);
     
     useEffect(() => {
         alreadySelecetedTarLangID.length !== 0 &&
@@ -1003,8 +929,7 @@ const InstantTextTranslate = (props) => {
 
     useEffect(() => {
         let scrollingDiv = document.querySelector('.ai-new-project-setup-wrapper')
-        if (scrollingDiv) handleScroll()
-
+        if (scrollingDiv) handleScroll();
         scrollingDiv?.addEventListener('scroll', handleScroll);
         return () => {
             scrollingDiv?.removeEventListener('scroll', handleScroll);
@@ -1014,15 +939,14 @@ const InstantTextTranslate = (props) => {
     useEffect(() => {
         if (translateResultText) {
             // based on the target content length decide whether it should be stick or not
-            handleScroll()
-            debounce(symSpellCheck)
+            handleScroll();
+            debounce(symSpellCheck);
         }
-    }, [translateResultText])
-
+    }, [translateResultText]);
 
     useEffect(() => {
         if (selectedTaskDetails !== null && (userDetails?.agency ? selectedTaskDetails?.task_data?.task_reassign_info === null : selectedTaskDetails?.task_data?.task_assign_info === null)) {
-            setShowAssignIcon(true)
+            setShowAssignIcon(true);
         }
         if (editorId !== null && selectedTaskDetails !== null) {
             if (
@@ -1032,82 +956,77 @@ const InstantTextTranslate = (props) => {
                     (selectedTaskDetails?.task_data?.task_assign_info?.find(each => ((userDetails.pk === each?.assign_to_details.id || each?.assign_to_details.managers?.find(user => user === userDetails.pk)) && each.task_assign_detail.step === 1 && each.task_ven_status === 'task_accepted' && each.task_assign_detail.task_status !== 'Completed' && each.task_assign_detail.task_status !== 'Return Request')))
                 )
             ) {
-                setShowAssignIcon(true)
+                setShowAssignIcon(true);
             }
         }
-    }, [selectedTaskDetails, editorId])
+    }, [selectedTaskDetails, editorId]);
 
     useEffect(()=>{
         if(taskId != null){
-            spellCheckAvailability()
+            spellCheckAvailability();
         }
-    },[taskId])
-
+    },[taskId]);
 
     useEffect(() => {
         setTranslateResultText('')
-        copyTarDivRef.current.innerHTML = ''
-        let scrollingDiv = document.querySelector('.ai-working-col-wrapper')
-        // console.log(scrollingDiv)
-        scrollingDiv.scrollTo({ top: 0 })
+        copyTarDivRef.current.innerHTML = '';
+        let scrollingDiv = document.querySelector('.ai-working-col-wrapper');
+        scrollingDiv.scrollTo({ top: 0 });
         if (translatedTextTab === 1) {
-            let tarPTag2 = document.createElement('p')
-            tarPTag2.innerHTML = translatedText?.target_text?.replace(/\n/g, "<br />") == undefined ? sanitizeHtml('') : sanitizeHtml(translatedText?.target_text?.replace(/\n/g, "<br />"))
-            // summernoteEditorRef.current?.summernote('code', tarPTag2)
-            // tarDivRef.current.value = translatedText?.target_text == undefined ? '' : translatedText?.target_text
-            setTranslateResultText(translatedText?.target_text == undefined ? '' : translatedText?.target_text)
-            copyTarDivRef.current.innerHTML = translatedText?.target_text == undefined ? '' : translatedText?.target_text
+            let tarPTag2 = document.createElement('p');
+            tarPTag2.innerHTML = translatedText?.target_text?.replace(/\n/g, "<br />") == undefined ? sanitizeHtml('') : sanitizeHtml(translatedText?.target_text?.replace(/\n/g, "<br />"));
+            // summernoteEditorRef.current?.summernote('code', tarPTag2);
+            // tarDivRef.current.value = translatedText?.target_text == undefined ? '' : translatedText?.target_text;
+            setTranslateResultText(translatedText?.target_text == undefined ? '' : translatedText?.target_text);
+            copyTarDivRef.current.innerHTML = translatedText?.target_text == undefined ? '' : translatedText?.target_text;
             if (tarDivRef.current?.value?.length !== 0) {
-                setIsTarTextEmpty(false)
+                setIsTarTextEmpty(false);
             }
         } else {
-            expressCustomization()
+            expressCustomization();
         }
     }, [translatedTextTab])
 
     useEffect(() => {
         if (confirmedNavigation && lastLocation) {
             // Navigate to the previous blocked location with your navigate function
-            history(lastLocation.pathname)
+            history(lastLocation.pathname);
         }
-    }, [confirmedNavigation, history, lastLocation])
-
-
-    useEffect(() => {
-        setShowEditorAssignModal(false)
-    }, [selectedLanguageSwitch])
+    }, [confirmedNavigation, history, lastLocation]);
 
     useEffect(() => {
-        setConfirmedNavigation(false)
+        setShowEditorAssignModal(false);
+    }, [selectedLanguageSwitch]);
+
+    useEffect(() => {
+        setConfirmedNavigation(false);
         if ((srcDivRef.current.value?.length !== 0 && sourceLanguage && targetLanguage)) {
-            checkform.current = true
+            checkform.current = true;
         }
         else {
-            checkform.current = false
+            checkform.current = false;
         }
-
-    }, [translateContent, sourceLanguage, targetLanguage])
-    
+    }, [translateContent, sourceLanguage, targetLanguage]);    
 
     useEffect(() => {
         if (autoDetectIndication) {
             setTimeout(() => {
-                setAutoDetectIndication(false)
+                setAutoDetectIndication(false);
             }, 10000);
         }
-    }, [autoDetectIndication])
+    }, [autoDetectIndication]);
 
     useEffect(() => {
         if (sourceText?.trim() !== '' && autoDetectFireEnable.current) {
             if (isOpenFromList.current == false && URL_SEARCH_PARAMS.get("project") == null) {
-                debounce(detectSourceLanguage)
+                debounce(detectSourceLanguage);
             }
         }
-    }, [sourceText])
+    }, [sourceText]);
 
     useEffect(() => {
-        detectBrowserName()
-    }, [])
+        detectBrowserName();
+    }, []);
 
     // useEffect(() => {
     //     var trap = false;
@@ -1138,7 +1057,6 @@ const InstantTextTranslate = (props) => {
     //                 // debounced(getspellcheck);
     //             },
     //             onEnter: function() {
-    //             // console.log('Enter/Return key pressed');
     //             },
     //             onImageUpload: function (data) {
     //                 data.pop();
@@ -1211,23 +1129,17 @@ const InstantTextTranslate = (props) => {
     //                 }
     //             },
     //             onChange: function(e) {
-    //                 setSourceTextLength(count(document.querySelector('.note-editable').innerText.replace(/\n/g, ''))?.chars)
+    //                 setSourceTextLength(count(document.querySelector('.note-editable').innerText.replace(/\n/g, ''))?.chars);
     //                 if(document.querySelector('.note-editable').innerText?.length === 0){
-    //                     // autoDetectFireEnable.current = true
+    //                     // autoDetectFireEnable.current = true;
     //                 }
-    //                 // setSourceText(document.querySelector('.note-editable').innerText)
-    //                 // console.log(getSummerNotePlainText(sourceSummernoteRef.current)?.replace(/\n/g, "")?.replace(/\r/g, ""))
-    //                 // console.log(taskDataFromApi.current?.source_text?.replace(/\n/g, "")?.replace(/\r/g, ""))
-    //                 // console.log(taskDataFromApi.current?.source_text?.replace(/\n/g, "") == document.querySelector('.note-editable').innerText?.replace(/\n/g, ""))
-    //                 // console.log("src-summer: " + getSummerNotePlainText(sourceSummernoteRef.current)?.replace(/\n/g, "")?.replace(/\r/g, ""))
-    //                 // console.log("task data: " + taskDataFromApi.current?.source_text?.replace(/\n/g, " "))
+    //                 // setSourceText(document.querySelector('.note-editable').innerText);
 
     //                 if(getSummerNotePlainText(sourceSummernoteRef.current)?.replace(/\n/g, "")?.replace(/\r/g, "") !== taskDataFromApi.current?.source_text?.replace(/\n/g, "")?.replace(/\r/g, "")){
-    //                     setIsSourceTextChanged(true)
+    //                     setIsSourceTextChanged(true);
     //                 }else{
-    //                     setIsSourceTextChanged(false)
+    //                     setIsSourceTextChanged(false);
     //                 }
-
     //             },
     //             onImageUpload: function (data) {
     //                 data.pop();
@@ -1256,32 +1168,27 @@ const InstantTextTranslate = (props) => {
     //     $('.src-summernote').summernote('removeModule', 'autoLink');
     // }, [])
 
-
-
     useEffect(() => {
         setMtOptionsSelect(mtpeEngineOptions[0])
-    }, [mtpeEngineOptions])
+    }, [mtpeEngineOptions]);
 
     useEffect(() => {
         if (targetLanguage || editedTargetLanguage) {
-            let list = ""
+            let list = "";
             if (createdProject) {
                 if (editedTargetLanguage !== '') {
                     editedTargetLanguage?.map((each, index) => {
-                        list += `${each?.language}${index !== editedTargetLanguage?.length - 1 ? ", " : ""
-                            }`;
+                        list += `${each?.language}${index !== editedTargetLanguage?.length - 1 ? ", " : ""}`;
                     });
                 }
             } else {
                 targetLanguage?.map((each, index) => {
-                    list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""
-                        }`;
+                    list += `${each?.language}${index !== targetLanguage?.length - 1 ? ", " : ""}`;
                 });
             }
-            setTargetLanguageListTooltip(list)
+            setTargetLanguageListTooltip(list);
         }
-    }, [targetLanguage, targetLanguageOptionsRef.current, editedTargetLanguage])
-
+    }, [targetLanguage, targetLanguageOptionsRef.current, editedTargetLanguage]);
 
     useEffect(() => {
         setDidMount(true); //Component mounted
@@ -1297,11 +1204,10 @@ const InstantTextTranslate = (props) => {
             tempDictateLang.push({
                 value: each.code,
                 label: each.name
-            })
-        })
-        setDictationLanguageOptions(tempDictateLang)
+            });
+        });
+        setDictationLanguageOptions(tempDictateLang);
     }, []);
-
 
     /* Check for clicing outside of the social panel */
     useEffect(() => {
@@ -1310,9 +1216,7 @@ const InstantTextTranslate = (props) => {
                 setShareIconsPanel(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -1325,14 +1229,11 @@ const InstantTextTranslate = (props) => {
                 setDownoadPanel(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     });
-
 
     /* Check for clicing outside of the Assign dropdown panel */
     useEffect(() => {
@@ -1341,45 +1242,32 @@ const InstantTextTranslate = (props) => {
                 setAssignToDrpdown(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     });
 
     // mt-engine filter =========================================================
-
     useEffect(() => {
-        // console.log(sourceLanguage)
         const sourceFilter = allLangDetailsList?.filter(
             (each) => each?.language === sourceLanguage
         );
-        // console.log(sourceFilter)
         const srcTranslateFilterRes = sourceFilter?.filter(
             (each) => each?.translate === true
         );
-        // console.log(srcTranslateFilterRes)
-
         let sortedSrcMtpe = srcTranslateFilterRes?.map((each) => {
             return each?.mtpe_engines;
         });
-        // console.log(sortedSrcMtpe)
         setCommonSrcValue(sortedSrcMtpe);
-
         // remove the source language from the target language list
         setTargetLanguageOptions(targetLanguageOptionsRef.current?.filter(each => each.id !== sourceLanguage))
         if (targetLanguage !== '') {
-            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage))
+            setTargetLanguage(targetLanguage?.filter(each => each?.id !== sourceLanguage));
         }
-        //   console.log(allLangDetailsList.find(function(each){each.language === sourceLanguage})
-
-
         // if(sourceSummernoteRef.current !== null){
         //     if(targetLanguage[0]?.id === 4 || targetLanguage[0]?.id === 31 || targetLanguage[0]?.id === 83 || targetLanguage[0]?.id === 31
-        //         || targetLanguage[0]?.id === 60 || targetLanguage[0]?.id === 101 || targetLanguage[0]?.id === 88 || targetLanguage[0]?.id === 106){
-        //         // console.log(document.querySelector('.ai-text-translate-work-container .source-summernote .note-editor.card .note-editable'))       
+        //         || targetLanguage[0]?.id === 60 || targetLanguage[0]?.id === 101 || targetLanguage[0]?.id === 88 || targetLanguage[0]?.id === 106){      
         //         document.querySelector('.ai-text-translate-work-container .source-summernote .note-editor.card .note-editable')
         //             .style = 'direction: rtl !important; text-align: right !important;' 
         //     } else{
@@ -1387,22 +1275,19 @@ const InstantTextTranslate = (props) => {
         //             .style = 'direction: ltr !important; text-align: left !important;' 
         //     }
         // }
-
         if (sourceLanguage === 4 || sourceLanguage === 31 || sourceLanguage === 83 || sourceLanguage === 31
             || sourceLanguage === 60 || sourceLanguage === 101 || sourceLanguage === 88 || sourceLanguage === 106) {
-            srcDivRef.current.style.setProperty("direction", "rtl")
-            srcDivRef.current.style.setProperty("text-align", "right")
+            srcDivRef.current.style.setProperty("direction", "rtl");
+            srcDivRef.current.style.setProperty("text-align", "right");
         } else {
-            srcDivRef.current.style.setProperty("direction", "ltr")
-            srcDivRef.current.style.setProperty("text-align", "left")
+            srcDivRef.current.style.setProperty("direction", "ltr");
+            srcDivRef.current.style.setProperty("text-align", "left");
         }
     }, [sourceLanguage]);
 
     useEffect(() => {
-        // console.log(targetLanguage)
         let targetArr = [];
         for (let i = 0; i < targetLanguage?.length; i++) {
-            // console.log(targetLanguage[i].id)
             targetArr?.push(
                 allLangDetailsList?.filter(
                     (each2) => each2?.language === targetLanguage[i]?.id
@@ -1412,8 +1297,6 @@ const InstantTextTranslate = (props) => {
         const tarTranslateFilter = targetArr?.map((each) => {
             return each?.filter((eachTargetArr) => eachTargetArr?.translate === true);
         });
-
-        // console.log(tarTranslateFilter)
         let sortedTarMtpe = tarTranslateFilter?.map((each) => {
             return each.map((each2) => {
                 return each2?.mtpe_engines;
@@ -1424,15 +1307,12 @@ const InstantTextTranslate = (props) => {
                 return a?.indexOf(v) !== -1;
             });
         });
-        // console.log(commonTarMtpeEngine)
         setCommonTarValue(commonTarMtpeEngine);
-
         // code to aligning the right aligned language  
         // if(summernoteEditorRef.current !== null){
         //     // 83 31 60 101 88 106
         //     if(targetLanguage[0]?.id === 4 || targetLanguage[0]?.id === 31 || targetLanguage[0]?.id === 83 || targetLanguage[0]?.id === 31
         //         || targetLanguage[0]?.id === 60 || targetLanguage[0]?.id === 101 || targetLanguage[0]?.id === 88 || targetLanguage[0]?.id === 106){
-        //         // console.log(document.querySelector('.ai-text-translate-work-container .instant-translate-row .target-summernote .note-editor.card .note-editable'))
         //         document.querySelector('.ai-text-translate-work-container .instant-translate-row .target-summernote .note-editor.card .note-editable')
         //             .style = 'direction: rtl !important; text-align: right !important;' 
         //     } else{
@@ -1447,7 +1327,6 @@ const InstantTextTranslate = (props) => {
         const common = commonSrcValue?.filter((value) =>
             commonTarValue?.includes(value)
         );
-        // console.log(common)
         setCommonMtpeEngine(common);
     }, [commonSrcValue, commonTarValue]);
 
@@ -1463,7 +1342,7 @@ const InstantTextTranslate = (props) => {
             })
         );
         setMtpeEngineOptions(engines);
-        mtEngineOptionsRef.current = engines
+        mtEngineOptionsRef.current = engines;
     }, [commonMtpeEngine]);
 
 
@@ -1489,17 +1368,14 @@ const InstantTextTranslate = (props) => {
     //           })
     //         );
     //         if(engines?.filter((each) => each.value === selectedMTEngine.value).length ? false : true){
-    //           setSelectedMTEngine(mtpeEngineOptions?.filter((each) => each?.value === 1))
+    //           setSelectedMTEngine(mtpeEngineOptions?.filter((each) => each?.value === 1));
     //         }else if(engines.length > 1){
-    //             setSelectedMTEngine(selectedMTFromAPI)
+    //             setSelectedMTEngine(selectedMTFromAPI);
     //         }
     //     }
-    // }, [targetLanguage, commonMtpeEngine])
-
-
+    // }, [targetLanguage, commonMtpeEngine]);
 
     // ==========================================================================
-
     // This is calculate the sticky element bottom and the div element bottom 
     // and decide whether the rewrite bar should be sticky or not 
     const handleScroll = () => {
@@ -1531,35 +1407,32 @@ const InstantTextTranslate = (props) => {
         );
     };
 
-
     const detectSourceLanguage = () => {
         if (sourceText?.split(' ')?.length >= 2) {
-            autoDetectFireEnable.current = false
+            autoDetectFireEnable.current = false;
+
             Config.axios({
                 headers: header,
                 url: Config.BASE_URL + "/auth/lang_detect/?text=" + sourceText.split(' ').splice(0, 10).join(" "),
                 auth: true,
                 success: (response) => {
-                    setSourceLanguage(response.data?.lang_id)
-                    setSourceLabel(response.data?.language)
-                    setAutoDetectIndication(true)
+                    setSourceLanguage(response.data?.lang_id);
+                    setSourceLabel(response.data?.language);
+                    setAutoDetectIndication(true);
                 },
                 error: (err) => {
-                    setAutoDetectIndication(false)
+                    setAutoDetectIndication(false);
                 }
             });
         }
     }
-
     
     const handleProjectEnter = (e) => {
         e.which === 13 ? e.target.blur() : e.target.focus();
     }
-
     
     const handleDateChange = (newValue) => {
         setDeadline(newValue);
-        // console.log(newValue)
     };
 
     const handleInstructToggle = () => {
@@ -1578,7 +1451,6 @@ const InstantTextTranslate = (props) => {
         });
         return text;
     };
-
     
     const debounce = (callback) => {
         if (typingTimeout.current) clearTimeout(typingTimeout.current);
@@ -1589,7 +1461,6 @@ const InstantTextTranslate = (props) => {
         }, 500);
     };
 
-    
     /* Get source language options */
     const getSourceLanguages = () => {
         let params = {
@@ -1615,43 +1486,41 @@ const InstantTextTranslate = (props) => {
         setshowSrcLangModal(false);
         setSourceLabel(name);
         setError({ ...error, sourceLanguage: "" });
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     /* Handling target language selection */
     const handleTargetLangClick = (value, e) => {
-
         let targetLanguageTemp = createdProject ? (editedTargetLanguage?.length !== 0 ? editedTargetLanguage : []) : (targetLanguage?.length !== 0 ? targetLanguage : []);
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
             if (targetLanguageTemp?.length === 1) {
-                Config.toast(t("one_lang_must_select"), 'warning')
+                Config.toast(t("one_lang_must_select"), 'warning');
                 return;
             }
-            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.remove("selected") : e.target.parentNode.classList.remove("selected");
             targetLanguageTemp = Config.removeItemFromArray(
                 targetLanguageTemp,
                 value
             );
         } else {
-            e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected")
+            e.target.nodeName !== "IMG" ? e.target.classList.add("selected") : e.target.parentNode.classList.add("selected");
             targetLanguageTemp.push(value);
         }
 
         if (createdProject) {
-            setEditedTargetLanguage([...new Set(targetLanguageTemp)])
+            setEditedTargetLanguage([...new Set(targetLanguageTemp)]);
         } else {
             setTargetLanguage([...new Set(targetLanguageTemp)]);
         }
-
-        setSearchInput('')
-        setOnFocusWrap(false)
+        setSearchInput('');
+        setOnFocusWrap(false);
     };
 
     const handleHideIcon = () => {
         if (!isOpenFromList.current) {
             projectNameRef.current.focus();
-            setHasFocus(true)
+            setHasFocus(true);
         }
     }
 
@@ -1660,14 +1529,14 @@ const InstantTextTranslate = (props) => {
         if (e.target.innerText == "" || e.target.textContent == "") {
             // setValidationState({
             //     projectName: true
-            // })
-            projectNameRef.current.scrollIntoView()
+            // });
+            projectNameRef.current.scrollIntoView();
             projectNameRef.current.focus();
             setHasFocus(true);
         } else {
             setValidationState({
                 projectName: false
-            })
+            });
         }
     }
 
@@ -1677,7 +1546,6 @@ const InstantTextTranslate = (props) => {
             url: Config.BASE_URL + "/app/mt-language-support/",
             auth: true,
             success: (response) => {
-                // console.log(response.data)
                 setAllLangDetailsList(response.data);
             },
         };
@@ -1691,7 +1559,7 @@ const InstantTextTranslate = (props) => {
             auth: true,
             success: (response) => {
                 setMtpeEngines(response?.data);
-                mtpeEngineRef.current = response?.data
+                mtpeEngineRef.current = response?.data;
             },
         });
     };
@@ -1708,7 +1576,7 @@ const InstantTextTranslate = (props) => {
                 });
                 setTimeout(() => {
                     setCurrencyOptions(currencyOptionsTemp);
-                    currencyOptionsRef.current = currencyOptionsTemp
+                    currencyOptionsRef.current = currencyOptionsTemp;
                 }, 200);
             },
         });
@@ -1726,16 +1594,15 @@ const InstantTextTranslate = (props) => {
                 });
                 setTimeout(() => {
                     setUnitTypeOptions(unitTypeOptionsTemp);
-                    unitTypeOptionRef.current = unitTypeOptionsTemp
+                    unitTypeOptionRef.current = unitTypeOptionsTemp;
                 }, 200);
             },
         });
     };
 
     const handleAssignedSwitcher = (switchId) => {
-        setAssignedEditorSwitch(switchId)
+        setAssignedEditorSwitch(switchId);
     }
-
 
     function getDifference() {
         return targetLanguageOptionsRef.current.filter((object1) => {
@@ -1749,10 +1616,8 @@ const InstantTextTranslate = (props) => {
         setEditFilteredTargetLang(getDifference());
     };
 
-
-
     const getLanguagesNameFromID = (id) => {
-        return targetLanguageOptionsRef.current?.find(each => each.id == id)?.language
+        return targetLanguageOptionsRef.current?.find(each => each.id == id)?.language;
     }
 
     /* List tasks for specific project */
@@ -1762,38 +1627,33 @@ const InstantTextTranslate = (props) => {
             auth: true,
             success: (response) => {
                 let { data } = response;
-
                 if (createdProject === null) {
-                    setCreatedProject(response.data)
+                    setCreatedProject(response.data);
                 }
-
-                let list = []
-                let tempTarLang = []
-                let tarID = []
+                let list = [];
+                let tempTarLang = [];
+                let tarID = [];
 
                 data?.map((job) => {
                     if (job?.target_language !== null) {
                         list.push({
                             value: job.id,  //task id
                             label: getLanguagesNameFromID(job.target_language)  //target lang
-                        })
-                        tarID.push(job.id)
+                        });
+                        tarID.push(job.id);
                         // tempTarLang.push(
                         //     targetLanguageOptionsRef.current?.find((element) => element.language == job.target_language)
                         // );
                     }
                 });
-                // setAlreadySelecetedTarLangID(tarID)
-                setJobs(tempTarLang)
-
-                // setEditedTargetLanguage(tempTarLang)
-                // editJobRef.current = tempTarLang 
-                setLanguageListOptions(list)
-
+                // setAlreadySelecetedTarLangID(tarID);
+                setJobs(tempTarLang);
+                // setEditedTargetLanguage(tempTarLang);
+                // editJobRef.current = tempTarLang;
+                setLanguageListOptions(list);
             },
         });
     };
-
 
     const editExpressProject = (projectId) => {
         Config.axios({
@@ -1801,16 +1661,13 @@ const InstantTextTranslate = (props) => {
             auth: true,
             success: (response) => {
                 let { data } = response;
-
                 setEditJobs(data?.jobs);
-
                 let tarID = [];
                 response.data?.jobs?.map((each) => {
                     let a = each?.source_target_pair_names?.split("->");
                     tarID.push(each.target_language);
                 });
                 let editTargetLanguages = [];
-
                 data?.jobs?.map((job) => {
                     if (job?.target_language !== null) {
                         editTargetLanguages.push(
@@ -1820,12 +1677,11 @@ const InstantTextTranslate = (props) => {
                         );
                     }
                 });
-
                 setTimeout(() => {
-                    setEditedTargetLanguage(editTargetLanguages)
-                    setAlreadySelecetedTarLangID(tarID)
+                    setEditedTargetLanguage(editTargetLanguages);
+                    setAlreadySelecetedTarLangID(tarID);
                 }, 50);
-                setHasTeam(data.team)
+                setHasTeam(data.team);
             },
         });
     }
@@ -1858,29 +1714,22 @@ const InstantTextTranslate = (props) => {
             .replace(/<\/p>/gi, "\n")
             .replace(/<br\/?>/gi, "\n")
             .replace(/<\/?[^>]+(>|$)/g, "");
-        // console.log(unescape(plainText))
-        return unescape(plainText)
+        return unescape(plainText);
     }
 
     const createExpressProject = (from) => {
         let formData = new FormData();
-
         if (projectName !== null && projectName?.trim() !== "") {
             formData.append("project_name", projectName);
         }
-
         // formData.append("text_data", getSummerNotePlainText(sourceSummernoteRef.current));
         formData.append("text_data", srcDivRef.current.value.trim());
-
         formData.append("source_language", sourceLanguage);
-
         targetLanguage.map((eachTargetLanguage) => {
             formData.append("target_languages", eachTargetLanguage?.id);
         });
-
         formData.append("mt_engine", selectedMTEngine?.value ? selectedMTEngine?.value : 1
         );
-
         formData.append("pre_translate", true);
         setIsCustomizationProcessing(true)
 
@@ -1891,16 +1740,16 @@ const InstantTextTranslate = (props) => {
             data: formData,
             auth: true,
             success: (response) => {
-                setCreatedProject(response.data.Res)
-                setIsSourceTextChanged(false)
-                setIsMainMtChanged(false)
-                // translatedtrue.current = true 
-                setMtEngineLable(mtpeEngineRef.current?.find(each => each.id === selectedMTEngine?.value)?.name?.replaceAll('_', ' '))
+                setCreatedProject(response.data.Res);
+                setIsSourceTextChanged(false);
+                setIsMainMtChanged(false);
+                // translatedtrue.current = true ;
+                setMtEngineLable(mtpeEngineRef.current?.find(each => each.id === selectedMTEngine?.value)?.name?.replaceAll('_', ' '));
                 // Config.toast("Project created successfully");
-                history(`/create/translate/text/instant-text?project=${response.data?.project_id}`)
+                history(`/create/translate/text/instant-text?project=${response.data?.project_id}`);
                 if (from === 'compare-mt') {
-                    setCompareMTLoader(false)
-                    setInstantCompareMTVisible(false)
+                    setCompareMTLoader(false);
+                    setInstantCompareMTVisible(false);
                 }
             },
         });
@@ -1908,19 +1757,15 @@ const InstantTextTranslate = (props) => {
 
     const updateExpressProject = (key) => {
         // save the target changes first
-        saveChanges('target-save')
-        setTranslatedTextTab(1)
+        saveChanges('target-save');
+        setTranslatedTextTab(1);
         let formdata = new FormData();
         // setClickedOpenButton("key")
-        setIsUpdating(true)
+        setIsUpdating(true);
         formdata.append("source_language", sourceLanguage);
-
         formdata.append("project_name", projectName);
-
         formdata.append("team", hasTeam);
-
         // formdata.append("mt_engine", selectedMTEngine?.value ? selectedMTEngine?.value : 1);
-
         // editedTargetLanguage?.map((eachTargetLanguage) => {
         //     if (
         //       targetLanguage.find(
@@ -1937,8 +1782,6 @@ const InstantTextTranslate = (props) => {
             )
                 formdata.append("target_languages", eachTargetLanguage?.id);
         });
-
-
         let list = "";
         targetLangListToRemove?.map((each, index) => {
             list += `${each.id}${index !== targetLangListToRemove.length - 1 ? "," : ""
@@ -1957,19 +1800,16 @@ const InstantTextTranslate = (props) => {
             auth: true,
             success: (response) => {
                 Config.toast("Project updated successfully");
-                vendorDashboard(response.data.id)
-                editExpressProject(response.data.id)
-                // history(`/file-upload?page=${prevPageInfo.current?.pageNo}&order_by=${prevPageInfo.current?.orderBy}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId}`)
-                setIsUpdating(false)
+                vendorDashboard(response.data.id);
+                editExpressProject(response.data.id);
+                // history(`/file-upload?page=${prevPageInfo.current?.pageNo}&order_by=${prevPageInfo.current?.orderBy}${(prevPageInfo.current?.projectTypeFilter !== 'all' && prevPageInfo.current?.projectTypeFilter != null) ? `&filter=${prevPageInfo.current?.projectTypeFilter}` : ""}${prevPageInfo.current?.search != null ? `&search=${prevPageInfo.current?.search}` : ""}&open-project=${prevPageInfo.current?.projectId}`);
+                setIsUpdating(false);
             },
             error: (err) => {
-                setIsUpdating(false)
+                setIsUpdating(false);
             }
         });
     }
-
-
-
 
     const getTranslatedTextByTaskId = (taskID, from) => {
         let params = {
@@ -1977,31 +1817,30 @@ const InstantTextTranslate = (props) => {
             auth: true,
             success: (response) => {
                 if (response.data?.msg !== undefined) {
-                    setShowCreditAlertModal(true)
-                    setIsCustomizationProcessing(false)
-                    taskInsufficientCreditRef.current = response.data?.msg
-                    setTaskInsufficientCredit(true)
+                    setShowCreditAlertModal(true);
+                    setIsCustomizationProcessing(false);
+                    taskInsufficientCreditRef.current = response.data?.msg;
+                    setTaskInsufficientCredit(true);
                 } else {
-                    taskInsufficientCreditRef.current = undefined
-                    setTaskInsufficientCredit(false)
+                    taskInsufficientCreditRef.current = undefined;
+                    setTaskInsufficientCredit(false);
                 }
-
                 if (response.data.Res.target_lang_id === 4 || response.data.Res.target_lang_id === 31 || response.data.Res.target_lang_id === 83 || response.data.Res.target_lang_id === 31
                     || response.data.Res.target_lang_id === 60 || response.data.Res.target_lang_id === 101 || response.data.Res.target_lang_id === 88 || response.data.Res.target_lang_id === 106) {
-                    tarDivRef.current.style.setProperty("direction", "rtl")
-                    tarDivRef.current.style.setProperty("text-align", "right")
-                    copyTarDivRef.current.style.setProperty("direction", "rtl")
-                    copyTarDivRef.current.style.setProperty("text-align", "right")
+                    tarDivRef.current.style.setProperty("direction", "rtl");
+                    tarDivRef.current.style.setProperty("text-align", "right");
+                    copyTarDivRef.current.style.setProperty("direction", "rtl");
+                    copyTarDivRef.current.style.setProperty("text-align", "right");
                     
                 } else {
-                    tarDivRef.current.style.setProperty("direction", "ltr")
-                    tarDivRef.current.style.setProperty("text-align", "left")
-                    copyTarDivRef.current.style.setProperty("direction", "ltr")
-                    copyTarDivRef.current.style.setProperty("text-align", "left")
+                    tarDivRef.current.style.setProperty("direction", "ltr");
+                    tarDivRef.current.style.setProperty("text-align", "left");
+                    copyTarDivRef.current.style.setProperty("direction", "ltr");
+                    copyTarDivRef.current.style.setProperty("text-align", "left");
                 }
-
                 const search_params = new URLSearchParams(window.location.search);
                 if (search_params.get("project") !== null) {
+
                     Config.axios({
                         url: `${Config.BASE_URL}/workspace/project/quick/setup/${search_params.get("project")}/`,
                         auth: true,
@@ -2011,7 +1850,7 @@ const InstantTextTranslate = (props) => {
                                 url: `${Config.BASE_URL}/workspace/vendor/dashboard/${search_params.get("project")}`,
                                 auth: true,
                                 success: (taskResponse) => {
-                                    let task = taskResponse.data?.find(each => each.id == taskID)
+                                    let task = taskResponse.data?.find(each => each.id == taskID);
                                     selectedFileRow.current = {
                                         task: task.id,
                                         job: task.job,
@@ -2022,101 +1861,89 @@ const InstantTextTranslate = (props) => {
                                         bid_info: task.bid_job_detail_info,
                                         task_data: task,
                                         project_data: project
-                                    }
-                                    setSelectedTaskDetails(selectedFileRow.current)
-                                    getTaskAssignInfo(taskID)
+                                    };
+                                    setSelectedTaskDetails(selectedFileRow.current);
+                                    getTaskAssignInfo(taskID);
                                 },
-                                error: (err) => { }
+                                error: (err) => { 
+                                    console.error(err);
+                                }
                             });
                         },
-                        error: (err) => { }
+                        error: (err) => { 
+                            console.error(err);
+                        }
                     });
                 }
-
-                getCreditStatus()
-                taskDataFromApi.current = response.data.Res
-                setTranslatedText(response.data.Res)
-                setProjectId(response.data.Res?.project_id)
-                setJobId(response.data.Res?.job_id)
-                sourceLangIdRef.current = response.data.Res?.source_lang_id
-                targetLangIdRef.current = response.data.Res?.target_lang_id
-                projectNameRef.current.innerText = response.data.Res.project_name
-                setprojectName(response.data.Res.project_name)
-                translatedtrue.current = true
-                setIsCustomizationProcessing(false)
-                setIsSourceTextLoading(false)
-                let srcPTag = document.createElement('p')
-                srcPTag.innerHTML = response.data.Res?.source_text?.replace(/\n/g, "<br />")
-                // sourceSummernoteRef.current?.summernote('code', srcPTag)
-
-                srcDivRef.current.value = response.data.Res?.source_text
-
-                // tarDivRef.current.value = response.data.Res?.target_text ? response.data.Res?.target_text : ""
-                setTranslateResultText(response.data.Res?.target_text ? response.data.Res?.target_text : "")
-                copyTarDivRef.current.innerHTML = response.data.Res?.target_text ? response.data.Res?.target_text : ""
-
-                setSourceText(srcDivRef.current?.value)
-                setSourceTextLength(srcDivRef.current?.value?.length)
-
-                let tarPTag = document.createElement('p')
-                tarPTag.innerHTML = response.data.Res?.target_text?.replace(/\n/g, "<br />")
-                // summernoteEditorRef.current?.summernote('code', tarPTag)
-
-                setSourceLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.source_lang_id)?.language)
-                setSourceLanguage(response.data.Res?.source_lang_id)
-                setTargetLanguage(targetLanguageOptionsRef.current?.filter(each => each.id === response.data.Res?.target_lang_id))
-                setTargetLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.target_lang_id)?.language)
-                // console.log(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.target_lang_id)?.language)
-                // console.log(targetLanguageOptionsRef.current?.filter(each => each.id === response.data.Res?.target_lang_id))
-                enableassignrow.current = true
-                let engine = mtpeEngineRef.current?.find(each => each.id === response.data?.Res.mt_engine)
+                getCreditStatus();
+                taskDataFromApi.current = response.data.Res;
+                setTranslatedText(response.data.Res);
+                setProjectId(response.data.Res?.project_id);
+                setJobId(response.data.Res?.job_id);
+                sourceLangIdRef.current = response.data.Res?.source_lang_id;
+                targetLangIdRef.current = response.data.Res?.target_lang_id;
+                projectNameRef.current.innerText = response.data.Res.project_name;
+                setprojectName(response.data.Res.project_name);
+                translatedtrue.current = true;
+                setIsCustomizationProcessing(false);
+                setIsSourceTextLoading(false);
+                let srcPTag = document.createElement('p');
+                srcPTag.innerHTML = response.data.Res?.source_text?.replace(/\n/g, "<br />");
+                // sourceSummernoteRef.current?.summernote('code', srcPTag);
+                srcDivRef.current.value = response.data.Res?.source_text;
+                // tarDivRef.current.value = response.data.Res?.target_text ? response.data.Res?.target_text : "";
+                setTranslateResultText(response.data.Res?.target_text ? response.data.Res?.target_text : "");
+                copyTarDivRef.current.innerHTML = response.data.Res?.target_text ? response.data.Res?.target_text : "";
+                setSourceText(srcDivRef.current?.value);
+                setSourceTextLength(srcDivRef.current?.value?.length);
+                let tarPTag = document.createElement('p');
+                tarPTag.innerHTML = response.data.Res?.target_text?.replace(/\n/g, "<br />");
+                // summernoteEditorRef.current?.summernote('code', tarPTag);
+                setSourceLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.source_lang_id)?.language);
+                setSourceLanguage(response.data.Res?.source_lang_id);
+                setTargetLanguage(targetLanguageOptionsRef.current?.filter(each => each.id === response.data.Res?.target_lang_id));
+                setTargetLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.target_lang_id)?.language);
+                enableassignrow.current = true;
+                let engine = mtpeEngineRef.current?.find(each => each.id === response.data?.Res.mt_engine);
                 let engineOpt = {
                     value: engine.id,
                     label: engine.name?.replaceAll('_', ' ')
-                }
-
+                };
                 if (from === 'from-create' || from === 'from-translate') {
-                    storeCurrentTranslationInHistory("Translation")
+                    storeCurrentTranslationInHistory("Translation");
                 }
-
-                setSelectedMTEngine(engineOpt)
-
+                setSelectedMTEngine(engineOpt);
                 if (editProjectId !== null) {
-                    // textareaRef.current.value = response.data.Res?.source_text
+                    // textareaRef.current.value = response.data.Res?.source_text;
                 } else {
-                    let srcPTag2 = document.createElement('p')
-                    srcPTag2.innerHTML = response.data.Res?.source_text?.replace(/\n/g, "<br />")
-                    // sourceSummernoteRef.current?.summernote('code', srcPTag2)
-
-                    srcDivRef.current.value = response.data.Res?.source_text
-
-
-                    setTranslateContent(response.data.Res?.source_text)
-                    setSourceLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.source_lang_id)?.language)
-                    setSourceLanguage(response.data.Res?.source_lang_id)
-                    setTargetLanguage(targetLanguageOptionsRef.current?.filter(each => each.id === response.data.Res?.target_lang_id))
-                    setTargetLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.target_lang_id)?.language)
-                    setMtEngineLable(mtpeEngineRef.current?.find(each => each.id === response.data?.Res.mt_engine)?.name?.replaceAll('_', ' '))
+                    let srcPTag2 = document.createElement('p');
+                    srcPTag2.innerHTML = response.data.Res?.source_text?.replace(/\n/g, "<br />");
+                    // sourceSummernoteRef.current?.summernote('code', srcPTag2);
+                    srcDivRef.current.value = response.data.Res?.source_text;
+                    setTranslateContent(response.data.Res?.source_text);
+                    setSourceLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.source_lang_id)?.language);
+                    setSourceLanguage(response.data.Res?.source_lang_id);
+                    setTargetLanguage(targetLanguageOptionsRef.current?.filter(each => each.id === response.data.Res?.target_lang_id));
+                    setTargetLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.target_lang_id)?.language);
+                    setMtEngineLable(mtpeEngineRef.current?.find(each => each.id === response.data?.Res.mt_engine)?.name?.replaceAll('_', ' '));
                     if (!isOpenFromList.current) {
                     } else {
-                        let engine = mtpeEngineRef.current?.find(each => each.id === response.data?.Res.mt_engine)
+                        let engine = mtpeEngineRef.current?.find(each => each.id === response.data?.Res.mt_engine);
                         let engineOpt = {
                             value: engine.id,
                             label: engine.name?.replaceAll('_', ' ')
-                        }
-                        // console.log(engineOpt)
-                        setSelectedMTEngine(engineOpt)
+                        };
+                        setSelectedMTEngine(engineOpt);
                     }
                 }
-                setTargetLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.target_lang_id)?.language)
-                setShowProcessingModal(false)
-                setIsCustomizationProcessing(false)
-
+                setTargetLabel(targetLanguageOptionsRef.current?.find(each => each.id === response.data.Res?.target_lang_id)?.language);
+                setShowProcessingModal(false);
+                setIsCustomizationProcessing(false);
             },
             error: (err) => {
                 if (err.response?.status === 400) {
-                    setShowCreditAlertModal(true)
-                    setIsCustomizationProcessing(false)
+                    setShowCreditAlertModal(true);
+                    setIsCustomizationProcessing(false);
                 }
             }
         };
@@ -2126,12 +1953,11 @@ const InstantTextTranslate = (props) => {
     const handleMainMtChange = (selectedOption) => {
         setSelectedMTEngine(selectedOption);
         if (taskDataFromApi.current?.mt_engine !== selectedOption?.value) {
-            setIsMainMtChanged(true)
+            setIsMainMtChanged(true);
         } else {
-            setIsMainMtChanged(false)
+            setIsMainMtChanged(false);
         }
     }
-
 
     const spellCheckAvailability = () => {
         let formData = new FormData();
@@ -2142,9 +1968,7 @@ const InstantTextTranslate = (props) => {
             auth: true,
             data: formData,
             success: (response) => {
-                // console.log(response.data.out);
-                isSpellcheckAvailableRef.current = response.data.out
-                // console.log(response.data?.show_paraphrase_and_grammercheck);
+                isSpellcheckAvailableRef.current = response.data.out;
             },
         });
     }
@@ -2154,16 +1978,17 @@ const InstantTextTranslate = (props) => {
         // if (projectSelect?.value != null) {
         // let url = `${Config.BASE_URL}/workspace/assign_to/?project=${projectId}`;
         let url = `${Config.BASE_URL}/workspace/assign_to/?project=${projectId}&job=${jobId}`;
+
         Config.axios({
             url: url,
             auth: true,
             success: (response) => {
                 if (response.data?.external_editors) {
                     // allExternalEditors.current = response.data?.external_editors;
-                    let external_list = []
+                    let external_list = [];
                     response.data?.external_editors?.map(each => {
                         if (each?.status === "Invite Accepted") {
-                            external_list.push(each)
+                            external_list.push(each);
                         }
                     })
                     setExternalEditors(external_list);
@@ -2182,7 +2007,6 @@ const InstantTextTranslate = (props) => {
         setAssignBtnLoader(true)
         let url = `${Config.BASE_URL}/workspace/task_assign_info/`;
         let method = "POST";
-
         let formData = new FormData();
         // if (referenceFile?.size)
         //     // To check if it's a file because loading name attr when editing so checking with size
@@ -2191,44 +2015,32 @@ const InstantTextTranslate = (props) => {
         // selectedTaskIds?.map((value) => {
         // formData.append("task", selectedLanguageSwitch?.value || taskId);
         // });
-
         if (assignInstructionText?.trim() !== '') {
             formData.append("instruction", assignInstructionText?.trim());
         }
-
         // if(selectedEditor !== alreadySelectedEditor.current){
         formData.append("assign_to", selectedEditor);
         // }
-
-        // console.log(deadlineUTC);
         // if(deadlineUTC !== taskDetailsFromApi?.deadline){
         if (deadline !== null) {
             let deadlineUTC = Config.convertLocalToUTC(deadline);
             formData.append("deadline", deadlineUTC);
         }
         // }
-
         // if(additionalFiles?.length !== 0){
         //     for (let x = 0; x < additionalFiles.length; x++) {
         //         if (typeof additionalFiles[x] != "undefined") formData.append("instruction_file", additionalFiles[x]);
         //     }
         // }
-
-
         formData.append("step", 1);
-
         let arrDict = [{
             mtpe_rate: unitRate,
             currency: currencySelect?.value,
             mtpe_count_unit: unitTypeSelect?.value,
             tasks: [selectedLanguageSwitch?.value || taskId],
             ...(unitTypeSelect?.value === 3 && { estimated_hours: estimatedHours })
-        }]
-
-        // console.log(JSON.stringify(arrDict))
-
-        formData.append("task_assign_detail", JSON.stringify(arrDict))
-
+        }];
+        formData.append("task_assign_detail", JSON.stringify(arrDict));
         // if(unitRate !== taskDetailsFromApi?.mtpeRate){
         //     if (unitRate > 0) formData.append("mtpe_rate", unitRate);
         // // }
@@ -2241,20 +2053,19 @@ const InstantTextTranslate = (props) => {
         // // if(unitTypeSelect?.value !== taskDetailsFromApi?.mtpeCountUnit){
         //     if (unitTypeSelect?.value) formData.append("mtpe_count_unit", unitTypeSelect?.value);
         // }
-
         // setDrawerOpen(false);
+
         Config.axios({
             url: url,
             method: method,
             data: formData,
             auth: true,
             success: (response) => {
-                // console.log(response.data);
-                Config.toast(t("task_assigned_success"))
-                // history(`/file-upload?page=1&order_by=-id&open-project=${projectId}`)
-                setShowEditorAssignModal(false)
-                getTaskAssignInfo(selectedLanguageSwitch?.value || taskId)
-                setAssignBtnLoader(false)
+                Config.toast(t("task_assigned_success"));
+                // history(`/file-upload?page=1&order_by=-id&open-project=${projectId}`);
+                setShowEditorAssignModal(false);
+                getTaskAssignInfo(selectedLanguageSwitch?.value || taskId);
+                setAssignBtnLoader(false);
             },
             error: (error) => {
                 if (error.response?.data?.message == "integrirty error") Config.toast(t("already_assigned"), "warning");
@@ -2265,52 +2076,41 @@ const InstantTextTranslate = (props) => {
 
     const getLanguageNameFromId = (name, languages) => languages?.find((language) => language.id == name);
 
-
     const getTaskAssignInfo = (taskId) => {
-        // console.log(taskId);
-        let project = selectedFileRow.current?.project_data
-        let task = selectedFileRow.current?.task_data
-        let isProjectAssigned = project?.assign_enable !== undefined ? !project?.assign_enable : false
+        let project = selectedFileRow.current?.project_data;
+        let task = selectedFileRow.current?.task_data;
+        let isProjectAssigned = project?.assign_enable !== undefined ? !project?.assign_enable : false;
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/task_assign_info/?tasks=${taskId}${((userDetails?.agency && isProjectAssigned) || task?.task_reassign_info == true) ? '&reassigned=True' : ''}`,
             auth: true,
             success: (response) => {
-                // console.log(response.data);
                 if (response.data?.length !== 0) {
-                    let data = response?.data[0]
-
-                    // console.log(userDetails?.pk)
-                    // console.log(data?.assign_to_details?.id)
-
-                    setIsTaskAssigned(true)
-
-                    setTaskAssignDetails(response.data)
-                    setEditorName(data?.assign_to_details?.name)
-                    setEditorId(data?.assign_to_details?.id)
-                    setDeadline(Config.convertUTCToLocal(data?.deadline))
-                    setCurrencySelect(currencyOptionsRef.current?.find(each => each.value === data?.currency))
-                    setUnitTypeSelect(unitTypeOptionRef.current.find((element) => element.value === data?.mtpe_count_unit))
-                    setUnitRate(data?.mtpe_rate)
-                    setAssignInstructionText(data?.instruction)
-                    setAdditionalFilesFromApi(data?.instruction_files)
-                    // console.log('from info api');
-                    setEstimatedHours(data?.estimated_hours)
+                    let data = response?.data[0];
+                    setIsTaskAssigned(true);
+                    setTaskAssignDetails(response.data);
+                    setEditorName(data?.assign_to_details?.name);
+                    setEditorId(data?.assign_to_details?.id);
+                    setDeadline(Config.convertUTCToLocal(data?.deadline));
+                    setCurrencySelect(currencyOptionsRef.current?.find(each => each.value === data?.currency));
+                    setUnitTypeSelect(unitTypeOptionRef.current.find((element) => element.value === data?.mtpe_count_unit));
+                    setUnitRate(data?.mtpe_rate);
+                    setAssignInstructionText(data?.instruction);
+                    setAdditionalFilesFromApi(data?.instruction_files);
+                    setEstimatedHours(data?.estimated_hours);
                 } else {
-                    setIsTaskAssigned(false)
-                    setIsFunctionButtonsVisible(true)
+                    setIsTaskAssigned(false);
+                    setIsFunctionButtonsVisible(true);
                 }
             },
             error: (err) => {
-
+                console.error(err);
             }
         });
     }
 
-
     // useEffect(() => {
-    //     console.log(isFunctionButtonsVisible)
-    // }, [isFunctionButtonsVisible])
-
+    // }, [isFunctionButtonsVisible]);
 
     /* Current user plan details get */
     const getUserPlanDetails = () => {
@@ -2318,8 +2118,7 @@ const InstantTextTranslate = (props) => {
             url: `${Config.BASE_URL}/auth/check-subscription/`,
             auth: true,
             success: (response) => {
-                // console.log(response.data.subscription_name)
-                setUserSubscriptionName(response.data.subscription_name)
+                setUserSubscriptionName(response.data.subscription_name);
             },
         });
     };
@@ -2344,39 +2143,37 @@ const InstantTextTranslate = (props) => {
         );
     };
 
-    const downloadedFileName = useRef(null)
+    const downloadedFileName = useRef(null);
 
     const downloadFile = async (e, type = "ORIGINAL") => {
         saveChanges('from-download')
         setTimeout(async () => {
             const response = await downloadTxtFile();
-            Config.downloadFileInBrowser(response)
+            Config.downloadFileInBrowser(response);
         }, 200);
     };
-
 
     const handleAssignIconClick = () => {
         setShowIndividualAssignManage(!showIndividualAssignManage);
         // getTeamLists(); 
     }
 
-
     const handleTextCopy = () => {
         if (isTargetEmpty()) {
-            Config.toast(t("text_to_copy_target"), 'warning')
+            Config.toast(t("text_to_copy_target"), 'warning');
             return;
         }
-        navigator.clipboard.writeText(tarDivRef.current.value)
-        Config.toast(t("txt_copied"))
+        navigator.clipboard.writeText(tarDivRef.current.value);
+        Config.toast(t("txt_copied"));
     }
 
     const handleShareIconClick = () => {
         if (isTargetEmpty()) {
-            Config.toast(t("text_to_share_target"), 'warning')
+            Config.toast(t("text_to_share_target"), 'warning');
             return;
         }
         setShareIconsPanel(!shareIconsPanel);
-        saveChanges("from-share")
+        saveChanges("from-share");
     }
 
     /* Delete a project by id */
@@ -2394,36 +2191,36 @@ const InstantTextTranslate = (props) => {
 
     const toggleSynonym = () => {
         setEnableSynonym(!enableSynonym);
-        resetParaphraseStates()
-        setEnableParaphrase(false)
-        setSpellcheck(false)
+        resetParaphraseStates();
+        setEnableParaphrase(false);
+        setSpellcheck(false);
     }
 
     const toggleParaphrase = () => {
         setEnableParaphrase(!enableParaphrase);
-        resetSynonymStates()
-        setEnableSynonym(false)
-        setSpellcheck(false)
+        resetSynonymStates();
+        setEnableSynonym(false);
+        setSpellcheck(false);
     }
 
     const resetSynonymStates = () => {
-        setSynonymPopoverOpen(false)
-        setSynonymPopoverTarget("")
-        setSynonymsResList([])
-        setSynonymText("")
+        setSynonymPopoverOpen(false);
+        setSynonymPopoverTarget("");
+        setSynonymsResList([]);
+        setSynonymText("");
     }
 
     const resetParaphraseStates = () => {
-        setParaphrasePopoverOpen(false)
-        setParaphrasePopoverTarget("")
-        setParaphraseResList([])
-        setParaphraseText("")
+        setParaphrasePopoverOpen(false);
+        setParaphrasePopoverTarget("");
+        setParaphraseResList([]);
+        setParaphraseText("");
     }
 
-    const [enableselection, setEnableselection] = useState(true)
-    const [selectiontarget, setSelectiontarget] = useState(null)
-    const [selectiontext, setSelectiontext] = useState(null)
-    const [selectionpopover, setSelectiontextpopover] = useState(null)
+    const [enableselection, setEnableselection] = useState(true);
+    const [selectiontarget, setSelectiontarget] = useState(null);
+    const [selectiontext, setSelectiontext] = useState(null);
+    const [selectionpopover, setSelectiontextpopover] = useState(null);
 
     // function getSelected() {
     //     if (window.getSelection?.toString()?.length) {
@@ -2442,94 +2239,76 @@ const InstantTextTranslate = (props) => {
     //     return false;
     // }
 
-
     // const getSelectedText = () => {
     //     if (window.getSelection()?.toString()?.length) {
     //         if(enableSynonym){
-    //             setSynonymText(window.getSelection().toString())
-    //             secondWordRef.current =  document.querySelector('.target-summernote').querySelector('.note-editable').innerText.slice(0, window.getSelection()?.anchorOffset)
+    //             setSynonymText(window.getSelection().toString());
+    //             secondWordRef.current =  document.querySelector('.target-summernote').querySelector('.note-editable').innerText.slice(0, window.getSelection()?.anchorOffset);
     //         }
     //         if(enableParaphrase){
-    //             setParaphraseText(window.getSelection().toString())
+    //             setParaphraseText(window.getSelection().toString());
     //         }
     //         if(enableselection){
-    //             setSelectiontext(window.getSelection().toString())
+    //             setSelectiontext(window.getSelection().toString());
     //         }
     //     }
     // } 
-
-
-
-
-
 
     // useEffect(() => {
     //     if (synonymText?.length || paraphraseText?.length || selectiontext?.length) {
     //         var selection = window.getSelection().getRangeAt(0);
     //         if (window.getSelection().toString().length) {
     //             var selectedText = selection.extractContents();
-    //             let randomNum = Math.floor(Math.random() * 1000)
+    //             let randomNum = Math.floor(Math.random() * 1000);
     //             var mark = document.createElement("mark");
-    //             // if(enableSynonym) mark.id = `synonym-${randomNum}`
-    //             // if(enableParaphrase) mark.id = `paraphrase-${randomNum}`
-    //             if(enableselection) mark.id = `selection-${randomNum}`
-    //             console.log(`selection-${randomNum}`);
+    //             // if(enableSynonym) mark.id = `synonym-${randomNum}`;
+    //             // if(enableParaphrase) mark.id = `paraphrase-${randomNum}`;
+    //             if(enableselection) mark.id = `selection-${randomNum}`;
     //             mark.style.setProperty('background-color', 'transparent', 'important');
     //             mark.appendChild(selectedText);
-
-
-    //             mark.contentEditable = "true"
+    //             mark.contentEditable = "true";
     //             selection.insertNode(mark);
-    //             // if(enableSynonym) setSynonymPopoverTarget("synonym-" + randomNum)
-    //             // if(enableParaphrase) setParaphrasePopoverTarget("paraphrase-" + randomNum) 
-    //             if(enableselection) setSelectiontarget("selection-" + randomNum) 
+    //             // if(enableSynonym) setSynonymPopoverTarget("synonym-" + randomNum);
+    //             // if(enableParaphrase) setParaphrasePopoverTarget("paraphrase-" + randomNum) ;
+    //             if(enableselection) setSelectiontarget("selection-" + randomNum) ;
     //         }
     //     }
-    // }, [synonymText, paraphraseText,selectiontext])
+    // }, [synonymText, paraphraseText,selectiontext]);
 
     // useEffect(()=>{
-
     //     const checkselction =()=>{
     //         var selection = getSelected();
-
     //         if (selection) {
-    //             console.log(selection);
     //         }
     //        setTimeout(() => {
-
     //         if(selection.type == 'Range'){
-    //             // console.log('yes');
-    //             setEnableselection(true)
-    //             setSelectiontextpopover(true)
-    //             console.log(selectiontarget);
+    //             setEnableselection(true);
+    //             setSelectiontextpopover(true);
     //         }
     //         else{
-    //             setEnableselection(false)
-    //             setSelectiontarget(null)
-    //             setSelectiontextpopover(false)
+    //             setEnableselection(false);
+    //             setSelectiontarget(null);
+    //             setSelectiontextpopover(false);
     //         }
     //        }, 200);
 
     //     }
-    //     document.querySelector('.target-summernote').querySelector('.note-editable').addEventListener('mouseup',checkselction)
+    //     document.querySelector('.target-summernote').querySelector('.note-editable').addEventListener('mouseup',checkselction);
     //     return ()=> {document.querySelector('.target-summernote').querySelector('.note-editable').removeEventListener('mouseup',checkselction)}
-
-
     //   })
 
     // useEffect(() => {
     //   if(synonymPopoverTarget !== ""){
     //     if (synonymText?.trim() !== "") {
-    //         getSynonym()
+    //         getSynonym();
     //     }
     //   }
-    // }, [synonymPopoverTarget])
-
+    // }, [synonymPopoverTarget]);
 
     // const getSynonym = async(loader) => {
-    //     setPopupLoading(loader)
-    //     setSynonymText(window.getSelection().toString())
-    //     secondWordRef.current =  document.querySelector('.target-summernote').querySelector('.note-editable').innerText.slice(0, window.getSelection()?.anchorOffset)
+    //     setPopupLoading(loader);
+    //     setSynonymText(window.getSelection().toString());
+    //     secondWordRef.current =  document.querySelector('.target-summernote').querySelector('.note-editable').innerText.slice(0, window.getSelection()?.anchorOffset);
     //     let userCacheData = JSON.parse(
     //         typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
     //     );
@@ -2537,27 +2316,21 @@ const InstantTextTranslate = (props) => {
     //     var formdata = new FormData();
     //     var myHeaders = new Headers();
     //     myHeaders.append("Authorization", `Bearer  ${token}`);
-
     //     formdata.append("word", window.getSelection()?.toString()?.trim());
     //     formdata.append("sentence", document.querySelector('.target-summernote').querySelector('.note-editable').innerText);
     //     formdata.append("second_word", secondWordRef.current !== "" ? secondWordRef.current : "-1");
-    //         console.log(synonymText)
-    //         console.log(secondWordRef.current)
-
     //     var requestOptions = {
     //         method: 'POST',
     //         body: formdata,
     //         redirect: 'follow',
     //         headers: myHeaders,
     //     };
+    //     let data = await fetch(Config.BASE_URL + "/workspace_okapi/synonyms/", requestOptions);
 
-    //     let data = await fetch(Config.BASE_URL + "/workspace_okapi/synonyms/", requestOptions)
     //     if (data.status === 200) {
-    //         setPopupLoading('none')
-    //         let response = await data.json()
-    //         // console.log(response.context.synonyms)
-    //         let synonymList = []
-    //         // console.log(typeof response.context?.synonyms)
+    //         setPopupLoading('none');
+    //         let response = await data.json();    
+    //         let synonymList = [];
     //         if (typeof response.context == "object") {
     //             response.context?.map((value) => {
     //                 synonymList.push(
@@ -2570,29 +2343,26 @@ const InstantTextTranslate = (props) => {
     //                     </p>
     //                 );
     //             });
-    //             setSynonymsResList(synonymList)
-    //             setSynonymPopoverOpen(true)
-    //             setPopoverContentSwitch(true)
-    //             checkSelection()
+    //             setSynonymsResList(synonymList);
+    //             setSynonymPopoverOpen(true);
+    //             setPopoverContentSwitch(true);
+    //             checkSelection();
     //         } else {
-    //             Config.toast('No synonym found', 'warning')
-    //             resetSynonymStates()
-    //             setPopupLoading('none')
-
+    //             Config.toast('No synonym found', 'warning');
+    //             resetSynonymStates();
+    //             setPopupLoading('none');
     //         }
     //     }
     // } 
 
     // const repalceWithNewSynonym = (e, value) => {
-    //     // let childMark = document?.getElementById(selectiontarget)
-    //     // childMark.innerHTML = value + " "
-
-    //     // resetSynonymStates()
+    //     // let childMark = document?.getElementById(selectiontarget);
+    //     // childMark.innerHTML = value + " ";
+    //     // resetSynonymStates();
     //     // document.querySelector('.target-summernote').querySelector('.note-editable').innerHTML = removeSpecificTag(
     //     //     document.querySelector('.target-summernote').querySelector('.note-editable').innerHTML,
     //     //     "mark"
     //     // );
-
     //     // const selection = window.getSelection();
     //     // const range = document.createRange();
     //     // selection.removeAllRanges();
@@ -2600,56 +2370,48 @@ const InstantTextTranslate = (props) => {
     //     // range.collapse(false);
     //     // selection.addRange(range);
     //     // document.querySelector('.target-summernote').querySelector('.note-editable').focus();
-    //     summernoteEditorRef?.current.summernote('insertText', value + ' ')
-    //     setPopoverContentSwitch(false)
-    //     resetParaphraseStates()
-    //     resetSynonymStates()
-    //     // summernoteEditorRef?.current.summernote('restoreRange')
-
+    //     summernoteEditorRef?.current.summernote('insertText', value + ' ');
+    //     setPopoverContentSwitch(false);
+    //     resetParaphraseStates();
+    //     resetSynonymStates();
+    //     // summernoteEditorRef?.current.summernote('restoreRange');
     // } 
-
 
     // useEffect(() => {
     //     if (synonymsResList.length !== 0 || paraphraseResList.length !== 0) {
-    //         document.addEventListener('click', outsideClickHandler)
+    //         document.addEventListener('click', outsideClickHandler);
     //     }
     //     return () => {
     //         document.removeEventListener('click', outsideClickHandler);
     //     }
-
-    // }, [synonymsResList, synonymPopoverOpen, paraphraseResList, paraphrasePopoverOpen])
+    // }, [synonymsResList, synonymPopoverOpen, paraphraseResList, paraphrasePopoverOpen]);
 
     // const outsideClickHandler = () => {
-    //     // console.log(paraphrasePopoverTarget);
-    //     // console.log(paraphrasePopoverOpen);
-    //     // console.log(paraphraseResList);
-    //     // let markTag = document.getElementById(enableSynonym ? synonymPopoverTarget : enableParaphrase && paraphrasePopoverTarget)
+    //     // let markTag = document.getElementById(enableSynonym ? synonymPopoverTarget : enableParaphrase && paraphrasePopoverTarget);
     //     // if (markTag !== undefined && ((enableSynonym && synonymPopoverOpen && synonymsResList?.length) || (enableParaphrase && paraphrasePopoverOpen && paraphraseResList?.length))) {
-    //     //     if(enableSynonym) resetSynonymStates()
-    //     //     if(enableParaphrase) resetParaphraseStates()
+    //     //     if(enableSynonym) resetSynonymStates();
+    //     //     if(enableParaphrase) resetParaphraseStates();
     //     //     document.querySelector('.target-summernote').querySelector('.note-editable').innerHTML = removeSpecificTag(
     //     //         document.querySelector('.target-summernote').querySelector('.note-editable').innerHTML,
     //     //         "mark"
     //     //     );
     //     // }
-    //     setPopoverContentSwitch(false)
-    //     setPopupLoading('none')
-    //     checkSelection()
-    //     resetParaphraseStates()
-    //     resetSynonymStates()
-
+    //     setPopoverContentSwitch(false);
+    //     setPopupLoading('none');
+    //     checkSelection();
+    //     resetParaphraseStates();
+    //     resetSynonymStates();
     // }    
 
     // useEffect(() => {
     //     if(paraphrasePopoverTarget !== ""){
-    //       setParaphrasePopoverOpen(true)
-    //       getParaphrases()
+    //       setParaphrasePopoverOpen(true);
+    //       getParaphrases();
     //     }
-    // }, [paraphrasePopoverTarget])
-
+    // }, [paraphrasePopoverTarget]);
 
     // const getParaphrases = async(loader) => {
-    //     setPopupLoading(loader)
+    //     setPopupLoading(loader);
     //     if (window.getSelection()?.toString()?.trim()?.length !== 0) {
     //         let userCacheData = JSON.parse(
     //             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
@@ -2659,26 +2421,24 @@ const InstantTextTranslate = (props) => {
     //         var myHeaders = new Headers();
     //         myHeaders.append("Authorization", `Bearer  ${token}`);
     //         formdata.append("sentence", window.getSelection()?.toString()?.trim());
-
     //         var requestOptions = {
     //             method: 'POST',
     //             body: formdata,
     //             redirect: 'follow',
     //             headers: myHeaders,
     //         };
+    //         let data = await fetch(Config.BASE_URL + "/workspace_okapi/paraphrase/", requestOptions);
 
-    //         let data = await fetch(Config.BASE_URL + "/workspace_okapi/paraphrase/", requestOptions)
     //         if (data.status === 200) {
-    //             let response = await data.json()
-    //             let paraphraseList = []
+    //             let response = await data.json();
+    //             let paraphraseList = [];
     //             if(response?.message?.includes('error in paraphrasing')){
-    //                 Config.toast('No alternate phrases.', 'warning')
-    //                 resetParaphraseStates()
-    //                 setPopupLoading('none')
-
+    //                 Config.toast('No alternate phrases.', 'warning');
+    //                 resetParaphraseStates();
+    //                 setPopupLoading('none');
     //             }
     //             if(response?.msg === 'success'){
-    //                 setPopupLoading('none')
+    //                 setPopupLoading('none');
     //                 response.paraphrase?.map((value) => {
     //                     paraphraseList.push(
     //                         <p
@@ -2690,34 +2450,30 @@ const InstantTextTranslate = (props) => {
     //                         </p>
     //                     );
     //                 });
-    //                 setParaphraseResList(paraphraseList)
-    //                 setParaphrasePopoverOpen(true)
-    //                 setPopoverContentSwitch(true)
-    //                 checkSelection()
+    //                 setParaphraseResList(paraphraseList);
+    //                 setParaphrasePopoverOpen(true);
+    //                 setPopoverContentSwitch(true);
+    //                 checkSelection();
     //             }else if(response.msg === 'error'){
-    //                 Config.toast('No alternate phrases.', 'warning')
-    //                 resetParaphraseStates()
-    //             setPopupLoading('none')
-
+    //                 Config.toast('No alternate phrases.', 'warning');
+    //                 resetParaphraseStates();
+    //                 setPopupLoading('none');
     //             }
     //         }
     //     } else {
-    //         Config.toast("Please select text to paraphrase", 'warning')
-    //         setPopupLoading('none')
+    //         Config.toast("Please select text to paraphrase", 'warning');
+    //         setPopupLoading('none');
 
     //     }
     // }
 
     // const repalceWithNewPhrase = (event, value) => {
-    //     // let childMark = document?.getElementById(paraphrasePopoverTarget)
-    //     // childMark.innerHTML = value + " "
-
-
+    //     // let childMark = document?.getElementById(paraphrasePopoverTarget);
+    //     // childMark.innerHTML = value + " ";
     //     // translatedTextDivRef.current.innerHTML = removeSpecificTag(
     //     //     translatedTextDivRef.current.innerHTML,
     //     //     "mark"
     //     // );
-
     //     // const selection = window.getSelection();
     //     // const range = document.createRange();
     //     // selection.removeAllRanges();
@@ -2725,13 +2481,12 @@ const InstantTextTranslate = (props) => {
     //     // range.collapse(false);
     //     // selection.addRange(range);
     //     // translatedTextDivRef.current.focus();
-    //     // checkSelection()
-    //     // summernoteEditorRef?.current.summernote('restoreRange')
-    //     summernoteEditorRef?.current.summernote('insertText', value + ' ')
-    //     setPopoverContentSwitch(false)
-    //     resetParaphraseStates()
-    //     resetSynonymStates()
-
+    //     // checkSelection();
+    //     // summernoteEditorRef?.current.summernote('restoreRange');
+    //     summernoteEditorRef?.current.summernote('insertText', value + ' ');
+    //     setPopoverContentSwitch(false);
+    //     resetParaphraseStates();
+    //     resetSynonymStates();
     // }
 
     // this is block the double click behaviour (allows only the triple click selection)
@@ -2743,38 +2498,30 @@ const InstantTextTranslate = (props) => {
     //           }
     //         }, false);
     //     }else{
-    //         resetParaphraseStates()
+    //         resetParaphraseStates();
     //     }
-    // }, [enableParaphrase])
-
+    // }, [enableParaphrase]);
 
     const getMtTranslation = () => {
         if (translatedText?.mt_raw !== undefined && translatedText?.mt_raw !== null) {
             // translatedTextDivRef.current.innerHTML = translatedText?.mt_raw?.replace(/\n/g, "<br />");
-            let tarPTag = document.createElement('p')
-            tarPTag.innerHTML = translatedText?.mt_raw?.replace(/\n/g, "<br />")
-            // summernoteEditorRef.current.summernote('code', tarPTag)
-
-            // tarDivRef.current.value = translatedText?.mt_raw
-            setTranslateResultText(translatedText?.mt_raw)
-            copyTarDivRef.current.innerHTML = translatedText?.mt_raw
-            
+            let tarPTag = document.createElement('p');
+            tarPTag.innerHTML = translatedText?.mt_raw?.replace(/\n/g, "<br />");
+            // summernoteEditorRef.current.summernote('code', tarPTag);
+            // tarDivRef.current.value = translatedText?.mt_raw;
+            setTranslateResultText(translatedText?.mt_raw);
+            copyTarDivRef.current.innerHTML = translatedText?.mt_raw;            
         } else {
-            setShowCreditAlertModal(true)
+            setShowCreditAlertModal(true);
         }
     }
 
     const saveChanges = (from, history_obj_id, store_history) => {
-
-        taskInsufficientCreditRef.current = undefined
-        setTaskInsufficientCredit(false)
-
+        taskInsufficientCreditRef.current = undefined;
+        setTaskInsufficientCredit(false);
         let formData = new FormData();
-
         formData.append("task_id", taskId);
-
         if (from !== 'from-translate' && taskInsufficientCreditRef.current === undefined && from !== 'from-history') {
-
             if (translatedTextTab === 1) {
                 // formData.append("target_text", getSummerNotePlainText(summernoteEditorRef.current));
                 formData.append("target_text", tarDivRef.current.value.trim()?.replace(/\r/g, ""));
@@ -2788,24 +2535,21 @@ const InstantTextTranslate = (props) => {
         } else {
             setTranslatedTextTab(1)
             if (isSourceTextChanged) {
-                setIsCustomizationProcessing(true)
+                setIsCustomizationProcessing(true);
                 formData.append("source_text", srcDivRef.current.value.trim()?.replace(/\r/g, ""));
             }
             if (isMainMtChanged) {
-                setIsCustomizationProcessing(true)
+                setIsCustomizationProcessing(true);
                 formData.append("mt_engine", selectedMTEngine?.value);
             }
             if (sourceApplyToAll) {
                 formData.append("apply_all", "True");
             }
         }
-
-
         if (from === 'from-history') {
             formData.append("from_history", history_obj_id);
-            setHistoryDrawerShow(false)
+            setHistoryDrawerShow(false);
         }
-
 
         Config.axios({
             url: `${Config.BASE_URL}/workspace/express_save/`,
@@ -2813,98 +2557,90 @@ const InstantTextTranslate = (props) => {
             data: formData,
             auth: true,
             success: (response) => {
-                // console.log(response.data.target_text)
-                setSavedTargetData(response.data.target_text)
-                setChangesSaved(true)
-                setIsConfirmContinue(false)
-
+                setSavedTargetData(response.data.target_text);
+                setChangesSaved(true);
+                setIsConfirmContinue(false);
                 if (from === 'target-save') {
                     if (translatedTextTab === 1) {
                         setTranslatedText({
                             ...translatedText,
                             target_text: response.data.target_text
-                        })
+                        });
                         taskDataFromApi.current = ({
                             ...taskDataFromApi.current,
                             target_text: response.data.target_text
-                        })
+                        });
                         if (store_history) {
-                            storeCurrentTranslationInHistory("Post-edited")
+                            storeCurrentTranslationInHistory("Post-edited");
                         }
                     }
                 }
                 if (from === undefined) {     // show toast when save button is clicked
-                    // Config.toast('Changes saved')
+                    // Config.toast('Changes saved');
                 }
                 if (from === 'from-translate') {
-                    setShowSourceChangeConfimationModal(false)
+                    setShowSourceChangeConfimationModal(false);
                     if(taskId !== undefined && taskId !== null){
-                        getTranslatedTextByTaskId(taskId, 'from-translate')
+                        getTranslatedTextByTaskId(taskId, 'from-translate');
                     }
-                    setIsSourceTextChanged(false)
-                    setIsMainMtChanged(false)
+                    setIsSourceTextChanged(false);
+                    setIsMainMtChanged(false);
                 }
-
                 if (from === 'validate') {
-
-                    // console.log(response.data?.mt_raw?.replace(/\n/g, "")?.replace(/\r/g, "")?.trim() === response.data?.target_text?.replace(/\n/g, "")?.replace(/\r/g, "")?.trim())
-
-                    let isPostedited = response.data?.mt_raw?.replace(/\n/g, "")?.replace(/\r/g, "")?.trim() === response.data?.target_text?.replace(/\n/g, "")?.replace(/\r/g, "")?.trim() ? false : true
-                    // console.log(isPostedited)
-                    setIsContentPostedited(isPostedited)
+                    let isPostedited = response.data?.mt_raw?.replace(/\n/g, "")?.replace(/\r/g, "")?.trim() === response.data?.target_text?.replace(/\n/g, "")?.replace(/\r/g, "")?.trim() ? false : true;
+                    setIsContentPostedited(isPostedited);
                     if (isPostedited) {     // if target is post-edited then show confirmation modal
                         if (!dontShowAgain) {     // if dont show again is checked dont show the modal, directly save the changes
-                            setShowSourceChangeConfimationModal(true)
+                            setShowSourceChangeConfimationModal(true);
                         } else {
-                            saveChanges('from-translate')
+                            saveChanges('from-translate');
                         }
                     } else {  // if nothing is changed save the changes
-                        saveChanges('from-translate')
-                        // setIsSourceTextChanged(false)
-                        setIsMainMtChanged(false)
+                        saveChanges('from-translate');
+                        // setIsSourceTextChanged(false);
+                        setIsMainMtChanged(false);
                     }
                 }
-
                 if (from === 'from-history') {
-                    srcDivRef.current.value = response.data?.source_text
-                    // tarDivRef.current.value = response.data?.target_text
-                    setTranslateResultText(response.data?.target_text)
-                    copyTarDivRef.current.innerHTML = response.data?.target_text
+                    srcDivRef.current.value = response.data?.source_text;
+                    // tarDivRef.current.value = response.data?.target_text;
+                    setTranslateResultText(response.data?.target_text);
+                    copyTarDivRef.current.innerHTML = response.data?.target_text;
                 }
             },
             error: (err) => {
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                        setShowCreditAlertModal(true)
-                        setTaskInsufficientCredit(true)
-                        taskInsufficientCreditRef.current = err.response.data?.msg
+                        setShowCreditAlertModal(true);
+                        setTaskInsufficientCredit(true);
+                        taskInsufficientCreditRef.current = err.response.data?.msg;
                         if (from !== 'from-translate') {
-                            // summernoteEditorRef.current?.summernote('code', '')
-                            // tarDivRef.current.innerHTML = ''
-                            setTranslateResultText('')
-                            copyTarDivRef.current.innerHTML = ""
+                            // summernoteEditorRef.current?.summernote('code', '');
+                            // tarDivRef.current.innerHTML = '';
+                            setTranslateResultText('');
+                            copyTarDivRef.current.innerHTML = "";
                         }
-                        setIsCustomizationProcessing(false)
-                        setShowSourceChangeConfimationModal(false)
+                        setIsCustomizationProcessing(false);
+                        setShowSourceChangeConfimationModal(false);
                         // if(isSourceTextChanged){
-                        //     summernoteEditorRef.current?.summernote('code', taskDataFromApi.current?.source_text)
+                        //     summernoteEditorRef.current?.summernote('code', taskDataFromApi.current?.source_text);
                         // }
                         // if(isMainMtChanged){
-                        //     let engine = mtpeEngineRef.current?.find(each => each.id == taskDataFromApi.current?.mt_engine)
+                        //     let engine = mtpeEngineRef.current?.find(each => each.id == taskDataFromApi.current?.mt_engine);
                         //     let engineOpt = {
                         //         value: engine.id,
                         //         label: engine.name?.replaceAll('_', ' ')
-                        //     }
-                        //     setSelectedMTEngine(engineOpt)
+                        //     };
+                        //     setSelectedMTEngine(engineOpt);
                         // }
                         // 
 
                     }
                 } else {
                     if (from !== 'from-translate') {
-                        Config.toast(t("failed_to_save"), 'error')
+                        Config.toast(t("failed_to_save"), 'error');
                     } else {
-                        Config.toast(t("failed_to_translate"), 'error')
+                        Config.toast(t("failed_to_translate"), 'error');
                     }
                 }
             },
@@ -2912,35 +2648,35 @@ const InstantTextTranslate = (props) => {
     }
 
     const handleSourceEditYesBtn = () => {
-        saveChanges('from-translate')
-        setIsConfirmContinue(true)
+        saveChanges('from-translate');
+        setIsConfirmContinue(true);
     }
 
     const handleSouceEditNoBtn = () => {
-        setIsCustomizationProcessing(true)
-        saveChanges('from-translate')
-        setShowSourceChangeConfimationModal(false)
+        setIsCustomizationProcessing(true);
+        saveChanges('from-translate');
+        setShowSourceChangeConfimationModal(false);
     }
 
     const handleEditorSelect = (id, name, is_internal = false, email) => {
-        setSelectedEditor(id)
-        setEditorName(name)
-        setIsInternalEditor(is_internal)
+        setSelectedEditor(id);
+        setEditorName(name);
+        setIsInternalEditor(is_internal);
         if (is_internal) {
-            setCurrencySelect(null)
-            setUnitTypeSelect(null)
-            setUnitRate("")
-            setEstimatedHours("")
+            setCurrencySelect(null);
+            setUnitTypeSelect(null);
+            setUnitRate("");
+            setEstimatedHours("");
         } else {
             if (email == 'ailaysateam@gmail.com') {
-                getAilaysaServiceRate()
-                setIsEditorAilaysa(true)
+                getAilaysaServiceRate();
+                setIsEditorAilaysa(true);
             } else {
-                fetchAcceptedRates(id)
-                setIsEditorAilaysa(false)
+                fetchAcceptedRates(id);
+                setIsEditorAilaysa(false);
             }
         }
-        setAssignToDrpdown(false)
+        setAssignToDrpdown(false);
     }
 
     // get previous accepted rates of that editor
@@ -2958,12 +2694,12 @@ const InstantTextTranslate = (props) => {
             success: (response) => {
                 if (response.status === 200) {
                     if (response.data["Previously Agreed Rates"]?.length !== 0) {
-                        setEditorRates(response.data["Previously Agreed Rates"].flat(1))
+                        setEditorRates(response.data["Previously Agreed Rates"].flat(1));
                     } else {
-                        setEditorRates(response.data["Given Rates"])
+                        setEditorRates(response.data["Given Rates"]);
                     }
                 } else {
-                    Config.toast(`${t("something_went_wrong")}`, 'error')
+                    Config.toast(`${t("something_went_wrong")}`, 'error');
                 }
             },
         });
@@ -2977,57 +2713,48 @@ const InstantTextTranslate = (props) => {
             (sourceLangIdRef.current === 17 && indianLanguages?.find(each => each.id === targetLangIdRef.current)) ||
             (targetLangIdRef.current === 17 && indianLanguages?.find(each => each.id === sourceLangIdRef.current))
         ) {
-            lastFunctionCall.current = 'getAilaysaServiceRate'
-            setCurrencySelect(currencyOptionsRef.current?.find(each => each.value === 63))
-            setUnitTypeSelect(unitTypeOptions.find((element) => element.value === 1))
-            setUnitRate(0.99)
+            lastFunctionCall.current = 'getAilaysaServiceRate';
+            setCurrencySelect(currencyOptionsRef.current?.find(each => each.value === 63));
+            setUnitTypeSelect(unitTypeOptions.find((element) => element.value === 1));
+            setUnitRate(0.99);
         } else {
-            lastFunctionCall.current = 'getAilaysaServiceRate'
-            setCurrencySelect(currencyOptionsRef.current?.find(each => each.value === 144))
-            setUnitTypeSelect(unitTypeOptions.find((element) => element.value === 1))
-            setUnitRate(0.05)
+            lastFunctionCall.current = 'getAilaysaServiceRate';
+            setCurrencySelect(currencyOptionsRef.current?.find(each => each.value === 144));
+            setUnitTypeSelect(unitTypeOptions.find((element) => element.value === 1));
+            setUnitRate(0.05);
         }
     }
 
     const handleTargetChange = (e) => {
-        // setTargetInputBox(e.target.innerText)
-        setTranslateResultText(e.target.value)
-        copyTarDivRef.current.innerHTML = e.target.value
-        // console.log('target change')
-
+        // setTargetInputBox(e.target.innerText);
+        setTranslateResultText(e.target.value);
+        copyTarDivRef.current.innerHTML = e.target.value;
         if (e.target.value?.trim()?.length === 0) {
-            setIsTarTextEmpty(true)
+            setIsTarTextEmpty(true);
         } else {
-            setIsTarTextEmpty(false)
+            setIsTarTextEmpty(false);
         }
         if (e.target.innerText?.replace(/\n/g, "")?.replace(/\r/g, "") === savedTargetData?.replace(/\n/g, "")?.replace(/\r/g, "")) {
-            setChangesSaved(true)
+            setChangesSaved(true);
         } else {
-            setChangesSaved(false)
+            setChangesSaved(false);
         }
     }
     
     const handleTargetKeyDown = (e) => {
         if(e.ctrlKey){
             if(e.which === 90){
-                console.log("pointer: "+ pointer)
-                console.log(historyArr)
-                console.log('undo')
-                back()
-
+                back();
                 if(historyArrState !== '') {
-                    setTranslateResultText(historyArrState)
-                    copyTarDivRef.current.innerHTML = historyArrState
+                    setTranslateResultText(historyArrState);
+                    copyTarDivRef.current.innerHTML = historyArrState;
                 }
             } 
             if(e.which === 89){
-                console.log("pointer: "+ pointer)
-                console.log(historyArr)
-                console.log('redo')
-                forward()
+                forward();
                 if(historyArrState !== '') {
-                    setTranslateResultText(historyArrState)
-                    copyTarDivRef.current.innerHTML = historyArrState
+                    setTranslateResultText(historyArrState);
+                    copyTarDivRef.current.innerHTML = historyArrState;
                 }
             } 
         }
@@ -3035,24 +2762,17 @@ const InstantTextTranslate = (props) => {
 
     const handleActionBtn = (target) => {
         if(target === 'undo'){
-            console.log("pointer: "+ pointer)
-            console.log(historyArr)
-            console.log('undo')
-            back
-
+            back();
             if(historyArrState !== '') {
-                setTranslateResultText(historyArrState)
-                copyTarDivRef.current.innerHTML = historyArrState
+                setTranslateResultText(historyArrState);
+                copyTarDivRef.current.innerHTML = historyArrState;
             }
         } 
         if(target === 'redo'){
-            console.log("pointer: "+ pointer)
-            console.log(historyArr)
-            console.log('redo')
-            forward
+            forward();
             if(historyArrState !== '') {
-                setTranslateResultText(historyArrState)
-                copyTarDivRef.current.innerHTML = historyArrState
+                setTranslateResultText(historyArrState);
+                copyTarDivRef.current.innerHTML = historyArrState;
             }
         } 
     } 
@@ -3060,7 +2780,6 @@ const InstantTextTranslate = (props) => {
     const detectBrowserName = () => {
         let userAgent = navigator.userAgent;
         let browserName;
-
         if (userAgent.match(/chrome|chromium|crios/i)) {
             browserName = "chrome";
         } else if (userAgent.match(/firefox|fxios/i)) {
@@ -3074,14 +2793,12 @@ const InstantTextTranslate = (props) => {
         } else {
             browserName = "No browser detection";
         }
-        //    console.log(browserName);
-        setBrowserName(browserName)
+        setBrowserName(browserName);
     }
 
     const removebrtag = () => {
-        let rem = document.querySelector('.project-box')
+        let rem = document.querySelector('.project-box');
         var var1 = rem.getElementsByTagName('br');
-
         for (var i = var1.length; i--;) {
             var1[i].parentNode.removeChild(var1[i]);
         }
@@ -3093,95 +2810,88 @@ const InstantTextTranslate = (props) => {
 
     const translatedtextmodifiedcheck = () => {
         if (translatedTextDivRef?.current?.innerText != translatedText.target_text) {
-            setTranslatedtextmodified(true)
+            setTranslatedtextmodified(true);
         }
         else {
-            setTranslatedtextmodified(false)
+            setTranslatedtextmodified(false);
         }
     }
-    // const [showmodelwarning,setShowmodelwarning]=useState(false)
-
-
-    const handleBlockedNavigation = ({nextLocation}) => {
-        
+   
+    const handleBlockedNavigation = ({nextLocation}) => {        
         if (
             !nextLocation.pathname?.includes('/instant-text') && 
             (checkform.current || isOpenFromList.current)
         ) {
-            return true
+            return true;
         }
-        return false
+        return false;
     }
 
     const handleConfirmNavigationClick = () => {
         if (translatedtextmodified) {
-            saveChanges('target-save')
+            saveChanges('target-save');
         }
-        setSourceLanguage('')
-        setSourceLabel(t("source_language"))
-        setTargetLabel(t("target_language"))
-        setTargetLanguage([])
-        setTranslateContent('')
-        setSourceTextLength(0)
-        setSourceText('')
-        setIsSourceTextChanged(false)
-        setIsMainMtChanged(false)
-        setprojectName(null)
-        setMTResponses(null)
-        setEditedTargetLanguage([])
-        setIsContentPostedited([])
-        setCreatedProject(null)
-        setTranslatedTextTab(1)
-        setTranslatedContentClicked(false)
-        setSourceContentClicked(true)
-        setLanguageListOptions(null)
-        setSelectedLanguageSwitch(null)
-        setNewTargetLanguages([])
-        setTargetLangListToRemove([])
-        setAlreadySelecetedTarLangID([])
-        setTranslatedText(null)
-        setIsTarTextEmpty(false)
-        setIsSrcTextEmpty(false)
-        setIsTaskAssigned(false)
-        setEditorId(null)
-        setSelectedMTEngine(null)
-        setTaskInsufficientCredit(false)
-        setTaskAssignDetails(null)
-        srcDivRef.current.value = ''
-        // tarDivRef.current.value = ''
-        setTranslateResultText('')
-        copyTarDivRef.current.innerHTML = ''
-        isOpenFromList.current = false
-        projectNameRef.current.innerText = ''
-        setNavigationModalVisible(false)
-        setConfirmedNavigation(true)
-
-        setEditorName(null)
-        setDeadline(null)
-        setCurrencySelect(null)
-        setUnitTypeSelect(null)
-        setUnitRate('')
-        setAssignInstructionText('')
-        setAdditionalFilesFromApi([])
-        // console.log('from info api');
-        setEstimatedHours(null)
-
+        setSourceLanguage('');
+        setSourceLabel(t("source_language"));
+        setTargetLabel(t("target_language"));
+        setTargetLanguage([]);
+        setTranslateContent('');
+        setSourceTextLength(0);
+        setSourceText('');
+        setIsSourceTextChanged(false);
+        setIsMainMtChanged(false);
+        setprojectName(null);
+        setMTResponses(null);
+        setEditedTargetLanguage([]);
+        setIsContentPostedited([]);
+        setCreatedProject(null);
+        setTranslatedTextTab(1);
+        setTranslatedContentClicked(false);
+        setSourceContentClicked(true);
+        setLanguageListOptions(null);
+        setSelectedLanguageSwitch(null);
+        setNewTargetLanguages([]);
+        setTargetLangListToRemove([]);
+        setAlreadySelecetedTarLangID([]);
+        setTranslatedText(null);
+        setIsTarTextEmpty(false);
+        setIsSrcTextEmpty(false);
+        setIsTaskAssigned(false);
+        setEditorId(null);
+        setSelectedMTEngine(null);
+        setTaskInsufficientCredit(false);
+        setTaskAssignDetails(null);
+        srcDivRef.current.value = '';
+        // tarDivRef.current.value = '';
+        setTranslateResultText('');
+        copyTarDivRef.current.innerHTML = '';
+        isOpenFromList.current = false;
+        projectNameRef.current.innerText = '';
+        setNavigationModalVisible(false);
+        setConfirmedNavigation(true);
+        setEditorName(null);
+        setDeadline(null);
+        setCurrencySelect(null);
+        setUnitTypeSelect(null);
+        setUnitRate('');
+        setAssignInstructionText('');
+        setAdditionalFilesFromApi([]);
+        setEstimatedHours(null);
         setTimeout(() => {
         }, 100);
     }
 
-
     const handleTranslatedText = () => {
-        setTranslatedContentClicked(true)
+        setTranslatedContentClicked(true);
         if (sourceContentClicked) {
-            setSourceContentClicked(false)
+            setSourceContentClicked(false);
         }
     }
 
     const handleSourceText = () => {
-        setSourceContentClicked(true)
+        setSourceContentClicked(true);
         if (translatedContentClicked) {
-            setTranslatedContentClicked(false)
+            setTranslatedContentClicked(false);
         }
     }
 
@@ -3193,9 +2903,8 @@ const InstantTextTranslate = (props) => {
     }
 
     const getMTSamples = async () => {
-        setProcessing(true)
+        setProcessing(true);
         var formdata = new FormData();
-
         formdata.append("text", srcDivRef.current.value);
         formdata.append("source_language", sourceLanguage);
         formdata.append("target_language", JSON.stringify([targetLanguage[0]?.id]));
@@ -3207,25 +2916,25 @@ const InstantTextTranslate = (props) => {
             data: formdata,
             success: (response) => {
                 if (Object.values(response.data[targetLanguage[0]?.id])?.filter(each => each.includes('Insufficient Credits'))?.length === Object.keys(response.data[targetLanguage[0]?.id])?.length) {
-                    setShowCreditAlertModal(true)
-                    setProcessing(false)
+                    setShowCreditAlertModal(true);
+                    setProcessing(false);
                     return;
                 } else if (Object.values(response.data[targetLanguage[0]?.id])?.filter(each => each.includes('Insufficient Credits'))?.length > 0) {
-                    setPartialCompareMt(true)
-                    setInstantCompareMTVisible(true)
-                    setMTResponses(response.data)
-                    setProcessing(false)
+                    setPartialCompareMt(true);
+                    setInstantCompareMTVisible(true);
+                    setMTResponses(response.data);
+                    setProcessing(false);
                     setTimeout(() => {
-                        setShowCreditAlertModal(true)
+                        setShowCreditAlertModal(true);
                     }, 250);
                     return;
                 }
-                setInstantCompareMTVisible(true)
-                setMTResponses(response.data)
-                setProcessing(false)
+                setInstantCompareMTVisible(true);
+                setMTResponses(response.data);
+                setProcessing(false);
             },
             error: (err) => {
-                Config.toast('')
+                Config.toast('');
             }
         });
     }
@@ -3233,49 +2942,42 @@ const InstantTextTranslate = (props) => {
     // onlick on the radio button
     const handleMtChange = (event) => {
         setSelectedMtType(event.target.value);
-        let engine = mtpeEngineRef.current?.find(each => each.id == event.target.value)
+        let engine = mtpeEngineRef.current?.find(each => each.id == event.target.value);
         let engineOpt = {
             value: engine.id,
             label: engine.name?.replaceAll('_', ' ')
-        }
-        setSelectedMTEngine(engineOpt)
+        };
+        setSelectedMTEngine(engineOpt);
     };
 
     // onclick on the card
     const handleMtSelect = (e) => {
-        // console.log(e.currentTarget.dataset.id)
         setSelectedMtType(e.currentTarget.dataset.id);
         let engine = mtpeEngineRef.current?.find(each => each.id == e.currentTarget.dataset.id)
         let engineOpt = {
             value: engine.id,
             label: engine.name?.replaceAll('_', ' ')
-        }
-        setSelectedMTEngine(engineOpt)
+        };
+        setSelectedMTEngine(engineOpt);
     }
 
     const handleMtSampleSelectBtn = () => {
-        setCompareMTLoader(true)
-        createExpressProject('compare-mt')
+        setCompareMTLoader(true);
+        createExpressProject('compare-mt');
     }
-
 
     // const handleDictateBtnClick = () => {
     //     document.querySelector('#dictate-btn')?.click()
     //     if(!isListening){
-    //         setIsListening(true)
+    //         setIsListening(true);
     //     }else{
-    //         setIsListening(false)
+    //         setIsListening(false);
     //     }
     // } 
 
-
-
-
     const expressCustomization = async () => {
         var formdata = new FormData();
-
-        setIsCustomizationProcessing(true)
-
+        setIsCustomizationProcessing(true);
         formdata.append("task", taskId);
         formdata.append("option", translatedTextTab === 2 ? 'Simplify' : translatedTextTab === 3 ? 'Shorten' : "Rewrite");
 
@@ -3285,35 +2987,34 @@ const InstantTextTranslate = (props) => {
             method: "POST",
             data: formdata,
             success: (response) => {
-                let finalPTag = document.createElement('p')
-                finalPTag.innerHTML = response.data.final_result?.replace(/\n/g, "<br />")
-                // summernoteEditorRef.current?.summernote('code', finalPTag)
-
-                // tarDivRef.current.value = response.data.final_result
-                setTranslateResultText(response.data.final_result)
-                copyTarDivRef.current.innerHTML = response.data.final_result
+                let finalPTag = document.createElement('p');
+                finalPTag.innerHTML = response.data.final_result?.replace(/\n/g, "<br />");
+                // summernoteEditorRef.current?.summernote('code', finalPTag);
+                // tarDivRef.current.value = response.data.final_result;
+                setTranslateResultText(response.data.final_result);
+                copyTarDivRef.current.innerHTML = response.data.final_result;
                 if (tarDivRef.current?.value?.length !== 0) {
-                    setIsTarTextEmpty(false)
+                    setIsTarTextEmpty(false);
                 }
-                setIsCustomizationProcessing(false)
-                getCreditStatus()
+                setIsCustomizationProcessing(false);
+                getCreditStatus();
             },
             error: (err) => {
-                setIsCustomizationProcessing(false)
+                setIsCustomizationProcessing(false);
                 if (err.response.status === 400) {
                     if (err.response.data?.msg?.includes('Insufficient Credits')) {
-                        setShowCreditAlertModal(true)
-                        // summernoteEditorRef.current?.summernote('code', '')
-                        // tarDivRef.current.value = ''
-                        setTranslateResultText('')
-                        copyTarDivRef.current.innerHTML = ''
+                        setShowCreditAlertModal(true);
+                        // summernoteEditorRef.current?.summernote('code', '');
+                        // tarDivRef.current.value = '';
+                        setTranslateResultText('');
+                        copyTarDivRef.current.innerHTML = '';
                     }
                 } else if (err.response.status === 500) {
-                    Config.toast(t("paraphrase_get_error_3"), 'error')
-                    // summernoteEditorRef.current?.summernote('code', '')
-                    // tarDivRef.current.value = ''
-                    setTranslateResultText('')
-                    copyTarDivRef.current.innerHTML = ''
+                    Config.toast(t("paraphrase_get_error_3"), 'error');
+                    // summernoteEditorRef.current?.summernote('code', '');
+                    // tarDivRef.current.value = '';
+                    setTranslateResultText('');
+                    copyTarDivRef.current.innerHTML = '';
                 }
             }
         });
@@ -3321,40 +3022,39 @@ const InstantTextTranslate = (props) => {
 
     const handleSourceApplytoAllCheckbox = (e) => {
         if (e.target.checked) {
-            setSourceApplyToAll(true)
+            setSourceApplyToAll(true);
         } else {
-            setSourceApplyToAll(false)
+            setSourceApplyToAll(false);
         }
     }
 
     const handleDontShowAgainCheckbox = (e) => {
         if (e.target.checked) {
-            setDontShowAgain(true)
+            setDontShowAgain(true);
         } else {
-            setDontShowAgain(false)
+            setDontShowAgain(false);
         }
     }
 
     const validateSourceChange = () => {
         if (taskInsufficientCredit) {
-            saveChanges('validate')
+            saveChanges('validate');
         } else {
-            saveChanges('validate')
+            saveChanges('validate');
         }
-
     }
 
     const handleTranslateTabSwitch = (tab) => {
-        saveChanges('tab-switch')
-        setTranslatedTextTab(tab)
+        saveChanges('tab-switch');
+        setTranslatedTextTab(tab);
     }
 
     if (summernoteEditorRef.current !== null) {
         summernoteEditorRef.current?.on('summernote.change', function (we, contents, $editable) {
             if (getSummerNotePlainText(summernoteEditorRef.current) === savedTargetData) {
-                setChangesSaved(true)
+                setChangesSaved(true);
             } else {
-                setChangesSaved(false)
+                setChangesSaved(false);
             }
         });
     }
@@ -3391,10 +3091,9 @@ const InstantTextTranslate = (props) => {
         let fileName = name?.substring(0, lastDot);
         let ext = "." + name?.substring(lastDot + 1);
         // if(ext !== ".docx" && ext !== ".txt" && ext !== ".pdf"){
-        //     Config.toast('Unsupported file format', 'warning')
+        //     Config.toast('Unsupported file format', 'warning');
         //     return;
         // }
-
         let fileList = [...additionalFiles];
         Object.keys(thisFiles).map((eachKey) => {
             if (
@@ -3406,7 +3105,6 @@ const InstantTextTranslate = (props) => {
         });
         setAdditionalFiles(fileList);
     }
-
 
     /* Removed dragged files */
     const removeFile = (e, index) => {
@@ -3425,21 +3123,20 @@ const InstantTextTranslate = (props) => {
     };
 
     const handleIsSrcListening = () => {
-        // console.log(document.querySelector('#dictate-btn'))
         document.querySelector('#dictate-btn')?.click()
         if (isSrcListening) {
-            setIsSrcListening(false)
+            setIsSrcListening(false);
         } else {
-            setIsSrcListening(true)
+            setIsSrcListening(true);
         }
     }
 
     const handleIsTarListening = () => {
         document.querySelector('#dictate-btn')?.click()
         if (isTarListening) {
-            setIsTarListening(false)
+            setIsTarListening(false);
         } else {
-            setIsTarListening(true)
+            setIsTarListening(true);
         }
     }
 
@@ -3449,86 +3146,80 @@ const InstantTextTranslate = (props) => {
             url: `${Config.BASE_URL}/workspace/dashboard_credit_status`,
             auth: true,
             success: (response) => {
-                setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription)
+                setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription);
                 // setCreditsAvailable(response?.data?.credits_left?.addon + response?.data?.credits_left?.subscription);
             },
         });
     };
 
     const handleJobSwitch = (selectedOption) => {
-        saveChanges('target-save')
-        setTranslatedTextTab(1)
+        saveChanges('target-save');
+        setTranslatedTextTab(1);
         setSelectedLanguageSwitch(selectedOption);
-        resetAssignEditorModal()
+        resetAssignEditorModal();
     }
 
     const resetTotalPage = () => {
-        setSourceLanguage("")
-        setTargetLanguage([])
-        setSourceLabel(t("source_language"))
-        setTargetLabel("")
-        setEditedTargetLanguage([])
-        setEditJobs([])
-        setprojectName(null)
-        setTranslatedText(null)
-        setSelectedLanguageSwitch(null)
-        setLanguageListOptions(null)
-        setCreatedProject(null)
-        setAlreadySelecetedTarLangID([])
-        setSelectedMTEngine(null)
-        setHasTeam(null)
-        setTaskId(null)
-        setTranslatedTextTab(1)
-        // setTargetLangListToRemove([])
-        // setNewTargetLanguages(null)
-        setTargetLangListToRemove([])
-        setAdditionalFiles([])
-        setAdditionalFilesFromApi([])
-        setSelectedSrcDictationLang({ value: 'en', label: 'English' })
-        setSelectedTarDictationLang({ value: 'en', label: 'English' })
+        setSourceLanguage("");
+        setTargetLanguage([]);
+        setSourceLabel(t("source_language"));
+        setTargetLabel("");
+        setEditedTargetLanguage([]);
+        setEditJobs([]);
+        setprojectName(null);
+        setTranslatedText(null);
+        setSelectedLanguageSwitch(null);
+        setLanguageListOptions(null);
+        setCreatedProject(null);
+        setAlreadySelecetedTarLangID([]);
+        setSelectedMTEngine(null);
+        setHasTeam(null);
+        setTaskId(null);
+        setTranslatedTextTab(1);
+        // setTargetLangListToRemove([]);
+        // setNewTargetLanguages(null);
+        setTargetLangListToRemove([]);
+        setAdditionalFiles([]);
+        setAdditionalFilesFromApi([]);
+        setSelectedSrcDictationLang({ value: 'en', label: 'English' });
+        setSelectedTarDictationLang({ value: 'en', label: 'English' });
     }
 
     const resetAssignEditorModal = () => {
-        // console.log('reset modal')
-        setEditorId(null)
-        setEditorName(null)
-        setSelectedEditor(null)
-        setDeadline(null)
-        setCurrencySelect(null)
-        setUnitTypeSelect(null)
-        setUnitRate('')
-        setAssignInstructionText('')
-        setIsTaskAssigned(false)
-        setIsInternalEditor(false)
-
+        setEditorId(null);
+        setEditorName(null);
+        setSelectedEditor(null);
+        setDeadline(null);
+        setCurrencySelect(null);
+        setUnitTypeSelect(null);
+        setUnitRate('');
+        setAssignInstructionText('');
+        setIsTaskAssigned(false);
+        setIsInternalEditor(false);
     }
 
     // source textarea handler
     const handleSrcTextChange = (e) => {
-
         setSourceTextLength(e.target.value?.length);
-        setSourceText(e.target.value.trim())
-
+        setSourceText(e.target.value.trim());
         if (e.target.value?.trim()?.length === 0) {
-            autoDetectFireEnable.current = true
-            setTranslatedTextTab(1)
+            autoDetectFireEnable.current = true;
+            setTranslatedTextTab(1);
             setTimeout(() => {
-                // tarDivRef.current.value = ''
-                setTranslateResultText('')
-                copyTarDivRef.current.innerHTML = ''
+                // tarDivRef.current.value = '';
+                setTranslateResultText('');
+                copyTarDivRef.current.innerHTML = '';
             }, 20);
-            setIsSrcTextEmpty(true)
+            setIsSrcTextEmpty(true);
         } else {
-            setIsSrcTextEmpty(false)
+            setIsSrcTextEmpty(false);
         }
-
         if (e.target.value?.replace(/\n/g, "")?.replace(/\r/g, "") === taskDataFromApi.current?.source_text?.replace(/\n/g, "")?.replace(/\r/g, "")) {
-            setIsSourceTextChanged(false)
+            setIsSourceTextChanged(false);
         } else {
-            setIsSourceTextChanged(true)
+            setIsSourceTextChanged(true);
         }
     }
-
 
     const storeCurrentTranslationInHistory = (from) => {
         var formdata = new FormData();
@@ -3543,22 +3234,21 @@ const InstantTextTranslate = (props) => {
             method: "POST",
             data: formdata,
             success: (response) => {
-                // console.log(response.data)
             },
         });
     }
     const getTranslationHistoryForTask = () => {
-        setHistoryDrawerShow(true)
-        // setHistoryContentLoader(true)
+        setHistoryDrawerShow(true);
+        // setHistoryContentLoader(true);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/express_task_history/?task=${taskId}`,
             auth: true,
             success: (response) => {
-                setTranslationHistoryList(response.data)
-                setHistoryContentLoader(false)
+                setTranslationHistoryList(response.data);
+                setHistoryContentLoader(false);
             },
             error: (err) => {
-                setHistoryContentLoader(false)
+                setHistoryContentLoader(false);
             }
         });
     }
@@ -3570,78 +3260,70 @@ const InstantTextTranslate = (props) => {
             auth: true,
             success: (response) => {
                 // Config.toast("Deleted");
-                setTranslationHistoryList(translationHistoryList?.filter(each => each.id !== history_obj_id))
+                setTranslationHistoryList(translationHistoryList?.filter(each => each.id !== history_obj_id));
             },
         });
     }
 
-
     const isTargetEmpty = () => {
         if (tarDivRef.current.value?.trim()?.length === 0)
-            return true
+            return true;
         else
-            return false
-    }
-
- 
+            return false;
+    } 
 
     const handleSrcShowTextToggle = (index) => {
-        let collapseByIndex = [...historySrcShowMore]
+        let collapseByIndex = [...historySrcShowMore];
         collapseByIndex[index] = !collapseByIndex[index];
         setHistorySrcShowMore(collapseByIndex);
     }
 
     const handleTarShowTextToggle = (index) => {
-        let collapseByIndex = [...historyTarShowMore]
+        let collapseByIndex = [...historyTarShowMore];
         collapseByIndex[index] = !collapseByIndex[index];
         setHistoryTarShowMore(collapseByIndex);
     }
 
     const handleNonEditableSource = () => {
         if (Config.userState?.id !== editorId && isTaskAssigned) {
-            setShowSourceEditDisableAlert(true)
+            setShowSourceEditDisableAlert(true);
             sourceDisableAlertTimeout.current = setTimeout(() => {
-                setShowSourceEditDisableAlert(false)
+                setShowSourceEditDisableAlert(false);
             }, 8000);
         } else if (Config.userState?.id === editorId) {
-            setShowSourceEditDisableAlert(true)
-            setShowSourceEditPermissionAlert(true)
+            setShowSourceEditDisableAlert(true);
+            setShowSourceEditPermissionAlert(true);
             sourceDisableAlertTimeout.current = setTimeout(() => {
-                setShowSourceEditPermissionAlert(false)
-                setShowSourceEditDisableAlert(false)
+                setShowSourceEditPermissionAlert(false);
+                setShowSourceEditDisableAlert(false);
             }, 8000);
         }
     }
 
     const handleAlertCloseBtn = () => {
-        // console.log(Config.userState?.id === editorId)
         if (Config.userState?.id !== editorId && isTaskAssigned) {
-            setShowSourceEditDisableAlert(false)
-            clearTimeout(sourceDisableAlertTimeout.current)
+            setShowSourceEditDisableAlert(false);
+            clearTimeout(sourceDisableAlertTimeout.current);
         } else if (Config.userState?.id === editorId) {
-            setShowSourceEditDisableAlert(false)
-            clearTimeout(sourceDisableAlertTimeout.current)
-            setShowSourceEditPermissionAlert(false)
+            setShowSourceEditDisableAlert(false);
+            clearTimeout(sourceDisableAlertTimeout.current);
+            setShowSourceEditPermissionAlert(false);
         }
     }
 
     const handleSaveIconClick = () => {
         if (!isTarTextEmpty) {
             saveChanges('target-save', null, "store-history")
-        } else {
-
-        }
+        } else { }
     }
 
     // removes specified tag with its text content
     const removeSpecificTagWithContent = (html, tagName) => {
     const openingTagRegExp = new RegExp(`<${tagName}[^>]*>.*?<\\/${tagName}>`, "gs");
-        const modifiedHTML = html.replace(openingTagRegExp, "");
-    
+        const modifiedHTML = html.replace(openingTagRegExp, "");    
         return modifiedHTML;
     };
- 
-    
+     
     const arrow = document.querySelector('#arrow');
     const arrowTop = 'arrow-top';
     const arrowBottom = 'arrow-bottom';
@@ -3649,11 +3331,11 @@ const InstantTextTranslate = (props) => {
     function changeArrow(dir) {
         if (!arrow) return;
         if (dir == 'up') {
-            arrow.classList.remove(arrowTop)
+            arrow.classList.remove(arrowTop);
             arrow.classList.add(arrowBottom);
         }
         else {
-            arrow.classList.remove(arrowBottom)
+            arrow.classList.remove(arrowBottom);
             arrow.classList.add(arrowTop);
         }
     }
@@ -3664,7 +3346,6 @@ const InstantTextTranslate = (props) => {
             const boundingBox = markElement.getBoundingClientRect();
             const mouseX = event.clientX;
             const mouseY = event.clientY;
-
             if (
                 mouseX >= boundingBox.left &&
                 mouseX <= boundingBox.right &&
@@ -3677,44 +3358,37 @@ const InstantTextTranslate = (props) => {
                 };
             }
         }
-
         return null;
     }    
 
     const getMouseMoveCoordinates = (e) => {
         const markTags = copyTarDivRef.current.querySelectorAll('mark');
-
-        let isSpellCheckPopOpen = document.querySelector('#pop').style.visibility === 'visible' ? true : false
-
+        let isSpellCheckPopOpen = document.querySelector('#pop').style.visibility === 'visible' ? true : false;
         const touchedMark = isMouseOverMark(e, markTags);
         if (isMouseOverMark(e, markTags) && !isSpellCheckPopOpen) {
             // Mouse pointer is touching the bounding box of a <mark> element
             for (const markElement of markTags) {
-                tarDivRef.current.style.cursor = 'pointer'
+                tarDivRef.current.style.cursor = 'pointer';
             }
             // if(document.querySelector('#pop').style.visibility === 'hidden'){
-                clickedWrongWordRef.current = touchedMark
-                clickedMarkEleRef.current = touchedMark 
-                setRectElement(touchedMark)
+                clickedWrongWordRef.current = touchedMark;
+                clickedMarkEleRef.current = touchedMark ;
+                setRectElement(touchedMark);
             // }
-            // console.log("Touched <mark> element:", touchedMarkText);
         } else {
             // Mouse pointer is not over any <mark> element
             for (const markElement of markTags) {
-                clickedWrongWordRef.current = null
-                tarDivRef.current.style.cursor = 'text'
+                clickedWrongWordRef.current = null;
+                tarDivRef.current.style.cursor = 'text';
             }
         }
     } 
     
-    const setPopOnPosition = () => {
-        // console.log("rect element "+rectElement)
-        // console.log("rect ref "+clickedWrongWordRef.current)
-        
-        if(rectElement !== null) clickedWrongWordRef.current = rectElement
+    const setPopOnPosition = () => {        
+        if(rectElement !== null) clickedWrongWordRef.current = rectElement;
         if(clickedWrongWordRef.current !== null){
-            let {element, rect} = clickedWrongWordRef.current
-            rect = element?.getBoundingClientRect()
+            let {element, rect} = clickedWrongWordRef.current;
+            rect = element?.getBoundingClientRect();
             let pos = decidePopPosition(rect);
             let top = pos.y - document.querySelector('.text-area-wizard-wrapper').scrollTop;
             let left = pos.x - document.querySelector('.text-area-wizard-wrapper').scrollLeft;
@@ -3732,12 +3406,10 @@ const InstantTextTranslate = (props) => {
             }
             else
                 document.querySelector('#pop').style.top = `${pos.y}px`;
-            document.querySelector('#pop').style.left = `${pos.x}px`;
-
-            changeArrow(pos.dir);
-            document.querySelector('#pop').style.visibility = 'visible';
-            document.querySelector('#pop').style.opacity = '1';
-            
+                document.querySelector('#pop').style.left = `${pos.x}px`;
+                changeArrow(pos.dir);
+                document.querySelector('#pop').style.visibility = 'visible';
+                document.querySelector('#pop').style.opacity = '1';            
         }
     } 
 
@@ -3747,11 +3419,9 @@ const InstantTextTranslate = (props) => {
         if (x < 0)
             x = 0;
         else if (x + document.querySelector('#pop')?.clientWidth > document.querySelector('.text-area-wizard-wrapper')?.clientWidth)
-            x = document.querySelector('.text-area-wizard-wrapper')?.clientWidth - document.querySelector('#pop')?.clientWidth;
-
-        let y, dir;
+             x = document.querySelector('.text-area-wizard-wrapper')?.clientWidth - document.querySelector('#pop')?.clientWidth;
+             let y, dir;
         if (rect.top > window.innerHeight - rect.bottom) {
-
             y = rect.bottom - document.querySelector('.text-area-wizard-wrapper')?.getBoundingClientRect().top + document.querySelector('.text-area-wizard-wrapper').scrollTop + 8
             dir = 'down';
         }
@@ -3762,17 +3432,12 @@ const InstantTextTranslate = (props) => {
         return { x: x, y: y, dir: dir };
     }
 
-    const handleWrongWordClick = (e) => {
-        // console.log(clickedWrongWordRef.current)        
-        let clickedOverPop = e.target.closest('#pop') ? true : false
-
-
+    const handleWrongWordClick = (e) => {       
+        let clickedOverPop = e.target.closest('#pop') ? true : false;
         if(clickedWrongWordRef.current !== null && !clickedOverPop){
-            let {element} = clickedWrongWordRef.current
-
-            setPopOnPosition()
-
-            let suggestions = spellCheckResponseRef.current?.find(each => each.word === element.innerText)?.suggestion
+            let {element} = clickedWrongWordRef.current;
+            setPopOnPosition();
+            let suggestions = spellCheckResponseRef.current?.find(each => each.word === element.innerText)?.suggestion;
 
             try{
                 let options_list = suggestions?.map((value, ind) => {
@@ -3786,32 +3451,27 @@ const InstantTextTranslate = (props) => {
                         </p>
                     )
                 })
-                setSpellCheckSuggestion(options_list)
+                setSpellCheckSuggestion(options_list);
             }catch(e){
-                console.log(e)
+                console.error(e);
             }
             
         }else{
-            // console.log(e.target)
             // don't close when clicked inside the #pop div
             if(e.target instanceof Element && !e.target?.closest('#pop')){
                 document.querySelector('#pop').style.visibility = 'hidden';
                 document.querySelector('#pop').style.opacity = '0';
-                setRectElement(null)
-                clickedWrongWordRef.current = null
+                setRectElement(null);
+                clickedWrongWordRef.current = null;
             }
         }
     }
 
     // useEffect(() => {
-    //   console.log("rect element "+rectElement)
-    // }, [rectElement])
-    
-    
-    
+    // }, [rectElement]);
+          
     const replaceWithCorrectWord = (e, value) => {
         const markTags = copyTarDivRef.current.querySelectorAll('mark');
-
         // group the mark tags based on the innerText / it will give the order and occurance of each word
         const groups = {};
         // Iterate through each <mark> element
@@ -3827,34 +3487,22 @@ const InstantTextTranslate = (props) => {
                 groups[innerText] = [markElement];
             }
         });
-        // console.log(groups);
-
-        // console.log(groups[clickedMarkEleRef.current?.element.innerText?.trim()])
-
-        let markArr = groups[clickedMarkEleRef.current?.element.innerText?.trim()]
-        let index = markArr?.findIndex(each => each?.id === clickedMarkEleRef.current?.element.id)
-        // console.log(index)
-
+        let markArr = groups[clickedMarkEleRef.current?.element.innerText?.trim()];
+        let index = markArr?.findIndex(each => each?.id === clickedMarkEleRef.current?.element.id);
         // get the text from textarea 
         var text = tarDivRef.current.value;
-
         var searchWord = clickedMarkEleRef.current?.element.innerText;
         var replacementText = value;
-
         // Specify the index (zero-based) of the word to replace
         var instanceToReplace = index; // Replace the index occurrence (index 0 means 1st occurance | index 1 means 2nd occurance)
-
         // Use a regular expression to find all instances of the word
         // var regex = new RegExp(searchWord, "g");
         var regex = new RegExp('\\b' + searchWord + '\\b', 'g');
         var matches = text.match(regex);
-
         // Keep track of the current instance count
         var currentInstance = -1;
-
         // Use a custom replace function to replace the specific instance
-        setHistoryArrState(prevState => { return text})
-
+        setHistoryArrState(prevState => { return text});
         var newText = text.replace(regex, function(match) {
             currentInstance++;
             if (currentInstance === instanceToReplace) {
@@ -3863,13 +3511,11 @@ const InstantTextTranslate = (props) => {
                 return match;
             }
         });
-
         document.querySelector('#pop').style.visibility = 'hidden';
         document.querySelector('#pop').style.opacity = '0';
-
-        setTranslateResultText(newText)
-        setHistoryArrState(prevState => { return newText})
-        copyTarDivRef.current.innerHTML = newText
+        setTranslateResultText(newText);
+        setHistoryArrState(prevState => { return newText});
+        copyTarDivRef.current.innerHTML = newText;
     }
 
     function escapeRegExp(str) {
@@ -3877,20 +3523,14 @@ const InstantTextTranslate = (props) => {
     }
     
     const highlightSpellCheckWords = () => {
-
-        if (translateResultText?.length === 0) return
-        // let content_editable_div = targetContentEditable.current[segment_id].current
-
+        if (translateResultText?.length === 0) return;
+        // let content_editable_div = targetContentEditable.current[segment_id].current;
         if(spellCheckWordsOptions?.length !== 0){
             let words_list = spellCheckWordsOptions?.map(each => {
-                return each.word
+                return each.word;
             })
-
-            var text = translateResultText
+            var text = translateResultText;
             var wordsToHighlight = words_list; // Array of words to highlight
-            // console.log(wordsToHighlight)
-            // console.log(text)
-
             try{
                 // Generate regular expression pattern with all the words to highlight
                 var pattern = new RegExp('\\b(' + wordsToHighlight.map(escapeRegExp).join('|') + ')\\b', 'g');
@@ -3900,15 +3540,11 @@ const InstantTextTranslate = (props) => {
                         return `<mark data-word=${`"${match}"`} id=${`"spell-check-${uid}"`} class="spellcheck-highlight" >${match}</mark>`
                     }
                 );
-    
-                // console.log(highlightedHtml)
                 copyTarDivRef.current.innerHTML = removeSpecificTag(highlightedHtml, 'font');
             }catch(e){
-                console.log(e)
+                console.error(e);
             }
-            // restoreCursorPositionWithinContenteditable(content_editable_div);
-            
-
+            // restoreCursorPositionWithinContenteditable(content_editable_div); 
         }
     }
 
@@ -3925,23 +3561,23 @@ const InstantTextTranslate = (props) => {
                 data: formData,
                 success: (response) => {
                     if(response.data?.result){
-                        // console.log(response.data?.result)
-                        setSpellCheckWordsOptions(response.data.result)
-                        spellCheckResponseRef.current = response.data.result
+                        setSpellCheckWordsOptions(response.data.result);
+                        spellCheckResponseRef.current = response.data.result;
                     }
                 },
-                error: (err) => { }
+                error: (err) => { 
+                    console.error(err);
+                }
             });
         }
     } 
 
     const handleSpellCheckToggle = () => {
-        setTranslateResultText(translateResultText)
-        copyTarDivRef.current.innerHTML = translateResultText
-        setSpellCheckWordsOptions([])
-        setIsSpellCheckEnable(!isSpellCheckEnable)
-        console.log(isSpellCheckEnable)
-        if(isSpellCheckEnable === false) symSpellCheck(true) 
+        setTranslateResultText(translateResultText);
+        copyTarDivRef.current.innerHTML = translateResultText;
+        setSpellCheckWordsOptions([]);
+        setIsSpellCheckEnable(!isSpellCheckEnable);
+        if(isSpellCheckEnable === false) symSpellCheck(true) ;
     } 
 
     return (
