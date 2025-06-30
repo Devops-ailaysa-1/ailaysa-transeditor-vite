@@ -85,7 +85,7 @@ const AllRoutes = (props) => {
                 {!is_internal_meber_editor && (
                     isEnterprise === false ? (
                         
-                        <Route path="/" element={<Navigate to="/create/translate/translate-files"/>} />
+                        <Route path="/" element={<Navigate to="/create/all-templates"/>} />
                     ) : (
                         isDinamalar ? (
                             <Route path="/" element={<Navigate to="/my-stories?page=1"/>} />
