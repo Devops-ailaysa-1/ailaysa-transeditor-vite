@@ -59,7 +59,7 @@ function TranslateFiles(props) {
     const { t } = useTranslation();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const dispatch = useDispatch();
-    const open = Boolean(anchorEl); //Assigned task open
+   
 
     const [didMount, setDidMount] = useState(false);
     const [isLoading, setLoading] = useState(false);
@@ -274,7 +274,7 @@ function TranslateFiles(props) {
     const fileTranslatingTaskListRef = useRef([]);
     const defaultGlossDetailsRef = useRef(null);
     /* Ref constants - end */
-   
+    const open = Boolean(anchorEl); //Assigned task open
     const customMtSelectStyles = {
         placeholder: (provided, state) => ({
             ...provided,
@@ -1761,8 +1761,8 @@ function TranslateFiles(props) {
                     setLoading(false);
                 }, 50);
                 setFileError("");
-                setGlossaryProjectId(data.individual_gloss_project_id);               
-                getProjectTaskData(data.individual_gloss_project_id, "GLOSSARY", 'INIT');
+                setGlossaryProjectId(data.individual_gloss_project_id);  
+                //  getProjectTaskData(data.individual_gloss_project_id, "GLOSSARY", 'INIT');
             },
         });
     };
@@ -1904,13 +1904,14 @@ function TranslateFiles(props) {
         if (projectDataFromApi.current?.pre_translate !== preTranslate) {
             formData.append("pre_translate", preTranslate);
         }
+        formData.append("get_mt_by_page", translationByPage);
+        // if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
+        //     formData.append("get_mt_by_page", translationByPage);
+        // }
+        // if(adaptiveTransEnable){
+        //     formData.append("get_mt_by_page", true);
+        // }
 
-        if (projectDataFromApi.current?.get_mt_by_page !== translationByPage) {
-            formData.append("get_mt_by_page", translationByPage);
-        }
-        if(adaptiveTransEnable){
-            formData.append("get_mt_by_page", true);
-        }
 
 
         let stepsToRemoveList = stepOptions?.filter(stepOpt => selectedSteps?.some(each => stepOpt.value !== each.value))
