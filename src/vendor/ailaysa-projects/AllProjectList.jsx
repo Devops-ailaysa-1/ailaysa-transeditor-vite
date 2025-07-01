@@ -1732,6 +1732,13 @@ function AllProjectList(props) {
                     }
                 }
             },
+            error:(err)=>{
+if(err?.response?.status === 404){
+if(err?.response?.data?.detail.includes("Not found")){
+    listAllProjects();
+}
+}
+            }
         });
 
     };
