@@ -77,7 +77,7 @@ const Config = {
     STRAPI_BASE_URL: import.meta.env.VITE_APP_STRAPI_BASE_URL, //Card Content API BASE_URL
     IS_MAINTANCE: import.meta.env.VITE_APP_MAINTANCE,
     AI_GEN_URL: import.meta.env.VITE_APP_AI_GEN_URL,
-    STATIC_URL:import.meta.env.VITE_APP_STATIC_URL,
+    STATIC_URL:import.meta.env.VITE_APP_LOGIN_REDIRECT_URL,
     redirectIfNotLoggedIn: function (props) {
         //Redirect to specified page if not logged in
         if (Config.userState === null) {
