@@ -53,8 +53,7 @@ import ConfirmIcon from "../../assets/images/new-ui-icons/confirm-icon.svg";
 const ConvertedPdfList = (props) => {
     const location = useLocation();
     const history = useNavigate();
-    const { t } = useTranslation();
-    const open = Boolean(sortEl);
+    const { t } = useTranslation();   
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
 
     const [didMount, setDidMount] = useState(false);
@@ -105,6 +104,8 @@ const ConvertedPdfList = (props) => {
     const triggerTimeoutRef = useRef(null);
     const targetLanguageOptionsRef = useRef([]);    
 
+     const open = Boolean(sortEl);
+     
     // const AddProjectButton = withStyles((theme) => ({
     //     root: {
     //         backgroundColor: "#0078D4",
