@@ -5,12 +5,7 @@ import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 export const MoreMenu = (props) => {
-    let { 
-        item, 
-        updateSpecificKeyInList,
-        list,
-        setList
-    } = props;
+    let { item, updateSpecificKeyInList, list, setList } = props;
     const options = [
         {
             id: 1,

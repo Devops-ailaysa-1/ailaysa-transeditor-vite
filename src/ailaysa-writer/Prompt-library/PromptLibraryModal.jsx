@@ -157,10 +157,7 @@ export const PromptLibraryModal = (props) => {
                     {domainList?.map(domain => {
                         return (
                             <SwiperSlide key={domain?.id}>
-                                <div 
-                                    className={"domain-capsule " + (selectedDomain === domain?.id ? 'active' : "")} 
-                                    onClick={() => setSelectedDomain(domain?.id)}
-                                >
+                                <div className={"domain-capsule " + (selectedDomain === domain?.id ? 'active' : "")}  onClick={() => setSelectedDomain(domain?.id)} >
                                     {domain?.name}
                                 </div>
                             </SwiperSlide>
@@ -177,13 +174,8 @@ export const PromptLibraryModal = (props) => {
         return (
             <div key={id} className="prompt-card">
                 {isNew ? (
-                    <textarea 
-                        name="new-prompt" 
-                        placeholder='Enter your own prompt,  utilizing [square brackets] for placeholders.'                     
-                        autoFocus={true}
-                        onChange={(e) => handlePromptChange(e, id)}
-                        value={prompt}
-                    ></textarea>
+                    <textarea name="new-prompt" placeholder='Enter your own prompt,  utilizing [square brackets] for placeholders.'                     
+                        autoFocus={true} onChange={(e) => handlePromptChange(e, id)} value={prompt} ></textarea>
                 ) : (
                     <p className="prompt-text">
                         {prompt}
@@ -212,10 +204,7 @@ export const PromptLibraryModal = (props) => {
                                     <ModeEditOutlinedIcon />
                                 </div>
                             </Tooltip>
-                            <PromptButton
-                                classname="prompt-primary-btn" 
-                                onClick={() => handleUsePromptBtn(each.prompt_content)}
-                            >
+                            <PromptButton  classname="prompt-primary-btn"  onClick={() => handleUsePromptBtn(each.prompt_content)} >
                                 Use prompt
                             </PromptButton>
                         </>
@@ -422,15 +411,16 @@ export const PromptLibraryModal = (props) => {
                     setPromptCardsList(response.data);
                     setPromptCardsListCopy(response.data);
                 },
+                error: (err) => {
+                    console.error(err);
+                }
             });
         })
     } 
 
     return (
         <>
-            <button 
-                className="prompt-library-btn d-flex items-center"
-                onClick={() => setShowPromptLibrary(!showPromptLibrary)}>
+            <button className="prompt-library-btn d-flex items-center" onClick={() => setShowPromptLibrary(!showPromptLibrary)}>
                 <LibraryBooksOutlinedIcon style={{color: "#5F6368", fontSize: "22px"}} />
                 Prompt library
             </button>
@@ -452,13 +442,7 @@ export const PromptLibraryModal = (props) => {
                                 <PromptTabs />
                                 <div className="search-box d-flex items-center">
                                     <SearchOutlinedIcon style={{ color: '#5F6368' }} />
-                                    <input 
-                                        type="text" 
-                                        className="search-input" 
-                                        placeholder='Search...'
-                                        value={searchQueryText}
-                                        onChange={handleSearchPromptChange}
-                                    />
+                                    <input type="text" className="search-input" placeholder='Search...' value={searchQueryText} onChange={handleSearchPromptChange} />
                                     {searchQueryText !== "" && (
                                         <IconButton className="p-1" onClick={(e) => setSearchQueryText("")}>
                                             <CloseIcon style={{fontSize: '20px'}} />
@@ -467,21 +451,14 @@ export const PromptLibraryModal = (props) => {
                                 </div>
                             </div>
                             <div className="prompt-container d-flex">
-                                <div className="left-box"
-                                    style={
-                                        searchQueryText !== "" ? {display: 'none'} : {}
-                                    } > 
-                                    {activePromptTab === 1 && (
-                                        <DomainCapsuleList />
-                                    )}
+                                <div className="left-box" style={ searchQueryText !== "" ? {display: 'none'} : {} } > 
+                                    {activePromptTab === 1 && ( <DomainCapsuleList /> )}
                                     <div className="d-flex category-list-container">
                                         <ul className="category-list custom-scroll-bar">
                                             {categoryList?.map(category => {
                                                 if(category?.isEditable) {
                                                     return (
-                                                        <li 
-                                                            className={"list-item-input " + (selectedCategory === category.id ? "active" : "")}
-                                                        >
+                                                        <li className={"list-item-input " + (selectedCategory === category.id ? "active" : "")} >
                                                             <input 
                                                                 type="text" 
                                                                 placeholder='Category name'
@@ -495,17 +472,11 @@ export const PromptLibraryModal = (props) => {
                                                     )
                                                 }else{
                                                     return (
-                                                        <li 
-                                                            className={"list-item d-flex items-center justify-between " + (selectedCategory === category.id ? "active" : "")}
-                                                            onClick={() => setselectedCategory(category.id)}
-                                                        >
+                                                        <li className={"list-item d-flex items-center justify-between " + (selectedCategory === category.id ? "active" : "")}
+                                                            onClick={() => setselectedCategory(category.id)} >
                                                             {category.name}
                                                             {activePromptTab === 2 && (
-                                                                <MoreMenu 
-                                                                    item={category} 
-                                                                    updateSpecificKeyInList={updateSpecificKeyInList}
-                                                                    list={categoryList}
-                                                                    setList={setCategoryList} />
+                                                                <MoreMenu item={category} updateSpecificKeyInList={updateSpecificKeyInList} list={categoryList} setList={setCategoryList} />
                                                             )}
                                                         </li>
                                                     )
@@ -516,9 +487,7 @@ export const PromptLibraryModal = (props) => {
                                             {subCategoryList?.map(subCategory => {
                                                 if(subCategory?.isEditable){
                                                     return (
-                                                        <li 
-                                                            className={"list-item-input " + (selectedSubCategory === subCategory.id ? "active" : "")}
-                                                        >
+                                                        <li className={"list-item-input " + (selectedSubCategory === subCategory.id ? "active" : "")} >
                                                             <input 
                                                                 type="text" 
                                                                 placeholder='Category name'
@@ -532,10 +501,8 @@ export const PromptLibraryModal = (props) => {
                                                     )
                                                 }
                                                 return (
-                                                    <li 
-                                                        className={"list-item d-flex items-center justify-between " + (selectedSubCategory == subCategory.id ? "active" : "")}
-                                                        onClick={() => setselectedSubCategory(subCategory.id)}
-                                                    >
+                                                    <li className={"list-item d-flex items-center justify-between " + (selectedSubCategory == subCategory.id ? "active" : "")}
+                                                        onClick={() => setselectedSubCategory(subCategory.id)}>
                                                         {subCategory.name}
                                                         {activePromptTab === 2 && (
                                                             <MoreMenu 
@@ -581,8 +548,7 @@ export const PromptLibraryModal = (props) => {
                                                     className={[
                                                         "prompt-card",
                                                         (each?.isNew || each?.isEdit) && "active",
-                                                        (isNewOrEditMode && !each?.isNew && !each?.isEdit) && "disable"
-                                                        
+                                                        (isNewOrEditMode && !each?.isNew && !each?.isEdit) && "disable"                                                        
                                                     ].join(' ')}>
                                                     {(each?.isNew || each?.isEdit) ? (
                                                         <textarea 
@@ -603,32 +569,20 @@ export const PromptLibraryModal = (props) => {
                                                     <div className="action-btn-wrapper items-center">
                                                         {each?.isNew && (
                                                             <>
-                                                                <PromptButton 
-                                                                    classname="simple-btn"
-                                                                    onClick={(e) => handlePromptCancelBtn(e, each.id)}
-                                                                >
+                                                                <PromptButton classname="simple-btn" onClick={(e) => handlePromptCancelBtn(e, each.id)} >
                                                                     Cancel
                                                                 </PromptButton>
-                                                                <PromptButton 
-                                                                    classname="prompt-primary-btn"
-                                                                    onClick={(e) => handleAddPromptBtn(e, each.id)}
-                                                                >
+                                                                <PromptButton classname="prompt-primary-btn" onClick={(e) => handleAddPromptBtn(e, each.id)} >
                                                                     Add prompt
                                                                 </PromptButton>
                                                             </>
                                                         )}  
                                                         {each?.isEdit ? (
                                                             <>
-                                                                <PromptButton 
-                                                                    classname="simple-btn"
-                                                                    onClick={(e) => handleToggleEditPromptCard(e, each.id, false)}
-                                                                >
+                                                                <PromptButton classname="simple-btn" onClick={(e) => handleToggleEditPromptCard(e, each.id, false)} >
                                                                     Cancel
                                                                 </PromptButton>
-                                                                <PromptButton
-                                                                    classname="prompt-primary-btn"
-                                                                    onClick={(e) => handleSavePromptCard(e, each.id)}
-                                                                >
+                                                                <PromptButton classname="prompt-primary-btn" onClick={(e) => handleSavePromptCard(e, each.id)} >
                                                                     Save prompt
                                                                 </PromptButton>
                                                             </>
@@ -637,43 +591,28 @@ export const PromptLibraryModal = (props) => {
                                                                 {activePromptTab === 2 && (
                                                                     <>
                                                                         <Tooltip title="Delete prompt" placement="top" arrow>
-                                                                            <div 
-                                                                                className="action-icon delete-bin-icon"
-                                                                                onClick={(e) => handleToggleDeletePromptCard(e, each.id, true)}
-                                                                            >
+                                                                            <div className="action-icon delete-bin-icon" onClick={(e) => handleToggleDeletePromptCard(e, each.id, true)} >
                                                                                 <DeleteOutlinedIcon />
                                                                             </div>
                                                                         </Tooltip>
                                                                         <Tooltip title="Edit prompt" placement="top" arrow>
-                                                                            <div
-                                                                                className="action-icon edit-icon"
-                                                                                onClick={(e) => handleToggleEditPromptCard(e, each.id, true)}
-                                                                            >
+                                                                            <div className="action-icon edit-icon" onClick={(e) => handleToggleEditPromptCard(e, each.id, true)} >
                                                                                 <ModeEditOutlinedIcon />
                                                                             </div>
                                                                         </Tooltip>
                                                                     </>
                                                                 )}
-                                                                <PromptButton
-                                                                    classname="prompt-primary-btn" 
-                                                                    onClick={() => handleUsePromptBtn(each.prompt_content)}
-                                                                >
+                                                                <PromptButton classname="prompt-primary-btn" onClick={() => handleUsePromptBtn(each.prompt_content)}>
                                                                     Use prompt
                                                                 </PromptButton>
                                                             </>
                                                         )}
                                                         {each.isDelete && (
                                                             <>
-                                                                <PromptButton 
-                                                                    classname="simple-btn"
-                                                                    onClick={(e) => handleToggleDeletePromptCard(e, each.id, false)}
-                                                                >
+                                                                <PromptButton classname="simple-btn" onClick={(e) => handleToggleDeletePromptCard(e, each.id, false)} >
                                                                     Cancel
                                                                 </PromptButton>
-                                                                <PromptButton 
-                                                                    classname="danger-btn"
-                                                                    onClick={(e) => handleDeletePromptCard(e, each.id)}
-                                                                >
+                                                                <PromptButton classname="danger-btn" onClick={(e) => handleDeletePromptCard(e, each.id)} >
                                                                     Delete prompt
                                                                 </PromptButton>
                                                             </>
@@ -685,18 +624,11 @@ export const PromptLibraryModal = (props) => {
                                         {(searchQueryText.trim() !== "" && promptCardsList.length === 0) && (
                                             <div className="d-flex items-center justify-center items-center" style={{height: '100%'}}>
                                                 <div>
-                                                    <img 
-                                                        src={NoEditorsFoundTwo} 
-                                                        style={{margin: '0px auto', display: 'block'}} 
-                                                        className='mb-4'
-                                                        alt="no search found" 
-                                                        width={86}
-                                                    />
+                                                    <img src={NoEditorsFoundTwo} style={{margin: '0px auto', display: 'block'}} className='mb-4'  alt="no search found" width={86}  />
                                                     <p style={{textAlign: 'center'}}><b>No prompts found</b></p>
                                                     <p style={{textAlign: 'center'}}>
                                                         We couldn't find any prompts matching your search. <br />Please try using other keywords or phrases.
                                                     </p>
-
                                                 </div>
                                             </div>
                                         )}

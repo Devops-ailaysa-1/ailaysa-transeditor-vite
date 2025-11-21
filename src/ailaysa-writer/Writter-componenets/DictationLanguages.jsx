@@ -75,7 +75,7 @@ export const dictationLanguages = [
     // { name: "Swedish", code: "sv-SE"},
     // { name: "Turkish", code: "tr"},
     // { name: "Zulu", code: "zu"},
-    {
+      {
         name: "Bulgarian",
         code: "bg"
       },
@@ -117,176 +117,141 @@ export const dictationLanguages = [
       },
       {
         name: "Greek",
-        code: "el"
-  
+        code: "el"  
       },
       {
         name: "Gujarati",
-        code: "gu"
-  
+        code: "gu"  
       },
       {
         name: "Hindi",
-        code: "hi"
-  
+        code: "hi"  
       },
       {
         name: "Hungarian",
-        code: "hu"
-  
+        code: "hu"  
       },
       {
         name: "Icelandic",
-        code: "is"
-  
+        code: "is"  
       },
       {
         name: "Indonesian",
-        code: "id"
-  
+        code: "id"  
       },
       {
         name: "Italian",
-        code: "it"
-  
+        code: "it"  
       },
       {
         name: "Japanese",
-        code: "ja"
-  
+        code: "ja"  
       },
       {
         name: "Kannada",
-        code: "kn"
-  
+        code: "kn"  
       },
       {
         name: "Korean",
-        code: "ko"
-  
+        code: "ko"  
       },
       {
         name: "Latvian",
-        code: "lv"
-  
+        code: "lv"  
       },
       {
         name: "Malay",
-        code: "ms"
-  
+        code: "ms"  
       },
       {
         name: "Malayalam",
-        code: "ml"
-  
+        code: "ml"  
       },
       {
         name: "Polish",
-        code: "pl"
-  
+        code: "pl"  
       },
       {
         name: "Portuguese",
-        code: "pt"
-  
+        code: "pt"  
       },
       {
         name: "Punjabi",
-        code: "pa"
-  
+        code: "pa"  
       },
       {
         name: "Romanian",
-        code: "ro"
-  
+        code: "ro"  
       },
       {
         name: "Russian",
-        code: "ru"
-  
+        code: "ru"  
       },
       {
         name: "Serbian",
-        code: "sr"
-  
+        code: "sr"  
       },
       {
         name: "Slovak",
-        code: "sk"
-  
+        code: "sk"  
       },
       {
         name: "Spanish",
-        code: "es"
-  
+        code: "es"  
       },
       {
         name: "Swedish",
-        code: "sv"
-  
+        code: "sv"  
       },
       {
         name: "Tamil",
-        code: "ta"
-  
+        code: "ta"  
       },
       {
         name: "Telugu",
-        code: "te"
-  
+        code: "te"  
       },
       {
         name: "Thai",
-        code: "th"
-  
+        code: "th"  
       },
       {
         name: "Turkish",
-        code: "tr"
-  
+        code: "tr"  
       },
       {
         name: "Ukrainian",
-        code: "uk"
-  
+        code: "uk"  
       },
       {
         name: "Vietnamese",
-        code: "vi"
-  
+        code: "vi"  
       },
       {
         name: "Bengali",
-        code: "bn"
-  
+        code: "bn"  
       },
       {
         name: "Norwegian",
-        code: "no"
-  
+        code: "no"  
       },
       {
         name: "Chinese (Traditional)",
-        code: "zh-TW"
-  
+        code: "zh-TW"  
       },
       {
         name: "Chinese (Simplified)",
-        code: "zh-CN"
-  
+        code: "zh-CN"  
       },
       {
         name: "Arabic",
-        code: "ar"
-  
+        code: "ar"  
       },
       {
         name: "Afrikaans",
-        code: "bg"
-  
+        code: "bg"  
       }
 ];
-
 
 // [
 //     {

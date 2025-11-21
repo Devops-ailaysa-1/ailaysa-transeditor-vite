@@ -27,11 +27,7 @@ const GlobalWriterFooter = () => {
             <div className="prompt-typing-area">
                 <div className="prompt-typing-inner-area">
                     <div className="prompt-type-area">
-                        <TextareaAutosize
-                            ref={promptInput} 
-                            className="sent-input" 
-                            placeholder="Type a new message"
-                        />
+                        <TextareaAutosize  ref={promptInput}  className="sent-input"  placeholder="Type a new message"/>
                     </div>
                     <div className="prompt-send-icon-main">
                         <button className="prompt-send-icon" type="submit">

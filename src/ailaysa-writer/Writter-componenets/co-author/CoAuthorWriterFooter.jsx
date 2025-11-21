@@ -9,7 +9,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useTranslation } from "react-i18next";
 import $ from 'jquery';
 import CircularProgress from '@mui/material/CircularProgress';
-import ChatSentIcon from "../../../assets/images/chat/chat-sent-icon.svg"
+import ChatSentIcon from "../../../assets/images/chat/chat-sent-icon.svg";
 
 const CoAuthorWriterFooter = (props) => {
     let { 
@@ -126,7 +126,7 @@ const CoAuthorWriterFooter = (props) => {
     }
 
     const postAiPrompt = () => {
-        if(promptText?.trim()?.length === 0) return
+        if(promptText?.trim()?.length === 0) return;
         promptInput.current.blur();
         let formdata = new FormData();
         let isCoAuthor = window.location.pathname.includes('book-writing');
@@ -144,7 +144,7 @@ const CoAuthorWriterFooter = (props) => {
         // targetLanguage?.map(each => {                               // target language
             // formdata.append("get_result_in", 38);
             // formdata.append("get_result_in", 32);
-        // })
+        // });
         setPromptText("");
         setIsGenerating(true);
 
@@ -199,8 +199,7 @@ const CoAuthorWriterFooter = (props) => {
                 dataList?.forEach(result => {
                     let text = result?.api_result !== null ? result?.api_result?.match(/[^\r\n]+/g) : result?.translated_prompt_result?.match(/[^\r\n]+/g);
                     insertResultInEditor(text);
-                });
-                
+                });                
             },
         });
     }
@@ -211,9 +210,9 @@ const CoAuthorWriterFooter = (props) => {
             // var divNode = document.createElement('div');
             var pNode = document.createElement('p');
             var brNode = document.createElement('p');
-            brNode.innerHTML = "<br />"
-            pNode.innerHTML = each.trim()
-            pNode.className = 'temp-color'
+            brNode.innerHTML = "<br />";
+            pNode.innerHTML = each.trim();
+            pNode.className = 'temp-color';
             // pNode.style = 'display: inline;'
             if (containsRtlCharacters(each)) {
                 pNode.classList.add('right-align-lang-style');
@@ -230,9 +229,8 @@ const CoAuthorWriterFooter = (props) => {
                 $('.summernote')?.summernote('insertNode', brNode);
                 pNode?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-        })
+        });
     } 
-
     
     return (
         <section className="global-footer-main-wrapper">
@@ -242,8 +240,7 @@ const CoAuthorWriterFooter = (props) => {
                     <KeyboardArrowDownIcon className="close-icon" style={promptMainWrapper ? { transform: 'rotate(180deg)' } : { transform: 'rotate(360deg)' }} />
                 </div>
             </div> */}
-            <div 
-                className="prompting-main-wrapper" 
+            <div className="prompting-main-wrapper" 
                 // style={{ height: promptMainWrapper ? "calc(100% - 38px)" : "auto", display: promptMainWrapper ? "flex" : "none"}}
             >
                 {/* <div className={"global-footer-options-wrapper " + (deskLeftSideBar ? "show " : (!deskLeftSideBar && !rightSideBar) && "hide")}></div> */}
@@ -278,8 +275,6 @@ const CoAuthorWriterFooter = (props) => {
                                 </div> */}
                             </div>
                             <div className="prompt-type-area-wrapper">
-
-
                                 <div className="prompt-type-area">
                                     <div className="prompt-type-area-inner-wrapper">
                                         <TextareaAutosize
@@ -292,12 +287,9 @@ const CoAuthorWriterFooter = (props) => {
                                             onKeyDown={handlePromptBoxKeyDown}
                                         />
                                         <div className="prompt-send-icon-main">
-                                            <button 
-                                                className="prompt-send-icon" 
+                                            <button  className="prompt-send-icon" 
                                                 style={promptText?.trim()?.length === 0 ? {pointerEvents: 'none', opacity: 0.5, backgroundColor: "#ebebeb"} : {}}
-                                                onClick={postAiPrompt} 
-                                                disabled={promptText?.trim()?.length === 0}
-                                            >
+                                                onClick={postAiPrompt}  disabled={promptText?.trim()?.length === 0} >
                                                 {isGenerating ? (
                                                     <CircularProgress sx={{ color: 'grey.500' }} style={{height: '22px', width: '22px'}} />
                                                 ) : (
@@ -306,10 +298,7 @@ const CoAuthorWriterFooter = (props) => {
                                             </button>
                                         </div>
                                     </div>
-                                    <div 
-                                        className="prompt-box-foot-notes"
-                                        style={promptText?.trim()?.length === 0 ? {opacity: 0} : {opacity: 1}}
-                                    >
+                                    <div className="prompt-box-foot-notes" style={promptText?.trim()?.length === 0 ? {opacity: 0} : {opacity: 1}} >
                                         <small className="multiline-chat-help-text">{promptText?.trim()?.length}/1000</small>
                                         <span className="multiline-chat-help-text">
                                             <b>Shift + Enter</b> {t("multiline_text_box_help_text")}

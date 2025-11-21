@@ -13,10 +13,7 @@ import NoEditorsFoundTwo from "../../assets/images/no-editors-found-2.svg";
 import EmptyProjectFolder from "../../assets/images/empty-projects-folder.svg";
 
 const DocumentListModal = (props) => {
-    let {
-        showDocumentListModal,
-        setShowDocumentListModal
-    } = props;
+    let { showDocumentListModal, setShowDocumentListModal } = props;
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState("");
     const [openFileLoader, setOpenFileLoader] = useState(false);
@@ -113,7 +110,7 @@ const DocumentListModal = (props) => {
       }
 
     const openDocument = (id) => {
-        // window.location.href = `/word-processor?document-id=${id}`
+        // window.location.href = `/word-processor?document-id=${id}`;
         openInNewTab(Config.TRANSEDITOR_HOST + `/word-processor?document-id=${id}`);
     }
 
@@ -148,9 +145,7 @@ const DocumentListModal = (props) => {
                                     onKeyUp={(e) => handleKeyUp(e)}
                                     onFocus={() => setIsSearchDropDownShow(true)}
                                 />
-                                <span className={"close " + (searchTerm !== '' ? "show " : " ")}
-                                    onClick={() => handleCloseSearchBox()}
-                                >
+                                <span className={"close " + (searchTerm !== '' ? "show " : " ")} onClick={() => handleCloseSearchBox()}>
                                     <img src={ChatSearchBarClose} alt="search-bar-close" />
                                 </span>
                             </div>

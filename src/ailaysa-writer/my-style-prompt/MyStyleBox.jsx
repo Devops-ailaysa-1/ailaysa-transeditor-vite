@@ -5,10 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setShowCustomSettingsModal } from '../../features/ShowCustomSettingsModalSlice';
 
 export const MyStyleBox = (props) => {
-    const {
-        myStyleData,
-        getMyStyle
-    } = props;
+    const { myStyleData, getMyStyle } = props;
     let data = myStyleData[0];
     const {t} = useTranslation();
     const dispatch = useDispatch();
@@ -49,15 +46,8 @@ export const MyStyleBox = (props) => {
             <span className='block text-right text-[#B2B2B2] text-sm'>
                 {myStylePrompt?.length}/500
             </span>
-            <textarea
-                name="prompt-box" 
-                id="prompt-box" 
-                cols="30" 
-                rows="10"
-                className="block"
-                value={myStylePrompt}
-                onChange={(e) => setMyStylePrompt(e.target.value)}
-                maxLength={500} ></textarea>
+            <textarea name="prompt-box" id="prompt-box" cols="30" rows="10" className="block" value={myStylePrompt} 
+               onChange={(e) => setMyStylePrompt(e.target.value)} maxLength={500} ></textarea>
             <div className="footer-area-wrapper justify-content-end mt-8" style={{ padding: '0px 0px 15px 30px' }}>
                 <div className="term-edit-btn-row">
                     <button className="uploadProjectButton-writter" onClick={createUpdatePrompt} >

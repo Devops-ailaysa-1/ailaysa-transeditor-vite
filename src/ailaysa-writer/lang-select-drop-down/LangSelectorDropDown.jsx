@@ -107,23 +107,14 @@ export const LangSelectorDropDown = (props) => {
                 <div className="lang-drop-down-container d-flex">
                     <div className="lang-search-box d-flex items-center">
                         <SearchIcon style={{color: "#5F6368"}} />
-                        <input 
-                            type="text"
-                            placeholder="Output language"
-                            autoFocus={true}
-                            className="search-input"
-                            value={langSearchValue}
-                            onChange={handleLangSearch}
-                        />
+                        <input type="text" placeholder="Output language" autoFocus={true} className="search-input" value={langSearchValue} onChange={handleLangSearch} />
                     </div>
                     <div className="lang-list-wrapper">
                         <ul className="lang-list">
                             {languagesList?.length !== 0 ? (
                                 languagesList?.map(item => {
                                     return (
-                                        <LangListItem 
-                                            item={item}
-                                        />
+                                        <LangListItem  item={item} />
                                     )
                                 })
                             ) : (
