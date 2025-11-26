@@ -482,8 +482,8 @@ const ChapterPanel = (props) => {
         $('.summernote').summernote('code', '');
         let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.front_matter);
         setFrontMatterList(newArr);
-        // let item = {}
-        // item = bookCreationResponseRedux?.front_matter?.find(each => each?.id === itemObj?.id)
+        // let item = {};
+        // item = bookCreationResponseRedux?.front_matter?.find(each => each?.id === itemObj?.id);
         if(item?.generated_content){
             insertContentInEditor(item?.generated_content, item?.name);
         }else{
@@ -838,7 +838,7 @@ const ChapterPanel = (props) => {
         e?.stopPropagation();        
         let formdata = new FormData();
         if(method === 'PUT'){
-            let textareaValue = ''
+            let textareaValue = '';
             if(matter === 'front'){
                 textareaValue = frontMatterListCopy?.find(each => each?.id === item?.id)?.name;
                 formdata.append("name", textareaValue);
@@ -954,7 +954,7 @@ const ChapterPanel = (props) => {
 
     // check if editor is empty or not: if empty generate the content otherwise show the content loss alert
     const generateItemContentBtn = (e, item, matter) => {
-        tempStoredGenerateLinkParamRef.current = {item, matter}
+        tempStoredGenerateLinkParamRef.current = {item, matter};
         let isEditorEmpty = $('.summernote').summernote('isEmpty');
 
         if(matter === 'front'){
@@ -1061,7 +1061,7 @@ const ChapterPanel = (props) => {
             Authorization: `Bearer ${token}`
         };
         formdata.append("html", removedStyleAttribFromImg);
-        // formdata.append("html_str", removedStyleAttribFromImg)
+        // formdata.append("html_str", removedStyleAttribFromImg);
         formdata.append("name", "name");
         var requestOptions = {
             method: 'POST',
@@ -1324,8 +1324,7 @@ const ChapterPanel = (props) => {
                                                 </ul>
                                                 </motion.div>)
                                             }
-                                        </AnimatePresence>
-                                            
+                                        </AnimatePresence>                                            
                                     </div>
                                 </div>
                                 <Collapse isOpen={frontMatterCollapse}>

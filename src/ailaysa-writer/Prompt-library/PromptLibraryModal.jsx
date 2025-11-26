@@ -275,7 +275,7 @@ export const PromptLibraryModal = (props) => {
             id: generateKey(),
             prompt_content: '',
             [key]: true
-        }
+        };
         let newArr = [newItem, ...list];
         setList(newArr);
     } 
@@ -531,8 +531,7 @@ export const PromptLibraryModal = (props) => {
                                         </div>
                                     )}
                                 </div>
-                                <div  className="right-box"
-                                    style={searchQueryText !== "" ? {width: '100%'} : {} } >
+                                <div className="right-box" style={searchQueryText !== "" ? {width: '100%'} : {} } >
                                     <div ref={promptCardsContainerRef} 
                                         className={"prompt-cards-list custom-scroll-bar " + (activePromptTab === 1 ? "prompt-cards-list-without-btn" : "prompt-cards-list-with-btn")}>
                                         {promptCardsList.map((each, ind) => {

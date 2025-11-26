@@ -16,6 +16,8 @@ import FederalWorkspace from '../federal-news/FederalWorkspace';
 import BIReport from '../federal-news/BIReport';
 import NewsProjects from '../federal-news/NewsProject';
 import { ErrorBoundary } from 'react-error-boundary';
+import PIBNewsProjects from '../PIB-news/PIBNewsProject';
+import PIBWorkspace from '../PIB-news/PIBWorkspace';
 // import SpellCheck from '../project-setup-components/spell-check/SpellCheck';
 
 // a function to retry loading a chunk to avoid chunk load error for out of date code
@@ -60,8 +62,12 @@ const AllRoutes = (props) => {
     let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
     const isFederal = useSelector((state) => state.isFederalNews.value);
     const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
+    const isPIB = useSelector((state) => state.isPIBNews.value);
     let isEnterprise = userDetails?.is_enterprise;
 
+    if (!userDetails) {
+        return <MainAILoader />;
+    }
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route>
@@ -73,6 +79,8 @@ const AllRoutes = (props) => {
                     )
                 ) : (
                     isDinamalar ? (
+                        <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
+                    ) : isPIB ? (
                         <Route path="*" element={<Navigate to="/my-stories?page=1"/>} />
                     ) : (
                         !is_internal_meber_editor ? (
@@ -88,6 +96,8 @@ const AllRoutes = (props) => {
                         <Route path="/" element={<Navigate to="/create/all-templates"/>} />
                     ) : (
                         isDinamalar ? (
+                            <Route path="/" element={<Navigate to="/my-stories?page=1"/>} />
+                        ) : isPIB ? (
                             <Route path="/" element={<Navigate to="/my-stories?page=1"/>} />
                         ) : (
                             <Route path="/" element={<Navigate to="/all-stories?page=1"/>} />
@@ -112,6 +122,12 @@ const AllRoutes = (props) => {
                 {(isFederal && !is_internal_meber_editor) && (
                     <Route exact path="/all-stories" element={<Suspense fallback={<MainAILoader />}><NewsProjects /></Suspense>} />
                 )}
+                {isPIB && (
+                    <>
+                    <Route exact path="/my-stories" element={<Suspense fallback={<MainAILoader />}><PIBNewsProjects /></Suspense>} />
+                    <Route exact path="/add-stories" element={<Suspense fallback={<MainAILoader />}><PIBNewsProjects /></Suspense>} />
+                    </>
+                )}
                 {/* my story project route */}
                 {(isFederal || isDinamalar) && (
                     <Route exact path="/my-stories" element={<Suspense fallback={<MainAILoader />}><NewsProjects /></Suspense>} />
@@ -125,6 +141,8 @@ const AllRoutes = (props) => {
                 <Route exact path="/workspace/:documentId" element={<Suspense fallback={<MainAILoader />}><Workspace /></Suspense>} />
                 <Route exact path="/news-workspace" element={<Suspense fallback={<MainAILoader />}><FederalWorkspace /></Suspense>} />
                 <Route exact path="/news-workspace/:documentId" element={<Suspense fallback={<MainAILoader />}><FederalWorkspace /></Suspense>} />
+                <Route exact path="/pibnews-workspace" element={<Suspense fallback={<MainAILoader />}><PIBWorkspace /></Suspense>} />
+                <Route exact path="/pibnews-workspace/:documentId" element={<Suspense fallback={<MainAILoader />}><PIBWorkspace /></Suspense>} />
                 <Route exact path="/chat" element={<Suspense fallback={<MainAILoader />}><Chat /></Suspense>} />
                 {/* <Route exact path="/glossary-workspace" element={<Suspense fallback={<MainAILoader />}><GlossaryWorkspace /></Suspense>} /> */}
                 <Route exact path="/writer-blog" element={<Suspense fallback={<MainAILoader />}><WriterBlog /></Suspense>} />

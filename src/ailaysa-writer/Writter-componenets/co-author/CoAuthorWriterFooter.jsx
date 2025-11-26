@@ -213,7 +213,7 @@ const CoAuthorWriterFooter = (props) => {
             brNode.innerHTML = "<br />";
             pNode.innerHTML = each.trim();
             pNode.className = 'temp-color';
-            // pNode.style = 'display: inline;'
+            // pNode.style = 'display: inline';
             if (containsRtlCharacters(each)) {
                 pNode.classList.add('right-align-lang-style');
             } else {

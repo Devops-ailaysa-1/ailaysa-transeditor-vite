@@ -69,6 +69,7 @@ function Navbar(props) {
         isWorkspaceEditable,
         isAiChatBook,
         isFederalWorkspace,
+        isPIBWorkspace,
         documentTaskIdRef,
         mobileVersion,
         aiChatMobileTab,
@@ -146,6 +147,7 @@ function Navbar(props) {
     const [isEmailTextHovered, setIsEmailTextHovered] = useState(false);
     const [isFullnameTextHovered, setIsFullnameTextHovered] = useState(false);
     const spellCheckData = useSelector((state) => state.spellCheckData.value);
+    const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
     const socket = useRef(null);
     const chatNotificationsCountRef = useRef(null);
@@ -687,6 +689,10 @@ function Navbar(props) {
             url = Config.BASE_URL + "/workspace_okapi/download_federal_file/" + `?task_id=${documentTaskIdRef.current}`;
             url = url + "&output_type=" + type;
             if (type == "AUDIO") url += `&locale=${props?.audioLocale?.label}&voice_gender=${props?.audioGender?.label?.toUpperCase()}&voice_name=${props.voiceType}`;
+        } else if(isPIBWorkspace){
+            url = Config.BASE_URL + "/workspace_okapi/download_federal_file/" + `?task_id=${documentTaskIdRef.current}`;
+            url = url + "&output_type=" + type;
+            if (type == "AUDIO") url += `&locale=${props?.audioLocale?.label}&voice_gender=${props?.audioGender?.label?.toUpperCase()}&voice_name=${props.voiceType}`;
         }else{
             url = Config.BASE_URL + "/workspace_okapi/document/to/file/" + props.documentId;
             url = url + "?output_type=" + type;
@@ -1033,14 +1039,14 @@ function Navbar(props) {
                                 {isEnterprise ? (
                                     <>
                                         <NavLink 
-                                            to={is_internal_meber_editor ? "/my-stories?page=1" : "/all-stories?page=1"} 
+                                            to={(isPIBNews || is_internal_meber_editor) ? "/my-stories?page=1" : "/all-stories?page=1"} 
                                             // activeClassName="selected" 
                                             className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myNewsProjectsSelected ? "selected" : ""}`}
                                         >
                                             <div className="nav-assign-manage-link">
-                                                <span>{t("news_projects")}</span>
+                                                <span>{isPIBNews ? 'Story/Press release' : t("news_projects")}</span>
                                             </div>
-                                        </NavLink>                                        
+                                        </NavLink>
 
                                         {/* {!is_internal_meber_editor && (
                                         )} */}
@@ -1068,7 +1074,7 @@ function Navbar(props) {
                                     </NavLink>
                                 )}
 
-                                {(Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected) ? (
+                                {(isPIBNews || (Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected)) ? (
                                     <ButtonBase component={Link} to="/create/all-templates/" className={props.isWhite ? "d-none" : "ml-4"}>
                                         <div className="btn-text">
                                             <AddIcon style={{ width: 20,color: "#3C4043"  }} />

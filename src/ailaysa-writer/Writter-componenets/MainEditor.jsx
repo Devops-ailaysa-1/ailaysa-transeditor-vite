@@ -126,7 +126,7 @@ const MainEditor = (props) => {
     //             noteEditingWrapper.style.setProperty("width", "920px", 'important');
     //         }
     //     }
-    // }, [document.querySelector('.note-editable-class-wrapper'), zoomLevel, leftSideBar, rightSideBar, deskLeftSideBar])
+    // }, [document.querySelector('.note-editable-class-wrapper'), zoomLevel, leftSideBar, rightSideBar, deskLeftSideBar]);
        
     const onStart = () => {
         const { activeDrags } = state;
@@ -350,10 +350,10 @@ const MainEditor = (props) => {
                             const doc = parser?.parseFromString(clean, 'text/html');
                             const images = doc?.querySelectorAll('img');
                             images.forEach(img => {
-                            const src = img.getAttribute('src');
-                            if (!src?.startsWith(allowedDomain)) {
-                                img.remove();
-                            }
+                                const src = img.getAttribute('src');
+                                if (!src?.startsWith(allowedDomain)) {
+                                    img.remove();
+                                }
                             });
                             const sanitizedHtmlString = doc.body.innerHTML;
                         // Insert the cleaned HTML into the contenteditable div
@@ -558,7 +558,7 @@ const MainEditor = (props) => {
                             // Do stuff.
                             e.preventDefault();
                             // navigator.clipboard.writeText(node);
-                            copyImage(imgNode?.current?.src)
+                            copyImage(imgNode?.current?.src);
                         }
                         if ((e.ctrlKey || e.metaKey) && e.keyCode == 88) {
                             e.preventDefault();
@@ -569,7 +569,6 @@ const MainEditor = (props) => {
                                 $('.summernote').summernote('focus');
                                 $('.summernote').summernote('insertText', '');
                             }, 150);
-                            // Do stuff.
                         }
                     }
                 }, 
@@ -644,9 +643,9 @@ const MainEditor = (props) => {
             buttons: {
                 newDoc: newDocumentButton,
                 openDoc: openDocumentButton,
-                // // paste: PasteButton,
-                // // copy: copyButton,
-                // // pasteFormat: PasteButtonWithFormate,
+                //  paste: PasteButton,
+                //  copy: copyButton,
+                //  pasteFormat: PasteButtonWithFormate,
                 voice: voiceDictateButton,
                 voiceLang: voiceLangDropDown,
                 styleDropdown: styleDropdown,
@@ -726,7 +725,6 @@ const MainEditor = (props) => {
     var indentButton = function (context) {
         try{
             var ui = $.summernote.ui;
-            // create button
             var button = ui.button({
                 contents: '<i class="fas fa-indent"></i>',
                 tooltip: t("indent"),
@@ -766,9 +764,9 @@ const MainEditor = (props) => {
                 tooltip: t("new_docs"),
                 click: function () {
                     window.open('/word-processor');
-                    // history('/word-processor')
-                    // resetDocument()
-                    // something()
+                    // history('/word-processor');
+                    // resetDocument();
+                    // something();
                 }
             });
             return button.render();   // return button as jquery object
@@ -900,7 +898,7 @@ const MainEditor = (props) => {
                 ctx.drawImage(this, 0, 0, this.width, this.height);
                 c.toBlob((blob) => {
                     // here the image is a blob
-                    resolve(blob)
+                    resolve(blob);
                 }, "image/png", 1);
             };
         })
@@ -1016,7 +1014,7 @@ const MainEditor = (props) => {
           // Create a new paragraph element
           const paragraph = document.querySelector('.note-editable');      
           // Iterate over the nodes within the selection range and replace only heading nodes
-        //   const nodes = range.cloneContents().childNodes;
+         //   const nodes = range.cloneContents().childNodes;
           const nodes = range.commonAncestorContainer.nodeType === 3 // Text node
           ? range.commonAncestorContainer.parentElement
           : range.cloneContents().childNodes;
@@ -1879,7 +1877,7 @@ const MainEditor = (props) => {
                 mouseX <= boundingBox.right &&
                 mouseY >= boundingBox.top &&
                 mouseY <= boundingBox.bottom
-                
+
             ) {
                 return {
                     element: markElement,

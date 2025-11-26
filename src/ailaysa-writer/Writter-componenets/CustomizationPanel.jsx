@@ -7,12 +7,7 @@ import SimpleRodals from "../../project-setup-components/rodals/SimpleRodals";
 import TargetLanguage from "../../vendor/lang-modal/Targetlanguage";
 import Rodal from "rodal";
 import Select, { components } from "react-select";
-import {
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-} from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, } from 'reactstrap';
 import { ConstructionOutlined } from "@mui/icons-material";
 import { count } from 'letter-count';
 import ButtonBase from '@mui/material/ButtonBase';
@@ -158,7 +153,7 @@ const CustomizationPanel = (props) => {
             engines?.push({
                 value: eachEngine?.id,
                 label: eachEngine?.name?.replaceAll("_", " "),
-            })
+            });
         }
         );
         setMtpeEngineOptions(engines);
@@ -579,8 +574,7 @@ const CustomizationPanel = (props) => {
                                                     </p>
 
                                                     <div className="translate_customization"
-                                                        style={(count(selectionString?.replace(/\n/g, ''))?.chars <= 2000 && count(selectionString?.replace(/\n/g, ''))?.chars > 1) ? { opacity: 1, pointerEvents: 'all' } : { opacity: 0.5, pointerEvents: 'none' }}
-                                                    >
+                                                        style={(count(selectionString?.replace(/\n/g, ''))?.chars <= 2000 && count(selectionString?.replace(/\n/g, ''))?.chars > 1) ? { opacity: 1, pointerEvents: 'all' } : { opacity: 0.5, pointerEvents: 'none' }}>
                                                         <div className="language-select-wrapper-cutomize-bar grid1">
                                                             <ButtonBase onClick={() => {
                                                                 setshowSrcLangModal(true);

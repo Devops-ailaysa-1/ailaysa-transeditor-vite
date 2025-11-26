@@ -35,6 +35,7 @@ import { setAllTemplateList } from "./features/AllTempateListSlice";
 import AllRoutes from "./router/AllRoutes";
 import { setIsDinamalarNews } from "./features/IsDinamalarNewsSlice";
 import { setIsFederalNews } from "./features/IsFederalNewsSlice";
+import { setIsPIBNews } from "./features/IsPIBNewsSlice";
 import { CookieChecker } from "cookie-validator-check";
 import { PromptLibraryModal } from "./ailaysa-writer/Prompt-library/PromptLibraryModal";
 import { AdaptiveTranslationIntroModal } from "./vendor/model-select/adaptive-mt-intro/AdaptiveTranslationIntroModal";
@@ -130,6 +131,8 @@ function App() {
                     dispatch(setIsDinamalarNews(true));
                 }else if(response.data?.is_enterprise && response.data?.enterprise_name === "Enterprise - TFN") {
                     dispatch(setIsFederalNews(true));
+                }else if(response.data?.is_enterprise && response.data?.enterprise_name === "Enterprise - PIB") {
+                    dispatch(setIsPIBNews(true));
                 }
                 if (response.data.is_vendor) {
                     getEdiorSettingStatus();

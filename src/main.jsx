@@ -38,6 +38,7 @@ import allTemplateListReducer from './features/AllTempateListSlice';
 import individualTemplateListReducer from './features/IndividualTemplateListSlice';
 import { writerReducers } from './features/writer-reducers/writerReducers';
 import IsFederalNewsReducer from './features/IsFederalNewsSlice';
+import IsPIBNewsReducer from './features/IsPIBNewsSlice';
 import IsDinamalarNewsReducer from './features/IsDinamalarNewsSlice';
 import showAilaysaGlossaryModalReducer from './features/ShowAilaysaGlossaryModalSlice';
 import toggleGlossTermAddFormReducer from './features/ai-glossary/ToggleGlossTermAddFormSlice';
@@ -68,6 +69,7 @@ const store = configureStore({
 	allTemplateList: allTemplateListReducer,
 	individualTemplateList: individualTemplateListReducer,
 	isFederalNews: IsFederalNewsReducer,
+	isPIBNews: IsPIBNewsReducer,
 	isDinamalarNews: IsDinamalarNewsReducer,
 	showAilaysaGlossaryModal: showAilaysaGlossaryModalReducer,
 	showGlossTermAddForm: toggleGlossTermAddFormReducer,

@@ -107,7 +107,7 @@ const DocumentListModal = (props) => {
     const openInNewTab = (url) => {
         const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
         if (newWindow) newWindow.opener = null;
-      }
+    }
 
     const openDocument = (id) => {
         // window.location.href = `/word-processor?document-id=${id}`;
@@ -115,12 +115,7 @@ const DocumentListModal = (props) => {
     }
 
     return (
-        <Rodal
-            visible={showDocumentListModal}
-            showCloseButton={false}
-            className="ai-open-doc-modal"
-            onClose={() => console.log()}
-        >
+        <Rodal visible={showDocumentListModal} showCloseButton={false} className="ai-open-doc-modal"  onClose={() => console.log()} >
             <span className="modal-close-btn lang-close" onClick={(e) => { setShowDocumentListModal(false) }}>
                 <img src={CloseBlack} alt="close_black" />
             </span>
@@ -136,15 +131,8 @@ const DocumentListModal = (props) => {
                                 <div className="img-box">
                                     <img src={ChatSearch} alt="search-icon" />
                                 </div>
-                                <input
-                                    type="search"
-                                    ref={searchBoxRef}
-                                    value={searchTerm}
-                                    onChange={handleDocSearchTerm}
-                                    placeholder={`${t("search")}....`}
-                                    onKeyUp={(e) => handleKeyUp(e)}
-                                    onFocus={() => setIsSearchDropDownShow(true)}
-                                />
+                                <input type="search" ref={searchBoxRef} value={searchTerm} onChange={handleDocSearchTerm} placeholder={`${t("search")}....`}
+                                    onKeyUp={(e) => handleKeyUp(e)} onFocus={() => setIsSearchDropDownShow(true)} />
                                 <span className={"close " + (searchTerm !== '' ? "show " : " ")} onClick={() => handleCloseSearchBox()}>
                                     <img src={ChatSearchBarClose} alt="search-bar-close" />
                                 </span>
@@ -212,17 +200,9 @@ const DocumentListModal = (props) => {
                                                                 <div className="ai-no-project-cont">
                                                                     {
                                                                         searchTerm ?
-                                                                            <img
-                                                                                className="empty-folder-img"
-                                                                                src={NoEditorsFoundTwo}
-                                                                                alt="main-no-project-found"
-                                                                            />
+                                                                            <img className="empty-folder-img" src={NoEditorsFoundTwo} alt="main-no-project-found" />
                                                                             :
-                                                                            <img
-                                                                                className="empty-folder-img"
-                                                                                src={EmptyProjectFolder}
-                                                                                alt="empty-folder-open"
-                                                                            />
+                                                                            <img className="empty-folder-img" src={EmptyProjectFolder} alt="empty-folder-open" />
                                                                     }
                                                                     <h2>{t("pdf_not_found_note")}</h2>
                                                                 </div>
@@ -243,25 +223,13 @@ const DocumentListModal = (props) => {
                                                             return (
                                                                 <tr key={key}>
                                                                     <td>
-                                                                        <Skeleton
-                                                                            animation="wave"
-                                                                            variant="text"
-                                                                            width={100}
-                                                                        />
+                                                                        <Skeleton  animation="wave" variant="text" width={100} />
                                                                     </td>
                                                                     <td>
-                                                                        <Skeleton
-                                                                            animation="wave"
-                                                                            variant="text"
-                                                                            width={120}
-                                                                        />
+                                                                        <Skeleton animation="wave" variant="text" width={120} />
                                                                     </td>
                                                                     <td>
-                                                                        <Skeleton
-                                                                            animation="wave"
-                                                                            variant="text"
-                                                                            style={{ width: 100, height: 40, marginLeft: "auto" }}
-                                                                        />
+                                                                        <Skeleton animation="wave" variant="text" style={{ width: 100, height: 40, marginLeft: "auto" }}  />
                                                                     </td>
                                                                 </tr>
                                                             )
@@ -275,11 +243,7 @@ const DocumentListModal = (props) => {
                                 <React.Fragment>
                                     <section className="ai-no-project-found">
                                         <div className="ai-no-project-cont">
-                                            <img
-                                                className="empty-folder-img"
-                                                src={EmptyProjectFolder}
-                                                alt="empty-folder-open"
-                                            />
+                                            <img className="empty-folder-img" src={EmptyProjectFolder} alt="empty-folder-open" />
                                             <h2>{t("no_documents")}</h2>
                                         </div>
                                     </section>

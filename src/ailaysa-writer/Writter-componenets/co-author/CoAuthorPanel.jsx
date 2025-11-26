@@ -56,7 +56,7 @@ const CoAuthorPanel = (props, ref) => {
     // const [selectedTitle, setSelectedTitle] = useState({
     //     id: null, title: ''
     // });
-    // const [bookTitleList, setBookTitleList] = useState([])
+    // const [bookTitleList, setBookTitleList] = useState([]);
     const [isGenerating, setIsGenerating] = useState({
         title: false,
         chapter: false
