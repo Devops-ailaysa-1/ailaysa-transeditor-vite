@@ -102,13 +102,6 @@ const PIBNewsProjects = () => {
         }
     };
 
-    /* Set tab change if clicked only other tabs */
-    const activeToggle = (tab) => {
-        if (activeTab != tab) {
-            setActiveTab(tab);
-        }
-    };
-
     /* Show the tour */
     const showHowToTour = () => {
         setTourStepIndex(0);
@@ -160,19 +153,6 @@ const PIBNewsProjects = () => {
         Config.axios(params);
     }
 
-    const openAddStoryModal = () => {
-        setShowAddStoryModal(true);
-    } 
-
-    const handlePorjectListSwitch = (tab, filter) => {
-        const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
-        setActiveProjTab(tab);
-        URL_SEARCH_PARAMS.set('page', 1);
-        URL_SEARCH_PARAMS.set('filter', filter);
-        history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-        // history("/my-stories?page=1&filter=inprogress");
-    } 
-
     const tabList = [{
         id: 1,
         name: t("all_stories"),
@@ -188,8 +168,15 @@ const PIBNewsProjects = () => {
         name: 'Add stories',
         link: '/add-stories',
         isEnabled: true
-    }]
+    }];
 
+    /**
+     * This mehtod used to set the active project tab while change.
+     * @param {*} tab 
+     * 
+     * @auhtor Padmabharathi Subiramanian 
+     * @since 24 Nov 2025
+     */
     const onTabChange = (tab) => {
         setActiveProjTab(tab.id);
         history(tab.link + '?page=1');

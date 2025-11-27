@@ -65,6 +65,13 @@ const StoryList = (props) => {
         openEditProjectModel(e, project);
     }
 
+    /**
+     * This method used to fetch the story project details based on the project id.
+     * @param {*} projectId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const fetchProjectDetails = (projectId) => {
         const controller = new AbortController();
         let url = Config.BASE_URL + "/workspace/vendor/dashboard/" + projectId;
@@ -84,6 +91,13 @@ const StoryList = (props) => {
         Config.axios(params);
     }
 
+    /**
+     * This method used to open the selected project from the list.
+     * @param {*} projectId 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const selectProject = (projectId) => {
         if (openedProjectId === projectId) {
             setOpenedProjectId(null);
@@ -94,33 +108,73 @@ const StoryList = (props) => {
         }
     }
 
+    /**
+     * This method used to get the status class name based on the project status.
+     * @param {*} selectedProjectFile 
+     * @returns 
+     * 
+     * @auhtor Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     * 
+     */
     const getStatusClassName = (selectedProjectFile) => {
         if (selectedProjectFile == null) return 'status-indicator-created';
-        else if (selectedProjectFile.task_assign_info != null && FILE_STATUS_MAP[staselectedProjectFile.task_assign_info] != null)
+        else if (selectedProjectFile.task_assign_info != null && FILE_STATUS_MAP[selectedProjectFile.task_assign_info] != null)
             return FILE_STATUS_MAP?.[staselectedProjectFile.task_assign_info]?.className || '';
         return 'status-indicator-created';
     }
     
-
+    /**
+     * This method used to get the status label based on the project status
+     * @param {*} selectedProjectFile 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 24 Nov 2025
+     */
     const getStatusLabel = (selectedProjectFile) => {
         if (selectedProjectFile == null) return 'Yet to Start';
-        else if (selectedProjectFile.task_assign_info != null && FILE_STATUS_MAP[staselectedProjectFile.task_assign_info] != null)
+        else if (selectedProjectFile.task_assign_info != null && FILE_STATUS_MAP[selectedProjectFile.task_assign_info] != null)
             return FILE_STATUS_MAP?.[staselectedProjectFile.task_assign_info]?.label || '';
         return 'Yet to Start';
     }
 
+    /**
+     * This mehtod used to show the more option for the story project.
+     * @param {*} e 
+     * @param {*} id 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 24 Nov 2025
+     */
     const handleMoreVertOption = (e, id) => {
         e.stopPropagation();
         setMoreEl(true);
         setOpenedMoreOption(id);
     }
 
+    /**
+     * This method used to hide the sub download options.
+     * @param {*} e 
+     * @param {*} id 
+     * 
+     * @auhtor Padmabharathi Subiramanian 
+     * @since 2 Nov 2025
+     */
     const handleSubDownloadOptioHide = (e, id) => {
         e.stopPropagation();
         setMoreEl(false);
         setOpenedMoreOption(false);
     }
 
+    /**
+     * This method used to provide the more option template for the story project.
+     * @param {*} props 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 24 Nov 2025
+     */
     const MoreOptionsIcon = (props) => {
         let { project, selectedProjectFile } = props;
 
@@ -166,7 +220,16 @@ const StoryList = (props) => {
         )
     }
 
-     const downloadDifferentFile = async (url, type) => {
+    /**
+     * This method used download the story project file.
+     * @param {*} url 
+     * @param {*} type 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
+    const downloadDifferentFile = async (url, type) => {
             // throw new Error("uncomment this line to mock failure of API");
             let userCacheData = JSON.parse(
                 typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
@@ -215,8 +278,15 @@ const StoryList = (props) => {
                     Config.toast('Something went wrong with file processing', 'warning');
                 }
             }
-        };
+    };
 
+    /**
+     * This mehtod used to handle the download the file in browser.
+     * @param {*} selectedProjectFile 
+     * 
+     * @auhtor Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const handleFileDownload = async(selectedProjectFile)  => {
         let url = Config.BASE_URL + "/workspace_okapi/download_pib_file/" + `?task_id=${selectedProjectFile.id}`;
         url = url + "&output_type=" + 'ORIGINAL';
@@ -226,6 +296,14 @@ const StoryList = (props) => {
         }
     }
 
+    /**
+     * This method used to trigger the delete action.
+     * @param {*} project 
+     * @param {*} taskId 
+     * 
+     * @auhtor Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const handleTaskDeleteButton = (project, taskId) => {
         setMoreEl(false);
         taskDeleteParam.current = {
@@ -235,6 +313,12 @@ const StoryList = (props) => {
         taskDeleteFunction();
     }
 
+    /**
+     * This method used to delted the current task from the list.
+     * 
+     * @auhtor Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const taskDeleteFunction = () => {
         setIsTaskDeleting(true);
         Config.axios({
@@ -257,6 +341,15 @@ const StoryList = (props) => {
         });
     }
 
+    /**
+     * This method used to navigate to the transeditor workspace for the respective task.
+     * @param {*} e 
+     * @param {*} selectedProjectFile 
+     * @param {*} type 
+     * 
+     * @auhtor Padmabharathi Subiramanian 
+     * @since 26 Nov 2025
+     */
     const handleViewStoryClick = (e, selectedProjectFile, type) => {
         if (e) e.stopPropagation();
         const open_as = 'editor';

@@ -11,45 +11,17 @@ import Config from "../vendor/Config";
 import Navbar from "../vendor/Navbar";
 import Draggable from "react-draggable";
 import Tooltip from '@mui/material/Tooltip';
-// import { makeStyles } from '@mui/styles';
 import ButtonBase from '@mui/material/ButtonBase';
-// import { TransliterationProvider } from "../vendor/google-input-tools/transliteration-provider";
-// import "../vendor/google-input-tools/styles/style.scss"
 import Cookies from "js-cookie";
 import Cursor from "../vendor/Cursor";
-import Joyride, { ACTIONS, EVENTS, STATUS } from "react-joyride";
-import TourTooltip from "../tour/TourTooltip";
 import Skeleton from '@mui/material/Skeleton';
 import { MessageTypingAnimation } from "../loader/MessageTypingAnimation";
 import SimpleRodals from "../project-setup-components/rodals/SimpleRodals";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import ReactSelect, { components } from 'react-select';
-import Checkbox from '@mui/material/Checkbox';
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-// import DOMPurify from "isomorphic-dompurify";
-import sanitizeHtml from 'sanitize-html-react';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { MainAILoader } from "../loader/MainAILoader";
 import { useSelector } from "react-redux";
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
-import MicOutlinedIcon from '@mui/icons-material/MicOutlined';
-import SquareIcon from '@mui/icons-material/Square';
-import VoiceTyping from '../vendor/custom-component/VoiceTyping'
 import ContentCopyIcon from "../vendor/styles-svg/Content-copy-icon";
-import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
-import { webSpeechLang } from "../project-setup-components/speech-component/text-to-speech/WebSpeechLang";
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteIcon from "../vendor/styles-svg/DeleteIcon";
-import { TextareaAutosize } from "@mui/material";
-import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
-import EastOutlinedIcon from '@mui/icons-material/EastOutlined';
 import NavigateBeforeSharpIcon from '@mui/icons-material/NavigateBeforeSharp';
 import NavigateNextSharpIcon from '@mui/icons-material/NavigateNextSharp';
 import { t } from "i18next";
@@ -70,92 +42,9 @@ import RemoveCircleRed from "../assets/images/new-ui-icons/remove_circle_red.svg
 import ErrorBlackWarn from "../assets/images/new-ui-icons/error_black_warn.svg";
 import WikipediaIcon from "../assets/images/new-ui-icons/wiki-new-img.svg";
 import WikitionaryIcon from "../assets/images/new-ui-icons/wikitionary-new-img.png";
-// import { getTransliterateSuggestions } from "react-transliterate";
-
-// const useStyles = makeStyles((theme) => ({
-//     selectBox: {
-//         height: 28,
-//         padding: "4px 2px",
-//         borderRadius: "2px",
-//         backgroundColor: "transparent",
-//         "&:hover, :focus": {
-//             backgroundColor: "#E8F0FE",
-//         },
-//         "& .MuiSelect-select.MuiSelect-select": {
-//             paddingRight: "20px !important",
-//             paddingLeft: 0,
-//             paddingTop: 0,
-//             paddingBottom: 0,
-//             "&:focus": {
-//                 backgroundColor: "transparent",
-//             }
-//         },
-//         "& .MuiOutlinedInput-notchedOutline": {
-//             border: "0px solid darkgrey",
-//             padding: 0,
-//         },
-//         "& .MuiSvgIcon-root": {
-//             color: "#5F6368",
-//             fontSize: 20,
-//         },
-//     },
-//     selectOptions: {
-//         "& .MuiMenu-list": {
-//             padding: "21px 0px"
-//         },
-//         "& .MuiListItem-root": {
-//             fontSize: 14,
-//             lineHeight: 1.3,
-//             color: "#3C4043",
-//         },
-//         "& .MuiListItem-root:hover": {
-//             backgroundColor: "#F1F3F4"
-//         },
-//         "& .MuiListItem-root.Mui-selected": {
-//             color: "#202124",
-//         },
-//         "& .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover": {
-//             backgroundColor: "#F1F3F4"
-//         },
-//         "& .MuiCheckbox-root": {
-//             color: "#5F6368",
-//             padding: "5px",
-//             "&:hover": {
-//                 backgroundColor: "#F1F3F4"
-//             }
-//         },
-//         "& .MuiCheckbox-colorSecondary": {
-//             "&.Mui-checked": {
-//                 color: "#0074D3"
-//             }
-//         }
-//     }
-// }));
-
-const filterMenuProps = {
-    getContentAnchorEl: null,
-    anchorOrigin: {
-        vertical: "bottom",
-        horizontal: "right",
-    },
-    transformOrigin: {
-        vertical: "top",
-        horizontal: "right",
-    },
-    PaperProps: {
-        style: {
-            width: 265,
-            borderRadius: 4,
-            boxShadow: "0px 2px 8px #0000002E",
-            "& .MuiList-root": {
-                padding: "21px 0px"
-            }
-        },
-    }
-};
 
 const PIBWorkspace = (props) => {
-    Config.redirectIfNotLoggedIn(props); //Redirect to login page if not logged in
+    Config.redirectIfNotLoggedIn(props); 
     let userToken = new URLSearchParams(window.location.search).get("token");
     /* If coming with token from some other app like ailaysa.com. No longer used - start */
     if (userToken != null) {
@@ -552,7 +441,6 @@ const PIBWorkspace = (props) => {
     const transphraseId = transphrasePopoverOpen ? "simple-popover" : undefined;
     let userSelectionCallTimer = null;
 
-    // filterMenuProps.PaperProps.className = classes.selectOptions;
     const writerAreaDiv = document.querySelector(".federal-segment-wrapper .note-editable");
     const newsSourceDiv = document.querySelector("#source-text-div-3");
     const targetNoteEditableDiv = document.querySelector('.note-editable');
@@ -3238,7 +3126,6 @@ const PIBWorkspace = (props) => {
 
     // put curosr on the source segment but dont allow any kind of editing (keypress, pasting of content and drag and drop of contentx)
     const handleSourceSegmentClick = (e) => {
-        // disable when any of the checkbox is selected
         if (sourceTextDiv.current[focusedDivIdRef.current].current !== null) {           
             if (e.target.getAttribute('data-id') && e.target.getAttribute('source-data-text-unit')) {
                 segmentIdRef.current = e.target.getAttribute('data-id');

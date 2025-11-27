@@ -125,6 +125,12 @@ const MyStories = (props) => {
             }
     }, [URL_SEARCH_PARAMS.get("search"), isSearchTermDelete]);
     
+    /**
+     * This method used to list out the projects based on the search query and page query.
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 24 Nov 2025
+     */
     const listProjects = () => {
         setFileListSearchEnlarge(false);
         setCreatedProjects([]) ;
@@ -173,7 +179,13 @@ const MyStories = (props) => {
         }
     }, [totalPages, currentPage]);
 
-    /* Pagination content and logic */
+    /**
+     * This method used for the pagination content logic.
+     * @param {*} page 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const paginationContentFunction = (page = 1) => {
         page = page == 0 ? 1 : page;
         page = parseInt(page);
@@ -228,6 +240,13 @@ const MyStories = (props) => {
         }, 100);
     };
 
+    /**
+     * This method used to filter the projects based on the search query.
+     * @param {*} e 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const SearchTermFilterEnter = (e) => {
         if (e.which === 13 && projectSearchTerm == "") {
             setFileListSearchEnlarge(false);
@@ -241,6 +260,12 @@ const MyStories = (props) => {
         }
     }
     
+    /**
+     * This mehtod used to handle the close action for the search box.
+     * 
+     * @auhtor Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const handleCloseSearchBox = () => {
         setProjectSearchTerm("");
         projectSearchFunctionality('clear-search');
@@ -248,7 +273,14 @@ const MyStories = (props) => {
         setIsSearchTermDelete(true);
     }
     
-     const projectSearchFunctionality = (param) => {
+    /**
+     * This method used to search the project based on the query.
+     * @param {*} param 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
+    const projectSearchFunctionality = (param) => {
         let orderby = URL_SEARCH_PARAMS.get("order_by");
         let filter = URL_SEARCH_PARAMS.get("filter");
         let url = `/my-stories?page=1`;
@@ -263,6 +295,13 @@ const MyStories = (props) => {
         history(window.location.pathname + '?' + queryParam.toString());
     }
 
+    /**
+     * This mehtod used to update the edited story project
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 26 Nov 2025
+     */
     const updateStoryProject = () => {
         let formdata = new FormData();
         setIsStoryProjUpdating(true);
@@ -317,9 +356,27 @@ const MyStories = (props) => {
         });
     }
 
+    /**
+     * This method used focus the target language div section. 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const focusTargetLangDiv = () => {
+        if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #E74C3C;'
+        setTimeout(() => {
+            if (targetLangDivRef.current !== null) targetLangDivRef.current.style = 'border: 1px solid #ced4da;'
+        }, 1000);
     }
 
+    /**
+     * This method used to open the edit project modal.
+     * @param {*} e 
+     * @param {*} project 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 27 Nov 2025
+     */
     const openEditProjectModel = (e, project) => {
         projectObject.current = project;
         if (project.get_project_type === 8) {
@@ -329,6 +386,14 @@ const MyStories = (props) => {
         }
     }
 
+    /**
+     * Thi method used to update the edited story project.
+     * @param {*} e 
+     * @param {*} projectId 
+     * 
+     * @auhtor Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const editStoryProject = (e, projectId) => {
         e.stopPropagation();
         setSkeletonLoader(true);
@@ -376,6 +441,14 @@ const MyStories = (props) => {
         });
     }
     
+    /**
+     * This method used to close action for the target modal popup.
+     * @param {*} e 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const handleTargetModalCloseBtn = (e) => {
         if(targetLanguage?.length < 1){
             Config.toast(t("at_least_language_selected"), 'warning');
@@ -386,7 +459,15 @@ const MyStories = (props) => {
         setOnFocusWrap(false);        
     }
 
-    /* Handling target language selection */
+    /**
+     * This method used to handling the target language selection.
+     * @param {*} value 
+     * @param {*} e 
+     * @returns 
+     * 
+     * @author Padamabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const handleTargetLangClick = (value, e) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
         if(targetLanguage?.length === 2 && (targetLanguage?.find(each => each.id === value.id) ? false : true)){
@@ -408,7 +489,12 @@ const MyStories = (props) => {
         setOnFocusWrap(false);
     };
 
-    /* Delete a project by id */
+    /**
+     * This mehtod used to deleted the story project by id.
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const deleteStoryProject = () => {
         setIsStoryProjectDeleting(true);
 

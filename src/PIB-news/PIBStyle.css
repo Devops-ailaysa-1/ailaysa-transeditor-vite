@@ -11,6 +11,7 @@ button {
     font-weight: 500;
     line-height: normal;
 }
+
 .add-new-story-btn {
     display: flex;
     width: 215px;
@@ -22,7 +23,8 @@ button {
     flex-shrink: 0;
     border-radius: 3px;
     background: #0078D4;
-}
+} 
+
 .add-new-story-btn, .add-new-story-btn-text {
     color: #FFF;
     font-family: Roboto;
@@ -31,6 +33,7 @@ button {
     font-weight: 400;
     line-height: 24px;
 }
+
 .pib-language {
     color: #0673F7;
     font-family: Roboto;
@@ -45,6 +48,7 @@ button {
     text-underline-offset: auto;
     text-underline-position: from-font;
 }
+
 .pib-headline {
     display: -webkit-box;
     width: 331px;
@@ -60,6 +64,7 @@ button {
     font-weight: 400;
     line-height: normal;
 }
+
 .pib-ministry-badge {
     width: fit-content;
     display: flex;
@@ -78,6 +83,7 @@ button {
     font-weight: 500;
     line-height: normal;
 }
+
 .pib-status-badge {
     color: #3C4043;
     font-family: Roboto;
@@ -86,10 +92,12 @@ button {
     font-weight: 500;
     line-height: normal;
 }
+
 .pib-project-list-action-wrap {
     display: flex;
     gap: 14px;
 }
+
 .disabled-lang {
     pointer-events: none;
     cursor: not-allowed !important;
