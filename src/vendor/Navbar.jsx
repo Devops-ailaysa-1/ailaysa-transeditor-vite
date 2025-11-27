@@ -1153,7 +1153,7 @@ function Navbar(props) {
                                         <span className="translation-results">
                                             <span>{sourceLanguage}</span>
                                             <img src={ArrowRightAltColor} />
-                                            <span>{targetLanguageScript}</span>
+                                            <span>{targetLanguageScript || targetLanguage}</span>
                                         </span>
                                     )}
                                     {(props.isWhite && showViewOnlyTag && !isWorkspaceEditable) && (

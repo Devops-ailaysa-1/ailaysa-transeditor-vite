@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState, useRef } from 'react';
 import Rodal from 'rodal';
 import Tooltip from '@mui/material/Tooltip';
@@ -9,16 +9,14 @@ import CloseBack from "../assets/images/new-ui-icons/close_black.svg";
 import Config from '../vendor/Config';
 import Select, { components } from 'react-select';
 import { ArrowDropDown } from "@mui/icons-material";
-
-const templateFormData = {
-    // Define your template form data here
-    
-};
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const AddStory = (props) => {
     const {languageOptions, ministryDepartmentOptions} = props;
-    
-    
+    const { t } = useTranslation();
+    const location = useLocation();
+    const history = useNavigate();
+
     const [showSrcLangModal, setshowSrcLangModal] = useState(false);
     const [showTarLangModal, setshowTarLangModal] = useState(false);
     const [searchInput, setSearchInput] = useState('');
@@ -35,11 +33,24 @@ const AddStory = (props) => {
     const [alreadySelecetedTarLangID, setAlreadySelecetedTarLangID] = useState([]);
     const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
     const [isEdit, setIsEdit] = useState(false);
-        
+    const [selectedDepartment, setSelectedDepartment] = useState(null);
+    const [errors, setErrors] = React.useState({});
+
     const searchAreaRef = useRef(null);
     const sourceLangRef = useRef(null);
-        
-    
+
+    const ministryDepartmentSelectOptions = ministryDepartmentOptions?.map((dept) => ({
+        value: dept.uid,
+        label: dept.name
+    }));
+
+    useEffect(() => {
+        const tempDepartment = ministryDepartmentSelectOptions.find(
+            opt => opt.value === formData.ministry_department
+        );
+        setSelectedDepartment(tempDepartment);
+    }, []);
+
     const [formData, setFormData] = React.useState({
         source_language: "",
         target_language: "",               
@@ -48,8 +59,6 @@ const AddStory = (props) => {
         headline: "",
         body: ""
     });
-    const { t } = useTranslation();
-    const [errors, setErrors] = React.useState({});
     const hideSettingsModal = () => setshowSettings(false);
 
     const modaloption = {
@@ -58,6 +67,15 @@ const AddStory = (props) => {
         onClose: hideSettingsModal,
     };
 
+    /**
+     * This method used to set the soruce language on click of language in modal
+     * @param {*} value 
+     * @param {*} name 
+     * @param {*} e 
+     * 
+     * @auhtor Padmabharathi Subiramanian
+     * @since 26 Nov 2025
+     */
     const handleSourceLangClick = (value, name, e) => {
         setSourceLanguage(value);
         setshowSrcLangModal(false);
@@ -72,8 +90,17 @@ const AddStory = (props) => {
             ...formData,
             source_language: value,
         });
+        updateError('source');
     };
     
+    /**
+     * This method used to set the target language on click of language in modal
+     * @param {*} value 
+     * @param {*} e
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 26 Nov 2025 
+     */
     const handleTargetLangClick = (value, e) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
@@ -99,17 +126,50 @@ const AddStory = (props) => {
             ...formData,
             target_language: value.id,
         });
+        updateError('target');
     };
+    
+    /**
+     * This mehtod used to update the error state
+     * @param {*} field 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 26 Nov 2025
+     */
+    const updateError = (field) => {
+        setErrors(prev => ({
+            ...prev,
+            [field]: null
+        }));
+    }
 
+    /**
+     * This mehtod used to update the form data state on change of input fields
+     * @param {*} e 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 26 Nov 2025
+     */
     const handleChange = (e) => {
         const { name, value } = e.target;
+        updateError(name);
         setFormData({
             ...formData,
             [name]: value
         });
     }
 
+    /**
+     * This method used to clear the form data after successful submission
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 26 Nov 2025
+     */
     const clearFormData = () => {
+        setSourceLabel('');
+        setSourceLanguage('');
+        setTargetLanguage('');
+        setSelectedDepartment(null);
         setFormData({
             source_language: "",
             target_language: "",               
@@ -120,17 +180,31 @@ const AddStory = (props) => {
         });
     }
 
+    /**
+     * This mehtod used to validate the form data before submission
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 26 Nov 2025 
+     */
     const validate = () => {
         let newErrors = {};
         if (!formData.headline) newErrors.headline = "Headline is required";
         if (!formData.body) newErrors.body = "Story body is required";
-        if (!formData.source_language) newErrors.source_language = "Source language is required";
-        if (!formData.target_language) newErrors.target_languages = "Target language is required";
+        if (!formData.source_language) newErrors.source = "Source language is required";
+        if (!formData.target_language) newErrors.target = "Target language is required";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
+    /**
+     * This method used to submit the story from data.
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 25 Nov 2025
+     */
     const handleSubmit = () => {
         if (!validate()) return;
 
@@ -148,6 +222,13 @@ const AddStory = (props) => {
         if (payload) sumbit(payload);
     };
 
+    /**
+     * This method used to make api call to submit the story data
+     * @param {*} payload 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 25 Nov 2025
+     */
     const sumbit = (payload) => {
         let params = {
             url: Config.BASE_URL + "/workspace/stories_pib/",
@@ -158,11 +239,21 @@ const AddStory = (props) => {
                 Config.toast(t("story_added_successfully"), 'success');
                 clearFormData();
                 if (props.onStoryAdded) props.onStoryAdded(response.data);
+                // handleViewStoryClick(response?.data);
+                redirectToMyStory();
             },
         };
         Config.axios(params);
     };
 
+    /**
+     * This method used to customize the dropdown indicator of react select
+     * @param {*} props 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 25 Nov 2025
+     */
     const DropdownIndicator = props => {
         return (
             components.DropdownIndicator && (
@@ -173,7 +264,13 @@ const AddStory = (props) => {
         );
     };
 
-     const customProjectTypeSelectStyles = {
+    /**
+     * This method used to customize the styles of react select for project type selection
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 25 Nov 2025
+     */
+    const customProjectTypeSelectStyles = {
         placeholder: (provided, state) => ({
             ...provided,
             color: "#3C4043",
@@ -249,15 +346,13 @@ const AddStory = (props) => {
         }),
     };
 
-    const ministryDepartmentSelectOptions = ministryDepartmentOptions?.map((dept) => ({
-        value: dept.uid,
-        label: dept.name
-    }));
-
-    const selectedDepartment = ministryDepartmentSelectOptions.find(
-        opt => opt.value === formData.ministry_department
-    );
-
+    /**
+     * This mehtod used to handle the department change in select dropdown
+     * @param {*} selected 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 26 Nov 2025
+     */
     const handleDepartmentChange = (selected) => {
         setFormData(prev => ({
             ...prev,
@@ -265,11 +360,34 @@ const AddStory = (props) => {
         }));
     };
 
+    /**
+     * This mehtod used to redirect to mystories page once the story was created.
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 26 Nov 2025
+     */
+    const redirectToMyStory = () => {
+        setTimeout(() => {
+            history(`/my-stories${location.search ? location.search : ''}`);
+        });
+    }
+    
+    const handleViewStoryClick = (selectedProjectFile, type) => {
+        if (!selectedProjectFile) return;
+        const open_as = 'editor';
+        setTimeout(() => {
+            history(`/pibnews-workspace/${selectedProjectFile.id}`, {state: {
+                prevPath: location.pathname + location.search,
+                open_as
+            }});
+        });
+    }
+
     return (
          <React.Fragment>
             <div className="p-10 bg-white max-w-5xl mx-auto mt-6 shadow-md rounded-md">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="form-group">
+                    <div className="">
                         <label htmlFor="exampleFormControlFile1" className="block mb-1 text-gray-700 font-medium">
                             {t("source_language")}<span className="asterik-symbol">*</span>
                         </label>
@@ -281,10 +399,10 @@ const AddStory = (props) => {
                             )}
                             <i style={{ color: "#8c8c8c" }} className="fas fa-caret-down" />
                         </div>
-                        {sourceTargetValidation.source && <small className="text-danger">{t("select_a_source_language")}</small>}
+                        {errors.source && <small className="text-danger">{t("select_a_source_language")}</small>}
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="exampleFormControlFile1">
+                    <div className="">
+                        <label htmlFor="exampleFormControlFile1" className="block mb-1 text-gray-700 font-medium">
                             {t("target_language")}<span className="asterik-symbol">*</span>
                         </label>
                             <Tooltip arrow componentsProps={{
@@ -319,7 +437,7 @@ const AddStory = (props) => {
                                     />
                                 </div>
                             </Tooltip>
-                            {sourceTargetValidation.target && <small className="text-danger">{t("select_a_target_language")}</small>}
+                            {errors.target && <small className="text-danger">{t("select_a_target_language")}</small>}
                     </div>
                     <div>
                         <label className="block mb-1 text-gray-700 font-medium">Ministry/Department</label>
@@ -332,40 +450,42 @@ const AddStory = (props) => {
                             value={selectedDepartment}
                             onChange={handleDepartmentChange}
                         />
-                        {/* <select name='ministry_department' className="w-full border rounded-md px-4 py-2 bg-gray-50"
-                            value={formData.ministry_department} onChange={handleChange}>
-                            {ministryDepartmentOptions?.map((dept, idx) => (
-                                <option key={dept.uid} value={dept.uid}>
-                                {dept.name}
-                                </option>
-                            ))}
-                        </select> */}
                     </div>
                     <div>
                         <label className="block mb-1 text-gray-700 font-medium">Dateline</label>
-                        <input type="text" name="dateline" placeholder="Enter dateline" className="w-full border rounded-md px-4 py-2 bg-gray-50"  value={formData.dateline} onChange={handleChange}/>
+                        <input type="text" name="dateline"
+                            placeholder="Enter dateline"
+                            className="w-full border rounded-md px-4 py-2"
+                            value={formData.dateline}
+                            onChange={handleChange}/>
                     </div>
                 </div>
                 <div className="mt-6">
                     <label className="block mb-1 text-gray-700 font-medium">Headline
-                        <span className="text-red-500">*</span>
+                        <span className="asterik-symbol">*</span>
                     </label>
-                    <input type="text" name='headline' className="w-full border rounded-md px-4 py-2 bg-gray-50" placeholder="Enter headline"  value={formData.headline} onChange={handleChange} />
+                    <input type="text" name='headline'
+                        className="w-full border rounded-md px-4 py-2"
+                        placeholder="Enter headline"
+                        value={formData.headline}
+                        onChange={handleChange} />
+                    {errors.headline && <small className="text-danger">{errors.headline}</small>}
                 </div>
                 <div className="mt-6">
                     <label className="block mb-1 text-gray-700 font-medium">Body
-                        <span className="text-red-500">*</span>
+                        <span className="asterik-symbol">*</span>
                     </label>
                     <textarea name='body'
-                        className="w-full border rounded-md px-4 py-2 h-44 bg-gray-50"
+                        className="w-full border rounded-md px-4 py-2 h-44"
                         placeholder="Write your story here..."
                         value={formData.body}
                         onChange={handleChange}>
                     </textarea>
+                    {errors.body && <small className="text-danger">{errors.body}</small>}
                 </div>
                 <div className="flex justify-end mt-6">
                     <button className="bg-[#0077C8] text-white px-6 py-2 rounded-md font-medium" onClick={handleSubmit}>
-                        Add to my stories & Open
+                        Add to my stories
                     </button>
                 </div>
             </div>

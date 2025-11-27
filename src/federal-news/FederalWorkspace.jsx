@@ -3848,7 +3848,7 @@ const FederalWorkspace = (props) => {
         setFocusedDivId(segmentId);
         ctrlAClicked.current = false;
         focusedDivIdRef.current = segmentId;
-        let newArr = translatedResponse?.map(obj => {
+            let newArr = translatedResponse?.map(obj => {
             if (obj.segment_id == segmentId) {
                 return {
                     ...obj,

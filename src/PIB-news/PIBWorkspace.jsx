@@ -1191,7 +1191,7 @@ const PIBWorkspace = (props) => {
         if (didMount) {
             /*Highlight last segment Find Previous clicked from next page - start*/
             if (props.location?.state?.findHighlightSegment != null) {
-                findHighlightSegment.current = props.location.state.findHighlightSegment;
+                findHighlightSegment.current = props?.location?.state.findHighlightSegment;
                 window.history.replaceState(null, "");
                 // filterWithFindTerm();
                 setTimeout(() => {
@@ -1207,7 +1207,7 @@ const PIBWorkspace = (props) => {
                     }
                 }, 200);
                 /*Highlight last segment Find Previous clicked from next page - end*/
-            } else if (props.location.state?.highlightFirstFindTerm === true) {
+            } else if (props?.location?.state?.highlightFirstFindTerm === true) {
                 setTimeout(() => {
                     findNext();
                 }, 400);
@@ -1270,32 +1270,32 @@ const PIBWorkspace = (props) => {
     /* Make the find and replace icon active when select that */
     useEffect(() => {
         if (didMount) {
-            showFindReplaceRef.current.classList.remove("toolbar-list-icons-active");
-            if (showFindReplace) showFindReplaceRef.current.classList.add("toolbar-list-icons-active");
+            showFindReplaceRef?.current?.classList.remove("toolbar-list-icons-active");
+            if (showFindReplace) showFindReplaceRef.current?.classList.add("toolbar-list-icons-active");
         }
     }, [showFindReplace]);
 
     /* Make the special characters icon active when select that */
     useEffect(() => {
         if (didMount) {
-            showSpecialCharactersRef.current.classList.remove("toolbar-list-icons-active");
-            if (showSpecialCharacters) showSpecialCharactersRef.current.classList.add("toolbar-list-icons-active");
+            showSpecialCharactersRef.current?.classList.remove("toolbar-list-icons-active");
+            if (showSpecialCharacters) showSpecialCharactersRef.current?.classList.add("toolbar-list-icons-active");
         }
     }, [showSpecialCharacters]);
 
     /* Make the size selection icon active when select that */
     useEffect(() => {
         if (didMount) {
-            showFormatSizeRef.current.classList.remove("toolbar-list-icons-active");
-            if (showFormatSize) showFormatSizeRef.current.classList.add("toolbar-list-icons-active");
+            showFormatSizeRef.current?.classList.remove("toolbar-list-icons-active");
+            if (showFormatSize) showFormatSizeRef.current?.classList.add("toolbar-list-icons-active");
         }
     }, [showFormatSize]);
 
     /* Make the size selection icon active when select that */
     useEffect(() => {
         if (didMount) {
-            showGlossaryRef.current.classList.remove("toolbar-list-icons-active");
-            if (showGlossary) showGlossaryRef.current.classList.add("toolbar-list-icons-active");
+            showGlossaryRef.current?.classList.remove("toolbar-list-icons-active");
+            if (showGlossary) showGlossaryRef.current?.classList.add("toolbar-list-icons-active");
         }
     }, [showGlossary]);
 
@@ -1890,110 +1890,116 @@ const PIBWorkspace = (props) => {
 
     const createSegmentLikeJson = (responseTemp) => {
         // 'keywords description media->caption image_caption heading authorName story location tags story_summary'        
-        let segmentData = [{
-            "source": responseTemp?.source_json?.news !== undefined ?
-                        responseTemp.source_json.news[0].heading :
-                        responseTemp?.source_json?.heading,
-            "target": responseTemp.target_json.heading,
+        let segmentData = [
+        {
+            "source": responseTemp?.source_json?.heading,
+            "target": responseTemp.target_json?.heading,
             "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.heading,
             "segment_count": 1,
             'segment_id': 1,
             type: "Headline"
-        },{
-            "source": responseTemp?.source_json?.news !== undefined ? 
-                        responseTemp.source_json.news[0].image_caption : 
-                        responseTemp?.source_json?.image_caption,
-            "target": responseTemp.target_json.image_caption,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.image_caption,
-            "segment_count": 1,
-            'segment_id': 2,
-            type: "Image caption"
         },
+        // {
+        //     "source": responseTemp?.source_json?.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].image_caption : 
+        //                 responseTemp?.source_json?.image_caption,
+        //     "target": responseTemp.target_json.image_caption,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.image_caption,
+        //     "segment_count": 1,
+        //     'segment_id': 2,
+        //     type: "Image caption"
+        // },
         (
-            (responseTemp.source_json.news !== undefined ? responseTemp.source_json.news[0].story : responseTemp.source_json?.story) !== "<p><br></p>" && 
-            (responseTemp.source_json.news !== undefined ? responseTemp.source_json.news[0].story : responseTemp.source_json?.story) !== "" &&  
-            (responseTemp.source_json.news !== undefined ? responseTemp.source_json.news[0].story : responseTemp.source_json?.story) !== null
+            (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "<p><br></p>" && 
+            (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "" &&  
+            (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== null
         ) &&
         {
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].story : 
-                        responseTemp.source_json?.story,
-            "target": responseTemp.target_json.story,
+            "source": responseTemp.source_json?.story,
+            "target": responseTemp.target_json?.story,
             "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.story,
             "segment_count": 1,
             'segment_id': 3,
             type: "Story"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].tags :
-                        responseTemp.source_json?.tags,
-            "target": responseTemp.target_json.tags,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.tags,
-            "segment_count": 1,
-            'segment_id': 4,
-            type: "Tags"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].description:
-                        responseTemp.source_json?.description,
-            "target": responseTemp.target_json.description,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.description,
-            "segment_count": 1,
-            'segment_id': 5,
-            type: "Description"
-        },{
-            "source": responseTemp.source_json.news !== undefined ?
-                        responseTemp.source_json.news[0].keywords :
-                        responseTemp.source_json?.keywords,
-            "target": responseTemp.target_json.keywords,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.keywords,
-            "segment_count": 1,
-            'segment_id': 6,
-            type: "Keywords"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].authorName :
-                        responseTemp.source_json?.authorName,
-            "target": responseTemp.target_json.authorName,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.authorName,
-            "segment_count": 1,
-            'segment_id': 7,
-            type: "Author name"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].story_summary :
-                        responseTemp.source_json?.story_summary,
-            "target": responseTemp.target_json.story_summary,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.story_summary,
-            "segment_count": 1,
-            'segment_id': 8,
-            type: "Story summary"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].location :
-                        responseTemp.source_json?.location,
-            "target": responseTemp.target_json.location,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.location,
-            "segment_count": 1,
-            'segment_id': 9,
-            type: "Location"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].media[0]?.caption :
-                        responseTemp.source_json?.media[0]?.caption,
-            "target": responseTemp.target_json.media[0]?.caption,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.media[0]?.caption,
-            "segment_count": 1,
-            'segment_id': 10,
-            type: "Caption (media)"
-        }];
+        },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].tags :
+        //                 responseTemp.source_json?.tags,
+        //     "target": responseTemp.target_json.tags,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.tags,
+        //     "segment_count": 1,
+        //     'segment_id': 4,
+        //     type: "Tags"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].description:
+        //                 responseTemp.source_json?.description,
+        //     "target": responseTemp.target_json.description,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.description,
+        //     "segment_count": 1,
+        //     'segment_id': 5,
+        //     type: "Description"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ?
+        //                 responseTemp.source_json.news[0].keywords :
+        //                 responseTemp.source_json?.keywords,
+        //     "target": responseTemp.target_json.keywords,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.keywords,
+        //     "segment_count": 1,
+        //     'segment_id': 6,
+        //     type: "Keywords"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].authorName :
+        //                 responseTemp.source_json?.authorName,
+        //     "target": responseTemp.target_json.authorName,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.authorName,
+        //     "segment_count": 1,
+        //     'segment_id': 7,
+        //     type: "Author name"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].story_summary :
+        //                 responseTemp.source_json?.story_summary,
+        //     "target": responseTemp.target_json.story_summary,
+        //     "mt_raw": responseTemp?.mt_json?.mt_raw_json?.story_summary,
+        //     "segment_count": 1,
+        //     'segment_id': 8,
+        //     type: "Story summary"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].location :
+        //                 responseTemp.source_json?.location,
+        //     "target": responseTemp.target_json.location,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.location,
+        //     "segment_count": 1,
+        //     'segment_id': 9,
+        //     type: "Location"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].media[0]?.caption :
+        //                 responseTemp.source_json?.media[0]?.caption,
+        //     "target": responseTemp.target_json.media[0]?.caption,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.media[0]?.caption,
+        //     "segment_count": 1,
+        //     'segment_id': 10,
+        //     type: "Caption (media)"
+        // }
+    ];
         return segmentData;
     } 
 
     /* Get the docuement details by document id */
     const getDocumentDetailsById = (documentIdTemp) => {
         Config.axios({
-            url: `${Config.BASE_URL}/workspace/pib_translate/${documentIdTemp}${(userDetails?.agency && location.state?.open_as !== undefined) ? `?step_id=${location.state?.open_as === 'editor' ? 1 : 2}` : ''}`,
+            url: `${Config.BASE_URL}/workspace/pib_translate/${documentIdTemp}`,
             auth: true,
             success: (docResponse) => {
                 let responseTemp = docResponse.data;
@@ -2082,7 +2088,7 @@ const PIBWorkspace = (props) => {
                         let task_data = response.data?.find(each => each.id === responseTemp.task);
                         taskDataRef.current = task_data;
                         // logged in user is an agency and this task is assigned to LSP(not his own project) (LSP(reassign) -> vendor)
-                        if (userDetails?.agency) {
+                        if (userDetails?.agency ) {
                             // the task whether reassigned or not, the LSP needs to work/see work and submit the document
                             isDocumentOpenerVendorRef.current = true;
                             isTaskReassignedRef.current = typeof task_data.task_reassign_info === 'boolean' ? true : false;
@@ -4575,32 +4581,32 @@ const PIBWorkspace = (props) => {
             let translatedJson = {
                 ...translatedFullResponseref.current?.target_json,
                 "heading": document.querySelector('#workspace-textarea-1')?.innerText,
-                "image_caption": document.querySelector('#workspace-textarea-2')?.innerText,
+                // "image_caption": document.querySelector('#workspace-textarea-2')?.innerText,
                 "story": editorRef.current?.summernote("code"),
-                "tags": document.querySelector('#workspace-textarea-4')?.innerText,
-                "description": document.querySelector('#workspace-textarea-5')?.innerText,
-                "keywords": document.querySelector('#workspace-textarea-6')?.innerText,
-                "authorName": document.querySelector('#workspace-textarea-7')?.innerText,
-                "story_summary": document.querySelector('#workspace-textarea-8')?.innerText,
-                "location": document.querySelector('#workspace-textarea-9')?.innerText,
-                "media": [
-                    {
-                        ...translatedFullResponseref.current.target_json.media[0],
-                        "caption": document.querySelector('#workspace-textarea-10')?.innerText
-                    }
-                ]
+                // "tags": document.querySelector('#workspace-textarea-4')?.innerText,
+                // "description": document.querySelector('#workspace-textarea-5')?.innerText,
+                // "keywords": document.querySelector('#workspace-textarea-6')?.innerText,
+                // "authorName": document.querySelector('#workspace-textarea-7')?.innerText,
+                // "story_summary": document.querySelector('#workspace-textarea-8')?.innerText,
+                // "location": document.querySelector('#workspace-textarea-9')?.innerText,
+                // "media": [
+                //     {
+                //         ...translatedFullResponseref.current.target_json.media[0],
+                //         "caption": document.querySelector('#workspace-textarea-10')?.innerText
+                //     }
+                // ]
             };
             let formData = new FormData();
             formData.append("target_json", JSON.stringify(translatedJson));
 
             Config.axios({
-                url: `${Config.BASE_URL}/workspace/pib_translate/${translatedFullResponseref.current.id}/`,
+                url: `${Config.BASE_URL}/workspace/pib_translate/${translatedFullResponseref.current.uid}/`,
                 auth: true,
                 method: "PUT",
                 data: formData,
                 success: (docResponse) => {
-                    let responseTemp = docResponse.data;
-                    // let segmentData = createSegmentLikeJson(responseTemp);
+                    const responseTemp = docResponse.data;
+                    let segmentData = createSegmentLikeJson(responseTemp);
                 },
                 error: (err) => {
                     if (err.response?.data?.detail) {
@@ -4997,7 +5003,7 @@ const PIBWorkspace = (props) => {
                 showDocumentSubmitButton={showDocumentSubmitButton}
                 enableDocumentSubmitBtn={enableDocumentSubmitBtn}
                 handleDocumentSubmitBtn={handleDocumentSubmitBtn}
-                showReturnRequestBtn={showReturnRequestBtn}
+                showReturnRequestBtn={false}
                 isWorkspaceEditable={isWorkspaceEditable}
                 documentTaskIdRef={documentTaskIdRef}
                 isPIBWorkspace={true}
@@ -5231,7 +5237,7 @@ const PIBWorkspace = (props) => {
                                                                             {(translation?.isFocused) && (
                                                                                 <div data-id={id} className="target-lang-row-align trigger-focus">
                                                                                     <div data-id={id} className="segment-status trigger-focus">
-                                                                                        {(isWorkspaceEditable && (sourceLanguageId == 17 || targetLanguageId == 17)) ? (
+                                                                                        {(isWorkspaceEditable) ? (
                                                                                             !["Tags", "Keywords", "Author name", "Location"]?.find(each => each === translation?.type) &&
                                                                                                 <>
                                                                                                     <Tooltip title={

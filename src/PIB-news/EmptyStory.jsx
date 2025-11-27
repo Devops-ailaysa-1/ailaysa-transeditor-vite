@@ -4,6 +4,12 @@ import { useNavigate } from 'react-router-dom';
 const EmptyStory = () => {
     const location = useNavigate();
 
+    /**
+     * This method used to navigate to add stories when click the add story button. 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 25 Nov 2025
+     */
     const addStory = () => {
         location('/add-stories' + '?page=1');
     }
