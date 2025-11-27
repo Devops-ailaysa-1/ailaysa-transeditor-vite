@@ -19,20 +19,20 @@ import Cookies from "js-cookie";
 import axios from "axios";
 
 const FILE_STATUS_MAP = {
-    'In Progress': {
+    'In_Progress': {
         label: 'In Progress',
         className: 'status-indicator-in-progress-color',
     },
-    'Completed': {
-        label: 'Submitted',
+    'COMPLETED': {
+        label: 'Completed',
         className: 'status-indicator-completed',
     },
-    'Yet to start': {
+    'YET_TO_START': {
         label: 'Yet to Start',
         className: 'status-indicator-created',
     },
-    'Return Request': {
-        label: 'Declined',
+    'FAILED': {
+        label: 'Failed',
         className: 'status-indicator-created',
     },
 };
@@ -119,8 +119,8 @@ const StoryList = (props) => {
      */
     const getStatusClassName = (selectedProjectFile) => {
         if (selectedProjectFile == null) return 'status-indicator-created';
-        else if (selectedProjectFile.task_assign_info != null && FILE_STATUS_MAP[selectedProjectFile.task_assign_info] != null)
-            return FILE_STATUS_MAP?.[staselectedProjectFile.task_assign_info]?.className || '';
+        else if (selectedProjectFile.pib_story_details != null && selectedProjectFile.pib_story_details?.status && FILE_STATUS_MAP[selectedProjectFile.pib_story_details?.status] != null)
+            return FILE_STATUS_MAP?.[selectedProjectFile.pib_story_details?.status]?.className || '';
         return 'status-indicator-created';
     }
     
@@ -134,8 +134,8 @@ const StoryList = (props) => {
      */
     const getStatusLabel = (selectedProjectFile) => {
         if (selectedProjectFile == null) return 'Yet to Start';
-        else if (selectedProjectFile.task_assign_info != null && FILE_STATUS_MAP[selectedProjectFile.task_assign_info] != null)
-            return FILE_STATUS_MAP?.[staselectedProjectFile.task_assign_info]?.label || '';
+        else if (selectedProjectFile.pib_story_details != null && selectedProjectFile.pib_story_details?.status && FILE_STATUS_MAP[selectedProjectFile.pib_story_details?.status] != null)
+            return FILE_STATUS_MAP?.[selectedProjectFile.pib_story_details?.status]?.label || '';
         return 'Yet to Start';
     }
 
@@ -466,7 +466,10 @@ const StoryList = (props) => {
                                                 <button type="button" className="workspace-files-OpenProjectButton" onClick={() => handleViewStoryClick(null, selectedProjectFile, "tar")}>
                                                     <span className="fileopen-new-btn">{t("open")}</span>
                                                 </button>
-                                                <button type="button" className="workspace-files-OpenProjectButton" onClick={() => handleFileDownload(selectedProjectFile)}>
+                                                <button type="button" className="workspace-files-OpenProjectButton" 
+                                                    disabled={ selectedProjectFile?.pib_story_details?.status === 'YET_TO_START' || selectedProjectFile?.pib_story_details?.status === 'In_Progress' || 
+                                                        selectedProjectFile?.pib_story_details?.status === 'FAILED'}
+                                                    onClick={() => handleFileDownload(selectedProjectFile)}>
                                                     <span className="fileopen-new-btn">{t("download")}</span>
                                                 </button>
                                                 <MoreOptionsIcon project={project} selectedProjectFile={selectedProjectFile} />
