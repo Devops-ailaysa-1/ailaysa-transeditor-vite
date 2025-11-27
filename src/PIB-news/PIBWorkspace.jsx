@@ -4887,7 +4887,7 @@ const PIBWorkspace = (props) => {
                 listSegments={() => console.log()}
                 mtEnable={mtEnable}
                 docCreditCheckAlertRef={docCreditCheckAlertRef}
-                showDocumentSubmitButton={showDocumentSubmitButton}
+                showDocumentSubmitButton={false}
                 enableDocumentSubmitBtn={enableDocumentSubmitBtn}
                 handleDocumentSubmitBtn={handleDocumentSubmitBtn}
                 showReturnRequestBtn={false}

@@ -690,7 +690,7 @@ function Navbar(props) {
             url = url + "&output_type=" + type;
             if (type == "AUDIO") url += `&locale=${props?.audioLocale?.label}&voice_gender=${props?.audioGender?.label?.toUpperCase()}&voice_name=${props.voiceType}`;
         } else if(isPIBWorkspace){
-            url = Config.BASE_URL + "/workspace_okapi/download_federal_file/" + `?task_id=${documentTaskIdRef.current}`;
+            url = Config.BASE_URL + "/workspace_okapi/download_pib_file/" + `?task_id=${documentTaskIdRef.current}`;
             url = url + "&output_type=" + type;
             if (type == "AUDIO") url += `&locale=${props?.audioLocale?.label}&voice_gender=${props?.audioGender?.label?.toUpperCase()}&voice_name=${props.voiceType}`;
         }else{
