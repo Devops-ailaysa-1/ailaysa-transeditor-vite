@@ -1047,15 +1047,13 @@ function Navbar(props) {
                                                 <span>{isPIBNews ? 'Story/Press release' : t("news_projects")}</span>
                                             </div>
                                         </NavLink>
-
-                                        {/* {!is_internal_meber_editor && (
-                                        )} */}
+                                        {/* {!is_internal_meber_editor && ()}  */}
                                         <NavLink  to="/file-upload?page=1&order_by=-id" // activeClassName="selected" 
                                             className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}>
                                             <div className="nav-assign-manage-link">
                                                 <span>{t("standard_project")}</span>
                                             </div>
-                                        </NavLink>
+                                        </NavLink>                                                                               
                                         {isDinamalar && (
                                             <ButtonBase   className={props.isWhite ? "d-none" : "ml-3"} onClick={() => history('/report')} >
                                                 <div className="btn-text">
@@ -1074,7 +1072,7 @@ function Navbar(props) {
                                     </NavLink>
                                 )}
 
-                                {(isPIBNews || (Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected)) ? (
+                                {((isPIBNews && Config.userState?.internal_member_team_detail?.role !== 'Editor')|| (Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected)) ? (
                                     <ButtonBase component={Link} to="/create/all-templates/" className={props.isWhite ? "d-none" : "ml-4"}>
                                         <div className="btn-text">
                                             <AddIcon style={{ width: 20,color: "#3C4043"  }} />

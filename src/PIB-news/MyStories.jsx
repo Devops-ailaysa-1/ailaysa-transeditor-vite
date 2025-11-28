@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Config from "../Config";
 import EmptyStory from "./EmptyStory";
 import StoryList from "./StoryList";
@@ -17,10 +17,10 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import Rodal from "rodal";
 import TargetLanguage from "../vendor/lang-modal/Targetlanguage";
-
+import SearchBarClose from "../assets/images/assign-page/search-bar-close.svg";
 
 const MyStories = (props) => {
-    const {targetLanguageOptionsRef, languageOptions} = props;
+    const {targetLanguageOptionsRef, languageOptions, internelMemberEditor} = props;
     const { t } = useTranslation();
     const location = useLocation();
     const history = useNavigate();
@@ -33,6 +33,7 @@ const MyStories = (props) => {
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [createdProjects, setCreatedProjects] = useState([]);
+    const [projectListLoading, setProjectListLoading] = useState(false);
     const [selectFileRow, setSelectFileRow] = useState(false);
     const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [didMount, setDidMount] = useState(true);
@@ -61,6 +62,7 @@ const MyStories = (props) => {
     const [filteredResults, setFilteredResults] = useState([]);
     const [targetLanguageOptions, setTargetLanguageOptions] = useState([]);
     const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false);
+    const [paginationContent, setPaginationContent] = useState("");
 
     const axiosListProjectControllerRef = useRef(null);
     const searchTermCloseOutside = useRef();
@@ -70,6 +72,8 @@ const MyStories = (props) => {
     const storyProjectIdRef = useRef(null);
     const searchAreaRef = useRef(null);
     const projectObject = useRef(null);
+    const wordCountAnalysisTimeoutRef = useRef(null);
+    const myTimeoutFunc = useRef(null);
 
     const modaloption = {
         closeMaskOnClick: false,
@@ -133,7 +137,8 @@ const MyStories = (props) => {
      */
     const listProjects = () => {
         setFileListSearchEnlarge(false);
-        setCreatedProjects([]) ;
+        setCreatedProjects([]);
+        setProjectListLoading(true);
         let page = 1;
         let pageParam = URL_SEARCH_PARAMS.get("page");
         if (pageParam != null) {
@@ -156,11 +161,13 @@ const MyStories = (props) => {
             ...(controller !== undefined && {signal: controller.signal}),
             timeout: 1000 * 15, // Wait for 15 seconds
             success: (response) => {
+                setProjectListLoading(false);
                 setCreatedProjects(response.data.results);
                 setCurrentPage(page);
                 setTotalPages(Math.ceil(response.data.count / projectsPerPage.current));
             },
             error: (error) => {
+                setProjectListLoading(false);
                 Config.log(error);
             }
         };
@@ -240,6 +247,14 @@ const MyStories = (props) => {
         }, 100);
     };
 
+    const pageSelect = (page = 1) => {
+        clearTimeout(wordCountAnalysisTimeoutRef.current);
+        clearTimeout(myTimeoutFunc.current);
+        let queryParam = new URLSearchParams(window.location.search);
+        queryParam.set('page', page);
+        history(window.location.pathname + '?' + queryParam.toString());
+    };
+
     /**
      * This method used to filter the projects based on the search query.
      * @param {*} e 
@@ -258,6 +273,10 @@ const MyStories = (props) => {
             searchTermRef.current = projectSearchTerm;
             e.target.blur();
         }
+    }
+
+    const handleSearchDropDownClick = (e) => {
+        projectSearchFunctionality();
     }
     
     /**
@@ -347,7 +366,6 @@ const MyStories = (props) => {
                     return obj;
                 });
                 setCreatedProjects(newArr);
-                setCreatedProjectsList(newArr);
             },
             error: (err) => {
                 setIsStoryProjUpdating(false);
@@ -430,6 +448,7 @@ const MyStories = (props) => {
                 let editSourceLanguage = targetLanguageOptionsRef.current?.find(
                     (element) => element.id == data.jobs[0].source_language
                 );
+                removeSelectedSourceFromTarget(editSourceLanguage);
                 setTimeout(() => {
                     setSourceLabel(editSourceLanguage?.language);
                     setSourceLanguage(editSourceLanguage?.id);
@@ -470,8 +489,8 @@ const MyStories = (props) => {
      */
     const handleTargetLangClick = (value, e) => {
         let targetLanguageTemp = targetLanguage != "" ? targetLanguage : [];
-        if(targetLanguage?.length === 2 && (targetLanguage?.find(each => each.id === value.id) ? false : true)){
-            Config.toast('Maximum 2 languages can be added for better project management', 'warning')
+        if(targetLanguage?.length === 12 && (targetLanguage?.find(each => each.id === value.id) ? false : true)){
+            Config.toast('Maximum 12 languages can be added for better project management', 'warning')
             return
         }
         if (e.target.nodeName !== "IMG" ? e.target.classList.contains("selected") : e.target.parentNode.classList.contains("selected")) {
@@ -487,6 +506,10 @@ const MyStories = (props) => {
         setTargetLanguage([...new Set(targetLanguageTemp)]);
         setSearchInput('');
         setOnFocusWrap(false);
+    };
+
+    const removeSelectedSourceFromTarget = (editSourceLanguage) => {
+        setTargetLanguageOptions(languageOptions?.filter((element) => element.id != editSourceLanguage?.id));
     };
 
     /**
@@ -527,6 +550,33 @@ const MyStories = (props) => {
     const handleDeleteDesignerProj = (proj, selectedProjectFile) => {
     }
 
+    const ListLoader = ({row = 3}) => {
+        return (
+            <React.Fragment>
+                {Array(row)
+                    .fill(null)
+                    .map((value, key) => (
+                        <div className="file-edit-list-table-row" key={key}>
+                            <div className="file-edit-list-table-cell">
+                                <div className="d-flex align-items-center">
+                                    <Skeleton animation="wave" variant="text" width={30} height={35} />
+                                    <Skeleton animation="wave" style={{ marginLeft: "1rem" }} variant="text" width={115} />
+                                </div>
+                            </div>
+                            <div className="file-edit-list-table-cell">
+                                <Skeleton animation="wave" variant="text" width={50} />
+                            </div>
+                            <div className="file-edit-list-table-cell gap-[6px]">
+                                <Skeleton animation="wave" variant="text" width={50} />
+                                <Skeleton animation="wave" variant="text" width={50} />
+                                <Skeleton animation="wave" variant="circular" width={25} height={25} />
+                            </div>
+                        </div>
+                    ))}
+            </React.Fragment>
+        )
+    }
+
     return (
         <>
         <div className="header-align">
@@ -547,7 +597,7 @@ const MyStories = (props) => {
                         />
                         <span className={"close " + ((fileListSearchEnlarge || projectSearchTerm !== "") ? "show " : " ")}
                             onClick={() => handleCloseSearchBox()}  >
-                            <img src={SearchBarIcon} alt="search-bar-close" />
+                            <img src={SearchBarClose} alt="search-bar-close" />
                         </span>
                     </div>
                     <div ref={searchTermCloseOutside} className={"search-results-bar project-list-search-bar " + (fileListSearchEnlarge ? "show" : "hide")}>
@@ -588,14 +638,20 @@ const MyStories = (props) => {
                             openEditProjectModel={openEditProjectModel}
                         />
                     </div>
+                ) : projectListLoading ? (
+                    <ListLoader row={5} />
                 ) :
                     <section className="ai-no-project-found">
-                        <EmptyStory />
+                        <EmptyStory internelMemberEditor = {internelMemberEditor}/>
                     </section>
+                }
+                {!projectListLoading &&
+                    <div className="project-setup-pagination">
+                        <ul>{paginationContent}</ul>
+                    </div>
                 }
             </div>
         </div>
-
         {/* modal for instant tranlation project edit */}
         {editInstantProjectModal && (
             <Rodal
@@ -691,8 +747,7 @@ const MyStories = (props) => {
                     </div>
                 </div>
             </Rodal>
-        )}
-        
+        )}        
         {showTarLangModal && (<Rodal visible={showTarLangModal} {...modaloption} showCloseButton={false} className="ai-tar-lang-select-modal">
             <div className="lang-modal-wrapper">
                 <span className="modal-close-btn lang-close" onClick={(e) => handleTargetModalCloseBtn()}>
@@ -717,8 +772,7 @@ const MyStories = (props) => {
                     restrictedTargetLanguages={restrictedTargetLanguages}
                 />
             </div>
-        </Rodal>)}
-        
+        </Rodal>)}        
         {/* modal for express project delete */}
         {showStoryProjDeleteModal && (
             <Rodal

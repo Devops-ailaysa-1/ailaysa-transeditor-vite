@@ -29,8 +29,7 @@ const PIBNewsProjects = () => {
     const dispatch = useDispatch();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const userDetails = useSelector((state) => state.userDetails.value);
-    const isFederal = useSelector((state) => state.isFederalNews.value);
-    const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
+    const internelMemberEditor = userDetails?.internal_member_team_detail?.role === 'Editor';
     const [tourStepIndex, setTourStepIndex] = useState(0);
     const [languageOptions, setLanguageOptions] = useState(null);
     const [isProductTourSeen, setIsProductTourSeen] = useState(true);
@@ -167,7 +166,7 @@ const PIBNewsProjects = () => {
         id: 3,
         name: 'Add stories',
         link: '/add-stories',
-        isEnabled: true
+        isEnabled: !internelMemberEditor 
     }];
 
     /**
@@ -214,6 +213,7 @@ const PIBNewsProjects = () => {
                             <MyStories
                                 languageOptions= {languageOptions}
                                 targetLanguageOptionsRef={targetLanguageOptionsRef}
+                                internelMemberEditor= {internelMemberEditor}
                             />
                         </TabPane>
                     )}

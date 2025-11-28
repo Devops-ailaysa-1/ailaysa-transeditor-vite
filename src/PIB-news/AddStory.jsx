@@ -10,6 +10,7 @@ import Config from '../vendor/Config';
 import Select, { components } from 'react-select';
 import { ArrowDropDown } from "@mui/icons-material";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { ButtonLoader } from '../loader/CommonBtnLoader';
 
 const AddStory = (props) => {
     const {languageOptions, ministryDepartmentOptions} = props;
@@ -26,7 +27,7 @@ const AddStory = (props) => {
     const [targetLanguage, setTargetLanguage] = useState(""); 
     const [sourceTargetValidation, setSourceTargetValidation] = useState({ source: false, target: false,});
     const [filteredResults, setFilteredResults] = useState([]);
-    const [targetLanguageOptions, setTargetLanguageOptions] = useState(null);
+    const [targetLanguageOptions, setTargetLanguageOptions] = useState(languageOptions);
     const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("");
     const [editJobs, setEditJobs] = useState([]);
     const [alreadySelectedTarLang, setAlreadySelectedTarLang] = useState([]);
@@ -35,6 +36,7 @@ const AddStory = (props) => {
     const [isEdit, setIsEdit] = useState(false);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
     const [errors, setErrors] = React.useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const searchAreaRef = useRef(null);
     const sourceLangRef = useRef(null);
@@ -67,6 +69,10 @@ const AddStory = (props) => {
         onClose: hideSettingsModal,
     };
 
+    useEffect(() => {
+        removeSelectedSourceFromTarget();
+    }, [sourceLanguage]);
+
     /**
      * This method used to set the soruce language on click of language in modal
      * @param {*} value 
@@ -91,6 +97,10 @@ const AddStory = (props) => {
             source_language: value,
         });
         updateError('source');
+    };
+
+    const removeSelectedSourceFromTarget = () => {
+        setTargetLanguageOptions(languageOptions?.filter((element) => element.id != sourceLanguage));
     };
     
     /**
@@ -230,18 +240,24 @@ const AddStory = (props) => {
      * @since 25 Nov 2025
      */
     const sumbit = (payload) => {
+        setIsLoading(true);
         let params = {
             url: Config.BASE_URL + "/workspace/stories_pib/",
             auth: true,
             data: payload,
             method: "POST",
             success: (response) => {
-                Config.toast(t("story_added_successfully"), 'success');
+                setIsLoading(false);
+                Config.toast("Story added successfully", 'success');
                 clearFormData();
                 if (props.onStoryAdded) props.onStoryAdded(response.data);
                 // handleViewStoryClick(response?.data);
                 redirectToMyStory();
             },
+            error: (err) => {
+                setIsLoading(false);
+                console.error(err);
+            }
         };
         Config.axios(params);
     };
@@ -369,7 +385,7 @@ const AddStory = (props) => {
     const redirectToMyStory = () => {
         setTimeout(() => {
             history(`/my-stories${location.search ? location.search : ''}`);
-        });
+        }, 500);
     }
     
     const handleViewStoryClick = (selectedProjectFile, type) => {
@@ -484,7 +500,8 @@ const AddStory = (props) => {
                     {errors.body && <small className="text-danger">{errors.body}</small>}
                 </div>
                 <div className="flex justify-end mt-6">
-                    <button className="bg-[#0077C8] text-white px-6 py-2 rounded-md font-medium" onClick={handleSubmit}>
+                    <button className="bg-[#0077C8] text-white px-6 py-2 rounded-md font-medium flex items-center gap-[6px]" onClick={handleSubmit}>
+                        {isLoading && <ButtonLoader />}
                         Add to my stories
                     </button>
                 </div>
@@ -521,7 +538,7 @@ const AddStory = (props) => {
                         </span>
                         <Targetlanguage
                             targetLanguage={targetLanguage}
-                            targetLanguageOptions={languageOptions}
+                            targetLanguageOptions={targetLanguageOptions}
                             setTargetLanguageOptions={setTargetLanguageOptions}
                             handleTargetLangClick={handleTargetLangClick}
                             showTarLangModal={showTarLangModal}

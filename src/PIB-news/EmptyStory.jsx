@@ -1,7 +1,8 @@
 import './PIBStyle.css';
 import { useNavigate } from 'react-router-dom';
 
-const EmptyStory = () => {
+const EmptyStory = (props) => {
+    const {internelMemberEditor} = props;
     const location = useNavigate();
 
     /**
@@ -42,14 +43,16 @@ const EmptyStory = () => {
                     <span className="no-story-found-text">No stories available</span>
                 </div>
             </div>
-            <div>
-                <button className="add-new-story-btn add-new-story-btn-text" onClick={addStory}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M15.8334 10.8334H10.8334V15.8334H9.16669V10.8334H4.16669V9.16669H9.16669V4.16669H10.8334V9.16669H15.8334V10.8334Z" fill="white"/>
-                    </svg>
-                    {'Add new story'}
-                </button>
-            </div>
+            {!internelMemberEditor && 
+                <div>
+                    <button className="add-new-story-btn add-new-story-btn-text" onClick={addStory}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M15.8334 10.8334H10.8334V15.8334H9.16669V10.8334H4.16669V9.16669H9.16669V4.16669H10.8334V9.16669H15.8334V10.8334Z" fill="white"/>
+                        </svg>
+                        {'Add new story'}
+                    </button>
+                </div>
+            }            
         </div>
     );
 }

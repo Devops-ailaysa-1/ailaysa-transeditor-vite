@@ -10,13 +10,14 @@ import Zoom from '@mui/material/Zoom';
 import EditIcon from "../assets/images/new-ui-icons/pencil-edit-new.svg";
 import BlueRightArrow from "../assets/images/new-ui-icons/arrow_right_alt_color.svg";
 import { Collapse } from 'reactstrap';
-import { ButtonBase } from '@mui/material';
+import { ButtonBase, Skeleton } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '../vendor/styles-svg/DeleteIcon';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import Cookies from "js-cookie";
 import axios from "axios";
+import { ButtonLoader } from '../loader/CommonBtnLoader';
 
 const FILE_STATUS_MAP = {
     'In_Progress': {
@@ -48,13 +49,23 @@ const StoryList = (props) => {
     const [moreEl, setMoreEl] = useState(null);
     const [openedMoreOption, setOpenedMoreOption] = useState(null);    
     const [isTaskDeleting, setIsTaskDeleting] = useState(false);
-    
+    const [inProgressTaskIds, setInProgressTaskIds] = useState([]);
+    const [fileListLoading, setFileListLoading] = useState(false);
+
     const moreOptionOutside = useRef();
     const taskDeleteParam = useRef(null);
+    const inProgressProjectId = useRef(null);
+
+    useEffect(() => {
+        return () => {
+            inProgressProjectId.current = null;
+        }
+    }, []);
 
     useEffect(() => {
         if (storyList && storyList.length > 0) {
             const story = storyList[0];
+            inProgressProjectId.current = story.id;
             setOpenedProjectId(story.id);
             fetchProjectDetails(story.id);
         }
@@ -75,16 +86,21 @@ const StoryList = (props) => {
     const fetchProjectDetails = (projectId) => {
         const controller = new AbortController();
         let url = Config.BASE_URL + "/workspace/vendor/dashboard/" + projectId;
-
+        setFileListLoading(true);
         let params = {
             url: url,
             auth: true,
             ...(controller !== undefined && {signal: controller.signal}),
             timeout: 1000 * 15, // Wait for 15 seconds
             success: (response) => {
-                setSelectedProjectFiles(response?.data || []);
+                setFileListLoading(false);
+                const {data} = response;
+                setSelectedProjectFiles(data || []);
+                if (anyPending(data))
+                    progressTask(projectId, data);
             },
             error: (error) => {
+                setFileListLoading(false);
                 Config.log(error);
             }
         };
@@ -98,13 +114,15 @@ const StoryList = (props) => {
      * @author Padmabharathi Subiramanian 
      * @since 25 Nov 2025
      */
-    const selectProject = (projectId) => {
-        if (openedProjectId === projectId) {
+    const selectProject = (project) => {
+        if (openedProjectId === project?.id) {
             setOpenedProjectId(null);
             setSelectedProjectFiles([]);
+            inProgressProjectId.current = null;
         } else {
-            setOpenedProjectId(projectId);
-            fetchProjectDetails(projectId);
+            inProgressProjectId.current = project?.id;
+            setOpenedProjectId(project?.id);
+            fetchProjectDetails(project?.id);
         }
     }
 
@@ -351,26 +369,117 @@ const StoryList = (props) => {
      * @since 26 Nov 2025
      */
     const handleViewStoryClick = (e, selectedProjectFile, type) => {
+        if (inProgressProjectId.current && inProgressTaskIds.indexOf(selectedProjectFile?.pib_story_details?.pib_task_uid) != -1) {
+            selectedProjectFile.openProjectLabel = 'Processing';
+            return;
+        }
         if (e) e.stopPropagation();
+        selectedProjectFile.openProjectLabel = 'Opening';
+        inProgressProjectId.current = null;
         const open_as = 'editor';
-        // location(`/pibnews-workspace/${selectedProjectFile?.document_id}`, { state: { open_as: type === "src" ? "editor" : "reviewer", from: "my-stories" } });
-        // Config.axios({
-        //     url: Config.BASE_URL + selectedProjectFile.document_url,
-        //     method: "GET",
-        //     auth: true,
-        //     success: (response) => {
-                // setClickedOpenButton(null);
-                setTimeout(() => {
-                    history(`/pibnews-workspace/${selectedProjectFile.id}`, {state: {
-                        prevPath: location.pathname + location.search,
-                        open_as
-                    }});
+        setTimeout(() => {
+            history(`/pibnews-workspace/${selectedProjectFile.id}`, {state: {
+                prevPath: location.pathname + location.search,
+                open_as
+            }});
+        }, 500);
+    }
+
+    const prepareTaskIds = (taskList) => {
+        if (taskList && taskList.length < 1)
+            return null;
+        const taskIds = taskList.map(item => {
+            if (item?.pib_story_details && item?.pib_story_details?.pib_task_uid)
+                return item?.pib_story_details?.pib_task_uid;
+            else false;
+        });
+        if (taskIds.length > 0) return taskIds.join(',');
+        return null;
+    }
+
+    const progressTask = (projectId, taskList) => {
+        const taskIds = prepareTaskIds(taskList);
+        if (!taskIds || inProgressProjectId.current != projectId) return;
+        taskStatusPolling(projectId, taskIds);
+    }
+
+    const taskStatusPolling = (projectId, taskIds) => {
+        if (inProgressProjectId.current != projectId) return;
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace/poll_pib_tasks?task_ids=${taskIds}`,
+            method: 'GET',
+            auth: true,
+            success: (response) => {
+                const result = response.data;
+                if (result?.length > 0) updateTaskStatus(result);
+                if (!allDone(result) && inProgressProjectId.current == projectId) {
+                    setTimeout(() => {
+                        taskStatusPolling(projectId, taskIds);
+                    }, 5000);
+                } else {
+                    setInProgressTaskIds([]);
+                    inProgressProjectId.current = null;
+                }
+            },
+            error: (err) => {
+                console.error(err);
+                inProgressProjectId.current = null
+            }
+        });
+    }
+
+    const allDone = (result) => result.every(item => item.status == "COMPLETED" || item.status == "FAILED");
+    const anyPending = (result) => result.some(item => item?.pib_story_details?.status == "YET_TO_START" || item?.pib_story_details?.status == "In_Progress");
+
+    const updateTaskStatus = (result) => {
+        setSelectedProjectFiles(prev =>
+            prev.map(file => {
+                const matched = result.find(r => r.pib_task_uid === file.pib_story_details.pib_task_uid);
+                setInProgressTaskIds(prev => {
+                    const pendingTaskIds = result
+                        .filter(item => !(item.status === "COMPLETED" || item.status === "FAILED"))
+                        .map(item => item.pib_task_uid);
+                    return pendingTaskIds;
                 });
-        //     },
-        //     error: (err) => {
-        //         setClickedOpenButton(null);
-        //     }
-        // });
+                if (matched) {
+                    return {
+                        ...file,
+                        pib_story_details: {
+                            ...file.pib_story_details,
+                            status: matched.status
+                        }
+                    };
+                }
+                return file;
+            })
+        );
+    };
+
+    const ListLoader = ({row = 3}) => {
+        return (
+            <React.Fragment>
+                {Array(row)
+                    .fill(null)
+                    .map((value, key) => (
+                        <div className="file-edit-list-table-row" key={key}>
+                            <div className="file-edit-list-table-cell">
+                                <div className="d-flex align-items-center">
+                                    <Skeleton animation="wave" variant="text" width={30} height={35} />
+                                    <Skeleton animation="wave" style={{ marginLeft: "1rem" }} variant="text" width={115} />
+                                </div>
+                            </div>
+                            <div className="file-edit-list-table-cell">
+                                <Skeleton animation="wave" variant="text" width={50} />
+                            </div>
+                            <div className="file-edit-list-table-cell gap-[6px]">
+                                <Skeleton animation="wave" variant="text" width={50} />
+                                <Skeleton animation="wave" variant="text" width={50} />
+                                <Skeleton animation="wave" variant="circular" width={25} height={25} />
+                            </div>
+                        </div>
+                    ))}
+            </React.Fragment>
+        )
     }
 
     return (
@@ -385,7 +494,7 @@ const StoryList = (props) => {
                             : "file-edit-list-table-row"
                     }
                 >
-                    <div onClick={(e) => selectProject(project?.id, project)}
+                    <div onClick={(e) => selectProject(project)}
                         className="file-edit-list-table-cell-wrap">
                         <div className="file-edit-list-table-cell" data-key={project.id}>
                             <span className="arrow-icon">
@@ -429,7 +538,7 @@ const StoryList = (props) => {
                         </div>
                     </div>
                     <Collapse isOpen={openedProjectId == project.id} className="selected-file-row">
-                        {openedProjectId == project.id && selectedProjectFiles.length > 0 ? (
+                        {openedProjectId == project.id && !fileListLoading && selectedProjectFiles.length > 0 ? (
                             selectedProjectFiles.map((selectedProjectFile, fileIndex) => (
                                 <div key={fileIndex} className="file-edit-inner-table p-[23px]">
                                     <div className="pib-language language-file-row justify-start">
@@ -463,8 +572,12 @@ const StoryList = (props) => {
                                         </div>
                                         <div className="file-edit-list-table-cell">
                                             <div className="pib-project-list-action-wrap">
-                                                <button type="button" className="workspace-files-OpenProjectButton" onClick={() => handleViewStoryClick(null, selectedProjectFile, "tar")}>
-                                                    <span className="fileopen-new-btn">{t("open")}</span>
+                                                <button type="button" className="workspace-files-OpenProjectButton flex items-center justify-center gap-[6px]" onClick={() => handleViewStoryClick(null, selectedProjectFile, "tar")}>
+                                                    {selectedProjectFile && selectedProjectFile.openProjectLabel && <ButtonLoader />}
+                                                    <span className="fileopen-new-btn">
+                                                        {selectedProjectFile && selectedProjectFile.openProjectLabel
+                                                            ? selectedProjectFile.openProjectLabel : t("open")}
+                                                    </span>
                                                 </button>
                                                 <button type="button" className="workspace-files-OpenProjectButton" 
                                                     disabled={ selectedProjectFile?.pib_story_details?.status === 'YET_TO_START' || selectedProjectFile?.pib_story_details?.status === 'In_Progress' || 
@@ -478,6 +591,8 @@ const StoryList = (props) => {
                                     </div>
                                 </div>
                             ))
+                        ) : fileListLoading ? (
+                            <ListLoader row={2} />
                         ) : (
                             <div className="no-files-in-proj-txt">
                                 {t("no_files_in_this_project")}
