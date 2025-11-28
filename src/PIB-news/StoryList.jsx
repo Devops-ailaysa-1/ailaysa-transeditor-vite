@@ -351,7 +351,10 @@ const StoryList = (props) => {
                     Config.toast(t("task_deleted_success"));
                 }
                 setSelectedProjectFiles(selectedProjectFiles?.filter(each => each.id !== taskDeleteParam.current?.taskId));
-                if (deleteProject) deleteProject(taskDeleteParam.current?.project_id);
+                if(selectedProjectFiles.length === 1) 
+                    if (deleteProject) {
+                        deleteProject(taskDeleteParam.current?.project_id)
+                    };                               
             },
             error: (err) => {
                 setIsTaskDeleting(false);
