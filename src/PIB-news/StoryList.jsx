@@ -431,8 +431,9 @@ const StoryList = (props) => {
         });
     }
 
-    const allDone = (result) => result.every(item => item.status == "COMPLETED" || item.status == "FAILED");
+    const allDone = (result) => result.every(item => isCompleted(item));
     const anyPending = (result) => result.some(item => item?.pib_story_details?.status == "YET_TO_START" || item?.pib_story_details?.status == "In_Progress");
+    const isCompleted = (task) => task.status == "COMPLETED" || task.status == "FAILED";
 
     const updateTaskStatus = (result) => {
         setSelectedProjectFiles(prev =>
@@ -447,6 +448,7 @@ const StoryList = (props) => {
                 if (matched) {
                     return {
                         ...file,
+                        openProjectLabel: isCompleted(matched) ? null : file?.openProjectLabel,
                         pib_story_details: {
                             ...file.pib_story_details,
                             status: matched.status
@@ -598,7 +600,7 @@ const StoryList = (props) => {
                             <ListLoader row={2} />
                         ) : (
                             <div className="no-files-in-proj-txt">
-                                {t("no_files_in_this_project")}
+                                {/* {t("no_files_in_this_project")} */}
                             </div>
                         )}
                     </Collapse>
