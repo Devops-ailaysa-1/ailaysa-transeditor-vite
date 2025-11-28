@@ -484,7 +484,8 @@ const AddStory = (props) => {
                         className="w-full border rounded-md px-4 py-2"
                         placeholder="Enter headline"
                         value={formData.headline}
-                        onChange={handleChange} />
+                        onChange={handleChange}
+                        maxLength={1000} />
                     {errors.headline && <small className="text-danger">{errors.headline}</small>}
                 </div>
                 <div className="mt-6">
@@ -495,7 +496,8 @@ const AddStory = (props) => {
                         className="w-full border rounded-md px-4 py-2 h-44"
                         placeholder="Write your story here..."
                         value={formData.body}
-                        onChange={handleChange}>
+                        onChange={handleChange}
+                        maxLength={4000}>
                     </textarea>
                     {errors.body && <small className="text-danger">{errors.body}</small>}
                 </div>

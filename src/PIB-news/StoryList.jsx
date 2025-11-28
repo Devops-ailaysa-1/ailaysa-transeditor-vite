@@ -460,6 +460,14 @@ const StoryList = (props) => {
         );
     };
 
+    /**
+     * This method used to return the loader for the project list.
+     * @param {*} param0 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 27 Nov 2025
+     */
     const ListLoader = ({row = 3}) => {
         return (
             <React.Fragment>
