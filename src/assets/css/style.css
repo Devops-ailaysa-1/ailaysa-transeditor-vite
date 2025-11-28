@@ -27417,6 +27417,10 @@ ul.templates-tab-list li:hover {
     cursor: context-menu;
 }
 
+div.note-editable * {
+    line-height: normal !important;
+}
+
 .co-author-writer-col-wrapper .note-editable {
     min-height: calc(100vh - (52px + 44px) - 195px) !important;
 }

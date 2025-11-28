@@ -483,14 +483,14 @@ const Config = {
     },
 
     // debounce/delays the api callsthat is 
-    debounceApiCalls : (callback) => {
+    debounceApiCalls : (callback, delay=500) => {
         if (debounceCallTimer) {
             clearTimeout(debounceCallTimer);
         }
             debounceCallTimer = setTimeout(() => {
             callback();
             debounceCallTimer = null;
-        }, 500); // Adjust the debounce delay as needed
+        }, delay); // Adjust the debounce delay as needed
     },
 
     // extract filename and extension from filename

@@ -1,0 +1,105 @@
+
+button {
+    border: none;
+}
+
+.no-story-found-text {
+    color: #3C4043;
+    font-family: Roboto;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.add-new-story-btn {
+    display: flex;
+    width: 215px;
+    height: 44px;
+    padding: 6px 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    border-radius: 3px;
+    background: #0078D4;
+} 
+
+.add-new-story-btn, .add-new-story-btn-text {
+    color: #FFF;
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.pib-language {
+    color: #0673F7;
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+}
+
+.pib-headline {
+    display: -webkit-box;
+    width: 331px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    color: #2A353E;
+    text-overflow: ellipsis;
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.pib-ministry-badge {
+    width: fit-content;
+    display: flex;
+    height: 19px;
+    padding: 2px 11px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    background: #E4E8EB;
+    color: #3C4043;
+    font-family: Roboto !important;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.pib-status-badge {
+    color: #3C4043;
+    font-family: Roboto;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.pib-project-list-action-wrap {
+    display: flex;
+    gap: 14px;
+}
+
+.disabled-lang {
+    pointer-events: none;
+    cursor: not-allowed !important;
+    opacity: 0.5;
+}

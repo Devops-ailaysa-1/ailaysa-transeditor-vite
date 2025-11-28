@@ -126,7 +126,7 @@ const MainEditor = (props) => {
     //             noteEditingWrapper.style.setProperty("width", "920px", 'important');
     //         }
     //     }
-    // }, [document.querySelector('.note-editable-class-wrapper'), zoomLevel, leftSideBar, rightSideBar, deskLeftSideBar])
+    // }, [document.querySelector('.note-editable-class-wrapper'), zoomLevel, leftSideBar, rightSideBar, deskLeftSideBar]);
        
     const onStart = () => {
         const { activeDrags } = state;
@@ -240,7 +240,6 @@ const MainEditor = (props) => {
         }
     }
 
-
     function convertUnitsToPt(htmlString) {
         const pxToPtRatio = 0.75; // 1px = 0.75pt
         const remToPxRatio = 16; // 1rem = 16px
@@ -266,9 +265,9 @@ const MainEditor = (props) => {
         tempDiv.querySelectorAll('img').forEach(img => img.remove());
         // Return the cleaned HTML content
         return tempDiv.innerHTML;
-      }
+    }
     
-      function removeFormElements(htmlString) {
+    function removeFormElements(htmlString) {
         // Create a temporary div element
         const tempDiv = document.createElement('div');
         // Set the HTML content of the div
@@ -277,9 +276,9 @@ const MainEditor = (props) => {
         tempDiv.querySelectorAll('input, checkbox, button').forEach(element => element.remove());
         // Return the cleaned HTML content
         return tempDiv.innerHTML;
-      }
+    }
 
-      function unwrapDivAndKeepPTags(htmlString) {
+    function unwrapDivAndKeepPTags(htmlString) {
         // Create a temporary element to parse the HTML string
         const tempElement = document.createElement('div');
         tempElement.innerHTML = htmlString;      
@@ -313,7 +312,7 @@ const MainEditor = (props) => {
                     const sanitizedHtml1 = copiedContentRef.current?.replace(/\s/g, '');
                     const sanitizedHtml2 = pastedData?.replace(/\s/g, '');
                     // if(sanitizedHtml1 != sanitizedHtml2){
-                    //     isCopiedFromSummernoteRef.current = false
+                    //     isCopiedFromSummernoteRef.current = false;
                     // }
                     // if(isCopiedFromSummernoteRef.current){
                         e.preventDefault();
@@ -351,10 +350,10 @@ const MainEditor = (props) => {
                             const doc = parser?.parseFromString(clean, 'text/html');
                             const images = doc?.querySelectorAll('img');
                             images.forEach(img => {
-                            const src = img.getAttribute('src');
-                            if (!src?.startsWith(allowedDomain)) {
-                                img.remove();
-                            }
+                                const src = img.getAttribute('src');
+                                if (!src?.startsWith(allowedDomain)) {
+                                    img.remove();
+                                }
                             });
                             const sanitizedHtmlString = doc.body.innerHTML;
                         // Insert the cleaned HTML into the contenteditable div
@@ -362,14 +361,14 @@ const MainEditor = (props) => {
                         // var clean = removeFormElements(removeImgTags(cleanedHTML));                        
                         document.execCommand(clipboardData.getData('text/html')?.length  == 0 ? 'insertText' : 'insertHTML', false, sanitizedHtmlString);
                         // document.execCommand('insertHTML', false, sanitizedHtmlString);
-                        // $('summernote').summernote('pasteHTML', cleanedHTML)
+                        // $('summernote').summernote('pasteHTML', cleanedHTML);
                     // }
                     // if(sanitizedHtml1 != sanitizedHtml2){
-                    //     isCopiedFromSummernoteRef.current = false
+                    //     isCopiedFromSummernoteRef.current = false;
                     // }
                     // var clipboardData = e.originalEvent.clipboardData || window.clipboardData;
                     // var pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
-                    // let plain_text = clipboardData.getData('text/plain')
+                    // let plain_text = clipboardData.getData('text/plain');
                     // // Remove unwanted styles and retain basic formatting
                     // var tempDiv = document.createElement('div');
                     // tempDiv.innerHTML = pastedData;
@@ -383,8 +382,8 @@ const MainEditor = (props) => {
                     // }
                     // // Remove any styles from the pasted content and retain basic formatting
                     // var cleanedContent = tempDiv.innerHTML.replace(/<div>/gi, '').replace(/<\/div>/gi, '');
-                    // let p_tag = document.createElement('p')
-                    // p_tag.innerHTML = cleanedContent
+                    // let p_tag = document.createElement('p');
+                    // p_tag.innerHTML = cleanedContent;
                     // // Insert the cleaned content into the Summernote editor
                     // $('.summernote').summernote('insertNode', p_tag);
                     // // Prevent default paste behavior
@@ -444,17 +443,17 @@ const MainEditor = (props) => {
                         if ((window.location.pathname != '/word-processor/article/') && (window.location.pathname != '/book-writing')) {
                             if (URL_SEARCH_PARAMS.get("pdf-id") || URL_SEARCH_PARAMS.get("task")) {
                                 debounce(saveHtmlDataForPdf);
-                                // saveHtmlDataForPdf()
+                                // saveHtmlDataForPdf();
                             } else if (createdDocumentId.current) {
                                 debounce(saveHtmlDataForDocument);
-                                // saveHtmlDataForDocument()
+                                // saveHtmlDataForDocument();
                             } else if (URL_SEARCH_PARAMS.get("transcription-task")) {
                                 debounce(saveTranscriptionData);
-                                // saveTranscriptionData()
+                                // saveTranscriptionData();
                             }
                             else {
                                 debounce(createNewDocument);
-                                // createNewDocument()
+                                // createNewDocument();
                             }
                         }
                     }
@@ -471,16 +470,16 @@ const MainEditor = (props) => {
                             pTag.classList.add('right-align-lang-style');
                         }
                         // else {
-                        //     pTag.classList.remove('right-align-lang-style')
+                        //     pTag.classList.remove('right-align-lang-style');
                         // }
                     });
-                    // let range = window.getSelection().getRangeAt(0)
-                    // let current_node = range?.commonAncestorContainer?.parentElement
-                    // let current_text = range?.commonAncestorContainer?.parentElement?.innerText
-                    // if (current_text?.trim() !== '' && current_text?.trim()?.length >= 3) debounce(() => detectLanguage(current_text, current_node))
+                    // let range = window.getSelection().getRangeAt(0);
+                    // let current_node = range?.commonAncestorContainer?.parentElement;
+                    // let current_text = range?.commonAncestorContainer?.parentElement?.innerText;
+                    // if (current_text?.trim() !== '' && current_text?.trim()?.length >= 3) debounce(() => detectLanguage(current_text, current_node));
                     let htmlContent = document.querySelector('.note-editable')?.innerHTML;
-                    // document.querySelector('.note-editable-backdrop').innerHTML = htmlContent
-                    // Config.debounceApiCalls(symSpellCheck)
+                    // document.querySelector('.note-editable-backdrop').innerHTML = htmlContent;
+                    // Config.debounceApiCalls(symSpellCheck);
                 },
                 onScroll: function () {
                     // checkSelection()
@@ -493,11 +492,8 @@ const MainEditor = (props) => {
                         allowedAttributes: false,
                         transformTags: {
                             'font': function (tagName, attribs) {
-
                                 let c = attribs?.color ? attribs?.color : ''
                                 let s = attribs?.style ? attribs.style : ''
-
-
                                 return {
                                     tagName: 'span',
                                     attribs: {
@@ -516,16 +512,15 @@ const MainEditor = (props) => {
                     let img = new Image();
                     img.src = window.URL.createObjectURL(files[0]);
                     img.onload = () => {
-                        let loaderPTag = document.createElement('p')
-                        loaderPTag.classList.add('skeleton-box', 'img-loader-tag')
-                        let width = window.getComputedStyle(document.querySelector('.note-editable')).getPropertyValue('width').replaceAll('px', '') - (window.getComputedStyle(document.querySelector('.note-editable')).getPropertyValue('padding-left').replaceAll('px', '') * 2)
-
+                        let loaderPTag = document.createElement('p');
+                        loaderPTag.classList.add('skeleton-box', 'img-loader-tag');
+                        let width = window.getComputedStyle(document.querySelector('.note-editable')).getPropertyValue('width').replaceAll('px', '') - (window.getComputedStyle(document.querySelector('.note-editable')).getPropertyValue('padding-left').replaceAll('px', '') * 2);
                         if (img.width > width) {
-                            loaderPTag.style.setProperty('width', `100%`)
-                            loaderPTag.style.setProperty('height', `${img.height*(width/img.width)}px`)
+                            loaderPTag.style.setProperty('width', `100%`);
+                            loaderPTag.style.setProperty('height', `${img.height*(width/img.width)}px`);
                         } else {
-                            loaderPTag.style.setProperty('width', img.width)
-                            loaderPTag.style.setProperty('height', img.height)
+                            loaderPTag.style.setProperty('width', img.width);
+                            loaderPTag.style.setProperty('height', img.height);
                         }
                         // $('.summernote').summernote("insertNode", loaderPTag);
                     }
@@ -550,31 +545,30 @@ const MainEditor = (props) => {
                     if (document.querySelector('.note-editable').innerHTML.length === 0) {
                         $('.summernote').summernote('formatPara');                        
                     }
-                    changeParagraphStyleDropDownLabel(e)
+                    changeParagraphStyleDropDownLabel(e);
                     if ($('.summernote').summernote('isEmpty') === false && imgNode?.current?.nodeName === 'IMG') {
                         if (e.key === 'Delete') {
-                            e.preventDefault()
-                            deleteImageFromServer(imgNode?.current) // remove the image from server
-                            imgNode?.current?.remove()  // remove the image from DOM
+                            e.preventDefault();
+                            deleteImageFromServer(imgNode?.current); // remove the image from server
+                            imgNode?.current?.remove();  // remove the image from DOM
                             $('.summernote').summernote('focus');
                             $('.summernote').summernote('insertText', '');
                         }
                         if ((e.ctrlKey || e.metaKey) && e.keyCode == 67) {
                             // Do stuff.
-                            e.preventDefault()
+                            e.preventDefault();
                             // navigator.clipboard.writeText(node);
-                            copyImage(imgNode?.current?.src)
+                            copyImage(imgNode?.current?.src);
                         }
                         if ((e.ctrlKey || e.metaKey) && e.keyCode == 88) {
-                            e.preventDefault()
-                            copyImage(imgNode?.current?.src)
+                            e.preventDefault();
+                            copyImage(imgNode?.current?.src);
                             setTimeout(() => {
-                                imgNode?.current?.remove()
-                                deleteImageFromServer(imgNode?.current) // remove the image from server
+                                imgNode?.current?.remove();
+                                deleteImageFromServer(imgNode?.current); // remove the image from server
                                 $('.summernote').summernote('focus');
                                 $('.summernote').summernote('insertText', '');
                             }, 150);
-                            // Do stuff.
                         }
                     }
                 }, 
@@ -649,9 +643,9 @@ const MainEditor = (props) => {
             buttons: {
                 newDoc: newDocumentButton,
                 openDoc: openDocumentButton,
-                // // paste: PasteButton,
-                // // copy: copyButton,
-                // // pasteFormat: PasteButtonWithFormate,
+                //  paste: PasteButton,
+                //  copy: copyButton,
+                //  pasteFormat: PasteButtonWithFormate,
                 voice: voiceDictateButton,
                 voiceLang: voiceLangDropDown,
                 styleDropdown: styleDropdown,
@@ -691,7 +685,7 @@ const MainEditor = (props) => {
         $('.summernote').summernote('focus');
         $('.summernote').summernote('removeModule', 'autoLink');
         $('.summernote').summernote('fontsizeunit', 'pt');
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (!showSpecialCharacterModalRef.current) {
@@ -731,7 +725,6 @@ const MainEditor = (props) => {
     var indentButton = function (context) {
         try{
             var ui = $.summernote.ui;
-            // create button
             var button = ui.button({
                 contents: '<i class="fas fa-indent"></i>',
                 tooltip: t("indent"),
@@ -771,9 +764,9 @@ const MainEditor = (props) => {
                 tooltip: t("new_docs"),
                 click: function () {
                     window.open('/word-processor');
-                    // history('/word-processor')
-                    // resetDocument()
-                    // something()
+                    // history('/word-processor');
+                    // resetDocument();
+                    // something();
                 }
             });
             return button.render();   // return button as jquery object
@@ -794,7 +787,6 @@ const MainEditor = (props) => {
                 }
             });
             return button.render();   // return button as jquery object
-
         }catch(e){
             console.error(e);
         }
@@ -844,7 +836,6 @@ const MainEditor = (props) => {
                 }
             });
             return button.render();   // return button as jquery object
-
         }catch(e){
             console.error(e);
         }
@@ -865,7 +856,6 @@ const MainEditor = (props) => {
                 }
             });
             return button.render();   // return button as jquery object
-
         }catch(e){
             console.error(e);
         }
@@ -908,7 +898,7 @@ const MainEditor = (props) => {
                 ctx.drawImage(this, 0, 0, this.width, this.height);
                 c.toBlob((blob) => {
                     // here the image is a blob
-                    resolve(blob)
+                    resolve(blob);
                 }, "image/png", 1);
             };
         })
@@ -922,15 +912,14 @@ const MainEditor = (props) => {
     }
 
     useEffect(() => {
-        let node
+        let node;
         document.addEventListener('mouseup', (e) => {
             if ($('.summernote').summernote('isEmpty') === false) {
                 node = $('.summernote').summernote('restoreTarget');
                 imgNode.current = $('.summernote').summernote('restoreTarget');
             }
         })
-    }, [])
-
+    }, []);
 
     // ================================================== Voice language drop-down ===========================================================
     var voiceLangDropDown = function (context) {
@@ -1025,7 +1014,7 @@ const MainEditor = (props) => {
           // Create a new paragraph element
           const paragraph = document.querySelector('.note-editable');      
           // Iterate over the nodes within the selection range and replace only heading nodes
-        //   const nodes = range.cloneContents().childNodes;
+         //   const nodes = range.cloneContents().childNodes;
           const nodes = range.commonAncestorContainer.nodeType === 3 // Text node
           ? range.commonAncestorContainer.parentElement
           : range.cloneContents().childNodes;
@@ -1067,7 +1056,7 @@ const MainEditor = (props) => {
                   // If it's not a heading, append the original node
                   paragraph.appendChild(node.cloneNode(true));
                 }
-              }          
+            }          
         }
           // Replace the selected content with the new paragraph
           range.deleteContents();
@@ -1309,7 +1298,7 @@ const MainEditor = (props) => {
             }
         }, 8000);
         setIsCopied(true);
-        // Config.toast("Text copied")
+        // Config.toast("Text copied");
     }
 
     function getCaretPosition(editableDiv) {
@@ -1357,7 +1346,6 @@ const MainEditor = (props) => {
         return precedingChar;
     }
 
-
     var handle = (event) => {
         try {
             if (document.querySelector('.temp-color')) {
@@ -1366,7 +1354,6 @@ const MainEditor = (props) => {
                     each.classList.remove('temp-color');
                 });
             }
-
             if (document.querySelector('.note-editable')) {
                 // Chrome is wrapping line in span with styling upon deleting previous line break #3088 (reference)
                 // $(document).on("DOMNodeInserted", '.note-editable', function (e) {
@@ -1438,7 +1425,7 @@ const MainEditor = (props) => {
                                 if (document.querySelector('.tab-to-write-more-tooltip')) {
                                     document.querySelector('.tab-to-write-more-tooltip').style.setProperty('top', (rect.y - 46) + "px", 'important');
                                     document.querySelector('.tab-to-write-more-tooltip').style.setProperty('left', (rect.x - 66) + "px", 'important');
-                                    document.querySelector('.tab-to-write-more-tooltip').style.visibility = 'visible'
+                                    document.querySelector('.tab-to-write-more-tooltip').style.visibility = 'visible';
                                 }
                                 // var HTMLstring = '<span class="write-more-tab" contenteditable="false">Press<span class="tab-write-more-inner">Tab</span> to write more...</span>';
                                 // $('.summernote').summernote('pasteHTML', HTMLstring);
@@ -1484,15 +1471,15 @@ const MainEditor = (props) => {
                                     document.querySelector('.tab-to-write-more-tooltip').style.visibility = 'visible';
                                 }
                                 // var HTMLstring = '<span class="write-more-tab" contenteditable="false">Press<span class="tab-write-more-inner">Tab</span> to write more...</span>';
-                                // $('.summernote').summernote('pasteHTML', HTMLstring)
-                                // $('.summernote').summernote("restoreRange")
+                                // $('.summernote').summernote('pasteHTML', HTMLstring);
+                                // $('.summernote').summernote("restoreRange");
                             }
                         }
                     }
                 }
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
     }
 
@@ -1568,7 +1555,7 @@ const MainEditor = (props) => {
                 }
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
         // return document.querySelector('.note-editable').removeEventListener("keydown", handleTab, false);
     }, []);
@@ -1607,10 +1594,9 @@ const MainEditor = (props) => {
             var div = document.createElement('div');
             div.appendChild(clonedSelection);
             html = div.innerHTML;
-        //     if (selection.baseNode && selection.baseNode.parentElement && selection.baseNode.parentElement.nodeName.toUpperCase() === "LI")
-        //     {
-        //         html = "<li>" + html + "</li>";
-        // }
+        //  if (selection.baseNode && selection.baseNode.parentElement && selection.baseNode.parentElement.nodeName.toUpperCase() === "LI"){
+        //      html = "<li>" + html + "</li>";
+        //  }
             txt = div.textContent;
         }
         }        
@@ -1621,7 +1607,6 @@ const MainEditor = (props) => {
         }else{
             e.preventDefault();
         }
-        // 
     }
 
     const handleCopyFromEditor =async(e) => {
@@ -1718,14 +1703,14 @@ const MainEditor = (props) => {
     const getRangeObjectFromSelection = () => {
         const selection = window.getSelection();
         summernoteRangeRef.current = $.summernote.range;
-        setIsTextSelected(selection?.toString()?.length === 0 ? false : true)
+        setIsTextSelected(selection?.toString()?.length === 0 ? false : true);
         if (selection.toString()?.trim()?.length !== 0) {
             if (selection) {
                 if (selection.rangeCount > 0) {
                     setSavedSelection(selection.getRangeAt(0));
                     // dispatch({
                     //     range: setWriterRangeObject(selection.getRangeAt(0))
-                    // })
+                    // });
                 }
             }
         }
@@ -1802,10 +1787,10 @@ const MainEditor = (props) => {
             },
             error: (err) => {
                 console.error(err);
-                // setIsDefaultSettingSaving(false)
+                // setIsDefaultSettingSaving(false);
             }
         })
-        // dispatch(saveDefaultSettings({newline: newline, action: e.target.getAttribute('name')}))
+        // dispatch(saveDefaultSettings({newline: newline, action: e.target.getAttribute('name')}));
     }
 
     //  useEffect(() => {
@@ -1832,7 +1817,7 @@ const MainEditor = (props) => {
             window.removeEventListener('resize', setPopOnPosition);
             noteEditingArea.removeEventListener('scroll', setPopOnPosition);
         }
-    }, [clickedWrongWordRef.current])    ;
+    }, [clickedWrongWordRef.current]);
 
     const arrow = document.querySelector('#arrow');
     const arrowTop = 'arrow-top';
@@ -1873,11 +1858,10 @@ const MainEditor = (props) => {
                         let uid = generateKey();
                         return `<mark data-word=${`"${match}"`} id=${`"spell-check-${uid}"`} class="spellcheck-highlight" >${match}</mark>`
                     }
-                );
-    
-                document.querySelector('.note-editable-backdrop').innerHTML = highlightedHtml
+                );    
+                document.querySelector('.note-editable-backdrop').innerHTML = highlightedHtml;
             }catch(e){
-                console.error(e)
+                console.error(e);
             }
         }
     }
@@ -1893,6 +1877,7 @@ const MainEditor = (props) => {
                 mouseX <= boundingBox.right &&
                 mouseY >= boundingBox.top &&
                 mouseY <= boundingBox.bottom
+
             ) {
                 return {
                     element: markElement,

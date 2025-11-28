@@ -11,45 +11,17 @@ import Config from "../vendor/Config";
 import Navbar from "../vendor/Navbar";
 import Draggable from "react-draggable";
 import Tooltip from '@mui/material/Tooltip';
-// import { makeStyles } from '@mui/styles';
 import ButtonBase from '@mui/material/ButtonBase';
-// import { TransliterationProvider } from "../vendor/google-input-tools/transliteration-provider";
-// import "../vendor/google-input-tools/styles/style.scss"
 import Cookies from "js-cookie";
 import Cursor from "../vendor/Cursor";
-import Joyride, { ACTIONS, EVENTS, STATUS } from "react-joyride";
-import TourTooltip from "../tour/TourTooltip";
 import Skeleton from '@mui/material/Skeleton';
 import { MessageTypingAnimation } from "../loader/MessageTypingAnimation";
 import SimpleRodals from "../project-setup-components/rodals/SimpleRodals";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import ReactSelect, { components } from 'react-select';
-import Checkbox from '@mui/material/Checkbox';
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-// import DOMPurify from "isomorphic-dompurify";
-import sanitizeHtml from 'sanitize-html-react';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { MainAILoader } from "../loader/MainAILoader";
 import { useSelector } from "react-redux";
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
-import MicOutlinedIcon from '@mui/icons-material/MicOutlined';
-import SquareIcon from '@mui/icons-material/Square';
-import VoiceTyping from '../vendor/custom-component/VoiceTyping'
 import ContentCopyIcon from "../vendor/styles-svg/Content-copy-icon";
-import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
-import { webSpeechLang } from "../project-setup-components/speech-component/text-to-speech/WebSpeechLang";
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteIcon from "../vendor/styles-svg/DeleteIcon";
-import { TextareaAutosize } from "@mui/material";
-import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
-import EastOutlinedIcon from '@mui/icons-material/EastOutlined';
 import NavigateBeforeSharpIcon from '@mui/icons-material/NavigateBeforeSharp';
 import NavigateNextSharpIcon from '@mui/icons-material/NavigateNextSharp';
 import { t } from "i18next";
@@ -70,92 +42,9 @@ import RemoveCircleRed from "../assets/images/new-ui-icons/remove_circle_red.svg
 import ErrorBlackWarn from "../assets/images/new-ui-icons/error_black_warn.svg";
 import WikipediaIcon from "../assets/images/new-ui-icons/wiki-new-img.svg";
 import WikitionaryIcon from "../assets/images/new-ui-icons/wikitionary-new-img.png";
-// import { getTransliterateSuggestions } from "react-transliterate";
 
-// const useStyles = makeStyles((theme) => ({
-//     selectBox: {
-//         height: 28,
-//         padding: "4px 2px",
-//         borderRadius: "2px",
-//         backgroundColor: "transparent",
-//         "&:hover, :focus": {
-//             backgroundColor: "#E8F0FE",
-//         },
-//         "& .MuiSelect-select.MuiSelect-select": {
-//             paddingRight: "20px !important",
-//             paddingLeft: 0,
-//             paddingTop: 0,
-//             paddingBottom: 0,
-//             "&:focus": {
-//                 backgroundColor: "transparent",
-//             }
-//         },
-//         "& .MuiOutlinedInput-notchedOutline": {
-//             border: "0px solid darkgrey",
-//             padding: 0,
-//         },
-//         "& .MuiSvgIcon-root": {
-//             color: "#5F6368",
-//             fontSize: 20,
-//         },
-//     },
-//     selectOptions: {
-//         "& .MuiMenu-list": {
-//             padding: "21px 0px"
-//         },
-//         "& .MuiListItem-root": {
-//             fontSize: 14,
-//             lineHeight: 1.3,
-//             color: "#3C4043",
-//         },
-//         "& .MuiListItem-root:hover": {
-//             backgroundColor: "#F1F3F4"
-//         },
-//         "& .MuiListItem-root.Mui-selected": {
-//             color: "#202124",
-//         },
-//         "& .MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover": {
-//             backgroundColor: "#F1F3F4"
-//         },
-//         "& .MuiCheckbox-root": {
-//             color: "#5F6368",
-//             padding: "5px",
-//             "&:hover": {
-//                 backgroundColor: "#F1F3F4"
-//             }
-//         },
-//         "& .MuiCheckbox-colorSecondary": {
-//             "&.Mui-checked": {
-//                 color: "#0074D3"
-//             }
-//         }
-//     }
-// }));
-
-const filterMenuProps = {
-    getContentAnchorEl: null,
-    anchorOrigin: {
-        vertical: "bottom",
-        horizontal: "right",
-    },
-    transformOrigin: {
-        vertical: "top",
-        horizontal: "right",
-    },
-    PaperProps: {
-        style: {
-            width: 265,
-            borderRadius: 4,
-            boxShadow: "0px 2px 8px #0000002E",
-            "& .MuiList-root": {
-                padding: "21px 0px"
-            }
-        },
-    }
-};
-
-const FederalWorkspace = (props) => {
-    Config.redirectIfNotLoggedIn(props); //Redirect to login page if not logged in
+const PIBWorkspace = (props) => {
+    Config.redirectIfNotLoggedIn(props); 
     let userToken = new URLSearchParams(window.location.search).get("token");
     /* If coming with token from some other app like ailaysa.com. No longer used - start */
     if (userToken != null) {
@@ -552,7 +441,6 @@ const FederalWorkspace = (props) => {
     const transphraseId = transphrasePopoverOpen ? "simple-popover" : undefined;
     let userSelectionCallTimer = null;
 
-    // filterMenuProps.PaperProps.className = classes.selectOptions;
     const writerAreaDiv = document.querySelector(".federal-segment-wrapper .note-editable");
     const newsSourceDiv = document.querySelector("#source-text-div-3");
     const targetNoteEditableDiv = document.querySelector('.note-editable');
@@ -854,15 +742,6 @@ const FederalWorkspace = (props) => {
                     if (targetContentEditable.current) {
                         targetContentEditable.current[focusedDivIdRef.current]?.current.blur(); // Make the currently focused contenteditable to save
                     }
-                    // if(document.querySelector('.ks-input-suggestions')){
-                    //     const suggestionsArray = document.querySelectorAll('.ks-input-suggestions')
-                    //     suggestionsArray.forEach((each) => {
-                    //         each.remove()
-                    //     })
-                    // }
-                    // removeListenersFromElement(targetContentEditable.current[focusedDivIdRef.current].current, )
-                    // targetContentEditable.current[focusedDivIdRef.current].current.replaceWith(targetContentEditable.current[focusedDivIdRef.current].current.clone()); // Make the currently focused contenteditable to save
-                    // recreateNode(document.querySelector('#workspace'), true)
                     setTimeout(() => {
                         window.location.reload(); // As of now just reload the page to disable
                         // history(window.location)
@@ -872,27 +751,6 @@ const FederalWorkspace = (props) => {
             }
         }
     }, [targetLanguageCode, enableIME]); //Whenever ebable IME Editor
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         getSavedFontSize();
-    //     }, 200);
-    // }, [targetLanguageId]);
-
-    // useEffect(() => {
-    //     const insertInputSuggestionClick = (e) => {
-    //         // To insert the clicked text from IME suggestions
-    //         if (e.target.classList.contains("suggestion-div")) {
-    //             changeSavedCaretPosition();
-    //             let text = "" + e.target.innerText;
-    //             document.execCommand("insertText", false, text);
-    //         }
-    //     };
-    //     document.addEventListener("click", insertInputSuggestionClick, false); // Also can merge this with the previous click eventListener
-    //     return () => {
-    //         document.removeEventListener("click", insertInputSuggestionClick);
-    //     };
-    // });
 
     useEffect(() => {
         if(!isWorkspaceEditable && editorRef.current !== null){
@@ -932,11 +790,6 @@ const FederalWorkspace = (props) => {
                 // let { segments_confirmed_count, total_segment_count } = documentProgressRef.current;                
                 if(!isEditorSubmittedDocument.current)  // check if document is already submitted - if not submitted show the button 
                     setShowDocumentSubmitButton(true);
-                // if (true) {
-                //     setShowDocumentSubmitButton(true);
-                // } else {
-                //     setShowDocumentSubmitButton(false);
-                // }
             }
         }
     }, [isWorkspaceEditable, documentProgressRef.current, isDocumentOpenerVendorRef.current, isUserIsReviwer, isEditorSubmittedDocument.current, taskDataRef.current]);
@@ -1024,10 +877,6 @@ const FederalWorkspace = (props) => {
             const filteredVoiceType = filteredRes?.reduce((a, item) => (
                 Object.assign(a, { [item?.voice_type]: item })
             ), {});
-            // set voice-type as Neural(1st priority) then Standard(2nd priority) and then Wavenet(3rd priority)
-            // if(filteredVoiceType?.Neural2 !== undefined){
-            //     setVoiceType(filteredVoiceType?.Neural2?.voice_name);
-            // }else 
             if (filteredVoiceType?.Wavenet !== undefined) {
                 setVoiceType(filteredVoiceType?.Wavenet?.voice_name);
             } else if (filteredVoiceType?.Standard !== undefined) {
@@ -1035,65 +884,6 @@ const FederalWorkspace = (props) => {
             }
         }
     }, [audioLocale, audioGender]);
-
-    // ============= Voice option selection logic ends =============
-    // useEffect(() => {
-    //     findTriggerCount.current = 0; // Initial find and replace trigger
-    //     //Don't update if it comes from update segment with id function
-    //     if (didMount) {
-    //         if (lastCalledArgs.current.functionName == "pageSelect" || lastCalledArgs.current.functionName == "filter") {
-    //             // If the state set from one of these functions
-    //             paginationContentFunction(lastCalledArgs.current.page);
-    //             createTargetContentEditableRefs();
-    //             updateSegmentStatus();
-    //             /*Trigger focus on the first segment - start*/
-    //             // if (!creditAlertTxt?.length) {
-    //             setTimeout(() => {
-    //                 //targetContentEditable Ref's assigned
-    //                 if (targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current !== null) {
-                        
-    //                     // focus the first segment if moved by confirming the last segment manually  
-    //                     if(isMovedFromLastSegmentConfirmRef.current){
-    //                         targetContentEditable.current[translatedResponse[0]?.segment_id]?.current?.focus();
-    //                         isMovedFromLastSegmentConfirmRef.current = false
-    //                     }
-    //                     if (Cookies.get('isProductTourSeen') == undefined) {
-    //                         if (isWorkspaceEditable) {
-    //                             targetContentEditable.current[translatedResponse[0]?.segment_id]?.current?.focus();
-    //                         }
-    //                     }
-    //                     // didMountRef.current = false;
-    //                 }
-    //                 // if (targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current != null){
-    //                 //     let a = document.getElementsByClassName('workspace-editor')[0];
-    //                 //     a.scroll({
-    //                 //         top: 0,
-    //                 //         behavior: 'smooth'
-    //                 //       });
-    //                 //     targetContentEditable?.current[translatedResponse[0]?.segment_id]?.current.scrollTo({top: 0, behavior: 'smooth'});
-    //                 //     if(findTerm === ""){
-    //                 //         if(isMergedRef.current || isRestoredRef.current || isSplitRef.current){
-    //                 // //         //     // if(isMergedRef.current || isRestoredRef.current){
-    //                 // //         //     //     targetContentEditable.current[translatedResponse[0].segment_id].current.focus();
-    //                 // //         //     //     targetContentEditable.current[translatedResponse.find(each => each.segment_id === mergedSegmentIDsRef.current?.sort()[0]).segment_id].current.focus();
-    //                 // //         //     // }
-    //                 // //         //     // mergedSegmentIDsRef.current = null
-    //                 // //             if(translatedResponse !== null){
-    //                 //                 isMergedRef.current = false
-    //                 //                 isRestoredRef.current = false
-    //                 //                 isSplitRef.current = false
-    //                 // //             }
-    //                 //         }else{
-    //                 //             targetContentEditable.current[translatedResponse[0].segment_id].current.focus();
-    //                 //         }
-    //                 //     }
-    //                 // }
-    //             }, 50);
-    //             // }
-    //             /*Trigger focus on the first segment - end*/
-    //         }
-    //     }
-    // }, [translatedResponse, allSegmentStatusState]);
 
     useEffect(() => {
         if (didMount) {
@@ -1289,7 +1079,7 @@ const FederalWorkspace = (props) => {
         if (didMount) {
             /*Highlight last segment Find Previous clicked from next page - start*/
             if (props.location?.state?.findHighlightSegment != null) {
-                findHighlightSegment.current = props.location.state.findHighlightSegment;
+                findHighlightSegment.current = props?.location?.state.findHighlightSegment;
                 window.history.replaceState(null, "");
                 // filterWithFindTerm();
                 setTimeout(() => {
@@ -1305,7 +1095,7 @@ const FederalWorkspace = (props) => {
                     }
                 }, 200);
                 /*Highlight last segment Find Previous clicked from next page - end*/
-            } else if (props.location.state?.highlightFirstFindTerm === true) {
+            } else if (props?.location?.state?.highlightFirstFindTerm === true) {
                 setTimeout(() => {
                     findNext();
                 }, 400);
@@ -1368,32 +1158,32 @@ const FederalWorkspace = (props) => {
     /* Make the find and replace icon active when select that */
     useEffect(() => {
         if (didMount) {
-            showFindReplaceRef.current.classList.remove("toolbar-list-icons-active");
-            if (showFindReplace) showFindReplaceRef.current.classList.add("toolbar-list-icons-active");
+            showFindReplaceRef?.current?.classList.remove("toolbar-list-icons-active");
+            if (showFindReplace) showFindReplaceRef.current?.classList.add("toolbar-list-icons-active");
         }
     }, [showFindReplace]);
 
     /* Make the special characters icon active when select that */
     useEffect(() => {
         if (didMount) {
-            showSpecialCharactersRef.current.classList.remove("toolbar-list-icons-active");
-            if (showSpecialCharacters) showSpecialCharactersRef.current.classList.add("toolbar-list-icons-active");
+            showSpecialCharactersRef.current?.classList.remove("toolbar-list-icons-active");
+            if (showSpecialCharacters) showSpecialCharactersRef.current?.classList.add("toolbar-list-icons-active");
         }
     }, [showSpecialCharacters]);
 
     /* Make the size selection icon active when select that */
     useEffect(() => {
         if (didMount) {
-            showFormatSizeRef.current.classList.remove("toolbar-list-icons-active");
-            if (showFormatSize) showFormatSizeRef.current.classList.add("toolbar-list-icons-active");
+            showFormatSizeRef.current?.classList.remove("toolbar-list-icons-active");
+            if (showFormatSize) showFormatSizeRef.current?.classList.add("toolbar-list-icons-active");
         }
     }, [showFormatSize]);
 
     /* Make the size selection icon active when select that */
     useEffect(() => {
         if (didMount) {
-            showGlossaryRef.current.classList.remove("toolbar-list-icons-active");
-            if (showGlossary) showGlossaryRef.current.classList.add("toolbar-list-icons-active");
+            showGlossaryRef.current?.classList.remove("toolbar-list-icons-active");
+            if (showGlossary) showGlossaryRef.current?.classList.add("toolbar-list-icons-active");
         }
     }, [showGlossary]);
 
@@ -1988,110 +1778,116 @@ const FederalWorkspace = (props) => {
 
     const createSegmentLikeJson = (responseTemp) => {
         // 'keywords description media->caption image_caption heading authorName story location tags story_summary'        
-        let segmentData = [{
-            "source": responseTemp?.source_json?.news !== undefined ?
-                        responseTemp.source_json.news[0].heading :
-                        responseTemp?.source_json?.heading,
-            "target": responseTemp.target_json.heading,
+        let segmentData = [
+        {
+            "source": responseTemp?.source_json?.heading,
+            "target": responseTemp.target_json?.heading,
             "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.heading,
             "segment_count": 1,
             'segment_id': 1,
             type: "Headline"
-        },{
-            "source": responseTemp?.source_json?.news !== undefined ? 
-                        responseTemp.source_json.news[0].image_caption : 
-                        responseTemp?.source_json?.image_caption,
-            "target": responseTemp.target_json.image_caption,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.image_caption,
-            "segment_count": 1,
-            'segment_id': 2,
-            type: "Image caption"
         },
+        // {
+        //     "source": responseTemp?.source_json?.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].image_caption : 
+        //                 responseTemp?.source_json?.image_caption,
+        //     "target": responseTemp.target_json.image_caption,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.image_caption,
+        //     "segment_count": 1,
+        //     'segment_id': 2,
+        //     type: "Image caption"
+        // },
         (
-            (responseTemp.source_json.news !== undefined ? responseTemp.source_json.news[0].story : responseTemp.source_json?.story) !== "<p><br></p>" && 
-            (responseTemp.source_json.news !== undefined ? responseTemp.source_json.news[0].story : responseTemp.source_json?.story) !== "" &&  
-            (responseTemp.source_json.news !== undefined ? responseTemp.source_json.news[0].story : responseTemp.source_json?.story) !== null
+            (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "<p><br></p>" && 
+            (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "" &&  
+            (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== null
         ) &&
         {
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].story : 
-                        responseTemp.source_json?.story,
-            "target": responseTemp.target_json.story,
+            "source": responseTemp.source_json?.story,
+            "target": responseTemp.target_json?.story,
             "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.story,
             "segment_count": 1,
             'segment_id': 3,
             type: "Story"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].tags :
-                        responseTemp.source_json?.tags,
-            "target": responseTemp.target_json.tags,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.tags,
-            "segment_count": 1,
-            'segment_id': 4,
-            type: "Tags"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].description:
-                        responseTemp.source_json?.description,
-            "target": responseTemp.target_json.description,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.description,
-            "segment_count": 1,
-            'segment_id': 5,
-            type: "Description"
-        },{
-            "source": responseTemp.source_json.news !== undefined ?
-                        responseTemp.source_json.news[0].keywords :
-                        responseTemp.source_json?.keywords,
-            "target": responseTemp.target_json.keywords,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.keywords,
-            "segment_count": 1,
-            'segment_id': 6,
-            type: "Keywords"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].authorName :
-                        responseTemp.source_json?.authorName,
-            "target": responseTemp.target_json.authorName,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.authorName,
-            "segment_count": 1,
-            'segment_id': 7,
-            type: "Author name"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].story_summary :
-                        responseTemp.source_json?.story_summary,
-            "target": responseTemp.target_json.story_summary,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.story_summary,
-            "segment_count": 1,
-            'segment_id': 8,
-            type: "Story summary"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].location :
-                        responseTemp.source_json?.location,
-            "target": responseTemp.target_json.location,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.location,
-            "segment_count": 1,
-            'segment_id': 9,
-            type: "Location"
-        },{
-            "source": responseTemp.source_json.news !== undefined ? 
-                        responseTemp.source_json.news[0].media[0]?.caption :
-                        responseTemp.source_json?.media[0]?.caption,
-            "target": responseTemp.target_json.media[0]?.caption,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.media[0]?.caption,
-            "segment_count": 1,
-            'segment_id': 10,
-            type: "Caption (media)"
-        }];
+        },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].tags :
+        //                 responseTemp.source_json?.tags,
+        //     "target": responseTemp.target_json.tags,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.tags,
+        //     "segment_count": 1,
+        //     'segment_id': 4,
+        //     type: "Tags"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].description:
+        //                 responseTemp.source_json?.description,
+        //     "target": responseTemp.target_json.description,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.description,
+        //     "segment_count": 1,
+        //     'segment_id': 5,
+        //     type: "Description"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ?
+        //                 responseTemp.source_json.news[0].keywords :
+        //                 responseTemp.source_json?.keywords,
+        //     "target": responseTemp.target_json.keywords,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.keywords,
+        //     "segment_count": 1,
+        //     'segment_id': 6,
+        //     type: "Keywords"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].authorName :
+        //                 responseTemp.source_json?.authorName,
+        //     "target": responseTemp.target_json.authorName,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.authorName,
+        //     "segment_count": 1,
+        //     'segment_id': 7,
+        //     type: "Author name"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].story_summary :
+        //                 responseTemp.source_json?.story_summary,
+        //     "target": responseTemp.target_json.story_summary,
+        //     "mt_raw": responseTemp?.mt_json?.mt_raw_json?.story_summary,
+        //     "segment_count": 1,
+        //     'segment_id': 8,
+        //     type: "Story summary"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].location :
+        //                 responseTemp.source_json?.location,
+        //     "target": responseTemp.target_json.location,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.location,
+        //     "segment_count": 1,
+        //     'segment_id': 9,
+        //     type: "Location"
+        // },
+        // {
+        //     "source": responseTemp.source_json.news !== undefined ? 
+        //                 responseTemp.source_json.news[0].media[0]?.caption :
+        //                 responseTemp.source_json?.media[0]?.caption,
+        //     "target": responseTemp.target_json.media[0]?.caption,
+        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.media[0]?.caption,
+        //     "segment_count": 1,
+        //     'segment_id': 10,
+        //     type: "Caption (media)"
+        // }
+    ];
         return segmentData;
     } 
 
     /* Get the docuement details by document id */
     const getDocumentDetailsById = (documentIdTemp) => {
         Config.axios({
-            url: `${Config.BASE_URL}/workspace/federal_translate/${documentIdTemp}${(userDetails?.agency && location.state?.open_as !== undefined) ? `?step_id=${location.state?.open_as === 'editor' ? 1 : 2}` : ''}`,
+            url: `${Config.BASE_URL}/workspace/pib_translate/${documentIdTemp}`,
             auth: true,
             success: (docResponse) => {
                 let responseTemp = docResponse.data;
@@ -2105,7 +1901,7 @@ const FederalWorkspace = (props) => {
                 if (location.state?.prevPath) {
                     let [pathname, search] = location.state.prevPath?.split("?");
                     const URL_SEARCH_PARAMS = new URLSearchParams(`?${search}`);
-                    URL_SEARCH_PARAMS.set('open-project', responseTemp.project);
+                    URL_SEARCH_PARAMS.set('open-project', responseTemp.task);
                     prevPathRef.current = pathname + '?' + URL_SEARCH_PARAMS.toString();
                 }
                 setTranslatedResponse(segmentData);
@@ -2180,7 +1976,7 @@ const FederalWorkspace = (props) => {
                         let task_data = response.data?.find(each => each.id === responseTemp.task);
                         taskDataRef.current = task_data;
                         // logged in user is an agency and this task is assigned to LSP(not his own project) (LSP(reassign) -> vendor)
-                        if (userDetails?.agency && !isAssignEnableRef.current) {
+                        if (userDetails?.agency ) {
                             // the task whether reassigned or not, the LSP needs to work/see work and submit the document
                             isDocumentOpenerVendorRef.current = true;
                             isTaskReassignedRef.current = typeof task_data.task_reassign_info === 'boolean' ? true : false;
@@ -3330,7 +3126,6 @@ const FederalWorkspace = (props) => {
 
     // put curosr on the source segment but dont allow any kind of editing (keypress, pasting of content and drag and drop of contentx)
     const handleSourceSegmentClick = (e) => {
-        // disable when any of the checkbox is selected
         if (sourceTextDiv.current[focusedDivIdRef.current].current !== null) {           
             if (e.target.getAttribute('data-id') && e.target.getAttribute('source-data-text-unit')) {
                 segmentIdRef.current = e.target.getAttribute('data-id');
@@ -3848,7 +3643,7 @@ const FederalWorkspace = (props) => {
         setFocusedDivId(segmentId);
         ctrlAClicked.current = false;
         focusedDivIdRef.current = segmentId;
-            let newArr = translatedResponse?.map(obj => {
+        let newArr = translatedResponse?.map(obj => {
             if (obj.segment_id == segmentId) {
                 return {
                     ...obj,
@@ -4629,10 +4424,10 @@ const FederalWorkspace = (props) => {
     }
 
     const handleChangeUpdate = (isStory = false) => {
-        Config.debounceApiCalls(() => handleFederalNewsUpdate(isStory));
+        Config.debounceApiCalls(() => handlePIBNewsUpdate(isStory));
     }
 
-    const handleFederalNewsUpdate = (isStory = false) => {
+    const handlePIBNewsUpdate = (isStory = false) => {
         if(isStory){
             if(editorRef.current?.summernote("code") === translatedFullResponseref.current?.target_json?.story) return;
         }
@@ -4673,32 +4468,32 @@ const FederalWorkspace = (props) => {
             let translatedJson = {
                 ...translatedFullResponseref.current?.target_json,
                 "heading": document.querySelector('#workspace-textarea-1')?.innerText,
-                "image_caption": document.querySelector('#workspace-textarea-2')?.innerText,
+                // "image_caption": document.querySelector('#workspace-textarea-2')?.innerText,
                 "story": editorRef.current?.summernote("code"),
-                "tags": document.querySelector('#workspace-textarea-4')?.innerText,
-                "description": document.querySelector('#workspace-textarea-5')?.innerText,
-                "keywords": document.querySelector('#workspace-textarea-6')?.innerText,
-                "authorName": document.querySelector('#workspace-textarea-7')?.innerText,
-                "story_summary": document.querySelector('#workspace-textarea-8')?.innerText,
-                "location": document.querySelector('#workspace-textarea-9')?.innerText,
-                "media": [
-                    {
-                        ...translatedFullResponseref.current.target_json.media[0],
-                        "caption": document.querySelector('#workspace-textarea-10')?.innerText
-                    }
-                ]
+                // "tags": document.querySelector('#workspace-textarea-4')?.innerText,
+                // "description": document.querySelector('#workspace-textarea-5')?.innerText,
+                // "keywords": document.querySelector('#workspace-textarea-6')?.innerText,
+                // "authorName": document.querySelector('#workspace-textarea-7')?.innerText,
+                // "story_summary": document.querySelector('#workspace-textarea-8')?.innerText,
+                // "location": document.querySelector('#workspace-textarea-9')?.innerText,
+                // "media": [
+                //     {
+                //         ...translatedFullResponseref.current.target_json.media[0],
+                //         "caption": document.querySelector('#workspace-textarea-10')?.innerText
+                //     }
+                // ]
             };
             let formData = new FormData();
             formData.append("target_json", JSON.stringify(translatedJson));
 
             Config.axios({
-                url: `${Config.BASE_URL}/workspace/federal_translate/${translatedFullResponseref.current.id}/`,
+                url: `${Config.BASE_URL}/workspace/pib_translate/${translatedFullResponseref.current.uid}/`,
                 auth: true,
                 method: "PUT",
                 data: formData,
                 success: (docResponse) => {
-                    let responseTemp = docResponse.data;
-                    // let segmentData = createSegmentLikeJson(responseTemp);
+                    const responseTemp = docResponse.data;
+                    let segmentData = createSegmentLikeJson(responseTemp);
                 },
                 error: (err) => {
                     if (err.response?.data?.detail) {
@@ -5092,13 +4887,13 @@ const FederalWorkspace = (props) => {
                 listSegments={() => console.log()}
                 mtEnable={mtEnable}
                 docCreditCheckAlertRef={docCreditCheckAlertRef}
-                showDocumentSubmitButton={showDocumentSubmitButton}
+                showDocumentSubmitButton={false}
                 enableDocumentSubmitBtn={enableDocumentSubmitBtn}
                 handleDocumentSubmitBtn={handleDocumentSubmitBtn}
-                showReturnRequestBtn={showReturnRequestBtn}
+                showReturnRequestBtn={false}
                 isWorkspaceEditable={isWorkspaceEditable}
                 documentTaskIdRef={documentTaskIdRef}
-                isFederalWorkspace={true}
+                isPIBWorkspace={true}
             />
             {
                 showAiLoader && <MainAILoader background={"#ffffffba"} />
@@ -5329,7 +5124,7 @@ const FederalWorkspace = (props) => {
                                                                             {(translation?.isFocused) && (
                                                                                 <div data-id={id} className="target-lang-row-align trigger-focus">
                                                                                     <div data-id={id} className="segment-status trigger-focus">
-                                                                                        {(isWorkspaceEditable && (sourceLanguageId == 17 || targetLanguageId == 17)) ? (
+                                                                                        {(isWorkspaceEditable) ? (
                                                                                             !["Tags", "Keywords", "Author name", "Location"]?.find(each => each === translation?.type) &&
                                                                                                 <>
                                                                                                     <Tooltip title={
@@ -5984,4 +5779,4 @@ const FederalWorkspace = (props) => {
     );
 }
 
-export default FederalWorkspace;
+export default PIBWorkspace;

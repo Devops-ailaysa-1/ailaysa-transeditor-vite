@@ -21,7 +21,8 @@ function TargetLanguage(props) {
         showTarLangModal,
         setshowTarLangModal,
         handleTargetLangClick,
-        hideAddOrUpdateBtn
+        hideAddOrUpdateBtn,
+        restrictedTargetLanguages
     } = props;
     
     const [modalTarOpened, setModalTarOpened] = useState(showTarLangModal ? true : false);
@@ -151,8 +152,9 @@ function TargetLanguage(props) {
                                         <li
                                             key={value?.id}
                                             onClick={(e) => props.handleTargetLangClick(value, e)}
-                                            className={
-                                                ((alreadySelecetedTarLangID?.includes(value?.id) || (props.targetLanguage != "" && props.targetLanguage?.some(each => each?.id === value?.id))) ? "list selected" : "list")  
+                                            className={`${((alreadySelecetedTarLangID?.includes(value?.id)
+                                                    || (props.targetLanguage != "" && props.targetLanguage?.some(each => each?.id === value?.id)))
+                                                    ? "list selected" : "list")} ${restrictedTargetLanguages && restrictedTargetLanguages?.includes(value.id) ? "disabled-lang" : ""}`
                                             }
                                         >
                                             <img className="checked-icon" src={CheckBlue} alt="check_blue" />{" "}
@@ -246,7 +248,7 @@ function TargetLanguage(props) {
                                             <li
                                                 key={value.id}
                                                 onClick={(e) => props.handleTargetLangClick(value.id, value.language, e, props.quickProjectSetup)}
-                                                className={value.id == props.targetLanguage ? "list selected" : "list"}
+                                                className={`${value.id == props.targetLanguage ? "list selected" : "list"}`}
                                             >
                                                 <img className="checked-icon" src={CheckBlue} alt="check_blue" />{" "}
                                                 {value.language}

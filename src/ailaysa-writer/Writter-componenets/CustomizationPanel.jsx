@@ -7,12 +7,7 @@ import SimpleRodals from "../../project-setup-components/rodals/SimpleRodals";
 import TargetLanguage from "../../vendor/lang-modal/Targetlanguage";
 import Rodal from "rodal";
 import Select, { components } from "react-select";
-import {
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-} from 'reactstrap';
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, } from 'reactstrap';
 import { ConstructionOutlined } from "@mui/icons-material";
 import { count } from 'letter-count';
 import ButtonBase from '@mui/material/ButtonBase';
@@ -135,7 +130,6 @@ const CustomizationPanel = (props) => {
         const tarTranslateFilter = targetArr?.map((each) => {
             return each?.filter((eachTargetArr) => eachTargetArr?.translate === true);
         });
-
         let sortedTarMtpe = tarTranslateFilter?.map((each) => {
             return each?.map((each2) => {
                 return each2?.mtpe_engines;
@@ -159,7 +153,7 @@ const CustomizationPanel = (props) => {
             engines?.push({
                 value: eachEngine?.id,
                 label: eachEngine?.name?.replaceAll("_", " "),
-            })
+            });
         }
         );
         setMtpeEngineOptions(engines);
@@ -360,7 +354,6 @@ const CustomizationPanel = (props) => {
         });
     };
    
-
     var toUtf8 = function (text) {
         var surrogate = encodeURIComponent(text);
         var result = '';
@@ -420,7 +413,8 @@ const CustomizationPanel = (props) => {
                         if (grammarCheckBtn) {
                             if (response.data?.lang_id != 17) {
                                 grammarCheckBtn.style.setProperty('opacity', '0.4');
-                                grammarCheckBtn.style.setProperty('pointer-events', 'none');                            } else {
+                                grammarCheckBtn.style.setProperty('pointer-events', 'none');                            
+                            } else {
                                 if (((count(selectionString?.replace(/\n/g, ''))?.chars >= 5 * 4 && count(selectionString?.replace(/\n/g, ''))?.chars <= 500))) {
                                     grammarCheckBtn.style.setProperty('opacity', '1');
                                     grammarCheckBtn.style.setProperty('pointer-events', 'all');
@@ -462,11 +456,10 @@ const CustomizationPanel = (props) => {
     }
 
     // useEffect(() => {
-
     //     if(selectedMTEngine === undefined && sourceLanguage?.length !== 0 && targetLanguage?.length !== 0){
-    //         setSelectedMTEngine(1)
+    //         setSelectedMTEngine(1);
     //     }
-    // }, [selectedMTEngine, sourceLanguage, targetLanguage])
+    // }, [selectedMTEngine, sourceLanguage, targetLanguage]);
     
     return (
         <React.Fragment>
@@ -486,11 +479,7 @@ const CustomizationPanel = (props) => {
                         }}
                         title={t("settings")} placement="top" arrow
                     >
-                        <span
-                            className="customize-settings-icon"
-                            style={{ marginLeft: '8px' }}
-                            onClick={() => dispatch(setShowCustomSettingsModal(true))}
-                        >
+                        <span className="customize-settings-icon" style={{ marginLeft: '8px' }} onClick={() => dispatch(setShowCustomSettingsModal(true))} >
                             <SettingsOutlinedIcon style={{ fontSize: '19px' }} />
                         </span>
                     </Tooltip>
@@ -502,7 +491,6 @@ const CustomizationPanel = (props) => {
                     <ArrowForwardIosIcon className="side-bar-arrow-ai-writter" />
                 </div>
             </div>
-
             <div className={showGallery ? "prompt-bubble-header d-none" : "prompt-bubble-sugestion-wrapper"} style={showPlaceHolderDivForBook ? {pointerEvents: 'none'} : {}}>
                 <div className="bubble-prompt-main-container">
                     {
@@ -586,8 +574,7 @@ const CustomizationPanel = (props) => {
                                                     </p>
 
                                                     <div className="translate_customization"
-                                                        style={(count(selectionString?.replace(/\n/g, ''))?.chars <= 2000 && count(selectionString?.replace(/\n/g, ''))?.chars > 1) ? { opacity: 1, pointerEvents: 'all' } : { opacity: 0.5, pointerEvents: 'none' }}
-                                                    >
+                                                        style={(count(selectionString?.replace(/\n/g, ''))?.chars <= 2000 && count(selectionString?.replace(/\n/g, ''))?.chars > 1) ? { opacity: 1, pointerEvents: 'all' } : { opacity: 0.5, pointerEvents: 'none' }}>
                                                         <div className="language-select-wrapper-cutomize-bar grid1">
                                                             <ButtonBase onClick={() => {
                                                                 setshowSrcLangModal(true);
@@ -734,34 +721,19 @@ const CustomizationPanel = (props) => {
                                         },
                                     }}
                                     title={'Assets from Ailaysa designer'} placement="top" arrow >
-                                    <img
-                                        className="imp-icon-file"
-                                        src={
-                                            Config.HOST_URL + "assets/images/new-ui-icons/imp-icon-file.svg"
-                                        }
-                                        alt="help"
-                                    />
+                                    <img className="imp-icon-file" src={ Config.HOST_URL + "assets/images/new-ui-icons/imp-icon-file.svg" } alt="help" />
                                 </Tooltip>
                             </div>
                         </div>
                         <div className="prompt-bubble-container">
                                 <>
-                                    <button
-                                        className="prompt-bubble"
-                                        onClick={() => {setShowGallery(true);setSidebarType('Design')}}
-                                    >
+                                    <button className="prompt-bubble" onClick={() => {setShowGallery(true);setSidebarType('Design')}} >
                                          My Designs
                                     </button>
-                                    <button
-                                        className="prompt-bubble"
-                                        onClick={() => {setShowGallery(true);setSidebarType('Ai')}}
-                                    >
+                                    <button className="prompt-bubble" onClick={() => {setShowGallery(true);setSidebarType('Ai')}} >
                                         Ai Generated
                                     </button>
-                                    <button
-                                        className="prompt-bubble"
-                                        onClick={() => {setShowGallery(true);setSidebarType('User')}}
-                                    >
+                                    <button className="prompt-bubble" onClick={() => {setShowGallery(true);setSidebarType('User')}} >
                                         Uploads
                                     </button>
                                 </>

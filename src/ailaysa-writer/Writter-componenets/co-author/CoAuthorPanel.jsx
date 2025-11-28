@@ -56,7 +56,7 @@ const CoAuthorPanel = (props, ref) => {
     // const [selectedTitle, setSelectedTitle] = useState({
     //     id: null, title: ''
     // });
-    // const [bookTitleList, setBookTitleList] = useState([])
+    // const [bookTitleList, setBookTitleList] = useState([]);
     const [isGenerating, setIsGenerating] = useState({
         title: false,
         chapter: false
@@ -67,7 +67,7 @@ const CoAuthorPanel = (props, ref) => {
     const bookLevelSelectRef = useRef(null);
     const bookGenreSelectRef = useRef(null);
     const updateTitleManuallyRef = useRef(true);
-    // const chaptersCreatedRef = useRef(false)
+    // const chaptersCreatedRef = useRef(false);
     
     const Newvariants = {
         hidden: {
@@ -228,15 +228,14 @@ const CoAuthorPanel = (props, ref) => {
             removeErrorFieldClass(bookDescriptionInputRef.current);
         }
     } 
+
     const handleBookTitleChange = (e) => {
         let value = e.target.value;
         setBookTitle(value);
         if(value?.trim()?.length !== 0){
             removeErrorFieldClass(bookTitleInputRef.current);
         }else{
-            setSelectedTitle({
-                id: null, title: ''
-            });
+            setSelectedTitle({ id: null, title: '' });
         }
     } 
 
@@ -251,10 +250,7 @@ const CoAuthorPanel = (props, ref) => {
     } 
 
     const handleTitleSelect = (id, titleText) => {
-        setSelectedTitle({
-            id,
-            title: titleText
-        });
+        setSelectedTitle({ id, title: titleText });
         setBookTitle(titleText);
         removeErrorFieldClass(bookTitleInputRef.current);
         bookTitleInputRef.current.focus();
@@ -342,8 +338,8 @@ const CoAuthorPanel = (props, ref) => {
                     updateTitleManuallyRef.current = false;
                     createChapters();
                 }
-                // let data = response.data
-                // createdBookIdRef.current = data.id
+                // let data = response.data;
+                // createdBookIdRef.current = data.id;
             },
             error: (err) => {
                 if (err?.response.status === 400) {
@@ -370,7 +366,7 @@ const CoAuthorPanel = (props, ref) => {
             data: formdata,
             auth: true,
             success: (response) => {
-                // let leftSideBarScrollingDiv = document.querySelector('.gen-prop-main-wrap')
+                // let leftSideBarScrollingDiv = document.querySelector('.gen-prop-main-wrap');
                 // leftSideBarScrollingDiv.scrollTo({
                 //     top: leftSideBarScrollingDiv.scrollHeight,
                 //     behavior: 'smooth'

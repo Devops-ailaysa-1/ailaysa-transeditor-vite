@@ -30,7 +30,6 @@ const NewsProjects = () => {
     const userDetails = useSelector((state) => state.userDetails.value);
     const isFederal = useSelector((state) => state.isFederalNews.value);
     const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
-    const [activeProjTab, setActiveProjTab] = useState(isDinamalar || is_internal_meber_editor ? 2 : 1);
     const [tourStepIndex, setTourStepIndex] = useState(0);
     const [targetLanguageOptions, setTargetLanguageOptions] = useState(null);
     const [isProductTourSeen, setIsProductTourSeen] = useState(true);
@@ -44,6 +43,7 @@ const NewsProjects = () => {
     const targetLanguageOptionsRef = useRef([]);
 
     let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
+    const [activeProjTab, setActiveProjTab] = useState(isDinamalar || is_internal_meber_editor ? 2 : 1);
     const isIncompleteEditorSettings = useSelector((state) => state.editorSettingStatus.value);
          
     const BeaconComponent = React.forwardRef((props, ref) => <div ref={ref} className="d-none"></div>);

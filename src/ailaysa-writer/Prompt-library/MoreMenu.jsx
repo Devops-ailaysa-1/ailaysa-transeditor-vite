@@ -5,12 +5,7 @@ import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 export const MoreMenu = (props) => {
-    let { 
-        item, 
-        updateSpecificKeyInList,
-        list,
-        setList
-    } = props;
+    let { item, updateSpecificKeyInList, list, setList } = props;
     const options = [
         {
             id: 1,
@@ -74,12 +69,10 @@ export const MoreMenu = (props) => {
                     },
                 }}>
                 {options.map((option) => (
-                    <MenuItem 
-                        key={option.id} 
-                        className="d-flex items-center py-2"
+                    <MenuItem  key={option.id} className="d-flex items-center py-2"
                         onClick={(e) => {
                             option.value === "Edit" ? handleEditOption() :
-                            handleDeleteOption()
+                            handleDeleteOption();
                         }}
                     >
                         {option.icon}

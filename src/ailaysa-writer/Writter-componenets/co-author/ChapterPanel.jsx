@@ -30,17 +30,7 @@ import sanitizeHtml from 'sanitize-html-react';
 import { addDownloadingFiles, deleteDownloadingFile, updateDownloadingFile } from "../../../features/FileDownloadingListSlice";
 
 const ChapterPanel = (props) => {
-    let { 
-        getBookDetails,
-        createdBookIdRef,
-        coAuthorPanelView,
-        bookCreationObjRef,
-        isUpdatingText,
-        setIsUpdatingText,
-        isDeleting,
-        setIsDeleting,
-        setShowCreditAlertModal
-     } = props;
+    let {getBookDetails, createdBookIdRef, coAuthorPanelView, bookCreationObjRef, isUpdatingText, setIsUpdatingText, isDeleting, setIsDeleting, setShowCreditAlertModal} = props;
     const { t } = useTranslation();
     const history = useNavigate();
     const dispatch = useDispatch();
@@ -142,9 +132,9 @@ const ChapterPanel = (props) => {
 
     // useEffect(() => {
     //     if(bookCreationResponseRedux !== null){
-    //         bookCreationObjRef.current = bookCreationResponseRedux
+    //         bookCreationObjRef.current = bookCreationResponseRedux;
     //     }
-    // },[bookCreationResponseRedux])
+    // },[bookCreationResponseRedux]);
 
     // based on the item in search param open the matter item
     useEffect(() => {
@@ -270,7 +260,7 @@ const ChapterPanel = (props) => {
                 ...obj,
                 isDelete : false,
                 isEdit: false
-            }
+            };
         });
         return newArr;
     }
@@ -483,7 +473,7 @@ const ChapterPanel = (props) => {
         }else if(matter === 'back'){
             let newArr = updateSpecificKeyInList(backMatterList, item?.id, 'isEdit', false);
             setBackMatterList(newArr);
-            setBackMatterListCopy(newArr)
+            setBackMatterListCopy(newArr);
         }
     } 
 
@@ -492,8 +482,8 @@ const ChapterPanel = (props) => {
         $('.summernote').summernote('code', '');
         let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.front_matter);
         setFrontMatterList(newArr);
-        // let item = {}
-        // item = bookCreationResponseRedux?.front_matter?.find(each => each?.id === itemObj?.id)
+        // let item = {};
+        // item = bookCreationResponseRedux?.front_matter?.find(each => each?.id === itemObj?.id);
         if(item?.generated_content){
             insertContentInEditor(item?.generated_content, item?.name);
         }else{
@@ -510,8 +500,8 @@ const ChapterPanel = (props) => {
         let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.body_matter);
         setBodyMatterList(newArr);
         $('.summernote').summernote('code', '');
-        // let item = {}
-        // item = bookCreationResponseRedux?.body_matter?.find(each => each?.id === itemObj?.id)
+        // let item = {};
+        // item = bookCreationResponseRedux?.body_matter?.find(each => each?.id === itemObj?.id);
         if(item?.html_data){
             insertContentInEditor(item?.html_data, item?.generated_content);
         }else {
@@ -525,13 +515,12 @@ const ChapterPanel = (props) => {
     const handleBackMatterOptionClick = (item) => {
         let newArr = closeEditAndDeleteMode(bookCreationResponseRedux?.back_matter);
         setBackMatterList(newArr);
-        $('.summernote').summernote('code', '');
-       
+        $('.summernote').summernote('code', '');       
         if(item?.generated_content){
             insertContentInEditor(item?.generated_content, item?.name);
         }else{
             // comment the below line to stop the auto generation of chapter when the particular chapter is clicked 
-            // getMatterItemData(item, 'back')
+            // getMatterItemData(item, 'back');
         }
         updateSearchParamInURL('back', item?.id);
     } 
@@ -580,16 +569,16 @@ const ChapterPanel = (props) => {
                 // setTimeout(() => {
                 //     // once the new chapter/matter-item is saved in list : then generate data for chapter/item
                 //     if(matter === 'front'){
-                //         isContentGenerateRef.current = true
-                //         updateSearchParamInURL('front', response.data?.id)
-                //         // handleFrontMatterOptionClick(response.data)
+                //         isContentGenerateRef.current = true;
+                //         updateSearchParamInURL('front', response.data?.id);
+                //         // handleFrontMatterOptionClick(response.data);
                 //     }else if(matter === 'body'){
-                //         // handleBodyMatterOptionClick(response.data)
-                //         updateSearchParamInURL('body', response.data?.id)
+                //         // handleBodyMatterOptionClick(response.data);
+                //         updateSearchParamInURL('body', response.data?.id);
                 //     }else if(matter === 'back'){
-                //         isContentGenerateRef.current = true
-                //         // handleBackMatterOptionClick(response.data)
-                //         updateSearchParamInURL('back', response.data?.id)
+                //         isContentGenerateRef.current = true;
+                //         // handleBackMatterOptionClick(response.data);
+                //         updateSearchParamInURL('back', response.data?.id);
                 //     }
                 // }, 80);
             },
@@ -619,7 +608,6 @@ const ChapterPanel = (props) => {
         let token = userCacheData != null ? userCacheData?.token : "";        
         // URL_SEARCH_PARAMS.set('streaming', true)
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-
         document.querySelector('.ailaysa-writter-main-wrapper').style.pointerEvents = 'none';
         props.showOverlay();
         document.querySelector('.note-editable').classList.add('note-editable-loader');
@@ -649,7 +637,7 @@ const ChapterPanel = (props) => {
                         }, 500);
                     }
                     if (res.ok && res.status === 200) {
-                        // blogAricleUpdate(createdDocumentId.current, blogCreatedId.current)
+                        // blogAricleUpdate(createdDocumentId.current, blogCreatedId.current);
                     } else if (
                         res.status >= 400 &&
                         res.status < 500 &&
@@ -688,8 +676,7 @@ const ChapterPanel = (props) => {
                     document.querySelector('.note-editable').classList.remove('cursor-hide');
                     isStreamClosedRef.current = true;
                     URL_SEARCH_PARAMS.delete('streaming');
-                    history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
-    
+                    history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());    
                     setTimeout(() => {
                         updateHTMLInMatterItem(id);
                         props.closeOverlay();
@@ -702,8 +689,7 @@ const ChapterPanel = (props) => {
             });
         }catch(e){
             console.error(e);
-        }
-        
+        }        
     };
 
     // convert the generated data (From .md format to html format)
@@ -747,10 +733,10 @@ const ChapterPanel = (props) => {
             auth: true,
             success: (response) => {
                 if(isLast){
-                if(isStreamClosedRef){
-                    getBookDetails(createdBookIdRef.current);
-                    isStreamClosedRef.current = false;
-                }
+                    if(isStreamClosedRef){
+                        getBookDetails(createdBookIdRef.current);
+                        isStreamClosedRef.current = false;
+                    }
                 }               
             },
         });
@@ -802,7 +788,7 @@ const ChapterPanel = (props) => {
                 scrollingDiv.scrollTo({
                     top: scrollingDiv.scrollHeight,
                     behavior: 'smooth',
-                  });
+                });
                 focusCurrentEditingTextarea(`body-mat-textarea-${focusingEleId}`);
             }, 15);
             return;
@@ -852,9 +838,9 @@ const ChapterPanel = (props) => {
         e?.stopPropagation();        
         let formdata = new FormData();
         if(method === 'PUT'){
-            let textareaValue = ''
+            let textareaValue = '';
             if(matter === 'front'){
-                 textareaValue = frontMatterListCopy?.find(each => each?.id === item?.id)?.name;
+                textareaValue = frontMatterListCopy?.find(each => each?.id === item?.id)?.name;
                 formdata.append("name", textareaValue);
             }else if(matter === 'body'){
                 textareaValue = bodyMatterListCopy?.find(each => each?.id === item?.id)?.generated_content;
@@ -968,7 +954,7 @@ const ChapterPanel = (props) => {
 
     // check if editor is empty or not: if empty generate the content otherwise show the content loss alert
     const generateItemContentBtn = (e, item, matter) => {
-        tempStoredGenerateLinkParamRef.current = {item, matter}
+        tempStoredGenerateLinkParamRef.current = {item, matter};
         let isEditorEmpty = $('.summernote').summernote('isEmpty');
 
         if(matter === 'front'){
@@ -1075,7 +1061,7 @@ const ChapterPanel = (props) => {
             Authorization: `Bearer ${token}`
         };
         formdata.append("html", removedStyleAttribFromImg);
-        // formdata.append("html_str", removedStyleAttribFromImg)
+        // formdata.append("html_str", removedStyleAttribFromImg);
         formdata.append("name", "name");
         var requestOptions = {
             method: 'POST',
@@ -1086,7 +1072,7 @@ const ChapterPanel = (props) => {
        
         try{
             let data = await fetch(`https://apinodestaging.ailaysa.com/docx-generator`, requestOptions);
-            // let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions)
+            // let data = await fetch(`${Config.BASE_URL}/workspace/html2docx`, requestOptions);
             if (data.status === 200) {
                 let response = await data.blob();    
                 let fileObj = new File([response], `${(item.hasOwnProperty('front_matter') || item.hasOwnProperty('back_matter')) ? item.name : item.generated_content}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
@@ -1102,7 +1088,7 @@ const ChapterPanel = (props) => {
 
     const handleDownloadAll = () => {
         allDownloadedFilesArrRef.current = [];
-        let arr = []
+        let arr = [];
         bookCreationResponseRedux?.front_matter?.forEach(each => {
             arr.push(each);
         })
@@ -1115,7 +1101,7 @@ const ChapterPanel = (props) => {
         dispatch(addDownloadingFiles({ id: bookCreationResponseRedux?.id, file_name: bookCreationResponseRedux?.name, ext: '.docx', status: 1 }));
         downloadFilesInOrder(arr).then(() => {
             mergeFile();
-        })
+        });
     } 
 
     const downloadFilesInOrder = async (arr) => {
@@ -1338,8 +1324,7 @@ const ChapterPanel = (props) => {
                                                 </ul>
                                                 </motion.div>)
                                             }
-                                        </AnimatePresence>
-                                            
+                                        </AnimatePresence>                                            
                                     </div>
                                 </div>
                                 <Collapse isOpen={frontMatterCollapse}>
