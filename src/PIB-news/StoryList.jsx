@@ -22,19 +22,35 @@ import { ButtonLoader } from '../loader/CommonBtnLoader';
 const FILE_STATUS_MAP = {
     'In_Progress': {
         label: 'In Progress',
+        status: 'In_Progress',
         className: 'status-indicator-in-progress-color',
+        btnLabel: 'View Progress',
+        loading: true,
+        polling: true
     },
     'COMPLETED': {
         label: 'Completed',
+        status: 'COMPLETED',
         className: 'status-indicator-completed',
+        btnLabel: 'Open',
+        loading: false,
+        polling: false
     },
     'YET_TO_START': {
         label: 'Yet to Start',
+        status: 'YET_TO_START',
         className: 'status-indicator-created',
+        btnLabel: 'Translate',
+        loading: false,
+        polling: true
     },
     'FAILED': {
         label: 'Failed',
+        status: 'FAILED',
         className: 'status-indicator-created',
+        btnLabel: '',
+        loading: false,
+        polling: false
     },
 };
 
@@ -95,9 +111,8 @@ const StoryList = (props) => {
             success: (response) => {
                 setFileListLoading(false);
                 const {data} = response;
-                setSelectedProjectFiles(data || []);
-                if (anyPending(data))
-                    progressTask(projectId, data);
+                setSelectedProjectFiles(updateFileStatus(data) || []);
+                if (anyPending(data)) progressTask(projectId, data);
             },
             error: (error) => {
                 setFileListLoading(false);
@@ -105,6 +120,19 @@ const StoryList = (props) => {
             }
         };
         Config.axios(params);
+    }
+
+    const updateFileStatus = (files) => {
+        return files.map(file => {
+            if (FILE_STATUS_MAP[file?.pib_story_details?.status]) {
+                const status = FILE_STATUS_MAP[file?.pib_story_details?.status];
+                return {
+                    ...file,
+                    openProjectLabel: status?.btnLabel || null,
+                    btnLoading: status.loading || null
+                }
+            }
+        })
     }
 
     /**
@@ -372,12 +400,14 @@ const StoryList = (props) => {
      * @since 26 Nov 2025
      */
     const handleViewStoryClick = (e, selectedProjectFile, type) => {
-        if (inProgressProjectId.current && inProgressTaskIds.indexOf(selectedProjectFile?.pib_story_details?.pib_task_uid) != -1) {
-            selectedProjectFile.openProjectLabel = 'Processing';
-            return;
-        }
+        // if (inProgressProjectId.current && inProgressTaskIds.indexOf(selectedProjectFile?.pib_story_details?.pib_task_uid) != -1) {
+        //     selectedProjectFile.openProjectLabel = 'View Processing';
+        //     selectedProjectFile.btnLoading = true;
+        //     return;
+        // }
         if (e) e.stopPropagation();
         selectedProjectFile.openProjectLabel = 'Opening';
+        selectedProjectFile.btnLoading = false;
         inProgressProjectId.current = null;
         const open_as = 'editor';
         setTimeout(() => {
@@ -386,6 +416,42 @@ const StoryList = (props) => {
                 open_as
             }});
         }, 500);
+    }
+
+    const handleBtnAction = (e, selectedProjectFile, type) => {
+        if (FILE_STATUS_MAP[selectedProjectFile?.pib_story_details?.status]) {
+            const status = FILE_STATUS_MAP[selectedProjectFile?.pib_story_details?.status];
+            if (status.status == 'In_Progress') {
+                handleViewStoryClick(e, selectedProjectFile, type);
+            } else if (status.polling) {
+                inProgressProjectId.current = selectedProjectFile.id;
+                startTranslation(selectedProjectFile);
+                handleViewStoryClick(e, selectedProjectFile, type);
+            } else if (status.status == 'COMPLETED') {
+                handleViewStoryClick(e, selectedProjectFile, type);
+            }
+        }
+    }
+
+    const startTranslation = (selectedProjectFile) => {
+        const formData = new FormData();
+        formData.append('pib_task_id', selectedProjectFile.id);
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace/stories_pib/translate/`,
+            method: 'POST',
+            data: formData,
+            auth: true,
+            success: (response) => {
+                const result = response.data;
+                if (result) {
+                    console.log('Translate Started!!!');
+                    progressTask(selectedProjectFile.id, [selectedProjectFile]);
+                }
+            },
+            error: (err) => {
+                console.error(err);
+            }
+        });
     }
 
     const prepareTaskIds = (taskList) => {
@@ -432,7 +498,7 @@ const StoryList = (props) => {
     }
 
     const allDone = (result) => result.every(item => isCompleted(item));
-    const anyPending = (result) => result.some(item => item?.pib_story_details?.status == "YET_TO_START" || item?.pib_story_details?.status == "In_Progress");
+    const anyPending = (result) => result.some(item => item?.pib_story_details?.status == "In_Progress");
     const isCompleted = (task) => task.status == "COMPLETED" || task.status == "FAILED";
 
     const updateTaskStatus = (result) => {
@@ -446,9 +512,11 @@ const StoryList = (props) => {
                     return pendingTaskIds;
                 });
                 if (matched) {
+                    file.openProjectLabel = "View Progressing";
                     return {
                         ...file,
                         openProjectLabel: isCompleted(matched) ? null : file?.openProjectLabel,
+                        btnLoading: isCompleted(matched) ? null : true,
                         pib_story_details: {
                             ...file.pib_story_details,
                             status: matched.status
@@ -585,8 +653,9 @@ const StoryList = (props) => {
                                         </div>
                                         <div className="file-edit-list-table-cell">
                                             <div className="pib-project-list-action-wrap">
-                                                <button type="button" className="workspace-files-OpenProjectButton flex items-center justify-center gap-[6px]" onClick={() => handleViewStoryClick(null, selectedProjectFile, "tar")}>
-                                                    {selectedProjectFile && selectedProjectFile.openProjectLabel && <ButtonLoader />}
+                                                <button type="button" className="workspace-files-OpenProjectButton flex items-center justify-center gap-[6px]"
+                                                    onClick={() => handleBtnAction(null, selectedProjectFile, "tar")}>
+                                                    {selectedProjectFile && selectedProjectFile.btnLoading && <ButtonLoader />}
                                                     <span className="fileopen-new-btn">
                                                         {selectedProjectFile && selectedProjectFile.openProjectLabel
                                                             ? selectedProjectFile.openProjectLabel : t("open")}

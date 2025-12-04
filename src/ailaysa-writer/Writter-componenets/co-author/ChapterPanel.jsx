@@ -34,11 +34,13 @@ const ChapterPanel = (props) => {
     const { t } = useTranslation();
     const history = useNavigate();
     const dispatch = useDispatch();
+
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const frontMatterOptions = useSelector((state) => state.bookFrontMatterOption.value);
     const backMatterOptions = useSelector((state) => state.bookBackMatterOption.value);
     const modalConfirmationUserDecision = useSelector((state) => state.modalConfirmationUserDecision.value);
     const bookCreationResponseRedux = useSelector((state) => state.bookCreationResponse.value);
+
     const [frontMatterList, setFrontMatterList] = useState([]);
     const [bodyMatterList, setBodyMatterList] = useState([]);
     const [backMatterList, setBackMatterList] = useState([]);
@@ -55,6 +57,7 @@ const ChapterPanel = (props) => {
     const [titleFocus, setTitleFocus] = useState(false);
     const [selectedMatterItem, setSelectedMatterItem] = useState({ matter: null, id: null });
     const [isTranslateProceeding, setIsTranslateProceeding] = useState(false);
+
     const frontMatterReorderingRef = useRef([]);
     const bodyMatterReorderingRef = useRef([]);
     const backMatterReorderingRef = useRef([]);
@@ -329,7 +332,7 @@ const ChapterPanel = (props) => {
                         [key]: !value
                     }
                 }
-                return obj  ; 
+                return obj; 
             }
         })
         return newArr;
@@ -763,7 +766,7 @@ const ChapterPanel = (props) => {
                 local: true,
                 ...((key === 'generated_content') && {isEdit: true})
             }
-        ]
+        ];
     } 
 
     // add new/additional items from more options in selected matter 

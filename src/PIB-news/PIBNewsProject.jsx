@@ -192,18 +192,13 @@ const PIBNewsProjects = () => {
                             <h1>{'Story/Press release'}</h1>
                         </div>
                         <div className="project-setup-tabs">
-                            <Nav tabs className="setup-container-tab">
-                                    {tabList.map(tab => (tab.isEnabled && (
-                                        <NavItem
-                                            className={"setup-button-global " + classnames({ active: activeProjTab == tab.id })}
-                                            onClick={() => onTabChange(tab)}>
-                                                <NavLink
-                                                    key={tab.id}
-                                                    className={"project-setup-btn " + (activeProjTab == tab.id ? 'active' : '')}>{tab.name}
-                                                </NavLink>
-                                        </NavItem>)
-                                    ))}
-                            </Nav>
+                            <div className='pib-nav-bar'>
+                                {tabList.map(tab => (tab.isEnabled && (
+                                    <div className={"pib-nav-item " + (activeProjTab == tab.id ? 'active' : '')} onClick={() => onTabChange(tab)}>
+                                        <span className='pib-nav-text'>{tab.name}</span>
+                                    </div>
+                                )))}
+                            </div>
                         </div>
                     </div>
                 </div>

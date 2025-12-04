@@ -12,24 +12,16 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ChatSentIcon from "../../../assets/images/chat/chat-sent-icon.svg";
 
 const CoAuthorWriterFooter = (props) => {
-    let { 
-        promptMainWrapper, 
-        setPromptMainWrapper, 
-        deskLeftSideBar, 
-        rightSideBar,
-        setShowCreditAlertModal,
-        setshowSrcLangModal,
-        setshowTarLangModal,
-        promptSrcLang,
-        promptSrcLabel,
-        promptTarLang,
-    } = props;
+    let { promptMainWrapper, setPromptMainWrapper, deskLeftSideBar, rightSideBar, setShowCreditAlertModal, setshowSrcLangModal, setshowTarLangModal, promptSrcLang,
+         promptSrcLabel, promptTarLang, } = props;
+
     const promptInput = useRef(null);
     const { t } = useTranslation();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const [promptText, setPromptText] = useState("");
     const [isGenerating, setIsGenerating] = useState(false);
     const generatedPromptId = useRef(null);
+
     // check if the text contains rtl characters
     const containsRtlCharacters = (text) => {
         var rtlCharacters = /[\u0600-\u06FF\u0590-\u05FF\uFE70-\uFEFF]/;
@@ -51,11 +43,11 @@ const CoAuthorWriterFooter = (props) => {
     
     // to remove the background color of added prompt
     const removeBgColor = (e) => {
-        // e.target.style = 'background: none;' 
-        // e.target.removeEventListener('click', removeBgColor)
+        // e.target.style = 'background: none;' ;
+        // e.target.removeEventListener('click', removeBgColor);
         e.target.classList.remove('temp-color');
         e.target.removeEventListener('click', removeBgColor);
-        // currentSummerNoteData.current = document.querySelector('.note-editable').innerHTML   
+        // currentSummerNoteData.current = document.querySelector('.note-editable').innerHTML;
     }
 
     // onchange handler for text prompt box

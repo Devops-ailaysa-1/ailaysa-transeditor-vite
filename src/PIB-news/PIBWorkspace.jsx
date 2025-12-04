@@ -42,6 +42,8 @@ import RemoveCircleRed from "../assets/images/new-ui-icons/remove_circle_red.svg
 import ErrorBlackWarn from "../assets/images/new-ui-icons/error_black_warn.svg";
 import WikipediaIcon from "../assets/images/new-ui-icons/wiki-new-img.svg";
 import WikitionaryIcon from "../assets/images/new-ui-icons/wikitionary-new-img.png";
+import { SandClockLoader } from "../loader/SandClockLoader";
+import Rodal from "rodal";
 
 const PIBWorkspace = (props) => {
     Config.redirectIfNotLoggedIn(props); 
@@ -115,7 +117,7 @@ const PIBWorkspace = (props) => {
     const [wholeWordMatch, setWholeWordMatch] = useState(false);
     const [pushPinActive, setPushPinActive] = useState(false);
     const [segmentStatusName, setSegmentStatusName] = useState([]);
-    const [forceRender, setForceRender] = useState(false);  
+    const [forceRender, setForceRender] = useState(false);
     /*Find and replace - end*/
     const [segmentStatuses, setSegmentStatuses] = useState({
         0: t("un_opened"),
@@ -445,6 +447,15 @@ const PIBWorkspace = (props) => {
     const newsSourceDiv = document.querySelector("#source-text-div-3");
     const targetNoteEditableDiv = document.querySelector('.note-editable');
 
+    const [showProcessingModal, setShowProcessingModal] = useState(false);
+
+    const modaloption = {
+        closeMaskOnClick: false,
+        width: 509,
+        height: 288,
+        onClose: () => console.log(),
+    };
+
     // Use useEffect to attach scroll event listeners
     useEffect(() => {
         const handleScroll = (event) => {
@@ -469,70 +480,6 @@ const PIBWorkspace = (props) => {
             }
         };
     }, [newsSourceDiv, writerAreaDiv]); // Empty dependency array ensures the effect runs once when the component mounts
-   
-    const customPageSelectStyles = {
-        placeholder: (provided, state) => ({
-            ...provided,
-            color: !state.isDisabled ? "#3C4043" : "#b7b8ba",
-            fontFamily: "Roboto",
-            fontSize: "14px",
-            fontWeight: "500",
-            lineHeight: "24px",
-
-        }),
-        menu: (provided, state) => ({
-            ...provided,
-            padding: "6px 0px",
-            boxShadow: "0px 3px 6px #00000029",
-            border: "1px solid #DADADA",
-            borderRadius: "4px",
-            width: "max-content",
-            minWidth: "100%",
-            zIndex: 10,
-
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            borderBottom: "0px solid #CED4DA",
-            borderLeft: "2px solid transparent",
-            color: state.isSelected ? "#ffffff" : state.isDisabled ? "#cccccc" : "#7E7E7E",
-            background: state.isSelected ? "#F4F5F7" : "#ffffff",
-            padding: "5px 8px",
-            color: "#3C4043",
-            fontFamily: "Roboto",
-            fontSize: "13px",
-            fontWeight: "500",
-            lineHeight: 1.3,
-            "&:hover": {
-                background: "#F4F5F7",
-                borderLeft: "2px solid #0074D3",
-                cursor: "pointer",
-            },
-        }),
-        control: (base, state) => ({
-            ...base,
-            border: state.isFocused ? "1px solid #d7d7d7" : "1px solid #d7d7d7",
-            borderRadius: 3,
-            transtion: 0.3,
-            background: state.isFocused ? "#transparent" : "transparent",
-            color: state.isFocused ? "#262626" : "#262626",
-            fontFamily: "Roboto",
-            fontSize: "13px",
-            fontWeight: "500",
-            lineHeight: 1,
-            boxShadow: 0,
-            height: 24,
-            width: 29,
-            minHeight: 24,
-            marginRight: 8,
-            padding: 0,
-            justifyContent: "center",
-            "&:hover": {
-                color: "#262626",
-                cursor: 'pointer'
-            },
-        }),
-    };
     
     useEffect(() => {
         if (location.state?.partial) {
@@ -672,69 +619,17 @@ const PIBWorkspace = (props) => {
         /* Keep the target contenteditable focus when clicking the spellcheck / synonum popover - end*/
     });
 
-    // useEffect(() => {
-    //     /* Keep the target contenteditable focus when clicking with the IME editor suggestions - start*/
-    //     const handlePopoverClick = (e) => {
-    //         e.preventDefault();
-    //     };
-    //     if (document.getElementsByClassName("ks-input-suggestions")[0])
-    //         document.getElementsByClassName("ks-input-suggestions")[0].addEventListener("mousedown", handlePopoverClick, false);
-    //     return () => {
-    //         if (document.getElementsByClassName("ks-input-suggestions")[0])
-    //             document.getElementsByClassName("ks-input-suggestions")[0].removeEventListener("mousedown", handlePopoverClick);
-    //     };
-    //     /* Keep the target contenteditable focus when clicking with the IME editor suggestions - end*/
-    // });
-
     useEffect(() => {
         if (didMount) setDocumentId(params.documentId);
     }, [window.location.pathname, window.location.search]); // Wheever the url and query param changes
 
-    // useEffect(() => {
-    //     if (didMount) {
-    //         setTimeout(() => {
-    //             // To wait for click the spellcheck button to disable spellcheck by default. Ref: ID1
-    //             toggleSpellcheck();
-    //         }, 1500);
-    //     }
-    // }, [documentId]);
-
-    // useEffect(() => {
-    //     if (didMount) {
-    //         getDocumentProgressData();
-    //     }
-    // }, [documentId, new URLSearchParams(history.location.search).get("page")]);
-
     useEffect(() => {
         if (didMount) {
             if (targetLanguageCode != "") {
-                /*Google input tools suggestion functionality start*/
-                /* let workspaceTextArea = document.getElementsByClassName("workspace-textarea")
-                for (let i = 0; i < workspaceTextArea.length; i++) {
-                    if (enableIME) {
-                        workspaceTextArea[i].value = workspaceTextArea[i].innerText
-                        enableTransliteration(workspaceTextArea[i], targetLanguageCode)
-                    } else {
-                        disableTransliteration(workspaceTextArea[i])
-                    }
-                } */
                 translatedResponse.map((value, key) => {
                     //Loop all the target contenteditable
                     if (enableIME) {
-                        // If enabled
-                        // targetContentEditable.current[value.segment_id].current.value = targetContentEditable.current[value.segment_id].current.innerText;
-                        // let instance = new TransliterationProvider(targetContentEditable.current[value.segment_id].current, targetLanguageCode);
-                        // instance.addEvents(); // Enable IME in each target contenteditable
-                        // enabledTransliteration.current.push(instance)
                     } else if (enableIME == false) {
-                        // If disabled
-                        // let instance = new TransliterationProvider(targetContentEditable.current[value.segment_id].current, targetLanguageCode)
-                        // instance.removeEvents(instance.elements)
-                        /* enabledTransliteration.current.map(value => {
-                            value.disableTransliteration()
-                        }) */
-                        // if (targetContentEditable.current[value.segment_id].current != null)
-                        // disableTransliteration(targetContentEditable.current[value.segment_id].current)
                     }
                 });
                 if (enableIME == false) {
@@ -985,26 +880,6 @@ const PIBWorkspace = (props) => {
         }
     }, [isWordsCorrected, isWordsCorrectedTrigger]);
 
-    // close the popover and remove the mark tag when clicked outside of the popover
-    // useEffect(() => {
-    //     if (grammarCheckPopoverTarget !== "") {
-    //         document.addEventListener('click', (e) => {
-    //             let popoverDiv = document.getElementsByClassName('popover')[0];
-    //             if (!e.target.classList.contains('popover') && popoverDiv) {
-    //                 setParaphraseText("");
-    //                 setGrammarPopoverOpen(false);
-    //                 setgrammarCheckPopoverTarget("");
-    //                 setGrammarCheckResponse([]);
-    //                 targetContentEditable.current[focusedDivIdRef.current].current.innerHTML = removeSpecificTag(
-    //                 targetContentEditable.current[focusedDivIdRef.current].current.innerHTML,"mark");
-    //                 updateTranslatedResponseSegment(focusedDivIdRef.current, "temp_target", targetContentEditable.current[focusedDivIdRef.current].current.innerHTML);
-    //                 updateSegmentStatus(focusedDivIdRef.current, 103);
-    //                 changeEditedStatus(focusedDivIdRef.current, "unsaved");
-    //             }
-    //         })
-    //     }
-    // }, [grammarCheckPopoverTarget]);
-
     useEffect(() => {
         setGrammarPopoverOpen(false);
         setgrammarCheckPopoverTarget("");
@@ -1059,20 +934,6 @@ const PIBWorkspace = (props) => {
             }
         })
     }, [grammarCheckPopoverTarget]);
-
-    // useEffect(() => {
-    //     const handleMouseOverGrammar = (e) => {
-    //         if (e.target.classList.contains('grammarcheck-highlight')) {
-    //             if (grammarPopoverOpen === false) {
-    //                 setGrammarPopoverOpen(true);
-    //             }
-    //         }
-    //     }
-    //     document.addEventListener("mouseover", handleMouseOverGrammar, false);
-    //     return () => {
-    //         document.removeEventListener("mouseover", handleMouseOverGrammar);
-    //     };
-    // });
 
     /* Update the pagination content whenever the page changes */
     useEffect(() => {
@@ -1781,111 +1642,32 @@ const PIBWorkspace = (props) => {
         let segmentData = [
         {
             "source": responseTemp?.source_json?.heading,
-            "target": responseTemp.target_json?.heading,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.heading,
+            "target": responseTemp?.target_json?.heading,
+            "mt_raw": responseTemp?.mt_json?.[0]?.mt_raw_json?.heading,
             "segment_count": 1,
             'segment_id': 1,
             type: "Headline"
         },
-        // {
-        //     "source": responseTemp?.source_json?.news !== undefined ? 
-        //                 responseTemp.source_json.news[0].image_caption : 
-        //                 responseTemp?.source_json?.image_caption,
-        //     "target": responseTemp.target_json.image_caption,
-        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.image_caption,
-        //     "segment_count": 1,
-        //     'segment_id': 2,
-        //     type: "Image caption"
-        // },
         (
             (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "<p><br></p>" && 
             (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "" &&  
             (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== null
         ) &&
         {
-            "source": responseTemp.source_json?.story,
-            "target": responseTemp.target_json?.story,
-            "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.story,
+            "source": responseTemp?.source_json?.story,
+            "target": responseTemp?.target_json?.story,
+            "mt_raw": responseTemp?.mt_json?.[0]?.mt_raw_json?.story,
             "segment_count": 1,
-            'segment_id': 3,
+            'segment_id': 2,
             type: "Story"
         },
-        // {
-        //     "source": responseTemp.source_json.news !== undefined ? 
-        //                 responseTemp.source_json.news[0].tags :
-        //                 responseTemp.source_json?.tags,
-        //     "target": responseTemp.target_json.tags,
-        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.tags,
-        //     "segment_count": 1,
-        //     'segment_id': 4,
-        //     type: "Tags"
-        // },
-        // {
-        //     "source": responseTemp.source_json.news !== undefined ? 
-        //                 responseTemp.source_json.news[0].description:
-        //                 responseTemp.source_json?.description,
-        //     "target": responseTemp.target_json.description,
-        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.description,
-        //     "segment_count": 1,
-        //     'segment_id': 5,
-        //     type: "Description"
-        // },
-        // {
-        //     "source": responseTemp.source_json.news !== undefined ?
-        //                 responseTemp.source_json.news[0].keywords :
-        //                 responseTemp.source_json?.keywords,
-        //     "target": responseTemp.target_json.keywords,
-        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.keywords,
-        //     "segment_count": 1,
-        //     'segment_id': 6,
-        //     type: "Keywords"
-        // },
-        // {
-        //     "source": responseTemp.source_json.news !== undefined ? 
-        //                 responseTemp.source_json.news[0].authorName :
-        //                 responseTemp.source_json?.authorName,
-        //     "target": responseTemp.target_json.authorName,
-        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.authorName,
-        //     "segment_count": 1,
-        //     'segment_id': 7,
-        //     type: "Author name"
-        // },
-        // {
-        //     "source": responseTemp.source_json.news !== undefined ? 
-        //                 responseTemp.source_json.news[0].story_summary :
-        //                 responseTemp.source_json?.story_summary,
-        //     "target": responseTemp.target_json.story_summary,
-        //     "mt_raw": responseTemp?.mt_json?.mt_raw_json?.story_summary,
-        //     "segment_count": 1,
-        //     'segment_id': 8,
-        //     type: "Story summary"
-        // },
-        // {
-        //     "source": responseTemp.source_json.news !== undefined ? 
-        //                 responseTemp.source_json.news[0].location :
-        //                 responseTemp.source_json?.location,
-        //     "target": responseTemp.target_json.location,
-        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.location,
-        //     "segment_count": 1,
-        //     'segment_id': 9,
-        //     type: "Location"
-        // },
-        // {
-        //     "source": responseTemp.source_json.news !== undefined ? 
-        //                 responseTemp.source_json.news[0].media[0]?.caption :
-        //                 responseTemp.source_json?.media[0]?.caption,
-        //     "target": responseTemp.target_json.media[0]?.caption,
-        //     "mt_raw": responseTemp?.mt_json[0]?.mt_raw_json?.media[0]?.caption,
-        //     "segment_count": 1,
-        //     'segment_id': 10,
-        //     type: "Caption (media)"
-        // }
     ];
         return segmentData;
     } 
 
     /* Get the docuement details by document id */
     const getDocumentDetailsById = (documentIdTemp) => {
+        setIsSegmentPageLoading(true);
         Config.axios({
             url: `${Config.BASE_URL}/workspace/pib_translate/${documentIdTemp}`,
             auth: true,
@@ -1972,6 +1754,7 @@ const PIBWorkspace = (props) => {
                     url: `${Config.BASE_URL}/workspace/vendor/dashboard/${responseTemp.project}/`,
                     auth: true,
                     success: (response) => {
+                        setIsSegmentPageLoading(false);
                         documentSubmitStepRef.current = 1;
                         let task_data = response.data?.find(each => each.id === responseTemp.task);
                         taskDataRef.current = task_data;
@@ -2122,12 +1905,14 @@ const PIBWorkspace = (props) => {
                         }
                     },
                     error: (err) => {
+                        setIsSegmentPageLoading(false);
                         console.error(err);
                      }
                 })
                 // setIsUserIsReviwer(stepOptions?.find(eachStep => responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id === eachStep.value) );
             },
             error: (err) => {
+                setIsSegmentPageLoading(false);
                 if (err.response?.data?.detail) {
                     history("/file-upload");
                 }
@@ -4752,8 +4537,8 @@ const PIBWorkspace = (props) => {
             data: tbxFormdata,
             success: (response) => {
                 if (response.data !== undefined) {
-                    if (response.data.out.length > 0) {
-                        setTbxData(response.data.out);
+                    if (response?.data?.out?.length > 0) {
+                        setTbxData(response?.data?.out);
                         showTmSectionFunction();
                         if (!advanceToolbarOpenedForTm) {
                             let segmentData = translatedResponse.find((element) => element.segment_id == id);
@@ -4786,7 +4571,7 @@ const PIBWorkspace = (props) => {
             data: glossaryFormdata,
             success: (response) => {
                 if (response.data !== undefined) {
-                    if (response.data.res !== null || response.data.res.length > 0) {
+                    if (response?.data?.res !== null && response?.data?.res?.length > 0) {
                         setGlossaryData(response.data.res);
                         showTmSectionFunction();
                         handleToggleVisibility(true);
@@ -4855,7 +4640,50 @@ const PIBWorkspace = (props) => {
         textUnit;
     let bgColor = "#0074D3";
 
+    useEffect(() => {
+        if (anyPending([taskDataRef.current])) {
+            const taskId = taskDataRef.current.pib_story_details.pib_task_uid;
+            if (taskId) taskStatusPolling(taskId);
+        }
+    }, [documentId, taskDataRef.current]);
+
+    const taskStatusPolling = (taskId) => {
+        Config.axios({
+            url: `${Config.BASE_URL}/workspace/poll_pib_tasks?task_ids=${taskId}`,
+            method: 'GET',
+            auth: true,
+            success: (response) => { 
+                const result = response.data;
+                if (result?.length > 0) updateTaskStatus(taskId, result);
+                if (!allDone(result)) {
+                    setTimeout(() => {
+                        taskStatusPolling(taskId);
+                    }, 5000);
+                } else {
+                    getDocumentDetailsById(documentId);
+                    // location.reload();
+                }
+            },
+            error: (err) => {
+                console.error(err);
+            }
+        });
+    }
+
+    const allDone = (result) => result.every(item => isCompleted(item));
+    const anyPending = (result) => result.some(item => item?.pib_story_details?.status == "In_Progress" || item?.pib_story_details?.status == "YET_TO_START");
+    const isCompleted = (task) => task.status == "COMPLETED" || task.status == "FAILED";
+
+    const updateTaskStatus = (taskId, result) => {
+        const matched = result.find(r => r.pib_task_uid === taskId);
+        if (matched) {
+            setShowProcessingModal(!isCompleted(matched));
+        }
+    };
+
+
     return (
+        <>
         <React.Fragment>
             <Navbar
                 documentId={documentId}
@@ -5776,6 +5604,20 @@ const PIBWorkspace = (props) => {
                 </div >
             </ClickAwayListener>
         </React.Fragment>
+        {/* modal for file processing */}
+        {showProcessingModal && (<Rodal  visible={showProcessingModal}  {...modaloption}  showCloseButton={false}  className="ai-mark-confirm-box" >
+            <div className="confirmation-wrapper">
+                <SandClockLoader />
+                <div className="gap-[39px] flex flex-col items-center justify-center">
+                    <div className="task-inprogress-text">
+                        <span>Translation is under process.</span>
+                        <span>Please wait, it may take few minutes.</span>
+                    </div>
+                    <button className="task-inprogress-btn" onClick={() => history('/my-stories')}>{'Back to my stories'}</button>
+                </div>
+            </div>
+        </Rodal>)}
+        </>
     );
 }
 

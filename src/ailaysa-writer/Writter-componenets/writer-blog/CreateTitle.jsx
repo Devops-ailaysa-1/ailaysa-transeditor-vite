@@ -67,11 +67,13 @@ const CreateTitle = (props) => {
         groupByKey,
         flattenObject
     } = props;
+
     const location = useLocation();
     const history = useNavigate();
     const languageOptionsList = useSelector((state) => state.languageOptionsList.value)
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const { t } = useTranslation();
+
     const [keywordSuggestions, setKeywordSuggestions] = useState(false);
     // const [isEnableCollapse, setIsEnableCollapse] = useState(false);
     const [blogKeywords, setBlogKeywords] = useState("");
@@ -94,6 +96,7 @@ const CreateTitle = (props) => {
     const [selectedTitleText, setSelectedTitleText] = useState('');
     const [chipsArray, setChipsArray] = useState([]);
     const [chipsCopyArray, setChipsCopyArray] = useState([]);
+
     const createdBlogIdRef = useRef(null);
     const blogCreationResponse = useRef(null);
     const selectedTitleTextRef = useRef(null);
@@ -230,9 +233,9 @@ const CreateTitle = (props) => {
 
     // useEffect(() => {
     //     if(URL_SEARCH_PARAMS.get("blog")){
-    //         saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), location.pathname)
+    //         saveBlogWizardLastStep(URL_SEARCH_PARAMS.get("blog"), location.pathname);
     //     }
-    // }, [blogCreationResponse.current])
+    // }, [blogCreationResponse.current]);
 
     useEffect(() => {
         if (stepWizard === "create-title") {
@@ -273,10 +276,10 @@ const CreateTitle = (props) => {
                 setChipsArray(chip_arr);
             }
             setBlogKeywordsList(keywordList?.filter(each => !inGeneratedList.some(item => item.id === each.id)));
-            // setBlogKeywordsList(totalBlogResponseObj.blog_key_create)
+            // setBlogKeywordsList(totalBlogResponseObj.blog_key_create);
             blogKeywordsListRef.current = totalBlogResponseObj.blog_key_create;
-            // blogKeywordsRef.current = totalBlogResponseObj.keywords
-            // blogKeywordsRef.current = (totalBlogResponseObj.keywords_mt !== null && totalBlogResponseObj.keywords_mt !== '') ? totalBlogResponseObj.keywords_mt : totalBlogResponseObj.keywords
+            // blogKeywordsRef.current = totalBlogResponseObj.keywords;
+            // blogKeywordsRef.current = (totalBlogResponseObj.keywords_mt !== null && totalBlogResponseObj.keywords_mt !== '') ? totalBlogResponseObj.keywords_mt : totalBlogResponseObj.keywords;
             setSelectedTone(toneOptions?.find(each => each.value === totalBlogResponseObj.tone));
             setCreatedBlogId(totalBlogResponseObj.id);
             setBlogTitlesList(totalBlogResponseObj.blog_title_create);
@@ -340,7 +343,7 @@ const CreateTitle = (props) => {
         let keyword_list = '';
         list?.forEach((each, index) => {
             keyword_list += `${each.name}${index !== list?.length - 1 ? "," : ""}`;
-        })
+        });
         return keyword_list;
     }
 
@@ -479,15 +482,15 @@ const CreateTitle = (props) => {
     const createTitleformValidation = () => {
         if (blogTopic?.trim() === '') {
             blogTopicInputRef.current.style.border = fieldErrorStyle.border;
-            // blogKeywordInputRef.current.style.border = fieldErrorStyle.border
+            // blogKeywordInputRef.current.style.border = fieldErrorStyle.border;
             return true;
         } else if (blogTopic?.trim() === '') {
             blogTopicInputRef.current.style.border = fieldErrorStyle.border;
             return true;
         }
         // else if(chipsArray?.length === 0){
-        //     blogKeywordInputRef.current.style.border = fieldErrorStyle.border
-        //     return true 
+        //     blogKeywordInputRef.current.style.border = fieldErrorStyle.border;
+        //     return true ;
         // }
     }
 
@@ -526,12 +529,12 @@ const CreateTitle = (props) => {
             auth: true,
             success: (response) => {
                 setIsTitleGenerating(false);
-                // setBlogTitlesList(response.data)
-                // setTitleListCopy(response.data)
+                // setBlogTitlesList(response.data);
+                // setTitleListCopy(response.data);
                 setIsEnableCollapse(true);
                 setCreateTitleCollapse(false);
                 getTotalBlogCreationObject(URL_SEARCH_PARAMS.get('blog') ? URL_SEARCH_PARAMS.get('blog') : blogCreationResponse.current?.id);
-                // saveBlogWizardLastStep(createdBlogIdRef.current, window.location.pathname)
+                // saveBlogWizardLastStep(createdBlogIdRef.current, window.location.pathname);
             },
             error: (err) => {
                 setIsTitleGenerating(false);
@@ -672,11 +675,8 @@ const CreateTitle = (props) => {
                 <div className="blog-create-header">
                     <h1>Create blog title</h1>
                     <div className="arrow-wrapper">
-                        <div
-                            className="keyboard-icon"
-                            onClick={() => { isEnableCollapse && handleCreateTileCollapse() }}
-                            style={blogCreationResponseRef.current === null ? { opacity: 0 } : {}}
-                        >
+                        <div className="keyboard-icon" onClick={() => { isEnableCollapse && handleCreateTileCollapse() }}
+                            style={blogCreationResponseRef.current === null ? { opacity: 0 } : {}}>
                             <KeyboardArrowDownIcon className="close-icon" style={createTitleCollapse ? { transform: 'rotate(180deg)' } : {}} />
                         </div>
                         <motion.div variants={variants} initial="hidden" animate={!createTitleCollapse ? "shown" : "hidden"} className="auto-fix-wrap">
@@ -715,7 +715,6 @@ const CreateTitle = (props) => {
                             </div>
                             <div className="blog-forms-plain-row">
                                 <div className="label-wrapper">
-
                                     <label htmlFor="topic">{t("topic")}<span className="asterik-symbol">*</span></label><small style={{ opacity: 0.7 }}>{blogTopic?.length}/200</small>
                                 </div>
                                 <input
@@ -801,9 +800,7 @@ const CreateTitle = (props) => {
                         <div className="blog-form-button-wrap">
                             {
                                 blogTitlesList?.length === 0 ? (
-                                    <ButtonBase
-                                        className="generate-blog-btn"
-                                        onClick={() => !isTitleGenerating && generateBlogTitles()}
+                                    <ButtonBase className="generate-blog-btn" onClick={() => !isTitleGenerating && generateBlogTitles()}
                                     // disabled={(selectedTone === null || blogTopic?.trim() === '' || blogKeywords?.trim() === '') ? true : false}
                                     // style={(selectedTone === null || blogTopic?.trim() === '' || blogKeywords?.trim() === '') ? {opacity: 0.7} : {}}
                                     >
@@ -812,9 +809,7 @@ const CreateTitle = (props) => {
                                         <span><AutoFixIcon className={isTitleGenerating ? "wand-animation" : ''} /></span>
                                     </ButtonBase>
                                 ) : blogCreationResponse.current !== null && (
-                                    <ButtonBase
-                                        className="generate-blog-btn"
-                                        onClick={() => (!isTitleGenerating && !isOutlineGenerating) && generateBlogTitles()}
+                                    <ButtonBase  className="generate-blog-btn"  onClick={() => (!isTitleGenerating && !isOutlineGenerating) && generateBlogTitles()}
                                     // disabled={(blogCreationResponse.current?.user_title?.trim() === blogTopic?.trim() && blogCreationResponse.current?.tone === selectedTone?.value) ? true : false}
                                     // style={(blogCreationResponse.current?.user_title?.trim() === blogTopic?.trim() && blogCreationResponse.current?.tone === selectedTone?.value && blogCreationResponse.current?.keywords === blogKeywords) ? {opacity: 0.7} : {}}
                                     >
@@ -900,16 +895,10 @@ const CreateTitle = (props) => {
                 </div>
             </motion.div>
             {showSrcLangModal && (
-                <Rodal
-                    visible={showSrcLangModal}
-                    showCloseButton={false}
-                    className="ai-lang-select-modal"
-                >
+                <Rodal  visible={showSrcLangModal} showCloseButton={false} className="ai-lang-select-modal" >
                     <div className="lang-modal-wrapper">
                         <span
-                            className="modal-close-btn lang-close"
-                            onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false); }}
-                        >
+                            className="modal-close-btn lang-close" onClick={() => { setshowSrcLangModal(false); setSearchInput(''); setOnFocusWrap(false); }} >
                             <img
                                 src={CloseBlack}
                                 alt="close_black"

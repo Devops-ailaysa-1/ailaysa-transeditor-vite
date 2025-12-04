@@ -125,7 +125,7 @@ export const PromptLibraryModal = (props) => {
                 {...props} >
                 {children}
             </button>
-        )
+        );
     } 
 
     // JSX component for prompt tabs
@@ -266,7 +266,7 @@ export const PromptLibraryModal = (props) => {
             }else{
                 return obj   
             }
-        })
+        });
         return newArr;
     } 
 
