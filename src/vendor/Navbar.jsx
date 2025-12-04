@@ -1038,7 +1038,9 @@ function Navbar(props) {
                             </div>
                         </div>
                     </div>
-                        <div className="pib-logo-container"><span className="pib-logo-text">{'(PIB)'}</span></div>
+                        {isPIBNews &&
+                           <div className="pib-logo-container"><span className="pib-logo-text">{'(PIB)'}</span></div>
+                        }                        
                     </div>
                     {/* !props.isGlossary ? history.goBack() */}
                     <div className={"common-navbar-wrap " + (isAiChatBook ? "justify-content-end" : "")}>

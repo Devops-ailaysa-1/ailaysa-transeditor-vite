@@ -4661,7 +4661,6 @@ const PIBWorkspace = (props) => {
                     }, 5000);
                 } else {
                     getDocumentDetailsById(documentId);
-                    // location.reload();
                 }
             },
             error: (err) => {
@@ -5613,7 +5612,7 @@ const PIBWorkspace = (props) => {
                         <span>Translation is under process.</span>
                         <span>Please wait, it may take few minutes.</span>
                     </div>
-                    <button className="task-inprogress-btn" onClick={() => history('/my-stories')}>{'Back to my stories'}</button>
+                    <button className="task-inprogress-btn" onClick={() => history('/my-stories')}>{'Back to My stories'}</button>
                 </div>
             </div>
         </Rodal>)}

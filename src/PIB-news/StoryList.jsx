@@ -112,7 +112,10 @@ const StoryList = (props) => {
                 setFileListLoading(false);
                 const {data} = response;
                 setSelectedProjectFiles(updateFileStatus(data) || []);
-                if (anyPending(data)) progressTask(projectId, data);
+                if (anyPending(data)) {
+                    inProgressProjectId.current = projectId;
+                    progressTask(projectId, getPendingTask(data));
+                }
             },
             error: (error) => {
                 setFileListLoading(false);
@@ -445,7 +448,7 @@ const StoryList = (props) => {
                 const result = response.data;
                 if (result) {
                     console.log('Translate Started!!!');
-                    progressTask(selectedProjectFile.id, [selectedProjectFile]);
+                    // progressTask(selectedProjectFile.id, [selectedProjectFile]);
                 }
             },
             error: (err) => {
@@ -455,15 +458,13 @@ const StoryList = (props) => {
     }
 
     const prepareTaskIds = (taskList) => {
-        if (taskList && taskList.length < 1)
-            return null;
+        if (taskList && taskList.length < 1) return null;
         const taskIds = taskList.map(item => {
             if (item?.pib_story_details && item?.pib_story_details?.pib_task_uid)
                 return item?.pib_story_details?.pib_task_uid;
-            else false;
         });
         if (taskIds.length > 0) return taskIds.join(',');
-        return null;
+        else return null;
     }
 
     const progressTask = (projectId, taskList) => {
@@ -499,6 +500,9 @@ const StoryList = (props) => {
 
     const allDone = (result) => result.every(item => isCompleted(item));
     const anyPending = (result) => result.some(item => item?.pib_story_details?.status == "In_Progress");
+    const getPendingTask = (result) => result.map(item => {
+        if (item?.pib_story_details?.status == "In_Progress") return item;
+    });
     const isCompleted = (task) => task.status == "COMPLETED" || task.status == "FAILED";
 
     const updateTaskStatus = (result) => {
