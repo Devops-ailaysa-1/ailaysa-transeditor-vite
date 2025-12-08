@@ -167,3 +167,143 @@ button {
     font-weight: 400;
     line-height: 24px; /* 150% */
 }
+.pib-segment-wrapper .note-editable-class-wrapper,
+.pib-segment-wrapper .note-editing-area {
+    height: 100% !important;
+}
+
+.federal-news-workspace-wrap ul#workspace .pib-segment-wrapper:not(:last-child){
+    margin-bottom: 20px;
+}
+.federal-news-workspace-wrap ul#workspace .pib-segment-wrapper .title{
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #222222;
+    margin-bottom: 0px;
+}
+.story-file-upload-main-wrap::-webkit-scrollbar:horizontal,
+.rodal.news-proj-report-wrap .report-main-wrapper::-webkit-scrollbar:horizontal,
+.editor-roles-wrapper .editor-roles-table-wrap .editor-roles-value-wrap::-webkit-scrollbar:horizontal,
+.pib-segment-wrapper .source-text-div#source-text-div-3::-webkit-scrollbar:horizontal,
+.view-story-modal-inner-wrapper .story-main-wrapper.add-story-wrap textarea::-webkit-scrollbar:horizontal,
+.note-editing-area::-webkit-scrollbar:horizontal{
+    height: 20px;
+     width: 100%;
+}
+.story-file-upload-main-wrap::-webkit-scrollbar,
+.rodal.news-proj-report-wrap .report-main-wrapper::-webkit-scrollbar,
+.editor-roles-wrapper .editor-roles-table-wrap .editor-roles-value-wrap::-webkit-scrollbar,
+.pib-segment-wrapper .source-text-div#source-text-div-3::-webkit-scrollbar,
+.view-story-modal-inner-wrapper .story-main-wrapper.add-story-wrap textarea::-webkit-scrollbar,
+.prompt-type-area textarea.sent-input::-webkit-scrollbar,
+.chat-book-body-wrapper::-webkit-scrollbar,
+.chat-book-main-wrapper__upload-access-wrapper .file-list-wrapper .button-wrap-file-list::-webkit-scrollbar,
+.note-editing-area::-webkit-scrollbar{
+    width: 19px;
+    height: 100%;
+}
+.story-file-upload-main-wrap::-webkit-scrollbar-corner,
+.rodal.news-proj-report-wrap .report-main-wrapper::-webkit-scrollbar-corner,
+.editor-roles-wrapper .editor-roles-table-wrap .editor-roles-value-wrap::-webkit-scrollbar-corner,
+.pib-segment-wrapper .source-text-div#source-text-div-3::-webkit-scrollbar-corner,
+.view-story-modal-inner-wrapper .story-main-wrapper.add-story-wrap textarea::-webkit-scrollbar-corner,
+.note-editing-area::-webkit-scrollbar-corner {
+    background: #ECEFF4;
+}
+.story-file-upload-main-wrap::-webkit-scrollbar-track,
+.story-file-upload-main-wrap::-webkit-scrollbar-track:horizontal,
+.rodal.news-proj-report-wrap .report-main-wrapper::-webkit-scrollbar-track,
+.editor-roles-wrapper .editor-roles-table-wrap .editor-roles-value-wrap::-webkit-scrollbar-track,
+.editor-roles-wrapper .editor-roles-table-wrap .editor-roles-value-wrap::-webkit-scrollbar-track:horizontal,
+.pib-segment-wrapper .source-text-div#source-text-div-3::-webkit-scrollbar-track,
+.pib-segment-wrapper .source-text-div#source-text-div-3::-webkit-scrollbar-track:horizontal,
+.view-story-modal-inner-wrapper .story-main-wrapper.add-story-wrap textarea::-webkit-scrollbar-track,
+.view-story-modal-inner-wrapper .story-main-wrapper.add-story-wrap textarea::-webkit-scrollbar-track:horizontal{
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+}
+.pib-segment-wrapper .source-text-div#source-text-div-3::-webkit-scrollbar-thumb,
+.pib-segment-wrapper .source-text-div#source-text-div-3::-webkit-scrollbar-thumb:horizontal{
+    background-color: #DADDE0 !important;
+    border-radius: 50px;
+    border: 6px solid #f9f9f9 !important;
+}
+.pib-segment-wrapper .writer-form-component{
+    outline: 0px solid #c5c1c1 !important;
+    /* border: 1px solid #E1E5E6; */
+    border-radius: 4px;
+    height: auto;
+    margin: 0px 0;
+}
+.pib-segment-wrapper .writer-form-component .note-editor .note-toolbar,
+.story-main-wrapper.add-story-wrap .writer-form-component .note-editor .note-toolbar{
+    border-radius:4px 4px 0px 0px;
+}
+.pib-segment-wrapper .writer-form-component .note-editable-class-wrapper,
+.story-main-wrapper.add-story-wrap .writer-form-component .note-editable-class-wrapper{
+    border-radius:0px 0px 4px 4px;
+}
+.pib-segment-wrapper .writer-form-component .note-editing-area{
+    /* max-height: 500px !important; */
+    /* height: 500px; */
+}
+.pib-segment-wrapper .writer-form-component .note-editable{
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    overflow-x: hidden !important;
+    min-height: 537px !important;
+    width: 100%;
+    overflow-y: hidden !important;
+    cursor: context-menu;
+    font-size: 15px !important;
+}
+/* .pib-segment-wrapper .note-editing-area{
+    height: 455px !important;
+} */
+.pib-segment-wrapper .source-text-div#source-text-div-3{
+    min-height: 500px !important; 
+    max-height: 500px !important; 
+}
+.pib-segment-wrapper .source-text-div{
+    width: 100% !important;
+    border: 0px solid transparent !important;
+    background-color: transparent !important;
+    resize: none;
+    margin-top: 44px;
+    overflow: auto;
+}
+/* .pib-segment-wrapper  .note-editable-class-wrapper{
+    height: 455px !important;
+} */
+.pib-segment-wrapper  .note-editable-class-wrapper .note-editable{
+    height: inherit !important;
+    min-height: auto !important;
+    padding-bottom: 0px !important;
+    overflow: auto !important;
+}
+.pib-segment-wrapper .writer-form-component .note-toolbar.card-header,
+.view-story-modal-wrapper.add-story-modal .rodal-dialog .note-toolbar.card-header{
+    text-align: left !important;
+}
+.pib-segment-wrapper .workspace-row:not(.focused-row) .target-lang-part .workspace-align>.form-group{
+    width: 100%;
+}.pib-segment-wrapper .workspace-row .note-toolbar{
+    border-top: 1px solid #E1E5E6 !important;
+    border-bottom: 1px solid #E1E5E6 !important;
+    border-left: 1px solid #E1E5E6 !important;
+    border-right: 1px solid #E1E5E6 !important;
+    border-radius: 4px !important;
+}
+
+.pib-segment-wrapper .focused-row.workspace-row .note-toolbar{
+    border-top: 1px solid #E1E5E6 !important;
+    border-bottom: 1px solid #E1E5E6 !important;
+    border-left: 1px solid #E1E5E6 !important;
+    border-right: 1px solid #E1E5E6 !important;
+    border-radius: 4px !important;
+}

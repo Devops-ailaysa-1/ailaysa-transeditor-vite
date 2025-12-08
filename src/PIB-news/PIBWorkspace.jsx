@@ -443,7 +443,7 @@ const PIBWorkspace = (props) => {
     const transphraseId = transphrasePopoverOpen ? "simple-popover" : undefined;
     let userSelectionCallTimer = null;
 
-    const writerAreaDiv = document.querySelector(".federal-segment-wrapper .note-editable");
+    const writerAreaDiv = document.querySelector(".pib-segment-wrapper .note-editable");
     const newsSourceDiv = document.querySelector("#source-text-div-3");
     const targetNoteEditableDiv = document.querySelector('.note-editable');
 
@@ -4847,7 +4847,7 @@ const PIBWorkspace = (props) => {
                                                 
 
                                                 return (
-                                                    <div className={translation.source?.length  != 0 &&  translation.source?.length  != undefined ? "federal-segment-wrapper" : "federal-segment-wrapper d-none"}>
+                                                    <div className={translation.source?.length  != 0 &&  translation.source?.length  != undefined ? "pib-segment-wrapper" : "pib-segment-wrapper d-none"}>
                                                         <span className="title">{translation?.type}</span>
                                                         <li key={id} onClick={() => !isWorkspaceEditable && highlightFocusedSegment(translation.segment_id)}>
                                                             <div

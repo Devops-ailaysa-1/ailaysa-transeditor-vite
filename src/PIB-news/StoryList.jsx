@@ -131,8 +131,8 @@ const StoryList = (props) => {
                 const status = FILE_STATUS_MAP[file?.pib_story_details?.status];
                 return {
                     ...file,
-                    openProjectLabel: status?.btnLabel || null,
-                    btnLoading: status.loading || null
+                    openBtnLabel: status?.btnLabel || null,
+                    openBtnLoading: status.loading || null
                 }
             }
         })
@@ -337,12 +337,16 @@ const StoryList = (props) => {
      * @since 25 Nov 2025
      */
     const handleFileDownload = async(selectedProjectFile)  => {
+        updateDownloadBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Downloading', 'ADD');
         let url = Config.BASE_URL + "/workspace_okapi/download_pib_file/" + `?task_id=${selectedProjectFile.id}`;
         url = url + "&output_type=" + 'ORIGINAL';
-        const response = await downloadDifferentFile(url);
-        if (response !== undefined) {
-            Config.downloadFileInBrowser(response);
-        }
+        setTimeout(async () => {
+            const response = await downloadDifferentFile(url);
+            if (response !== undefined) {
+                Config.downloadFileInBrowser(response);
+                updateDownloadBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Downloading');
+            }
+        }, 300);
     }
 
     /**
@@ -402,15 +406,8 @@ const StoryList = (props) => {
      * @auhtor Padmabharathi Subiramanian 
      * @since 26 Nov 2025
      */
-    const handleViewStoryClick = (e, selectedProjectFile, type) => {
-        // if (inProgressProjectId.current && inProgressTaskIds.indexOf(selectedProjectFile?.pib_story_details?.pib_task_uid) != -1) {
-        //     selectedProjectFile.openProjectLabel = 'View Processing';
-        //     selectedProjectFile.btnLoading = true;
-        //     return;
-        // }
+    const handleViewStoryClick = (e, selectedProjectFile, type, timeOut = 500) => {
         if (e) e.stopPropagation();
-        selectedProjectFile.openProjectLabel = 'Opening';
-        selectedProjectFile.btnLoading = false;
         inProgressProjectId.current = null;
         const open_as = 'editor';
         setTimeout(() => {
@@ -418,7 +415,37 @@ const StoryList = (props) => {
                 prevPath: location.pathname + location.search,
                 open_as
             }});
-        }, 500);
+        }, timeOut);
+    }
+
+    const updateDownloadBtnState = (taskId, btnLabel, action = 'remove') => {
+        setSelectedProjectFiles(prev =>
+            prev.map(file => {
+                if (file.pib_story_details.pib_task_uid == taskId) {
+                    return {
+                        ...file,
+                        downloadBtnLabel: action == 'ADD' ? btnLabel : null,
+                        downloadBtnLoading: action == 'ADD' ? true : false
+                    };
+                }
+                return file;
+            })
+        );
+    }
+
+    const updateActionBtnState = (taskId, btnLabel, action = 'REMOVE') => {
+        setSelectedProjectFiles(prev =>
+            prev.map(file => {
+                if (file.pib_story_details.pib_task_uid == taskId) {
+                    return {
+                        ...file,
+                        openBtnLabel: action == 'ADD' ? btnLabel : null,
+                        openBtnLoading: action == 'ADD' ? true : false
+                    };
+                }
+                return file;
+            })
+        );
     }
 
     const handleBtnAction = (e, selectedProjectFile, type) => {
@@ -428,33 +455,40 @@ const StoryList = (props) => {
                 handleViewStoryClick(e, selectedProjectFile, type);
             } else if (status.polling) {
                 inProgressProjectId.current = selectedProjectFile.id;
-                startTranslation(selectedProjectFile);
-                handleViewStoryClick(e, selectedProjectFile, type);
+                updateActionBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Translating', 'ADD');
+                startTranslation(selectedProjectFile).then(() => {
+                    handleViewStoryClick(e, selectedProjectFile, type, 1500);
+                })
             } else if (status.status == 'COMPLETED') {
-                handleViewStoryClick(e, selectedProjectFile, type);
+                updateActionBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Opening', 'ADD');
+                handleViewStoryClick(e, selectedProjectFile, type, 1500);
             }
         }
     }
 
-    const startTranslation = (selectedProjectFile) => {
+    const startTranslation = async (selectedProjectFile) => {
         const formData = new FormData();
         formData.append('pib_task_id', selectedProjectFile.id);
-        Config.axios({
-            url: `${Config.BASE_URL}/workspace/stories_pib/translate/`,
-            method: 'POST',
-            data: formData,
-            auth: true,
-            success: (response) => {
-                const result = response.data;
-                if (result) {
-                    console.log('Translate Started!!!');
-                    // progressTask(selectedProjectFile.id, [selectedProjectFile]);
+        return new Promise((resolve, reject) => {
+            Config.axios({
+                url: `${Config.BASE_URL}/workspace/stories_pib/translate/`,
+                method: 'POST',
+                data: formData,
+                auth: true,
+                success: (response) => {
+                    const result = response.data;
+                    if (result) {
+                        console.log('Translate Started!!!');
+                        resolve();
+                        // progressTask(selectedProjectFile.id, [selectedProjectFile]);
+                    }
+                },
+                error: (err) => {
+                    console.error(err);
+                    reject(err);
                 }
-            },
-            error: (err) => {
-                console.error(err);
-            }
-        });
+            });
+        })
     }
 
     const prepareTaskIds = (taskList) => {
@@ -516,11 +550,11 @@ const StoryList = (props) => {
                     return pendingTaskIds;
                 });
                 if (matched) {
-                    file.openProjectLabel = "View Progressing";
+                    file.openBtnLabel = "View Progressing";
                     return {
                         ...file,
-                        openProjectLabel: isCompleted(matched) ? null : file?.openProjectLabel,
-                        btnLoading: isCompleted(matched) ? null : true,
+                        openBtnLabel: isCompleted(matched) ? null : file?.openBtnLabel,
+                        openBtnLoading: isCompleted(matched) ? null : true,
                         pib_story_details: {
                             ...file.pib_story_details,
                             status: matched.status
@@ -659,17 +693,22 @@ const StoryList = (props) => {
                                             <div className="pib-project-list-action-wrap">
                                                 <button type="button" className="workspace-files-OpenProjectButton flex items-center justify-center gap-[6px]"
                                                     onClick={() => handleBtnAction(null, selectedProjectFile, "tar")}>
-                                                    {selectedProjectFile && selectedProjectFile.btnLoading && <ButtonLoader />}
+                                                    {selectedProjectFile && selectedProjectFile.openBtnLoading && <ButtonLoader />}
                                                     <span className="fileopen-new-btn">
-                                                        {selectedProjectFile && selectedProjectFile.openProjectLabel
-                                                            ? selectedProjectFile.openProjectLabel : t("open")}
+                                                        {selectedProjectFile && selectedProjectFile.openBtnLabel
+                                                            ? selectedProjectFile.openBtnLabel : t("open")}
                                                     </span>
                                                 </button>
-                                                <button type="button" className="workspace-files-OpenProjectButton" 
-                                                    disabled={ selectedProjectFile?.pib_story_details?.status === 'YET_TO_START' || selectedProjectFile?.pib_story_details?.status === 'In_Progress' || 
-                                                        selectedProjectFile?.pib_story_details?.status === 'FAILED'}
+                                                <button type="button" className="workspace-files-OpenProjectButton flex items-center justify-center gap-[6px]" 
+                                                    disabled={selectedProjectFile?.pib_story_details?.status === 'YET_TO_START'
+                                                        || selectedProjectFile?.pib_story_details?.status === 'In_Progress'
+                                                        || selectedProjectFile?.pib_story_details?.status === 'FAILED'}
                                                     onClick={() => handleFileDownload(selectedProjectFile)}>
-                                                    <span className="fileopen-new-btn">{t("download")}</span>
+                                                    {selectedProjectFile && selectedProjectFile.downloadBtnLoading && <ButtonLoader />}
+                                                    <span className="fileopen-new-btn">
+                                                        {selectedProjectFile && selectedProjectFile.downloadBtnLabel
+                                                            ? selectedProjectFile.downloadBtnLabel : t("download")}
+                                                    </span>
                                                 </button>
                                                 <MoreOptionsIcon project={project} selectedProjectFile={selectedProjectFile} />
                                             </div>

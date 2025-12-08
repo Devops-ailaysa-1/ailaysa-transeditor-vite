@@ -994,6 +994,8 @@ function Navbar(props) {
         return ProjectsLogo;
     };
 
+    const isProjectLogo = () => !(props.isWhite || props.istranseditor || props.istranslator || isAiChatBook);
+
     const checkIsPIBUserPath = () => {
         return (window.location.pathname.includes("/my-stories") || window.location.pathname.includes("/add-stories")) && isPIBNews;
     }
@@ -1028,8 +1030,8 @@ function Navbar(props) {
                                 <img src={ChevronLeftBlack} />
                             </div>
                         }
-                        <Link className="navbar-display-logo" to={"/file-upload?page=1&order_by=-id"}>
-                            <img src={getLogo()}   alt="logo" />
+                        <Link className="navbar-display-logo" to={checkIsPIBUserPath() ? '/my-stories?page=1' : "/file-upload?page=1&order_by=-id"}>
+                            <img src={getLogo()} alt="logo" />
                         </Link>
                         <div onClick={() => props.prevPathRef.current ? history(props.prevPathRef.current) : history('/file-upload?page=1')}
                             className={props.isWhite ? "navbar-display-show" : "navbar-display-hide"} >
@@ -1038,9 +1040,7 @@ function Navbar(props) {
                             </div>
                         </div>
                     </div>
-                        {isPIBNews &&
-                           <div className="pib-logo-container"><span className="pib-logo-text">{'(PIB)'}</span></div>
-                        }                        
+                        {isPIBNews && isProjectLogo() && <div className="pib-logo-container"><span className="pib-logo-text">{'(PIB)'}</span></div>}                        
                     </div>
                     {/* !props.isGlossary ? history.goBack() */}
                     <div className={"common-navbar-wrap " + (isAiChatBook ? "justify-content-end" : "")}>

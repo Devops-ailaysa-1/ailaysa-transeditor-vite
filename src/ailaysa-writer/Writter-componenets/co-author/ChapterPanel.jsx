@@ -609,7 +609,7 @@ const ChapterPanel = (props) => {
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
         let token = userCacheData != null ? userCacheData?.token : "";        
-        // URL_SEARCH_PARAMS.set('streaming', true)
+        // URL_SEARCH_PARAMS.set('streaming', true);
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
         document.querySelector('.ailaysa-writter-main-wrapper').style.pointerEvents = 'none';
         props.showOverlay();
@@ -958,7 +958,7 @@ const ChapterPanel = (props) => {
     // check if editor is empty or not: if empty generate the content otherwise show the content loss alert
     const generateItemContentBtn = (e, item, matter) => {
         tempStoredGenerateLinkParamRef.current = {item, matter};
-        let isEditorEmpty = $('.summernote').summernote('isEmpty');
+        let isEditorEmpty = $('.summernote').summernote('isEmpty');      
 
         if(matter === 'front'){
             if(item?.generated_content && !isEditorEmpty){
@@ -1026,9 +1026,7 @@ const ChapterPanel = (props) => {
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
-            allowedClasses: {
-                'p': ['right-align-lang-style']
-            },
+            allowedClasses: { 'p': ['right-align-lang-style'] },
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here
