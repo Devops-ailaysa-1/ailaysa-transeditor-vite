@@ -485,7 +485,11 @@ const StoryList = (props) => {
                 },
                 error: (err) => {
                     console.error(err);
-                    reject(err);
+                    if(err?.response?.status === 500) {
+                        Config.toast("Something went wrong", "error");
+                    }else  {
+                        reject(err);
+                    }
                 }
             });
         })
