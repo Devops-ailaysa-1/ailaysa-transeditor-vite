@@ -166,6 +166,9 @@ function Navbar(props) {
     const mtRawDownloadRetryLimit = useRef(2)
     const mtRawDownloadRetryCounter = useRef(0)
     const newProjectBoxRef = useRef();
+
+    const isEditor = userDetails?.internal_member_team_detail?.role === 'Editor';
+    const navigateURL = isEditor ? "/file-upload?page=1&order_by=-id" : "/create/all-templates";
    
     const handleEmailTextMouseEnter = () => {
         setIsEmailTextHovered(true);
@@ -1589,7 +1592,7 @@ function Navbar(props) {
                                 {isPIBNews && checkIsPIBUserPath() && <li className="nav-item pib-view-more-item active">
                                     <Tooltip title={'View other apps'} arrow placement="bottom">
                                         <Link className="pib-view-more-nav"
-                                            to={"/create/all-templates"}
+                                            to={navigateURL}
                                             target="_blank"
                                             state={{
                                                 ...location?.state,
