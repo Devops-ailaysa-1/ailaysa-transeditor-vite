@@ -233,6 +233,7 @@ function TranslateFiles(props) {
     const [backupSourceLanguage, setBackupSourceLanguage] = useState("");
     const [backupTargetLanguage, setBackupTargetLanguage] = useState("");
     const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
+    const [pibMTEngine, setPIBMTEngineId] = useState(null);
     /* State constants - end */
 
     /* Ref constants - start */
@@ -458,6 +459,10 @@ function TranslateFiles(props) {
             success: (response) => {
                 mtEngineOptionRef.current = response?.data;
                 setMtpeEngines(response?.data);
+                const item = response?.data?.find( (obj) => obj?.name === "PIB_Translator" );
+                if (isPIBNews && item) {
+                    setPIBMTEngineId(item.id);
+                }
             },
         });
     };
@@ -1053,7 +1058,7 @@ function TranslateFiles(props) {
         let mtValue;
 
         if (isPIBNews) {
-            mtValue = 4;                
+            mtValue = pibMTEngine;                
         } else {
             mtValue = selectedMTEngine?.value || 1;   
         }
