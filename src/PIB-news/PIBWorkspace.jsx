@@ -3611,7 +3611,7 @@ const PIBWorkspace = (props) => {
     };
 
     const triggerFocuseWritter = ( ) => {
-        highlightFocusedSegment(3);
+        highlightFocusedSegment(2);
     }
 
     /* Setting focus and adding class for currently focusing contenteditable */
