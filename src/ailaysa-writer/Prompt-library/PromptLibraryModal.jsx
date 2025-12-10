@@ -117,27 +117,20 @@ export const PromptLibraryModal = (props) => {
     const PromptButton = (props) => {
         let {children, classname} = props
         return (
-            <button
-                className={[
-                    "prompt-btn",
-                    classname
-                ].join(' ')}
-                {...props} >
+            <button className={[ "prompt-btn", classname ].join(' ')} {...props} >
                 {children}
             </button>
-        )
+        );
     } 
 
     // JSX component for prompt tabs
     const PromptTabs = (props) => {
         return (
             <div className="tab-list d-flex">
-                <div className={"tab-item " + (activePromptTab === 1 ? 'active' : '')} 
-                    onClick={() => setActivePromptTab(1)} >
+                <div className={"tab-item " + (activePromptTab === 1 ? 'active' : '')}  onClick={() => setActivePromptTab(1)} >
                     Open prompts
                 </div>
-                <div className={"tab-item " + (activePromptTab === 2 ? 'active' : '')} 
-                    onClick={() => setActivePromptTab(2)} >
+                <div className={"tab-item " + (activePromptTab === 2 ? 'active' : '')} onClick={() => setActivePromptTab(2)} >
                     My prompts
                 </div>
             </div>
@@ -148,12 +141,7 @@ export const PromptLibraryModal = (props) => {
     const DomainCapsuleList = (props) => {
         return (
             <div className="domain-capsule-container custom-scroll-bar d-flex">
-                <Swiper
-                    slidesPerView="auto"
-                    navigation={true}
-                    grabCursor={true}
-                    modules={[Navigation]}
-                    className="mySwiper">
+                <Swiper slidesPerView="auto" navigation={true} grabCursor={true} modules={[Navigation]} className="mySwiper">
                     {domainList?.map(domain => {
                         return (
                             <SwiperSlide key={domain?.id}>
@@ -266,7 +254,7 @@ export const PromptLibraryModal = (props) => {
             }else{
                 return obj   
             }
-        })
+        });
         return newArr;
     } 
 

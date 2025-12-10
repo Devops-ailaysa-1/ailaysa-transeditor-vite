@@ -48,6 +48,7 @@ const CoAuthorPanel = (props, ref) => {
     const userDetails = useSelector((state) => state.userDetails.value);
     const levelOptions = useSelector((state) => state.bookLevelOption.value);
     const genreOptions = useSelector((state) => state.bookGenreOption.value);
+
     // const [selectedLevel, setSelectedLevel] = useState(null);
     // const [selectedGenre, setSelectedGenre] = useState(null);
     // const [authorIdentity, setAuthorIdentity] = useState("");
@@ -61,6 +62,7 @@ const CoAuthorPanel = (props, ref) => {
         title: false,
         chapter: false
     });
+    
     const authorIdentityInputRef = useRef(null);
     const bookDescriptionInputRef = useRef(null);
     const bookTitleInputRef = useRef(null);

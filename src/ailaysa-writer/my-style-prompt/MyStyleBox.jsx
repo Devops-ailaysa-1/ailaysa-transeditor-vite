@@ -35,7 +35,7 @@ export const MyStyleBox = (props) => {
                 console.error(err);
                 setIsSaving(false);
             }
-        })
+        });
     } 
 
     return (

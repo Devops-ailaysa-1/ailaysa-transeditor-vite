@@ -55,9 +55,7 @@ export const MoreMenu = (props) => {
             </IconButton>
             <Menu
                 id="long-menu"
-                MenuListProps={{
-                'aria-labelledby': 'long-button',
-                }}
+                MenuListProps={{ 'aria-labelledby': 'long-button', }}
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
@@ -70,11 +68,7 @@ export const MoreMenu = (props) => {
                 }}>
                 {options.map((option) => (
                     <MenuItem  key={option.id} className="d-flex items-center py-2"
-                        onClick={(e) => {
-                            option.value === "Edit" ? handleEditOption() :
-                            handleDeleteOption();
-                        }}
-                    >
+                        onClick={(e) => { option.value === "Edit" ? handleEditOption() : handleDeleteOption();}} >
                         {option.icon}
                         {option.value}
                     </MenuItem>

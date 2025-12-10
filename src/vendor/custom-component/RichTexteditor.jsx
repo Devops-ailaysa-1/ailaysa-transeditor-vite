@@ -163,16 +163,20 @@ const RichTexteditor = (props) => {
                     const parentDiv = document.querySelector('.note-editable');
 
                     // Get direct child p tags within the parent div
-                    const pTags = Array.from(parentDiv.children).filter(function (element) {
-                        return element.tagName.toLowerCase() === 'p';
-                    });
+                    let contentTags = [];
+                    if (parentDiv?.children && parentDiv.children.length > 0) {
+                        contentTags = Array.from(parentDiv.children).filter(function (element) {
+                            return element.tagName.toLowerCase() === 'p';
+                        }); 
+                    } else {
+                        contentTags = document.querySelectorAll('.note-editable');
+                    }
                     // Loop through the selected p tags and perform actions
-                    pTags.forEach(function (pTag) {
+                    contentTags.forEach(function (pTag) {
                         // Access each p tag and perform actions
                         if (containsRtlCharacters(pTag.textContent)) {
                             pTag.classList.add('right-align-lang-style')
-                        }
-                        else {
+                        } else {
                             pTag.classList.remove('right-align-lang-style')
                         }
                     });

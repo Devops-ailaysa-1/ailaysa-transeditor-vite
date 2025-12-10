@@ -82,7 +82,7 @@ export const LangSelectorDropDown = (props) => {
                 <DoneIcon className="item-select-icon" style={{marginRight: "8px"}} />
                 {item?.language}
             </li>
-        )
+        );
     }
 
     return (

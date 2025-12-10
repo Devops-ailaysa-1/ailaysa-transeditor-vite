@@ -82,6 +82,7 @@ function Navbar(props) {
     const queryParams = new URLSearchParams(window.location);
     const history = useNavigate();
     const dispatch = useDispatch();
+    const location = useLocation();
     const userDetails = useSelector((state) => state.userDetails.value);
     const showCampaignCouponStrip = useSelector((state) => state.campaignCouponStrip.value);
 
@@ -165,6 +166,9 @@ function Navbar(props) {
     const mtRawDownloadRetryLimit = useRef(2)
     const mtRawDownloadRetryCounter = useRef(0)
     const newProjectBoxRef = useRef();
+
+    const isEditor = userDetails?.internal_member_team_detail?.role === 'Editor';
+    const navigateURL = isEditor ? "/file-upload?page=1&order_by=-id" : "/create/all-templates";
    
     const handleEmailTextMouseEnter = () => {
         setIsEmailTextHovered(true);
@@ -993,6 +997,12 @@ function Navbar(props) {
         return ProjectsLogo;
     };
 
+    const isProjectLogo = () => !(props.isWhite || props.istranseditor || props.istranslator || isAiChatBook);
+
+    const checkIsPIBUserPath = () => {
+        return (window.location.pathname.includes("/my-stories") || window.location.pathname.includes("/add-stories")) && isPIBNews;
+    }
+
     return (
         <React.Fragment>
             <div className={(userDetails?.is_campaign && showCampaignCouponStrip) ? "navbar-stripe-wrapper stick-top" : "navbar-stripe-wrapper"}>
@@ -1015,15 +1025,16 @@ function Navbar(props) {
                         <span className="line"></span>
                         <span className="line"></span>
                     </button>} */}
-                    <div className="logo-wrap">
+                    <div className="flex gap-[4px]">
+                    <div className={`logo-wrap ${isPIBNews ? 'mr-0' : ''}`}>
                         {
                             ((mobileVersion < 991) && (aiChatMobileTab === 2)) &&
                             <div className="previou-page" onClick={() => handlePreviousPage()}>
                                 <img src={ChevronLeftBlack} />
                             </div>
                         }
-                        <Link className="navbar-display-logo" to={"/file-upload?page=1&order_by=-id"}>
-                            <img src={getLogo()}   alt="logo" />
+                        <Link className="navbar-display-logo" to={checkIsPIBUserPath() ? '/my-stories?page=1' : "/file-upload?page=1&order_by=-id"}>
+                            <img src={getLogo()} alt="logo" />
                         </Link>
                         <div onClick={() => props.prevPathRef.current ? history(props.prevPathRef.current) : history('/file-upload?page=1')}
                             className={props.isWhite ? "navbar-display-show" : "navbar-display-hide"} >
@@ -1032,28 +1043,30 @@ function Navbar(props) {
                             </div>
                         </div>
                     </div>
+                        {isPIBNews && isProjectLogo() && <div className="pib-logo-container"><span className="pib-logo-text">{'(PIB)'}</span></div>}                        
+                    </div>
                     {/* !props.isGlossary ? history.goBack() */}
                     <div className={"common-navbar-wrap " + (isAiChatBook ? "justify-content-end" : "")}>
                         {(!props.isWhite && !props.isGlossary && !isAiChatBook) &&
                             <div ref={newProjectBoxRef} className="nav-transeditor-wrapper federal-news-navbar">
-                                {isEnterprise ? (
+                                {isEnterprise && !checkIsPIBUserPath() ? (
                                     <>
-                                        <NavLink 
-                                            to={(isPIBNews || is_internal_meber_editor) ? "/my-stories?page=1" : "/all-stories?page=1"} 
+                                        {!isPIBNews && <NavLink 
+                                            to={is_internal_meber_editor ? "/my-stories?page=1" : "/all-stories?page=1"} 
                                             // activeClassName="selected" 
                                             className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myNewsProjectsSelected ? "selected" : ""}`}
                                         >
                                             <div className="nav-assign-manage-link">
-                                                <span>{isPIBNews ? 'Story/Press release' : t("news_projects")}</span>
+                                                <span>{t("news_projects")}</span>
                                             </div>
-                                        </NavLink>
+                                        </NavLink>}
                                         {/* {!is_internal_meber_editor && ()}  */}
                                         <NavLink  to="/file-upload?page=1&order_by=-id" // activeClassName="selected" 
                                             className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}>
                                             <div className="nav-assign-manage-link">
                                                 <span>{t("standard_project")}</span>
                                             </div>
-                                        </NavLink>                                                                               
+                                        </NavLink>
                                         {isDinamalar && (
                                             <ButtonBase   className={props.isWhite ? "d-none" : "ml-3"} onClick={() => history('/report')} >
                                                 <div className="btn-text">
@@ -1063,7 +1076,7 @@ function Navbar(props) {
                                             </ButtonBase>
                                         )}
                                     </>
-                                ) : (   // for global users
+                                ) : ( !isPIBNews &&  // for global users
                                     <NavLink to="/file-upload?page=1&order_by=-id"  // activeClassName="selected" 
                                         className={`${!props.isWhite ? "navbar-display-show" : "navbar-display-hide"} ${myProjectsSelected ? "selected" : ""}`}>
                                         <div className="nav-assign-manage-link">
@@ -1072,7 +1085,7 @@ function Navbar(props) {
                                     </NavLink>
                                 )}
 
-                                {((isPIBNews && Config.userState?.internal_member_team_detail?.role !== 'Editor')|| (Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected)) ? (
+                                {!checkIsPIBUserPath() && ((Config.userState?.internal_member_team_detail?.role !== 'Editor')|| (Config.userState?.internal_member_team_detail?.role !== 'Editor' && !myNewsProjectsSelected)) ? (
                                     <ButtonBase component={Link} to="/create/all-templates/" className={props.isWhite ? "d-none" : "ml-4"}>
                                         <div className="btn-text">
                                             <AddIcon style={{ width: 20,color: "#3C4043"  }} />
@@ -1412,7 +1425,7 @@ function Navbar(props) {
                                         )}
                                     </li>
                                 }
-                                <li className="nav-item active">
+                                {!checkIsPIBUserPath() && <li className="nav-item active">
                                     <Tooltip title={t("chat")} arrow placement="bottom">
                                         <div
                                             onClick={() => {
@@ -1482,8 +1495,8 @@ function Navbar(props) {
                                             <Link to="/chat" target="_blank">{t("see_all_in_chat")}</Link>
                                         </div>
                                     </div>
-                                </li>
-                                {!is_internal_meber_editor && (
+                                </li>}
+                                {!is_internal_meber_editor && !checkIsPIBUserPath() && (
                                     <li className="nav-item active">
                                         {!isDinamalar && (
                                             <Tooltip title={t("apps")} arrow placement="bottom">
@@ -1576,6 +1589,21 @@ function Navbar(props) {
                                         </div>
                                     </li>
                                 )}
+                                {isPIBNews && checkIsPIBUserPath() && <li className="nav-item pib-view-more-item active">
+                                    <Tooltip title={'View other apps'} arrow placement="bottom">
+                                        <Link className="pib-view-more-nav"
+                                            to={navigateURL}
+                                            target="_blank"
+                                            state={{
+                                                ...location?.state,
+                                                isPIBNews: isPIBNews ? 'PIB' : ''
+                                            }}
+                                        >
+                                            <span>View other apps</span>
+                                        </Link>
+                                    </Tooltip>
+                                    </li>
+                                }
                                 <li className="nav-item active">
                                     <div
                                         onClick={(e) => {

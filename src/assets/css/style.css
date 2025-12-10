@@ -44328,4 +44328,31 @@ body{
     margin-right: 6px;
     font-weight: bold;
 }
-  
+.pib-logo-container {
+    height: 100%;
+    margin-right: 41px;
+}
+.pib-logo-text {
+    color: #FFF;
+    font-family: Roboto;
+    font-size: 15.652px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.pib-view-more-item {
+    cursor: pointer;
+    margin-right: 39px;
+}
+a.pib-view-more-nav:hover {
+    color: #FFF !important;
+    text-decoration: none !important;
+}
+.pib-view-more-nav {
+    color: #FFF;
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}

@@ -34,11 +34,13 @@ const ChapterPanel = (props) => {
     const { t } = useTranslation();
     const history = useNavigate();
     const dispatch = useDispatch();
+
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const frontMatterOptions = useSelector((state) => state.bookFrontMatterOption.value);
     const backMatterOptions = useSelector((state) => state.bookBackMatterOption.value);
     const modalConfirmationUserDecision = useSelector((state) => state.modalConfirmationUserDecision.value);
     const bookCreationResponseRedux = useSelector((state) => state.bookCreationResponse.value);
+
     const [frontMatterList, setFrontMatterList] = useState([]);
     const [bodyMatterList, setBodyMatterList] = useState([]);
     const [backMatterList, setBackMatterList] = useState([]);
@@ -55,6 +57,7 @@ const ChapterPanel = (props) => {
     const [titleFocus, setTitleFocus] = useState(false);
     const [selectedMatterItem, setSelectedMatterItem] = useState({ matter: null, id: null });
     const [isTranslateProceeding, setIsTranslateProceeding] = useState(false);
+
     const frontMatterReorderingRef = useRef([]);
     const bodyMatterReorderingRef = useRef([]);
     const backMatterReorderingRef = useRef([]);
@@ -329,7 +332,7 @@ const ChapterPanel = (props) => {
                         [key]: !value
                     }
                 }
-                return obj  ; 
+                return obj; 
             }
         })
         return newArr;
@@ -606,7 +609,7 @@ const ChapterPanel = (props) => {
             typeof Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) != "undefined" ? Cookies.get(import.meta.env.VITE_APP_USER_COOKIE_KEY_NAME) : null
         );
         let token = userCacheData != null ? userCacheData?.token : "";        
-        // URL_SEARCH_PARAMS.set('streaming', true)
+        // URL_SEARCH_PARAMS.set('streaming', true);
         history(window.location.pathname + '?' + URL_SEARCH_PARAMS.toString());
         document.querySelector('.ailaysa-writter-main-wrapper').style.pointerEvents = 'none';
         props.showOverlay();
@@ -763,7 +766,7 @@ const ChapterPanel = (props) => {
                 local: true,
                 ...((key === 'generated_content') && {isEdit: true})
             }
-        ]
+        ];
     } 
 
     // add new/additional items from more options in selected matter 
@@ -955,7 +958,7 @@ const ChapterPanel = (props) => {
     // check if editor is empty or not: if empty generate the content otherwise show the content loss alert
     const generateItemContentBtn = (e, item, matter) => {
         tempStoredGenerateLinkParamRef.current = {item, matter};
-        let isEditorEmpty = $('.summernote').summernote('isEmpty');
+        let isEditorEmpty = $('.summernote').summernote('isEmpty');      
 
         if(matter === 'front'){
             if(item?.generated_content && !isEditorEmpty){
@@ -1023,9 +1026,7 @@ const ChapterPanel = (props) => {
         let clean = sanitizeHtml(summerNoteData, {
             allowedTags: false,
             allowedAttributes: false,
-            allowedClasses: {
-                'p': ['right-align-lang-style']
-            },
+            allowedClasses: { 'p': ['right-align-lang-style'] },
             transformTags: {
                 'font': function (tagName, attribs) {
                     // My own custom magic goes here

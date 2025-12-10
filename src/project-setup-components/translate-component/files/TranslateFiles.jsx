@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, createRef, useRef } from "react";
+import { useSelector } from "react-redux";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Config from "../../../vendor/Config";
 import Skeleton from '@mui/material/Skeleton';
@@ -59,7 +60,7 @@ function TranslateFiles(props) {
     const { t } = useTranslation();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const dispatch = useDispatch();
-   
+    const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
     const [didMount, setDidMount] = useState(false);
     const [isLoading, setLoading] = useState(false);
@@ -232,6 +233,7 @@ function TranslateFiles(props) {
     const [backupSourceLanguage, setBackupSourceLanguage] = useState("");
     const [backupTargetLanguage, setBackupTargetLanguage] = useState("");
     const [editFilteredTargetLang, setEditFilteredTargetLang] = useState([]);
+    const [pibMTEngine, setPIBMTEngineId] = useState(null);
     /* State constants - end */
 
     /* Ref constants - start */
@@ -457,6 +459,10 @@ function TranslateFiles(props) {
             success: (response) => {
                 mtEngineOptionRef.current = response?.data;
                 setMtpeEngines(response?.data);
+                const item = response?.data?.find( (obj) => obj?.name === "PIB_Translator" );
+                if (isPIBNews && item) {
+                    setPIBMTEngineId(item.id);
+                }
             },
         });
     };
@@ -1049,10 +1055,19 @@ function TranslateFiles(props) {
         }
         /* Validation - end */
         // formData.append("project_type", 2);
-        formData.append(
-            "mt_engine",
-            selectedMTEngine?.value ? selectedMTEngine?.value : 1
-        );
+        let mtValue;
+
+        if (isPIBNews) {
+            mtValue = pibMTEngine;                
+        } else {
+            mtValue = selectedMTEngine?.value || 1;   
+        }
+
+        formData.append("mt_engine", mtValue);
+        // formData.append(
+        //     "mt_engine",
+        //     selectedMTEngine?.value ? selectedMTEngine?.value : 1
+        // );
         formData.append("source_language", sourceLanguage);
         targetLanguage.map((eachTargetLanguage) => {
             formData.append("target_languages", eachTargetLanguage?.id);
@@ -1844,10 +1859,19 @@ function TranslateFiles(props) {
         /* Validation end */
         formData.append("project_name", projectName);
         formData.append("project_type", projectType);
-        formData.append(
-            "mt_engine",
-            selectedMTEngine?.value ? selectedMTEngine?.value : 1
-        );
+        let mtValue;
+
+        if (isPIBNews) {
+            mtValue = 4;                
+        } else {
+            mtValue = selectedMTEngine?.value || 1;   
+        }
+
+        formData.append("mt_engine", mtValue);
+        // formData.append(
+        //     "mt_engine",
+        //     selectedMTEngine?.value ? selectedMTEngine?.value : 1
+        // );
         formData.append("source_language", sourceLanguage);
 
         if (pdfIdFromToolkit !== null) {

@@ -42,12 +42,14 @@ const BlogStepWrapper = (props) => {
         targetLabel,
         setTargetLabel
     } = props;
+
     const params = useParams();
     const dispatch = useDispatch();
     const history = useNavigate();
     const location = useLocation();
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     // const blogCreationResponse = useSelector((state) => state.blogCreationRes.value);
+    
     const [blogOutlineList, setBlogOutlineList] = useState([]);
     const [toneOptions, setToneOptions] = useState([]);
     const [selectedTone, setSelectedTone] = useState(null);
@@ -55,6 +57,7 @@ const BlogStepWrapper = (props) => {
     const [selectIndividual, setSelectIndividual] = useState(false);
     const [createTitleCollapse, setCreateTitleCollapse] = useState(true);
     const [isEnableCollapse, setIsEnableCollapse] = useState(false);
+    
     const blogCreationResponseRef = useRef(null);
     const blogOutlineGenResponseRef = useRef(null);
     const isNavigatedInternally = useRef(false);
