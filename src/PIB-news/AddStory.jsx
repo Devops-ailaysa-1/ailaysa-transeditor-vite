@@ -494,7 +494,7 @@ const AddStory = (props) => {
         const lastDot = name.lastIndexOf(".");
         const ext = "." + name.substring(lastDot + 1);
 
-        if(!["txt", "docx"].includes(ext)) {
+        if(![".txt", ".docx"].includes(ext)) {
             Config.toast(t("file_not_support_message"), 'warning');
             return false;
         }
