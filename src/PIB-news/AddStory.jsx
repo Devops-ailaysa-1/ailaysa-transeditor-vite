@@ -769,9 +769,9 @@ const AddStory = (props) => {
                                                     <span className="supported-file-tooltip"> TXT, DOCX</span>
                                                 </div>
                                                 <div className="file-upload_instruct-row">
-                                                    <span className="max-word-note">
+                                                    {/* <span className="max-word-note">
                                                         {'Recommended max words per file'}: <span>50,000</span>
-                                                    </span>
+                                                    </span> */}
                                                     <span className="max-file-size-note ">
                                                         {'Maximum size of a file'}: <span>500 mb</span> 
                                                     </span>
