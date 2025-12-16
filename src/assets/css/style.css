@@ -11816,7 +11816,8 @@ ul.qa-file-list-wrapper .selected-job-value {
 }
 
 .max-word-note,
-.max-file-note {
+.max-file-note,
+.max-file-size-note {
     font-weight: normal;
     font-style: normal;
     font-size: 13px;
@@ -11825,7 +11826,8 @@ ul.qa-file-list-wrapper .selected-job-value {
     text-align: center;
 }
 
-.max-word-note {
+.max-word-note,
+.max-file-size-note {
     padding-right: 11px;
     border-right: 1px solid #a5a5a5;
 }
@@ -11835,6 +11837,10 @@ ul.qa-file-list-wrapper .selected-job-value {
 }
 
 .max-file-note {
+    padding-left: 11px;
+}
+
+.max-file-size-note {
     padding-left: 11px;
 }
 

@@ -412,8 +412,9 @@ const StoryList = (props) => {
         const open_as = 'editor';
         const uriPath = selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload'
             ? 'pibfile-workspace' : 'pibnews-workspace';
+        const resourceId = selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload' ? selectedProjectFile?.document : selectedProjectFile?.id;
         setTimeout(() => {
-            history(`/${uriPath}/${selectedProjectFile.id}`, {state: {
+            history(`/${uriPath}/${resourceId}`, {state: {
                 prevPath: location.pathname + location.search,
                 open_as
             }});

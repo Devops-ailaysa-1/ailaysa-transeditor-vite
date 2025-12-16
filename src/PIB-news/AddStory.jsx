@@ -45,7 +45,7 @@ const AddStory = (props) => {
     const isIncompleteEditorSettings = useSelector((state) => state.editorSettingStatus.value);
     const [files, setFiles] = useState([]);
     const [uploadedFiles, setUploadedFiles] = useState([]);
-
+    
     const inputFileUploadRef = useRef(null);
     const searchAreaRef = useRef(null);
     const sourceLangRef = useRef(null);
@@ -488,6 +488,16 @@ const AddStory = (props) => {
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
+        if (!file) return;
+
+        const name = file.name;
+        const lastDot = name.lastIndexOf(".");
+        const ext = "." + name.substring(lastDot + 1);
+
+        if(!["txt", "docx"].includes(ext)) {
+            Config.toast(t("file_not_support_message"), 'warning');
+            return false;
+        }
         if (checkFileSize(file)) {
             setFiles([file]);
             uploadFile(file);
@@ -528,9 +538,9 @@ const AddStory = (props) => {
 
     const checkFileSize = (file) => {
         if (!file) return;
-        const MAX_SIZE = 100 * 1024 * 1024; // 100 MB
+        const MAX_SIZE = 500 * 1024 * 1024; 
         if (file.size > MAX_SIZE) {
-            alert("File size exceeds 100 MB!");
+            alert("File size exceeds 500 MB!");
             return false;
         }
         return true;
@@ -762,8 +772,11 @@ const AddStory = (props) => {
                                                     <span className="max-word-note">
                                                         {'Recommended max words per file'}: <span>50,000</span>
                                                     </span>
+                                                    <span className="max-file-size-note ">
+                                                        {'Maximum size of a file'}: <span>500 mb</span> 
+                                                    </span>
                                                     <span className="max-file-note">
-                                                        {'Maximum size of a file'}: <span>100 mb</span> 
+                                                        {'Maximum file per project'}: <span>1</span> 
                                                     </span>
                                                 </div>
                                             </div>

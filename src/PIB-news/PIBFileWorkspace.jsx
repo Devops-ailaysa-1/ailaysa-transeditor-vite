@@ -7051,7 +7051,7 @@ function PIBFileWorkspace(props) {
                                 )} */}
                             </div>
                             <div className="toolbar-filter-option">
-                                <div className="pagesize-wrapper">
+                                {/* <div className="pagesize-wrapper">
                                     <ReactSelect
                                         classNamePrefix="pagesize-select"
                                         value={selectedPageSize}
@@ -7063,7 +7063,7 @@ function PIBFileWorkspace(props) {
                                         onChange={(selectedOption) => setSelectedPageSize(selectedOption)}
                                         components={{ DropdownIndicator, IndicatorSeparator: () => null }}/>
                                     <span>{t("segments/page")}</span>
-                                </div>
+                                </div> */}
                                 {/* <div className="confirm-all-btn">
                                         <ButtonBase className="buttonwwrap" onClick={() => setCompleteAllWrap(!completeAllWrap)}>
                                             <CheckCircleOutlineIcon className="complete"/>

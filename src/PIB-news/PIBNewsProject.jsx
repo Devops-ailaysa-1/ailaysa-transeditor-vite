@@ -30,7 +30,7 @@ const PIBNewsProjects = () => {
 
     const addStoryTabList = [{
         id: 1,
-        name: 'Test',
+        name: 'TeXt',
         code: 'text_input',
         link: '/text',
         isEnabled: true
