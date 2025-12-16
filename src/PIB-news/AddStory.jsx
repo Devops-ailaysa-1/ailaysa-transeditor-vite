@@ -11,9 +11,12 @@ import Select, { components } from 'react-select';
 import { ArrowDropDown } from "@mui/icons-material";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ButtonLoader } from '../loader/CommonBtnLoader';
+import { useSelector } from 'react-redux';
+import DragAndDrop from '../vendor/DragandDrop';
+import UploadFolder from "./../assets/images/new-ui-icons/upload-folder.svg";
 
 const AddStory = (props) => {
-    const {languageOptions, ministryDepartmentOptions} = props;
+    const {languageOptions, ministryDepartmentOptions, activeProjTab } = props;
     const { t } = useTranslation();
     const location = useLocation();
     const history = useNavigate();
@@ -37,7 +40,13 @@ const AddStory = (props) => {
     const [selectedDepartment, setSelectedDepartment] = useState(null);
     const [errors, setErrors] = React.useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [subTitleItem, setSubTitleItem] = useState([0]);
+    const [subTitleList, setSubTitleList] = useState(['']);
+    const isIncompleteEditorSettings = useSelector((state) => state.editorSettingStatus.value);
+    const [files, setFiles] = useState([]);
+    const [uploadedFiles, setUploadedFiles] = useState([]);
 
+    const inputFileUploadRef = useRef(null);
     const searchAreaRef = useRef(null);
     const sourceLangRef = useRef(null);
 
@@ -53,13 +62,20 @@ const AddStory = (props) => {
         setSelectedDepartment(tempDepartment);
     }, []);
 
+    useEffect(() => {
+        if (activeProjTab) {
+            clearFormData();
+        }
+    }, [activeProjTab]);
+
     const [formData, setFormData] = React.useState({
         source_language: "",
         target_language: "",               
         ministry_department: "",
         dateline: "",
         headline: "",
-        body: ""
+        body: "",
+        preTranslate: true
     });
     const hideSettingsModal = () => setshowSettings(false);
 
@@ -161,13 +177,34 @@ const AddStory = (props) => {
      * @since 26 Nov 2025
      */
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
+        if (name == 'body' && value.length > 20000) value = value.slice(0, 20000);
         updateError(name);
         setFormData({
             ...formData,
             [name]: value
         });
     }
+
+    const handleSubTitleChange = (e, index) => {
+        let { value } = e.target;
+
+        if (value.length > 1000) value = value.slice(0, 1000);
+
+        setSubTitleList(prev =>
+            prev.map((item, idx) => (idx === index ? value : item))
+        );
+    };
+
+    const addSubTitle = () => {
+        setSubTitleItem(prev => ([...prev, prev.length]));
+        setSubTitleList(prev => ([...prev, '']));
+    }
+
+    const removeSubTitle = (removeIndex) => {
+        setSubTitleItem(prev => prev.filter((_, idx) => idx !== removeIndex));
+        setSubTitleList(prev => prev.filter((_, idx) => idx !== removeIndex));
+    };
 
     /**
      * This method used to clear the form data after successful submission
@@ -180,6 +217,10 @@ const AddStory = (props) => {
         setSourceLanguage('');
         setTargetLanguage('');
         setSelectedDepartment(null);
+        setSubTitleItem([0]);
+        setSubTitleList(['']);
+        setFiles([]);
+        setUploadedFiles([]);
         setFormData({
             source_language: "",
             target_language: "",               
@@ -198,15 +239,52 @@ const AddStory = (props) => {
      * @since 26 Nov 2025 
      */
     const validate = () => {
-        let newErrors = {};
-        if (!formData.headline) newErrors.headline = "Headline is required";
-        if (!formData.body) newErrors.body = "Story body is required";
+        let newErrors = {};       
         if (!formData.source_language) newErrors.source = "Source language is required";
         if (!formData.target_language) newErrors.target = "Target language is required";
+        
+        if (activeProjTab.id === 1) {
+            if (!formData.headline) newErrors.headline = "Headline is required";
+            if (!formData.body) newErrors.body = "Story body is required";
+            // validateSubTitle(newErrors);
+        }
+        if (activeProjTab.id === 2 && (!files || files.length <= 0)) {
+            newErrors.file = "File is required";
+        }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+
+    const allFalse = (obj) => Object.values(obj).every(v => v === false);
+    const anyTrue = (obj) => Object.values(obj).some(v => v === true);
+
+    const validateSubTitle = (newErrors) => {
+        const subTitleErrorList = {}
+        subTitleList.forEach((subTitle, index) => {
+            if (!subTitle || subTitle.length < 0) subTitleErrorList[index] = true;
+            else subTitleErrorList[index] = false;
+        });
+        if (anyTrue(subTitleErrorList)) {
+            newErrors.subTitleList = subTitleErrorList;
+        }
+    }
+
+    const prepareSubTitleData = () => {
+        if (subTitleList && subTitleList.length > 0) {
+            const subTitleData = [];
+            let index = 0;
+            subTitleList.forEach(subTitle => {
+                if (subTitle && subTitle.length > 0){
+                    const data = {};
+                    data[index++] = subTitle;
+                    subTitleData.push(data);
+                }
+            });
+            return subTitleData;
+        }
+        return null;
+    }
 
     /**
      * This method used to submit the story from data.
@@ -220,12 +298,21 @@ const AddStory = (props) => {
 
         const payload = new FormData();
 
-        payload.append("headline", formData.headline);
-        payload.append("body", formData.body);
+        payload.append("story_creation_type", activeProjTab.code);
         payload.append("source_language", formData.source_language);
-        payload.append("target_languages", formData.target_language); // if multiple, append each
+        payload.append("target_languages", formData.target_language);
         payload.append("dateline", formData.dateline);
-        payload.append("ministry_department", formData.ministry_department);
+        payload.append("ministry_department", formData.ministry_department);        
+
+        if (activeProjTab.id === 1) {
+            payload.append("headline", formData.headline);
+            payload.append("body", formData.body);
+            const subTitleData = prepareSubTitleData();
+            if (subTitleData) payload.append("sub_headlines", JSON.stringify(subTitleData));
+        } else if (activeProjTab.id === 2) {
+            payload.append("pre_translate", formData.preTranslate ? formData.preTranslate : false);
+            if (files && files.length > 0) payload.append("files", files[0]);
+        }
 
         console.log("Submitting FormData →", Object.fromEntries(payload));
 
@@ -399,9 +486,64 @@ const AddStory = (props) => {
         });
     }
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (checkFileSize(file)) {
+            setFiles([file]);
+            uploadFile(file);
+        } else {
+            e.target.value = "";
+        }
+    };
+
+    const handleDrop = (filesTemp, request = null) => {
+        const file = filesTemp[0];
+        if (checkFileSize(file)) {
+            setFiles([file]);
+            uploadFile(file);
+        } else {
+            e.target.value = "";
+        }
+    };
+    
+    const uploadFile = async (file) => {
+        try {
+            setUploadedFiles(prev => [
+                ...prev,
+                {
+                    name: file.name,
+                    file: file,
+                    file_id: file.id,
+                    status: "YET TO START",
+                }
+            ]);
+            setErrors(prev => ({
+                ...prev,
+                file: null
+            }));
+        } catch (err) {
+            console.error("File upload error:", err);
+        }
+    };
+
+    const checkFileSize = (file) => {
+        if (!file) return;
+        const MAX_SIZE = 100 * 1024 * 1024; // 100 MB
+        if (file.size > MAX_SIZE) {
+            alert("File size exceeds 100 MB!");
+            return false;
+        }
+        return true;
+    };
+
+    const removeFile = (index) => {
+        setUploadedFiles(prev => prev.filter((_, idx) => idx !== index));
+        setFiles(prev => prev.filter((_, idx) => idx !== index));
+    }
+
     return (
          <React.Fragment>
-            <div className="p-10 bg-white max-w-5xl mx-auto mt-6 shadow-md rounded-md">
+            <div className="p-10 bg-white shadow-md rounded-md">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="">
                         <label htmlFor="exampleFormControlFile1" className="block mb-1 text-gray-700 font-medium">
@@ -476,29 +618,222 @@ const AddStory = (props) => {
                             onChange={handleChange}/>
                     </div>
                 </div>
+                {activeProjTab.id === 1 && <>
                 <div className="mt-6">
                     <label className="block mb-1 text-gray-700 font-medium">Headline
                         <span className="asterik-symbol">*</span>
                     </label>
                     <input type="text" name='headline'
+                        maxLength={500}
                         className="w-full border rounded-md px-4 py-2"
                         placeholder="Enter headline"
                         value={formData.headline}
                         onChange={handleChange} />
-                    {errors.headline && <small className="text-danger">{errors.headline}</small>}
-                </div>
-                <div className="mt-6">
-                    <label className="block mb-1 text-gray-700 font-medium">Body
-                        <span className="asterik-symbol">*</span>
+                    <div className='flex justify-between'>
+                        <span>
+                            {errors.headline && <small className="text-danger">{errors.headline}</small>}
+                        </span>
+                        <span className="add-subtitle-text-count">{`${formData.headline.length}/500`}</span>
+                    </div>
+                </div>                
+                    {subTitleItem && subTitleItem.map((item, index) => (
+                        <>
+                        <div className="mt-6 ">
+                            <label className="block mb-1 text-gray-700 font-medium">{`Subtitle ${index + 1}`}</label>
+                            <div className="relative">
+                                {subTitleItem.length > 1 && (
+                                    <button
+                                        type="button"
+                                        className="absolute top-2 right-2 text-[--grey-shade] w-6 h-6 flex items-center justify-center rounded-full text-sm hover:bg-[--maroon-light-one] hover:text-[--maroon]"
+                                        onClick={() => removeSubTitle(index)}
+                                        title="Remove"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M6.5 17C6.0875 17 5.73437 16.8531 5.44062 16.5594C5.14687 16.2656 5 15.9125 5 15.5V5.5H4.75C4.5375 5.5 4.35938 5.42854 4.21563 5.28563C4.07188 5.14271 4 4.96563 4 4.75438C4 4.54313 4.07188 4.36458 4.21563 4.21875C4.35938 4.07292 4.5375 4 4.75 4H8V3.75C8 3.5375 8.07188 3.35937 8.21563 3.21562C8.35938 3.07187 8.5375 3 8.75 3H11.25C11.4625 3 11.6406 3.07187 11.7844 3.21562C11.9281 3.35937 12 3.5375 12 3.75V4H15.25C15.4625 4 15.6406 4.07146 15.7844 4.21437C15.9281 4.35729 16 4.53437 16 4.74562C16 4.95687 15.9281 5.13542 15.7844 5.28125C15.6406 5.42708 15.4625 5.5 15.25 5.5H15V15.491C15 15.9137 14.8531 16.2708 14.5594 16.5625C14.2656 16.8542 13.9125 17 13.5 17H6.5ZM8.74563 14C8.95688 14 9.13542 13.9281 9.28125 13.7844C9.42708 13.6406 9.5 13.4625 9.5 13.25V7.75C9.5 7.5375 9.42854 7.35937 9.28562 7.21562C9.14271 7.07187 8.96562 7 8.75437 7C8.54313 7 8.36458 7.07187 8.21875 7.21562C8.07292 7.35937 8 7.5375 8 7.75V13.25C8 13.4625 8.07146 13.6406 8.21438 13.7844C8.35729 13.9281 8.53438 14 8.74563 14ZM11.2456 14C11.4569 14 11.6354 13.9281 11.7812 13.7844C11.9271 13.6406 12 13.4625 12 13.25V7.75C12 7.5375 11.9285 7.35937 11.7856 7.21562C11.6427 7.07187 11.4656 7 11.2544 7C11.0431 7 10.8646 7.07187 10.7188 7.21562C10.5729 7.35937 10.5 7.5375 10.5 7.75V13.25C10.5 13.4625 10.5715 13.6406 10.7144 13.7844C10.8573 13.9281 11.0344 14 11.2456 14Z"
+                                            fill="currentColor"/>
+                                        </svg>
+                                    </button>
+                                )}
+                                <input type="text" name='subTitleList'
+                                    className="w-full border rounded-md px-4 py-2"
+                                    placeholder="Type or paste a subtitle here"
+                                    value={subTitleList[index]}
+                                    maxLength={1000}
+                                    onChange={(e) => handleSubTitleChange(e, index)} />
+                                <div className='flex justify-between'>
+                                    <span>
+                                        {errors?.subTitleList && errors?.subTitleList[index]
+                                            && <small className="text-danger">{`Subtitle ${index + 1} is required`}</small>}
+                                    </span>
+                                    <span className="add-subtitle-text-count">{`${subTitleList[index].length}/1000`}</span>
+                                </div>
+                            </div>
+                        </div>
+                        </>
+                    ))}
+                    <div className="flex justify-between mt-6">
+                        <button className="add-subtitle-btn gap-[6px]" onClick={addSubTitle}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M15.8333 10.8334H10.8333V15.8334H9.16663V10.8334H4.16663V9.16675H9.16663V4.16675H10.8333V9.16675H15.8333V10.8334Z" fill="#0074D3"/>
+                            </svg>
+                            <span className="add-subtitle-btn-text">Add another subtitle</span>
+                        </button>
+                        <div></div>
+                    </div>
+                    <div className="mt-6">
+                        <label className="block mb-1 text-gray-700 font-medium">Body
+                            <span className="asterik-symbol">*</span>
+                        </label>
+                        <textarea name='body'
+                            maxLength={2000}
+                            className="w-full border rounded-md px-4 py-2 h-44"
+                            placeholder="Write your story here..."
+                            value={formData.body}
+                            onChange={handleChange}>
+                        </textarea>
+                        
+                        <div className='flex justify-between'>
+                            <span>
+                                {errors.body && <small className="text-danger">{errors.body}</small>}
+                            </span>
+                            <span className="add-subtitle-text-count">{`${formData.body.length}/20000`}</span>
+                        </div>
+                    </div>
+                    </>
+                }
+                {activeProjTab.id === 2 &&
+                <>
+                    <div className='mt-6'>
+                        <p class="upload-area-title">Upload file(s)<span class="asterik-symbol">*</span></p>
+                        <div className="story-file-upload">
+                            <div className="story-file-upload-container">
+                                <DragAndDrop handleDrop={handleDrop}>
+                                    <div className={files.length > 0 ? "button-wrap fileloaded h-25 button-wrap disabled-upload" : "button-wrap sa"} >
+                                        <div className="overall-draganddrop">
+                                            <div className="draganddrop-align">
+                                                <img className={files.length > 0  ? 'img' : ''}
+                                                    src={UploadFolder}
+                                                    alt="folder"
+                                                        height="38px"
+                                                    width="46px"
+                                                />
+                                                {/* {Object.keys(files).map((eachKey) => {
+                                                    return (
+                                                        <div key={eachKey + files[eachKey].name} className="file-name-list">
+                                                            <div className="filename">
+                                                                {
+                                                                    <img src={import.meta.env.PUBLIC_URL + "/assets/images/document.svg"} alt="document"/>
+                                                                }{" "}
+                                                                {files[eachKey].name}
+                                                            </div>
+                                                            <span data-file-index={eachKey} onClick={(e) => removeFile(e, eachKey)}>
+                                                                <i className="far fa-trash-alt"></i>
+                                                            </span>
+                                                        </div>
+                                                    );
+                                                })} */}
+                                                <div className="file-upload-align">
+                                                    <p className="upload-text">
+                                                        {'Drop your file here or'}{" "}
+                                                    </p>
+                                                    <div className="upload-link-wrapper">
+                                                        <label htmlFor="files">{'browse'}</label>
+                                                        <input
+                                                            ref={inputFileUploadRef}
+                                                            type="file"
+                                                            name="files"
+                                                            className="form-control-file"
+                                                            id="files"
+                                                            accept='.docx,.txt'
+                                                            onChange={handleFileChange}
+                                                            hidden
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="file-upload-instruction" style={{flexDirection:'column'}}>
+                                                <div className="supp-file-format">
+                                                    <span className="supported-file-tooltip">
+                                                        {'Supported file formats'}:
+                                                    </span>
+                                                    <span className="supported-file-tooltip"> TXT, DOCX</span>
+                                                </div>
+                                                <div className="file-upload_instruct-row">
+                                                    <span className="max-word-note">
+                                                        {'Recommended max words per file'}: <span>50,000</span>
+                                                    </span>
+                                                    <span className="max-file-note">
+                                                        {'Maximum size of a file'}: <span>100 mb</span> 
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </DragAndDrop>
+                                {uploadedFiles && uploadedFiles.length > 0 && 
+                                    <div className="file-list-container">
+                                        {uploadedFiles.map((item, index) => (
+                                            <div key={index} className="file-row">
+                                                <div className="file-name">{item.name}</div>
+                                                {/* <div className="file-status">
+                                                    {item.status === "YET TO START" && (
+                                                        <span className="status-start p-[140px]">YET TO START</span>
+                                                    )}
+                                                    {item.status === "IN PROCESS" && (
+                                                        <span className="status-progress"> IN PROGRESS</span>
+                                                    )}
+                                                    {item.status === "COMPLETED" && (
+                                                        <span className="status-completed">COMPLETED</span>
+                                                    )}
+                                                    {item.status === "FAILED" && (
+                                                        <span className="status-failed">FAILED</span>
+                                                    )}
+                                                </div> */}
+                                                <div className="file-actions">
+                                                    <button className="btn-analyze" onClick={() => removeFile(index)}>
+                                                        Remove
+                                                    </button>
+                                                    {/* {item.status === "YET TO START" && (
+                                                        <button className="btn-analyze" onClick={() => analyzeFile(index)}>
+                                                            Analyze
+                                                        </button>
+                                                    )}
+                                                    {item.status === "IN PROCESS" && (
+                                                        <div className="analyzing">
+                                                            <span className="loader"></span> Analyzing...
+                                                        </div>
+                                                    )}
+                                                    {item.status === "COMPLETED" && item.output && (
+                                                        <a href={item.output} target="_blank" className="btn-analyze">
+                                                            Download
+                                                        </a>
+                                                    )} */}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                }
+                            </div>
+                        {errors?.file && <small className="text-danger">{errors?.file}</small>}
+                        </div>
+                    </div>
+                    <label className={`flex items-center gap-2 cursor-pointer ${errors?.file ? 'mt-[12px]' : 'mt-[24px]'}`}>
+                        <input
+                            type="checkbox"
+                            checked={formData.preTranslate}
+                            onChange={(e) => {
+                                setFormData(prev => ({
+                                    ...prev,
+                                    preTranslate: e.target.checked,
+                                }));
+                            }}
+                            className="w-4 h-4 accent-blue-600 cursor-pointer"
+                        />
+                        <span className="text-gray-700">Pre-translate file</span>
                     </label>
-                    <textarea name='body'
-                        className="w-full border rounded-md px-4 py-2 h-44"
-                        placeholder="Write your story here..."
-                        value={formData.body}
-                        onChange={handleChange}>
-                    </textarea>
-                    {errors.body && <small className="text-danger">{errors.body}</small>}
-                </div>
+                </>
+                }
+
                 <div className="flex justify-end mt-6">
                     <button className="bg-[#0077C8] text-white px-6 py-2 rounded-md font-medium flex items-center gap-[6px]" onClick={handleSubmit}>
                         {isLoading && <ButtonLoader />}

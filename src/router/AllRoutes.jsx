@@ -17,7 +17,6 @@ import BIReport from '../federal-news/BIReport';
 import NewsProjects from '../federal-news/NewsProject';
 import { ErrorBoundary } from 'react-error-boundary';
 import PIBNewsProjects from '../PIB-news/PIBNewsProject';
-import PIBWorkspace from '../PIB-news/PIBWorkspace';
 // import SpellCheck from '../project-setup-components/spell-check/SpellCheck';
 
 // a function to retry loading a chunk to avoid chunk load error for out of date code
@@ -56,6 +55,8 @@ const Writter = lazy(() => lazyRetry(() => import('../ailaysa-writer/Writter')))
 // const Prompt = lazy(() => lazyRetry(() => import('../ailaysa-writer/prompt')));
 const WriterBlog = lazy(() => lazyRetry(() => import('../ailaysa-writer/WriterBlog')));
 const AilaysaProjects = lazy(() => lazyRetry(() => import('../vendor/ailaysa-projects/AilaysaProjects')));
+const PIBWorkspace = lazy(() => lazyRetry(() => import('../PIB-news/PIBWorkspace')));
+const PIBFileWorkspace = lazy(() => lazyRetry(() => import('../PIB-news/PIBFileWorkspace')));
 
 const AllRoutes = (props) => {
     const userDetails = useSelector((state) => state.userDetails.value);
@@ -143,6 +144,8 @@ const AllRoutes = (props) => {
                 <Route exact path="/news-workspace/:documentId" element={<Suspense fallback={<MainAILoader />}><FederalWorkspace /></Suspense>} />
                 <Route exact path="/pibnews-workspace" element={<Suspense fallback={<MainAILoader />}><PIBWorkspace /></Suspense>} />
                 <Route exact path="/pibnews-workspace/:documentId" element={<Suspense fallback={<MainAILoader />}><PIBWorkspace /></Suspense>} />
+                <Route exact path="/pibfile-workspace" element={<Suspense fallback={<MainAILoader />}><PIBFileWorkspace /></Suspense>} />
+                <Route exact path="/pibfile-workspace/:documentId" element={<Suspense fallback={<MainAILoader />}><PIBFileWorkspace /></Suspense>} />
                 <Route exact path="/chat" element={<Suspense fallback={<MainAILoader />}><Chat /></Suspense>} />
                 {/* <Route exact path="/glossary-workspace" element={<Suspense fallback={<MainAILoader />}><GlossaryWorkspace /></Suspense>} /> */}
                 <Route exact path="/writer-blog" element={<Suspense fallback={<MainAILoader />}><WriterBlog /></Suspense>} />

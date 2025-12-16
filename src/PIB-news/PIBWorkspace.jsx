@@ -1640,30 +1640,77 @@ const PIBWorkspace = (props) => {
     const createSegmentLikeJson = (responseTemp) => {
         // 'keywords description media->caption image_caption heading authorName story location tags story_summary'        
         let segmentData = [
-        {
-            "source": responseTemp?.source_json?.heading,
-            "target": responseTemp?.target_json?.heading,
-            "mt_raw": responseTemp?.mt_json?.[0]?.mt_raw_json?.heading,
-            "segment_count": 1,
-            'segment_id': 1,
-            type: "Headline"
-        },
-        (
-            (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "<p><br></p>" && 
-            (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "" &&  
-            (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== null
-        ) &&
-        {
-            "source": responseTemp?.source_json?.story,
-            "target": responseTemp?.target_json?.story,
-            "mt_raw": responseTemp?.mt_json?.[0]?.mt_raw_json?.story,
-            "segment_count": 1,
-            'segment_id': 2,
-            type: "Story"
-        },
-    ];
+            {
+                "source": responseTemp?.source_json?.heading,
+                "target": responseTemp?.target_json?.heading,
+                "mt_raw": responseTemp?.mt_json?.[0]?.mt_raw_json?.heading,
+                "segment_count": 1,
+                'segment_id': 1,
+                type: "Headline"
+            },
+            (
+                (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "<p><br></p>" && 
+                (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== "" &&  
+                (responseTemp.source_json !== undefined ? responseTemp.source_json.story : responseTemp.source_json?.story) !== null
+            ) &&
+            {
+                "source": responseTemp?.source_json?.story,
+                "target": responseTemp?.target_json?.story,
+                "mt_raw": responseTemp?.mt_json?.[0]?.mt_raw_json?.story,
+                "segment_count": 1,
+                'segment_id': 3,
+                type: "Story"
+            }
+        ];
+        const subheadingSegment = prepareSubheading(responseTemp);
+        if (subheadingSegment) {
+            segmentData.length > 1 ? segmentData.splice(1, 0, ...subheadingSegment) : segmentData.push(...subheadingSegment);
+        }
         return segmentData;
-    } 
+    }
+
+    const updateSegmentId = (segmentList) => {
+        return segmentList.map((segment, index) => {
+            return {
+                ...segment,
+                segment_id: index + 1
+            };
+        });
+    }
+
+    const prepareSubheading = (responseTemp) => {
+        if (responseTemp?.source_json?.sub_headlines && responseTemp?.source_json?.sub_headlines.length > 0) {
+            const subHeadingList = [];
+            let hIndex = 0;
+            let segmentId = 3;
+            responseTemp?.source_json?.sub_headlines.forEach((subHeading, index) => {
+                const subHeadlines = responseTemp?.target_json?.sub_headlines;
+                const rawSubHeadline = responseTemp?.mt_json?.[0]?.mt_raw_json?.sub_headlines;
+                if (subHeading) {
+                    Object.keys(subHeading).forEach(key => {
+                        const targetSubHeadline = getTargetSubHeadline(subHeadlines, index, key);
+                        const targetRawSubHeadline = getTargetSubHeadline(rawSubHeadline, index, key);
+                        subHeadingList.push({
+                            "source": subHeading[key],
+                            "target": targetSubHeadline,
+                            "mt_raw": targetRawSubHeadline,
+                            "segment_count": 1,
+                            'segment_id': ++segmentId,
+                            'subheadingClass': 'subHeading',
+                            type: `Subheading ${++hIndex}`
+                        });
+                    })
+                }
+            });
+            return subHeadingList.length > 0 ? subHeadingList : null;
+        }
+        return null;
+    }
+
+    const getTargetSubHeadline = (subHeadinlines, index, key) => {
+        if (subHeadinlines && subHeadinlines[index] && subHeadinlines[index]?.[key]) return subHeadinlines[index]?.[key];
+        return '';
+    }
 
     /* Get the docuement details by document id */
     const getDocumentDetailsById = (documentIdTemp) => {
@@ -4217,57 +4264,24 @@ const PIBWorkspace = (props) => {
             if(editorRef.current?.summernote("code") === translatedFullResponseref.current?.target_json?.story) return;
         }
         if(translatedFullResponseref.current != null){
-            // let translatedJson = {
-            //     "url":translatedFullResponseref.current?.target_json?.url,
-            //     "tags": document.querySelector('#workspace-textarea-4')?.innerText,
-            //     "media": translatedFullResponseref.current?.target_json?.media,
-            //     "story": editorRef.current?.summernote("code"),
-            //     "newsId": translatedFullResponseref.current?.target_json?.newsId,
-            //     "source": translatedFullResponseref.current?.target_json?.source,
-            //     "heading": document.querySelector('#workspace-textarea-1')?.innerText,
-            //     "is_open": translatedFullResponseref.current.target_json.is_open,
-            //     "is_paid": translatedFullResponseref.current.target_json.is_paid,
-            //     "mediaId":  translatedFullResponseref.current.target_json.mediaId,
-            //     "authorId": translatedFullResponseref.current.target_json.authorId,
-            //     "keywords": document.querySelector('#workspace-textarea-6')?.innerText,
-            //     "location": translatedFullResponseref.current.target_json.location,
-            //     "thumbUrl": translatedFullResponseref.current.target_json.thumbUrl,
-            //     "date_news": translatedFullResponseref.current.target_json.date_news,
-            //     "news_tags": translatedFullResponseref.current.target_json.news_tags,
-            //     "authorName":document.querySelector('#workspace-textarea-7')?.innerText,
-            //     "buzz_count": translatedFullResponseref.current.target_json.buzz_count,
-            //     "categories": translatedFullResponseref.current.target_json.categories,
-            //     "locationId": translatedFullResponseref.current.target_json.locationId,
-            //     "authorImage": translatedFullResponseref.current.target_json.authorImage,
-            //     "description": document.querySelector('#workspace-textarea-5')?.innerText,
-            //     "app_lite_url": translatedFullResponseref.current.target_json.app_lite_url,
-            //     "date_created": translatedFullResponseref.current.target_json.date_created,
-            //     "maincat_name": translatedFullResponseref.current.target_json.maincat_name,
-            //     "maincategory": translatedFullResponseref.current.target_json.maincategory,
-            //     "image_caption": document.querySelector('#workspace-textarea-2')?.innerText,
-            //     "is_live_article": translatedFullResponseref.current.target_json.is_live_article,
-            //     "article_template": translatedFullResponseref.current.target_json.article_template,
-            //     "show_authors_block": translatedFullResponseref.current.target_json.show_authors_block,
-            // 
-
+            const subheadingList = document.querySelectorAll('.subHeading');
+            let subheadlines = [];
+            subheadingList.forEach((subheading, index) => {
+                if (subheading.innerText) {
+                    subheadlines.push({[index]: subheading.innerHTML});
+                }
+            })
             let translatedJson = {
                 ...translatedFullResponseref.current?.target_json,
                 "heading": document.querySelector('#workspace-textarea-1')?.innerText,
-                // "image_caption": document.querySelector('#workspace-textarea-2')?.innerText,
                 "story": editorRef.current?.summernote("code"),
-                // "tags": document.querySelector('#workspace-textarea-4')?.innerText,
-                // "description": document.querySelector('#workspace-textarea-5')?.innerText,
-                // "keywords": document.querySelector('#workspace-textarea-6')?.innerText,
-                // "authorName": document.querySelector('#workspace-textarea-7')?.innerText,
-                // "story_summary": document.querySelector('#workspace-textarea-8')?.innerText,
-                // "location": document.querySelector('#workspace-textarea-9')?.innerText,
-                // "media": [
-                //     {
-                //         ...translatedFullResponseref.current.target_json.media[0],
-                //         "caption": document.querySelector('#workspace-textarea-10')?.innerText
-                //     }
-                // ]
             };
+            if (subheadlines && subheadlines.length) {
+                translatedJson = {
+                    ...translatedJson,
+                    sub_headlines: subheadlines
+                }
+            }
             let formData = new FormData();
             formData.append("target_json", JSON.stringify(translatedJson));
 
@@ -4940,7 +4954,7 @@ const PIBWorkspace = (props) => {
                                                                                     data-id={id}
                                                                                     data-source-text={translation.source}
                                                                                     id={"workspace-textarea-" + id}
-                                                                                    className={rightAlignLangs.current.indexOf(targetLanguage) != -1 ? "workspace-textarea align-right" : "workspace-textarea"}
+                                                                                    className={`${rightAlignLangs.current.indexOf(targetLanguage) != -1 ? "workspace-textarea align-right" : "workspace-textarea"} ${translation.subheadingClass ? translation.subheadingClass : ''}`}
                                                                                     style={targetLanguageFontSize != null ? { fontSize: targetLanguageFontSize } : {}}
                                                                                     spellCheck="false"
                                                                                     suppressContentEditableWarning={true}

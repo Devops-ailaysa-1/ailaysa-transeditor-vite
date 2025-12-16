@@ -410,8 +410,10 @@ const StoryList = (props) => {
         if (e) e.stopPropagation();
         inProgressProjectId.current = null;
         const open_as = 'editor';
+        const uriPath = selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload'
+            ? 'pibfile-workspace' : 'pibnews-workspace';
         setTimeout(() => {
-            history(`/pibnews-workspace/${selectedProjectFile.id}`, {state: {
+            history(`/${uriPath}/${selectedProjectFile.id}`, {state: {
                 prevPath: location.pathname + location.search,
                 open_as
             }});
@@ -462,7 +464,7 @@ const StoryList = (props) => {
             } else if (status.status == 'COMPLETED') {
                 updateActionBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Opening', 'ADD');
                 handleViewStoryClick(e, selectedProjectFile, type, 1500);
-            }
+            } else {handleViewStoryClick(e, selectedProjectFile, type);}
         }
     }
 
@@ -568,7 +570,7 @@ const StoryList = (props) => {
                 return file;
             })
         );
-    };
+    }
 
     /**
      * This method used to return the loader for the project list.
@@ -626,19 +628,33 @@ const StoryList = (props) => {
                                     : <KeyboardArrowDownIcon className="proj-list-arrow-down" />
                                 }
                             </span>
-                            <div className={"proj-title-list-container " + (project?.get_project_type === 4 ? "speech-proj" : "")}>
+                            <div className={"proj-title-list-container !ml-[15px]" + (project?.get_project_type === 4 ? "speech-proj" : "")}>
                                 <div className="proj-type-icon-wrap">
                                 </div>
-                                <div className="proj-list-info">
-                                    <div className="proj-information">
-                                        <Tooltip TransitionComponent={Zoom} title={project.project_name} placement="top" arrow>
-                                            <span className="file-edit-proj-txt-tmx">
-                                                {project.project_name}
-
+                                    <div className="proj-list-info pib-proj-list-info">
+                                        {project.story_creation_type === 'file_upload' && 
+                                            <span class="proj-type-icon translate-bg">
+                                                <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium proj-types css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="TranslateIcon">
+                                                    <path d="m12.87 15.07-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"></path>
+                                                </svg>
                                             </span>
-                                        </Tooltip>
+                                        }
+                                        <div>
+                                            <div className="proj-information gap-[5.3px]">
+                                                <Tooltip TransitionComponent={Zoom} title={project.project_name} placement="top" arrow>
+                                                    <span className="file-edit-proj-txt-tmx">
+                                                        {project.project_name}
+                                                    </span>
+                                                </Tooltip>
+                                                {project.story_creation_type === 'file_upload' && project?.project_analysis?.proj_word_count &&
+                                                    <span className='pib-word-badge'>{`${project?.project_analysis?.proj_word_count} W`}</span>
+                                                }
+                                            </div>
+                                            <div className="pib-priject-type-text">
+                                                <span>{project.story_creation_type === 'file_upload' ? 'File' : 'Text'}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                         <div className="file-edit-list-table-cell">
@@ -676,8 +692,20 @@ const StoryList = (props) => {
                                     <div className="file-edit-list-inner-table-row">
                                         <div className="file-edit-list-table-cell pl-0">
                                             <div className="file-edit-file-name-txt flex flex-col gap-[12px]">
-                                                <span className='pib-headline'>
-                                                    {selectedProjectFile?.pib_story_details?.headline}
+                                                <span className='pib-headline flex items-center gap-[8px]'>
+                                                    {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload' && 
+                                                        <div className="block">
+                                                            <span className="doc-icon">
+                                                                <img src={`${Config.BASE_URL}/app/extension-image/${selectedProjectFile?.filename?.split(".")?.pop()}`} alt="doc-icon" />
+                                                            </span>
+                                                        </div>
+                                                    }
+                                                    {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload'
+                                                        ? selectedProjectFile?.filename
+                                                        : selectedProjectFile?.pib_story_details?.headline}
+                                                    {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload' && selectedProjectFile?.task_word_count &&
+                                                        <span className='pib-word-badge'>{`${selectedProjectFile?.task_word_count} W`}</span>
+                                                    }
                                                 </span>
                                                 {selectedProjectFile?.pib_story_details?.ministry_department && 
                                                     <span className='pib-ministry-badge'>{selectedProjectFile?.pib_story_details?.ministry_department}</span>
@@ -696,7 +724,9 @@ const StoryList = (props) => {
                                         <div className="file-edit-list-table-cell">
                                             <div className="pib-project-list-action-wrap">
                                                 <button type="button" className="workspace-files-OpenProjectButton flex items-center justify-center gap-[6px]"
-                                                    onClick={() => handleBtnAction(null, selectedProjectFile, "tar")}>
+                                                    onClick={() => handleBtnAction(null, selectedProjectFile, "tar")}
+                                                    // disabled={selectedProjectFile?.pib_story_details?.status === 'FAILED'}
+                                                    >
                                                     {selectedProjectFile && selectedProjectFile.openBtnLoading && <ButtonLoader />}
                                                     <span className="fileopen-new-btn">
                                                         {selectedProjectFile && selectedProjectFile.openBtnLabel

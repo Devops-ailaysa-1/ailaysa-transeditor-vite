@@ -27,6 +27,21 @@ const PIBNewsProjects = () => {
     const { t } = useTranslation();
     const history = useNavigate();
     const dispatch = useDispatch();
+
+    const addStoryTabList = [{
+        id: 1,
+        name: 'Test',
+        code: 'text_input',
+        link: '/text',
+        isEnabled: true
+    }, {
+        id: 2,
+        name: 'File',
+        code: 'file_upload',
+        link: '/file',
+        isEnabled: true
+    }];
+
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
     const userDetails = useSelector((state) => state.userDetails.value);
     const internelMemberEditor = userDetails?.internal_member_team_detail?.role === 'Editor';
@@ -42,6 +57,7 @@ const PIBNewsProjects = () => {
     const mainContainerRef = useRef(null);  
     const isIncompleteEditorSettings = useSelector((state) => state.editorSettingStatus.value);
     const BeaconComponent = React.forwardRef((props, ref) => <div ref={ref} className="d-none"></div>);
+    const [activeAddStoryTab, setActiveAddStoryTab] = useState(addStoryTabList[0]);
 
     const targetLanguageOptionsRef = useRef([]);
     
@@ -181,6 +197,10 @@ const PIBNewsProjects = () => {
         history(tab.link + '?page=1');
     }
 
+    const onAddStoryTabChange = (tab) => {
+        setActiveAddStoryTab(tab);
+    }
+
     return (
         <React.Fragment>
             <Navbar showHowToTour={showHowToTour} showTourOption={activeTab == 1} />
@@ -200,6 +220,19 @@ const PIBNewsProjects = () => {
                                 )))}
                             </div>
                         </div>
+                        {activeProjTab === 3 && 
+                            <div className="projects-list-wrap-header mt-[26px]">
+                                <div className="project-setup-tabs">
+                                    <div className='flex add-story-nav'>
+                                        {addStoryTabList.map(tab => (tab.isEnabled && (
+                                            <div className={"add-story-nav-item " + (activeAddStoryTab.id == tab.id ? 'active' : '')} onClick={() => onAddStoryTabChange(tab)}>
+                                                <span className='add-story-nav-text'>{tab.name}</span>
+                                            </div>
+                                        )))}
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
                 <TabContent className="setup-container" activeTab={activeProjTab}>
@@ -213,12 +246,15 @@ const PIBNewsProjects = () => {
                         </TabPane>
                     )}
                     {activeProjTab === 3 && (
+                        <>
                         <TabPane tabId={3}>
                             <AddStory 
                                 languageOptions= {languageOptions}
                                 ministryDepartmentOptions = {ministryDepartmentList}
+                                activeProjTab={activeAddStoryTab}
                             />
                         </TabPane>
+                        </>
                     )}
                 </TabContent>
             </section>

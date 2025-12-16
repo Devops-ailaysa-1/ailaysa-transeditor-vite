@@ -1000,7 +1000,22 @@ function Navbar(props) {
     const isProjectLogo = () => !(props.isWhite || props.istranseditor || props.istranslator || isAiChatBook);
 
     const checkIsPIBUserPath = () => {
-        return (window.location.pathname.includes("/my-stories") || window.location.pathname.includes("/add-stories")) && isPIBNews;
+        return (window.location.pathname.includes("/my-stories")
+            || window.location.pathname.includes("/add-stories")
+            || window.location.pathname.includes('/workspace')
+            || window.location.pathname.includes('/pibnews-workspace')
+            || window.location.pathname.includes('/pibfile-workspace'))
+            && isPIBNews;
+    }
+
+    /**
+     * This method used to redirect to the news project again if the user in the standard project view.
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 12 DEC 2025
+     */
+    const handleNavigation = () => {
+       history('/my-stories?page=1');
     }
 
     return (
@@ -1096,6 +1111,15 @@ function Navbar(props) {
                             </div>
                         }
                         <div className="right-align-links">
+                            {(!checkIsPIBUserPath() && isPIBNews )&&
+                                <>
+                                    <ul className="nav-project-txt-align mr-[34px]">
+                                        <li className="nav-item active project-doc-name">
+                                            <button className="open-press-release-btn" onClick={handleNavigation}>Open Press releases</button>
+                                        </li>
+                                    </ul>
+                                </>
+                            }                            
                             <ul className="nav-project-txt-align">
                                 <li className="nav-item active project-doc-name">
                                     {(props.glossaryProjectName !== "" && props.termdownload) &&
