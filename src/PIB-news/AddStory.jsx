@@ -776,7 +776,7 @@ const AddStory = (props) => {
                                                         {'Maximum size of a file'}: <span>500 mb</span> 
                                                     </span>
                                                     <span className="max-file-note">
-                                                        {'Maximum file per project'}: <span>1</span> 
+                                                        {t("limit_for_file_upload")}: <span>1 file upload</span> 
                                                     </span>
                                                 </div>
                                             </div>
