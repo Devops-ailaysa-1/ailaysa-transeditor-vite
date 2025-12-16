@@ -227,7 +227,8 @@ const AddStory = (props) => {
             ministry_department: "",
             dateline: "",
             headline: "",
-            body: ""
+            body: "",
+            preTranslate: false
         });
     }
 
@@ -456,10 +457,11 @@ const AddStory = (props) => {
      * @author Padmabharathi Subiramanian
      * @since 26 Nov 2025
      */
-    const handleDepartmentChange = (selected) => {
+    const handleDepartmentChange = (selectedDept) => {
+        setSelectedDepartment(selectedDept);
         setFormData(prev => ({
             ...prev,
-            ministry_department: selected?.value || ""
+            ministry_department: selectedDept?.value || ""
         }));
     };
 
@@ -538,7 +540,7 @@ const AddStory = (props) => {
 
     const checkFileSize = (file) => {
         if (!file) return;
-        const MAX_SIZE = 500 * 1024 * 1024; 
+        const MAX_SIZE = 100 * 1024 * 1024; 
         if (file.size > MAX_SIZE) {
             alert("File size exceeds 500 MB!");
             return false;
@@ -773,7 +775,7 @@ const AddStory = (props) => {
                                                         {'Recommended max words per file'}: <span>50,000</span>
                                                     </span> */}
                                                     <span className="max-file-size-note ">
-                                                        {'Maximum size of a file'}: <span>500 mb</span> 
+                                                        {'Maximum size of a file'}: <span>100 mb</span> 
                                                     </span>
                                                     <span className="max-file-note">
                                                         {t("limit_for_file_upload")}: <span>1 file upload</span> 
@@ -830,20 +832,26 @@ const AddStory = (props) => {
                         {errors?.file && <small className="text-danger">{errors?.file}</small>}
                         </div>
                     </div>
-                    <label className={`flex items-center gap-2 cursor-pointer ${errors?.file ? 'mt-[12px]' : 'mt-[24px]'}`}>
-                        <input
-                            type="checkbox"
-                            checked={formData.preTranslate}
-                            onChange={(e) => {
-                                setFormData(prev => ({
-                                    ...prev,
-                                    preTranslate: e.target.checked,
-                                }));
-                            }}
-                            className="w-4 h-4 accent-blue-600 cursor-pointer"
-                        />
-                        <span className="text-gray-700">Pre-translate file</span>
-                    </label>
+                    <div className={`flex items-center gap-2 ${errors?.file ? 'mt-[12px]' : 'mt-[24px]'}`}>
+                        {/* <label
+                            htmlFor="check-pre-translate"
+                            className="flex items-center gap-2 cursor-pointer"
+                        > */}
+                            <input
+                                id="check-pre-translate"
+                                type="checkbox"
+                                checked={formData.preTranslate}
+                                onChange={(e) => {
+                                    setFormData(prev => ({
+                                        ...prev,
+                                        preTranslate: e.target.checked,
+                                    }));
+                                }}
+                                className="w-4 h-4 accent-blue-600 cursor-pointer"
+                            />
+                            <span className="text-gray-700">Pre-translate file</span>
+                        {/* </label> */}
+                    </div>
                 </>
                 }
 

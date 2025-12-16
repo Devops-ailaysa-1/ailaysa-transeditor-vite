@@ -658,7 +658,6 @@ function PIBFileWorkspace(props) {
             } // If laguage data or document id is not present, redirect to file-upload page
             else history("/file-upload");
             makeSegmentStatusOptions();
-            getSavedPageSize();
             // history.listen((location, action) => {
             //     removeIMESuggestion();
             //     /* if (enableIME) {
@@ -1464,7 +1463,7 @@ function PIBFileWorkspace(props) {
         if (didMount) {
             if (lastCalledArgs.current.functionName == "findStatusChange") {
                 let pageParam = URL_SEARCH_PARAMS.get("page");
-                let url = `/workspace/${documentId}?page=1`
+                let url = `/pibfile-workspace/${documentId}?page=1`
                 // if (pageParam != 0 && pageParam != null) url += `?page=1`;
                 if (findStatus?.length !== 0) {
                     history(url + "&status=" + findStatus.toString());
@@ -1558,7 +1557,7 @@ function PIBFileWorkspace(props) {
             if (statusParam == null || statusParam == undefined) {
                 if (pageSizeFromApi.current != selectedPageSize?.value) {
                     saveCustomPageSize(selectedPageSize?.value);
-                    let url = `/workspace/${documentId}?page=${1}`;
+                    let url = `/pibfile-workspace/${documentId}?page=${1}`;
                     let pageParam = URL_SEARCH_PARAMS.get("page");
                     if (pageParam != 1) {
                         history(url);
@@ -2053,6 +2052,7 @@ function PIBFileWorkspace(props) {
                     setShowCreditAlert(true);
                     setShowCreditAlertRedirection(false);
                 }
+                getSavedPageSize();
                 docCreditCheckAlertRef.current = responseTemp.doc_credit_check_open_alert;
                 isAssignEnableRef.current = responseTemp.assign_enable;
                 setIsAssignEnable(responseTemp.assign_enable);
@@ -3485,7 +3485,7 @@ function PIBFileWorkspace(props) {
                 workspaceContainer.scroll({ top: 0, behavior: 'smooth' });
             }
         }, 10);
-        let url = `/workspace/${documentId}`
+        let url = `/pibfile-workspace/${documentId}`
         if (page != 0 && page != null) url += `?page=${page}`;
         else url += `?page=1`
         let statusParam = URL_SEARCH_PARAMS.get("status");
@@ -3508,7 +3508,7 @@ function PIBFileWorkspace(props) {
         if (totalPages != 0) {
             // let findParams = "";
             // if (findStatus.length) findParams += "&status=" + findStatus.toString();
-            let url = "/workspace/" + documentId + "?page=";
+            let url = "/pibfile-workspace/" + documentId + "?page=";
             /*Pagination logic starts*/
             if (page > 1)
                 content.push(
@@ -5368,7 +5368,7 @@ function PIBFileWorkspace(props) {
 
     const getSavedPageSize = () => {
         Config.axios({
-            url: Config.BASE_URL + "/workspace_okapi/page_size/",
+            url: `${Config.BASE_URL}/workspace_okapi/page_size/?task_id=${documentDetailsRef?.current?.task_id}`,
             auth: true,
             success: (response) => {
                 if (response.data.page_size != null) {
@@ -6805,7 +6805,6 @@ function PIBFileWorkspace(props) {
                 showTaskAssignActionBtn={showTaskAssignActionBtn}
                 setShowTaskAssignActionBtn={setShowTaskAssignActionBtn}
                 check_is_adaptive={check_is_adaptive}
-                isPIBWorkspace={true}
             />
             {
                 showAiLoader && <MainAILoader background={"#ffffffba"} />

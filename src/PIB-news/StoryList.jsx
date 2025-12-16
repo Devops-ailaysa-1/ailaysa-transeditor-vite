@@ -112,7 +112,7 @@ const StoryList = (props) => {
                 setFileListLoading(false);
                 const {data} = response;
                 setSelectedProjectFiles(updateFileStatus(data) || []);
-                if (anyPending(data)) {
+                if (!anyFileUpload(data) && anyPending(data)) {
                     inProgressProjectId.current = projectId;
                     progressTask(projectId, getPendingTask(data));
                 }
@@ -128,7 +128,7 @@ const StoryList = (props) => {
     const updateFileStatus = (files) => {
         return files.map(file => {
             if (FILE_STATUS_MAP[file?.pib_story_details?.status]) {
-                const status = FILE_STATUS_MAP[file?.pib_story_details?.status];
+                const status = isFileUpload(file) ? {} : FILE_STATUS_MAP[file?.pib_story_details?.status];
                 return {
                     ...file,
                     openBtnLabel: status?.btnLabel || null,
@@ -406,19 +406,49 @@ const StoryList = (props) => {
      * @auhtor Padmabharathi Subiramanian 
      * @since 26 Nov 2025
      */
-    const handleViewStoryClick = (e, selectedProjectFile, type, timeOut = 500) => {
+    const handleViewStoryClick = async (e, selectedProjectFile, type, timeOut = 500) => {
         if (e) e.stopPropagation();
         inProgressProjectId.current = null;
         const open_as = 'editor';
-        const uriPath = selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload'
-            ? 'pibfile-workspace' : 'pibnews-workspace';
-        const resourceId = selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload' ? selectedProjectFile?.document : selectedProjectFile?.id;
+        let uriPath = `pibnews-workspace/${selectedProjectFile?.id}`;
+        if (selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload') {
+            uriPath = 'pibfile-workspace/';
+            if (selectedProjectFile?.document)
+                uriPath += selectedProjectFile?.document;
+            else
+                uriPath += await getDocumentId(selectedProjectFile);
+            uriPath += '?page=1'
+        }
         setTimeout(() => {
-            history(`/${uriPath}/${resourceId}`, {state: {
+            history(`/${uriPath}`, {state: {
                 prevPath: location.pathname + location.search,
                 open_as
             }});
         }, timeOut);
+    }
+
+    const getDocumentId = async (selectedProjectFile) => {
+        return new Promise((resolve, reject) => {
+            Config.axios({
+                url: `${Config.BASE_URL}${selectedProjectFile.document_url}`,
+                method: 'GET',
+                auth: true,
+                success: (response) => {
+                    const result = response.data;
+                    if (result) {
+                        resolve(result.document_id);
+                    }
+                },
+                error: (err) => {
+                    console.error(err);
+                    if(err?.response?.status === 500) {
+                        Config.toast("Something went wrong", "error");
+                    }else  {
+                        reject(err);
+                    }
+                }
+            });
+        })
     }
 
     const updateDownloadBtnState = (taskId, btnLabel, action = 'remove') => {
@@ -452,6 +482,14 @@ const StoryList = (props) => {
     }
 
     const handleBtnAction = (e, selectedProjectFile, type) => {
+        if (selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload') {
+            handleViewStoryClick(e, selectedProjectFile, type);
+        } else {
+            handleTestUpload(e, selectedProjectFile, type);
+        }
+    }
+
+    const handleTestUpload = (e, selectedProjectFile, type) => {
         if (FILE_STATUS_MAP[selectedProjectFile?.pib_story_details?.status]) {
             const status = FILE_STATUS_MAP[selectedProjectFile?.pib_story_details?.status];
             if (status.status == 'In_Progress') {
@@ -465,7 +503,7 @@ const StoryList = (props) => {
             } else if (status.status == 'COMPLETED') {
                 updateActionBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Opening', 'ADD');
                 handleViewStoryClick(e, selectedProjectFile, type, 1500);
-            } else {handleViewStoryClick(e, selectedProjectFile, type);}
+            }
         }
     }
 
@@ -545,6 +583,8 @@ const StoryList = (props) => {
         if (item?.pib_story_details?.status == "In_Progress") return item;
     });
     const isCompleted = (task) => task.status == "COMPLETED" || task.status == "FAILED";
+    const isFileUpload = (file) => file?.pib_story_details && file?.pib_story_details?.story_creation_type == 'file_upload';
+    const anyFileUpload = (result) => result.some(file => file?.pib_story_details && file?.pib_story_details?.story_creation_type == 'file_upload');
 
     const updateTaskStatus = (result) => {
         setSelectedProjectFiles(prev =>
@@ -726,7 +766,7 @@ const StoryList = (props) => {
                                             <div className="pib-project-list-action-wrap">
                                                 <button type="button" className="workspace-files-OpenProjectButton flex items-center justify-center gap-[6px]"
                                                     onClick={() => handleBtnAction(null, selectedProjectFile, "tar")}
-                                                    // disabled={selectedProjectFile?.pib_story_details?.status === 'FAILED'}
+                                                    disabled={selectedProjectFile?.pib_story_details?.status === 'FAILED'}
                                                     >
                                                     {selectedProjectFile && selectedProjectFile.openBtnLoading && <ButtonLoader />}
                                                     <span className="fileopen-new-btn">
