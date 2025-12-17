@@ -14,6 +14,11 @@ import { ButtonLoader } from '../loader/CommonBtnLoader';
 import { useSelector } from 'react-redux';
 import DragAndDrop from '../vendor/DragandDrop';
 import UploadFolder from "./../assets/images/new-ui-icons/upload-folder.svg";
+import CloseBlack from "./../assets/images/new-ui-icons/close_black.svg";
+
+const HEADING_MAX_LENGTH = 500;
+const SUBHEADING_MAX_LENGTH = 1000;
+const SUMMERY_MAX_LENGTH = 20000;
 
 const AddStory = (props) => {
     const {languageOptions, ministryDepartmentOptions, activeProjTab } = props;
@@ -178,7 +183,7 @@ const AddStory = (props) => {
      */
     const handleChange = (e) => {
         let { name, value } = e.target;
-        if (name == 'body' && value.length > 20000) value = value.slice(0, 20000);
+        if (name == 'body' && value.length > SUMMERY_MAX_LENGTH) value = value.slice(0, SUMMERY_MAX_LENGTH);
         updateError(name);
         setFormData({
             ...formData,
@@ -188,9 +193,7 @@ const AddStory = (props) => {
 
     const handleSubTitleChange = (e, index) => {
         let { value } = e.target;
-
-        if (value.length > 1000) value = value.slice(0, 1000);
-
+        if (value.length > SUBHEADING_MAX_LENGTH) value = value.slice(0, SUBHEADING_MAX_LENGTH);
         setSubTitleList(prev =>
             prev.map((item, idx) => (idx === index ? value : item))
         );
@@ -298,7 +301,6 @@ const AddStory = (props) => {
         if (!validate()) return;
 
         const payload = new FormData();
-
         payload.append("story_creation_type", activeProjTab.code);
         payload.append("source_language", formData.source_language);
         payload.append("target_languages", formData.target_language);
@@ -314,9 +316,6 @@ const AddStory = (props) => {
             payload.append("pre_translate", formData.preTranslate ? formData.preTranslate : false);
             if (files && files.length > 0) payload.append("files", files[0]);
         }
-
-        console.log("Submitting FormData →", Object.fromEntries(payload));
-
         if (payload) sumbit(payload);
     };
 
@@ -434,7 +433,6 @@ const AddStory = (props) => {
         menuList: (base) => ({
             ...base,
             // height: "100px",
-
             "::-webkit-scrollbar": {
                 width: "8px"
             },
@@ -446,7 +444,6 @@ const AddStory = (props) => {
                 border: "8px solid #DADDE0 !important",
                 borderRadius: "50px",
             },
-
         }),
     };
 
@@ -476,7 +473,7 @@ const AddStory = (props) => {
             history(`/my-stories${location.search ? location.search : ''}`);
         }, 500);
     }
-    
+
     const handleViewStoryClick = (selectedProjectFile, type) => {
         if (!selectedProjectFile) return;
         const open_as = 'editor';
@@ -587,11 +584,8 @@ const AddStory = (props) => {
                                 }}
                                 title={`${targetLanguageListTooltip}`} placement="top"
                             >
-                                <div
-                                    style={{ opacity: (sourceLanguage === '' ? 0.5 : 1) }}
-                                    className="ai-lang-select"
-                                    onClick={() => { sourceLanguage !== '' ? setshowTarLangModal(true) : focusSourceLangDiv() }}
-                                >
+                                <div style={{ opacity: (sourceLanguage === '' ? 0.5 : 1) }}
+                                    className="ai-lang-select" onClick={() => { sourceLanguage !== '' ? setshowTarLangModal(true) : focusSourceLangDiv() }} >
                                     {targetLanguage == "" ? (
                                         <span className="placeholder">
                                             {t("select_target_language-1")}
@@ -601,10 +595,7 @@ const AddStory = (props) => {
                                             {targetLanguage[0].language}
                                         </span>
                                     )}
-                                    <i
-                                        style={{ color: "#8c8c8c" }}
-                                        className="fas fa-caret-down"
-                                    />
+                                    <i style={{ color: "#8c8c8c" }} className="fas fa-caret-down" />
                                 </div>
                             </Tooltip>
                             {errors.target && <small className="text-danger">{t("select_a_target_language")}</small>}
@@ -623,11 +614,8 @@ const AddStory = (props) => {
                     </div>
                     <div>
                         <label className="block mb-1 text-gray-700 font-medium">Dateline</label>
-                        <input type="text" name="dateline"
-                            placeholder="Enter dateline"
-                            className="w-full border rounded-md px-4 py-2"
-                            value={formData.dateline}
-                            onChange={handleChange}/>
+                        <input type="text" name="dateline" placeholder="Enter dateline" className="w-full border rounded-md px-4 py-2"
+                            value={formData.dateline} onChange={handleChange}/>
                     </div>
                 </div>
                 {activeProjTab.id === 1 && <>
@@ -636,7 +624,7 @@ const AddStory = (props) => {
                         <span className="asterik-symbol">*</span>
                     </label>
                     <input type="text" name='headline'
-                        maxLength={500}
+                        maxLength={HEADING_MAX_LENGTH}
                         className="w-full border rounded-md px-4 py-2"
                         placeholder="Enter headline"
                         value={formData.headline}
@@ -645,7 +633,7 @@ const AddStory = (props) => {
                         <span>
                             {errors.headline && <small className="text-danger">{errors.headline}</small>}
                         </span>
-                        <span className="add-subtitle-text-count">{`${formData.headline.length}/500`}</span>
+                        <span className="add-subtitle-text-count">{`${formData.headline.length}/${HEADING_MAX_LENGTH}`}</span>
                     </div>
                 </div>                
                     {subTitleItem && subTitleItem.map((item, index) => (
@@ -670,14 +658,14 @@ const AddStory = (props) => {
                                     className="w-full border rounded-md px-4 py-2"
                                     placeholder="Type or paste a subtitle here"
                                     value={subTitleList[index]}
-                                    maxLength={1000}
+                                    maxLength={SUBHEADING_MAX_LENGTH}
                                     onChange={(e) => handleSubTitleChange(e, index)} />
                                 <div className='flex justify-between'>
                                     <span>
                                         {errors?.subTitleList && errors?.subTitleList[index]
                                             && <small className="text-danger">{`Subtitle ${index + 1} is required`}</small>}
                                     </span>
-                                    <span className="add-subtitle-text-count">{`${subTitleList[index].length}/1000`}</span>
+                                    <span className="add-subtitle-text-count">{`${subTitleList[index].length}/${SUBHEADING_MAX_LENGTH}`}</span>
                                 </div>
                             </div>
                         </div>
@@ -697,18 +685,17 @@ const AddStory = (props) => {
                             <span className="asterik-symbol">*</span>
                         </label>
                         <textarea name='body'
-                            maxLength={2000}
+                            maxLength={SUMMERY_MAX_LENGTH}
                             className="w-full border rounded-md px-4 py-2 h-44"
                             placeholder="Write your story here..."
                             value={formData.body}
                             onChange={handleChange}>
-                        </textarea>
-                        
+                        </textarea>                        
                         <div className='flex justify-between'>
                             <span>
                                 {errors.body && <small className="text-danger">{errors.body}</small>}
                             </span>
-                            <span className="add-subtitle-text-count">{`${formData.body.length}/20000`}</span>
+                            <span className="add-subtitle-text-count">{`${formData.body.length}/${SUMMERY_MAX_LENGTH}`}</span>
                         </div>
                     </div>
                     </>
@@ -726,7 +713,7 @@ const AddStory = (props) => {
                                                 <img className={files.length > 0  ? 'img' : ''}
                                                     src={UploadFolder}
                                                     alt="folder"
-                                                        height="38px"
+                                                    height="38px"
                                                     width="46px"
                                                 />
                                                 {/* {Object.keys(files).map((eachKey) => {
@@ -789,40 +776,17 @@ const AddStory = (props) => {
                                     <div className="file-list-container">
                                         {uploadedFiles.map((item, index) => (
                                             <div key={index} className="file-row">
-                                                <div className="file-name">{item.name}</div>
-                                                {/* <div className="file-status">
-                                                    {item.status === "YET TO START" && (
-                                                        <span className="status-start p-[140px]">YET TO START</span>
-                                                    )}
-                                                    {item.status === "IN PROCESS" && (
-                                                        <span className="status-progress"> IN PROGRESS</span>
-                                                    )}
-                                                    {item.status === "COMPLETED" && (
-                                                        <span className="status-completed">COMPLETED</span>
-                                                    )}
-                                                    {item.status === "FAILED" && (
-                                                        <span className="status-failed">FAILED</span>
-                                                    )}
-                                                </div> */}
+                                                <div className="file-name">
+                                                    <div className="block">
+                                                        <span className="doc-icon">
+                                                            <img src={`${Config.BASE_URL}/app/extension-image/${item?.name?.split(".")?.pop()}`} alt="doc-icon" />
+                                                        </span>
+                                                    </div>
+                                                    {item.name}</div>
                                                 <div className="file-actions">
                                                     <button className="btn-analyze" onClick={() => removeFile(index)}>
-                                                        Remove
+                                                        <img src={CloseBlack} alt="delete" />
                                                     </button>
-                                                    {/* {item.status === "YET TO START" && (
-                                                        <button className="btn-analyze" onClick={() => analyzeFile(index)}>
-                                                            Analyze
-                                                        </button>
-                                                    )}
-                                                    {item.status === "IN PROCESS" && (
-                                                        <div className="analyzing">
-                                                            <span className="loader"></span> Analyzing...
-                                                        </div>
-                                                    )}
-                                                    {item.status === "COMPLETED" && item.output && (
-                                                        <a href={item.output} target="_blank" className="btn-analyze">
-                                                            Download
-                                                        </a>
-                                                    )} */}
                                                 </div>
                                             </div>
                                         ))}
@@ -854,7 +818,6 @@ const AddStory = (props) => {
                     </div>
                 </>
                 }
-
                 <div className="flex justify-end mt-6">
                     <button className="bg-[#0077C8] text-white px-6 py-2 rounded-md font-medium flex items-center gap-[6px]" onClick={handleSubmit}>
                         {isLoading && <ButtonLoader />}

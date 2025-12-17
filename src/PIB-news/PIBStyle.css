@@ -420,15 +420,16 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    padding: 12px 0px;
+    border-bottom: 1px solid #e5e7eb;
     background: #ffffff;
     margin-bottom: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 /* File name */
 .file-name {
+    display: flex !important;
+    align-items: center;
+    gap: 9px;
     font-size: 15px;
     font-weight: 600;
     color: #222;
@@ -448,18 +449,26 @@ button {
 .file-actions {
     width: 20%;
     text-align: right;
+    display: flex;
+    justify-content: end;
 }
 .btn-analyze {
     padding: 8px 12px;
-    background: #2563eb;
+    background: #FFF;
     color: #fff;
-    border-radius: 6px;
+    border-radius: 50%;
     border: none;
     cursor: pointer;
     font-size: 13px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
 }
 .btn-analyze:hover {
-    background: #1d4ed8;
+    background: #ececec !important;
     color: #FFF;
 }
 /* Status colors */

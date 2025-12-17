@@ -1001,8 +1001,21 @@ function Navbar(props) {
 
     const checkIsPIBUserPath = () => {
         return (window.location.pathname.includes("/my-stories")
+            || window.location.pathname.includes("/add-stories"))
+            && isPIBNews;
+    }
+
+    const hidePressBtnPIBUserPath = () => {
+        return (window.location.pathname.includes("/my-stories")
             || window.location.pathname.includes("/add-stories")
             || window.location.pathname.includes('/workspace')
+            || window.location.pathname.includes('/pibnews-workspace')
+            || window.location.pathname.includes('/pibfile-workspace'))
+            && isPIBNews;
+    }
+
+    const hideViewMoreIsPIBUserPath = () => {
+        return (window.location.pathname.includes('/workspace')
             || window.location.pathname.includes('/pibnews-workspace')
             || window.location.pathname.includes('/pibfile-workspace'))
             && isPIBNews;
@@ -1111,7 +1124,7 @@ function Navbar(props) {
                             </div>
                         }
                         <div className="right-align-links">
-                            {(!checkIsPIBUserPath() && isPIBNews )&&
+                            {(!hidePressBtnPIBUserPath() && isPIBNews )&&
                                 <>
                                     <ul className="nav-project-txt-align mr-[34px]">
                                         <li className="nav-item active project-doc-name">
@@ -1613,7 +1626,7 @@ function Navbar(props) {
                                         </div>
                                     </li>
                                 )}
-                                {isPIBNews && checkIsPIBUserPath() && <li className="nav-item pib-view-more-item active">
+                                {isPIBNews && !hideViewMoreIsPIBUserPath() && <li className="nav-item pib-view-more-item active">
                                     <Tooltip title={'View other apps'} arrow placement="bottom">
                                         <Link className="pib-view-more-nav"
                                             to={navigateURL}
