@@ -233,6 +233,7 @@ const AddStory = (props) => {
             body: "",
             preTranslate: false
         });
+        inputFileUploadRef.current.value = '';
     }
 
     /**
@@ -548,6 +549,7 @@ const AddStory = (props) => {
     const removeFile = (index) => {
         setUploadedFiles(prev => prev.filter((_, idx) => idx !== index));
         setFiles(prev => prev.filter((_, idx) => idx !== index));
+        inputFileUploadRef.current.value = '';
     }
 
     return (
