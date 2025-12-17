@@ -233,7 +233,7 @@ const AddStory = (props) => {
             body: "",
             preTranslate: false
         });
-        inputFileUploadRef.current.value = '';
+        inputFileUploadRef.current?.value = '';
     }
 
     /**
