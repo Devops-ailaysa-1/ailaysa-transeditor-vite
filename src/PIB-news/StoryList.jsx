@@ -338,8 +338,13 @@ const StoryList = (props) => {
      */
     const handleFileDownload = async(selectedProjectFile)  => {
         updateDownloadBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Downloading', 'ADD');
-        let url = Config.BASE_URL + "/workspace_okapi/download_pib_file/" + `?task_id=${selectedProjectFile.id}`;
-        url = url + "&output_type=" + 'ORIGINAL';
+        let url;
+        if(selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload') {
+            url = Config.BASE_URL + "/workspace_okapi/document/to/file/" + `${selectedProjectFile.document}?output_type=ORIGINAL`; 
+                        
+        }else {
+            url = Config.BASE_URL + "/workspace_okapi/download_pib_file/" + `?task_id=${selectedProjectFile.id}&output_type=ORIGINAL`;
+        }        
         setTimeout(async () => {
             const response = await downloadDifferentFile(url);
             if (response !== undefined) {
@@ -726,7 +731,7 @@ const StoryList = (props) => {
                                             {targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}
                                         </span>
                                         <img src={BlueRightArrow}/>
-                                        <span onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "tar")}>
+                                        <span onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "tar")}> 
                                             {targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}
                                         </span>
                                     </div>
