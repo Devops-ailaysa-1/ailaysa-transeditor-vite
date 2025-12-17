@@ -1017,7 +1017,9 @@ function Navbar(props) {
     const hideViewMoreIsPIBUserPath = () => {
         return (window.location.pathname.includes('/workspace')
             || window.location.pathname.includes('/pibnews-workspace')
-            || window.location.pathname.includes('/pibfile-workspace'))
+            || window.location.pathname.includes('/pibfile-workspace')
+            || window.location.pathname.includes("/file-upload")
+            || window.location.pathname.includes("/create/all-templates"))
             && isPIBNews;
     }
 
