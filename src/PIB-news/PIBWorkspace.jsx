@@ -1707,16 +1707,19 @@ const PIBWorkspace = (props) => {
         return null;
     }
 
-    const getTargetSubHeadline = (subHeadinlines, index, key) => {
-        if (!Array.isArray(subHeadinlines)) return {};
+    const getTargetSubHeadline = (subHeadlines, index) => {
+       if (!Array.isArray(subHeadlines)) return '';
 
-        const value = subHeadinlines[index]?.index;
-        if (!value) return {};
+        const value = subHeadlines[index];
+        if (!value) return '';
 
-        return {
-            [index]: value
-        };
-    }
+        if (typeof value === 'object') {
+            const key = Object.keys(value)[0];
+            return value[key] || '';
+        }
+
+        return value;
+    };
 
     /* Get the docuement details by document id */
     const getDocumentDetailsById = (documentIdTemp) => {
