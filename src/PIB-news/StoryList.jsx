@@ -147,12 +147,12 @@ const StoryList = (props) => {
      */
     const selectProject = (project) => {
         if (openedProjectId === project?.id) {
-            setOpenedProjectId(null);
+            setOpenedProjectId(prev => (prev = null));
             setSelectedProjectFiles([]);
             inProgressProjectId.current = null;
         } else {
             inProgressProjectId.current = project?.id;
-            setOpenedProjectId(project?.id);
+            setOpenedProjectId(prev => (prev = project?.id));
             fetchProjectDetails(project?.id);
         }
     }

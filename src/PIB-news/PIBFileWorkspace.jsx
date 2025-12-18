@@ -3437,43 +3437,6 @@ function PIBFileWorkspace(props) {
         });
     }
 
-    /* Specific page is selected. */
-    // const pageSelect = (page = 0) => {
-    //     let workspaceContainer = document.getElementsByClassName('workspace-editor')[0];
-    //     setTimeout(() => {
-    //         if(isMergedRef.current || isRestoredRef.current || isSplitRef.current){
-    //             isMergedRef.current = false;
-    //             isRestoredRef.current = false;
-    //             isSplitRef.current = false;
-    //         }else{
-    //             workspaceContainer.scroll({top: 0,behavior: 'smooth'});
-    //         }
-    //     }, 10);
-
-    //     let url = Config.BASE_URL + "/workspace_okapi/segments/" + documentId;
-    //     let pageParam = new URLSearchParams(history.location.search).get("page");
-    //     if (pageParam != null) {
-    //         setCurrentPage(pageParam);
-    //         page = pageParam;
-    //     }
-    //     if (page != 0 && page != null) url += "?page=" + page;
-
-    //     Config.axios({
-    //         url: url,
-    //         method: "GET",
-    //         auth: true,
-    //         success: (response) => {
-    //             setIsSegmentLoading(false);
-    //             lastCalledArgs.current.functionName = "pageSelect";
-    //             lastCalledArgs.current.page = page;
-    //             setTranslatedResponse(response.data.results);
-    //             setNextPageUrl(response.data.next);
-    //             setPreviousPageUrl(response.data.previous);
-    //             setTotalPages(Math.ceil(response.data.count / segmentsPerPage));
-    //         },
-    //     });
-    // };
-
     const pageSelect = (page = 0, param) => {
         let workspaceContainer = document.getElementsByClassName('workspace-editor')[0];
         setTimeout(() => {

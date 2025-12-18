@@ -1697,7 +1697,7 @@ const PIBWorkspace = (props) => {
                             "segment_count": 1,
                             'segment_id': ++segmentId,
                             'subheadingClass': 'subHeading',
-                            type: `Subheading ${++hIndex}`
+                            type: `Subtitle ${++hIndex}`
                         });
                     })
                 }
@@ -4268,7 +4268,7 @@ const PIBWorkspace = (props) => {
             let subheadlines = [];
             subheadingList.forEach((subheading, index) => {
                 if (subheading.innerText) {
-                    subheadlines.push({[index]: subheading.innerHTML});
+                    subheadlines.push({index: subheading.innerHTML});
                 }
             })
             let translatedJson = {
@@ -4500,7 +4500,7 @@ const PIBWorkspace = (props) => {
         if(type !== 'editor'){
             highlightFocusedSegment(id);
         }
-        setGrammarPopoverOpen(false);
+        setGrammarPopoverOpen(false);   
         setgrammarCheckPopoverTarget("");
         // setPopoverOpen(false);
         showTmSectionFunction(false);
@@ -4655,33 +4655,57 @@ const PIBWorkspace = (props) => {
     let bgColor = "#0074D3";
 
     useEffect(() => {
+        let isCancelled = false;
+
+        const startPolling = () => {
+            if (!taskDataRef.current || isCancelled) return;
+
+            const taskId = taskDataRef.current?.pib_story_details?.pib_task_uid;
+            if (taskId) taskStatusPolling(taskId, () => isCancelled);
+        };
+
         if (anyPending([taskDataRef.current])) {
-            const taskId = taskDataRef.current.pib_story_details.pib_task_uid;
-            if (taskId) taskStatusPolling(taskId);
+            startPolling();
         }
+
+        return () => {
+            isCancelled = true;
+        };
     }, [documentId, taskDataRef.current]);
 
-    const taskStatusPolling = (taskId) => {
+
+    const taskStatusPolling = (taskId, isCancelled) => {
+        if (isCancelled()) return;
+
         Config.axios({
             url: `${Config.BASE_URL}/workspace/poll_pib_tasks?task_ids=${taskId}`,
             method: 'GET',
             auth: true,
-            success: (response) => { 
+            success: (response) => {
+                if (isCancelled()) return;
+
                 const result = response.data;
-                if (result?.length > 0) updateTaskStatus(taskId, result);
+
+                if (result?.length > 0) {
+                    updateTaskStatus(taskId, result);
+                }
+
                 if (!allDone(result)) {
                     setTimeout(() => {
-                        taskStatusPolling(taskId);
+                        if (!isCancelled()) {
+                            taskStatusPolling(taskId, isCancelled);
+                        }
                     }, 5000);
                 } else {
                     getDocumentDetailsById(documentId);
                 }
             },
             error: (err) => {
-                console.error(err);
+                if (!isCancelled()) console.error(err);
             }
         });
-    }
+    };
+
 
     const allDone = (result) => result.every(item => isCompleted(item));
     const anyPending = (result) => result.some(item => item?.pib_story_details?.status == "In_Progress" || item?.pib_story_details?.status == "YET_TO_START");
@@ -4876,9 +4900,9 @@ const PIBWorkspace = (props) => {
                                                                 data-id={id}
                                                             >
                                                                 <div className="src-lang-part trigger-focus" data-id={id} onClick={(e) => isWorkspaceEditable && sourceSegmentClick(e)}>
-                                                                    <div className="src-workspace-align trigger-focus" data-id={id} style={translation.isFocused ? { justifyContent: 'space-between' } : { justifyContent: 'flex-end' }} >
+                                                                    <div className="src-workspace-align trigger-focus pibnews-workspace-container" data-id={id} style={translation.isFocused ? { justifyContent: 'space-between' } : { justifyContent: 'flex-end' }} >
                                                                             <div
-                                                                                className={rightAlignLangs.current.indexOf(sourceLanguage) != -1 ? "source-text-div align-right" : "source-text-div"}
+                                                                                className={`pibnews-source ${rightAlignLangs.current.indexOf(sourceLanguage) != -1 ? "source-text-div align-right" : "source-text-div"}`}
                                                                                 onClick={(e) =>  highlightFocusedSegment(translation.segment_id)}
                                                                                 onKeyDown={(e) => e.preventDefault()}
                                                                                 ref={sourceTextDiv.current[id]}
