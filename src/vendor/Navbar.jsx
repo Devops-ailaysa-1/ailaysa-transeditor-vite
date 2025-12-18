@@ -1020,7 +1020,9 @@ function Navbar(props) {
             || window.location.pathname.includes('/pibfile-workspace')
             || window.location.pathname.includes("/file-upload")
             || window.location.pathname.includes("/create/all-templates")
-            || window.location.pathname.includes("/chat-books"))
+            || window.location.pathname.includes("/chat-books")
+            || window.location.pathname.includes("/ai-voices")
+            || window.location.pathname.includes("/translations"))
             && isPIBNews;
     }
 
