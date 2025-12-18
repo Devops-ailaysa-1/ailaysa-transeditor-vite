@@ -281,11 +281,11 @@ const AddStory = (props) => {
         if (subTitleList && subTitleList.length > 0) {
             const subTitleData = [];
             let index = 0;
-            subTitleList.forEach(subTitle => {
-                if (subTitle && subTitle.length > 0){
-                    const data = {};
-                    data[index++] = subTitle;
-                    subTitleData.push(data);
+             subTitleList.forEach((subTitle, index) => {
+                if (subTitle && subTitle.length > 0) {
+                    subTitleData.push({
+                        [index]: subTitle
+                    });
                 }
             });
             return subTitleData;

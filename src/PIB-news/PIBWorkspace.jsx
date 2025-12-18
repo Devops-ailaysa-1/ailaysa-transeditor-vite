@@ -1708,8 +1708,14 @@ const PIBWorkspace = (props) => {
     }
 
     const getTargetSubHeadline = (subHeadinlines, index, key) => {
-        if (subHeadinlines && subHeadinlines[index] && subHeadinlines[index]?.[key]) return subHeadinlines[index]?.[key];
-        return '';
+        if (!Array.isArray(subHeadinlines)) return {};
+
+        const value = subHeadinlines[index]?.index;
+        if (!value) return {};
+
+        return {
+            [index]: value
+        };
     }
 
     /* Get the docuement details by document id */
@@ -4268,7 +4274,9 @@ const PIBWorkspace = (props) => {
             let subheadlines = [];
             subheadingList.forEach((subheading, index) => {
                 if (subheading.innerText) {
-                    subheadlines.push({index: subheading.innerHTML});
+                    if (subheading.innerText.trim()) {
+                        subheadlines.push({ [index]: subheading.innerHTML }); 
+                    }
                 }
             })
             let translatedJson = {
