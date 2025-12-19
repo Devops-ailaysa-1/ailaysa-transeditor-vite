@@ -490,7 +490,7 @@ button {
     gap: 8px;
     color: #555;
 }
-.loader {
+/* .loader {
     width: 16px;
     height: 16px;
     border: 2px solid #ccc;
@@ -501,7 +501,7 @@ button {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
+} */
 .disabled-upload {
     opacity: 0.5;
     pointer-events: none;  /* prevents clicking/dragging */

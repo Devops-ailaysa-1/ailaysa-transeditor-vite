@@ -1299,22 +1299,6 @@ function PIBFileWorkspace(props) {
         }
     }, [totalPages, currentPage]);
 
-    useEffect(() => {
-        let pageParam = URL_SEARCH_PARAMS.get("page");
-        let statusParam = URL_SEARCH_PARAMS.get("status");
-        if (documentId !== 0) {
-            if (statusParam == null || statusParam == undefined) {
-                if (pageParam !== null && pageParam !== undefined) {
-                    if (pageSizeFromApi.current !== null) {
-                        listSegments();
-                    }
-                }
-            } else {
-                segmentStatusFilter();
-            }
-        }
-    }, [URL_SEARCH_PARAMS.get("page"), documentId, pageSizeFromApi.current]);
-
     /* Go to the top of the page when move to another pages */
     useEffect(() => {
         let statusParam = URL_SEARCH_PARAMS.get("status");
@@ -1550,27 +1534,83 @@ function PIBFileWorkspace(props) {
         }
     }, [qaData]);
 
+    // useEffect(() => {
+    //     let pageParam = URL_SEARCH_PARAMS.get("page");
+    //     let statusParam = URL_SEARCH_PARAMS.get("status");
+    //     if (documentId !== 0) {
+    //         if (statusParam == null || statusParam == undefined) {
+    //             if (pageParam !== null && pageParam !== undefined) {
+    //                 if (pageSizeFromApi.current !== null) {
+    //                     listSegments();
+    //                 }
+    //             }
+    //         } else {
+    //             segmentStatusFilter();
+    //         }
+    //     }
+    // }, [URL_SEARCH_PARAMS.get("page"), documentId, pageSizeFromApi.current]);
+
+    // useEffect(() => {
+    //     if (selectedPageSize) {
+    //         let pageParam = URL_SEARCH_PARAMS.get("page");
+    //         let statusParam = URL_SEARCH_PARAMS.get("status");
+    //         if (statusParam == null || statusParam == undefined) {
+    //             if (pageSizeFromApi.current != selectedPageSize?.value) {
+    //                 saveCustomPageSize(selectedPageSize?.value);
+    //                 let url = `/pibfile-workspace/${documentId}?page=${1}`;
+    //                 let pageParam = URL_SEARCH_PARAMS.get("page");
+    //                 if (pageParam != 1) {
+    //                     history(url);
+    //                 } else {
+    //                     listSegments('page-size-change');
+    //                 }
+    //             }
+    //             listSegments();
+    //         } else {
+    //             segmentStatusFilter();
+    //         }
+    //     }
+    // }, [selectedPageSize]);
+
     useEffect(() => {
-        if (selectedPageSize) {
-            let pageParam = URL_SEARCH_PARAMS.get("page");
-            let statusParam = URL_SEARCH_PARAMS.get("status");
-            if (statusParam == null || statusParam == undefined) {
-                if (pageSizeFromApi.current != selectedPageSize?.value) {
-                    saveCustomPageSize(selectedPageSize?.value);
-                    let url = `/pibfile-workspace/${documentId}?page=${1}`;
-                    let pageParam = URL_SEARCH_PARAMS.get("page");
-                    if (pageParam != 1) {
-                        history(url);
-                    } else {
-                        listSegments('page-size-change');
-                    }
-                }
-                listSegments();
-            } else {
-                segmentStatusFilter();
-            }
+        if (documentId === 0) return;
+
+        const pageParam = URL_SEARCH_PARAMS.get("page");
+        const statusParam = URL_SEARCH_PARAMS.get("status");
+
+        if (statusParam != null) {
+            segmentStatusFilter();
+            return;
         }
-    }, [selectedPageSize]);
+
+        if (
+            selectedPageSize &&
+            pageSizeFromApi.current !== selectedPageSize.value
+        ) {
+            saveCustomPageSize(selectedPageSize.value);
+
+            const newPage = 1;
+            const currentPage = Number(pageParam);
+
+            if (currentPage !== newPage) {
+                history(`/pibfile-workspace/${documentId}?page=${newPage}`);
+                return;
+            }
+
+            listSegments('page-size-change');
+            return;
+        }
+
+        if (pageParam != null && pageSizeFromApi.current != null) {
+            listSegments();
+        }
+
+    }, [
+        documentId,
+        selectedPageSize,
+        URL_SEARCH_PARAMS.get("page")
+    ]);
+
 
     /* Cookie based tour show */
     useEffect(() => {

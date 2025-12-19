@@ -488,6 +488,7 @@ const StoryList = (props) => {
 
     const handleBtnAction = (e, selectedProjectFile, type) => {
         if (selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload') {
+            updateActionBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Opening', 'ADD');
             handleViewStoryClick(e, selectedProjectFile, type);
         } else {
             handleTestUpload(e, selectedProjectFile, type);
@@ -738,7 +739,7 @@ const StoryList = (props) => {
                                     <div className="file-edit-list-inner-table-row">
                                         <div className="file-edit-list-table-cell pl-0">
                                             <div className="file-edit-file-name-txt flex flex-col gap-[12px]">
-                                                <span className='pib-headline flex items-center gap-[8px]'>
+                                                <span className='flex items-center gap-[8px]'>
                                                     {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload' && 
                                                         <div className="block">
                                                             <span className="doc-icon">
@@ -746,9 +747,11 @@ const StoryList = (props) => {
                                                             </span>
                                                         </div>
                                                     }
-                                                    {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload'
-                                                        ? selectedProjectFile?.filename
-                                                        : selectedProjectFile?.pib_story_details?.headline}
+                                                    <span className='pib-headline'>
+                                                        {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload'
+                                                            ? selectedProjectFile?.filename
+                                                            : selectedProjectFile?.pib_story_details?.headline}
+                                                    </span>
                                                     {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload' && selectedProjectFile?.task_word_count &&
                                                         <span className='pib-word-badge'>{`${selectedProjectFile?.task_word_count} W`}</span>
                                                     }
