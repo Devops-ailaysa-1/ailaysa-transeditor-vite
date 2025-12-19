@@ -1023,6 +1023,7 @@ function Navbar(props) {
             || window.location.pathname.includes("/chat-books")
             || window.location.pathname.includes("/ai-voices")
             || window.location.pathname.includes("/translations")
+
             || window.location.pathname.includes("/transcriptions")
             || window.location.pathname.includes("/documents-list")
             || window.location.pathname.includes("/designs")
@@ -1032,7 +1033,11 @@ function Navbar(props) {
             || window.location.pathname.includes("/create/translate/text/instant-text")
             || window.location.pathname.includes("/create/translate/translate-files")
             || window.location.pathname.includes("/create/translate/files/translate-files")
-            || window.location.origin.includes(Config.MARKETPLACE_HOST))
+            || window.location.origin.includes(Config.MARKETPLACE_HOST)
+            || window.location.pathname.includes("/create/speech/speech-to-text")
+            || window.location.pathname.includes("/create/speech/text-to-speech")
+            || window.location.pathname.includes("/create/tool-kit/pdf/convert-pdf")
+            || window.location.pathname.includes("/create/tool-kit/pdf/compare-mt"))
             && isPIBNews;
     }
 
