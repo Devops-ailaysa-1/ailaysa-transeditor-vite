@@ -1862,7 +1862,7 @@ function TranslateFiles(props) {
         let mtValue;
 
         if (isPIBNews) {
-            mtValue = 4;                
+            mtValue = pibMTEngine;                
         } else {
             mtValue = selectedMTEngine?.value || 1;   
         }

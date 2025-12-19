@@ -1000,7 +1000,47 @@ function Navbar(props) {
     const isProjectLogo = () => !(props.isWhite || props.istranseditor || props.istranslator || isAiChatBook);
 
     const checkIsPIBUserPath = () => {
-        return (window.location.pathname.includes("/my-stories") || window.location.pathname.includes("/add-stories")) && isPIBNews;
+        return (window.location.pathname.includes("/my-stories")
+            || window.location.pathname.includes("/add-stories"))
+            && isPIBNews;
+    }
+
+    const hidePressBtnPIBUserPath = () => {
+        return (window.location.pathname.includes("/my-stories")
+            || window.location.pathname.includes("/add-stories")
+            || window.location.pathname.includes('/workspace')
+            || window.location.pathname.includes('/pibnews-workspace')
+            || window.location.pathname.includes('/pibfile-workspace'))
+            && isPIBNews;
+    }
+
+    const hideViewMoreIsPIBUserPath = () => {
+        return (window.location.pathname.includes('/workspace')
+            || window.location.pathname.includes('/pibnews-workspace')
+            || window.location.pathname.includes('/pibfile-workspace')
+            || window.location.pathname.includes("/file-upload")
+            || window.location.pathname.includes("/create/all-templates")
+            || window.location.pathname.includes("/chat-books")
+            || window.location.pathname.includes("/ai-voices")
+            || window.location.pathname.includes("/translations")
+            || window.location.pathname.includes("/transcriptions")
+            || window.location.pathname.includes("/documents-list")
+            || window.location.pathname.includes("/designs")
+            || window.location.pathname.includes("/assets")
+            || window.location.pathname.includes("/toolkit")
+            || window.location.pathname.includes("/chat")
+            || window.location.origin.includes(Config.MARKETPLACE_HOST))
+            && isPIBNews;
+    }
+
+    /**
+     * This method used to redirect to the news project again if the user in the standard project view.
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since 12 DEC 2025
+     */
+    const handleNavigation = () => {
+       history('/my-stories?page=1');
     }
 
     return (
@@ -1096,6 +1136,15 @@ function Navbar(props) {
                             </div>
                         }
                         <div className="right-align-links">
+                            {(!hidePressBtnPIBUserPath() && isPIBNews )&&
+                                <>
+                                    <ul className="nav-project-txt-align mr-[34px]">
+                                        <li className="nav-item active project-doc-name">
+                                            <button className="open-press-release-btn" onClick={handleNavigation}>Open Press releases</button>
+                                        </li>
+                                    </ul>
+                                </>
+                            }                            
                             <ul className="nav-project-txt-align">
                                 <li className="nav-item active project-doc-name">
                                     {(props.glossaryProjectName !== "" && props.termdownload) &&
@@ -1589,7 +1638,7 @@ function Navbar(props) {
                                         </div>
                                     </li>
                                 )}
-                                {isPIBNews && checkIsPIBUserPath() && <li className="nav-item pib-view-more-item active">
+                                {isPIBNews && !hideViewMoreIsPIBUserPath() && <li className="nav-item pib-view-more-item active">
                                     <Tooltip title={'View other apps'} arrow placement="bottom">
                                         <Link className="pib-view-more-nav"
                                             to={navigateURL}

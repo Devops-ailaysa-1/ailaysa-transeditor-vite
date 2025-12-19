@@ -672,6 +672,26 @@ input:focus {
     justify-content: center;
 }
 
+.open-press-release-btn {
+    display: inline-flex;
+    height: 32px;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #2A353E;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border-radius: 3px;
+    border: 1px solid #C8CFD5;
+    background: #FFF;
+    cursor: pointer;
+}
+
+
 /* .word-processor-wrap .navbar-nav:first-child{
     width: 27.333%;
 }
@@ -11796,7 +11816,8 @@ ul.qa-file-list-wrapper .selected-job-value {
 }
 
 .max-word-note,
-.max-file-note {
+.max-file-note,
+.max-file-size-note {
     font-weight: normal;
     font-style: normal;
     font-size: 13px;
@@ -11805,7 +11826,8 @@ ul.qa-file-list-wrapper .selected-job-value {
     text-align: center;
 }
 
-.max-word-note {
+.max-word-note,
+.max-file-size-note {
     padding-right: 11px;
     border-right: 1px solid #a5a5a5;
 }
@@ -11815,6 +11837,10 @@ ul.qa-file-list-wrapper .selected-job-value {
 }
 
 .max-file-note {
+    padding-left: 11px;
+}
+
+.max-file-size-note {
     padding-left: 11px;
 }
 

@@ -87,6 +87,14 @@ const StoryList = (props) => {
         }
     }, [storyList]);
 
+    /**
+     * This mehtod used to open the edit project model.
+     * @param {*} e 
+     * @param {*} project 
+     * 
+     * @auhtor Padmabharathi Subiramanian
+     * @since DEC 2 2025
+     */
     const editProject = (e, project) => {
         e.stopPropagation();
         openEditProjectModel(e, project);
@@ -112,7 +120,7 @@ const StoryList = (props) => {
                 setFileListLoading(false);
                 const {data} = response;
                 setSelectedProjectFiles(updateFileStatus(data) || []);
-                if (anyPending(data)) {
+                if (!anyFileUpload(data) && anyPending(data)) {
                     inProgressProjectId.current = projectId;
                     progressTask(projectId, getPendingTask(data));
                 }
@@ -125,10 +133,18 @@ const StoryList = (props) => {
         Config.axios(params);
     }
 
+    /**
+     * This mehtod used to update the file status in the project file list.
+     * @param {*} files 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since DEC 2 2025
+     */
     const updateFileStatus = (files) => {
         return files.map(file => {
             if (FILE_STATUS_MAP[file?.pib_story_details?.status]) {
-                const status = FILE_STATUS_MAP[file?.pib_story_details?.status];
+                const status = isFileUpload(file) ? {} : FILE_STATUS_MAP[file?.pib_story_details?.status];
                 return {
                     ...file,
                     openBtnLabel: status?.btnLabel || null,
@@ -147,12 +163,12 @@ const StoryList = (props) => {
      */
     const selectProject = (project) => {
         if (openedProjectId === project?.id) {
-            setOpenedProjectId(null);
+            setOpenedProjectId(prev => (prev = null));
             setSelectedProjectFiles([]);
             inProgressProjectId.current = null;
         } else {
             inProgressProjectId.current = project?.id;
-            setOpenedProjectId(project?.id);
+            setOpenedProjectId(prev => (prev = project?.id));
             fetchProjectDetails(project?.id);
         }
     }
@@ -338,8 +354,13 @@ const StoryList = (props) => {
      */
     const handleFileDownload = async(selectedProjectFile)  => {
         updateDownloadBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Downloading', 'ADD');
-        let url = Config.BASE_URL + "/workspace_okapi/download_pib_file/" + `?task_id=${selectedProjectFile.id}`;
-        url = url + "&output_type=" + 'ORIGINAL';
+        let url;
+        if(selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload') {
+            url = Config.BASE_URL + "/workspace_okapi/document/to/file/" + `${selectedProjectFile.document}?output_type=ORIGINAL`; 
+                        
+        }else {
+            url = Config.BASE_URL + "/workspace_okapi/download_pib_file/" + `?task_id=${selectedProjectFile.id}&output_type=ORIGINAL`;
+        }        
         setTimeout(async () => {
             const response = await downloadDifferentFile(url);
             if (response !== undefined) {
@@ -406,16 +427,49 @@ const StoryList = (props) => {
      * @auhtor Padmabharathi Subiramanian 
      * @since 26 Nov 2025
      */
-    const handleViewStoryClick = (e, selectedProjectFile, type, timeOut = 500) => {
+    const handleViewStoryClick = async (e, selectedProjectFile, type, timeOut = 500) => {
         if (e) e.stopPropagation();
         inProgressProjectId.current = null;
         const open_as = 'editor';
+        let uriPath = `pibnews-workspace/${selectedProjectFile?.id}`;
+        if (selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload') {
+            uriPath = 'pibfile-workspace/';
+            if (selectedProjectFile?.document)
+                uriPath += selectedProjectFile?.document;
+            else
+                uriPath += await getDocumentId(selectedProjectFile);
+            uriPath += '?page=1'
+        }
         setTimeout(() => {
-            history(`/pibnews-workspace/${selectedProjectFile.id}`, {state: {
+            history(`/${uriPath}`, {state: {
                 prevPath: location.pathname + location.search,
                 open_as
             }});
         }, timeOut);
+    }
+
+    const getDocumentId = async (selectedProjectFile) => {
+        return new Promise((resolve, reject) => {
+            Config.axios({
+                url: `${Config.BASE_URL}${selectedProjectFile.document_url}`,
+                method: 'GET',
+                auth: true,
+                success: (response) => {
+                    const result = response.data;
+                    if (result) {
+                        resolve(result.document_id);
+                    }
+                },
+                error: (err) => {
+                    console.error(err);
+                    if(err?.response?.status === 500) {
+                        Config.toast("Something went wrong", "error");
+                    }else  {
+                        reject(err);
+                    }
+                }
+            });
+        })
     }
 
     const updateDownloadBtnState = (taskId, btnLabel, action = 'remove') => {
@@ -449,6 +503,15 @@ const StoryList = (props) => {
     }
 
     const handleBtnAction = (e, selectedProjectFile, type) => {
+        if (selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload') {
+            updateActionBtnState(selectedProjectFile.pib_story_details.pib_task_uid, 'Opening', 'ADD');
+            handleViewStoryClick(e, selectedProjectFile, type);
+        } else {
+            handleTestUpload(e, selectedProjectFile, type);
+        }
+    }
+
+    const handleTestUpload = (e, selectedProjectFile, type) => {
         if (FILE_STATUS_MAP[selectedProjectFile?.pib_story_details?.status]) {
             const status = FILE_STATUS_MAP[selectedProjectFile?.pib_story_details?.status];
             if (status.status == 'In_Progress') {
@@ -542,6 +605,8 @@ const StoryList = (props) => {
         if (item?.pib_story_details?.status == "In_Progress") return item;
     });
     const isCompleted = (task) => task.status == "COMPLETED" || task.status == "FAILED";
+    const isFileUpload = (file) => file?.pib_story_details && file?.pib_story_details?.story_creation_type == 'file_upload';
+    const anyFileUpload = (result) => result.some(file => file?.pib_story_details && file?.pib_story_details?.story_creation_type == 'file_upload');
 
     const updateTaskStatus = (result) => {
         setSelectedProjectFiles(prev =>
@@ -568,7 +633,7 @@ const StoryList = (props) => {
                 return file;
             })
         );
-    };
+    }
 
     /**
      * This method used to return the loader for the project list.
@@ -626,19 +691,33 @@ const StoryList = (props) => {
                                     : <KeyboardArrowDownIcon className="proj-list-arrow-down" />
                                 }
                             </span>
-                            <div className={"proj-title-list-container " + (project?.get_project_type === 4 ? "speech-proj" : "")}>
+                            <div className={"proj-title-list-container !ml-[15px]" + (project?.get_project_type === 4 ? "speech-proj" : "")}>
                                 <div className="proj-type-icon-wrap">
                                 </div>
-                                <div className="proj-list-info">
-                                    <div className="proj-information">
-                                        <Tooltip TransitionComponent={Zoom} title={project.project_name} placement="top" arrow>
-                                            <span className="file-edit-proj-txt-tmx">
-                                                {project.project_name}
-
+                                    <div className="proj-list-info pib-proj-list-info">
+                                        {project.story_creation_type === 'file_upload' && 
+                                            <span class="proj-type-icon translate-bg">
+                                                <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium proj-types css-i4bv87-MuiSvgIcon-root" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="TranslateIcon">
+                                                    <path d="m12.87 15.07-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"></path>
+                                                </svg>
                                             </span>
-                                        </Tooltip>
+                                        }
+                                        <div>
+                                            <div className="proj-information gap-[5.3px]">
+                                                <Tooltip TransitionComponent={Zoom} title={project.project_name} placement="top" arrow>
+                                                    <span className="file-edit-proj-txt-tmx">
+                                                        {project.project_name}
+                                                    </span>
+                                                </Tooltip>
+                                                {project.story_creation_type === 'file_upload' && project?.project_analysis?.proj_word_count &&
+                                                    <span className='pib-word-badge'>{`${project?.project_analysis?.proj_word_count} W`}</span>
+                                                }
+                                            </div>
+                                            <div className="pib-priject-type-text">
+                                                <span>{project.story_creation_type === 'file_upload' ? 'File' : 'Text'}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                         <div className="file-edit-list-table-cell">
@@ -669,15 +748,29 @@ const StoryList = (props) => {
                                             {targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.source_language)?.language}
                                         </span>
                                         <img src={BlueRightArrow}/>
-                                        <span onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "tar")}>
+                                        <span onClick={(e) => handleViewStoryClick(e, selectedProjectFile, "tar")}> 
                                             {targetLanguageOptionsRef.current?.find(each => each.id == selectedProjectFile?.target_language)?.language}
                                         </span>
                                     </div>
                                     <div className="file-edit-list-inner-table-row">
                                         <div className="file-edit-list-table-cell pl-0">
                                             <div className="file-edit-file-name-txt flex flex-col gap-[12px]">
-                                                <span className='pib-headline'>
-                                                    {selectedProjectFile?.pib_story_details?.headline}
+                                                <span className='flex items-center gap-[8px]'>
+                                                    {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload' && 
+                                                        <div className="block">
+                                                            <span className="doc-icon">
+                                                                <img src={`${Config.BASE_URL}/app/extension-image/${selectedProjectFile?.filename?.split(".")?.pop()}`} alt="doc-icon" />
+                                                            </span>
+                                                        </div>
+                                                    }
+                                                    <span className='pib-headline'>
+                                                        {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload'
+                                                            ? selectedProjectFile?.filename
+                                                            : selectedProjectFile?.pib_story_details?.headline}
+                                                    </span>
+                                                    {selectedProjectFile?.pib_story_details && selectedProjectFile?.pib_story_details?.story_creation_type == 'file_upload' && selectedProjectFile?.task_word_count &&
+                                                        <span className='pib-word-badge'>{`${selectedProjectFile?.task_word_count} W`}</span>
+                                                    }
                                                 </span>
                                                 {selectedProjectFile?.pib_story_details?.ministry_department && 
                                                     <span className='pib-ministry-badge'>{selectedProjectFile?.pib_story_details?.ministry_department}</span>
@@ -696,7 +789,9 @@ const StoryList = (props) => {
                                         <div className="file-edit-list-table-cell">
                                             <div className="pib-project-list-action-wrap">
                                                 <button type="button" className="workspace-files-OpenProjectButton flex items-center justify-center gap-[6px]"
-                                                    onClick={() => handleBtnAction(null, selectedProjectFile, "tar")}>
+                                                    onClick={() => handleBtnAction(null, selectedProjectFile, "tar")}
+                                                    disabled={selectedProjectFile?.pib_story_details?.status === 'FAILED'}
+                                                    >
                                                     {selectedProjectFile && selectedProjectFile.openBtnLoading && <ButtonLoader />}
                                                     <span className="fileopen-new-btn">
                                                         {selectedProjectFile && selectedProjectFile.openBtnLabel

@@ -9,7 +9,6 @@ import sanitizeHtml from 'sanitize-html-react';
 import { useTranslation } from "react-i18next";
 
 const RichTexteditor = (props) => {
-
     let {
         editorRef,
         triggerFocuseWritter,
@@ -18,14 +17,11 @@ const RichTexteditor = (props) => {
         contentEditableFocus,
         isWorkspace,
         // handleSynchronizedScrollWriter
-    } = props
+    } = props;
 
     const { t } = useTranslation();
 
-    const directChildRef = useRef(null)
-
- 
-    
+    const directChildRef = useRef(null);    
 
     useEffect(() => {
         // customFn()
@@ -48,11 +44,9 @@ const RichTexteditor = (props) => {
                     elementsWithStyles.forEach(function(element) {
                         element.removeAttribute('style');
                     });
-
                     // Insert the cleaned HTML into the contenteditable div
                     var cleanedHTML = tempDiv.innerHTML;
                     document.execCommand('insertHTML', false, cleanedHTML);
-
                     // var clipboardData = e.originalEvent.clipboardData || window.clipboardData;
                     // var pastedData = clipboardData.getData('text/html') || clipboardData.getData('text/plain');
                     // let plain_text = clipboardData.getData('text/plain')
@@ -88,8 +82,6 @@ const RichTexteditor = (props) => {
 
                     // }, 100);
 
-
-
                     // var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData || window.clipboard).getData('text/html');
                     // var plain_text = ((e.originalEvent || e).clipboardData || window.clipboardData || window.clipboard).getData('text/plain');
                     // e.preventDefault();
@@ -115,17 +107,15 @@ const RichTexteditor = (props) => {
                 },
                 onEnter: function () {
                     if (document.querySelector('.temp-color')) {
-                        document.querySelector('.temp-color').classList.remove('temp-color')
+                        document.querySelector('.temp-color').classList.remove('temp-color');
                     }
                     if (document.querySelector('.tab-to-write-more-tooltip')) {
-                        document.querySelector('.tab-to-write-more-tooltip').style.visibility = "hidden"
-
+                        document.querySelector('.tab-to-write-more-tooltip').style.visibility = "hidden";
                     }
-
                 },
                 onChange: function (e) {
                     if(isWorkspace){
-                        handleChangeUpdate(true)
+                        handleChangeUpdate(true);
                     }
                     // currentSummerNoteTextData.current = count(document?.querySelector('.note-editable')?.innerText.replace(/\n/g, '')).chars
                     // dispatch(setWriterWordCount({
@@ -161,7 +151,6 @@ const RichTexteditor = (props) => {
 
                     // Get the parent div element
                     const parentDiv = document.querySelector('.note-editable');
-
                     // Get direct child p tags within the parent div
                     let contentTags = [];
                     if (parentDiv?.children && parentDiv.children.length > 0) {
@@ -180,24 +169,22 @@ const RichTexteditor = (props) => {
                             pTag.classList.remove('right-align-lang-style')
                         }
                     });
-                    // // let range = window.getSelection().getRangeAt(0)
-                    // // let current_node = range?.commonAncestorContainer?.parentElement
-                    // // let current_text = range?.commonAncestorContainer?.parentElement?.innerText
-
-                    // // if (current_text?.trim() !== '' && current_text?.trim()?.length >= 3) debounce(() => detectLanguage(current_text, current_node))
-                    // let htmlContent = document.querySelector('.note-editable')?.innerHTML
-                    // // document.querySelector('.note-editable-backdrop').innerHTML = htmlContent
-                    // // Config.debounceApiCalls(symSpellCheck)
-
+                    // // let range = window.getSelection().getRangeAt(0);
+                    // // let current_node = range?.commonAncestorContainer?.parentElement;
+                    // // let current_text = range?.commonAncestorContainer?.parentElement?.innerText;
+                    // // if (current_text?.trim() !== '' && current_text?.trim()?.length >= 3) debounce(() => detectLanguage(current_text, current_node));
+                    // let htmlContent = document.querySelector('.note-editable')?.innerHTML;
+                    // // document.querySelector('.note-editable-backdrop').innerHTML = htmlContent;
+                    // // Config.debounceApiCalls(symSpellCheck);
                 },
                 onScroll: function () {
-                    // checkSelection()
-                    // props.debounceApiCall()
-                    // handleSynchronizedScrollWriter()
+                    // checkSelection();
+                    // props.debounceApiCall();
+                    // handleSynchronizedScrollWriter();
                 },
                 onFocus: function (e) {
                     if(isWorkspace){
-                        contentEditableFocus(e,'editor')
+                        contentEditableFocus(e,'editor');
                     }
                     var htmlContent = $('.summernote').summernote('code');
                     let clean = sanitizeHtml(htmlContent, {
@@ -205,11 +192,8 @@ const RichTexteditor = (props) => {
                         allowedAttributes: false,
                         transformTags: {
                             'font': function (tagName, attribs) {
-
                                 let c = attribs?.color ? attribs?.color : ''
                                 let s = attribs?.style ? attribs.style : ''
-
-
                                 return {
                                     tagName: 'span',
                                     attribs: {
@@ -218,19 +202,17 @@ const RichTexteditor = (props) => {
                                 };
                             }
                         }
-                    });
-                    
+                    });                    
                 },
                 onInit: function () {
                     // document.querySelector('.word-count-number').innerHTML = 0
                     $(".note-editable").on('click', function (e) {
                         if(isWorkspace){
-                            triggerFocuseWritter()
+                            triggerFocuseWritter();
                         }
                     });
                 },
                 onImageUpload: async function (files) {
-
                     // let name = files[0]?.name;
                     // let img = new Image()
                     // img.src = window.URL.createObjectURL(files[0])
@@ -264,16 +246,15 @@ const RichTexteditor = (props) => {
 
                 },
                 onMediaDelete: async function (target) {
-                    // deleteImageFromServer(target[0])
+                    // deleteImageFromServer(target[0]);
                 },
                 onBlur: function () {
-
                 },
                 onKeyup: function (e) {
                     if (document.querySelector('.note-editable').innerHTML.length === 0) {
                         $('.summernote').summernote('formatPara');
                     }
-                    changeParagraphStyleDropDownLabel(e)
+                    changeParagraphStyleDropDownLabel(e);
                     // if ($('.summernote').summernote('isEmpty') === false && imgNode?.current?.nodeName === 'IMG') {
                     //     if (e.key === 'Delete') {
                     //         e.preventDefault()
@@ -301,8 +282,6 @@ const RichTexteditor = (props) => {
                     //     }
                     // }
                 },
-
-
             },
             disableDragAndDrop: true,
             spellCheck: true,
@@ -350,9 +329,7 @@ const RichTexteditor = (props) => {
                 ['insert', ['link']],
                 ['para', ['specialChar']],
                 ['style', ['clear']],
-
                 // ['dictation', ['voice', 'voiceLang']],
-
                 // word supported highlighter colors
                 // ['#008080', '#FFFF00', '#00FF00', '#30D5C8', '#FFC0CB', '#0000FF', '#808080', '#00008B', '#8F00FF', '#AAFF00', '#8B0000', '#8B8000', '#5A5A5A', '#000000']
 
@@ -404,12 +381,10 @@ const RichTexteditor = (props) => {
 
     // useEffect(() => {
     //     if(translatedResponse.length >= 0){
-
     //     // $('.summernote').summernote('reset');
     //     $('.summernote').summernote('pasteHTML', translation);
-
     //     }
-    // },[translatedResponse])
+    // },[translatedResponse]);
 
     useEffect(() => {
         // Append div structure to the .note-editing-area
@@ -423,11 +398,10 @@ const RichTexteditor = (props) => {
             wrapperDiv.appendChild(outerDiv);
             noteEditingArea.parentNode.insertBefore(wrapperDiv, noteEditingArea);
             wrapperDiv.appendChild(noteEditingArea);
-
             $(".note-handle").appendTo(".note-editable-class-wrapper");
             $('.summernote').summernote('focus');
         }
-    }, [document.querySelector('.note-editable')])
+    }, [document.querySelector('.note-editable')]);
 
 
     var styleDropdown = function (context) {
@@ -465,69 +439,67 @@ const RichTexteditor = (props) => {
                             $('.summernote').summernote('formatH3');
                         }
                         if (document?.querySelector('.active-voice')) {
-                            document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                            document?.querySelector('.active-voice')?.classList.remove('active-voice');
                         }
                         e.target.classList.add('active-voice')
-                        let styleListDiv = document.querySelector('.summernote-style-list')
+                        let styleListDiv = document.querySelector('.summernote-style-list');
                         if(e.target !== styleListDiv){
-                            document.querySelector('.style-select-btn').innerHTML = e.target.innerText
+                            document.querySelector('.style-select-btn').innerHTML = e.target.innerText;
                             document.querySelector('.note-dictation')?.firstChild.setAttribute('aria-valuetext', e.target.ariaValueText);
-                        }
-                        
+                        }                        
                     } catch (e) {
                         console.error(e);
                     }
                 },
             }),
         ]);
-
-        return button.render(); // jquery object
+        return button.render(); 
     }
 
     const searchParent = (node) => {
-        if (!node) return null; // Return null if no node is found
-        if (node.classList.contains('note-editable')) return node; // Return the element if class name is found
+        if (!node) return null; 
+        if (node.classList.contains('note-editable')) return node; 
         directChildRef.current = node
-        return searchParent(node.parentElement); // Recursively search the parent element
+        return searchParent(node.parentElement);
     };
 
     const changeParagraphStyleDropDownLabel = (event) => {
         // style select drop-down
-        let styleSelect = document.querySelector('.style-select-btn')
-        directChildRef.current = null
+        let styleSelect = document.querySelector('.style-select-btn');
+        directChildRef.current = null;
         const selection = window.getSelection();
         const parentElement = searchParent(selection.anchorNode.parentElement);
-        let tag = directChildRef.current?.tagName
+        let tag = directChildRef.current?.tagName;
         if (tag === 'H1') {
-            styleSelect.innerHTML = "Heading 1"
+            styleSelect.innerHTML = "Heading 1";
             if (document?.querySelector('.active-voice')) {
-                document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                document?.querySelector('.active-voice')?.classList.remove('active-voice');
             }
-            document.querySelector('[aria-valuetext="h1"]').classList.add('active-voice')
+            document.querySelector('[aria-valuetext="h1"]').classList.add('active-voice');
         } else if (tag === 'H2') {
-            styleSelect.innerHTML = "Heading 2"
+            styleSelect.innerHTML = "Heading 2";
             if (document?.querySelector('.active-voice')) {
-                document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                document?.querySelector('.active-voice')?.classList.remove('active-voice');
             }
-            document.querySelector('[aria-valuetext="h2"]').classList.add('active-voice')
+            document.querySelector('[aria-valuetext="h2"]').classList.add('active-voice');
         } else if (tag === 'H3') {
-            styleSelect.innerHTML = "Heading 3"
+            styleSelect.innerHTML = "Heading 3";
             if (document?.querySelector('.active-voice')) {
-                document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                document?.querySelector('.active-voice')?.classList.remove('active-voice');
             }
-            document.querySelector('[aria-valuetext="h3"]').classList.add('active-voice')
+            document.querySelector('[aria-valuetext="h3"]').classList.add('active-voice');
         } else if (tag === 'P') {
-            styleSelect.innerHTML = "Normal"
+            styleSelect.innerHTML = "Normal";
             if (document?.querySelector('.active-voice')) {
-                document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                document?.querySelector('.active-voice')?.classList.remove('active-voice');
             }
-            document.querySelector('[aria-valuetext="normal"]').classList.add('active-voice')
+            document.querySelector('[aria-valuetext="normal"]').classList.add('active-voice');
         }else {
-            styleSelect.innerHTML = "Normal"
+            styleSelect.innerHTML = "Normal";
             if (document?.querySelector('.active-voice')) {
-                document?.querySelector('.active-voice')?.classList.remove('active-voice')
+                document?.querySelector('.active-voice')?.classList.remove('active-voice');
             }
-            document.querySelector('[aria-valuetext="normal"]').classList.add('active-voice')
+            document.querySelector('[aria-valuetext="normal"]').classList.add('active-voice');
         }
     }
 
