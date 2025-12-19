@@ -1029,6 +1029,9 @@ function Navbar(props) {
             || window.location.pathname.includes("/assets")
             || window.location.pathname.includes("/toolkit")
             || window.location.pathname.includes("/chat")
+            || window.location.pathname.includes("/create/translate/text/instant-text")
+            || window.location.pathname.includes("/create/translate/translate-files")
+            || window.location.pathname.includes("/create/translate/files/translate-files")
             || window.location.origin.includes(Config.MARKETPLACE_HOST))
             && isPIBNews;
     }
