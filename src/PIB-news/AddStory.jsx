@@ -18,7 +18,7 @@ import CloseBlack from "./../assets/images/new-ui-icons/close_black.svg";
 
 const HEADING_MAX_LENGTH = 500;
 const SUBHEADING_MAX_LENGTH = 1000;
-const SUMMERY_MAX_LENGTH = 20000;
+const SUMMERY_MAX_LENGTH = 10000;
 
 const AddStory = (props) => {
     const {languageOptions, ministryDepartmentOptions, activeProjTab } = props;
