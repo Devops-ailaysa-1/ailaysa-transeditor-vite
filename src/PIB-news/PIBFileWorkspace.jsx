@@ -9,11 +9,6 @@ import Navbar from "../vendor/Navbar";
 import Draggable from "react-draggable";
 import Tooltip from '@mui/material/Tooltip';
 import ButtonBase from '@mui/material/ButtonBase';
-// import {enableTransliteration} from './google-input-tools/transliteration-input.bundle.js';
-// import { enableTransliteration, disableTransliteration } from './google-input-tools/index.ts';
-// import { TransliterationProvider } from "./google-input-tools/transliteration-provider";
-// import "./google-input-tools/styles/style.scss";
-// import Segment from './Segment'
 import Cookies from "js-cookie";
 import Cursor from "../vendor/Cursor";
 import Joyride, { ACTIONS, EVENTS, STATUS } from "react-joyride";
@@ -30,7 +25,6 @@ import Select from '@mui/material/Select';
 import ReactSelect, { components } from 'react-select';
 import Checkbox from '@mui/material/Checkbox';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-// import DOMPurify from "isomorphic-dompurify";
 import sanitizeHtml from 'sanitize-html-react';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -642,7 +636,7 @@ function PIBFileWorkspace(props) {
         if(userDetails !== null) {
             queryParamExistUrl();
             getSteps();
-            setDidMount(true); // Component is mount (App loaded)
+            setDidMount(true);
             didMountRef.current = true;
             if (location?.state?.sourceLanguage != null) {
                 setSourceLanguage(location.state.sourceLanguage);
@@ -655,36 +649,21 @@ function PIBFileWorkspace(props) {
                 // Check documentId is exist in the url
                 setDocumentId(params.documentId);
                 getDocumentDetailsById(params.documentId);
-            } // If laguage data or document id is not present, redirect to file-upload page
+            } 
             else history("/file-upload");
             makeSegmentStatusOptions();
-            // history.listen((location, action) => {
-            //     removeIMESuggestion();
-            //     /* if (enableIME) {
-            //         targetContentEditable.current[focusedDivIdRef.current].current.blur()
-            //         setTimeout(() => {
-            //             window.location.reload()
-            //         }, 100)
-            //     } */
-            // });
             let element = workspaceFeaturRef.current; // Footer toolbar
             makeResizable(element, 10, 10);
             /* How to tour will be shown for the first time - start */
             if (typeof Cookies.get("isProductTourSeen") == "undefined")
-                // Check for the product tour is not seen yet
-                setIsProductTourSeen(false); // Product tour is not yet seen
-            /* How to tour will be shown for the first time - end */
-            /* To unselect the spellcheck by default - start (ID1)*/
+                setIsProductTourSeen(false);
             const waitForSpellCheckButton = setInterval(() => {
-                // Wait for the spellcheck icon is to be rendered
                 let spellcheckButton = toggleSpellCheckBtn.current;
                 if (spellcheckButton) {
-                    spellcheckButton?.click(); // Manually clicking the spellcheck icon because it has been enabled by default
+                    spellcheckButton?.click(); 
                     clearInterval(waitForSpellCheckButton);
                 }
             }, 0);
-            /* To unselect the spellcheck by default - end */
-            // set browser tab title as "Transeditor"
             document.title = 'Ailaysa | Transeditor';
         }
     }, [userDetails]);
@@ -803,20 +782,6 @@ function PIBFileWorkspace(props) {
         };
         /* Keep the target contenteditable focus when clicking the spellcheck / synonum popover - end*/
     });
-
-    // useEffect(() => {
-    //     /* Keep the target contenteditable focus when clicking with the IME editor suggestions - start*/
-    //     const handlePopoverClick = (e) => {
-    //         e.preventDefault();
-    //     };
-    //     if (document.getElementsByClassName("ks-input-suggestions")[0])
-    //         document.getElementsByClassName("ks-input-suggestions")[0].addEventListener("mousedown", handlePopoverClick, false);
-    //     return () => {
-    //         if (document.getElementsByClassName("ks-input-suggestions")[0])
-    //             document.getElementsByClassName("ks-input-suggestions")[0].removeEventListener("mousedown", handlePopoverClick);
-    //     };
-    //     /* Keep the target contenteditable focus when clicking with the IME editor suggestions - end*/
-    // });
 
     useEffect(() => {
         if (didMount) setDocumentId(params.documentId);

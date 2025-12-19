@@ -1678,6 +1678,14 @@ const PIBWorkspace = (props) => {
         });
     }
 
+    /**
+     * This method uses to prepare the subheading segments.
+     * @param {*} responseTemp 
+     * @returns 
+     * 
+     * @author PadmaBharathi Subiramanian 
+     * @since DEC 16 2025
+     */
     const prepareSubheading = (responseTemp) => {
         if (responseTemp?.source_json?.sub_headlines && responseTemp?.source_json?.sub_headlines.length > 0) {
             const subHeadingList = [];
@@ -1707,6 +1715,15 @@ const PIBWorkspace = (props) => {
         return null;
     }
 
+    /**
+     * This method uses to get the target subheadline value.
+     * @param {*} subHeadlines 
+     * @param {*} index 
+     * @returns 
+     * 
+     * @author PadmaBharathi Subiramanian 
+     * @since DEC 16 2025
+     */
     const getTargetSubHeadline = (subHeadlines, index) => {
        if (!Array.isArray(subHeadlines)) return '';
 

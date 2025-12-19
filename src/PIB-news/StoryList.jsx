@@ -87,6 +87,14 @@ const StoryList = (props) => {
         }
     }, [storyList]);
 
+    /**
+     * This mehtod used to open the edit project model.
+     * @param {*} e 
+     * @param {*} project 
+     * 
+     * @auhtor Padmabharathi Subiramanian
+     * @since DEC 2 2025
+     */
     const editProject = (e, project) => {
         e.stopPropagation();
         openEditProjectModel(e, project);
@@ -125,6 +133,14 @@ const StoryList = (props) => {
         Config.axios(params);
     }
 
+    /**
+     * This mehtod used to update the file status in the project file list.
+     * @param {*} files 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since DEC 2 2025
+     */
     const updateFileStatus = (files) => {
         return files.map(file => {
             if (FILE_STATUS_MAP[file?.pib_story_details?.status]) {

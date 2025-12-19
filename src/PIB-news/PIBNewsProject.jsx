@@ -197,6 +197,13 @@ const PIBNewsProjects = () => {
         history(tab.link + '?page=1');
     }
 
+    /**
+     * This mehtod used to set the active add story tab while change.
+     * @param {*} tab 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 16 Dec 2025
+     */
     const onAddStoryTabChange = (tab) => {
         setActiveAddStoryTab(tab);
     }

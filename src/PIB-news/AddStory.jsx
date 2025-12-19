@@ -67,6 +67,12 @@ const AddStory = (props) => {
         setSelectedDepartment(tempDepartment);
     }, []);
 
+    /**
+     * This effect used to clear the form data while change the tab.
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 16 DEC 2025
+     */
     useEffect(() => {
         if (activeProjTab) {
             clearFormData();
@@ -120,6 +126,12 @@ const AddStory = (props) => {
         updateError('source');
     };
 
+    /**
+     * This method used to remove the selected source language from target language options
+     * 
+     * @author Padmabharathi Subiramanian   
+     * @since DEC 2 2025
+     */
     const removeSelectedSourceFromTarget = () => {
         setTargetLanguageOptions(languageOptions?.filter((element) => element.id != sourceLanguage));
     };
@@ -191,6 +203,14 @@ const AddStory = (props) => {
         });
     }
 
+    /**
+     * This mehtod used to handle the subtitle change
+     * @param {*} e 
+     * @param {*} index 
+     * 
+     * @author Padmabharathi Subiramanian   
+     * @since 16 DEC 2025
+     */
     const handleSubTitleChange = (e, index) => {
         let { value } = e.target;
         if (value.length > SUBHEADING_MAX_LENGTH) value = value.slice(0, SUBHEADING_MAX_LENGTH);
@@ -199,11 +219,24 @@ const AddStory = (props) => {
         );
     };
 
+    /**
+     * This mehtod used to add the sub title in the list.
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 16 DEC 2025
+     */
     const addSubTitle = () => {
         setSubTitleItem(prev => ([...prev, prev.length]));
         setSubTitleList(prev => ([...prev, '']));
     }
 
+    /**
+     * This method used to remove the subtitle from the list
+     * @param {*} removeIndex 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since 16 DEC 2025
+     */
     const removeSubTitle = (removeIndex) => {
         setSubTitleItem(prev => prev.filter((_, idx) => idx !== removeIndex));
         setSubTitleList(prev => prev.filter((_, idx) => idx !== removeIndex));
@@ -277,6 +310,13 @@ const AddStory = (props) => {
         }
     }
 
+    /**
+     * This method used to prepare the subtitle data befor submission.
+     * @returns 
+     * 
+     * @auhtor Padmabharathi Subiramanian
+     * @since 16 DEC 2025
+     */
     const prepareSubTitleData = () => {
         if (subTitleList && subTitleList.length > 0) {
             const subTitleData = [];
@@ -488,6 +528,14 @@ const AddStory = (props) => {
         });
     }
 
+    /**
+     * This mehtod used to handle the file change event when uploading the file.
+     * @param {*} e 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since DEC 16 2025
+     */
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -508,8 +556,26 @@ const AddStory = (props) => {
         }
     };
 
+    /**
+     * This mehtod used to handle the file drop event when drag and drop the file.
+     * @param {*} filesTemp 
+     * @param {*} request 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since DEC 16 2025
+     */
     const handleDrop = (filesTemp, request = null) => {
         const file = filesTemp[0];
+        if(!file) return;
+
+        const name = file.name;
+        const lastDot = name.lastIndexOf(".");
+        const ext = "." + name.substring(lastDot + 1);
+
+        if(![".txt", ".docx"].includes(ext)) {
+            Config.toast(t("file_not_support_message"), 'warning');
+            return false;
+        }
         if (checkFileSize(file)) {
             setFiles([file]);
             uploadFile(file);
@@ -518,6 +584,13 @@ const AddStory = (props) => {
         }
     };
     
+    /**
+     * This mehtod used to upload the file to the server.
+     * @param {*} file 
+     * 
+     * @author Padmabharathi Subiramanian
+     * @since DEC 16 2025
+     */
     const uploadFile = async (file) => {
         try {
             setUploadedFiles(prev => [
@@ -538,6 +611,14 @@ const AddStory = (props) => {
         }
     };
 
+    /**
+     * This method used to check the uploaded file size.
+     * @param {*} file 
+     * @returns 
+     * 
+     * @author Padmabharathi Subiramanian   
+     * @since DEC 16 2025
+     */
     const checkFileSize = (file) => {
         if (!file) return;
         const MAX_SIZE = 100 * 1024 * 1024; 
@@ -548,6 +629,13 @@ const AddStory = (props) => {
         return true;
     };
 
+    /**
+     * This method used to remove the file from the uploaded file list.
+     * @param {*} index 
+     * 
+     * @author Padmabharathi Subiramanian 
+     * @since DEC 16 2025
+     */
     const removeFile = (index) => {
         setUploadedFiles(prev => prev.filter((_, idx) => idx !== index));
         setFiles(prev => prev.filter((_, idx) => idx !== index));
