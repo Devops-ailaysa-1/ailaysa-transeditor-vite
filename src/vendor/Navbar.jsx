@@ -1028,7 +1028,8 @@ function Navbar(props) {
             || window.location.pathname.includes("/designs")
             || window.location.pathname.includes("/assets")
             || window.location.pathname.includes("/toolkit")
-            || window.location.pathname.includes("/chat"))
+            || window.location.pathname.includes("/chat")
+            || window.location.origin.includes(Config.MARKETPLACE_HOST))
             && isPIBNews;
     }
 
