@@ -1023,7 +1023,12 @@ function Navbar(props) {
             || window.location.pathname.includes("/chat-books")
             || window.location.pathname.includes("/ai-voices")
             || window.location.pathname.includes("/translations")
-            || (window.location.pathname.includes("/transcriptions")))
+            || window.location.pathname.includes("/transcriptions")
+            || window.location.pathname.includes("/documents-list")
+            || window.location.pathname.includes("/designs")
+            || window.location.pathname.includes("/assets")
+            || window.location.pathname.includes("/toolkit")
+            || window.location.pathname.includes("/chat"))
             && isPIBNews;
     }
 
