@@ -644,7 +644,7 @@ const AddNewGlossaryForm = (props) => {
                                 <div className="glossary-form-col">
                                     <div className="glossary-input-form-field">
                                         <div className="form-group">
-                                            <label htmlFor="exampleFormControlFile1">{t("machine_translation_engine")}<span className="asterik-symbol">*</span></label>
+                                            <label htmlFor="exampleFormControlFile1">{'Ministry/Department'}<span className="asterik-symbol">*</span></label>
                                             <Select
                                                 options={ministryDepartmentList}
                                                 value={selectedMinistryDepartment}
