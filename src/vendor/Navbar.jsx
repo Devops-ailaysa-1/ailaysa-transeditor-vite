@@ -1040,6 +1040,10 @@ function Navbar(props) {
             && isPIBNews;
     }
 
+    const hideGlosserMenu = () => {
+        return !(window.location.pathname.includes('/pibnews-workspace'));
+    }
+
     /**
      * This method used to redirect to the news project again if the user in the standard project view.
      * 
@@ -1315,7 +1319,7 @@ function Navbar(props) {
                                     </li>
                                 }                                
                                 <li id="download-dropdown-wrapper" className={props.isWhite ? "nav-item nav-drp-down active mr-3" : "navbar-display-hide mr-3"}>
-                                    {(props.updatedFileDownload && !isEnterprise && !is_internal_meber_editor) && (
+                                    {hideGlosserMenu() && (props.updatedFileDownload && ((!isEnterprise && !is_internal_meber_editor) || isPIBNews)) && (
                                         <GlossaryMenuDrpDown />
                                     )}
                                 </li>

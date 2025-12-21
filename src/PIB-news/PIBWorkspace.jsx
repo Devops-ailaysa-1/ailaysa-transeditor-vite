@@ -47,6 +47,7 @@ import Rodal from "rodal";
 import { OnTheFlyGlossary } from "../vendor/model-select/Ailaysa-Glossaries/on-the-fly-modal/OnTheFlyGlossary";
 import { setShowGlossTermAddForm } from "../features/ai-glossary/ToggleGlossTermAddFormSlice";
 import { useDispatch } from "react-redux";
+import { AilaysaGlossariesModal } from "../vendor/model-select/Ailaysa-Glossaries/AilaysaGlossariesModal";
 
 const PIBWorkspace = (props) => {
     Config.redirectIfNotLoggedIn(props); 
@@ -4816,16 +4817,16 @@ const PIBWorkspace = (props) => {
 
     
     const getDefaultGlossDetails = () => {
-        Config.axios({
-            url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
-            auth: true,
-            success: (response) => {
-                defaultGlossDetailsRef.current = response.data;
-            },
-            error: (err) => {
-                // setisGlossaryListLoading(false);
-            }
-        });
+        // Config.axios({
+        //     url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
+        //     auth: true,
+        //     success: (response) => {
+        //         defaultGlossDetailsRef.current = response.data;
+        //     },
+        //     error: (err) => {
+        //         // setisGlossaryListLoading(false);
+        //     }
+        // });
     }
 
 
@@ -5767,6 +5768,10 @@ const PIBWorkspace = (props) => {
                 </div>
             </div>
         </Rodal>)}
+        {/* <AilaysaGlossariesModal
+            documentDetails={documentDetailsRef.current}
+            defaultGlossDetailsRef={defaultGlossDetailsRef}
+            getDefaultGlossDetails={getDefaultGlossDetails}/> */}
         {selectedCoordinates && (
             <OnTheFlyGlossary
                 selectedCoordinates={selectedCoordinates}

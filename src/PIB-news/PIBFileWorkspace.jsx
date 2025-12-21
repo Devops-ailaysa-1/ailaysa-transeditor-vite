@@ -8226,7 +8226,7 @@ function PIBFileWorkspace(props) {
             {selectedCoordinates && (
                 <OnTheFlyGlossary 
                     selectedCoordinates={selectedCoordinates}
-                    setSelectedCoordinates={setSelectedCoordinates} 
+                    setSelectedCoordinates={setSelectedCoordinates}
                     sourceSelectionText={sourceSelectionText}
                     targetSelectionText={targetSelectionText}
                     defaultGlossDetailsRef={defaultGlossDetailsRef}

@@ -357,7 +357,7 @@ const AddStory = (props) => {
             const subTitleData = prepareSubTitleData();
             if (subTitleData) payload.append("sub_headlines", JSON.stringify(subTitleData));
         } else if (activeProjTab.id === 2) {
-            payload.append("pre_translate", formData.preTranslate ? formData.preTranslate : false);
+            // payload.append("pre_translate", formData.preTranslate ? formData.preTranslate : false);
             if (files && files.length > 0) payload.append("files", files[0]);
         }
         if (payload) sumbit(payload);
@@ -912,26 +912,21 @@ const AddStory = (props) => {
                         {errors?.file && <small className="text-danger">{errors?.file}</small>}
                         </div>
                     </div>
-                    <div className={`flex items-center gap-2 ${errors?.file ? 'mt-[12px]' : 'mt-[24px]'}`}>
-                        {/* <label
-                            htmlFor="check-pre-translate"
-                            className="flex items-center gap-2 cursor-pointer"
-                        > */}
-                            <input
-                                id="check-pre-translate"
-                                type="checkbox"
-                                checked={formData.preTranslate}
-                                onChange={(e) => {
-                                    setFormData(prev => ({
-                                        ...prev,
-                                        preTranslate: e.target.checked,
-                                    }));
-                                }}
-                                className="w-4 h-4 accent-blue-600 cursor-pointer"
-                            />
-                            <span className="text-gray-700">Pre-translate file</span>
-                        {/* </label> */}
-                    </div>
+                    {/* <div className={`flex items-center gap-2 ${errors?.file ? 'mt-[12px]' : 'mt-[24px]'}`}>
+                        <input
+                            id="check-pre-translate"
+                            type="checkbox"
+                            checked={formData.preTranslate}
+                            onChange={(e) => {
+                                setFormData(prev => ({
+                                    ...prev,
+                                    preTranslate: e.target.checked,
+                                }));
+                            }}
+                            className="w-4 h-4 accent-blue-600 cursor-pointer"
+                        />
+                        <span className="text-gray-700">Pre-translate file</span>
+                    </div> */}
                 </>
                 }
                 <div className="flex justify-end mt-6">
