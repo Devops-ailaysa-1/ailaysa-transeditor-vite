@@ -44,6 +44,9 @@ import WikipediaIcon from "../assets/images/new-ui-icons/wiki-new-img.svg";
 import WikitionaryIcon from "../assets/images/new-ui-icons/wikitionary-new-img.png";
 import { SandClockLoader } from "../loader/SandClockLoader";
 import Rodal from "rodal";
+import { OnTheFlyGlossary } from "../vendor/model-select/Ailaysa-Glossaries/on-the-fly-modal/OnTheFlyGlossary";
+import { setShowGlossTermAddForm } from "../features/ai-glossary/ToggleGlossTermAddFormSlice";
+import { useDispatch } from "react-redux";
 
 const PIBWorkspace = (props) => {
     Config.redirectIfNotLoggedIn(props); 
@@ -448,6 +451,16 @@ const PIBWorkspace = (props) => {
     const targetNoteEditableDiv = document.querySelector('.note-editable');
 
     const [showProcessingModal, setShowProcessingModal] = useState(false);
+
+    const [selectedCoordinates, setSelectedCoordinates] = useState(null);
+    const [showGlossaryAddition, setShowGlossaryAddition] = useState(false);
+    const [sourceSelectionText, setSourceSelectionText] = useState("");
+    const [targetSelectionText, setTargetSelectionText] = useState("");
+
+    const defaultGlossDetailsRef = useRef(null);
+    const documentDetailsRef = useRef(null);
+
+    const dispatch = useDispatch();
 
     const modaloption = {
         closeMaskOnClick: false,
@@ -1831,6 +1844,7 @@ const PIBWorkspace = (props) => {
                         documentSubmitStepRef.current = 1;
                         let task_data = response.data?.find(each => each.id === responseTemp.task);
                         taskDataRef.current = task_data;
+                        documentDetailsRef.current = {...task_data, task_id: task_data.id};
                         // logged in user is an agency and this task is assigned to LSP(not his own project) (LSP(reassign) -> vendor)
                         if (userDetails?.agency ) {
                             // the task whether reassigned or not, the LSP needs to work/see work and submit the document
@@ -4746,6 +4760,74 @@ const PIBWorkspace = (props) => {
         }
     };
 
+    
+    const checkTargetTextSelection = () => {
+        // let selTxt = window.getSelection()?.toString();
+        let selection = window.getSelection();
+        if(selection?.toString()?.trim()?.length === 0) {
+            setSelectedCoordinates(null);
+            dispatch(setShowGlossTermAddForm(false));
+            return;
+        } 
+        let range = selection.getRangeAt(0);
+        // if(!isEnterprise && !is_internal_meber_editor){
+            let selectionRect = range.getBoundingClientRect();
+            dispatch(setShowGlossTermAddForm(false));
+            setSelectedCoordinates(selectionRect);
+        // }
+        let clonedSelection = range.cloneContents();
+        let div = document.createElement('div');
+        div.appendChild(clonedSelection);
+        let selectedHTML = div.innerHTML;
+        let selTxt = removeSpecificTagWithContent(selectedHTML, 'span');
+        selTxt = removeSpecificTag(selTxt, 'mark');
+        setTargetSelectionText(Config.unescape(selTxt));
+        if(window.getSelection().toString()?.trim() === '' || dictionaryTerm !== selTxt){
+            showDictionaryRef.current?.classList.remove("toolbar-list-icons-active");
+        }
+    }
+
+    const checkSourceTextSelection = () => {
+        // let selTxt = window.getSelection()?.toString();
+        let selection = window.getSelection();
+    //   text selection
+        const restrectedtext=selection?.toString()?.trim().split(/\s+/).filter(Boolean);
+        if(selection?.toString()?.trim()?.length === 0) {
+            setSelectedCoordinates(null);
+            dispatch(setShowGlossTermAddForm(false));
+            return;
+        }
+        let range = selection.getRangeAt(0);
+        // if(!isEnterprise && !is_internal_meber_editor){
+            let selectionRect = range.getBoundingClientRect();
+            dispatch(setShowGlossTermAddForm(false));
+            // if(restrectedtext.length <= 2){
+            setSelectedCoordinates(selectionRect);
+            // }
+        // }
+        let clonedSelection = range.cloneContents();
+        let div = document.createElement('div');
+        div.appendChild(clonedSelection);
+        let selectedHTML = div.innerHTML;
+        let selTxt = removeSpecificTagWithContent(selectedHTML, 'span');
+        selTxt = removeSpecificTag(selTxt, 'mark');
+        setSourceSelectionText(Config.unescape(selTxt));
+    }
+
+    
+    const getDefaultGlossDetails = () => {
+        Config.axios({
+            url: `${Config.BASE_URL}/glex/get_default_gloss?trans_project_id=${documentDetailsRef.current?.project}&task=${documentDetailsRef.current?.task_id}`,
+            auth: true,
+            success: (response) => {
+                defaultGlossDetailsRef.current = response.data;
+            },
+            error: (err) => {
+                // setisGlossaryListLoading(false);
+            }
+        });
+    }
+
 
     return (
         <>
@@ -4939,9 +5021,10 @@ const PIBWorkspace = (props) => {
                                                                                 onPaste={(e) => e.preventDefault()}
                                                                                 onDrop={(e) => e.preventDefault()}
                                                                                 onCut={(e) => e.preventDefault()}
+                                                                                onSelect={() => debounceApiCall(checkSourceTextSelection)}
                                                                                 spellCheck="false"
                                                                                 style={{ marginTop: 0}}
-                                                                                contentEditable={false}
+                                                                                contentEditable={isWorkspaceEditable ? true : false}
                                                                                 suppressContentEditableWarning={true}
                                                                                 dangerouslySetInnerHTML={{__html: translation?.source}}
                                                                             ></div>
@@ -4990,6 +5073,7 @@ const PIBWorkspace = (props) => {
                                                                                     translation={translation.target}
                                                                                     editorRef={editorRef}
                                                                                     isWorkspace={true}
+                                                                                    onSelection={(e) => debounceApiCall(checkTargetTextSelection)}
                                                                                 />
                                                                             ) : ( 
                                                                                 <div
@@ -5003,6 +5087,7 @@ const PIBWorkspace = (props) => {
                                                                                     onInput={() => handleChangeUpdate()}
                                                                                     onScroll={(e) => imeOn && handleDissapear()}
                                                                                     onDrop={(e) => e.preventDefault()}  // this line prevent from dropping anything inside the target segment
+                                                                                    onSelect={() => debounceApiCall(checkTargetTextSelection)}
                                                                                     data-id={id}
                                                                                     data-source-text={translation.source}
                                                                                     id={"workspace-textarea-" + id}
@@ -5682,6 +5767,16 @@ const PIBWorkspace = (props) => {
                 </div>
             </div>
         </Rodal>)}
+        {selectedCoordinates && (
+            <OnTheFlyGlossary
+                selectedCoordinates={selectedCoordinates}
+                setSelectedCoordinates={setSelectedCoordinates} 
+                sourceSelectionText={sourceSelectionText}
+                targetSelectionText={targetSelectionText}
+                defaultGlossDetailsRef={defaultGlossDetailsRef}
+                taskId={defaultGlossDetailsRef.current ? defaultGlossDetailsRef.current?.gloss_task_id : documentDetailsRef.current.task_id}
+                focusedDivIdRef={focusedDivIdRef}/>
+        )}
         </>
     );
 }

@@ -20,6 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import GroupsColor from "../../../assets/images/new-ui-icons/groups_color.svg";
 import ReactRouterPrompt from "react-router-prompt";
+import { useSelector } from "react-redux";
 
 const CreateGlossaries = (props) => {
 	const { sidebarActiveTab, setSidebarActiveTab } = props;
@@ -123,6 +124,9 @@ const CreateGlossaries = (props) => {
 	const [hasTeam, setHasTeam] = useState(null);
 	const [checkchangenav, setCheckchangenav] = useState(false);
 	const [page, setPage] = useState(0);
+	
+	const [selectedMinistryDepartment, setSelectedMinistryDepartment] = useState(null);
+	const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
 	const searchAreaRef = useRef(null);
 	const projectIdToSelect = useRef(null);
@@ -648,6 +652,10 @@ const CreateGlossaries = (props) => {
 		setSelectedMTEngine(selectedOption);
 	};
 
+    const handleMinistryDepartmentChange = (selectedDept) => {
+        setSelectedMinistryDepartment(selectedDept);
+    };
+
 	/* Handle Usage permission option change */
 	const handleUsagePermissionChange = (selectedOption) => {
 		setSelectedUsagePermission(selectedOption);
@@ -789,6 +797,19 @@ const CreateGlossaries = (props) => {
 			formData.append("project_name", projectName);
 		}
 		if (fileUrl != "") formData.append("url", fileUrl);
+
+		if (isPIBNews) {
+			if (selectedMinistryDepartment?.value !== undefined) {
+				formData.append("ministry_department", selectedMinistryDepartment?.value);
+			}
+			formData.append("is_pib_glossary", true);
+			formData.append("get_mt_by_page", true);
+			formData.append("steps", 1);
+			formData.append("project_type", 3);
+			formData.append("usage_permission", 'Private');
+			formData.append("apative_simple", true);	
+		}
+
 		let url = "";
 		if (integrationFiles.length) {
 			if (!integrationFiles[0].branchId) {
@@ -809,7 +830,7 @@ const CreateGlossaries = (props) => {
 			url = Config.BASE_URL + "/workspace/project/quick/setup/";
 		else url = Config.BASE_URL + "/srt/fileUpload";
 		setShowCreateLoader(true);
-
+		const filteredFormData = filterFormData(formData);
 		Config.axios({
 			headers: {
 				"Access-Control-Allow-Origin": "*",
@@ -819,7 +840,7 @@ const CreateGlossaries = (props) => {
 			},
 			url: url,
 			method: "POST",
-			data: formData,
+			data: filteredFormData,
 			auth: true,
 			success: (response) => {
 				// Config.toast("Project created successfully");
@@ -840,6 +861,16 @@ const CreateGlossaries = (props) => {
 			},
 		});
 	};
+
+	const filterFormData = (formData) => {
+		const filteredFormData = new FormData();
+		for (const [key, value] of formData.entries()) {
+			if (value !== undefined && value !== null && value !== '') {
+				filteredFormData.append(key, value);
+			}
+		}
+		return filteredFormData;
+	}
 
 	// useEffect(() => {
 	// }, [projectName])
@@ -981,6 +1012,19 @@ const CreateGlossaries = (props) => {
 		// if (projectAvailalbility === "team") formData.append("team", true);
 		// else formData.append("team", false);
 		if (fileUrl != "") formData.append("url", fileUrl);
+
+		if (isPIBNews) {
+			if (selectedMinistryDepartment?.value !== undefined) {
+				formData.append("ministry_department", selectedMinistryDepartment?.value);
+			}
+			formData.append("is_pib_glossary", true);
+			formData.append("get_mt_by_page", true);
+			formData.append("steps", 1);
+			formData.append("project_type", 3);
+			formData.append("usage_permission", 'Private');
+			formData.append("apative_simple", true);	
+		}
+
 		let url = "";
 		if (fileUrl == "")
 			url = `${
@@ -988,6 +1032,7 @@ const CreateGlossaries = (props) => {
 			}/workspace/project/quick/setup/${editProjectId}/?step_delete_ids=${deleteIdList}&file_delete_ids=${deletedEditFileIds.current.join()}&job_delete_ids=${list}&subject_delete_ids=${deletedSubjectIds.current.join()}&project_type_id=3`;
 		else url = Config.BASE_URL + "/srt/fileUpload";
 		setShowUpdateLoader(true);
+		const filteredFormData = filterFormData(formData);
 		Config.axios({
 			headers: {
 				"Access-Control-Allow-Origin": "*",
@@ -997,7 +1042,7 @@ const CreateGlossaries = (props) => {
 			},
 			url: url,
 			method: "PUT",
-			data: formData,
+			data: filteredFormData,
 			auth: true,
 			success: (response) => {
 				// Config.toast("Project updated successfully");
@@ -1070,6 +1115,7 @@ const CreateGlossaries = (props) => {
 		setTargetLanguageOptions,
 		usagePermissionOptions,
 		handleMTEngineChange,
+		handleMinistryDepartmentChange,
 		handleUsagePermissionChange,
 		handleSourceLangClick,
 		handleTargetLangClick,
@@ -1117,6 +1163,7 @@ const CreateGlossaries = (props) => {
 		mtpeEngines,
 		setMtpeEngines,
 		selectedMTEngine,
+		selectedMinistryDepartment,
 		alreadySelecetedTarLangID,
 		alreadySelectedTarLang,
 		goBackCreateBtn,

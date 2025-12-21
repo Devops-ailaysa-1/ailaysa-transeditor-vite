@@ -4,7 +4,8 @@ import React, { useState, useEffect, createRef, useRef } from "react";
 import ReactDOM from "react-dom";
 import { useLocation } from "react-router-dom";
 import { Button, Popover, PopoverBody, PopoverHeader } from "reactstrap";
-import Config from "../Config";
+// import Config from "../Config";
+import Config from "../vendor/Config";
 import Navbar from "../vendor/Navbar";
 import Draggable from "react-draggable";
 import Tooltip from '@mui/material/Tooltip';
@@ -1707,11 +1708,11 @@ function PIBFileWorkspace(props) {
                     }
                     return;
                 }                
-                if(!isEnterprise && !is_internal_meber_editor){
+                // if(!isEnterprise && !is_internal_meber_editor){
                     let range = selection.getRangeAt(0);
                     let selectionRect = range.getBoundingClientRect();
                     setSelectedCoordinates(selectionRect);
-                }
+                // }
             }
         }    
         workspaceEditor?.addEventListener('scroll', handleScroll);
@@ -2081,7 +2082,7 @@ function PIBFileWorkspace(props) {
                 setMtEnable(responseTemp?.mt_enable);
                 setTaskAssignUserDetails(responseTemp?.assign_detail.find(each => each.assign_to_id === Config?.userState.id)?.step_id);
                 setIsAdaptiveTransEnabled(responseTemp?.isAdaptive);
-                if(!isEnterprise) getDefaultGlossDetails();
+                getDefaultGlossDetails();
                 if(userDetails?.enterprise_name !== "Enterprise - DIN"){
                     // edit_allowed key will restrict the workspace editing access
                     setIsWorkspaceEditable(responseTemp.edit_allowed)
@@ -6187,11 +6188,11 @@ function PIBFileWorkspace(props) {
             return;
         } 
         let range = selection.getRangeAt(0);
-        if(!isEnterprise && !is_internal_meber_editor){
+        // if(!isEnterprise && !is_internal_meber_editor){
             let selectionRect = range.getBoundingClientRect();
             dispatch(setShowGlossTermAddForm(false));
             setSelectedCoordinates(selectionRect);
-        }
+        // }
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
         div.appendChild(clonedSelection);
@@ -6215,13 +6216,13 @@ function PIBFileWorkspace(props) {
             return;
         }
         let range = selection.getRangeAt(0);
-        if(!isEnterprise && !is_internal_meber_editor){
+        // if(!isEnterprise && !is_internal_meber_editor){
             let selectionRect = range.getBoundingClientRect();
             dispatch(setShowGlossTermAddForm(false));
             // if(restrectedtext.length <= 2){
             setSelectedCoordinates(selectionRect);
             // }
-        }
+        // }
         let clonedSelection = range.cloneContents();
         let div = document.createElement('div');
         div.appendChild(clonedSelection);
@@ -6707,7 +6708,7 @@ function PIBFileWorkspace(props) {
                 // setisGlossaryListLoading(false);
             }
         });
-    } 
+    }
     // ================================================================================================================
 
     let id,

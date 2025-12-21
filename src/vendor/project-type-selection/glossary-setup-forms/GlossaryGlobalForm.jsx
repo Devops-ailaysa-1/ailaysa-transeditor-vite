@@ -13,7 +13,20 @@ import { glossaryContext } from './../../context-api/Context';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import { ButtonLoader } from './../../../loader/CommonBtnLoader';
+import { useSelector } from "react-redux";
 
+
+const GROSSARY_PIB_TABS = [{
+    id: 1,
+    code: 'Standard',
+    label: 'Standard',
+    isEnabled: true,
+}, {
+    id: 2,
+    code: 'PressReleases',
+    label: 'Stories/Press releases',
+    isEnabled: true,
+}];
 
 const GlossaryGlobalForm = (props) => {
     const { t } = useTranslation();
@@ -63,6 +76,8 @@ const GlossaryGlobalForm = (props) => {
     const [isUpdating, setIsUpdating] = useState(false)
     const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
     const [isProjectDeleting, setIsProjectDeleting] = useState(false)
+    const [selectedTab, setSelectedTab] = useState(GROSSARY_PIB_TABS[1]);
+    const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
     const projectTypeHeader = (
         <div className="header-align d-flex">
@@ -79,7 +94,9 @@ const GlossaryGlobalForm = (props) => {
             return (
                 <Fragment>
                     <AddNewGlossaryForm
-                        required={required} />
+                        required={required}
+                        selectedtab={selectedTab}
+                    />
                 </Fragment>
             );
         else
@@ -279,16 +296,16 @@ const GlossaryGlobalForm = (props) => {
         contentprojectNameRef.current.scrollTo(0, 0);
     }
 
-
-
-
+    const onTabChangeHandler = (tab) => {
+        setSelectedTab(tab);
+    }
 
     return (
         <React.Fragment>
             {page === 0 &&
                 <>
                     {/* <div className={"project-input-wrap " + ((!requirementSatisfied && projectName.length == 0) && "error-focus")}> */}
-                    <div className={"project-input-wrap "}>
+                    <div className={"project-input-wrap"}>
                         <div
                             ref={contentprojectNameRef}
                             // onInput={projectName}
@@ -303,6 +320,19 @@ const GlossaryGlobalForm = (props) => {
                             tabIndex={0}
                         ></div>
                     </div>
+                    {isPIBNews && 
+                        <div className="projects-list-wrap-header mt-[26px]">
+                            <div className="project-setup-tabs">
+                                <div className='flex add-story-nav'>
+                                    {GROSSARY_PIB_TABS.map(tab => (tab.isEnabled && (
+                                        <div className={"add-story-nav-item " + (selectedTab.id == tab.id ? 'active' : '')} onClick={() => onTabChangeHandler(tab)}>
+                                            <span className='add-story-nav-text'>{tab.label}</span>
+                                        </div>
+                                    )))}
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </>
             }
             <div className="glossary-global-setup-wrapper">

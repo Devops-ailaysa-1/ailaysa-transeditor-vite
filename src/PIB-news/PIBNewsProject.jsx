@@ -85,7 +85,7 @@ const PIBNewsProjects = () => {
             history(browserUrl);
         }
         getLanguagesList();
-        getMinistryDepartmentList();      
+        getMinistryDepartmentList();
         document.title = 'Ailaysa | News Projects';
     }, []); 
 
@@ -139,7 +139,7 @@ const PIBNewsProjects = () => {
             },
             error: (error) => {
                 if(error.response.status === 500){
-                    Helper.showToast('Something went wrong. Please try again later.', 'error');
+                    Config.showToast('Something went wrong. Please try again later.', 'error');
                 }
             }
         };
@@ -161,10 +161,10 @@ const PIBNewsProjects = () => {
             },
             error: (error) => {
                 if(error.response.status === 500){
-                    Helper.showToast('Something went wrong. Please try again later.', 'error');
+                    Config.showToast('Something went wrong. Please try again later.', 'error');
                 }
             }
-        };  
+        };
         Config.axios(params);
     }
 

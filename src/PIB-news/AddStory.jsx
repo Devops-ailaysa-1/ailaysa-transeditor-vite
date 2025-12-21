@@ -76,6 +76,7 @@ const AddStory = (props) => {
     useEffect(() => {
         if (activeProjTab) {
             clearFormData();
+            setErrors({});
         }
     }, [activeProjTab]);
 
@@ -282,7 +283,7 @@ const AddStory = (props) => {
         let newErrors = {};       
         if (!formData.source_language) newErrors.source = "Source language is required";
         if (!formData.target_language) newErrors.target = "Target language is required";
-        
+        if (!formData.ministry_department) newErrors.dept = "Ministry/Department is required";
         if (activeProjTab.id === 1) {
             if (!formData.headline) newErrors.headline = "Headline is required";
             if (!formData.body) newErrors.body = "Story body is required";
@@ -503,6 +504,7 @@ const AddStory = (props) => {
             ...prev,
             ministry_department: selectedDept?.value || ""
         }));
+        updateError('dept');
     };
 
     /**
@@ -695,7 +697,9 @@ const AddStory = (props) => {
                             {errors.target && <small className="text-danger">{t("select_a_target_language")}</small>}
                     </div>
                     <div>
-                        <label className="block mb-1 text-gray-700 font-medium">Ministry/Department</label>
+                        <label className="block mb-1 text-gray-700 font-medium">Ministry/Department
+                            <span className="asterik-symbol">*</span>
+                        </label>
                         <Select
                             placeholder="Select Ministry / Department"
                             menuPlacement="auto"
@@ -705,6 +709,24 @@ const AddStory = (props) => {
                             value={selectedDepartment}
                             onChange={handleDepartmentChange}
                         />
+                        <div className='flex flex-col'>
+                            <span className="dept-info flex items-center gap-[2px]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M11.3438 15.5H12.6562V11.125H11.3438V15.5ZM11.9962 9.8125C12.181 9.8125 12.3372 9.74997 12.4648 9.62492C12.5924 9.49987 12.6562 9.34492 12.6562 9.16008C12.6562 8.97523 12.5937 8.81901 12.4687 8.69141C12.3436 8.5638 12.1887 8.5 12.0038 8.5C11.819 8.5 11.6628 8.56253 11.5352 8.68758C11.4076 8.81263 11.3438 8.96758 11.3438 9.15242C11.3438 9.33727 11.4063 9.49349 11.5313 9.62109C11.6564 9.7487 11.8113 9.8125 11.9962 9.8125ZM12.0051 19C11.0416 19 10.1345 18.8177 9.28385 18.4531C8.43316 18.0885 7.6888 17.5872 7.05078 16.9492C6.41276 16.3112 5.91146 15.5671 5.54688 14.7169C5.18229 13.8667 5 12.9582 5 11.9916C5 11.025 5.18229 10.1194 5.54688 9.27474C5.91146 8.43012 6.41276 7.6888 7.05078 7.05078C7.6888 6.41276 8.43292 5.91146 9.28312 5.54688C10.1333 5.18229 11.0418 5 12.0084 5C12.975 5 13.8806 5.18229 14.7253 5.54688C15.5699 5.91146 16.3112 6.41276 16.9492 7.05078C17.5872 7.6888 18.0885 8.43146 18.4531 9.27875C18.8177 10.1262 19 11.0315 19 11.9949C19 12.9584 18.8177 13.8655 18.4531 14.7161C18.0885 15.5668 17.5872 16.3112 16.9492 16.9492C16.3112 17.5872 15.5685 18.0885 14.7213 18.4531C13.8738 18.8177 12.9685 19 12.0051 19ZM12 17.6875C13.5799 17.6875 14.9227 17.1345 16.0286 16.0286C17.1345 14.9227 17.6875 13.5799 17.6875 12C17.6875 10.4201 17.1345 9.07726 16.0286 7.97135C14.9227 6.86545 13.5799 6.3125 12 6.3125C10.4201 6.3125 9.07726 6.86545 7.97135 7.97135C6.86545 9.07726 6.3125 10.4201 6.3125 12C6.3125 13.5799 6.86545 14.9227 7.97135 16.0286C9.07726 17.1345 10.4201 17.6875 12 17.6875Z" fill="#5D5D5D"/>
+                                </svg>
+                                <span>Choose a ministry/department to apply its glossary. Don&apos;t see one?{" "}
+                                    <a
+                                        href="/create/assets/glossaries/create"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >Create it.</a>
+                                </span>
+                            </span>
+                            <span>
+                                {errors.dept && <small className="text-danger">{errors.dept}</small>}
+                            </span>
+                        </div>
                     </div>
                     <div>
                         <label className="block mb-1 text-gray-700 font-medium">Dateline</label>

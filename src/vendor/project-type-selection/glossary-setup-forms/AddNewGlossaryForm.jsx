@@ -18,6 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { CustomTimePicker } from "../../custom-component/CustomTimePicker";
 import ArrowRightGrey from "../../../assets/images/new-create-hub/arrow_right_grey_color.svg"
 import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
+import { useSelector } from "react-redux";
 // const GlossaryCellRadiobtn = withStyles({
 //     root: {
 //         color: "#5F6368",
@@ -66,6 +67,7 @@ const AddNewGlossaryForm = (props) => {
         setTargetLanguageOptions,
         usagePermissionOptions,
         handleMTEngineChange,
+        handleMinistryDepartmentChange,
         handleUsagePermissionChange,
         handleSourceLangClick,
         handleTargetLangClick,
@@ -103,6 +105,7 @@ const AddNewGlossaryForm = (props) => {
         alreadySelectedTarLang,
         revisionStepEdit,
         selectedMTEngine,
+        selectedMinistryDepartment,
         selectedSteps,
         stepOptions,
         handleSelectedSteps,
@@ -176,6 +179,8 @@ const AddNewGlossaryForm = (props) => {
     const [recentlyUsedLangs, setRecentlyUsedLangs] = useState([])
     const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
     const [glossClass, setGlossClass] = useState(true)
+    const isPIBNews = useSelector((state) => state.isPIBNews.value);
+    const [ministryDepartmentList, setMinistryDepartmentList] = useState([]);
 
     const sourceLangRef = useRef(null)
 
@@ -370,7 +375,49 @@ const AddNewGlossaryForm = (props) => {
             setTargetLanguageOptions(targetLanguageOptionsRef.current?.filter(each => each.id !== sourceLanguage))
         }
     }, [sourceLanguage])
-    
+
+    useEffect(() => {
+        if (props?.selectedtab?.id === 2 && !(ministryDepartmentList && ministryDepartmentList.length > 0)) {
+            getMinistryDepartmentList();
+        }
+        handleMinistryDepartmentChange(null);
+        handleMTEngineChange({});
+    }, [props?.selectedtab]);
+
+    const getMinistryDepartmentList = () => {
+        let params = {
+            url: Config.BASE_URL + "/workspace/ministry_names",                     
+            auth: true,
+            success: (response) => {
+                const {data} = response;
+                setMinistryDepartmentList(prev =>
+                    data.map(dept => ({
+                        ...dept,
+                        value: dept.uid,
+                        label: dept.name
+                    }))
+                );
+            },
+            error: (error) => {
+                if(error.response.status === 500){
+                    Config.showToast('Something went wrong. Please try again later.', 'error');
+                }
+            }
+        };
+        Config.axios(params);
+    }
+
+    // useEffect(() => {
+    //     if (ministryDepartmentList && ministryDepartmentList.length > 0) {
+    //         setMinistryDepartmentList(prev =>
+    //             prev.map(dept => ({
+    //                 ...dept,
+    //                 value: dept.uid,
+    //                 label: dept.name
+    //             }))
+    //         );
+    //     }
+    // }, [ministryDepartmentList]);
 
     return (
         <React.Fragment>
@@ -592,6 +639,30 @@ const AddNewGlossaryForm = (props) => {
                                 </div>
                             </div>
                         </div>
+                        {(isPIBNews && props.selectedtab?.id === 2) ? <>
+                            <div className="glossary-setup-form">
+                                <div className="glossary-form-col">
+                                    <div className="glossary-input-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="exampleFormControlFile1">{t("machine_translation_engine")}<span className="asterik-symbol">*</span></label>
+                                            <Select
+                                                options={ministryDepartmentList}
+                                                value={selectedMinistryDepartment}
+                                                onChange={handleMinistryDepartmentChange}
+                                                placeholder="Select Ministry / Department"
+                                                menuPlacement="auto"
+                                                components={{ DropdownIndicator, IndicatorSeparator: () => null }}
+                                                styles={customStepSelectStyles}
+                                                isClearable={false}
+                                                isSearchable={false}
+                                                hideSelectedOptions={false}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="glossary-form-col"></div>
+                            </div>
+                        </> : <>
                         <div className="glossary-setup-form">
                             <div className="glossary-form-col">
                                 <div className="glossary-input-form-field">
@@ -769,6 +840,7 @@ const AddNewGlossaryForm = (props) => {
                             </div>
                             <div className="glossary-form-col"></div>
                         </div>
+                        </>}
                     </div>
                 </div>
             }
