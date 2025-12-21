@@ -169,6 +169,7 @@ function Workspace(props) {
     const isDinamalar = useSelector((state) => state.isDinamalarNews.value);
     let isEnterprise = userDetails?.is_enterprise;
     let is_internal_meber_editor = userDetails?.internal_member_team_detail?.role === 'Editor';
+    const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
     /* State constants - start */
     const URL_SEARCH_PARAMS = new URLSearchParams(window.location.search);
@@ -1703,7 +1704,7 @@ function Workspace(props) {
                     }
                     return;
                 }                
-                if(!isEnterprise && !is_internal_meber_editor){
+                if((!isEnterprise && !is_internal_meber_editor) || (isEnterprise && isPIBNews)){
                     let range = selection.getRangeAt(0);
                     let selectionRect = range.getBoundingClientRect();
                     setSelectedCoordinates(selectionRect);
@@ -6219,7 +6220,7 @@ function Workspace(props) {
             return;
         } 
         let range = selection.getRangeAt(0);
-        if(!isEnterprise && !is_internal_meber_editor){
+        if((!isEnterprise && !is_internal_meber_editor) || (isEnterprise && isPIBNews)){
             let selectionRect = range.getBoundingClientRect();
             dispatch(setShowGlossTermAddForm(false));
             setSelectedCoordinates(selectionRect);
@@ -6247,7 +6248,7 @@ function Workspace(props) {
             return;
         }
         let range = selection.getRangeAt(0);
-        if(!isEnterprise && !is_internal_meber_editor){
+        if((!isEnterprise && !is_internal_meber_editor) || (isEnterprise && isPIBNews)){
             let selectionRect = range.getBoundingClientRect();
             dispatch(setShowGlossTermAddForm(false));
             // if(restrectedtext.length <= 2){
