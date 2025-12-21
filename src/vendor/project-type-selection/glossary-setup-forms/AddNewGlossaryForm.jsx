@@ -378,11 +378,22 @@ const AddNewGlossaryForm = (props) => {
 
     useEffect(() => {
         if (props?.selectedtab?.id === 2 && !(ministryDepartmentList && ministryDepartmentList.length > 0)) {
-            getMinistryDepartmentList();
+            if (ministryDepartmentList && ministryDepartmentList.length > 0)
+                updateSelectedMinistoryDept(ministryDepartmentList);
+            else
+                getMinistryDepartmentList();
+        } else {
+            handleMinistryDepartmentChange(null);
+            handleMTEngineChange({});
         }
-        handleMinistryDepartmentChange(null);
-        handleMTEngineChange({});
     }, [props?.selectedtab]);
+
+    const updateSelectedMinistoryDept = (list) => {
+        if (selectedMinistryDepartment && selectedMinistryDepartment.value && !selectedMinistryDepartment.name) {
+            const filtered = list?.find((each) => each.uid === selectedMinistryDepartment.value);
+            handleMinistryDepartmentChange(filtered);
+        }
+    }
 
     const getMinistryDepartmentList = () => {
         let params = {
@@ -390,13 +401,13 @@ const AddNewGlossaryForm = (props) => {
             auth: true,
             success: (response) => {
                 const {data} = response;
-                setMinistryDepartmentList(prev =>
-                    data.map(dept => ({
+                const formattedlist = data.map(dept => ({
                         ...dept,
                         value: dept.uid,
                         label: dept.name
-                    }))
-                );
+                    }));
+                setMinistryDepartmentList(formattedlist);
+                updateSelectedMinistoryDept(formattedlist);
             },
             error: (error) => {
                 if(error.response.status === 500){

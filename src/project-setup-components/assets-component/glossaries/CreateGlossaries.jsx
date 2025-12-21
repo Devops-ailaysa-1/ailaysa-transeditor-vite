@@ -126,6 +126,7 @@ const CreateGlossaries = (props) => {
 	const [page, setPage] = useState(0);
 	
 	const [selectedMinistryDepartment, setSelectedMinistryDepartment] = useState(null);
+	const [ministryDepartmentList, setMinistryDepartmentList] = useState([]);
 	const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
 	const searchAreaRef = useRef(null);
@@ -290,6 +291,8 @@ const CreateGlossaries = (props) => {
 						(each) => glossary?.usage_permission === each.label
 					)
 				);
+				if (selectedMinistryDepartment == null)	
+					setSelectedMinistryDepartment(prev => ({value: data?.ministry_department}));
 				setHasTeam(data.team);
 				setPrimaryGlossarySourceName(glossary?.primary_glossary_source_name);
 				setGlossaryCopyrightOwner(glossary?.source_Copyright_owner);
