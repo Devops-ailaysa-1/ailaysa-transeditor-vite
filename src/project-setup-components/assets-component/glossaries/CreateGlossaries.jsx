@@ -1188,8 +1188,10 @@ const CreateGlossaries = (props) => {
 		handleProjectNamechange,
 		prevPageInfo,
 		targetLanguageOptionsRef,
+		selectedTab,
 		setSelectedTab,
-		selectedTab
+		ministryDepartmentList,
+		setMinistryDepartmentList,
 	};
 
 	return (
