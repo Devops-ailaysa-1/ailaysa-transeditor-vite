@@ -114,7 +114,7 @@ const AddNewGlossaryForm = (props) => {
         setTargetLanguage,
         targetLanguageOptionsRef,
         ministryDepartmentList,
-        setMinistryDepartmentList
+        selectedTab,
     } = useContext(glossaryContext);
 
     const customMtSelectStyles = {
@@ -181,7 +181,6 @@ const AddNewGlossaryForm = (props) => {
     const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
     const [glossClass, setGlossClass] = useState(true)
     const isPIBNews = useSelector((state) => state.isPIBNews.value);
-    // const [ministryDepartmentList, setMinistryDepartmentList] = useState([]);
 
     const sourceLangRef = useRef(null)
 
@@ -375,53 +374,11 @@ const AddNewGlossaryForm = (props) => {
         if(sourceLanguage !== "" && sourceLanguage !== null){
             setTargetLanguageOptions(targetLanguageOptionsRef.current?.filter(each => each.id !== sourceLanguage))
         }
-    }, [sourceLanguage])
+    }, [sourceLanguage]);
 
     useEffect(() => {
-        if (props?.selectedtab?.id === 2 && !(ministryDepartmentList && ministryDepartmentList.length > 0)) {
-            if (ministryDepartmentList && ministryDepartmentList.length > 0)
-                updateSelectedMinistoryDept(ministryDepartmentList);
-            else
-                getMinistryDepartmentList();
-        } else {
-            handleMinistryDepartmentChange(null);
-            handleMTEngineChange({});
-        }
-    }, [props?.selectedtab]);
-
-    const updateSelectedMinistoryDept = (list) => {
-        if (selectedMinistryDepartment && selectedMinistryDepartment.value && !selectedMinistryDepartment.name) {
-            const filtered = list?.find((each) => each.uid === selectedMinistryDepartment.value);
-            handleMinistryDepartmentChange(filtered);
-        }
-    }
-
-    useEffect(() => {
-        updateSelectedMinistoryDept(ministryDepartmentList);
-    }, [ministryDepartmentList, selectedMinistryDepartment]);
-
-    const getMinistryDepartmentList = () => {
-        let params = {
-            url: Config.BASE_URL + "/workspace/ministry_names",                     
-            auth: true,
-            success: (response) => {
-                const {data} = response;
-                const formattedlist = data.map(dept => ({
-                        ...dept,
-                        value: dept.uid,
-                        label: dept.name
-                    }));
-                setMinistryDepartmentList(formattedlist);
-                updateSelectedMinistoryDept(formattedlist);
-            },
-            error: (error) => {
-                if(error.response.status === 500){
-                    Config.showToast('Something went wrong. Please try again later.', 'error');
-                }
-            }
-        };
-        Config.axios(params);
-    }
+        setTargetLanguageListTooltip("");
+    }, [selectedTab]);
 
     return (
         <React.Fragment>

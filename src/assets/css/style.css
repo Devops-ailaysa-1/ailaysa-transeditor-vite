@@ -30882,6 +30882,10 @@ label.settings-TBXConvertButton {
     color: #8B8E9B !important;
 }
 
+.recently-used-pair .mt-select__value-container {
+    /* padding: 0px !important; */
+}
+
 .subject-model .ai-source-langs-list {
     column-count: 5 !important;
     height: 88%;

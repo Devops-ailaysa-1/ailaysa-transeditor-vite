@@ -22,6 +22,19 @@ import GroupsColor from "../../../assets/images/new-ui-icons/groups_color.svg";
 import ReactRouterPrompt from "react-router-prompt";
 import { useSelector } from "react-redux";
 
+
+const GROSSARY_PIB_TABS = [{
+    id: 1,
+    value: 'standard',
+    label: 'Standard',
+    isEnabled: true,
+}, {
+    id: 2,
+    value: 'pib-news-glossary',
+    label: 'Stories/Press releases',
+    isEnabled: true,
+}];
+
 const CreateGlossaries = (props) => {
 	const { sidebarActiveTab, setSidebarActiveTab } = props;
 	const { t } = useTranslation();
@@ -127,7 +140,7 @@ const CreateGlossaries = (props) => {
 	
 	const [selectedMinistryDepartment, setSelectedMinistryDepartment] = useState(null);
 	const [ministryDepartmentList, setMinistryDepartmentList] = useState([]);
-	const [selectedTab, setSelectedTab] = useState({});
+	const [selectedTab, setSelectedTab] = useState(GROSSARY_PIB_TABS[1]);
 	const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
 	const searchAreaRef = useRef(null);
@@ -183,22 +196,28 @@ const CreateGlossaries = (props) => {
 	}, [goBackCreateBtn, goBackEditBtn]);
 
 	useEffect(() => {
-		if (location.state?.prevPageInfo) {
-			prevPageInfo.current = location.state?.prevPageInfo;
+		if (location.state) {
+			prevPageInfo.current = location.state;
+			setisEditable(prevPageInfo.current?.isEditable || false);
+			setIsLoading(prevPageInfo.current?.isEditable || false);
+			if (prevPageInfo?.current?.is_pib_glossary) setSelectedTab(GROSSARY_PIB_TABS[1]);
+			else setSelectedTab(GROSSARY_PIB_TABS[0]);
 		}
 	}, [location.state]);
 
 	useEffect(() => {
-		let a = [];
-		editJobs?.forEach((each) => {
-			targetLanguage?.map((b) => {
-				if (b?.id === each?.target_language) {
-					a?.push(each?.id);
-				}
+		if (targetLanguage) {
+			let a = [];
+			editJobs?.forEach((each) => {
+				targetLanguage?.map((b) => {
+					if (b?.id === each?.target_language) {
+						a?.push(each?.id);
+					}
+				});
 			});
-		});
-		let targetLangToRemove = editJobs?.filter((each) => !a.includes(each.id));
-		setTargetLangListToRemove(targetLangToRemove);
+			let targetLangToRemove = editJobs?.filter((each) => !a.includes(each.id));
+			setTargetLangListToRemove(targetLangToRemove);
+		}
 	}, [targetLanguage]);
 
 	const getSteps = () => {
@@ -292,8 +311,9 @@ const CreateGlossaries = (props) => {
 						(each) => glossary?.usage_permission === each.label
 					)
 				);
-				if (selectedMinistryDepartment == null)	
-					setSelectedMinistryDepartment(prev => ({value: data?.ministry_department}));
+				if (selectedTab.value === 'pib-news-glossary') {
+					getMinistryDepartmentList(data.ministry_department);
+				}
 				setHasTeam(data.team);
 				setPrimaryGlossarySourceName(glossary?.primary_glossary_source_name);
 				setGlossaryCopyrightOwner(glossary?.source_Copyright_owner);
@@ -367,6 +387,7 @@ const CreateGlossaries = (props) => {
 		getMtEngines();
 		getAllLangDetailsList();
 		getSteps();
+		getMinistryDepartmentList();
 	}, []);
 
 	/* Get source language options */
@@ -1098,6 +1119,41 @@ const CreateGlossaries = (props) => {
 		projectEditable.current = false;
 	};
 
+	useEffect(() => {
+		getMinistryDepartmentList();
+	}, [selectedTab]);
+
+    const updateSelectedMinistoryDept = (list, ministry_department) => {
+        if (ministry_department) {
+            const filtered = list?.find((each) => each.uid === ministry_department);
+            handleMinistryDepartmentChange(filtered);
+        }
+    }
+
+	const getMinistryDepartmentList = (ministry_department) => {
+		if (selectedTab.value !== 'pib-news-glossary') return;
+		let params = {
+			url: Config.BASE_URL + "/workspace/ministry_names",                     
+			auth: true,
+			success: (response) => {
+				const {data} = response;
+				const formattedlist = data.map(dept => ({
+						...dept,
+						value: dept.uid,
+						label: dept.name
+					}));
+				setMinistryDepartmentList(formattedlist);
+				updateSelectedMinistoryDept(formattedlist, ministry_department);
+			},
+			error: (error) => {
+				if(error.response.status === 500){
+					Config.showToast('Something went wrong. Please try again later.', 'error');
+				}
+			}
+		};
+		Config.axios(params);
+	}
+
 	let contextValue = {
 		isLoading,
 		isEditable,
@@ -1136,6 +1192,7 @@ const CreateGlossaries = (props) => {
 		sourceLanguageError,
 		targetLanguageError,
 		sourceLanguageDisable,
+		setSourceLanguageDisable,
 		primaryGlossarySourceName,
 		setPrimaryGlossarySourceName,
 		glossaryCopyrightOwner,
@@ -1147,6 +1204,7 @@ const CreateGlossaries = (props) => {
 		glossaryLicense,
 		setGlossaryLicense,
 		selectedUsagePermission,
+		setSelectedUsagePermission,
 		editProjectId,
 		glossaryEditFiles,
 		handleSubmit,
@@ -1167,7 +1225,7 @@ const CreateGlossaries = (props) => {
 		mtpeEngines,
 		setMtpeEngines,
 		selectedMTEngine,
-		selectedMinistryDepartment,
+		setSelectedMTEngine,
 		alreadySelecetedTarLangID,
 		alreadySelectedTarLang,
 		goBackCreateBtn,
@@ -1190,6 +1248,8 @@ const CreateGlossaries = (props) => {
 		targetLanguageOptionsRef,
 		selectedTab,
 		setSelectedTab,
+		selectedMinistryDepartment,
+		setSelectedMinistryDepartment,
 		ministryDepartmentList,
 		setMinistryDepartmentList,
 	};

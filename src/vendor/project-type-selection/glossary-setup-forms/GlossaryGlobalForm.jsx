@@ -60,7 +60,21 @@ const GlossaryGlobalForm = (props) => {
         prevPageInfo,
         setSelectedTab,
         selectedTab,
-        selectedMinistryDepartment
+        selectedMinistryDepartment,
+        setSelectedMinistryDepartment,
+        setSourceLanguage,
+        setSourceLabel,
+        setTargetLanguage,
+        setSelectedMTEngine,
+        setSelectedSteps,
+        setDeadline,
+        setPrimaryGlossarySourceName,
+        setGlossaryCopyrightOwner,
+        setDetailsOfPrimaryGlossarySourceName,
+        setglossaryGeneralNotes,
+        setSelectedUsagePermission,
+        setGlossaryLicense,
+        setSourceLanguageDisable,
     } = useContext(glossaryContext)
 
     let {
@@ -165,7 +179,6 @@ const GlossaryGlobalForm = (props) => {
     }
 
     useEffect(() => {
-        setSelectedTab(GROSSARY_PIB_TABS[1]);
         listGlossaryProjects();
     }, []);
 
@@ -298,6 +311,31 @@ const GlossaryGlobalForm = (props) => {
         contentprojectNameRef.current.scrollTo(0, 0);
     }
 
+    const clearGlossaryForm = () => {
+        setSourceLabel(t("select_source_language"));
+        setSourceLanguage("");
+        setSourceLanguageDisable(false);
+        setTargetLanguage("");
+        setSelectedMTEngine(null);
+        setSelectedSteps([]);
+        setDeadline("");
+        setPrimaryGlossarySourceName("");
+        setGlossaryCopyrightOwner("");
+        setDetailsOfPrimaryGlossarySourceName("");
+        setglossaryGeneralNotes("");
+        setSelectedUsagePermission({
+            value: 1,
+            label: t("private"),
+        });
+        setGlossaryLicense("");
+        setSelectedMinistryDepartment(null);
+    }
+
+    const handleTabChange = (tab) => {
+        setSelectedTab(tab);
+        clearGlossaryForm();
+    }
+
     return (
         <React.Fragment>
             {page === 0 &&
@@ -318,12 +356,12 @@ const GlossaryGlobalForm = (props) => {
                             tabIndex={0}
                         ></div>
                     </div>
-                    {isPIBNews && 
+                    {isPIBNews && !(goBackCreateBtn || isEditable) &&
                         <div className="projects-list-wrap-header mt-[26px]">
                             <div className="project-setup-tabs">
                                 <div className='flex add-story-nav'>
                                     {GROSSARY_PIB_TABS.map(tab => (tab.isEnabled && (
-                                        <div className={"add-story-nav-item " + (selectedTab.id == tab.id ? 'active' : '')} onClick={() => setSelectedTab(tab)}>
+                                        <div className={"add-story-nav-item " + (selectedTab.id == tab.id ? 'active' : '')} onClick={() => handleTabChange(tab)}>
                                             <span className='add-story-nav-text'>{tab.label}</span>
                                         </div>
                                     )))}
