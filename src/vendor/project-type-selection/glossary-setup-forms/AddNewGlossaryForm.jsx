@@ -395,6 +395,10 @@ const AddNewGlossaryForm = (props) => {
         }
     }
 
+    useEffect(() => {
+        updateSelectedMinistoryDept(ministryDepartmentList);
+    }, [ministryDepartmentList, selectedMinistryDepartment]);
+
     const getMinistryDepartmentList = () => {
         let params = {
             url: Config.BASE_URL + "/workspace/ministry_names",                     
