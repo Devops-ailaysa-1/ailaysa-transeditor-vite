@@ -113,8 +113,9 @@ const AddNewGlossaryForm = (props) => {
         setSourceLanguage,
         setTargetLanguage,
         targetLanguageOptionsRef,
-
-    } = useContext(glossaryContext)
+        ministryDepartmentList,
+        setMinistryDepartmentList
+    } = useContext(glossaryContext);
 
     const customMtSelectStyles = {
         placeholder: (provided, state) => ({
@@ -180,7 +181,7 @@ const AddNewGlossaryForm = (props) => {
     const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
     const [glossClass, setGlossClass] = useState(true)
     const isPIBNews = useSelector((state) => state.isPIBNews.value);
-    const [ministryDepartmentList, setMinistryDepartmentList] = useState([]);
+    // const [ministryDepartmentList, setMinistryDepartmentList] = useState([]);
 
     const sourceLangRef = useRef(null)
 
@@ -422,18 +423,6 @@ const AddNewGlossaryForm = (props) => {
         Config.axios(params);
     }
 
-    // useEffect(() => {
-    //     if (ministryDepartmentList && ministryDepartmentList.length > 0) {
-    //         setMinistryDepartmentList(prev =>
-    //             prev.map(dept => ({
-    //                 ...dept,
-    //                 value: dept.uid,
-    //                 label: dept.name
-    //             }))
-    //         );
-    //     }
-    // }, [ministryDepartmentList]);
-
     return (
         <React.Fragment>
             {
@@ -673,6 +662,7 @@ const AddNewGlossaryForm = (props) => {
                                                 hideSelectedOptions={false}
                                             />
                                         </div>
+                                        {!requirementSatisfied && (selectedMinistryDepartment == null || selectedMinistryDepartment.value == undefined) && props.required && <span className="text-danger position-absolute">{t("required")}</span>}
                                     </div>
                                 </div>
                                 <div className="glossary-form-col"></div>

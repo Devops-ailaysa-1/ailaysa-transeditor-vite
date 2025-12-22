@@ -127,6 +127,7 @@ const CreateGlossaries = (props) => {
 	
 	const [selectedMinistryDepartment, setSelectedMinistryDepartment] = useState(null);
 	const [ministryDepartmentList, setMinistryDepartmentList] = useState([]);
+	const [selectedTab, setSelectedTab] = useState({});
 	const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
 	const searchAreaRef = useRef(null);
@@ -801,7 +802,7 @@ const CreateGlossaries = (props) => {
 		}
 		if (fileUrl != "") formData.append("url", fileUrl);
 
-		if (isPIBNews) {
+		if (isPIBNews && selectedTab?.value === 'pib-news-glossary') {
 			if (selectedMinistryDepartment?.value !== undefined) {
 				formData.append("ministry_department", selectedMinistryDepartment?.value);
 			}
@@ -1016,7 +1017,7 @@ const CreateGlossaries = (props) => {
 		// else formData.append("team", false);
 		if (fileUrl != "") formData.append("url", fileUrl);
 
-		if (isPIBNews) {
+		if (isPIBNews && selectedTab?.value === 'pib-news-glossary') {
 			if (selectedMinistryDepartment?.value !== undefined) {
 				formData.append("ministry_department", selectedMinistryDepartment?.value);
 			}
@@ -1187,6 +1188,8 @@ const CreateGlossaries = (props) => {
 		handleProjectNamechange,
 		prevPageInfo,
 		targetLanguageOptionsRef,
+		setSelectedTab,
+		selectedTab
 	};
 
 	return (
@@ -1198,10 +1201,6 @@ const CreateGlossaries = (props) => {
 						<GlossaryProjectType page={page} setPage={setPage} />
 					</glossaryContext.Provider>
 				</div>
-				{/* <Prompt
-										when={checkchangenav}
-										message={handleBlockedNavigation}
-										/> */}
 				<ReactRouterPrompt when={handleBlockedNavigation}>
 					{({ isActive, onConfirm, onCancel }) => {
 						return (

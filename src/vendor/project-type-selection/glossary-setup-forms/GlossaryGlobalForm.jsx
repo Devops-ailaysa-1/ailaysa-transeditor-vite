@@ -18,12 +18,12 @@ import { useSelector } from "react-redux";
 
 const GROSSARY_PIB_TABS = [{
     id: 1,
-    code: 'Standard',
+    value: 'standard',
     label: 'Standard',
     isEnabled: true,
 }, {
     id: 2,
-    code: 'PressReleases',
+    value: 'pib-news-glossary',
     label: 'Stories/Press releases',
     isEnabled: true,
 }];
@@ -57,7 +57,10 @@ const GlossaryGlobalForm = (props) => {
         handleHideIcon,
         handleProjectEnter,
         handleProjectNamechange,
-        prevPageInfo
+        prevPageInfo,
+        setSelectedTab,
+        selectedTab,
+        selectedMinistryDepartment
     } = useContext(glossaryContext)
 
     let {
@@ -76,7 +79,6 @@ const GlossaryGlobalForm = (props) => {
     const [isUpdating, setIsUpdating] = useState(false)
     const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
     const [isProjectDeleting, setIsProjectDeleting] = useState(false)
-    const [selectedTab, setSelectedTab] = useState(GROSSARY_PIB_TABS[1]);
     const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
     const projectTypeHeader = (
@@ -120,7 +122,7 @@ const GlossaryGlobalForm = (props) => {
     };
 
     const validateAddGlossaryForm = () => {
-        if (sourceLanguage === "" || targetLanguage == "") {
+        if (sourceLanguage === "" || targetLanguage == "" || (selectedMinistryDepartment?.value === undefined && isPIBNews && selectedTab?.value === 'pib-news-glossary')) {
             setRequirementSatisfied(false);
             return false;
         } else {
@@ -132,10 +134,9 @@ const GlossaryGlobalForm = (props) => {
     const handleNextButton = (e) => {
         e.preventDefault();
         if (page !== 1) {
-            if (sourceLanguage === "" || targetLanguage == "") {
+            if (sourceLanguage === "" || targetLanguage == "" || (selectedMinistryDepartment?.value === undefined && isPIBNews && selectedTab?.value === 'pib-news-glossary')) {
                 setrequired(true);
-            }
-            else {
+            }else {
                 setrequired(false);
             }
             let processNext = validateAddGlossaryForm();
@@ -164,6 +165,7 @@ const GlossaryGlobalForm = (props) => {
     }
 
     useEffect(() => {
+        setSelectedTab(GROSSARY_PIB_TABS[1]);
         listGlossaryProjects();
     }, []);
 
@@ -296,10 +298,6 @@ const GlossaryGlobalForm = (props) => {
         contentprojectNameRef.current.scrollTo(0, 0);
     }
 
-    const onTabChangeHandler = (tab) => {
-        setSelectedTab(tab);
-    }
-
     return (
         <React.Fragment>
             {page === 0 &&
@@ -325,7 +323,7 @@ const GlossaryGlobalForm = (props) => {
                             <div className="project-setup-tabs">
                                 <div className='flex add-story-nav'>
                                     {GROSSARY_PIB_TABS.map(tab => (tab.isEnabled && (
-                                        <div className={"add-story-nav-item " + (selectedTab.id == tab.id ? 'active' : '')} onClick={() => onTabChangeHandler(tab)}>
+                                        <div className={"add-story-nav-item " + (selectedTab.id == tab.id ? 'active' : '')} onClick={() => setSelectedTab(tab)}>
                                             <span className='add-story-nav-text'>{tab.label}</span>
                                         </div>
                                     )))}
