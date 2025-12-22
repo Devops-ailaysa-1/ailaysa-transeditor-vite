@@ -1010,7 +1010,8 @@ function Navbar(props) {
             || window.location.pathname.includes("/add-stories")
             || window.location.pathname.includes('/workspace')
             || window.location.pathname.includes('/pibnews-workspace')
-            || window.location.pathname.includes('/pibfile-workspace'))
+            || window.location.pathname.includes('/pibfile-workspace')
+            || window.location.pathname.includes("/glossary-workspace"))
             && isPIBNews;
     }
 
@@ -1036,7 +1037,8 @@ function Navbar(props) {
             || window.location.pathname.includes("/create/speech/speech-to-text")
             || window.location.pathname.includes("/create/speech/text-to-speech")
             || window.location.pathname.includes("/create/tool-kit/pdf/convert-pdf")
-            || window.location.pathname.includes("/create/tool-kit/pdf/compare-mt"))
+            || window.location.pathname.includes("/create/tool-kit/pdf/compare-mt")
+            || window.location.pathname.includes("/glossary-workspace"))
             && isPIBNews;
     }
 
