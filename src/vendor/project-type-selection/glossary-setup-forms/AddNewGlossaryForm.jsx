@@ -661,8 +661,8 @@ const AddNewGlossaryForm = (props) => {
                                                 isSearchable={false}
                                                 hideSelectedOptions={false}
                                             />
+                                            {!requirementSatisfied && (selectedMinistryDepartment == null || selectedMinistryDepartment.value == undefined) && props.required && <span className="text-danger position-absolute">{t("required")}</span>}
                                         </div>
-                                        {!requirementSatisfied && (selectedMinistryDepartment == null || selectedMinistryDepartment.value == undefined) && props.required && <span className="text-danger position-absolute">{t("required")}</span>}
                                     </div>
                                 </div>
                                 <div className="glossary-form-col"></div>
