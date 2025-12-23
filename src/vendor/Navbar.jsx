@@ -1010,7 +1010,8 @@ function Navbar(props) {
             || window.location.pathname.includes("/add-stories")
             || window.location.pathname.includes('/workspace')
             || window.location.pathname.includes('/pibnews-workspace')
-            || window.location.pathname.includes('/pibfile-workspace'))
+            || window.location.pathname.includes('/pibfile-workspace')
+            || window.location.pathname.includes("/glossary-workspace"))
             && isPIBNews;
     }
 
@@ -1036,8 +1037,13 @@ function Navbar(props) {
             || window.location.pathname.includes("/create/speech/speech-to-text")
             || window.location.pathname.includes("/create/speech/text-to-speech")
             || window.location.pathname.includes("/create/tool-kit/pdf/convert-pdf")
-            || window.location.pathname.includes("/create/tool-kit/pdf/compare-mt"))
+            || window.location.pathname.includes("/create/tool-kit/pdf/compare-mt")
+            || window.location.pathname.includes("/glossary-workspace"))
             && isPIBNews;
+    }
+
+    const hideGlosserMenu = () => {
+        return !(window.location.pathname.includes('/pibnews-workspace'));
     }
 
     /**
@@ -1315,7 +1321,7 @@ function Navbar(props) {
                                     </li>
                                 }                                
                                 <li id="download-dropdown-wrapper" className={props.isWhite ? "nav-item nav-drp-down active mr-3" : "navbar-display-hide mr-3"}>
-                                    {(props.updatedFileDownload && !isEnterprise && !is_internal_meber_editor) && (
+                                    {hideGlosserMenu() && (props.updatedFileDownload && ((!isEnterprise && !is_internal_meber_editor) || isPIBNews)) && (
                                         <GlossaryMenuDrpDown />
                                     )}
                                 </li>

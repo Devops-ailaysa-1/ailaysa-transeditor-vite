@@ -1714,8 +1714,14 @@ const TextToSpeech = (props) => {
                 url: Config.BASE_URL + "/auth/lang_detect/?text=" + translateSrcContent.split(' ').splice(0, 10).join(" "),
                 auth: true,
                 success: (response) => {
-                    setSourceLanguage(response.data?.lang_id);
-                    setSourceLabel(response.data?.language);
+                    const targetOptions = targetLanguageOptionRef.current || [];
+                    if(response?.data?.language && targetOptions.some( item => item.language === response.data.language )) {
+                        setSourceLanguage(response.data?.lang_id);
+                        setSourceLabel(response.data?.language);
+                    }else {
+                        setSourceLanguage("");
+                        setSourceLabel(t("source_language"));
+                    }                  
                 },
                 error: (err) => {
                     // setAutoDetectIndication(false);

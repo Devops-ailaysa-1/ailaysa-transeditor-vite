@@ -393,9 +393,12 @@ button {
     line-height: normal;
 }
 .add-story-nav-item {
-    width: 85px;
+    /* width: 85px; */
     padding: 10px 29px;
     cursor: pointer;
+}
+.glossary-setup-wrapper .projects-list-wrap-header {
+    border-bottom: 1px solid #E0E0E0;
 }
 .add-story-nav-text {
     color: #2A353E;
@@ -510,4 +513,26 @@ button {
     height: 100% !important;
     min-height: 100% !important;
     max-height: 100% !important;
+}
+.dept-info {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+.dept-info svg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 2px;
+    width: 24px;
+    height: 24px;
+}
+.dept-info span {
+    color: var(--Text-Help-text, #969696);
+    font-family: Roboto;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }

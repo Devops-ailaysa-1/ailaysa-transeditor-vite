@@ -141,20 +141,20 @@ export const AilaysaGlossariesModal = (props) => {
                             {activeScreen === 1 ? (
                                 <AilaysaNewGlossEditingArea 
                                     setActiveScreen={setActiveScreen}
-                                    glossTaskId={defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails.task_id}
+                                    glossTaskId={defaultGlossDetails ? defaultGlossDetails?.gloss_task_id : documentDetails?.task_id}
                                 />
                             ) : (
                                 <ImportTerms 
                                     glossaryList={glossaryList}
                                     selectedGlossaryList={selectedGlossaryList}
                                     projectFilesListRef={projectFilesListRef}
-                                    projectId={documentDetails.project}
-                                    taskId={documentDetails.task_id}
-                                    showExtractTermsOption={[17]?.includes(documentDetails.source_language_id )  ? true : false}
+                                    projectId={documentDetails?.project}
+                                    taskId={documentDetails?.task_id}
+                                    showExtractTermsOption={[17]?.includes(documentDetails?.source_language_id )  ? true : false}
                                     getSelectedGlossaries={getSelectedGlossaries}
                                     setActiveScreen={setActiveScreen}
                                     defaultGlossDetailsRef={defaultGlossDetailsRef}
-                                    excludedTermsOption={[[17]?.includes(documentDetails.source_language_id )  ? 0 : 2]}
+                                    excludedTermsOption={[[17]?.includes(documentDetails?.source_language_id )  ? 0 : 2]}
                                 />
                             )}
                         </div>

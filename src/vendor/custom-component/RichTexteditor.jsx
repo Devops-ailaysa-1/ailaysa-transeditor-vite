@@ -16,6 +16,7 @@ const RichTexteditor = (props) => {
         handleChangeUpdate,
         contentEditableFocus,
         isWorkspace,
+        onSelection,
         // handleSynchronizedScrollWriter
     } = props;
 
@@ -281,7 +282,15 @@ const RichTexteditor = (props) => {
                     //         // Do stuff.
                     //     }
                     // }
+                    if(isWorkspace && onSelection){
+                        onSelection(e);
+                    }
                 },
+                onMouseup: function (e) {
+                    if(isWorkspace && onSelection){
+                        onSelection(e);
+                    }
+                }
             },
             disableDragAndDrop: true,
             spellCheck: true,

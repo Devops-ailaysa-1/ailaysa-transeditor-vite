@@ -13,7 +13,20 @@ import { glossaryContext } from './../../context-api/Context';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import { ButtonLoader } from './../../../loader/CommonBtnLoader';
+import { useSelector } from "react-redux";
 
+
+const GROSSARY_PIB_TABS = [{
+    id: 1,
+    value: 'standard',
+    label: 'Standard',
+    isEnabled: true,
+}, {
+    id: 2,
+    value: 'pib-news-glossary',
+    label: 'Stories/Press releases',
+    isEnabled: true,
+}];
 
 const GlossaryGlobalForm = (props) => {
     const { t } = useTranslation();
@@ -44,7 +57,24 @@ const GlossaryGlobalForm = (props) => {
         handleHideIcon,
         handleProjectEnter,
         handleProjectNamechange,
-        prevPageInfo
+        prevPageInfo,
+        setSelectedTab,
+        selectedTab,
+        selectedMinistryDepartment,
+        setSelectedMinistryDepartment,
+        setSourceLanguage,
+        setSourceLabel,
+        setTargetLanguage,
+        setSelectedMTEngine,
+        setSelectedSteps,
+        setDeadline,
+        setPrimaryGlossarySourceName,
+        setGlossaryCopyrightOwner,
+        setDetailsOfPrimaryGlossarySourceName,
+        setglossaryGeneralNotes,
+        setSelectedUsagePermission,
+        setGlossaryLicense,
+        setSourceLanguageDisable,
     } = useContext(glossaryContext)
 
     let {
@@ -63,6 +93,7 @@ const GlossaryGlobalForm = (props) => {
     const [isUpdating, setIsUpdating] = useState(false)
     const [showTaskDeleteAlert, setShowTaskDeleteAlert] = useState(false)
     const [isProjectDeleting, setIsProjectDeleting] = useState(false)
+    const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
     const projectTypeHeader = (
         <div className="header-align d-flex">
@@ -79,7 +110,9 @@ const GlossaryGlobalForm = (props) => {
             return (
                 <Fragment>
                     <AddNewGlossaryForm
-                        required={required} />
+                        required={required}
+                        selectedtab={selectedTab}
+                    />
                 </Fragment>
             );
         else
@@ -103,7 +136,7 @@ const GlossaryGlobalForm = (props) => {
     };
 
     const validateAddGlossaryForm = () => {
-        if (sourceLanguage === "" || targetLanguage == "") {
+        if (sourceLanguage === "" || targetLanguage == "" || (selectedMinistryDepartment?.value === undefined && isPIBNews && selectedTab?.value === 'pib-news-glossary')) {
             setRequirementSatisfied(false);
             return false;
         } else {
@@ -115,10 +148,9 @@ const GlossaryGlobalForm = (props) => {
     const handleNextButton = (e) => {
         e.preventDefault();
         if (page !== 1) {
-            if (sourceLanguage === "" || targetLanguage == "") {
+            if (sourceLanguage === "" || targetLanguage == "" || (selectedMinistryDepartment?.value === undefined && isPIBNews && selectedTab?.value === 'pib-news-glossary')) {
                 setrequired(true);
-            }
-            else {
+            }else {
                 setrequired(false);
             }
             let processNext = validateAddGlossaryForm();
@@ -279,16 +311,37 @@ const GlossaryGlobalForm = (props) => {
         contentprojectNameRef.current.scrollTo(0, 0);
     }
 
+    const clearGlossaryForm = () => {
+        setSourceLabel(t("select_source_language"));
+        setSourceLanguage("");
+        setSourceLanguageDisable(false);
+        setTargetLanguage("");
+        setSelectedMTEngine(null);
+        setSelectedSteps([]);
+        setDeadline("");
+        setPrimaryGlossarySourceName("");
+        setGlossaryCopyrightOwner("");
+        setDetailsOfPrimaryGlossarySourceName("");
+        setglossaryGeneralNotes("");
+        setSelectedUsagePermission({
+            value: 1,
+            label: t("private"),
+        });
+        setGlossaryLicense("");
+        setSelectedMinistryDepartment(null);
+    }
 
-
-
+    const handleTabChange = (tab) => {
+        setSelectedTab(tab);
+        clearGlossaryForm();
+    }
 
     return (
         <React.Fragment>
             {page === 0 &&
                 <>
                     {/* <div className={"project-input-wrap " + ((!requirementSatisfied && projectName.length == 0) && "error-focus")}> */}
-                    <div className={"project-input-wrap "}>
+                    <div className={"project-input-wrap"}>
                         <div
                             ref={contentprojectNameRef}
                             // onInput={projectName}
@@ -303,6 +356,19 @@ const GlossaryGlobalForm = (props) => {
                             tabIndex={0}
                         ></div>
                     </div>
+                    {isPIBNews && !(goBackCreateBtn || isEditable) &&
+                        <div className="projects-list-wrap-header mt-[26px]">
+                            <div className="project-setup-tabs">
+                                <div className='flex add-story-nav'>
+                                    {GROSSARY_PIB_TABS.map(tab => (tab.isEnabled && (
+                                        <div className={"add-story-nav-item " + (selectedTab.id == tab.id ? 'active' : '')} onClick={() => handleTabChange(tab)}>
+                                            <span className='add-story-nav-text'>{tab.label}</span>
+                                        </div>
+                                    )))}
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </>
             }
             <div className="glossary-global-setup-wrapper">

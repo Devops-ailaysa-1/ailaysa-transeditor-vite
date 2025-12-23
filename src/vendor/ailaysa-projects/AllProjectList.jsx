@@ -2213,7 +2213,9 @@ if(err?.response?.data?.detail.includes("Not found")){
             projectTypeFilter: URL_SEARCH_PARAMS.get("filter"),
             search: URL_SEARCH_PARAMS.get("search"),
             projectId: projectId,
-            fromProjectList: true
+            fromProjectList: true,
+            is_pib_glossary: project?.is_pib_glossary || false,
+            isEditable: true
         };
         if (projectType === 1 || projectType === 2) {
             history("/create/translate/files/translate-files?get-project-info=" + projectId + "&type=" + projectType, {state: prevPageInfo });

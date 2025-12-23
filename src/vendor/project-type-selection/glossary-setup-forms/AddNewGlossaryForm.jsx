@@ -18,6 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { CustomTimePicker } from "../../custom-component/CustomTimePicker";
 import ArrowRightGrey from "../../../assets/images/new-create-hub/arrow_right_grey_color.svg"
 import CloseBlack from "../../../assets/images/new-ui-icons/close_black.svg"
+import { useSelector } from "react-redux";
 // const GlossaryCellRadiobtn = withStyles({
 //     root: {
 //         color: "#5F6368",
@@ -66,6 +67,7 @@ const AddNewGlossaryForm = (props) => {
         setTargetLanguageOptions,
         usagePermissionOptions,
         handleMTEngineChange,
+        handleMinistryDepartmentChange,
         handleUsagePermissionChange,
         handleSourceLangClick,
         handleTargetLangClick,
@@ -103,6 +105,7 @@ const AddNewGlossaryForm = (props) => {
         alreadySelectedTarLang,
         revisionStepEdit,
         selectedMTEngine,
+        selectedMinistryDepartment,
         selectedSteps,
         stepOptions,
         handleSelectedSteps,
@@ -110,8 +113,9 @@ const AddNewGlossaryForm = (props) => {
         setSourceLanguage,
         setTargetLanguage,
         targetLanguageOptionsRef,
-
-    } = useContext(glossaryContext)
+        ministryDepartmentList,
+        selectedTab,
+    } = useContext(glossaryContext);
 
     const customMtSelectStyles = {
         placeholder: (provided, state) => ({
@@ -176,6 +180,7 @@ const AddNewGlossaryForm = (props) => {
     const [recentlyUsedLangs, setRecentlyUsedLangs] = useState([])
     const [targetLanguageListTooltip, setTargetLanguageListTooltip] = useState("")
     const [glossClass, setGlossClass] = useState(true)
+    const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
     const sourceLangRef = useRef(null)
 
@@ -369,8 +374,11 @@ const AddNewGlossaryForm = (props) => {
         if(sourceLanguage !== "" && sourceLanguage !== null){
             setTargetLanguageOptions(targetLanguageOptionsRef.current?.filter(each => each.id !== sourceLanguage))
         }
-    }, [sourceLanguage])
-    
+    }, [sourceLanguage]);
+
+    useEffect(() => {
+        setTargetLanguageListTooltip("");
+    }, [selectedTab]);
 
     return (
         <React.Fragment>
@@ -592,6 +600,31 @@ const AddNewGlossaryForm = (props) => {
                                 </div>
                             </div>
                         </div>
+                        {(isPIBNews && props.selectedtab?.id === 2) ? <>
+                            <div className="glossary-setup-form">
+                                <div className="glossary-form-col">
+                                    <div className="glossary-input-form-field">
+                                        <div className="form-group">
+                                            <label htmlFor="exampleFormControlFile1">{'Ministry/Department'}<span className="asterik-symbol">*</span></label>
+                                            <Select
+                                                options={ministryDepartmentList}
+                                                value={selectedMinistryDepartment}
+                                                onChange={handleMinistryDepartmentChange}
+                                                placeholder="Select Ministry / Department"
+                                                menuPlacement="auto"
+                                                components={{ DropdownIndicator, IndicatorSeparator: () => null }}
+                                                styles={customStepSelectStyles}
+                                                isClearable={false}
+                                                isSearchable={false}
+                                                hideSelectedOptions={false}
+                                            />
+                                            {!requirementSatisfied && (selectedMinistryDepartment == null || selectedMinistryDepartment.value == undefined) && props.required && <span className="text-danger position-absolute">{t("required")}</span>}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="glossary-form-col"></div>
+                            </div>
+                        </> : <>
                         <div className="glossary-setup-form">
                             <div className="glossary-form-col">
                                 <div className="glossary-input-form-field">
@@ -769,6 +802,7 @@ const AddNewGlossaryForm = (props) => {
                             </div>
                             <div className="glossary-form-col"></div>
                         </div>
+                        </>}
                     </div>
                 </div>
             }

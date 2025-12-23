@@ -20,6 +20,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import GroupsColor from "../../../assets/images/new-ui-icons/groups_color.svg";
 import ReactRouterPrompt from "react-router-prompt";
+import { useSelector } from "react-redux";
+
+
+const GROSSARY_PIB_TABS = [{
+    id: 1,
+    value: 'standard',
+    label: 'Standard',
+    isEnabled: true,
+}, {
+    id: 2,
+    value: 'pib-news-glossary',
+    label: 'Stories/Press releases',
+    isEnabled: true,
+}];
 
 const CreateGlossaries = (props) => {
 	const { sidebarActiveTab, setSidebarActiveTab } = props;
@@ -123,6 +137,11 @@ const CreateGlossaries = (props) => {
 	const [hasTeam, setHasTeam] = useState(null);
 	const [checkchangenav, setCheckchangenav] = useState(false);
 	const [page, setPage] = useState(0);
+	
+	const [selectedMinistryDepartment, setSelectedMinistryDepartment] = useState(null);
+	const [ministryDepartmentList, setMinistryDepartmentList] = useState([]);
+	const [selectedTab, setSelectedTab] = useState(GROSSARY_PIB_TABS[1]);
+	const isPIBNews = useSelector((state) => state.isPIBNews.value);
 
 	const searchAreaRef = useRef(null);
 	const projectIdToSelect = useRef(null);
@@ -177,22 +196,28 @@ const CreateGlossaries = (props) => {
 	}, [goBackCreateBtn, goBackEditBtn]);
 
 	useEffect(() => {
-		if (location.state?.prevPageInfo) {
-			prevPageInfo.current = location.state?.prevPageInfo;
+		if (location.state) {
+			prevPageInfo.current = location.state;
+			setisEditable(prevPageInfo.current?.isEditable || false);
+			setIsLoading(prevPageInfo.current?.isEditable || false);
+			if (prevPageInfo?.current?.is_pib_glossary) setSelectedTab(GROSSARY_PIB_TABS[1]);
+			else setSelectedTab(GROSSARY_PIB_TABS[0]);
 		}
 	}, [location.state]);
 
 	useEffect(() => {
-		let a = [];
-		editJobs?.forEach((each) => {
-			targetLanguage?.map((b) => {
-				if (b?.id === each?.target_language) {
-					a?.push(each?.id);
-				}
+		if (targetLanguage) {
+			let a = [];
+			editJobs?.forEach((each) => {
+				targetLanguage?.map((b) => {
+					if (b?.id === each?.target_language) {
+						a?.push(each?.id);
+					}
+				});
 			});
-		});
-		let targetLangToRemove = editJobs?.filter((each) => !a.includes(each.id));
-		setTargetLangListToRemove(targetLangToRemove);
+			let targetLangToRemove = editJobs?.filter((each) => !a.includes(each.id));
+			setTargetLangListToRemove(targetLangToRemove);
+		}
 	}, [targetLanguage]);
 
 	const getSteps = () => {
@@ -286,6 +311,9 @@ const CreateGlossaries = (props) => {
 						(each) => glossary?.usage_permission === each.label
 					)
 				);
+				if (selectedTab.value === 'pib-news-glossary') {
+					getMinistryDepartmentList(data.ministry_department);
+				}
 				setHasTeam(data.team);
 				setPrimaryGlossarySourceName(glossary?.primary_glossary_source_name);
 				setGlossaryCopyrightOwner(glossary?.source_Copyright_owner);
@@ -359,6 +387,7 @@ const CreateGlossaries = (props) => {
 		getMtEngines();
 		getAllLangDetailsList();
 		getSteps();
+		getMinistryDepartmentList();
 	}, []);
 
 	/* Get source language options */
@@ -648,6 +677,10 @@ const CreateGlossaries = (props) => {
 		setSelectedMTEngine(selectedOption);
 	};
 
+    const handleMinistryDepartmentChange = (selectedDept) => {
+        setSelectedMinistryDepartment(selectedDept);
+    };
+
 	/* Handle Usage permission option change */
 	const handleUsagePermissionChange = (selectedOption) => {
 		setSelectedUsagePermission(selectedOption);
@@ -789,6 +822,19 @@ const CreateGlossaries = (props) => {
 			formData.append("project_name", projectName);
 		}
 		if (fileUrl != "") formData.append("url", fileUrl);
+
+		if (isPIBNews && selectedTab?.value === 'pib-news-glossary') {
+			if (selectedMinistryDepartment?.value !== undefined) {
+				formData.append("ministry_department", selectedMinistryDepartment?.value);
+			}
+			formData.append("is_pib_glossary", true);
+			formData.append("get_mt_by_page", true);
+			formData.append("steps", 1);
+			formData.append("project_type", 3);
+			formData.append("usage_permission", 'Private');
+			formData.append("apative_simple", true);	
+		}
+
 		let url = "";
 		if (integrationFiles.length) {
 			if (!integrationFiles[0].branchId) {
@@ -809,7 +855,7 @@ const CreateGlossaries = (props) => {
 			url = Config.BASE_URL + "/workspace/project/quick/setup/";
 		else url = Config.BASE_URL + "/srt/fileUpload";
 		setShowCreateLoader(true);
-
+		const filteredFormData = filterFormData(formData);
 		Config.axios({
 			headers: {
 				"Access-Control-Allow-Origin": "*",
@@ -819,7 +865,7 @@ const CreateGlossaries = (props) => {
 			},
 			url: url,
 			method: "POST",
-			data: formData,
+			data: filteredFormData,
 			auth: true,
 			success: (response) => {
 				// Config.toast("Project created successfully");
@@ -840,6 +886,16 @@ const CreateGlossaries = (props) => {
 			},
 		});
 	};
+
+	const filterFormData = (formData) => {
+		const filteredFormData = new FormData();
+		for (const [key, value] of formData.entries()) {
+			if (value !== undefined && value !== null && value !== '') {
+				filteredFormData.append(key, value);
+			}
+		}
+		return filteredFormData;
+	}
 
 	// useEffect(() => {
 	// }, [projectName])
@@ -981,6 +1037,19 @@ const CreateGlossaries = (props) => {
 		// if (projectAvailalbility === "team") formData.append("team", true);
 		// else formData.append("team", false);
 		if (fileUrl != "") formData.append("url", fileUrl);
+
+		if (isPIBNews && selectedTab?.value === 'pib-news-glossary') {
+			if (selectedMinistryDepartment?.value !== undefined) {
+				formData.append("ministry_department", selectedMinistryDepartment?.value);
+			}
+			formData.append("is_pib_glossary", true);
+			formData.append("get_mt_by_page", true);
+			formData.append("steps", 1);
+			formData.append("project_type", 3);
+			formData.append("usage_permission", 'Private');
+			formData.append("apative_simple", true);	
+		}
+
 		let url = "";
 		if (fileUrl == "")
 			url = `${
@@ -988,6 +1057,7 @@ const CreateGlossaries = (props) => {
 			}/workspace/project/quick/setup/${editProjectId}/?step_delete_ids=${deleteIdList}&file_delete_ids=${deletedEditFileIds.current.join()}&job_delete_ids=${list}&subject_delete_ids=${deletedSubjectIds.current.join()}&project_type_id=3`;
 		else url = Config.BASE_URL + "/srt/fileUpload";
 		setShowUpdateLoader(true);
+		const filteredFormData = filterFormData(formData);
 		Config.axios({
 			headers: {
 				"Access-Control-Allow-Origin": "*",
@@ -997,7 +1067,7 @@ const CreateGlossaries = (props) => {
 			},
 			url: url,
 			method: "PUT",
-			data: formData,
+			data: filteredFormData,
 			auth: true,
 			success: (response) => {
 				// Config.toast("Project updated successfully");
@@ -1049,6 +1119,41 @@ const CreateGlossaries = (props) => {
 		projectEditable.current = false;
 	};
 
+	useEffect(() => {
+		getMinistryDepartmentList();
+	}, [selectedTab]);
+
+    const updateSelectedMinistoryDept = (list, ministry_department) => {
+        if (ministry_department) {
+            const filtered = list?.find((each) => each.uid === ministry_department);
+            handleMinistryDepartmentChange(filtered);
+        }
+    }
+
+	const getMinistryDepartmentList = (ministry_department) => {
+		if (selectedTab.value !== 'pib-news-glossary') return;
+		let params = {
+			url: Config.BASE_URL + "/workspace/ministry_names",                     
+			auth: true,
+			success: (response) => {
+				const {data} = response;
+				const formattedlist = data.map(dept => ({
+						...dept,
+						value: dept.uid,
+						label: dept.name
+					}));
+				setMinistryDepartmentList(formattedlist);
+				updateSelectedMinistoryDept(formattedlist, ministry_department);
+			},
+			error: (error) => {
+				if(error.response.status === 500){
+					Config.showToast('Something went wrong. Please try again later.', 'error');
+				}
+			}
+		};
+		Config.axios(params);
+	}
+
 	let contextValue = {
 		isLoading,
 		isEditable,
@@ -1070,6 +1175,7 @@ const CreateGlossaries = (props) => {
 		setTargetLanguageOptions,
 		usagePermissionOptions,
 		handleMTEngineChange,
+		handleMinistryDepartmentChange,
 		handleUsagePermissionChange,
 		handleSourceLangClick,
 		handleTargetLangClick,
@@ -1086,6 +1192,7 @@ const CreateGlossaries = (props) => {
 		sourceLanguageError,
 		targetLanguageError,
 		sourceLanguageDisable,
+		setSourceLanguageDisable,
 		primaryGlossarySourceName,
 		setPrimaryGlossarySourceName,
 		glossaryCopyrightOwner,
@@ -1097,6 +1204,7 @@ const CreateGlossaries = (props) => {
 		glossaryLicense,
 		setGlossaryLicense,
 		selectedUsagePermission,
+		setSelectedUsagePermission,
 		editProjectId,
 		glossaryEditFiles,
 		handleSubmit,
@@ -1117,6 +1225,7 @@ const CreateGlossaries = (props) => {
 		mtpeEngines,
 		setMtpeEngines,
 		selectedMTEngine,
+		setSelectedMTEngine,
 		alreadySelecetedTarLangID,
 		alreadySelectedTarLang,
 		goBackCreateBtn,
@@ -1137,6 +1246,12 @@ const CreateGlossaries = (props) => {
 		handleProjectNamechange,
 		prevPageInfo,
 		targetLanguageOptionsRef,
+		selectedTab,
+		setSelectedTab,
+		selectedMinistryDepartment,
+		setSelectedMinistryDepartment,
+		ministryDepartmentList,
+		setMinistryDepartmentList,
 	};
 
 	return (
@@ -1148,10 +1263,6 @@ const CreateGlossaries = (props) => {
 						<GlossaryProjectType page={page} setPage={setPage} />
 					</glossaryContext.Provider>
 				</div>
-				{/* <Prompt
-										when={checkchangenav}
-										message={handleBlockedNavigation}
-										/> */}
 				<ReactRouterPrompt when={handleBlockedNavigation}>
 					{({ isActive, onConfirm, onCancel }) => {
 						return (
